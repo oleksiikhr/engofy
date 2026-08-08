@@ -1,0 +1,92 @@
+name: App
+
+on:
+  push:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    env:
+      PUBLIC_URL: http://localhost:3000
+      MIKRO_ORM_DB_NAME: engofy
+      MIKRO_ORM_HOST: localhost
+      MIKRO_ORM_PASSWORD: postgres
+      MIKRO_ORM_PORT: 5432
+      MIKRO_ORM_USER: postgres
+      S3_ENDPOINT: http://localhost:8333
+      S3_BUCKET: engofy
+      S3_REGION: us-east-1
+      S3_ACCESS_KEY: seaweedfs
+      S3_SECRET_KEY: seaweedfs
+      S3_PUBLIC_URL: http://localhost:8333/engofy
+
+    services:
+      postgres:
+        image: postgres:18.4-alpine3.24
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: engofy
+          POSTGRES_PASSWORD: engofy
+          POSTGRES_DB: engofy
+        options: >-
+          --health-cmd "pg_isready -U postgres -d engofy"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      seaweedfs:
+        image: chrislusf/seaweedfs:4.25
+        ports:
+          - "8333:8333"
+        env:
+          AWS_ACCESS_KEY_ID: seaweedfs
+          AWS_SECRET_ACCESS_KEY: seaweedfs
+          S3_BUCKET: engofy
+        options: >-
+          --health-cmd "wget -qO- http://localhost:9333/"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          package_json_file: package.json
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      # Includes test/ files — pnpm build type-checks src/ only
+      - name: Type check
+        run: pnpm type
+        if: always()
+
+      - name: Lint check
+        run: pnpm lint:check
+        if: always()
+
+      - name: Run tests
+        run: pnpm test:cov --coverage.reporter=text-summary
+        if: always()
+
+      # --type-check generates src/metadata.ts — verified by the next step
+      - name: Build NestJS
+        run: pnpm build
+        if: always()
+
+      - name: Check generated metadata is up to date
+        run: git diff --exit-code src/metadata.ts
+        if: always()

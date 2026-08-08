@@ -1,0 +1,20 @@
+# Directories
+.agents
+.claude
+.git
+.github
+.idea
+.playwright-mcp
+.vscode
+coverage
+dist
+docs
+infra
+node_modules
+test
+
+# Files
+*.spec.ts
+*.ispec.ts
+.env
+.env.*

@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:18.4-alpine3.24
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/docker
+    environment:
+      POSTGRES_USER: engofy
+      POSTGRES_PASSWORD: engofy
+      POSTGRES_DB: engofy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U engofy -d engofy"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.25
+    command: mini -master.volumeSizeLimitMB=100
+    ports:
+      - "8333:8333"
+      - "23646:23646"
+    environment:
+      - AWS_ACCESS_KEY_ID=seaweedfs
+      - AWS_SECRET_ACCESS_KEY=seaweedfs
+      - S3_BUCKET=engofy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9333/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  spotlight:
+    image: ghcr.io/getsentry/spotlight:4.11.4
+    ports:
+      - "8969:8969"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8969'"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

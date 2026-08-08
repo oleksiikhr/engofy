@@ -1,0 +1,17 @@
+engineStrict: true
+
+minimumReleaseAge: 10080 # 7 days
+
+pmOnFail: error
+
+overrides:
+  # Must match the Fastify version required by @nestjs/platform-fastify.
+  # This override should follow the version pulled by that package.
+  # Verify with: pnpm why fastify
+  fastify: 5.8.5
+
+allowBuilds:
+  '@nestjs/core': true
+  '@scarf/scarf': false
+  '@swc/core': true
+  esbuild: true
