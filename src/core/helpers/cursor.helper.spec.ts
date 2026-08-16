@@ -1,4 +1,3 @@
-import { DomainError } from '../errors/domain.error.js';
 import { decodeCursor, encodeCursor } from './cursor.helper.js';
 
 const isNumber = (v: unknown): v is number => typeof v === 'number';
@@ -29,9 +28,7 @@ describe('decodeCursor', () => {
   });
 
   it('throws Error for non-base64url input', () => {
-    expect(() => decodeCursor('!!!not-base64!!!', 1, isNumber)).toThrow(
-      Error,
-    );
+    expect(() => decodeCursor('!!!not-base64!!!', 1, isNumber)).toThrow(Error);
   });
 
   it('throws Error when base64 decodes to invalid JSON', () => {

@@ -1,15 +1,15 @@
 import type { DynamicModule, Type } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { QueueName } from '../../core/queue/queue-names.enum.js';
-import { ExampleProcessor } from './example/example.processor.js';
-import { ExampleQueueModule } from './example/example-queue.module.js';
+import { SendChallengeEmailModule } from './auth/send-challenge-email.module.js';
+import { SendChallengeEmailProcessor } from './auth/send-challenge-email.processor.js';
 import { WORKER_QUEUES } from './worker.tokens.js';
 import { WorkerRegistrarService } from './worker-registrar.service.js';
 
 const PROCESSOR_CONFIG: Record<string, { processor: Type; module: Type }> = {
-  [QueueName.Example]: {
-    processor: ExampleProcessor,
-    module: ExampleQueueModule,
+  [QueueName.AuthChallengeEmail]: {
+    processor: SendChallengeEmailProcessor,
+    module: SendChallengeEmailModule,
   },
 };
 

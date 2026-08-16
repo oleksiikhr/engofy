@@ -10,6 +10,7 @@ export async function ensureMigrated(
     return;
   }
 
+  await orm.migrator.down();
   await orm.migrator.up();
   isInitialized = true;
 }

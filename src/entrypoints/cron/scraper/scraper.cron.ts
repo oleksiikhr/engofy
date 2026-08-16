@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { Span } from 'nestjs-otel';
 import { CronJobHost } from '../cron-job-host.js';
 
 @Injectable()
 export class ScraperCron extends CronJobHost {
   @Cron('* * * * *', { waitForCompletion: true })
-  @Span()
   override async handle(): Promise<void> {
     return super.handle();
   }

@@ -3,7 +3,11 @@ import * as Sentry from '@sentry/nestjs';
 import { injectOrm } from '../../../test/helpers/orm.helper.js';
 import { CronJobHost } from './cron-job-host.js';
 
-vi.mock('@sentry/nestjs', () => ({ captureException: vi.fn() }));
+vi.mock('@sentry/nestjs', () => ({
+  captureException: vi.fn(),
+  startNewTrace: vi.fn((callback: () => unknown) => callback()),
+  startSpan: vi.fn((_options: unknown, callback: () => unknown) => callback()),
+}));
 
 class TestCron extends CronJobHost {
   constructor(private readonly work: () => Promise<void>) {

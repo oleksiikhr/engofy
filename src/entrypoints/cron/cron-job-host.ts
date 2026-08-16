@@ -37,7 +37,13 @@ export abstract class CronJobHost {
       return;
     }
 
-    const tick = this.tick();
+    const tick = Sentry.startNewTrace(() =>
+      Sentry.startSpan(
+        { name: `cron.${this.constructor.name}`, op: 'function.cron' },
+        () => this.tick(),
+      ),
+    );
+
     inFlightTicks.add(tick);
 
     try {

@@ -12,6 +12,7 @@ import { databaseFactory } from './core/database/mikro-orm.factory.js';
 import { Environment, getEnvironment } from './core/enums/environment.enum.js';
 import { LoggerModule } from './core/logger/logger.module.js';
 import { PgBossModule } from './core/queue/pg-boss.module.js';
+import { RedisModule } from './core/redis/redis.module.js';
 import { CliModule } from './entrypoints/cli/cli.module.js';
 import { CronModule } from './entrypoints/cron/cron.module.js';
 import { WebModule } from './entrypoints/web/web.module.js';
@@ -47,6 +48,7 @@ export class AppModule {
         CqrsModule.forRoot(),
         LoggerModule.forRuntime(runtime),
         PgBossModule.forRuntime(runtime),
+        RedisModule,
       ],
     };
   }

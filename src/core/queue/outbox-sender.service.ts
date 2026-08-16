@@ -5,11 +5,6 @@ import { fromKysely } from 'pg-boss';
 import { PG_BOSS } from './queue.tokens.js';
 import { withSentryTrace } from './sentry-trace.js';
 
-/**
- * Sends a job as part of an existing MikroORM transaction (transactional outbox):
- * the insert into pg-boss's job table runs on the same Kysely transaction as the
- * entity writes, so both commit or roll back together.
- */
 @Injectable()
 export class OutboxSenderService {
   constructor(@Inject(PG_BOSS) private readonly boss: PgBoss) {}

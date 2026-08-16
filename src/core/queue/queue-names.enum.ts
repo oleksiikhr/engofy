@@ -1,5 +1,5 @@
 export enum QueueName {
-  Example = 'example',
+  AuthChallengeEmail = 'auth-challenge-email',
 }
 
 export const ALL_QUEUE_NAMES = Object.values(QueueName);

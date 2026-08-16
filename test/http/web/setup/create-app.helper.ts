@@ -1,11 +1,13 @@
+import cookie from '@fastify/cookie';
 import { MikroORM } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { type ModuleMetadata, ValidationPipe } from '@nestjs/common';
+import type { ModuleMetadata } from '@nestjs/common';
 import { HttpAdapterHost, Reflector } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
 import { Logger } from 'nestjs-pino';
+import { createZodValidationPipe } from 'nestjs-zod';
 import { AppModule } from '../../../../src/app.module.js';
 import { AuthorizationErrorFilter } from '../../../../src/core/http/filters/authorization-error.filter.js';
 import { DomainErrorFilter } from '../../../../src/core/http/filters/domain-error.filter.js';
@@ -13,9 +15,13 @@ import { ErrorFilter } from '../../../../src/core/http/filters/error.filter.js';
 import { HealthCheckErrorFilter } from '../../../../src/core/http/filters/health-check-error.filter.js';
 import { HttpErrorFilter } from '../../../../src/core/http/filters/http-error.filter.js';
 import { EmptyStringToNullPipe } from '../../../../src/core/pipes/empty-string-to-null.pipe.js';
-import { validationExceptionFactory } from '../../../../src/core/validation/validation-exception.factory.js';
+import { zodValidationExceptionFactory } from '../../../../src/core/validation/zod-validation-exception.factory.js';
 import { WebModule } from '../../../../src/entrypoints/web/web.module.js';
 import type { TestingBuilderHook } from '../../../setup/create-app.helper.js';
+
+const ZodValidationPipe = createZodValidationPipe({
+  createValidationException: zodValidationExceptionFactory,
+});
 
 export interface WebApp {
   app: NestFastifyApplication;
@@ -61,13 +67,7 @@ export async function createWebApp(
 
   app.useGlobalPipes(
     new EmptyStringToNullPipe(reflector),
-    new ValidationPipe({
-      exceptionFactory: validationExceptionFactory,
-      stopAtFirstError: true,
-      transform: true,
-      whitelist: true,
-      forbidUnknownValues: true,
-    }),
+    new ZodValidationPipe(),
   );
 
   app.useGlobalFilters(
@@ -77,6 +77,8 @@ export async function createWebApp(
     new AuthorizationErrorFilter(),
     new HealthCheckErrorFilter(),
   );
+
+  await app.register(cookie);
 
   await app.init();
   await app.getHttpAdapter().getInstance().ready();

@@ -1,130 +1,70 @@
-<!-- rtk-instructions v2 -->
-# RTK (Rust Token Killer) - Token-Optimized Commands
+# engofy — Project Conventions
 
-## Golden Rule
+NestJS backend (fastify, MikroORM/Postgres, pg-boss for queues). These rules are
+project-wide and override generic defaults.
 
-**Always prefix commands with `rtk`**. If RTK has a dedicated filter, it uses it. If not, it passes through unchanged. This means RTK is always safe to use.
+## Dates: Luxon `DateTime`, never `Date`
 
-**Important**: Even in command chains with `&&`, use `rtk`:
-```bash
-# ❌ Wrong
-git add . && git commit -m "msg" && git push
+Never write `new Date()`. Use Luxon's `DateTime` everywhere — it's immutable,
+`Date` isn't.
 
-# ✅ Correct
-rtk git add . && rtk git commit -m "msg" && rtk git push
-```
+- Entity timestamp fields: type `DateTime`, use the custom MikroORM type:
 
-## RTK Commands by Workflow
+  ```ts
+  @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
+  createdAt: Opt<DateTime> = DateTime.now();
+  ```
 
-### Build & Compile (80-90% savings)
-```bash
-rtk tsc                 # TypeScript errors grouped by file/code (83%)
-rtk lint                # ESLint/Biome violations grouped (84%)
-rtk prettier --check    # Files needing format only (70%)
-rtk next build          # Next.js build with route metrics (87%)
-```
+  (`LuxonTimestampType` lives at `src/core/database/types/luxon-timestamp.type.ts`
+  and (de)serializes `DateTime` <-> `timestamptz`.)
 
-### Test (60-99% savings)
-```bash
-rtk jest                # Jest failures only (99.5%)
-rtk vitest              # Vitest failures only (99.5%)
-rtk playwright test     # Playwright failures only (94%)
-rtk test <cmd>          # Generic test wrapper - failures only
-```
+- In services: `DateTime.now()`, `.plus({ milliseconds, days, ... })`.
+  Relational comparisons (`<=`, `>=`) work directly on `DateTime` values.
+- Raw SQL via `em.getConnection().execute(...)` bypasses `LuxonTimestampType`'s
+  conversion — pass `.toJSDate()` for bound params there, since the pg driver
+  serializes native `Date` but not `DateTime`.
 
-### Git (59-80% savings)
-```bash
-rtk git status          # Compact status
-rtk git log             # Compact log (works with all git flags)
-rtk git diff            # Compact diff (80%)
-rtk git show            # Compact show (80%)
-rtk git add             # Ultra-compact confirmations (59%)
-rtk git commit          # Ultra-compact confirmations (59%)
-rtk git push            # Ultra-compact confirmations
-rtk git pull            # Ultra-compact confirmations
-rtk git branch          # Compact branch list
-rtk git fetch           # Compact fetch
-rtk git stash           # Compact stash
-rtk git worktree        # Compact worktree
-```
+Reference implementation: the `auth` module's entities/services
+(`src/modules/auth/entities/*.entity.ts`, `application/session.service.ts`,
+`application/challenge.service.ts`).
 
-Note: Git passthrough works for ALL subcommands, even those not explicitly listed.
+## Request DTOs: `nestjs-zod`, never `class-validator`/`class-transformer`
 
-### GitHub (26-87% savings)
-```bash
-rtk gh pr view <num>    # Compact PR view (87%)
-rtk gh pr checks        # Compact PR checks (79%)
-rtk gh run list         # Compact workflow runs (82%)
-rtk gh issue list       # Compact issue list (80%)
-rtk gh api              # Compact API responses (26%)
-```
+Request-body/query/param validation goes through
+[`nestjs-zod`](https://github.com/BenLorantfy/nestjs-zod), not
+`class-validator` decorators — those packages aren't dependencies of this
+project.
 
-### JavaScript/TypeScript Tooling (70-90% savings)
-```bash
-rtk pnpm list           # Compact dependency tree (70%)
-rtk pnpm outdated       # Compact outdated packages (80%)
-rtk pnpm install        # Compact install output (90%)
-rtk npm run <script>    # Compact npm script output
-rtk npx <cmd>           # Compact npx command output
-rtk uv run <cmd>        # Compact uv project command output
-```
+- Define a `zod` schema, then wrap it: `class FooDto extends createZodDto(FooSchema) {}`.
+  Reference: `src/entrypoints/web/auth/dto/*.dto.ts`.
+- The global pipe is a `nestjs-zod` `ZodValidationPipe` built via
+  `createZodValidationPipe({ createValidationException: zodValidationExceptionFactory })`
+  (`src/main.ts`, mirrored in `test/http/web/setup/create-app.helper.ts`).
+  `zodValidationExceptionFactory`
+  (`src/core/validation/zod-validation-exception.factory.ts`) maps the first
+  Zod issue onto the existing `{ type: 'validation', message, field }` error
+  shape (`ValidationErrorResponseDto`) — don't let it drift back to the raw
+  `ZodError`/`ZodValidationException` shape.
+- `SwaggerModule.createDocument(...)` output must be passed through
+  `cleanupOpenApiDoc()` from `nestjs-zod` (see `build-openapi-document.ts`) so
+  zod-schema DTOs render correctly in the OpenAPI doc.
 
-### Files & Search (60-75% savings)
-```bash
-rtk ls <path>           # Tree format, compact (65%)
-rtk read <file>         # Code reading with filtering (60%)
-rtk grep <pattern>      # Search grouped by file (75%). Format flags (-c, -l, -L, -o, -Z) run raw.
-rtk find <pattern>      # Find grouped by directory (70%)
-```
+## No bare `@ApiProperty()`
 
-### Analysis & Debug (70-90% savings)
-```bash
-rtk err <cmd>           # Filter errors only from any command
-rtk log <file>          # Deduplicated logs with counts
-rtk json <file>         # JSON structure without values
-rtk deps                # Dependency overview
-rtk env                 # Environment variables compact
-rtk summary <cmd>       # Smart summary of command output
-rtk diff                # Ultra-compact diffs
-```
+`nest-cli.json` configures the `@nestjs/swagger` CLI plugin with
+`introspectComments: true` — it infers Swagger metadata (type, required-ness,
+description) from the TS types and leading comments at build time. A bare
+`@ApiProperty()` with no options is redundant. This applies to plain
+response-DTO classes (e.g. `src/core/http/dto/created-response.dto.ts`) —
+request DTOs built with `createZodDto` get their OpenAPI schema from the zod
+schema itself, not from this plugin.
 
-### Infrastructure (85% savings)
-```bash
-rtk docker ps           # Compact container list
-rtk docker images       # Compact image list
-rtk docker logs <c>     # Deduplicated logs
-rtk kubectl get         # Compact resource list
-rtk kubectl logs        # Deduplicated pod logs
-```
-
-### Network (65-70% savings)
-```bash
-rtk curl <url>          # Compact HTTP responses (70%)
-rtk wget <url>          # Compact download output (65%)
-```
-
-### Meta Commands
-```bash
-rtk gain                # View token savings statistics
-rtk gain --history      # View command history with savings
-rtk discover            # Analyze Claude Code sessions for missed RTK usage
-rtk proxy <cmd>         # Run command without filtering (for debugging)
-rtk init                # Add RTK instructions to CLAUDE.md
-rtk init --global       # Add RTK to ~/.claude/CLAUDE.md
-```
-
-## Token Savings Overview
-
-| Category | Commands | Typical Savings |
-|----------|----------|-----------------|
-| Tests | vitest, playwright, cargo test | 90-99% |
-| Build | next, tsc, lint, prettier | 70-87% |
-| Git | status, log, diff, add, commit | 59-80% |
-| GitHub | gh pr, gh run, gh issue | 26-87% |
-| Package Managers | pnpm, npm, npx | 70-90% |
-| Files | ls, read, grep, find | 60-75% |
-| Infrastructure | docker, kubectl | 85% |
-| Network | curl, wget | 65-70% |
-
-Overall average: **60-90% token reduction** on common development operations.
-<!-- /rtk-instructions -->
+- Plain fields (`string`, `number`, `boolean`, DTO types, etc.): no
+  `@ApiProperty()`.
+- Need a description in Swagger UI? Put it in a leading `//` comment above the
+  property — `introspectComments` picks it up automatically.
+- Exception: a property typed as Luxon `DateTime` still needs an explicit
+  `@ApiProperty()` (e.g. `{ type: String, format: 'date-time' }`), since the
+  plugin can't introspect a custom class the way it does primitives.
+- For zod DTOs, add a field description with `.describe('...')` on the schema
+  instead of a comment.

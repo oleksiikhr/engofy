@@ -1,16 +1,80 @@
-import { HttpStatus } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Module,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { createWebE2ESuite } from '../../../../test/http/web/setup/e2e-suite.helper.js';
+import { InternalWebModule } from '../../../entrypoints/web/internal/internal-web.module.js';
 import type { CreatedResponseDto } from '../dto/created-response.dto.js';
+import { CachePolicy } from './etag.interceptor.js';
 
 const ETAG_PATTERN = /^"[a-f0-9]+"$/;
 
-// TODO Change endpoints
+interface Widget {
+  id: string;
+  name: string;
+}
+
+@Controller('etag-test')
+class EtagTestController {
+  private readonly widgets = new Map<string, Widget>();
+
+  @Get('config')
+  @CachePolicy('private')
+  getConfig(): { value: string } {
+    return { value: 'private-config' };
+  }
+
+  @Get('public-config')
+  @CachePolicy('public')
+  getPublicConfig(): { value: string } {
+    return { value: 'public-config' };
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(): CreatedResponseDto {
+    const widget: Widget = { id: randomUUID(), name: 'Widget' };
+    this.widgets.set(widget.id, widget);
+
+    return { id: widget.id };
+  }
+
+  @Get(':id')
+  @CachePolicy('private')
+  getOne(@Param('id') id: string): Widget | undefined {
+    return this.widgets.get(id);
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  update(@Param('id') id: string, @Body() body: { name: string }): void {
+    const existing = this.widgets.get(id);
+
+    if (existing) {
+      this.widgets.set(id, { ...existing, name: body.name });
+    }
+  }
+}
+
+@Module({ controllers: [EtagTestController] })
+class EtagTestModule {}
+
 describe('ETagInterceptor', () => {
-  const suite = createWebE2ESuite();
+  const suite = createWebE2ESuite({
+    imports: [InternalWebModule, EtagTestModule],
+  });
 
   async function fetchEtag(): Promise<string> {
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .expect(HttpStatus.OK);
     return res.headers.etag as string;
   }
@@ -34,7 +98,7 @@ describe('ETagInterceptor', () => {
 
   it('does not set ETag or Cache-Control on non-GET requests', async () => {
     const res = await suite
-      .request('post', '/resumes')
+      .request('post', '/etag-test')
       .expect(HttpStatus.CREATED);
 
     expect(res.headers.etag).toBeUndefined();
@@ -47,7 +111,7 @@ describe('ETagInterceptor', () => {
 
   it('sets Cache-Control: private for @CachePolicy("private") routes', async () => {
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .expect(HttpStatus.OK);
 
     expect(res.headers['cache-control']).toBe('private');
@@ -55,7 +119,7 @@ describe('ETagInterceptor', () => {
 
   it('sets Cache-Control: public for @CachePolicy("public") routes', async () => {
     const res = await suite
-      .request('get', '/dictionaries/cities?name=x', { authed: false })
+      .request('get', '/etag-test/public-config', { authed: false })
       .expect(HttpStatus.OK);
 
     expect(res.headers['cache-control']).toBe('public');
@@ -67,7 +131,7 @@ describe('ETagInterceptor', () => {
 
   it('sets a quoted hex ETag on 200 responses', async () => {
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .expect(HttpStatus.OK);
 
     expect(res.headers.etag).toMatch(ETAG_PATTERN);
@@ -81,7 +145,7 @@ describe('ETagInterceptor', () => {
     const etag = await fetchEtag();
 
     await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .set('If-None-Match', etag)
       .expect(HttpStatus.NOT_MODIFIED);
   });
@@ -90,7 +154,7 @@ describe('ETagInterceptor', () => {
     const etag = await fetchEtag();
 
     await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .set(
         'If-None-Match',
         `"0000000000000000000000000000000000000000", ${etag}`,
@@ -104,7 +168,7 @@ describe('ETagInterceptor', () => {
 
   it('returns 200 with a new ETag when If-None-Match is stale', async () => {
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .set('If-None-Match', '"0000000000000000000000000000000000000000"')
       .expect(HttpStatus.OK);
 
@@ -113,7 +177,7 @@ describe('ETagInterceptor', () => {
 
   it('returns 200 when a weak validator does not match the current ETag', async () => {
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .set('If-None-Match', 'W/"0000000000000000000000000000000000000000"')
       .expect(HttpStatus.OK);
 
@@ -128,7 +192,7 @@ describe('ETagInterceptor', () => {
     const etag = await fetchEtag();
 
     const res = await suite
-      .request('get', '/resumes/config')
+      .request('get', '/etag-test/config')
       .set('If-None-Match', etag)
       .expect(HttpStatus.NOT_MODIFIED);
 
@@ -142,22 +206,22 @@ describe('ETagInterceptor', () => {
 
   it('returns 200 with a new ETag after the resource is mutated', async () => {
     const { id } = (
-      await suite.request('post', '/resumes').expect(HttpStatus.CREATED)
+      await suite.request('post', '/etag-test').expect(HttpStatus.CREATED)
     ).body as CreatedResponseDto;
 
     const firstRes = await suite
-      .request('get', `/resumes/${id}`)
+      .request('get', `/etag-test/${id}`)
       .expect(HttpStatus.OK);
     const staleEtag = firstRes.headers.etag as string;
     expect(staleEtag).toMatch(ETAG_PATTERN);
 
     await suite
-      .request('patch', `/resumes/${id}`)
+      .request('patch', `/etag-test/${id}`)
       .send({ name: 'Updated Name' })
       .expect(HttpStatus.NO_CONTENT);
 
     const secondRes = await suite
-      .request('get', `/resumes/${id}`)
+      .request('get', `/etag-test/${id}`)
       .set('If-None-Match', staleEtag)
       .expect(HttpStatus.OK);
 

@@ -7,15 +7,18 @@ import {
   type OpenAPIObject,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 import type SwaggerConfig from '../../core/config/swagger.config.js';
 import { ValidationErrorResponseDto } from '../../core/validation/validation-error-response.dto.js';
+import type AuthConfig from '../../modules/auth/config/auth.config.js';
 
 export async function buildOpenApiDocument(
   app: INestApplication,
   swaggerConfig: ConfigType<typeof SwaggerConfig>,
+  authConfig: ConfigType<typeof AuthConfig>,
 ): Promise<OpenAPIObject> {
   const swaggerDocument = new DocumentBuilder()
-    .addBearerAuth()
+    .addCookieAuth(authConfig.sessionCookieName)
     .addGlobalResponse({
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       description: 'Internal server error',
@@ -55,7 +58,9 @@ export async function buildOpenApiDocument(
   const { default: metadata } = await import('../../metadata.js');
   await SwaggerModule.loadPluginMetadata(metadata);
 
-  return SwaggerModule.createDocument(app, swaggerDocument, {
-    extraModels: [ValidationErrorResponseDto],
-  });
+  return cleanupOpenApiDoc(
+    SwaggerModule.createDocument(app, swaggerDocument, {
+      extraModels: [ValidationErrorResponseDto],
+    }),
+  );
 }

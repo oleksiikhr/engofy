@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 
-RUN corepack enable
+RUN npm install -g corepack@latest && corepack enable
 
 # ------------------------------------------------------------------------------
 # Build stage

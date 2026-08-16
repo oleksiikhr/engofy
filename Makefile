@@ -1,7 +1,77 @@
 .DEFAULT_GOAL := help
 
+COMPOSE := docker compose -f compose.yaml
+
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[%a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Docker
+# ----------------------------------------------------------------------------------------------------------------------
+
+.PHONY: up
+up: ## Start all containers in background
+	$(COMPOSE) up -d --remove-orphans
+
+.PHONY: up-%
+up-%: ## Start a specific container  (e.g. make up-postgres)
+	$(COMPOSE) up -d $*
+
+.PHONY: down
+down: ## Stop and remove all containers
+	$(COMPOSE) down --remove-orphans
+
+.PHONY: down-volumes
+down-volumes: ## Stop containers and delete all named volumes (destructive)
+	$(COMPOSE) down --remove-orphans -v
+
+.PHONY: stop
+stop: ## Stop all containers
+	$(COMPOSE) stop
+
+.PHONY: stop-%
+stop-%: ## Stop a specific container
+	$(COMPOSE) stop $*
+
+.PHONY: start
+start: ## Start existing (stopped) containers
+	$(COMPOSE) start
+
+.PHONY: start-%
+start-%: ## Start a specific stopped container
+	$(COMPOSE) start $*
+
+.PHONY: restart
+restart: ## Restart all containers
+	$(COMPOSE) restart
+
+.PHONY: restart-%
+restart-%: ## Restart a specific container
+	$(COMPOSE) restart $*
+
+.PHONY: exec-%
+exec-%: ## Open a shell in a container  (e.g. make exec-app)
+	$(COMPOSE) exec $* sh
+
+.PHONY: ps
+ps: ## Show container status
+	$(COMPOSE) ps
+
+.PHONY: logs
+logs: ## Follow logs from all containers
+	$(COMPOSE) logs -f
+
+.PHONY: logs-%
+logs-%: ## Follow logs from a specific container  (e.g. make logs-app)
+	$(COMPOSE) logs -f $*
+
+.PHONY: build-image
+build-image: ## Build all container images
+	$(COMPOSE) build
+
+.PHONY: build-image-%
+build-image-%: ## Build a specific container image
+	$(COMPOSE) build $*
 
 # ------------------------------------------------------------------------------
 # Setup & Onboarding
@@ -26,10 +96,6 @@ reset: ## Drop and recreate the database schema (destructive)
 # ------------------------------------------------------------------------------
 # Development
 # ------------------------------------------------------------------------------
-
-.PHONY: start
-start: ## Start in development mode (no watch)
-	NODE_ENV=development LOG_LEVEL=error pnpm exec nest start
 
 .PHONY: watch
 watch: ## Start in development mode with hot reload

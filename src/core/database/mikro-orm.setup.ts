@@ -17,8 +17,8 @@ if (env === Environment.Production) {
 export default defineConfig({
   preferEnvVars: true,
   dbName: 'engofy',
-  user: 'postgres',
-  password: 'postgres',
+  user: 'engofy',
+  password: 'engofy',
   port: 5432,
   host: '127.0.0.1',
   baseDir: import.meta.dirname,

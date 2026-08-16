@@ -1,4 +1,5 @@
 import type { Provider } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { PgBoss } from 'pg-boss';
 import type { AppRuntime } from '../app.js';
@@ -10,6 +11,8 @@ export function pgBossProvider(runtime: AppRuntime): Provider {
     provide: PG_BOSS,
     inject: [QueueConfig.KEY],
     useFactory: async (config: ConfigType<typeof QueueConfig>) => {
+      const logger = new Logger('PgBoss');
+
       const boss = new PgBoss({
         host: config.host,
         port: config.port,
@@ -17,11 +20,13 @@ export function pgBossProvider(runtime: AppRuntime): Provider {
         user: config.user,
         password: config.password,
         max: config.poolMax,
-        // Maintenance (archiving, retry scans, monitoring) runs on the cron runtime,
-        // which is always a single process — workers scale horizontally, so pinning
-        // supervise there would mean every replica repeats the same maintenance work.
         supervise: runtime === 'cron',
       });
+
+      boss.on('error', (err) => logger.error({ err }, 'pg-boss error'));
+      boss.on('warning', ({ message, data }) =>
+        logger.warn(data, `pg-boss warning: ${message}`),
+      );
 
       await boss.start();
 

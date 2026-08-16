@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { PgBoss, QueueStats } from 'pg-boss';
+import type { PgBoss, QueueResult } from 'pg-boss';
 import { PG_BOSS } from './queue.tokens.js';
 import { ALL_QUEUE_NAMES } from './queue-names.enum.js';
 
@@ -7,18 +7,10 @@ import { ALL_QUEUE_NAMES } from './queue-names.enum.js';
 export class QueueManagementService {
   constructor(@Inject(PG_BOSS) private readonly boss: PgBoss) {}
 
-  async getStats(queue: string): Promise<QueueStats[]> {
-    const stats = await Promise.all(
-      this.resolveNames(queue).map((name) => this.boss.getQueueStats(name)),
-    );
-
-    return stats.flat();
+  async getStats(queue: string): Promise<QueueResult[]> {
+    return this.boss.getQueues(this.resolveNames(queue));
   }
 
-  /**
-   * Bulk-retries jobs in `failed` state. Unlike `boss.redrive()`, this does not
-   * require the queue to have a `deadLetter` queue configured.
-   */
   async retryFailed(queue: string): Promise<number> {
     const counts = await Promise.all(
       this.resolveNames(queue).map((name) => this.retryFailedForQueue(name)),
