@@ -12,6 +12,12 @@ land — same input, more of the pipeline to observe.
   list, a link (exercises `markdown-to-doc.converter.ts`).
 - `formatted.html` — html: `h1`/`h2`, `<p>`, `<strong>`/`<em>`, `<ul><li>`, `<a>`
   (exercises `html-to-doc.converter.ts`).
+- `article.md` — full-length article (heading, list, 3 longer paragraphs):
+  non-adjacent phrasal verb ("put the delivery off"), a word-sense
+  disambiguation case ("fine" as noun/penalty vs. "fine print" as a
+  collocation, both in the same text), proper nouns, numerals. Used to
+  stress-test the `content-annotation` stage (`annotate-content.handler.ts`)
+  on realistic paragraph lengths, not just short samples.
 
 ## 1. Start local infra
 

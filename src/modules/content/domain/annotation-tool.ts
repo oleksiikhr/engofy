@@ -15,8 +15,22 @@ export const ANNOTATION_TOOL: AiToolDefinition = {
   name: 'record_annotations',
   description:
     'Records every content-word and phrase annotation found in the given text.',
+  // strict guarantees additionalProperties/enum/type constraints and the
+  // flat `required` below (start/end/form/kind), which stops the stray
+  // hallucinated fields (e.g. an extra "start2") and missing-array crashes
+  // we hit in testing. It does NOT reliably enforce kind-conditional
+  // requiredness — an allOf/if/then ("word kind requires lemma/pos/
+  // cefrLevel") was silently unenforced under strict, and a oneOf
+  // discriminated union is outright rejected ("Schema type 'oneOf' is not
+  // supported"). So lemma/pos/cefrLevel/phraseText/phraseGroupId stay
+  // optional at the schema level ("word kind only" / "phrase kind only" in
+  // their descriptions) — domain/drop-incomplete-annotations.ts filters out
+  // any annotation still missing them before validateAnnotations, instead
+  // of the whole block's pipeline crashing on one bad span.
+  strict: true,
   inputSchema: {
     type: 'object',
+    additionalProperties: false,
     properties: {
       spans: {
         type: 'array',
@@ -41,23 +55,24 @@ export const ANNOTATION_TOOL: AiToolDefinition = {
             lemma: {
               type: 'string',
               description:
-                'Dictionary base form of the word (e.g. "run" for "running"). word kind only.',
+                'Dictionary base form of the word (e.g. "run" for "running"). word kind only, always required for word kind.',
             },
             pos: {
               type: 'string',
               enum: PART_OF_SPEECH_VALUES,
-              description: 'Part of speech. word kind only.',
+              description:
+                'Part of speech. word kind only, always required for word kind.',
             },
             cefrLevel: {
               type: 'string',
               enum: CEFR_LEVEL_VALUES,
               description:
-                'Best-guess CEFR level (A1-C2) of this word or phrase.',
+                'Best-guess CEFR level (A1-C2) of this word or phrase. Always required for word kind.',
             },
             phraseText: {
               type: 'string',
               description:
-                'Canonical whole-phrase text (e.g. "take off"), the dictionary/base form of the phrase — the SAME value on every fragment sharing one phraseGroupId, even though each fragment\'s own `form` differs. phrase kind only.',
+                'Canonical whole-phrase text (e.g. "take off"), the dictionary/base form of the phrase — the SAME value on every fragment sharing one phraseGroupId, even though each fragment\'s own `form` differs. phrase kind only, always required for phrase kind.',
             },
             phraseType: {
               type: 'string',
@@ -71,6 +86,7 @@ export const ANNOTATION_TOOL: AiToolDefinition = {
             },
           },
           required: ['start', 'end', 'form', 'kind'],
+          additionalProperties: false,
         },
       },
     },

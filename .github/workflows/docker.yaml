@@ -35,15 +35,15 @@ jobs:
           context: .
           file: Dockerfile
           platforms: linux/amd64
-          tags: engofy:app
+          tags: engofy:api
           load: true
-          cache-from: type=gha,scope=app
-          cache-to: type=gha,mode=max,scope=app
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
 
       - name: Scan Docker image for vulnerabilities
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: app
+          image-ref: engofy:api
           format: table
           exit-code: 1
           ignore-unfixed: true

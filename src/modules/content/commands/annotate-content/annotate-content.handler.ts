@@ -11,12 +11,17 @@ import {
   ANNOTATION_SYSTEM_PROMPT,
   ANNOTATION_TOOL,
 } from '../../domain/annotation-tool.js';
+import { dedupeAnnotations } from '../../domain/dedupe-annotations.js';
+import { dropIncompleteAnnotations } from '../../domain/drop-incomplete-annotations.js';
+import { dropSpansCrossingNodeBoundaries } from '../../domain/drop-spans-crossing-node-boundaries.js';
 import { flattenNodes, flattenParagraph } from '../../domain/flatten.js';
 import type {
   ListBlock,
   ListItem,
   Paragraph,
 } from '../../domain/node-tree.types.js';
+import { recoverAnnotationOffsets } from '../../domain/recover-annotation-offsets.js';
+import { resolveWordPhraseOverlaps } from '../../domain/resolve-word-phrase-overlaps.js';
 import {
   type SpanInsert,
   spliceSpans,
@@ -35,6 +40,7 @@ import { ContentPipelineStage } from '../../enums/content-pipeline-stage.enum.js
 import { ContentStatus } from '../../enums/content-status.enum.js';
 import type { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
 import type { PhraseType } from '../../enums/phrase-type.enum.js';
+import { InvalidAnnotationShapeError } from '../../errors/invalid-annotation-shape.error.js';
 import { AnnotateContentCommand } from './annotate-content.command.js';
 
 interface AnnotationCaches {
@@ -112,13 +118,21 @@ export class AnnotateContentHandler
     caches: AnnotationCaches,
   ): Promise<void> {
     const paragraph = part.body as Paragraph;
-    const { text } = flattenParagraph(paragraph);
+    const { text, offsets } = flattenParagraph(paragraph);
 
     if (!text.trim()) {
       return;
     }
 
-    const annotations = await this.callAnnotationTool(text);
+    const rawAnnotations = await this.callAnnotationTool(text);
+    const annotations = dropIncompleteAnnotations(
+      dropSpansCrossingNodeBoundaries(
+        offsets,
+        resolveWordPhraseOverlaps(
+          dedupeAnnotations(recoverAnnotationOffsets(text, rawAnnotations)),
+        ),
+      ),
+    );
     validateAnnotations(text, annotations);
     const inserts = await this.buildSpanInserts(annotations, caches);
     part.body = spliceSpans(paragraph, inserts);
@@ -132,7 +146,7 @@ export class AnnotateContentHandler
     const items: ListItem[] = [];
 
     for (const item of list.items) {
-      const { text } = flattenNodes(item.children);
+      const { text, offsets } = flattenNodes(item.children);
 
       if (!text.trim()) {
         items.push(item);
@@ -140,7 +154,15 @@ export class AnnotateContentHandler
       }
 
       // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each item's find-or-create must see the previous item's not-yet-flushed Word/Phrase via the cache.
-      const annotations = await this.callAnnotationTool(text);
+      const rawAnnotations = await this.callAnnotationTool(text);
+      const annotations = dropIncompleteAnnotations(
+        dropSpansCrossingNodeBoundaries(
+          offsets,
+          resolveWordPhraseOverlaps(
+            dedupeAnnotations(recoverAnnotationOffsets(text, rawAnnotations)),
+          ),
+        ),
+      );
       validateAnnotations(text, annotations);
       const inserts = await this.buildSpanInserts(annotations, caches);
       items.push(spliceSpansIntoListItem(item, inserts));
@@ -155,6 +177,16 @@ export class AnnotateContentHandler
       userText: text,
       tool: ANNOTATION_TOOL,
     });
+
+    // AiClient.runTool<T> trusts the AI response matches T with an
+    // unchecked cast — verify the one thing we rely on (spans is an array)
+    // here, at the boundary, instead of crashing with a confusing
+    // "X.map is not a function" deeper in recoverAnnotationOffsets.
+    if (!Array.isArray(spans)) {
+      throw new InvalidAnnotationShapeError(
+        'AI response "spans" was not an array',
+      );
+    }
 
     return spans;
   }

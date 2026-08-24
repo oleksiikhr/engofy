@@ -99,7 +99,7 @@ function validatePhraseShape(annotation: Annotation): void {
   }
 }
 
-function validateShape(annotation: Annotation): void {
+export function validateShape(annotation: Annotation): void {
   if (annotation.kind === 'word') {
     validateWordShape(annotation);
     return;
