@@ -28,7 +28,7 @@ export class RequestLoginCodeHandler
 
     const { otp } = await this.challenges.issue(email);
 
-    await this.outbox.send<SendChallengeEmailJobData>(
+    this.outbox.send<SendChallengeEmailJobData>(
       this.em,
       QueueName.AuthChallengeEmail,
       { email, otp },

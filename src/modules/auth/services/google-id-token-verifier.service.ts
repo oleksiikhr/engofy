@@ -10,7 +10,6 @@ export interface GoogleIdentity {
   email: string;
 }
 
-// TODO Add tests
 @Injectable()
 export class GoogleIdTokenVerifierService {
   private readonly client: OAuth2Client;

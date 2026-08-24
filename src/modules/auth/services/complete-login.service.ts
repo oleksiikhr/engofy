@@ -4,7 +4,6 @@ import { User } from '../entities/user.entity.js';
 import type { LoginResult } from '../types/login-result.type.js';
 import { SessionService } from './session.service.js';
 
-// TODO Add tests
 @Injectable()
 export class CompleteLoginService {
   constructor(

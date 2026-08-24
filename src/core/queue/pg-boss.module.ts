@@ -3,6 +3,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import type { AppRuntime } from '../app.js';
 import QueueConfig from './config/queue.config.js';
+import { OutboxSubscriber } from './outbox.subscriber.js';
 import { OutboxSenderService } from './outbox-sender.service.js';
 import { pgBossProvider } from './pg-boss.provider.js';
 import { PgBossLifecycleService } from './pg-boss-lifecycle.service.js';
@@ -21,6 +22,7 @@ export class PgBossModule {
         pgBossProvider(runtime),
         PgBossLifecycleService,
         OutboxSenderService,
+        OutboxSubscriber,
         QueueManagementService,
       ],
       exports: [PG_BOSS, OutboxSenderService, QueueManagementService],

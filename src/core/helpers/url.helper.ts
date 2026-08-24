@@ -1,5 +1,3 @@
-// TODO Add on these methods
-
 export function toUrl(value: string): URL | null {
   try {
     return new URL(value);

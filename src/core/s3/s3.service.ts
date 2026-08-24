@@ -10,7 +10,6 @@ import type { ConfigType } from '@nestjs/config';
 import S3Config from './s3.config.js';
 import { S3_CLIENT } from './s3.tokens.js';
 
-// TODO Tests
 @Injectable()
 export class S3Service {
   constructor(

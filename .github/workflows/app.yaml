@@ -11,9 +11,9 @@ jobs:
       PUBLIC_URL: http://localhost:3000
       MIKRO_ORM_DB_NAME: engofy
       MIKRO_ORM_HOST: localhost
-      MIKRO_ORM_PASSWORD: postgres
+      MIKRO_ORM_PASSWORD: engofy
       MIKRO_ORM_PORT: 5432
-      MIKRO_ORM_USER: postgres
+      MIKRO_ORM_USER: engofy
       REDIS_HOST: localhost
       REDIS_PORT: 6379
       S3_ENDPOINT: http://localhost:8333

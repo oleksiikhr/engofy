@@ -5,7 +5,6 @@ import {
   ResolveSessionCommand,
 } from './resolve-session.command.js';
 
-// TODO Add tests
 @CommandHandler(ResolveSessionCommand)
 export class ResolveSessionHandler
   implements ICommandHandler<ResolveSessionCommand>
