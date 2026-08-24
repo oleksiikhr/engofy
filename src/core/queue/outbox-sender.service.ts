@@ -23,23 +23,32 @@ export class OutboxSenderService {
     data: T,
     options?: SendOptions,
   ): void {
-    const list = this.pending.get(em) ?? [];
+    // DI injects the root, request-context-agnostic EntityManager — resolve
+    // it to whichever forked em is actually active so this keys the same
+    // object drain() later receives via the afterFlush event.
+    const context = em.getContext();
+    const list = this.pending.get(context) ?? [];
+
     list.push({ name, data: withSentryTrace(data), options });
-    this.pending.set(em, list);
+
+    this.pending.set(context, list);
   }
 
   async drain(em: EntityManager): Promise<void> {
-    const list = this.pending.get(em);
+    const context = em.getContext();
+    const list = this.pending.get(context);
+
     if (!list?.length) {
       return;
     }
-    this.pending.delete(em);
+
+    this.pending.delete(context);
 
     for (const job of list) {
       // biome-ignore lint/performance/noAwaitInLoops: outbox jobs must be sent in the order they were staged.
       await this.boss.send(job.name, job.data, {
         ...job.options,
-        db: fromKysely(em.getKysely()),
+        db: fromKysely(context.getKysely()),
       });
     }
   }

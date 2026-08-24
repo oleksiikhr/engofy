@@ -46,7 +46,7 @@ ENV NODE_ENV=production
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
-USER node
+USER 1000:1000
 
 WORKDIR /app/dist
 

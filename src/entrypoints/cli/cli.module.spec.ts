@@ -1,4 +1,5 @@
 import { CliModule } from './cli.module.js';
+import { ContentCliModule } from './content/content-cli.module.js';
 import { MigrateCliModule } from './migrate/migrate-cli.module.js';
 import { QueueCliModule } from './queue/queue-cli.module.js';
 import { SentryCliModule } from './sentry/sentry-cli.module.js';
@@ -18,14 +19,15 @@ describe('CliModule.forCommand', () => {
         SentryCliModule,
         MigrateCliModule,
         QueueCliModule,
+        ContentCliModule,
       ]),
     );
-    expect(imports).toHaveLength(3);
+    expect(imports).toHaveLength(4);
   });
 
   it('loads every sub-module when no command is given', () => {
     const { imports } = CliModule.forCommand();
 
-    expect(imports).toHaveLength(3);
+    expect(imports).toHaveLength(4);
   });
 });
