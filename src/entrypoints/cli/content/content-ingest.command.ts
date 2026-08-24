@@ -3,10 +3,12 @@ import { Logger } from '@nestjs/common';
 import { Option, SubCommand } from 'nest-commander';
 import { IngestContentDto } from '../../../modules/content/commands/ingest-content/ingest-content.dto.js';
 import { ContentService } from '../../../modules/content/content.service.js';
+import { ContentType } from '../../../modules/content/enums/content-type.enum.js';
 import { CliCommandRunner } from '../cli-command.runner.js';
 
 interface IngestOptions {
   title?: string;
+  type?: ContentType;
 }
 
 @SubCommand({
@@ -31,6 +33,14 @@ export class ContentIngestCommand extends CliCommandRunner<IngestOptions> {
     return val;
   }
 
+  @Option({
+    flags: '-y, --type <type>',
+    description: `Content type (${Object.values(ContentType).join('|')}), defaults to "${ContentType.Post}"`,
+  })
+  parseType(val: string): ContentType {
+    return val as ContentType;
+  }
+
   protected async execute(
     args: string[],
     options: IngestOptions,
@@ -39,7 +49,11 @@ export class ContentIngestCommand extends CliCommandRunner<IngestOptions> {
     const rawText = await readFile(file, 'utf-8');
 
     const content = await this.content.ingest(
-      IngestContentDto.create({ rawText, title: options.title }),
+      IngestContentDto.create({
+        rawText,
+        title: options.title,
+        type: options.type,
+      }),
     );
 
     this.logger.log(

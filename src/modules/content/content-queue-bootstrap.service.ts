@@ -9,6 +9,9 @@ export class ContentQueueBootstrapService implements OnApplicationBootstrap {
   constructor(@Inject(PG_BOSS) private readonly boss: PgBoss) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    await this.boss.createQueue(QueueName.ContentAnnotation);
+    await this.boss.createQueue(QueueName.ContentAnnotation, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
   }
 }

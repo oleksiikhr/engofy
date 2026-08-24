@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import type { Redis } from 'ioredis';
 import { DateTime } from 'luxon';
+import { v7 as uuidv7 } from 'uuid';
 import { REDIS_CLIENT } from '../../../core/redis/redis.tokens.js';
 import AuthConfig from '../config/auth.config.js';
 import {
@@ -45,22 +46,23 @@ export class ChallengeService {
     const normalized = normalizeEmail(email);
     const otp = generateOtp();
 
-    const values = {
-      otpHash: hashSecret(otp),
-      attempts: 0,
-      expiresAt: DateTime.now().plus({
-        milliseconds: this.config.challengeTtlMs,
-      }),
-    };
-
-    const existing = await this.em.findOne(AuthChallenge, {
-      email: normalized,
-    });
-    if (existing) {
-      this.em.assign(existing, values);
-    } else {
-      this.em.create(AuthChallenge, { email: normalized, ...values });
-    }
+    await this.em.upsert(
+      AuthChallenge,
+      {
+        id: uuidv7(),
+        email: normalized,
+        otpHash: hashSecret(otp),
+        attempts: 0,
+        expiresAt: DateTime.now().plus({
+          milliseconds: this.config.challengeTtlMs,
+        }),
+      },
+      {
+        onConflictFields: ['email'],
+        onConflictAction: 'merge',
+        onConflictExcludeFields: ['id'],
+      },
+    );
 
     return { email: normalized, otp };
   }

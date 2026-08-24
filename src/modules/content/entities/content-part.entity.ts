@@ -49,6 +49,13 @@ export class ContentPart {
   @Property({ type: ContentPartBodyType })
   body!: Block;
 
+  // Explicit completion marker for content_annotation, not inferred from
+  // "does body contain a span" — a paragraph with zero annotate-worthy words
+  // is a legitimate, fully-annotated outcome, and inferring completion from
+  // span presence would re-call the AI on it forever.
+  @Property({ type: LuxonTimestampType, nullable: true })
+  annotatedAt?: DateTime | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

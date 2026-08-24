@@ -1,6 +1,7 @@
 import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
+  Index,
   PrimaryKey,
   Property,
   Unique,
@@ -19,6 +20,7 @@ export class AuthSession {
   tokenHash!: string;
 
   @Property({ type: 'uuid' })
+  @Index()
   userId!: string;
 
   @Property({ type: LuxonTimestampType })

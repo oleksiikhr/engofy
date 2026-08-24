@@ -24,9 +24,8 @@ export class WordDefinition {
   @Enum(() => PartOfSpeech)
   pos!: PartOfSpeech;
 
-  // '' = stub, not yet enriched by the fill-word-definition job (Phase 2).
-  @Property({ type: 'text', default: '' })
-  definition: Opt<string> = '';
+  @Property({ type: 'text', nullable: true })
+  definition?: string | null;
 
   @Property({ type: 'text', nullable: true })
   phonetic?: string | null;

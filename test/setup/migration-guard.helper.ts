@@ -10,7 +10,7 @@ export async function ensureMigrated(
     return;
   }
 
-  await orm.migrator.down();
+  await orm.schema.drop({ dropMigrationsTable: true });
   await orm.migrator.up();
   isInitialized = true;
 }

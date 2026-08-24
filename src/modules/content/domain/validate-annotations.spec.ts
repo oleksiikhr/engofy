@@ -16,6 +16,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'government',
         pos: 'noun',
+        cefrLevel: 'B1',
       },
       {
         start: 25,
@@ -24,10 +25,39 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'negotiate',
         pos: 'verb',
+        cefrLevel: 'B2',
       },
     ];
 
     expect(() => validateAnnotations(TEXT, annotations)).not.toThrow();
+  });
+
+  it('accepts a multi-fragment phrase sharing one phraseGroupId', () => {
+    const text = 'She took her coat off before dinner.';
+    const annotations: Annotation[] = [
+      {
+        start: 4,
+        end: 8,
+        form: 'took',
+        kind: 'phrase',
+        phraseText: 'take off',
+        phraseType: 'phrasal_verb',
+        phraseGroupId: 'g1',
+        cefrLevel: 'A2',
+      },
+      {
+        start: 18,
+        end: 21,
+        form: 'off',
+        kind: 'phrase',
+        phraseText: 'take off',
+        phraseType: 'phrasal_verb',
+        phraseGroupId: 'g1',
+        cefrLevel: 'A2',
+      },
+    ];
+
+    expect(() => validateAnnotations(text, annotations)).not.toThrow();
   });
 
   it('rejects an out-of-bounds offset', () => {
@@ -39,6 +69,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'x',
         pos: 'noun',
+        cefrLevel: 'A1',
       },
     ];
 
@@ -56,6 +87,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'government',
         pos: 'noun',
+        cefrLevel: 'B1',
       },
     ];
 
@@ -66,7 +98,7 @@ describe('validateAnnotations', () => {
 
   it('rejects a word annotation missing lemma or pos', () => {
     const annotations: Annotation[] = [
-      { start: 4, end: 14, form: 'government', kind: 'word' },
+      { start: 4, end: 14, form: 'government', kind: 'word', cefrLevel: 'B1' },
     ];
 
     expect(() => validateAnnotations(TEXT, annotations)).toThrow(
@@ -83,6 +115,42 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'government',
         pos: 'bogus-pos',
+        cefrLevel: 'B1',
+      },
+    ];
+
+    expect(() => validateAnnotations(TEXT, annotations)).toThrow(
+      InvalidAnnotationShapeError,
+    );
+  });
+
+  it('rejects a word annotation missing cefrLevel', () => {
+    const annotations: Annotation[] = [
+      {
+        start: 4,
+        end: 14,
+        form: 'government',
+        kind: 'word',
+        lemma: 'government',
+        pos: 'noun',
+      },
+    ];
+
+    expect(() => validateAnnotations(TEXT, annotations)).toThrow(
+      InvalidAnnotationShapeError,
+    );
+  });
+
+  it('rejects a word annotation with an invalid cefrLevel', () => {
+    const annotations: Annotation[] = [
+      {
+        start: 4,
+        end: 14,
+        form: 'government',
+        kind: 'word',
+        lemma: 'government',
+        pos: 'noun',
+        cefrLevel: 'bogus-level',
       },
     ];
 
@@ -101,6 +169,40 @@ describe('validateAnnotations', () => {
     );
   });
 
+  it('rejects a phrase annotation missing phraseGroupId', () => {
+    const annotations: Annotation[] = [
+      {
+        start: 4,
+        end: 14,
+        form: 'government',
+        kind: 'phrase',
+        phraseText: 'government announced',
+      },
+    ];
+
+    expect(() => validateAnnotations(TEXT, annotations)).toThrow(
+      InvalidAnnotationShapeError,
+    );
+  });
+
+  it('rejects a phrase annotation with an invalid phraseType', () => {
+    const annotations: Annotation[] = [
+      {
+        start: 4,
+        end: 14,
+        form: 'government',
+        kind: 'phrase',
+        phraseText: 'government announced',
+        phraseGroupId: 'g1',
+        phraseType: 'bogus-type',
+      },
+    ];
+
+    expect(() => validateAnnotations(TEXT, annotations)).toThrow(
+      InvalidAnnotationShapeError,
+    );
+  });
+
   it('rejects two overlapping annotations', () => {
     const annotations: Annotation[] = [
       {
@@ -110,6 +212,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'government',
         pos: 'noun',
+        cefrLevel: 'B1',
       },
       {
         start: 10,
@@ -118,6 +221,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'x',
         pos: 'noun',
+        cefrLevel: 'B1',
       },
     ];
 
@@ -135,6 +239,7 @@ describe('validateAnnotations', () => {
         kind: 'word',
         lemma: 'government',
         pos: 'noun',
+        cefrLevel: 'B1',
       },
       { start: 25, end: 34, form: 'negotiate', kind: 'word' },
     ];

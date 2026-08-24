@@ -1,5 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { v7 as uuidv7 } from 'uuid';
 import { User } from '../entities/user.entity.js';
 import type { LoginResult } from '../types/login-result.type.js';
 import { SessionService } from './session.service.js';
@@ -34,11 +35,10 @@ export class CompleteLoginService {
     email: string,
     googleSub?: string,
   ): Promise<User> {
-    const existing = await this.em.findOne(User, { email });
-    if (existing) {
-      return existing;
-    }
-
-    return this.em.create(User, { email, googleSub: googleSub ?? null });
+    return this.em.upsert(
+      User,
+      { id: uuidv7(), email, googleSub: googleSub ?? null },
+      { onConflictFields: ['email'], onConflictAction: 'ignore' },
+    );
   }
 }
