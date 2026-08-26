@@ -18,6 +18,15 @@ land — same input, more of the pipeline to observe.
   collocation, both in the same text), proper nouns, numerals. Used to
   stress-test the `content-annotation` stage (`annotate-content.handler.ts`)
   on realistic paragraph lengths, not just short samples.
+- `article-complex.md` — heavier stress test: h1 + h2, an ordered list and an
+  unordered list (short items, exercises `ordered` on `ListBlock`), a
+  word-sense case ("offer" as verb vs. noun in the same sentence), several
+  non-adjacent phrasal verbs ("turned the offer down", "look the contract
+  over"), idioms ("broke the ice", "picked up the phone"), a combined
+  bold+italic span (`**_significantly_**`, two marks on one node), a link,
+  multi-word proper nouns, and numerals/money amounts. Used to probe where
+  the annotation model's per-call completeness degrades (short list items,
+  longer paragraphs).
 
 ## 1. Start local infra
 

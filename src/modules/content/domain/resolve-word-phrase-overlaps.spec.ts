@@ -11,7 +11,6 @@ describe('resolveWordPhraseOverlaps', () => {
         kind: 'word',
         lemma: 'fine',
         pos: 'adjective',
-        cefrLevel: 'A2',
       },
       {
         start: 23,
@@ -20,7 +19,6 @@ describe('resolveWordPhraseOverlaps', () => {
         kind: 'word',
         lemma: 'print',
         pos: 'noun',
-        cefrLevel: 'A2',
       },
       {
         start: 18,
@@ -48,7 +46,6 @@ describe('resolveWordPhraseOverlaps', () => {
         kind: 'word',
         lemma: 'always',
         pos: 'adverb',
-        cefrLevel: 'A2',
       },
       {
         start: 18,
@@ -94,7 +91,6 @@ describe('resolveWordPhraseOverlaps', () => {
         kind: 'word',
         lemma: 'off',
         pos: 'particle',
-        cefrLevel: 'A1',
       },
     ];
 

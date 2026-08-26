@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Logger } from '@nestjs/common';
-import type { AiClient, AiToolCallParams } from './ai-client.port.js';
+import type { AiClient, AiCompleteParams } from './ai-client.port.js';
 
 // $ per 1M tokens, matched against `model` by substring — see the "Current
 // Models" pricing table in Anthropic's docs. Update alongside AI_MODEL.
@@ -49,7 +49,7 @@ export class AnthropicClientService implements AiClient {
     this.client = new Anthropic({ apiKey });
   }
 
-  async runTool<T>({ system, userText, tool }: AiToolCallParams): Promise<T> {
+  async complete({ system, userText }: AiCompleteParams): Promise<string> {
     const response = await this.client.messages.create({
       model: this.model,
       max_tokens: 16000,
@@ -57,22 +57,12 @@ export class AnthropicClientService implements AiClient {
         thinking: { type: 'adaptive' },
       }),
       system,
-      tools: [
-        {
-          name: tool.name,
-          description: tool.description,
-          input_schema: tool.inputSchema as Anthropic.Tool.InputSchema,
-          ...(tool.strict !== undefined && { strict: tool.strict }),
-        },
-      ],
-      tool_choice: { type: 'tool', name: tool.name },
       messages: [{ role: 'user', content: userText }],
     });
 
     this.logger.log(
       {
         model: this.model,
-        tool: tool.name,
         input_tokens: response.usage.input_tokens,
         output_tokens: response.usage.output_tokens,
         cache_creation_input_tokens:
@@ -80,20 +70,23 @@ export class AnthropicClientService implements AiClient {
         cache_read_input_tokens: response.usage.cache_read_input_tokens ?? 0,
         cost_usd: estimateCostUsd(this.model, response.usage),
       },
-      'ai tool call usage',
+      'ai complete call usage',
     );
 
-    const block = response.content.find(
-      (candidate): candidate is Anthropic.ToolUseBlock =>
-        candidate.type === 'tool_use',
-    );
-
-    if (!block) {
+    // max_tokens cuts generation off mid-stream — the caller's own
+    // completeness check (comparing the reconstructed plain text against
+    // the original) would otherwise treat this identically to a model that
+    // just stopped early for no reason, and retry indefinitely for a
+    // structural budget problem a retry can't fix. Surface it distinctly.
+    if (response.stop_reason === 'max_tokens') {
       throw new Error(
-        `AI response for tool "${tool.name}" contained no tool_use block (stop_reason: ${response.stop_reason})`,
+        `AI response was truncated by max_tokens — output_tokens=${response.usage.output_tokens}`,
       );
     }
 
-    return block.input as T;
+    return response.content
+      .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+      .map((block) => block.text)
+      .join('');
   }
 }

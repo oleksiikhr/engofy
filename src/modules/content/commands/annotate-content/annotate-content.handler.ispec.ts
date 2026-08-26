@@ -3,11 +3,10 @@ import { createIntegrationSuite } from '../../../../../test/setup/int-suite.help
 import {
   AI_CLIENT,
   type AiClient,
-  type AiToolCallParams,
+  type AiCompleteParams,
 } from '../../../../core/ai/ai-client.port.js';
 import { ContentModule } from '../../content.module.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
-import type { Annotation } from '../../domain/validate-annotations.js';
 import { ContentSource } from '../../embeddables/content-source.embeddable.js';
 import { Content } from '../../entities/content.entity.js';
 import { ContentPart } from '../../entities/content-part.entity.js';
@@ -23,66 +22,64 @@ import { ContentStatus } from '../../enums/content-status.enum.js';
 import { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
 import { AnnotateContentCommand } from './annotate-content.command.js';
 
-// Returns fixed annotations by matching substrings in the given text — good
-// enough to drive the handler's splice/find-or-create logic deterministically
-// without a live API call.
+interface Insertion {
+  at: number;
+  text: string;
+}
+
+// Inserts each tag at its exact character offset and leaves every other
+// character untouched, applied back-to-front so earlier offsets stay valid
+// as later ones are inserted. This matters beyond just producing the right
+// tags: parseAnnotationTags treats a response as complete only if stripping
+// its tags reconstructs the original text character-for-character, so any
+// insertion scheme that shifted untagged text would make the handler
+// believe the fake's response was truncated and trigger its one retry.
+function insertAll(text: string, insertions: Insertion[]): string {
+  const sorted = [...insertions].sort((a, b) => b.at - a.at);
+  return sorted.reduce(
+    (acc, { at, text: insertText }) =>
+      acc.slice(0, at) + insertText + acc.slice(at),
+    text,
+  );
+}
+
+// Hand-tags the two fixture sentences this ispec uses — good enough to
+// drive the handler's splice/find-or-create logic deterministically without
+// a live API call.
 class FakeAiClient implements AiClient {
   callCount = 0;
 
-  async runTool<T>({ userText }: AiToolCallParams): Promise<T> {
+  async complete({ userText }: AiCompleteParams): Promise<string> {
     this.callCount += 1;
-    const spans: Annotation[] = [];
 
-    const word = (
-      form: string,
-      lemma: string,
-      pos: string,
-      cefrLevel: string,
-    ) => {
-      const start = userText.indexOf(form);
-      if (start >= 0) {
-        spans.push({
-          start,
-          end: start + form.length,
-          form,
-          kind: 'word',
-          lemma,
-          pos,
-          cefrLevel,
-        });
-      }
-    };
+    const insertions: Insertion[] = [];
 
-    word('government', 'government', PartOfSpeech.Noun, 'B1');
+    const govStart = userText.indexOf('government');
+    if (govStart >= 0) {
+      insertions.push({
+        at: govStart + 'government'.length,
+        text: `{{w|${PartOfSpeech.Noun}|government}}`,
+      });
+    }
 
     const tookStart = userText.indexOf('took');
     const offStart = userText.indexOf('off', tookStart);
     if (tookStart >= 0 && offStart >= 0) {
-      spans.push(
+      insertions.push(
+        { at: tookStart, text: '⟦' },
         {
-          start: tookStart,
-          end: tookStart + 4,
-          form: 'took',
-          kind: 'phrase',
-          phraseText: 'take off',
-          phraseType: 'phrasal_verb',
-          phraseGroupId: 'g1',
-          cefrLevel: 'A2',
+          at: tookStart + 'took'.length,
+          text: '⟧{{p|phrasal_verb|take off|g1}}',
         },
+        { at: offStart, text: '⟦' },
         {
-          start: offStart,
-          end: offStart + 3,
-          form: 'off',
-          kind: 'phrase',
-          phraseText: 'take off',
-          phraseType: 'phrasal_verb',
-          phraseGroupId: 'g1',
-          cefrLevel: 'A2',
+          at: offStart + 'off'.length,
+          text: '⟧{{p|phrasal_verb|take off|g1}}',
         },
       );
     }
 
-    return { spans } as T;
+    return insertAll(userText, insertions);
   }
 }
 
@@ -140,11 +137,10 @@ describe('AnnotateContentHandler', () => {
     const word = await suite.orm.em.findOneOrFail(Word, {
       lemma: 'government',
     });
-    const definition = await suite.orm.em.findOneOrFail(WordDefinition, {
+    await suite.orm.em.findOneOrFail(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
-    expect(definition.cefrLevel).toBe('B1');
 
     const run = await suite.orm.em.findOneOrFail(ContentPipelineRun, {
       contentId,

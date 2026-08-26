@@ -2,24 +2,9 @@ import { dropIncompleteAnnotations } from './drop-incomplete-annotations.js';
 import type { Annotation } from './validate-annotations.js';
 
 describe('dropIncompleteAnnotations', () => {
-  it('drops a word annotation missing cefrLevel', () => {
-    const annotations: Annotation[] = [
-      {
-        start: 0,
-        end: 6,
-        form: 'Always',
-        kind: 'word',
-        lemma: 'always',
-        pos: 'adverb',
-      },
-    ];
-
-    expect(dropIncompleteAnnotations(annotations)).toHaveLength(0);
-  });
-
   it('drops a word annotation missing lemma or pos', () => {
     const annotations: Annotation[] = [
-      { start: 0, end: 6, form: 'Always', kind: 'word', cefrLevel: 'A2' },
+      { start: 0, end: 6, form: 'Always', kind: 'word' },
     ];
 
     expect(dropIncompleteAnnotations(annotations)).toHaveLength(0);
@@ -42,7 +27,6 @@ describe('dropIncompleteAnnotations', () => {
         kind: 'word',
         lemma: 'always',
         pos: 'adverb',
-        cefrLevel: 'A2',
       },
     ];
 

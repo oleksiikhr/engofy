@@ -11,7 +11,6 @@ describe('dedupeAnnotations', () => {
         kind: 'word',
         lemma: 'relocate',
         pos: 'verb',
-        cefrLevel: 'B2',
       },
       {
         start: 126,
@@ -20,7 +19,6 @@ describe('dedupeAnnotations', () => {
         kind: 'word',
         lemma: 'relocate',
         pos: 'verb',
-        cefrLevel: 'B2',
       },
     ];
 
@@ -38,7 +36,6 @@ describe('dedupeAnnotations', () => {
         kind: 'word',
         lemma: 'always',
         pos: 'adverb',
-        cefrLevel: 'A2',
       },
       {
         start: 7,
@@ -47,7 +44,6 @@ describe('dedupeAnnotations', () => {
         kind: 'word',
         lemma: 'review',
         pos: 'verb',
-        cefrLevel: 'B1',
       },
     ];
 

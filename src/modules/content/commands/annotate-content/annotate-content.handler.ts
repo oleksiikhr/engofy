@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
@@ -7,20 +7,19 @@ import {
   AI_CLIENT,
   type AiClient,
 } from '../../../../core/ai/ai-client.port.js';
-import {
-  ANNOTATION_SYSTEM_PROMPT,
-  ANNOTATION_TOOL,
-} from '../../domain/annotation-tool.js';
+import { ANNOTATION_SYSTEM_PROMPT } from '../../domain/annotation-prompt.js';
 import { dedupeAnnotations } from '../../domain/dedupe-annotations.js';
 import { dropIncompleteAnnotations } from '../../domain/drop-incomplete-annotations.js';
 import { dropSpansCrossingNodeBoundaries } from '../../domain/drop-spans-crossing-node-boundaries.js';
+import type { NodeOffset } from '../../domain/flatten.js';
 import { flattenNodes, flattenParagraph } from '../../domain/flatten.js';
 import type {
   ListBlock,
   ListItem,
   Paragraph,
 } from '../../domain/node-tree.types.js';
-import { recoverAnnotationOffsets } from '../../domain/recover-annotation-offsets.js';
+import type { ParseAnnotationTagsResult } from '../../domain/parse-annotation-tags.js';
+import { parseAnnotationTags } from '../../domain/parse-annotation-tags.js';
 import { resolveWordPhraseOverlaps } from '../../domain/resolve-word-phrase-overlaps.js';
 import {
   type SpanInsert,
@@ -33,17 +32,15 @@ import { Content } from '../../entities/content.entity.js';
 import { ContentPart } from '../../entities/content-part.entity.js';
 import { ContentPipelineRun } from '../../entities/content-pipeline-run.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
-import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { ContentPartKind } from '../../enums/content-part-kind.enum.js';
 import { ContentPipelineRunStatus } from '../../enums/content-pipeline-run-status.enum.js';
 import { ContentPipelineStage } from '../../enums/content-pipeline-stage.enum.js';
 import { ContentStatus } from '../../enums/content-status.enum.js';
 import type { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
 import type { PhraseType } from '../../enums/phrase-type.enum.js';
-import { InvalidAnnotationShapeError } from '../../errors/invalid-annotation-shape.error.js';
 import { AnnotateContentCommand } from './annotate-content.command.js';
 
-interface AnnotationCaches {
+export interface AnnotationCaches {
   wordDefinitionIdByKey: Map<string, string>;
   phraseIdByText: Map<string, string>;
 }
@@ -52,6 +49,8 @@ interface AnnotationCaches {
 export class AnnotateContentHandler
   implements ICommandHandler<AnnotateContentCommand>
 {
+  private readonly logger = new Logger(AnnotateContentHandler.name);
+
   constructor(
     private readonly em: EntityManager,
     @Inject(AI_CLIENT) private readonly ai: AiClient,
@@ -124,18 +123,13 @@ export class AnnotateContentHandler
       return;
     }
 
-    const rawAnnotations = await this.callAnnotationTool(text);
-    const annotations = dropIncompleteAnnotations(
-      dropSpansCrossingNodeBoundaries(
-        offsets,
-        resolveWordPhraseOverlaps(
-          dedupeAnnotations(recoverAnnotationOffsets(text, rawAnnotations)),
-        ),
-      ),
+    const annotations = await this.computeAnnotations(text, offsets);
+    part.body = await this.applyAnnotationsToParagraph(
+      paragraph,
+      text,
+      annotations,
+      caches,
     );
-    validateAnnotations(text, annotations);
-    const inserts = await this.buildSpanInserts(annotations, caches);
-    part.body = spliceSpans(paragraph, inserts);
   }
 
   private async annotateListPart(
@@ -154,41 +148,98 @@ export class AnnotateContentHandler
       }
 
       // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each item's find-or-create must see the previous item's not-yet-flushed Word/Phrase via the cache.
-      const rawAnnotations = await this.callAnnotationTool(text);
-      const annotations = dropIncompleteAnnotations(
-        dropSpansCrossingNodeBoundaries(
-          offsets,
-          resolveWordPhraseOverlaps(
-            dedupeAnnotations(recoverAnnotationOffsets(text, rawAnnotations)),
-          ),
-        ),
+      const annotations = await this.computeAnnotations(text, offsets);
+      const spliced = await this.applyAnnotationsToListItem(
+        item,
+        text,
+        annotations,
+        caches,
       );
-      validateAnnotations(text, annotations);
-      const inserts = await this.buildSpanInserts(annotations, caches);
-      items.push(spliceSpansIntoListItem(item, inserts));
+      items.push(spliced);
     }
 
     part.body = { ...list, items };
   }
 
-  private async callAnnotationTool(text: string): Promise<Annotation[]> {
-    const { spans } = await this.ai.runTool<{ spans: Annotation[] }>({
-      system: ANNOTATION_SYSTEM_PROMPT,
-      userText: text,
-      tool: ANNOTATION_TOOL,
-    });
+  // The model never states a position (see annotation-prompt.ts) — it
+  // copies the text back out verbatim with tags inserted inline, and
+  // parseAnnotationTags recovers offsets deterministically via indexOf and
+  // reports isComplete: false if the reconstructed text doesn't match
+  // `text` exactly (a truncation, a word skipped anywhere — not just at the
+  // end — or a malformed tag). On that signal, retry once on the SAME full
+  // text (never a slice: with no offsets to trust in the first place,
+  // there's nothing to "resume from") and merge both attempts. This is the
+  // one bounded lever this pipeline needs — no chunking, no separate
+  // verify-pass call, no offset-recovery heuristics.
+  private async computeAnnotations(
+    text: string,
+    offsets: NodeOffset[],
+  ): Promise<Annotation[]> {
+    const first = await this.callAnnotationPrompt(text);
+    let merged = first.annotations;
+    let isComplete = first.isComplete;
 
-    // AiClient.runTool<T> trusts the AI response matches T with an
-    // unchecked cast — verify the one thing we rely on (spans is an array)
-    // here, at the boundary, instead of crashing with a confusing
-    // "X.map is not a function" deeper in recoverAnnotationOffsets.
-    if (!Array.isArray(spans)) {
-      throw new InvalidAnnotationShapeError(
-        'AI response "spans" was not an array',
+    if (!isComplete) {
+      const retry = await this.callAnnotationPrompt(text);
+      merged = [...merged, ...retry.annotations];
+      isComplete = retry.isComplete;
+    }
+
+    if (!isComplete) {
+      this.logger.warn(
+        { textLength: text.length },
+        'annotation response still incomplete after retry — proceeding with the partial annotations found',
       );
     }
 
-    return spans;
+    const annotations = dropIncompleteAnnotations(
+      dropSpansCrossingNodeBoundaries(
+        offsets,
+        resolveWordPhraseOverlaps(dedupeAnnotations(merged)),
+      ),
+    );
+
+    validateAnnotations(text, annotations);
+    return annotations;
+  }
+
+  private async callAnnotationPrompt(
+    text: string,
+  ): Promise<ParseAnnotationTagsResult> {
+    const raw = await this.ai.complete({
+      system: ANNOTATION_SYSTEM_PROMPT,
+      userText: text,
+    });
+    return parseAnnotationTags(text, raw);
+  }
+
+  // Upserts the Word/WordDefinition or Phrase rows for `annotations` and
+  // splices them into `paragraph`/`item`. Public so tooling that already has
+  // a captured Annotation[] (e.g. a seed replaying a snapshot instead of
+  // calling the AI) can reuse the exact same DB-writing logic as the live
+  // pipeline. Re-validates `annotations` against `text` — cheap, and gives a
+  // clear error if a fixture's source text ever drifts from its captured
+  // annotations instead of silently mis-splicing.
+  private async applyAnnotationsToParagraph(
+    paragraph: Paragraph,
+    text: string,
+    annotations: Annotation[],
+    caches: AnnotationCaches,
+  ): Promise<Paragraph> {
+    validateAnnotations(text, annotations);
+    const inserts = await this.buildSpanInserts(annotations, caches);
+    return spliceSpans(paragraph, inserts);
+  }
+
+  private async applyAnnotationsToListItem(
+    item: ListItem,
+    text: string,
+    annotations: Annotation[],
+    caches: AnnotationCaches,
+  ): Promise<ListItem> {
+    validateAnnotations(text, annotations);
+    const inserts = await this.buildSpanInserts(annotations, caches);
+    return spliceSpansIntoListItem(item, inserts);
   }
 
   // Resolves each annotation to a Word/WordDefinition or Phrase, find-or-
@@ -217,7 +268,6 @@ export class AnnotateContentHandler
       const phraseId = await this.findOrCreatePhraseId(
         annotation.phraseText as string,
         annotation.phraseType,
-        annotation.cefrLevel,
         caches.phraseIdByText,
       );
       phraseIdByGroupId.set(groupId, phraseId);
@@ -231,7 +281,6 @@ export class AnnotateContentHandler
         const wordDefinitionId = await this.findOrCreateWordDefinitionId(
           annotation.lemma as string,
           annotation.pos as PartOfSpeech,
-          annotation.cefrLevel as CefrLevel,
           caches.wordDefinitionIdByKey,
         );
         inserts.push({
@@ -258,7 +307,6 @@ export class AnnotateContentHandler
   private async findOrCreateWordDefinitionId(
     lemma: string,
     pos: PartOfSpeech,
-    cefrLevel: CefrLevel,
     cache: Map<string, string>,
   ): Promise<string> {
     const key = `${lemma.toLowerCase()} ${pos}`;
@@ -277,10 +325,12 @@ export class AnnotateContentHandler
     // later occurrence of the same word elsewhere. `id` must be passed
     // explicitly: the entity's `id: string = uuidv7()` default is a
     // class-field initializer that only runs via `new WordDefinition()`,
-    // not for a plain data object handed to em.upsert().
+    // not for a plain data object handed to em.upsert(). cefrLevel is left
+    // unset here — it's filled in later by the word-definition enrichment
+    // job (see WordDefinition.cefrLevel), not the annotation pass.
     const definition = await this.em.upsert(
       WordDefinition,
-      { id: uuidv7(), wordId, pos, cefrLevel },
+      { id: uuidv7(), wordId, pos },
       { onConflictFields: ['wordId', 'pos'], onConflictAction: 'ignore' },
     );
 
@@ -319,7 +369,6 @@ export class AnnotateContentHandler
   private async findOrCreatePhraseId(
     phraseText: string,
     type: string | undefined,
-    cefrLevel: string | undefined,
     cache: Map<string, string>,
   ): Promise<string> {
     const key = phraseText.toLowerCase();
@@ -331,7 +380,6 @@ export class AnnotateContentHandler
     const phraseId = await this.upsertPhraseId(
       phraseText,
       (type as PhraseType | undefined) ?? null,
-      (cefrLevel as CefrLevel | undefined) ?? null,
     );
 
     cache.set(key, phraseId);
@@ -340,21 +388,22 @@ export class AnnotateContentHandler
 
   // Same case-insensitive expression-index constraint as Word.lemma
   // (lower(phrase_text)) — see upsertWordId for why em.upsert() can't
-  // target it and this is raw SQL instead. type/cefrLevel are only ever
-  // written on first creation (the no-op DO UPDATE leaves an existing
-  // phrase's classification untouched), matching the previous
-  // find-then-create semantics exactly, just atomically.
+  // target it and this is raw SQL instead. type is only ever written on
+  // first creation (the no-op DO UPDATE leaves an existing phrase's
+  // classification untouched), matching the previous find-then-create
+  // semantics exactly, just atomically. cefr_level is left null here — it's
+  // filled in later by the fill-phrase enrichment job (see Phrase.cefrLevel),
+  // not the annotation pass.
   private async upsertPhraseId(
     phraseText: string,
     type: PhraseType | null,
-    cefrLevel: CefrLevel | null,
   ): Promise<string> {
     const rows = await this.em.getConnection().execute<{ id: string }[]>(
-      `INSERT INTO phrases (id, phrase_text, type, cefr_level, created_at, updated_at)
-         VALUES (?, ?, ?, ?, now(), now())
+      `INSERT INTO phrases (id, phrase_text, type, created_at, updated_at)
+         VALUES (?, ?, ?, now(), now())
          ON CONFLICT (lower(phrase_text)) DO UPDATE SET phrase_text = phrases.phrase_text
          RETURNING id`,
-      [uuidv7(), phraseText, type, cefrLevel],
+      [uuidv7(), phraseText, type],
       'all',
       this.em.getTransactionContext(),
     );

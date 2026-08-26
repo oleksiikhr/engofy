@@ -30,8 +30,9 @@ export class WordDefinition {
   @Property({ type: 'text', nullable: true })
   phonetic?: string | null;
 
-  @Enum(() => CefrLevel)
-  cefrLevel!: CefrLevel;
+  // null = not yet classified by the word-definition enrichment job.
+  @Enum({ items: () => CefrLevel, nullable: true })
+  cefrLevel?: CefrLevel | null;
 
   @Property({ type: 'text', nullable: true })
   exampleSentence?: string | null;
