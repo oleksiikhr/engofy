@@ -12,6 +12,7 @@ import { LearningCard } from '../../entities/learning-card.entity.js';
 import { InvalidCardTargetError } from '../../errors/invalid-card-target.error.js';
 import { CardLimitService } from '../../services/card-limit.service.js';
 import { FsrsService } from '../../services/fsrs.service.js';
+import { SkillProgressService } from '../../services/skill-progress.service.js';
 import { AddCardCommand } from './add-card.command.js';
 
 // Adds one SRS card for the current user (PLAN.md §3.5). Idempotent: a second
@@ -24,6 +25,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
     private readonly em: EntityManager,
     private readonly cardLimit: CardLimitService,
     private readonly fsrs: FsrsService,
+    private readonly skillProgress: SkillProgressService,
   ) {}
 
   async execute(command: AddCardCommand): Promise<LearningCard> {
@@ -58,6 +60,10 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
     card.state = scheduling.state;
     card.lastReview = scheduling.lastReview;
     this.em.persist(card);
+
+    if (target.type === 'grammar') {
+      await this.skillProgress.unlockConstruction(userId, target.id);
+    }
 
     return card;
   }

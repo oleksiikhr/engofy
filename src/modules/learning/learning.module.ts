@@ -5,8 +5,10 @@ import { AddCardHandler } from './commands/add-card/add-card.handler.js';
 import { ReviewCardHandler } from './commands/review-card/review-card.handler.js';
 import { LearningService } from './learning.service.js';
 import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practice-queue.handler.js';
+import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
 import { FsrsService } from './services/fsrs.service.js';
+import { SkillProgressService } from './services/skill-progress.service.js';
 
 // SRS over words / phrases / grammar (PLAN.md §3.5). Wraps ts-fsrs and the
 // free-tier card cap; skill aggregation (Slice 7) will live alongside.
@@ -16,9 +18,11 @@ import { FsrsService } from './services/fsrs.service.js';
     LearningService,
     FsrsService,
     CardLimitService,
+    SkillProgressService,
     AddCardHandler,
     ReviewCardHandler,
     GetPracticeQueueHandler,
+    GetProfileHandler,
   ],
   exports: [LearningService],
 })

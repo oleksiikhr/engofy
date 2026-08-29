@@ -6,12 +6,14 @@ import { AuthWebModule } from './auth/auth-web.module.js';
 import { BillingWebModule } from './billing/billing-web.module.js';
 import { InternalWebModule } from './internal/internal-web.module.js';
 import { LearningWebModule } from './learning/learning-web.module.js';
+import { ProfileWebModule } from './profile/profile-web.module.js';
 
 const DEFAULT_SUB_MODULES: Type[] = [
   InternalWebModule,
   AuthWebModule,
   LearningWebModule,
   BillingWebModule,
+  ProfileWebModule,
 ];
 
 @Module({})

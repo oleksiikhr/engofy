@@ -6,16 +6,18 @@ import { LearningCard } from '../../entities/learning-card.entity.js';
 import { ReviewLog } from '../../entities/review-log.entity.js';
 import { CardNotFoundError } from '../../errors/card-not-found.error.js';
 import { FsrsService } from '../../services/fsrs.service.js';
+import { SkillProgressService } from '../../services/skill-progress.service.js';
 import { ReviewCardCommand } from './review-card.command.js';
 
 // Grades a card (Again/Hard/Good/Easy), reschedules it via ts-fsrs, and
-// appends an immutable review_logs row (PLAN.md §3.5). Skill-progress
-// aggregation (user_skill_progress) is Slice 7, not here.
+// appends an immutable review_logs row (PLAN.md §3.5). For a grammar card it
+// then updates the construction's user_skill_progress row (PLAN.md §3.6).
 @CommandHandler(ReviewCardCommand)
 export class ReviewCardHandler implements ICommandHandler<ReviewCardCommand> {
   constructor(
     private readonly em: EntityManager,
     private readonly fsrs: FsrsService,
+    private readonly skillProgress: SkillProgressService,
   ) {}
 
   async execute(command: ReviewCardCommand): Promise<LearningCard> {
@@ -61,6 +63,8 @@ export class ReviewCardHandler implements ICommandHandler<ReviewCardCommand> {
     reviewLog.elapsedDays = log.elapsedDays;
     reviewLog.scheduledDays = log.scheduledDays;
     this.em.persist(reviewLog);
+
+    await this.skillProgress.recordGrammarReview(userId, card, rating);
 
     return card;
   }

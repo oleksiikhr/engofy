@@ -5,8 +5,11 @@ import { createIntegrationSuite } from '../../../../../test/setup/int-suite.help
 import { Subscription } from '../../../auth/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../auth/enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../../auth/enums/subscription-status.enum.js';
+import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
+import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { CardLimitReachedError } from '../../errors/card-limit-reached.error.js';
 import { InvalidCardTargetError } from '../../errors/invalid-card-target.error.js';
@@ -82,6 +85,31 @@ describe('AddCardHandler', () => {
     await expect(
       suite.command(new AddCardCommand(userId, { wordId })),
     ).rejects.toBeInstanceOf(CardLimitReachedError);
+  });
+
+  it('unlocks the construction when a grammar card is added', async () => {
+    const userId = uuidv7();
+    const constructionId = uuidv7();
+    const point = suite.orm.em.create(GrammarUsagePoint, {
+      constructionId,
+      cefrLevel: CefrLevel.B1,
+      guideword: 'USE: past perfect',
+      canDoStatement: 'Can talk about an earlier past.',
+    });
+    await suite.orm.em.flush();
+
+    await suite.command(
+      new AddCardCommand(userId, { grammarUsagePointId: point.id }),
+    );
+
+    const progress = await suite.orm.em.findOne(UserSkillProgress, {
+      userId,
+      constructionId,
+    });
+    expect(progress).not.toBeNull();
+    expect(progress?.unlockedAt).not.toBeNull();
+    expect(progress?.masteryScore).toBe(0);
+    expect(progress?.totalAttempts).toBe(0);
   });
 
   it('lets a premium user past the cap', async () => {

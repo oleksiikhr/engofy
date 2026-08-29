@@ -689,9 +689,43 @@ CLI/API ще до появи фронтенду.
 
 ### Зріз 7 — skills / прогрес
 
-- [ ] `user_skill_progress`: `mastery_score` агрегується з `learning_cards`,
-      де `grammar_usage_point_id` належить конструкції.
-- [ ] Streak, статистика по CEFR.
+- [x] `user_skill_progress` write-path у `modules/learning/services/
+      skill-progress.service.ts` (callers флашать):
+      `unlockConstruction(userId, grammarUsagePointId)` — `AddCardHandler`
+      кличе для grammar-таргета після персисту нової картки: upsert
+      `UserSkillProgress(userId, constructionId)` + `unlockedAt` якщо null.
+      `recordGrammarReview(userId, card, rating)` — `ReviewCardHandler` кличе
+      після перепланування (no-op для word/phrase карток): `totalAttempts++`,
+      `correctAttempts++`/`correctStreak++` коли rating ≠ Again (інакше
+      `correctStreak = 0`), і **recompute `masteryScore`** по всій
+      конструкції.
+- [x] `mastery_score` (рішення користувача — **від FSRS-стану картки**, не
+      від correct/total): `domain/mastery.ts` (pure, spec) —
+      `cardMasteryContribution` = 0 для `New`, інакше
+      `clamp(100·(1−e^(−stability/30)), 0, 100)`; `aggregateMasteryScore` =
+      `round(mean)` по всіх `learning_cards` користувача, чий
+      `grammar_usage_point_id` ∈ usage points конструкції. `correct_streak`/
+      `*_attempts` лишаються, але лише для показу.
+- [x] Streak (рішення користувача — **derive з `review_logs`, без лічильника**):
+      `domain/daily-streak.ts` (pure, spec) `computeDailyStreak(reviewedAt[],
+      now)` — послідовні UTC-дні з ≥1 review, що закінчуються сьогодні (або
+      вчора, якщо сьогодні ще порожньо).
+- [x] `GET /profile` (рішення користувача — **один агрегат**, під глобальним
+      `SessionAuthGuard`): новий `entrypoints/web/profile/` (`ProfileWebModule`
+      у `web.module.ts`), `queries/get-profile/` handler у `modules/learning/`.
+      Віддає `{ streak, cefr: { A1..C2: n }, categories: [{ name,
+      constructions: [{ slug, name, cefrLevel, locked, masteryScore,
+      correctStreak }] }] }`. `categories` = 19 EGP-категорій за `sortOrder`,
+      кожна зі своїми конструкціями за `sortOrder`; `cefrLevel` конструкції =
+      найлегший рівень її usage points (`domain/cefr-order.ts`). `locked` =
+      немає `unlockedAt`. `cefr` = кількість SRS-карток користувача за рівнем
+      таргета (grammar → usage point `cefrLevel`; word → найлегший
+      класифікований `WordDefinition.cefrLevel`; phrase → `Phrase.cefrLevel`;
+      некласифіковані не рахуються).
+- Без міграцій (`user_skill_progress` вже є з Зрізу 1;
+      `migration:check` чистий). Перевірки зелені: type, biome, 441 unit
+      (+mastery 6, +daily-streak 8, +cefr-order 4), 125 integration (+add-card
+      1, +review-card 3, +get-profile 2, +profile e2e 2). Не закомічено.
 
 ### Зріз 8 — фронтенд (Astro + HTMX)
 
