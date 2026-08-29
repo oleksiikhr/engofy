@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet } from '../lib/api';
+import { renderPracticeQueue } from '../lib/practice-card';
+import { getCurrentUser } from '../lib/session';
+import type { PracticeItem } from '../lib/types';
+
+const user = await getCurrentUser(Astro.request);
+const cards = user
+  ? await apiGet<PracticeItem[]>('/learning/practice?limit=20', {
+      request: Astro.request,
+    })
+  : [];
+
+const initialHtml = user ? renderPracticeQueue(cards) : '';
+---
+
+<Layout title="Practice — Engofy" user={user} active="practice">
+  <h1>Practice</h1>
+
+  {
+    !user ? (
+      <p>
+        <a href="/login">Sign in</a> to build a deck and review it here.
+      </p>
+    ) : (
+      <div id="practice-container" set:html={initialHtml} />
+    )
+  }
+</Layout>
+
+<script is:inline>
+  // "Show answer" toggle, delegated so it survives HTMX swaps of the card.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.practice__reveal');
+    if (!btn) return;
+    const answer = btn.parentElement?.querySelector('.practice__answer');
+    if (answer) {
+      answer.hidden = false;
+      btn.hidden = true;
+    }
+  });
+</script>
+
+<style is:global>
+  .practice__card,
+  .practice__done {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    max-width: 32rem;
+    margin: 1rem auto 0;
+  }
+  .practice__count {
+    margin: 0 0 1.5rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .practice__kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+  }
+  .practice__front {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.75rem;
+  }
+  .practice__answer {
+    margin: 0 0 1.5rem;
+    color: var(--color-ink-soft);
+  }
+  .practice__answer--self {
+    font-size: 0.85rem;
+  }
+  .practice__reveal {
+    margin-bottom: 1.5rem;
+  }
+  .practice__grades {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .practice__done-emoji {
+    font-size: 2rem;
+    color: var(--color-success);
+    margin: 0;
+  }
+</style>

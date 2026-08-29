@@ -9,7 +9,8 @@
     "includes": [
       "**",
       "!src/metadata.ts",
-      "!src/core/database/migrations/*.json"
+      "!src/core/database/migrations/*.json",
+      "!apps/**"
     ]
   },
   "formatter": {

@@ -1,6 +1,30 @@
+packages:
+  - apps/*
+
 engineStrict: true
 
 minimumReleaseAge: 10080 # 7 days
+
+# The Astro toolchain (core, language-server / `astro check`, Shiki, Vite
+# helpers) publishes far more often than the 7-day gate allows; pinning every
+# churny transitive is not practical, so the frontend build/check ecosystem is
+# exempted. The Nest runtime deps stay fully gated.
+minimumReleaseAgeExclude:
+  - astro
+  - "@astrojs/*"
+  - "@img/*"
+  - sharp
+  - shiki
+  - "@shikijs/*"
+  - "@types/node"
+  - "@ungap/structured-clone"
+  - devalue
+  - magic-string
+  - svgo
+  - "vscode-*"
+  - "@volar/*"
+  - volar-service-*
+  - "@vscode/*"
 
 pmOnFail: error
 

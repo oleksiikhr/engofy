@@ -1,0 +1,189 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet } from '../lib/api';
+import { postUrl } from '../lib/post-url';
+import { getCurrentUser } from '../lib/session';
+import type { DictionaryResponse } from '../lib/types';
+
+const user = await getCurrentUser(Astro.request);
+const dict = user
+  ? await apiGet<DictionaryResponse>('/dictionary', { request: Astro.request })
+  : null;
+
+const items = dict?.items ?? [];
+const states = ['new', 'learning', 'review', 'relearning'] as const;
+---
+
+<Layout title="Dictionary — Engofy" user={user} active="dictionary">
+  <h1>Your dictionary</h1>
+
+  {
+    !user ? (
+      <p>
+        <a href="/login">Sign in</a> to see the words and phrases you've saved.
+      </p>
+    ) : items.length === 0 ? (
+      <p>
+        Nothing saved yet — tap the “+” on a word while reading to add it here.
+      </p>
+    ) : (
+      <>
+        <div class="dict-controls">
+          <input
+            id="dict-search"
+            type="search"
+            placeholder="Search words, phrases, definitions…"
+            aria-label="Search your dictionary"
+          />
+          <select id="dict-state" aria-label="Filter by status">
+            <option value="">All statuses</option>
+            {states.map((s) => (
+              <option value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+
+        <p id="dict-count" class="dict-count">{items.length} entries</p>
+
+        <ul class="dict-list">
+          {items.map((it) => (
+            <li
+              class="dict-entry card"
+              data-state={it.state}
+              data-text={`${it.primary} ${it.secondary ?? ''} ${it.definition ?? ''}`.toLowerCase()}
+            >
+              <div class="dict-entry__head">
+                <span class="dict-entry__term">{it.primary}</span>
+                <span class="badge">{it.type}</span>
+                {it.cefrLevel && <span class="badge">{it.cefrLevel}</span>}
+                <span class={`dict-entry__state dict-entry__state--${it.state}`}>
+                  {it.state}
+                </span>
+              </div>
+              {it.secondary && (
+                <p class="dict-entry__pos">{it.secondary}</p>
+              )}
+              {it.definition && <p class="dict-entry__def">{it.definition}</p>}
+              {it.example && (
+                <p class="dict-entry__eg">“{it.example}”</p>
+              )}
+              {it.posts.length > 0 && (
+                <p class="dict-entry__posts">
+                  Appears in:{' '}
+                  {it.posts.map((p, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={postUrl(p)}>{p.title ?? 'Untitled'}</a>
+                    </>
+                  ))}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</Layout>
+
+<script is:inline>
+  (() => {
+    const search = document.getElementById('dict-search');
+    const stateSel = document.getElementById('dict-state');
+    const count = document.getElementById('dict-count');
+    const entries = Array.from(document.querySelectorAll('.dict-entry'));
+    if (!search || !stateSel) return;
+
+    function apply() {
+      const q = search.value.trim().toLowerCase();
+      const st = stateSel.value;
+      let shown = 0;
+      for (const el of entries) {
+        const matchText = !q || el.getAttribute('data-text').includes(q);
+        const matchState = !st || el.getAttribute('data-state') === st;
+        const show = matchText && matchState;
+        el.hidden = !show;
+        if (show) shown += 1;
+      }
+      if (count) count.textContent = `${shown} entr${shown === 1 ? 'y' : 'ies'}`;
+    }
+    search.addEventListener('input', apply);
+    stateSel.addEventListener('change', apply);
+  })();
+</script>
+
+<style>
+  .dict-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+  .dict-controls input,
+  .dict-controls select {
+    font: inherit;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .dict-controls input {
+    flex: 1 1 16rem;
+  }
+  .dict-count {
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+    margin: 0 0 1rem;
+  }
+  .dict-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .dict-entry__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.35rem;
+  }
+  .dict-entry__term {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .dict-entry__state {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+  .dict-entry__state--review {
+    color: var(--color-success);
+  }
+  .dict-entry__state--relearning {
+    color: var(--color-warning);
+  }
+  .dict-entry__pos {
+    margin: 0 0 0.3rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-faint);
+  }
+  .dict-entry__def {
+    margin: 0 0 0.3rem;
+  }
+  .dict-entry__eg {
+    margin: 0 0 0.3rem;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+  .dict-entry__posts {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+  }
+</style>

@@ -1,0 +1,223 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet } from '../lib/api';
+import { getCurrentUser } from '../lib/session';
+import type { CefrLevel, Profile } from '../lib/types';
+
+const user = await getCurrentUser(Astro.request);
+const profile = user
+  ? await apiGet<Profile>('/profile', { request: Astro.request })
+  : null;
+
+const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const cefrMax = profile
+  ? Math.max(1, ...LEVELS.map((l) => profile.cefr[l] ?? 0))
+  : 1;
+
+const unlockedCount =
+  profile?.categories.reduce(
+    (n, c) => n + c.constructions.filter((x) => !x.locked).length,
+    0,
+  ) ?? 0;
+const totalCount =
+  profile?.categories.reduce((n, c) => n + c.constructions.length, 0) ?? 0;
+---
+
+<Layout title="Profile — Engofy" user={user} active="profile">
+  <h1>Your progress</h1>
+
+  {
+    !user ? (
+      <p>
+        <a href="/login">Sign in</a> to track your streak, skills and levels.
+      </p>
+    ) : profile ? (
+      <>
+        <section class="stat-row">
+          <div class="stat">
+            <p class="stat__num num">{profile.streak}</p>
+            <p class="stat__label">day streak</p>
+          </div>
+          <div class="stat">
+            <p class="stat__num num">
+              {unlockedCount}
+              <span class="stat__den">/ {totalCount}</span>
+            </p>
+            <p class="stat__label">constructions started</p>
+          </div>
+        </section>
+
+        <section class="cefr">
+          <h2>Cards by level</h2>
+          <ul class="cefr-bars">
+            {LEVELS.map((lvl) => {
+              const n = profile.cefr[lvl] ?? 0;
+              return (
+                <li class="cefr-bar" data-testid={`cefr-${lvl}`}>
+                  <span class="cefr-bar__label">{lvl}</span>
+                  <span class="cefr-bar__track">
+                    <span
+                      class="cefr-bar__fill"
+                      style={`width: ${Math.round((n / cefrMax) * 100)}%`}
+                    />
+                  </span>
+                  <span class="cefr-bar__n num">{n}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section class="skills">
+          <h2>Grammar skills</h2>
+          {profile.categories.map((cat) => (
+            <details class="skill-cat" open={cat.constructions.some((c) => !c.locked)}>
+              <summary>{cat.name}</summary>
+              <ul class="skill-list">
+                {cat.constructions.map((con) => (
+                  <li
+                    class:list={['skill', { 'skill--locked': con.locked }]}
+                    data-slug={con.slug}
+                  >
+                    <a href={`/grammar/${con.slug}`} class="skill__name">
+                      {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
+                      {con.name}
+                    </a>
+                    {con.locked ? (
+                      <span class="skill__locked">locked</span>
+                    ) : (
+                      <span class="skill__mastery">
+                        <span class="skill__track">
+                          <span
+                            class="skill__fill"
+                            style={`width: ${con.masteryScore}%`}
+                          />
+                        </span>
+                        <span class="num">{con.masteryScore}</span>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </section>
+      </>
+    ) : null
+  }
+</Layout>
+
+<style>
+  .stat-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat {
+    flex: 1 1 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat__num {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .stat__den {
+    font-size: 1rem;
+    color: var(--color-ink-faint);
+  }
+  .stat__label {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .cefr {
+    margin-bottom: 2rem;
+  }
+  .cefr-bars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .cefr-bar {
+    display: grid;
+    grid-template-columns: 2rem 1fr 2rem;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .cefr-bar__label {
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .cefr-bar__track,
+  .skill__track {
+    height: 0.5rem;
+    background: var(--color-paper-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .cefr-bar__fill,
+  .skill__fill {
+    display: block;
+    height: 100%;
+    background: var(--color-brand);
+  }
+  .cefr-bar__n {
+    text-align: right;
+    font-size: 0.85rem;
+  }
+  .skill-cat {
+    border-top: 1px solid var(--color-border);
+    padding: 0.5rem 0;
+  }
+  .skill-cat summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-display);
+  }
+  .skill-list {
+    list-style: none;
+    padding: 0.75rem 0 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .skill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .skill__name {
+    text-decoration: none;
+    color: var(--color-ink);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .skill--locked .skill__name {
+    color: var(--color-ink-faint);
+  }
+  .skill__mastery {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 8rem;
+  }
+  .skill__track {
+    flex: 1;
+  }
+  .skill__locked {
+    margin-left: auto;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-faint);
+  }
+</style>

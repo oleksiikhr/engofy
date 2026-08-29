@@ -1,0 +1,44 @@
+---
+import type { CurrentUser } from '../lib/types';
+
+interface Props {
+  user?: CurrentUser | null;
+  active?: string;
+}
+
+const { user = null, active } = Astro.props;
+
+const links = [
+  { href: '/', label: 'Feed', key: 'feed' },
+  { href: '/practice', label: 'Practice', key: 'practice' },
+  { href: '/grammar', label: 'Grammar', key: 'grammar' },
+  { href: '/dictionary', label: 'Dictionary', key: 'dictionary' },
+  { href: '/profile', label: 'Profile', key: 'profile' },
+];
+---
+
+<header class="site-header">
+  <nav>
+    <div class="nav-links">
+      <a href="/" style="font-family: var(--font-display); font-weight: 700;">Engofy</a>
+      {
+        links.map((link) => (
+          <a href={link.href} aria-current={active === link.key ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+    <div class="nav-links">
+      {
+        user ? (
+          <form method="post" action="/logout" style="margin: 0;">
+            <button class="btn btn--ghost" type="submit">Log out</button>
+          </form>
+        ) : (
+          <a class="btn btn--ghost" href="/login">Log in</a>
+        )
+      }
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,562 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { apiGetOrNull } from '../../lib/api';
+import { renderDoc } from '../../lib/render-doc';
+import { getCurrentUser } from '../../lib/session';
+import type { PostDetail } from '../../lib/types';
+
+const { slugId } = Astro.params;
+const user = await getCurrentUser(Astro.request);
+const post = slugId
+  ? await apiGetOrNull<PostDetail>(`/posts/${encodeURIComponent(slugId)}`, {
+      request: Astro.request,
+    })
+  : null;
+
+if (!post) {
+  return new Response('Not found', { status: 404 });
+}
+
+const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+
+const bodyHtml = renderDoc(post.doc);
+
+// --- exercise view models (all casts / normalisation live here; the template
+// only maps over plain data) ---
+type Ex = PostDetail['exercises'][number];
+
+function splitBlank(prompt: string): { before: string; after: string } {
+  const i = prompt.indexOf('____');
+  return i === -1
+    ? { before: prompt, after: '' }
+    : { before: prompt.slice(0, i), after: prompt.slice(i + 4) };
+}
+
+interface DrillView {
+  id: string;
+  type: 'fill_blank' | 'multiple_choice' | 'find_error' | 'reorder';
+  before: string;
+  after: string;
+  prompt: string;
+  answer: string;
+  answerIndex: number;
+  options: string[];
+  scrambled: string[];
+  order: number[];
+}
+
+function toDrill(ex: Ex): DrillView | null {
+  const p = ex.payload as Record<string, unknown>;
+  const base = {
+    id: ex.id,
+    before: '',
+    after: '',
+    prompt: '',
+    answer: '',
+    answerIndex: -1,
+    options: [] as string[],
+    scrambled: [] as string[],
+    order: [] as number[],
+  };
+  if (ex.type === 'fill_blank') {
+    const { before, after } = splitBlank(String(p.prompt ?? ''));
+    return { ...base, type: 'fill_blank', before, after, answer: String(p.answer ?? '') };
+  }
+  if (ex.type === 'multiple_choice') {
+    const { before, after } = splitBlank(String(p.prompt ?? ''));
+    return {
+      ...base,
+      type: 'multiple_choice',
+      before,
+      after,
+      options: Array.isArray(p.options) ? (p.options as string[]) : [],
+      answerIndex: Number(p.answerIndex ?? -1),
+    };
+  }
+  if (ex.type === 'find_error') {
+    return {
+      ...base,
+      type: 'find_error',
+      prompt: String(p.prompt ?? ''),
+      answer: String(p.correction ?? ''),
+    };
+  }
+  if (ex.type === 'reorder') {
+    return {
+      ...base,
+      type: 'reorder',
+      scrambled: Array.isArray(p.scrambled) ? (p.scrambled as string[]) : [],
+      order: Array.isArray(p.answer) ? (p.answer as number[]) : [],
+    };
+  }
+  return null;
+}
+
+interface ComprehensionView {
+  id: string;
+  questions: { question: string; options: string[]; answerIndex: number }[];
+}
+
+function toComprehension(ex: Ex): ComprehensionView {
+  const raw = (ex.payload as Record<string, unknown>).questions;
+  const questions = Array.isArray(raw)
+    ? (raw as { question: string; options: string[]; answerIndex: number }[])
+    : [];
+  return { id: ex.id, questions };
+}
+
+const drills: DrillView[] = post.exercises
+  .map(toDrill)
+  .filter((d): d is DrillView => d !== null);
+const comprehension: ComprehensionView[] = post.exercises
+  .filter((e) => e.type === 'comprehension')
+  .map(toComprehension);
+---
+
+<Layout
+  title={`${post.title ?? 'Reading'} — Engofy`}
+  user={user}
+  active="feed"
+  measure={true}
+>
+  <article>
+    <header class="post-head">
+      <div class="post-head__meta">
+        {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
+        <time datetime={post.publishedAt}>{published}</time>
+      </div>
+      <h1>{post.title ?? 'Untitled'}</h1>
+      {
+        post.sourceLink && (
+          <p class="post-head__source">
+            Source:{' '}
+            <a href={post.sourceLink} rel="noopener noreferrer" target="_blank">
+              {post.sourceLink}
+            </a>
+          </p>
+        )
+      }
+    </header>
+
+    <div class="analysis reading-body" set:html={bodyHtml} />
+    <p class="analysis-hint">
+      Underlined words and highlighted phrases carry notes — tap one to see the
+      definition and add it to your deck.
+    </p>
+  </article>
+
+  <script
+    is:inline
+    type="application/json"
+    id="analysis-data"
+    set:html={JSON.stringify(post.annotations)}
+  />
+
+  <div
+    id="analysis-tip"
+    class="analysis-tip"
+    role="dialog"
+    aria-label="Word notes"
+    hidden
+  >
+  </div>
+
+  {
+    drills.length > 0 && (
+      <section class="exercises">
+        <h2>Practice</h2>
+        {drills.map((d) => (
+          <div class="exercise" data-ex-type={d.type} data-answer={d.answer} data-answer-index={String(d.answerIndex)} data-order={JSON.stringify(d.order)}>
+            {d.type === 'fill_blank' && (
+              <p class="exercise__q">
+                {d.before}
+                <input class="exercise__blank" type="text" aria-label="Missing word" />
+                {d.after}
+              </p>
+            )}
+            {d.type === 'multiple_choice' && (
+              <>
+                <p class="exercise__q">{d.before}<b>____</b>{d.after}</p>
+                <ul class="exercise__options">
+                  {d.options.map((opt, i) => (
+                    <li>
+                      <label>
+                        <input type="radio" name={`mc-${d.id}`} value={String(i)} />
+                        {opt}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {d.type === 'find_error' && (
+              <>
+                <p class="exercise__hint">One word is in the wrong form. Type the correct form.</p>
+                <p class="exercise__q">{d.prompt}</p>
+                <input class="exercise__blank" type="text" aria-label="Correct form" />
+              </>
+            )}
+            {d.type === 'reorder' && (
+              <>
+                <p class="exercise__hint">Put the words in order.</p>
+                <div class="exercise__chips">
+                  {d.scrambled.map((tok, slot) => (
+                    <button type="button" class="exercise__chip" data-slot={String(slot)}>
+                      {tok}
+                    </button>
+                  ))}
+                </div>
+                <p class="exercise__build" aria-live="polite" />
+                <button class="btn btn--ghost exercise__reset" type="button">Reset</button>
+              </>
+            )}
+            {d.type !== 'reorder' && (
+              <button class="btn btn--ghost exercise__check" type="button">Check</button>
+            )}
+            <span class="exercise__result" role="status" />
+          </div>
+        ))}
+      </section>
+    )
+  }
+
+  {
+    comprehension.length > 0 && (
+      <section class="exercises">
+        <h2>Comprehension</h2>
+        {comprehension.map((c) => (
+          <div class="exercise" data-ex-type="comprehension">
+            {c.questions.map((q, qi) => (
+              <fieldset class="exercise__cq" data-answer={String(q.answerIndex)}>
+                <legend>{q.question}</legend>
+                {q.options.map((opt, oi) => (
+                  <label class="exercise__opt">
+                    <input type="radio" name={`cq-${c.id}-${qi}`} value={String(oi)} />
+                    {opt}
+                  </label>
+                ))}
+              </fieldset>
+            ))}
+            <button class="btn btn--ghost exercise__check" type="button">Check answers</button>
+            <span class="exercise__result" role="status" />
+          </div>
+        ))}
+      </section>
+    )
+  }
+</Layout>
+
+<script is:inline>
+  (() => {
+    const data = JSON.parse(
+      document.getElementById('analysis-data')?.textContent || '{}',
+    );
+    const tip = document.getElementById('analysis-tip');
+    const analysis = document.querySelector('.analysis');
+    if (!tip || !analysis) return;
+
+    const esc = (s) =>
+      String(s ?? '').replace(
+        /[&<>"']/g,
+        (c) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+          })[c],
+      );
+    const badge = (lvl) => (lvl ? `<span class="badge">${esc(lvl)}</span> ` : '');
+    const addForm = (field, id, label) =>
+      `<form hx-post="/partials/add-card" hx-swap="outerHTML" hx-target="this" class="add-card__form">
+        <input type="hidden" name="${field}" value="${esc(id)}" />
+        <button type="submit" class="add-card">+ ${esc(label)}</button>
+      </form>`;
+
+    function contentFor(el) {
+      const wid = el.getAttribute('data-word');
+      const pid = el.getAttribute('data-phrase');
+      const gslug = el.getAttribute('data-grammar');
+      const parts = [];
+      if (wid && data.words && data.words[wid]) {
+        const w = data.words[wid];
+        parts.push(
+          `<div class="analysis-tip__block">
+            <p class="analysis-tip__head">${badge(w.cefrLevel)}<b>${esc(w.lemma)}</b> <i>${esc(w.pos)}</i></p>
+            ${w.definition ? `<p>${esc(w.definition)}</p>` : ''}
+            ${w.example ? `<p class="analysis-tip__eg">“${esc(w.example)}”</p>` : ''}
+            ${addForm('wordId', w.wordId, 'Add word')}
+          </div>`,
+        );
+      }
+      if (pid && data.phrases && data.phrases[pid]) {
+        const ph = data.phrases[pid];
+        parts.push(
+          `<div class="analysis-tip__block">
+            <p class="analysis-tip__head">${badge(ph.cefrLevel)}<b>${esc(ph.text)}</b>${ph.type ? ` <i>${esc(ph.type)}</i>` : ''}</p>
+            ${ph.definition ? `<p>${esc(ph.definition)}</p>` : ''}
+            ${ph.example ? `<p class="analysis-tip__eg">“${esc(ph.example)}”</p>` : ''}
+            ${addForm('phraseId', ph.phraseId, 'Add phrase')}
+          </div>`,
+        );
+      }
+      if (gslug && data.grammar && data.grammar[gslug]) {
+        const g = data.grammar[gslug];
+        const points = (g.usagePoints || [])
+          .map(
+            (up) =>
+              `<div class="analysis-tip__up">
+                <p>${badge(up.cefrLevel)}${esc(up.canDoStatement)}</p>
+                ${up.exampleText ? `<p class="analysis-tip__eg">“${esc(up.exampleText)}”</p>` : ''}
+                ${addForm('grammarUsagePointId', up.grammarUsagePointId, 'Add')}
+              </div>`,
+          )
+          .join('');
+        parts.push(
+          `<div class="analysis-tip__block">
+            <p class="analysis-tip__head">${badge(g.cefrLevel)}<b>${esc(g.name)}</b></p>
+            <p><a href="/grammar/${esc(g.slug)}">Open grammar guide →</a></p>
+            ${points}
+          </div>`,
+        );
+      }
+      return parts.join('');
+    }
+
+    let openEl = null;
+    function open(el) {
+      const html = contentFor(el);
+      if (!html) return;
+      tip.innerHTML = html;
+      tip.hidden = false;
+      openEl = el;
+      const r = el.getBoundingClientRect();
+      tip.style.top = `${window.scrollY + r.bottom + 6}px`;
+      let left = window.scrollX + r.left;
+      const maxLeft =
+        window.scrollX +
+        document.documentElement.clientWidth -
+        tip.offsetWidth -
+        12;
+      if (left > maxLeft) left = Math.max(12, maxLeft);
+      tip.style.left = `${left}px`;
+      if (window.htmx) window.htmx.process(tip);
+    }
+    function close() {
+      tip.hidden = true;
+      openEl = null;
+    }
+
+    analysis.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-word],[data-phrase],[data-grammar]');
+      if (!el) return;
+      if (el === openEl) close();
+      else open(el);
+    });
+    analysis.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const el = e.target.closest('[data-word],[data-phrase],[data-grammar]');
+      if (!el) return;
+      e.preventDefault();
+      if (el === openEl) close();
+      else open(el);
+    });
+    document.addEventListener('click', (e) => {
+      if (
+        !tip.hidden &&
+        !tip.contains(e.target) &&
+        !e.target.closest('[data-word],[data-phrase],[data-grammar]')
+      ) {
+        close();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !tip.hidden) close();
+    });
+    window.addEventListener('resize', close);
+  })();
+</script>
+
+<script is:inline>
+  (() => {
+    const norm = (s) => String(s ?? '').trim().toLowerCase();
+    function setResult(box, ok) {
+      const r = box.querySelector('.exercise__result');
+      if (!r) return;
+      r.textContent = ok ? '✓ Correct' : '✗ Try again';
+      r.className = `exercise__result ${ok ? 'is-ok' : 'is-bad'}`;
+    }
+
+    for (const box of document.querySelectorAll('.exercise')) {
+      const type = box.getAttribute('data-ex-type');
+
+      if (type === 'reorder') {
+        const order = JSON.parse(box.getAttribute('data-order') || '[]');
+        const build = box.querySelector('.exercise__build');
+        const picks = [];
+        box.querySelectorAll('.exercise__chip').forEach((chip) => {
+          chip.addEventListener('click', () => {
+            if (chip.disabled) return;
+            chip.disabled = true;
+            picks.push({
+              slot: Number(chip.getAttribute('data-slot')),
+              tok: chip.textContent.trim(),
+            });
+            build.textContent = picks.map((p) => p.tok).join(' ');
+            const seq = picks.map((p) => order[p.slot]);
+            if (seq.length === order.length) {
+              setResult(box, seq.every((v, i) => v === i));
+            }
+          });
+        });
+        box.querySelector('.exercise__reset')?.addEventListener('click', () => {
+          picks.length = 0;
+          build.textContent = '';
+          box
+            .querySelectorAll('.exercise__chip')
+            .forEach((c) => (c.disabled = false));
+          const r = box.querySelector('.exercise__result');
+          if (r) {
+            r.textContent = '';
+            r.className = 'exercise__result';
+          }
+        });
+        continue;
+      }
+
+      const check = box.querySelector('.exercise__check');
+      if (!check) continue;
+      check.addEventListener('click', () => {
+        if (type === 'fill_blank' || type === 'find_error') {
+          const input = box.querySelector('.exercise__blank');
+          setResult(box, norm(input?.value) === norm(box.getAttribute('data-answer')));
+        } else if (type === 'multiple_choice') {
+          const sel = box.querySelector('input[type=radio]:checked');
+          setResult(
+            box,
+            sel != null && sel.value === box.getAttribute('data-answer-index'),
+          );
+        } else if (type === 'comprehension') {
+          let ok = true;
+          box.querySelectorAll('.exercise__cq').forEach((fs) => {
+            const sel = fs.querySelector('input[type=radio]:checked');
+            if (!sel || sel.value !== fs.getAttribute('data-answer')) ok = false;
+          });
+          setResult(box, ok);
+        }
+      });
+    }
+  })();
+</script>
+
+<style>
+  .post-head {
+    margin-bottom: 1.5rem;
+  }
+  .post-head__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.4rem;
+  }
+  .post-head__source {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    word-break: break-all;
+  }
+  .reading-body {
+    font-size: 1.075rem;
+  }
+  .analysis-hint {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+  }
+  .exercises {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+  }
+  .exercise {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .exercise__hint,
+  .exercise__q {
+    margin: 0 0 0.6rem;
+  }
+  .exercise__hint {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .exercise__blank {
+    font: inherit;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.3rem;
+    min-width: 6rem;
+  }
+  .exercise__options,
+  .exercise__opt {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.6rem;
+  }
+  .exercise__opt {
+    display: block;
+  }
+  .exercise__cq {
+    border: 0;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+  .exercise__cq legend {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .exercise__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.6rem;
+  }
+  .exercise__chip {
+    font: inherit;
+    padding: 0.25rem 0.55rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.3rem;
+    background: var(--color-paper-soft);
+    cursor: pointer;
+  }
+  .exercise__chip:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .exercise__build {
+    min-height: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 0.6rem;
+  }
+  .exercise__result {
+    margin-left: 0.6rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .exercise__result.is-ok {
+    color: var(--color-success);
+  }
+  .exercise__result.is-bad {
+    color: var(--color-danger);
+  }
+</style>

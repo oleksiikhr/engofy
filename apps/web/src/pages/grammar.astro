@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet } from '../lib/api';
+import { getCurrentUser } from '../lib/session';
+import type { CefrLevel, GrammarReference } from '../lib/types';
+
+const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+const user = await getCurrentUser(Astro.request);
+const cefrParam = Astro.url.searchParams.get('cefr') ?? '';
+const cefr = (LEVELS as string[]).includes(cefrParam)
+  ? (cefrParam as CefrLevel)
+  : null;
+
+const ref = await apiGet<GrammarReference>(
+  cefr ? `/grammar?cefr=${cefr}` : '/grammar',
+  { request: Astro.request },
+);
+
+const categories = ref.categories.filter((c) => c.constructions.length > 0);
+
+// HTMX pulls #grammar-panel (filter chips + list) out of the re-rendered page
+// so the active chip updates too. Plain <a href> is the no-JS fallback.
+const filterAttrs = (href: string) => ({
+  href,
+  'hx-get': href,
+  'hx-target': '#grammar-panel',
+  'hx-select': '#grammar-panel',
+  'hx-swap': 'outerHTML',
+  'hx-push-url': 'true',
+});
+---
+
+<Layout title="Grammar — Engofy" user={user} active="grammar">
+  <h1>Grammar reference</h1>
+  <p class="grammar-intro">
+    The Cambridge English Grammar Profile — {ref.categories.length} categories, filtered
+    by the level you're working on.
+  </p>
+
+  <div id="grammar-panel">
+    <div class="grammar-filter" role="group" aria-label="Filter by CEFR level">
+      <a
+        class:list={['chip', { 'chip--on': !cefr }]}
+        {...filterAttrs('/grammar')}
+      >
+        All
+      </a>
+      {
+        LEVELS.map((lvl) => (
+          <a
+            class:list={['chip', { 'chip--on': cefr === lvl }]}
+            {...filterAttrs(`/grammar?cefr=${lvl}`)}
+          >
+            {lvl}
+          </a>
+        ))
+      }
+    </div>
+
+    {
+      categories.length === 0 && (
+        <p data-testid="grammar-empty">No constructions at this level yet.</p>
+      )
+    }
+    {
+      categories.map((cat) => (
+        <section class="grammar-cat">
+          <h2>{cat.name}</h2>
+          <ul class="grammar-cons">
+            {cat.constructions.map((con) => (
+              <li>
+                <a href={`/grammar/${con.slug}`}>
+                  {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
+                  <span class="grammar-cons__name">{con.name}</span>
+                  <span class="grammar-cons__count">
+                    {con.usagePointCount} use{con.usagePointCount === 1 ? '' : 's'}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Layout>
+
+<style>
+  .grammar-intro {
+    color: var(--color-ink-soft);
+    margin-bottom: 1rem;
+  }
+  .grammar-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .chip {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+  .chip--on {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    color: #fff;
+  }
+  .grammar-cat {
+    margin-bottom: 1.75rem;
+  }
+  .grammar-cons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .grammar-cons a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--color-ink);
+  }
+  .grammar-cons a:hover {
+    border-color: var(--color-brand);
+  }
+  .grammar-cons__name {
+    font-weight: 600;
+  }
+  .grammar-cons__count {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+</style>

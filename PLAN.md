@@ -582,9 +582,13 @@ CLI/API ще до появи фронтенду.
       `isComplete`) — і за потреби підкрутити `grammar-prompt.ts`.
 - [ ] Rework `content_annotation`: spaCy дає POS/lemma/morph; AI лишає тільки
       ідіоми/колокації, яких spaCy не бачить. Лінк `sentence_tokens.word_id` /
-      `phrase_id`. (Відкладено окремим кроком — рішення користувача; торкає
-      робочий прод-пайплайн.) `words.cefr_level` **лишається per-POS на
-      `WordDefinition`** (рішення користувача — спека §3.3 неформальна).
+      `phrase_id`. `words.cefr_level` **лишається per-POS на `WordDefinition`**
+      (рішення користувача — спека §3.3 неформальна).
+      **Прода ще нема** (немає прод-БД / користувачів / живого пайплайну — лише
+      локальний dev-стек), тому цей rework можна робити звичайним зрізом без
+      обережності — «торкає робочий пайплайн» означає лише «тримати dev ingest
+      + unit/integration тести зеленими». Раніше було відкладено як «окремий
+      обережний крок» — це знято.
 
 ### Зріз 4 — вправи + публікація статусу
 
@@ -772,18 +776,144 @@ node-tree, tooltip/«+» — HTMX-партіали (§6). Зріз ділить�
 
 #### Зріз 8b — сторінки `apps/web/` (Astro + Tailwind + HTMX), у порядку:
 
-- [ ] Каркас пакета: `apps/web/`, `packages: [".", "apps/*"]` у
-      `pnpm-workspace.yaml`, Astro + Tailwind + HTMX, Vite `/api` proxy,
-      layout + токени (портувати з `../engofy-go/frontend/src/styles/app.css`:
-      indigo/amber, Manrope+Public Sans+IBM Plex Mono woff2).
-- [ ] `/posts/{slug}-{id}` — текст з інлайн-розбором, tooltip, «+», вправи.
-- [ ] `/` — стрічка з чергуванням стаття → повторення.
-- [ ] `/practice` — SRS-черга.
-- [ ] `/grammar` — довідник 19 → 90, фільтр CEFR.
-- [ ] `/dictionary` — особистий словник.
-- [ ] `/profile` — skills-дерево, streak.
-- [ ] `/login` — email+OTP (auth уже готовий) + Google.
-- [ ] `/pricing` — мок-оплата.
+- [x] **Каркас пакета (2026-08-29, uncommitted).** Воркспейс `packages: [apps/*]`
+      у `pnpm-workspace.yaml` (без `.` — root і так workspace-root) +
+      `minimumReleaseAgeExclude` для Astro/Shiki/`@img`/vscode-* toolchain
+      (7-денний gate б'ється зі свіжим Astro-стеком; Nest runtime-деп лишається
+      під gate). `apps/web/`: **Astro 7.2.9** + `@astrojs/node@11` standalone
+      SSR (`output:'server'`, image service = `noop` → без sharp),
+      `@tailwindcss/vite`+`tailwindcss@4.3.3` (Tailwind v4 `@theme`),
+      `htmx.org@2.0.10` (bundled у Layout). `astro.config.mjs`: Vite
+      `server.proxy` `/api` → `API_ORIGIN` (деф. `http://localhost:8080` = dev
+      `PORT`) з `rewrite` (зрізає префікс) — лише dev; прод-проксі (nginx) —
+      Зріз 9/деплой. `src/lib/api.ts` (`apiGet`/`apiGetOrNull`, forward
+      `Cookie`, `ApiError`), `src/lib/session.ts` (`getCurrentUser` → 401=гість),
+      `src/lib/types.ts` (дзеркало 8a DTO), `src/lib/post-url.ts`.
+      `Layout.astro` + `SiteHeader.astro` + `src/styles/app.css` — токени
+      портовані з `../engofy-go/frontend/src/styles/app.css` (indigo/amber,
+      Manrope 700 + Public Sans 400/600 + IBM Plex Mono 600 woff2 у
+      `src/styles/fonts/`) + атоми `.card/.badge/.btn` + inline-analysis
+      (`.word/.phrase/.grammar/.add-card`) + FSRS-grade кнопки.
+      `src/pages/index.astro` — тимчасовий feed-список (повний варіант — нижче).
+      Свій `apps/web/Dockerfile` (context = repo root, `pnpm --filter
+      @engofy/web`, runtime = `node ./dist/server/entry.mjs`). `apps/web/biome.json`
+      (лінтить лише `.ts/.mjs/.json` — biome Astro-парсер сирий; root `biome.json`
+      +`!apps/**`; root `tsconfig.json` +`exclude:[apps]`).
+      `playwright.config.ts` (без `webServer` — потрібен піднятий стек; патерн зі
+      старого сайту) + `e2e/smoke.spec.ts` (2 тести).
+      Перевірки: `astro check` 0 помилок, `biome check` (apps/web + root src/),
+      root `pnpm run type`, повний стек піднято руками (Nest :8080 + `astro dev`
+      :4321) — Playwright 2/2 зелені (shell + `/feed` через proxy + токен
+      шрифту). Не закомічено.
+- [x] **Спільна e2e-інфра (2026-08-29, uncommitted).** `test/e2e/seed-web-e2e.ts`
+      — standalone `MikroORM.init` з `mikro-orm.setup.ts` + явним списком
+      entity-класів (без Nest/Redis), сіє детерміновані фікстури в *dev*-БД
+      (НЕ test, schema не чіпає), ідемпотентно (wipe за тегами
+      `E2E`/`e2e-`/фікс-юзер → insert). `apps/web/e2e/global-setup.ts`
+      (`globalSetup` у `playwright.config.ts`) шелить seed через
+      `node --import @swc-node/register/esm-register` + пише
+      `e2e/.auth/state.json` storageState з фікс-cookie `__Host-session`
+      засіяної сесії (Chromium шле Secure-cookie на http://localhost — ОК).
+      `e2e/auth.ts` `AUTHED_STATE`; authed-спеки роблять
+      `test.use({ storageState: AUTHED_STATE })`. Фікс-юзер `e2e@engofy.test`,
+      пост `E2Eread1` (+`E2Efeed2..4`), граматика `e2e-past-perfect`/
+      `e2e-present-simple`, картки word/phrase/grammar (частина due), skill
+      progress + review_logs (streak=3), без підписки.
+- [x] `/posts/{slug}-{id}` — текст з інлайн-розбором, tooltip, «+», вправи
+      (2026-08-29, uncommitted). `src/lib/render-doc.ts` — node-tree Doc →
+      HTML-рядок (escape, `set:html`); spans несуть `class` word/phrase/grammar
+      + `data-word`/`data-phrase`/`data-grammar` + `tabindex`/`role=button`.
+      `src/pages/posts/[slugId].astro`: SSR `apiGetOrNull('/posts/:slugId')`
+      (404 → `Response 404`), CEFR-badge/дата/source-link, `.analysis` тіло,
+      `<script type=application/json id=analysis-data>` з `annotations`.
+      Tooltip — `is:inline` client-JS з вбудованих даних (без HTMX-fetch на
+      span); всередині форма `hx-post="/partials/add-card"`
+      `hx-swap="outerHTML"` (word→wordId, phrase→phraseId, grammar→кожен
+      usagePoint). `src/pages/partials/add-card.ts` (Astro `POST`-endpoint) →
+      Nest `POST /learning/cards` з forward-cookie → HTML-фрагмент
+      (`✓ Saved` / `Sign in` для 401 / `go Premium` для 400). Вправи
+      (fill_blank/multiple_choice/find_error/reorder + comprehension) —
+      view-моделі в frontmatter (Astro JSX не тримає `as`-каст), інтерактивна
+      перевірка на клієнті з `data-answer`/`data-answer-index`/`data-order`.
+      `Layout.astro` фікс: `import htmx from 'htmx.org'; window.htmx = htmx`
+      (ESM-білд не自-присвоює), `Window.htmx` тип у `env.d.ts`. Токени tooltip/
+      add-card перенесені в глобальний `app.css` (Astro scoped не досягає
+      innerHTML). `src/lib/api.ts` +`apiPost`/`isBadRequest`; `types.ts`
+      `SpanNode` → discriminated union, `Subscription.status`→`active`.
+      e2e `apps/web/e2e/reader.spec.ts` (6 тестів: рендер+spans, tooltip+гість
+      «+»→Sign in, fill_blank grade, comprehension grade, 404, authed «+»→
+      Saved). Перевірки зелені: `astro check` 0, `biome check` apps/web+root,
+      root `pnpm run type`, Playwright reader+smoke 8/8.
+- [x] `/` — стрічка з чергуванням стаття → повторення (2026-08-29, uncommitted).
+      `index.astro`: `/feed?limit=12&offset=`, `?offset=` пагінація
+      (Newer/Older). Для авторизованих — `apiGetOrNull('/learning/practice
+      ?limit=20')`, вставляє review-break картку (`data-testid=review-break`:
+      `target.primary`+`secondary`, кнопка «Review now» → `/practice`) після
+      кожних 2 постів (`ARTICLES_PER_BREAK`, не після останнього). Гість —
+      просто список. e2e `feed.spec.ts` (2: guest список+лінк без break; authed
+      1 break з due-терміном).
+- [x] `/practice` — SRS-черга (2026-08-29, uncommitted). `src/lib/practice-card.ts`
+      `renderPracticeQueue(cards)` — спільний рендер для SSR і партіалу
+      (картка `data-testid=practice-card`: count, type-kicker, front
+      `target.primary`, «Show answer» для `secondary`, форма з 4 grade-кнопками
+      `name=rating value=again|hard|good|easy` → app.css кольори) або
+      «All caught up» (`data-testid=practice-done`). `practice.astro` — гість→
+      Sign in, інакше `#practice-container` з `set:html`; delegated «Show
+      answer» toggle. `src/pages/partials/review.ts` (Astro `POST`) → Nest
+      `POST /learning/cards/:id/review {rating}` → перечитує `/learning/practice`
+      → `renderPracticeQueue(next)` у `hx-target=#practice-container`. e2e
+      `practice.spec.ts` (2: guest→Sign in; authed — front `perambulate`, grade
+      Good → front `at loose ends`; НЕ дренить чергу).
+- [x] `/grammar` — довідник + фільтр CEFR (2026-08-29, uncommitted).
+      `grammar.astro`: `/grammar` або `/grammar?cefr=X`, категорії з ≥1
+      конструкцією; чипи All/A1..C2 = `<a href=?cefr=>` + HTMX
+      (`hx-get`/`hx-target=#grammar-panel`/`hx-select=#grammar-panel`/
+      `hx-swap=outerHTML`/`hx-push-url`) — активний чип у свопнутому регіоні.
+      `grammar/[slug].astro`: `apiGetOrNull('/grammar/:slug')` (404→`Response`),
+      cheat sheet через `src/lib/markdown.ts` (міні-MD: h*, `- ` list, `**`,
+      `` ` ``, все escape), usage points з формою «+ Add to deck»
+      (`grammarUsagePointId`). e2e `grammar.spec.ts` (7: список, фільтр SSR,
+      фільтр HTMX-чип, 404, detail cheat+2 usage points, guest «+»→Sign in,
+      authed «+»→Saved).
+- [x] `/dictionary` — особистий словник (2026-08-29, uncommitted).
+      `dictionary.astro`: гість→Sign in, інакше `GET /dictionary` → картки
+      (`data-state`/`data-text` для клієнт-фільтру), badge type+CEFR, стан,
+      definition/example, «Appears in:» лінки на пости. Клієнт-JS: пошук
+      (`#dict-search`) + фільтр статусу (`#dict-state`) через `el.hidden`,
+      лічильник. e2e `dictionary.spec.ts` (3: guest→Sign in; authed список+
+      контекст; пошук «loose» + фільтр «review» звужують).
+- [x] `/profile` — skills-дерево, streak, CEFR (2026-08-29, uncommitted).
+      `profile.astro`: `GET /profile` → 2 stat-картки (streak, unlocked/total),
+      CEFR-бари A1..C2 (`data-testid=cefr-A1..`), 19 категорій як `<details>`
+      (open якщо є unlocked), конструкції з badge+`skill--locked`/mastery-бар,
+      лінк `/grammar/:slug`. Гість→Sign in. e2e `profile.spec.ts` (2: guest→
+      Sign in; authed streak=3, cefr B1/B2 =1, past-perfect не locked +
+      mastery-бар).
+- [x] `/login` + `/logout` (2026-08-29, uncommitted). `login.astro`: вже
+      залогінений → redirect `/`. Крок email (`action=request-code` →
+      `POST /auth/login`) → крок code (`action=verify-code` →
+      `apiPostRaw('/auth/login/verify-code')`, форвардить Set-Cookie через
+      `res.headers.getSetCookie()` на 303-редірект `/`). Deep-link
+      `?step=code&email=`. Google-кнопка (GIS) лише якщо
+      `PUBLIC_GOOGLE_CLIENT_ID` (`action=google` → `/auth/google`). Помилки
+      inline (`role=alert`). `src/pages/logout.ts` (`POST`): `/auth/logout` +
+      **власний** clearing Set-Cookie з `Secure` (Nest `clearCookie` губить
+      Secure → `__Host-` cookie не чиститься браузером). `src/lib/api.ts`
+      +`apiPostRaw`; `apiPost`/`apiPostRaw` не шлють `content-type: json` без
+      тіла (Fastify давився порожнім JSON на `/billing/subscribe`). Seed +
+      `AuthChallenge` фікстура (`login-e2e@engofy.test` / OTP `424242`).
+      e2e `login.spec.ts` (3: email→code крок; невірний код→alert; OTP-вхід
+      + вихід через хедер).
+- [x] `/pricing` — мок-оплата (2026-08-29, uncommitted). `pricing.astro`:
+      `GET /billing/subscription`; гість→«Sign in to upgrade»; free→кнопка
+      «Upgrade to Premium» (форма `action=subscribe` → `POST /billing/subscribe`
+      → `justUpgraded` банер + `data-testid=premium-active`); premium→«Active —
+      renews …». Free/Premium порівняння, ліміт 100. e2e `pricing.spec.ts`
+      (2: guest→Sign in; authed upgrade→premium, тримається після reload).
+- Перевірки зелені (весь 8b): `astro check` 0/0/0, `biome check` apps/web +
+      root `src/`+`test/`, root `pnpm run type`, Playwright 29/29
+      (`apps/web/e2e/*.spec.ts`, повний стек піднято руками). Nest `src/`
+      не чіпав; додано лише `test/e2e/seed-web-e2e.ts`. Не закомічено.
 
 ### Зріз 9 — Redis-поліш
 

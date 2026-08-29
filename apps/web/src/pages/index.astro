@@ -1,0 +1,188 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet, apiGetOrNull } from '../lib/api';
+import { postUrl } from '../lib/post-url';
+import { getCurrentUser } from '../lib/session';
+import type { FeedItem, FeedResponse, PracticeItem } from '../lib/types';
+
+const PAGE_SIZE = 12;
+// Insert one review-break card after every N feed items (PLAN.md §4:
+// "кожні 2-3 статті — картка повторення замість наступної статті").
+const ARTICLES_PER_BREAK = 2;
+
+const user = await getCurrentUser(Astro.request);
+
+const offsetParam = Number(Astro.url.searchParams.get('offset') ?? '0');
+const offset = Number.isFinite(offsetParam) && offsetParam > 0 ? offsetParam : 0;
+
+const feed = await apiGet<FeedResponse>(
+  `/feed?limit=${PAGE_SIZE}&offset=${offset}`,
+  { request: Astro.request },
+);
+
+// Due review cards to interleave — signed-in users only; a guest can't have a
+// queue, so the feed stays a plain list for them.
+const dueCards = user
+  ? ((await apiGetOrNull<PracticeItem[]>('/learning/practice?limit=20', {
+      request: Astro.request,
+    })) ?? [])
+  : [];
+
+type Row =
+  | { kind: 'post'; post: FeedItem }
+  | { kind: 'break'; card: PracticeItem };
+
+const rows: Row[] = [];
+let cardIdx = 0;
+feed.items.forEach((post, i) => {
+  rows.push({ kind: 'post', post });
+  const boundary = (i + 1) % ARTICLES_PER_BREAK === 0;
+  if (boundary && cardIdx < dueCards.length && i < feed.items.length - 1) {
+    rows.push({ kind: 'break', card: dueCards[cardIdx] });
+    cardIdx += 1;
+  }
+});
+
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+---
+
+<Layout title="Engofy — Feed" user={user} active="feed">
+  <h1>Latest reading</h1>
+
+  {feed.items.length === 0 && <p>No posts published yet.</p>}
+
+  {
+    user && dueCards.length > 0 && (
+      <p class="feed__note">
+        {dueCards.length} card{dueCards.length === 1 ? '' : 's'} due —{' '}
+        <a href="/practice">start a review session</a>.
+      </p>
+    )
+  }
+
+  <ul class="feed">
+    {
+      rows.map((row) =>
+        row.kind === 'post' ? (
+          <li class="card">
+            <div class="feed__meta">
+              {row.post.cefrLevel && (
+                <span class="badge">{row.post.cefrLevel}</span>
+              )}
+              <time datetime={row.post.publishedAt}>
+                {fmtDate(row.post.publishedAt)}
+              </time>
+            </div>
+            <h2>
+              <a href={postUrl(row.post)}>{row.post.title ?? 'Untitled'}</a>
+            </h2>
+            <p class="feed__excerpt">{row.post.excerpt}</p>
+          </li>
+        ) : (
+          <li class="card feed__break" data-testid="review-break">
+            <p class="feed__break-kicker">Quick review</p>
+            <p class="feed__break-word">{row.card.target.primary}</p>
+            {row.card.target.secondary && (
+              <p class="feed__break-hint">{row.card.target.secondary}</p>
+            )}
+            <a class="btn" href="/practice">
+              Review now
+            </a>
+          </li>
+        ),
+      )
+    }
+  </ul>
+
+  <nav class="feed__pager">
+    {
+      offset > 0 && (
+        <a
+          class="btn btn--ghost"
+          href={offset - PAGE_SIZE > 0 ? `/?offset=${offset - PAGE_SIZE}` : '/'}
+        >
+          ← Newer
+        </a>
+      )
+    }
+    {
+      feed.nextOffset !== null && (
+        <a class="btn btn--ghost" href={`/?offset=${feed.nextOffset}`}>
+          Older →
+        </a>
+      )
+    }
+  </nav>
+</Layout>
+
+<style>
+  .feed {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .feed__note {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
+  .feed__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.35rem;
+  }
+  .feed h2 {
+    margin: 0 0 0.4rem;
+  }
+  .feed h2 a {
+    text-decoration: none;
+    color: var(--color-ink);
+  }
+  .feed h2 a:hover {
+    color: var(--color-brand);
+  }
+  .feed__excerpt {
+    margin: 0;
+    color: var(--color-ink-soft);
+  }
+  .feed__break {
+    background: var(--color-brand-wash);
+    border-color: var(--color-brand);
+    text-align: center;
+  }
+  .feed__break-kicker {
+    margin: 0 0 0.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+  }
+  .feed__break-word {
+    margin: 0 0 0.2rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+  .feed__break-hint {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+  }
+  .feed__pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+</style>

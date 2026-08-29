@@ -1,0 +1,148 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { apiGetOrNull } from '../../lib/api';
+import { renderMarkdown } from '../../lib/markdown';
+import { getCurrentUser } from '../../lib/session';
+import type { GrammarConstructionDetail } from '../../lib/types';
+
+const { slug } = Astro.params;
+const user = await getCurrentUser(Astro.request);
+const con = slug
+  ? await apiGetOrNull<GrammarConstructionDetail>(
+      `/grammar/${encodeURIComponent(slug)}`,
+      { request: Astro.request },
+    )
+  : null;
+
+if (!con) {
+  return new Response('Not found', { status: 404 });
+}
+
+const cheatSheetHtml = con.cheatSheetContent
+  ? renderMarkdown(con.cheatSheetContent)
+  : null;
+---
+
+<Layout
+  title={`${con.name} — Grammar — Engofy`}
+  user={user}
+  active="grammar"
+  measure={true}
+>
+  <p class="crumb"><a href="/grammar">← Grammar reference</a></p>
+
+  <header class="con-head">
+    <p class="con-head__cat">{con.categoryName}</p>
+    <h1>
+      {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
+      {con.name}
+    </h1>
+  </header>
+
+  {
+    cheatSheetHtml && (
+      <section class="cheat">
+        <div class="analysis" set:html={cheatSheetHtml} />
+      </section>
+    )
+  }
+
+  <section class="usage">
+    <h2>When it's used</h2>
+    {
+      con.usagePoints.length === 0 && (
+        <p>No usage points recorded for this construction.</p>
+      )
+    }
+    <ul class="usage-list">
+      {
+        con.usagePoints.map((up) => (
+          <li class="usage-item">
+            <div class="usage-item__head">
+              <span class="badge">{up.cefrLevel}</span>
+              <span class="usage-item__guide">{up.guideword}</span>
+            </div>
+            <p class="usage-item__can">{up.canDoStatement}</p>
+            {up.exampleText && (
+              <p class="usage-item__eg">“{up.exampleText}”</p>
+            )}
+            <form
+              hx-post="/partials/add-card"
+              hx-swap="outerHTML"
+              hx-target="this"
+              class="add-card__form"
+            >
+              <input
+                type="hidden"
+                name="grammarUsagePointId"
+                value={up.grammarUsagePointId}
+              />
+              <button type="submit" class="add-card">+ Add to deck</button>
+            </form>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .crumb {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+  }
+  .con-head {
+    margin-bottom: 1.5rem;
+  }
+  .con-head__cat {
+    margin: 0 0 0.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+  }
+  .con-head h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .cheat {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    background: var(--color-paper-soft);
+  }
+  .usage-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .usage-item {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1rem;
+  }
+  .usage-item__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .usage-item__guide {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-soft);
+  }
+  .usage-item__can {
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+  }
+  .usage-item__eg {
+    margin: 0 0 0.6rem;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+</style>
