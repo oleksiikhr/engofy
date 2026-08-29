@@ -563,23 +563,34 @@ CLI/API ще до появи фронтенду.
       речень при партіал-ретраї. Воркер `TagGrammarProcessor`/`Module`.
       Live-smoke проти Anthropic пройдено (past-perfect / 1st conditional /
       could-request розпізнані, валідні egpIndex).
-- [ ] Eval `ai_grammar` через `draft/`-харнес перед мержем. Харнес
-      **побудовано й провалідовано** (`draft/lib/{call-nlp,grammar-catalog,
-      parse-content-sentences,grammar-tag-file}.ts` +
-      `draft/scripts/{run,snapshot,compare}-grammar.ts`, README-секція
-      "Grammar harness"): реюз реальних `parseGrammarResponse` /
-      `parseGrammarTags` / `spanToTokenRange` + та сама drop-драбина, що в
-      `TagGrammarHandler.persistMatch`; каталог відновлюється з
-      `assets/egp.json` тими ж хелперами, що `import-egp` (78 конструкцій /
-      574 usage points — 78, бо handler фільтрує 12 cheat-sheet-only; це
-      рівно те, що йде в prompt); `parse-content-sentences` дзеркалить
-      ingest+`spacy_parse` через живий `nlp-service`. Smoke на `article.md`
-      (16/16 spans persisted, 8 конструкцій, `isComplete:false` після
-      ретраю) і `plain.txt` (3/6 persisted, 3 dropped unknown-slug).
-      **Лишається**: прогнати повний baseline по всіх `examples/content/*`
-      (`snapshot-grammar.ts`, ~$3-4, ~25хв), закомітити його в
-      `draft/baselines/`, переглянути метрики (unknown-slug drops,
-      `isComplete`) — і за потреби підкрутити `grammar-prompt.ts`.
+- [x] Eval `ai_grammar` через `draft/`-харнес перед мержем (2026-08-30).
+      Повний baseline знято 3 рази по всіх 7 `examples/content/*`
+      (`snapshot-grammar.ts --name=grammar-sonnet-5`), закомічено в
+      `draft/baselines/grammar-sonnet-5.json`. Перший прогін виявив 2 баги в
+      round-trip (не в моделі), обидва пофікшено:
+      (1) **embedded newlines** — spaCy лишає hard-wrap `\n` у
+      `Sentence.rawText`; `buildGrammarUserText` джойнив через `\n`, а
+      `parseGrammarResponse` спліт по фізичних рядках → хвіст multi-line
+      речень губив теги + `isComplete:false` щоразу. Фікс: нормалізація
+      внутрішніх пробілів на речення в `grammar-prompt.ts` (промпт + парсер) +
+      remap офсетів спанів назад у `rawText`-координати (`normalizeInlineWhitespace`);
+      `parseGrammarResponse` тепер блок-спліт по `[i]`-маркерах, не по рядках.
+      (2) **nested tags** — модель вкладає коротшу конструкцію в довшу
+      (`⟦outer ⟦inner⟧{{g|a|1}} tail⟧{{g|b|2}}`); плоский regex у
+      `parse-grammar-tags.ts` це не тягнув → обидва теги речення губились,
+      output роздувався (article-extreme впирався в 16k max_tokens). Фікс:
+      stack-based walk по `⟦`/`⟧`, офсети беруться прямо з reconstructed
+      plain-text (без `indexOf`); промпт дозволяє один рівень вкладення з
+      прикладом. `GrammarMatch` не має overlap-констрейнту — вкладені матчі
+      персистяться ок.
+      **Baseline #3 (обидва фікси):** 7/7 файлів `isComplete`, 0 retry,
+      0 truncated, 172/175 spans persisted (spans/sentence 1.84), $1.63
+      (vs $3.03 до фіксів — half, бо нема ретраїв). Єдині 3
+      `droppedUnknownSlug` — усі в `plain.txt`: модель скорочує
+      `present-present-simple` → `present-simple` на голих present-simple
+      дієсловах, які й не варто тегати; drop-драбина коректно їх ріже, 0
+      поганих даних. Checks: type + biome + 462 unit + 141 integration
+      green. NOT committed (користувач комітить сам).
 - [x] Rework `content_annotation` — тонкий AI-шар над spaCy (2026-08-29,
       uncommitted). `domain/build-token-annotations.ts` (+spec): чиста ф-ція
       `SentenceRows` → `Annotation[]` в координатах юніта

@@ -15,54 +15,97 @@ export interface ParseGrammarTagsResult {
   spans: GrammarSpan[];
   // Same contract as parseAnnotationTags.isComplete: false when the raw
   // output, with every recognised tag stripped back to its underlying text,
-  // does not reconstruct `text` character-for-character, or when a tag
-  // couldn't be located in `text`. The caller retries once on false.
+  // does not reconstruct `text` character-for-character, when a ⟦ is left
+  // unclosed, or when a closed span does not match `text` at its offsets.
+  // The caller retries once on false.
   isComplete: boolean;
 }
 
-// ⟦span text⟧{{g|construction-slug|egpIndex}} — egpIndex optional:
-// ⟦span⟧{{g|slug}} is accepted too. Single braces tolerated like
-// parse-annotation-tags.ts.
-const GRAMMAR_TAG_RE = /⟦([^⟧]+)⟧\{{1,2}g\|([a-z0-9-]+)(?:\|(\d+))?\}{1,2}/g;
+const OPEN = '⟦';
+const CLOSE = '⟧';
+// The {{g|slug|egpIndex}} trailer that must follow a closing ⟧. egpIndex is
+// optional (⟦span⟧{{g|slug}}); single braces are tolerated like
+// parse-annotation-tags.ts. Sticky so it only matches immediately after ⟧.
+const TRAILER_RE = /\{{1,2}g\|([a-z0-9-]+)(?:\|(\d+))?\}{1,2}/y;
 
+interface WalkState {
+  plain: string;
+  intact: boolean;
+  index: number;
+}
+
+// Handles one ⟧ at `state.index`: matches its {{g|…}} trailer, pops the
+// matching ⟦ off `openStack`, and records the span when its offsets line up
+// with `text`. Advances `state.index` past whatever it consumed.
+function consumeClose(
+  rawInput: string,
+  text: string,
+  openStack: number[],
+  spans: GrammarSpan[],
+  state: WalkState,
+): void {
+  TRAILER_RE.lastIndex = state.index + 1;
+  const trailer = TRAILER_RE.exec(rawInput);
+  if (!trailer) {
+    // A bare ⟧ with no tag — keep the char so reconstruction diverges.
+    state.intact = false;
+    state.plain += CLOSE;
+    state.index += 1;
+    return;
+  }
+
+  const start = openStack.pop();
+  state.index += 1 + trailer[0].length;
+  if (start === undefined) {
+    state.intact = false;
+    return;
+  }
+
+  const form = state.plain.slice(start);
+  if (text.slice(start, state.plain.length) === form) {
+    spans.push({
+      form,
+      charStart: start,
+      charEnd: state.plain.length,
+      slug: trailer[1],
+      egpIndex: trailer[2] ? Number(trailer[2]) : null,
+    });
+  } else {
+    state.intact = false;
+  }
+}
+
+// Stack-based walk of the inline ⟦…⟧{{g|…}} markup. Unlike a flat regex
+// scan it handles nested tags — the model does wrap a smaller construction
+// inside a larger one (⟦outer ⟦inner⟧{{g|a|1}} tail⟧{{g|b|2}}) — recording
+// both spans with offsets taken straight from the reconstructed plain text,
+// so no separate indexOf lookup is needed. isComplete stays strict: every ⟦
+// must close with a valid trailer and the stripped text must equal `text`.
 export function parseGrammarTags(
   text: string,
   rawInput: string,
 ): ParseGrammarTagsResult {
   const spans: GrammarSpan[] = [];
-  let reconstructed = '';
-  let lastIndex = 0;
-  let cursor = 0;
-  let allResolved = true;
+  const openStack: number[] = [];
+  const state: WalkState = { plain: '', intact: true, index: 0 };
+  const n = rawInput.length;
 
-  GRAMMAR_TAG_RE.lastIndex = 0;
-  let match: RegExpExecArray | null = GRAMMAR_TAG_RE.exec(rawInput);
-  while (match !== null) {
-    reconstructed += rawInput.slice(lastIndex, match.index);
-    lastIndex = match.index + match[0].length;
-
-    const form = match[1];
-    const slug = match[2];
-    const egpIndex = match[3] ? Number(match[3]) : null;
-    reconstructed += form;
-
-    const idx = text.indexOf(form, cursor);
-    if (idx === -1) {
-      allResolved = false;
+  while (state.index < n) {
+    const ch = rawInput[state.index];
+    if (ch === OPEN) {
+      openStack.push(state.plain.length);
+      state.index += 1;
+    } else if (ch === CLOSE) {
+      consumeClose(rawInput, text, openStack, spans, state);
     } else {
-      spans.push({
-        form,
-        charStart: idx,
-        charEnd: idx + form.length,
-        slug,
-        egpIndex,
-      });
-      cursor = idx + form.length;
+      state.plain += ch;
+      state.index += 1;
     }
-
-    match = GRAMMAR_TAG_RE.exec(rawInput);
   }
-  reconstructed += rawInput.slice(lastIndex);
 
-  return { spans, isComplete: allResolved && reconstructed === text };
+  if (openStack.length > 0) {
+    state.intact = false;
+  }
+
+  return { spans, isComplete: state.intact && state.plain === text };
 }

@@ -73,4 +73,55 @@ describe('parseGrammarTags', () => {
       egpIndex: 5,
     });
   });
+
+  it('recovers both spans when the model nests one tag inside another', () => {
+    const text = 'Stay calm even if the offer feels disappointingly low.';
+    const raw =
+      '⟦Stay calm⟧{{g|clauses-imperatives|187}} ⟦even if the offer feels ' +
+      '⟦disappointingly⟧{{g|adverbs-adverbs-as-modifiers|107}} low⟧' +
+      '{{g|clauses-subordinated|246}}.';
+
+    const result = parseGrammarTags(text, raw);
+
+    expect(result.isComplete).toBe(true);
+    expect(result.spans).toEqual([
+      {
+        form: 'Stay calm',
+        charStart: 0,
+        charEnd: 9,
+        slug: 'clauses-imperatives',
+        egpIndex: 187,
+      },
+      {
+        form: 'disappointingly',
+        charStart: 34,
+        charEnd: 49,
+        slug: 'adverbs-adverbs-as-modifiers',
+        egpIndex: 107,
+      },
+      {
+        form: 'even if the offer feels disappointingly low',
+        charStart: 10,
+        charEnd: 53,
+        slug: 'clauses-subordinated',
+        egpIndex: 246,
+      },
+    ]);
+  });
+
+  it('flags incompleteness when a ⟦ is never closed', () => {
+    const text = 'She left early.';
+    const raw = 'She ⟦left early.';
+
+    expect(parseGrammarTags(text, raw).isComplete).toBe(false);
+  });
+
+  it('flags incompleteness on a bare ⟧ with no tag trailer', () => {
+    const text = 'She left early.';
+    const raw = 'She left⟧ early.';
+
+    const result = parseGrammarTags(text, raw);
+    expect(result.isComplete).toBe(false);
+    expect(result.spans).toEqual([]);
+  });
 });

@@ -175,6 +175,17 @@ no token → persisted). The catalogue is rebuilt straight from
 the only order difference from the seeded DB is documented in
 `lib/grammar-catalog.ts`.
 
+`parseGrammarResponse` collapses each sentence's internal whitespace (spaCy
+keeps the source's hard-wrap newlines in `Sentence.rawText`) before the
+numbered-line round-trip and maps recovered span offsets back to `rawText`
+coords; `parseGrammarTags` is a stack walk over `⟦…⟧` that accepts one
+construction nested inside another (`⟦outer ⟦inner⟧{{g|a|1}} tail⟧{{g|b|2}}`)
+and records both spans. `draft/baselines/grammar-sonnet-5.json` is the
+committed baseline (7 fixtures, all `isComplete` with no retry/truncation;
+the 3 `droppedUnknownSlug` are all in `plain.txt`, where the model shortens
+`present-present-simple` → `present-simple` on bare present-simple verbs it
+should arguably leave untagged).
+
 ### Pipeline mirrored
 
 `lib/parse-content-sentences.ts` reproduces ingest + `spacy_parse` without a
