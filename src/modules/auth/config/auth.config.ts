@@ -6,6 +6,7 @@ export default registerAs('auth', () => ({
   challengeTtlMs: envNumber('AUTH_CHALLENGE_TTL_MS', 15 * 60 * 1000),
   otpMaxAttempts: envNumber('AUTH_OTP_MAX_ATTEMPTS', 5),
   requestLimitPerEmail: envNumber('AUTH_REQUEST_LIMIT_PER_EMAIL', 5),
+  requestLimitPerIp: envNumber('AUTH_REQUEST_LIMIT_PER_IP', 20),
   requestLimitWindowMs: envNumber(
     'AUTH_REQUEST_LIMIT_WINDOW_MS',
     60 * 60 * 1000,

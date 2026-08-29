@@ -16,12 +16,24 @@ import { AuthChallenge } from '../entities/auth-challenge.entity.js';
 import { InvalidOrExpiredChallengeError } from '../errors/invalid-or-expired-challenge.error.js';
 import { TooManyAttemptsError } from '../errors/too-many-attempts.error.js';
 
+// Bumps the per-email and per-IP counters together in one round-trip, arming a
+// TTL on each the first time it appears in the window. Returns 1 when both stay
+// within their limits, 0 as soon as either is exceeded — the two keys close
+// different abuse vectors (one email from many IPs, many emails from one IP), so
+// both must pass. Both counters increment even when the other already denies.
 const ALLOW_REQUEST_SCRIPT = `
-local count = redis.call('INCR', KEYS[1])
-if count == 1 then
+local emailCount = redis.call('INCR', KEYS[1])
+if emailCount == 1 then
   redis.call('PEXPIRE', KEYS[1], ARGV[1])
 end
-return count
+local ipCount = redis.call('INCR', KEYS[2])
+if ipCount == 1 then
+  redis.call('PEXPIRE', KEYS[2], ARGV[1])
+end
+if emailCount > tonumber(ARGV[2]) or ipCount > tonumber(ARGV[3]) then
+  return 0
+end
+return 1
 `;
 
 export interface IssuedChallenge {
@@ -97,18 +109,20 @@ export class ChallengeService {
     return { email: challenge.email };
   }
 
-  async allowRequest(email: string): Promise<boolean> {
+  async allowRequest(email: string, ip: string): Promise<boolean> {
     const normalized = normalizeEmail(email);
-    const key = `auth:rate-limit:${normalized}`;
 
-    const count = await this.redis.eval(
+    const allowed = await this.redis.eval(
       ALLOW_REQUEST_SCRIPT,
-      1,
-      key,
+      2,
+      `otp:email:${normalized}`,
+      `otp:ip:${ip || 'unknown'}`,
       this.config.requestLimitWindowMs,
+      this.config.requestLimitPerEmail,
+      this.config.requestLimitPerIp,
     );
 
-    return (count as number) <= this.config.requestLimitPerEmail;
+    return allowed === 1;
   }
 
   private async incrementAttempts(email: string): Promise<number | null> {

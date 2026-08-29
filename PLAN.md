@@ -917,7 +917,20 @@ node-tree, tooltip/«+» — HTMX-партіали (§6). Зріз ділить�
 
 ### Зріз 9 — Redis-поліш
 
-- [ ] OTP rate-limit по IP **і** по email окремо (ключі вже частково є в auth).
+- [x] OTP rate-limit по IP **і** по email окремо (2026-08-29, uncommitted).
+      `ChallengeService.allowRequest(email, ip)` — один Lua-скрипт бампає обидва
+      лічильники за один round-trip, ставить `PEXPIRE` кожному при першій появі
+      у вікні, повертає `1` лише коли обидва в межах, `0` щойно будь-який
+      перевищено (обидва INCR-яться завжди). Ключі `otp:email:{email}` +
+      `otp:ip:{ip}` (§7), спільне вікно `AUTH_REQUEST_LIMIT_WINDOW_MS` (1год),
+      ліміти `AUTH_REQUEST_LIMIT_PER_EMAIL`=5 / новий
+      `AUTH_REQUEST_LIMIT_PER_IP`=20. IP тече `AuthController.requestCode`
+      (`request.ip`, поважає `TRUST_PROXY`) → `AuthService.requestLoginCode`
+      → `RequestLoginCodeCommand.ip` → handler → service. Тести: challenge
+      service ispec (+2 per-IP), request-login-code handler ispec (+1 per-IP),
+      auth.controller ispec (+1 e2e per-IP; `beforeEach` чистить `otp:ip:*` —
+      loopback IP спільний між тестами). unit 446/446, integration 139/139,
+      type + biome зелені.
 
 ---
 

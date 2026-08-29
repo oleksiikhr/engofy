@@ -1,8 +1,10 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
+import type { Redis } from 'ioredis';
 import { DateTime } from 'luxon';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
+import { REDIS_CLIENT } from '../../../../core/redis/redis.tokens.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateOtp,
@@ -19,6 +21,17 @@ describe('AuthController', () => {
 
   const uniqueEmail = () =>
     `user-${Math.random().toString(36).slice(2)}@example.com`;
+
+  // Every request in this suite arrives from the same loopback address, so the
+  // per-IP OTP counter is shared Redis state that would leak between tests (and
+  // across re-runs within the TTL window). Clear it before each test.
+  beforeEach(async () => {
+    const redis = suite.app.get<Redis>(REDIS_CLIENT);
+    const keys = await redis.keys('otp:ip:*');
+    if (keys.length > 0) {
+      await redis.del(...keys);
+    }
+  });
 
   async function issueChallenge(
     em: EntityManager,
@@ -90,6 +103,21 @@ describe('AuthController', () => {
       await suite
         .request('post', '/auth/login', { authed: false })
         .send({ email })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('rate-limits requests from one IP even across different emails', async () => {
+      for (let i = 0; i < config().requestLimitPerIp; i++) {
+        // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared per-IP counter the next depends on.
+        await suite
+          .request('post', '/auth/login', { authed: false })
+          .send({ email: uniqueEmail() })
+          .expect(HttpStatus.OK);
+      }
+
+      await suite
+        .request('post', '/auth/login', { authed: false })
+        .send({ email: uniqueEmail() })
         .expect(HttpStatus.BAD_REQUEST);
     });
   });

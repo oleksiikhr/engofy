@@ -26,8 +26,8 @@ export class AuthService {
     private readonly queryBus: QueryBus,
   ) {}
 
-  async requestLoginCode(dto: RequestLoginCodeDto): Promise<void> {
-    await this.commandBus.execute(new RequestLoginCodeCommand(dto));
+  async requestLoginCode(dto: RequestLoginCodeDto, ip: string): Promise<void> {
+    await this.commandBus.execute(new RequestLoginCodeCommand(dto, ip));
 
     await this.em.flush();
   }

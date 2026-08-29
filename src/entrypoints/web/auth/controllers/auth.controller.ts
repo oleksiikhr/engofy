@@ -39,8 +39,11 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async requestCode(@Body() dto: RequestLoginCodeDto): Promise<void> {
-    await this.auth.requestLoginCode(dto);
+  async requestCode(
+    @Body() dto: RequestLoginCodeDto,
+    @Req() request: FastifyRequest,
+  ): Promise<void> {
+    await this.auth.requestLoginCode(dto, request.ip);
   }
 
   @Public()

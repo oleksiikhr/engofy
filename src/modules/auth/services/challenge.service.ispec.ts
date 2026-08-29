@@ -21,6 +21,7 @@ describe('ChallengeService', () => {
 
   const uniqueEmail = () =>
     `user-${Math.random().toString(36).slice(2)}@example.com`;
+  const uniqueIp = () => `ip-${Math.random().toString(36).slice(2)}`;
 
   describe('issue + consumeByOtp', () => {
     it('redeems a freshly issued code exactly once', async () => {
@@ -77,26 +78,60 @@ describe('ChallengeService', () => {
   describe('allowRequest', () => {
     it('allows up to the per-email request limit, then denies', async () => {
       const email = uniqueEmail();
+      const ip = uniqueIp();
 
       for (let i = 0; i < config.requestLimitPerEmail; i++) {
         // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
-        await expect(challenges.allowRequest(email)).resolves.toBe(true);
+        await expect(challenges.allowRequest(email, ip)).resolves.toBe(true);
       }
 
-      await expect(challenges.allowRequest(email)).resolves.toBe(false);
+      await expect(challenges.allowRequest(email, ip)).resolves.toBe(false);
     });
 
     it('tracks each email independently', async () => {
       const emailA = uniqueEmail();
       const emailB = uniqueEmail();
+      const ip = uniqueIp();
 
       for (let i = 0; i < config.requestLimitPerEmail; i++) {
         // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
-        await challenges.allowRequest(emailA);
+        await challenges.allowRequest(emailA, ip);
       }
 
-      await expect(challenges.allowRequest(emailA)).resolves.toBe(false);
-      await expect(challenges.allowRequest(emailB)).resolves.toBe(true);
+      await expect(challenges.allowRequest(emailA, ip)).resolves.toBe(false);
+      await expect(challenges.allowRequest(emailB, ip)).resolves.toBe(true);
+    });
+
+    it('denies once the per-IP request limit is exceeded, regardless of email', async () => {
+      const ip = uniqueIp();
+
+      for (let i = 0; i < config.requestLimitPerIp; i++) {
+        // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
+        await expect(challenges.allowRequest(uniqueEmail(), ip)).resolves.toBe(
+          true,
+        );
+      }
+
+      await expect(challenges.allowRequest(uniqueEmail(), ip)).resolves.toBe(
+        false,
+      );
+    });
+
+    it('tracks each IP independently', async () => {
+      const ipA = uniqueIp();
+      const ipB = uniqueIp();
+
+      for (let i = 0; i < config.requestLimitPerIp; i++) {
+        // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
+        await challenges.allowRequest(uniqueEmail(), ipA);
+      }
+
+      await expect(challenges.allowRequest(uniqueEmail(), ipA)).resolves.toBe(
+        false,
+      );
+      await expect(challenges.allowRequest(uniqueEmail(), ipB)).resolves.toBe(
+        true,
+      );
     });
   });
 });
