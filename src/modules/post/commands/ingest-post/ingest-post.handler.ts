@@ -15,6 +15,10 @@ export interface PostAnnotationJobData {
   postId: string;
 }
 
+export interface PostSpacyParseJobData {
+  postId: string;
+}
+
 @CommandHandler(IngestPostCommand)
 export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
   constructor(
@@ -49,9 +53,20 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
       this.em.persist(part);
     }
 
+    // The node-tree annotation stage and the spaCy analysis stage are
+    // parallel layers over the same PostPart plain text (PLAN.md §12) with
+    // no dependency between them yet — enqueue both. Slice 3 turns this into
+    // a real chain once annotation starts consuming spaCy output.
     this.outbox.send<PostAnnotationJobData>(
       this.em,
       QueueName.PostAnnotation,
+      { postId: post.id },
+      { singletonKey: post.id },
+    );
+
+    this.outbox.send<PostSpacyParseJobData>(
+      this.em,
+      QueueName.PostSpacyParse,
       { postId: post.id },
       { singletonKey: post.id },
     );

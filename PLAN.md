@@ -1,428 +1,726 @@
-# Engofy pivot: generic content-learning API
+# English Reader — технічний спек (MVP)
 
-## Context
+Сервіс для вивчення англійської мови через короткі автентичні тексти (2-3 абзаци),
+з автоматичним граматичним та лексичним розбором, вправами та інтервальним повторенням.
 
-`engofy-go` (`../engofy-go`) is the original AI-written MVP: RSS ingestion →
-scrape → multi-source synthesis → 3 difficulty-level rewrites → annotation →
-publish to a single website. This repo (`engofy`, NestJS/Fastify/MikroORM) is
-a from-scratch rewrite, written manually with Claude Code so every step is
-understood and controlled, and it changes the product shape:
-
-- No more parsing/scraping, no more "news" framing.
-- Content is *fed in* (CLI, file: plain text / markdown / html) instead of
-  discovered.
-- No AI difficulty-level rewrite — the text is processed as-is (decided
-  2026-08-24).
-- The project becomes an API/core-engine: process text → structured JSON
-  (words, phrases, grammar, quiz, conversation kit) → later, publish that
-  JSON to arbitrary platforms (web, Telegram, X, Android, iOS, Chrome
-  extension, notifications...), each platform rendering only the content
-  types it supports.
-
-**Right now the target is only the core: ingest → analyze → JSON.**
-Publishing/platform adapters are deliberately out of scope until the core is
-solid.
-
-Reusable design carried over from `engofy-go` (see
-`../engofy-go/docs/kb/03-content-pipeline.md` and `04-content-body-schema.md`):
-- Node-tree body schema (`doc → paragraph → text/span`), span carries
-  `kind: word|phrase|grammar_only`, `word_definition_id`, `pos`,
-  `grammar_construct`.
-- Offset-splice primitive: AI returns character offsets via tool-use; code
-  validates offset against the real text before writing anything
-  (`text[start:end] === form`), whole job fails on one bad annotation
-  (all-or-nothing, no partial writes).
-- Pipeline stages are independent, idempotent pg-boss jobs ("gap-filler, not
-  rewrite" — check for existing result before ever calling AI).
-- **AI never runs on the HTTP request path** — only in workers.
-
-## Decisions locked in (2026-08-24)
-
-- No AI rewrite per difficulty level — process the original text as given.
-- Pipeline = separate pg-boss job per stage (annotate → grammar-tag → quiz →
-  conversation-kit), mirroring the Go project's per-stage worker pattern.
-- "Core done" means: CLI → DB-backed `Content` entity → JSON assembled via a
-  service method. Not just a local JSON file — this is deliberately DB-backed
-  so the later publishing module has something real to read from.
-
-## Phase 0 — Domain model + core primitives (no AI)
-
-- [x] `Content` entity: `id`, `source` (embedded `ContentSource`:
-      `sourceFormat` (`text`/`markdown`/`html`), `rawText`, nullable `link` to
-      the source site), `title?`, `type` (`post`/`article`/`book`/`quote`/
-      `comment`), `slug?`, `shortId`, `publishedAt`, `status` (`pending →
-      annotating → annotated/ready → failed`), Luxon timestamps
-      (`LuxonTimestampType`). `type`/`slug`/`shortId`/`publishedAt` added
-      2026-08-24 — see Working notes: "SEO fields on Content".
-      No `body` column — see `ContentPart` below and Working notes:
-      "Content.body split into ContentPart rows".
-- [x] `ContentPart` entity (`content_parts` table): one row per top-level
-      `Doc.children` element — a `Paragraph`, or a whole `ListBlock` (all its
-      items, not exploded per item). Replaces the single `Content.body: Doc`
-      jsonb blob. Added 2026-08-24, reworking already-shipped Phase 0/1 code;
-      revised same day from an earlier per-list-item-row shape — see Working
-      notes: "Content.body split into ContentPart rows" and "ContentPart
-      revised to whole-block rows".
-- [x] Node-tree body schema (`doc`/`paragraph`/`text`/`span`), ported from
-      `04-content-body-schema.md`. Extended 2026-08-24 beyond the Go source
-      with rich-formatting support not present in engofy-go: heading level on
-      `Paragraph`, `LinkNode`, `marks` (bold/italic) on `text`/`link`/`span`,
-      and a `ListBlock` that's flattened/spliced through the same AI
-      annotation pipeline as paragraphs (see Working notes).
-- [x] Vocabulary entities: `Word`, `WordDefinition` (dedup by
-      `(word, pos)`), `Phrase` (dedup by lowercase text).
-- [x] `ContentPipelineRun` (`contentId`, `stage`, `status`): scaffolded
-      2026-08-24, ahead of Phase 2 like the other Phase 0 entities — see
-      Working notes: "Full-pipeline-ready tracking".
-- [x] Pure domain functions, no DB/HTTP: `flattenDoc`/`flattenParagraph`,
-      `spliceSpans`, offset validation. Ported from `internal/content`.
-- [x] Format converters → node-tree: plain text (paragraphs by blank line),
-      markdown (need to pick a parser, e.g. `remark`/`mdast`), html (extract
-      `<p>` text — input is user-supplied, not scraped, so this stays
-      simple).
-
-## Phase 1 — Ingestion (CLI)
-
-- [x] `engofy content ingest <file> [--title=...]` in `src/entrypoints/cli`.
-      No `--format` flag (see Working notes: "Format auto-detected, not
-      passed") — space-separated subcommand, matching the existing
-      `migrate`/`queue` nest-commander convention, not the `content:ingest`
-      colon form originally sketched here.
-- [x] `IngestContentCommand` (CQRS): parse file → node-tree → create
-      `Content` row (`status='pending'`) → flush → enqueue
-      `content_annotation` job via pg-boss. No AI call at this step.
-
-## Phase 2 — Annotation pipeline (AI, per-stage pg-boss jobs)
-
-Each job: idempotent (skip AI call if result already exists), tool-use for
-structured output, validate offsets before any write, all-or-nothing per job.
-
-- [x] `content_annotation` — implemented 2026-08-24. Per-unit tool-use
-      (one AI call per `ContentPart`, or per list item within a `list`-kind
-      part — not one call over the whole document), Sonnet 5 by default
-      (`AI_MODEL` env, `ai.config.ts`) via a new generic `AiClient` port
-      (`core/ai/`, `runTool<T>`, forced tool-use, reused by every future
-      stage). Annotates every content word (noun/proper noun/verb/adjective/
-      adverb), every occurrence — not just difficult ones, since the app
-      serves A1 through C2 — plus phrasal verbs/idioms/collocations
-      (`domain/annotation-tool.ts`: `ANNOTATION_TOOL`/
-      `ANNOTATION_SYSTEM_PROMPT`). Creates/links `Word`/`WordDefinition`
-      (stub `definition: ''`) / `Phrase` (stub `definition: null`); a
-      `cefrLevel` best-guess is now requested directly in the same
-      annotation call and used only at first-creation time (`WordDefinition
-      .cefrLevel` is `NOT NULL`, so a stub can't be created without one) —
-      no separate fill-in job needed for that field specifically; a wider
-      fill-in job may still land later for `definition`/`exampleSentence`.
-      `AnnotateContentHandler`
-      (`commands/annotate-content/`) — see Working notes:
-      "content_annotation implementation notes".
-- [ ] `content_structuring` (html only, conditional) — see Working notes:
-      "HTML structuring for messy/scraped input" for when this fires. Claude
-      tool-use → node-tree `Doc`, replacing the deterministic
-      `html-to-doc.converter.ts` output for this Content. Runs *before*
-      `content_annotation` when it fires.
-- [ ] `content_grammar_tagging` — per-paragraph tool-use, tags
-      `grammar_construct` onto existing spans (overlap with word/phrase spans
-      is expected, not an error — same `spliceSpans` contract).
-- [ ] `content_comprehension_questions` — per-paragraph tool-use → quiz
-      (own table, not folded into body).
-- [ ] `content_conversation_kit` — one Claude call → system_prompt /
-      starter_questions / suggested_vocabulary (drawn from already-annotated
-      spans, cross-validated against that candidate list).
-
-`Content.status` moves `pending → annotating → annotated` after the
-annotation step (required). Grammar-tag/quiz/conversation-kit are best-effort
-enrichment on top, same as in the Go project — they don't block "ready".
-
-Each job also writes a `ContentPipelineRun` row (`contentId`, `stage`,
-`status`) — see Working notes: "Full-pipeline-ready tracking". A job's
-idempotency check is "is there already a `completed` row for
-(this content, this stage)", not "does the result already exist in some
-other table" (grammar-tagging in particular has no other way to tell).
-
-## Phase 3 — Access to the result
-
-- [ ] `ContentReaderService.getContentJson(id)` — assembles `Content` + body
-      + comprehension questions + conversation kit into one canonical JSON.
-      Service method only, no HTTP endpoint yet — but DB-backed, so the
-      publishing module can read from it later without rework.
-
-## Phase 4 — Publishing (separate, later effort — not started)
-
-- [ ] Capability manifest per platform (what block types it can render).
-- [ ] Per-platform renderer (pure function, node-tree → platform format),
-      same shape as Go's `BodyRenderer` but multiplied per target. Unknown
-      block type on a given platform → skipped, not an error.
+Цільова аудиторія: люди, які хочуть вчити англійську "між справами", маленькими
+порціями контенту, без відчуття, що це урок.
 
 ---
 
-## Working notes
+## 1. Технологічний стек
 
-- **SEO fields on Content (`type`/`slug`/`shortId`/`publishedAt`)**: decided
-  and implemented 2026-08-24, reworking already-shipped Phase 0 `Content`
-  entity (0 rows in dev DB, cheap to change). Trigger: routing/SEO
-  discussion — `Content` is generic across post/article/book/quote/comment
-  (not just "posts"), so a hardcoded `/posts/{uuid}` path doesn't fit, and a
-  raw uuid in the url is neither readable nor keyword-bearing.
-  - `ContentType` enum (`post`/`article`/`book`/`quote`/`comment`,
-    `enums/content-type.enum.ts`) on `Content.type`, set at ingestion
-    (`IngestContentDto.type`, CLI `--type`, defaults to `post`). No
-    `parentId`/self-FK — explicitly not needed yet (comment/quote don't
-    reference another `Content` in the current scope).
-  - `Content.slug` (nullable text, not unique): derived from `title` via
-    `domain/generate-slug.ts` at ingest time; null when there's no title.
-    Deliberately **not** DB-unique — the public url's uniqueness comes from
-    `shortId`, so two same-titled contents just share a slug prefix with
-    different shortIds, no collision-retry logic needed.
-  - `Content.shortId` (text, `@Unique()`): short url-facing id, generated by
-    `domain/generate-short-id.ts` (8-char base62 over `crypto.randomBytes`,
-    no new dependency) — distinct from the uuid primary key so urls aren't
-    time-sortable/structurally revealing. Intended url shape once Phase 4
-    lands: `/{type}/{slug}-{shortId}`.
-  - `Content.publishedAt` (`LuxonTimestampType`, `onCreate: DateTime.now()`):
-    mirrors `createdAt` for now since there's no draft/publish workflow —
-    kept as its own field (not reusing `createdAt`) so a real publish step
-    can set it independently later without a schema change. Feeds JSON-LD
-    `datePublished`; `dateModified` can reuse existing `updatedAt` as-is.
-  - Evaluated a sample `NewsArticle` JSON-LD (`@graph` with `NewsArticle` +
-    `BreadcrumbList`) against current schema: `headline`→`title`,
-    `datePublished`→`publishedAt` (new), `dateModified`→`updatedAt`
-    (existing), `url`/`mainEntityOfPage`→derived from `type`+`slug`+
-    `shortId` at render time (not stored). Not adding right now, flagged for
-    later: `description` (no meta-description-equivalent field exists yet;
-    needed for JSON-LD `description` and the html meta tag), `image`
-    (blocked on the anticipated `image`/`embed` `Block` variant — see
-    "Near-term content shape" below), `author`/`publisher`/`inLanguage` (all
-    site-level or not-yet-relevant for single-tenant CLI-fed content, not
-    per-`Content` data). `articleSection`/`BreadcrumbList` are
-    render-time-derived from `type`, not stored fields.
-- **Content.body split into ContentPart rows**: decided and implemented
-  2026-08-24, reworking already-shipped Phase 0/1 code (`Content` entity,
-  `IngestContentHandler`) while it's cheap to (dev only, 0 rows in prod).
-  Trigger: `content_annotation`/`content_grammar_tagging`/
-  `content_comprehension_questions` all process one paragraph/list-item AI
-  call at a time (see the per-unit decision above) — a single `Content.body`
-  jsonb blob meant every one-paragraph annotation rewrote the *entire*
-  document's jsonb, and made partial/incremental persistence across a
-  many-paragraph document (a 1-paragraph comment vs. a hundred-page book,
-  both explicitly in scope) impossible without a race on concurrent writers.
-  `ContentPart` (`entities/content-part.entity.ts`, `content_parts` table)
-  is one row per document block, `body` (jsonb, via `ContentPartBodyType` —
-  like `NodeTreeType` but skips `parseDoc` validation, since which parser
-  applies depends on the sibling `kind` column, invisible to a MikroORM
-  custom type) holding that block's content. Original shape exploded list
-  items into their own rows — superseded same day, see the next note for the
-  current column-level shape. `domain/content-parts.ts`
-  (`splitDocIntoParts`/`assembleDocFromParts`) converts between a whole `Doc`
-  and ordered parts; `IngestContentHandler` persists parts instead of
-  setting `content.body`. `ContentPipelineRun` stays content-level
-  (unchanged) — it's the product-facing "is this content fully ready" gate;
-  per-unit idempotency inside a job is a cheap "does this part's body
-  already contain a span" check, no new tracking table needed.
-- **ContentPart revised to whole-block rows**: decided 2026-08-24, same day
-  as the split above, before Phase 2 touched it. The first cut of
-  `ContentPart` exploded a `ListBlock` into one row per item (`itemIndex`,
-  `listOrdered` columns) to mirror `flattenDoc`'s per-unit AI-call
-  granularity 1:1 at the storage layer. Reopened because `ContentPart` is
-  meant to be the general top-level "block" layer everything else (image,
-  embed, table, ... — see below) builds on, and `itemIndex`/`listOrdered`
-  are columns that exist for exactly one kind and are null for every other
-  — the same "wide table, kind-specific nullable columns" shape being
-  avoided at the `Content`-vs-content-type level one layer up, just
-  recurring one layer down. Fixed by making `ContentPart` fully
-  kind-agnostic: `id`, `contentId`, `blockIndex`, `kind`, `body: Block` —
-  no other columns, ever, for any future kind. A `list`-kind row's `body` is
-  the whole `ListBlock` (`ordered` + all `items`), matching the `ListBlock`
-  TS type as-is. `domain/content-parts.ts` (`splitDocIntoParts`/
-  `assembleDocFromParts`) simplified to a direct `Doc.children` map/sort,
-  no per-item grouping logic left. **Trade-off accepted**: the per-unit AI
-  annotation *call* granularity is unchanged (still one call per paragraph
-  or per list item, for the blast-radius reasons already decided — call
-  granularity and storage-row granularity are independent), but annotating
-  one item of a list now rewrites that whole row's `body.items` array
-  (all items), not just a dedicated per-item row. Accepted because a list is
-  bounded in practice (unlike a whole document) — the incremental-write
-  problem this whole `ContentPart` split exists to solve was document-scale
-  blast radius, not list-scale.
-- **Near-term content shape**: current target is small content (max ~10
-  paragraphs, article-style), not book-length yet — but `ContentPart` is
-  sized for both from the start (see above), so no rework needed when larger
-  content shows up. Images/YouTube-style embeds between paragraphs are an
-  anticipated near-term addition to `Doc.children` (a new `Block` variant
-  alongside `Paragraph`/`ListBlock`) — not implemented yet (format
-  converters don't extract them), but `ContentPart.kind` is already shaped
-  to add `image`/`embed` values additively when that lands, with those parts
-  skipped by flatten/annotate (no text) but still ordered into the doc on
-  reassembly.
-- **Sentence/word metadata extensibility**: decided 2026-08-24, not
-  implemented beyond what's listed. Anticipated metadata beyond
-  word/phrase/grammar spans: per-word audio, per-sentence audio,
-  dictionary/grammar-based quizzes, and whatever comes after. Principle:
-  anchor every such concern on a stable id already in the schema —
-  `wordId`/`wordDefinitionId` (word-level), `phraseId` (phrase-level),
-  `contentPartId` (sentence/paragraph-level, now that `ContentPart` is a
-  real row with its own uuid) — as a **new dedicated table per concern**,
-  never as inline fields bolted onto `WordSpanNode`/`PhraseSpanNode`/
-  `Paragraph`/`ListItem`. This is already the project's existing pattern
-  (`WordDefinition`, `Phrase`, `ContentPipelineRun`, and the planned
-  standalone comprehension-questions table — "own table, not folded into
-  body" per Phase 2 above) — adding e.g. audio later means one new table
-  with a FK, zero changes to the node-tree shape or to `spliceSpans`.
-- **Discontinuous phrases (e.g. phrasal verbs like "took it off")**: the
-  existing span model already supports this with no schema/domain-code
-  change — `PhraseSpanNode.phraseId` is just an FK to `Phrase`, and nothing
-  in `spliceSpansIntoNodes`/`checkNoOverlaps` assumes one span per phrase.
-  The AI annotation job (Phase 2, not yet built) emits one
-  `PhraseSpanNode`-producing insert per contiguous fragment ("took", "off"),
-  all sharing the same `phraseId` — highlighting/tooltip logic groups spans
-  by shared `phraseId` to treat them as one logical phrase. Added `Phrase`
-  entity: `type?: PhraseType` (`phrasal_verb`/`idiom`/`collocation`/`other`,
-  nullable — not yet classified until Phase 2's annotation job runs).
-  `phraseGroupId` landed as planned — see the next note.
-- **content_annotation implementation notes**: implemented 2026-08-24.
-  - `ContentPart.annotatedAt` (nullable timestamp) is the idempotency marker
-    — explicit, not inferred from "does body contain a span" (a paragraph
-    with zero annotate-worthy words is a legitimate done state; inferring
-    from span presence would re-call the AI on it forever).
-  - Failure handling: a `validateAnnotations` throw (or any error) fails the
-    whole `execute()` — `Content.status` simply stays wherever it was
-    (`annotating`) until a retry succeeds; no partial "annotated with a
-    hole" state is ever published. pg-boss retries the job; already-
-    `annotatedAt` parts are skipped, so a retry only redoes what failed.
-  - `AnnotateContentHandler` deliberately breaks the "handler never
-    flushes" convention (`IngestContentHandler`'s convention) — it flushes
-    once per `ContentPart` it finishes. That's the actual mechanism behind
-    the point of the whole content_parts split: without per-part flushes,
-    a crash mid-job would still lose all progress regardless of storage
-    shape, since nothing would be written until one flush at the very end.
-  - `Annotation` (`domain/validate-annotations.ts`) gained `cefrLevel`
-    (required for `word`, optional for `phrase` — mirrors each entity's
-    column nullability exactly) and `phraseGroupId` (required for `phrase`).
-    Discontinuous phrases ("took ... off") need no domain/splice-layer
-    change — confirmed by test: multiple `PhraseSpanNode` fragments sharing
-    one `phraseId` splice in independently via the existing
-    `spliceSpansIntoNodes`, and a shared `phraseGroupId` in one AI response
-    is resolved to one `Phrase` row (find-or-create) before building each
-    fragment's `SpanInsert`.
-  - Duplicate-create race within one `execute()` run (e.g. the same lemma
-    in two different parts of the same content, processed before either
-    flush lands): handled by an in-memory `Map` cache
-    (`wordDefinitionIdByKey`/`phraseIdByText`) scoped to one `execute()`
-    call and threaded through as plain arguments (not a handler instance
-    field) — a class field would leak entity-shaped state across the
-    handler's reuse over unrelated jobs, so the cache stores plain id
-    strings and lives only for one command's duration.
-  - `core/ai/` (`AiClient`/`AI_CLIENT`, `AnthropicClientService`,
-    `aiClientProvider`) — a generic forced-tool-use wrapper
-    (`runTool<T>({system, userText, tool})`), not `annotate()`-specific,
-    since grammar_tagging/comprehension_questions/conversation_kit will
-    reuse it with their own prompt/schema. Wired into `ContentModule` the
-    same way `MailConfig`/`mailerProvider` are wired into `AuthModule` —
-    `ConfigModule.forFeature(AiConfig)` + the factory provider directly in
-    the consuming module, no dedicated `AiModule` wrapper.
+| Компонент | Технологія | Призначення |
+|---|---|---|
+| Backend | NestJS | REST API |
+| Background jobs | NestJS worker + `@Cron` | обробка текстів, telegram polling |
+| CLI | NestJS CLI (nest commander) | одноразові скрипти, імпорт EGP-даних |
+| Frontend | Astro + HTMX | SSR-сторінки, мінімум клієнтського JS |
+| DB | PostgreSQL | основне сховище |
+| Cache/queue | Redis | rate limiting, сесії гостей, feed-стан |
+| NLP | spaCy (Python, окремий сервіс або CLI-виклик) | POS, lemma, morphology, dependency parsing |
+| AI | Claude API | складність тексту, класифікація граматики (usage), генерація вправ |
+| SRS | ts-fsrs (алгоритм FSRS) | інтервальне повторення слів/фраз/граматики |
 
-- Update this file's checkboxes as phases land; re-open discussion here
-  before changing anything already checked off.
-- Format auto-detected, not passed: decided 2026-08-24, Phase 1 CLI review.
-  `detectContentSourceFormat` (Phase 0, `domain/detect-content-source-format.ts`)
-  already existed but was unused until Phase 1 — the CLI ingest command runs
-  it on the file's raw text instead of taking a `--format` flag. Rationale:
-  the flag would just duplicate what the heuristic already does reliably for
-  CLI-fed text/markdown/well-formed html, and giving both a flag and
-  auto-detection invites drift between them. `IngestContentDto`
-  (`modules/content/commands/ingest-content/`) has no `format` field for the
-  same reason. `ContentModule` also needs no `MikroOrmModule.forFeature` —
-  entities are auto-discovered (same as every other module so far).
-- Content module layering follows the `auth` reference implementation
-  exactly ([[feedback-controllers-no-cqrs]]): `ContentService` facade
-  (`commandBus.execute` + one `em.flush()`), `IngestContentHandler` never
-  flushes, `ContentQueueBootstrapService` (creates the `content-annotation`
-  pg-boss queue) sits at module root next to the facade like
-  `AuthQueueBootstrapService`, not under `services/`.
-- **Outbox pattern bug found and fixed while smoke-testing the CLI (2026-08-24)**:
-  `OutboxSenderService`'s `send()`/`drain()` WeakMap was keyed by the raw
-  DI-injected `EntityManager` (the root `orm.em`, since it's a `Scope.DEFAULT`
-  provider), but `OutboxSubscriber.afterFlush` hands `drain()` the *forked*
-  em for the active `RequestContext` — a different object, so the WeakMap
-  lookup silently missed and staged jobs (e.g. `content-annotation`,
-  and likely `auth-challenge-email` OTP emails too — same call pattern)
-  never reached `pgboss.job` outside of tests. Existing ispec tests never
-  caught this because `shouldSkipRequestContext()` skips
-  `RequestContext.create` entirely under `NODE_ENV=test`, so root and
-  "forked" em were trivially the same object there. Fixed by resolving
-  `em.getContext()` at the top of both methods
-  (`src/core/queue/outbox-sender.service.ts`); added a regression test in
-  `outbox-sender.service.ispec.ts` that wraps a real
-  `RequestContext.create(..., { keepTransactionContext: true })` call
-  (verified it fails without the fix, passes with it). Confirmed fixed
-  against the real dev DB via `content ingest`.
-- Markdown/html parser library choice (Phase 0, format converters): decided
-  2026-08-24 — `marked` (lexer only, for paragraph-block splitting) and
-  `node-html-parser` (for `<p>` extraction). See converter files under
-  `src/modules/content/converters/`.
-- Rich formatting (bold/italic/headers/lists/links): implemented 2026-08-24,
-  same day as the deferral note above — turned out small enough to do
-  immediately rather than as separate follow-up work. `Paragraph.level`
-  (heading), `Mark` (`bold`/`italic`) on `text`/`link`/`span` nodes, new
-  `LinkNode`, and `ListBlock` (see below — reversed from presentation-only on
-  2026-08-24). `spliceSpans` preserves marks onto the new span and both split
-  pieces; splitting a `LinkNode` keeps `href` on the lead/trail pieces but the
-  new span itself is plain (loses the link) — accepted simplification. No
-  entity/migration change needed (jsonb `body` already stored arbitrary
-  shape; only app-level validation changed).
-- List annotation symmetry: reversed 2026-08-24 (same day as the note above)
-  — `ListBlock` is no longer presentation-only. `flattenDoc` now flattens
-  each `ListItem` as its own unit (`FlattenedUnit.itemIndex` set), and
-  `spliceSpansIntoListItem` (sibling to `spliceSpans`, sharing the extracted
-  `spliceSpansIntoNodes`/`flattenNodes` core) inserts word/phrase/grammar
-  spans into list items exactly as `spliceSpans` does for paragraphs. List
-  text now reaches the AI annotation pipeline like any paragraph.
-- `Content.source` (embedded `ContentSource`: `format`/`rawText`/`link`):
-  added 2026-08-24, replacing flat `sourceFormat`/`rawText` columns.
-  `@Embedded` prefixes columns as `source_format`/`source_raw_text`/
-  `source_link`. `link` is nullable — only set when content was pulled from
-  a URL (not for directly CLI-fed text/markdown). Storing the raw input
-  exactly as received (whatever the format, whatever the source — CLI file,
-  or a future extension/API) is the point: ingestion never blocks on AI or
-  on how well it parses; that's entirely a worker-side concern, decided
-  below.
-- HTML structuring for messy/scraped input: decided 2026-08-24, resolving
-  the earlier "known limitation, not fixed" note on
-  `html-to-doc.converter.ts`. That converter only extracts
-  `p`/`h1`-`h6`/`ul`/`ol` — bare `<div>`/`<br>` markup (plausible from a
-  future Chrome-extension "grab this selection" flow, where arbitrary DOM
-  gets sent as-is) produces an empty `Doc` today. Decision: keep the
-  deterministic converters (`plain-text-to-doc`, `markdown-to-doc`,
-  `html-to-doc`) as the default, synchronous, zero-AI-cost path for the
-  common case (CLI-fed text/markdown, well-formed html) — do **not**
-  extend AI to markdown/plain-text structuring, that would trade a
-  reliable, deterministic, offset-free step for cost/latency/non-determinism
-  with no upside. For html specifically: `html-to-doc.converter.ts` stays
-  the first attempt; a new worker-side job, `content_structuring` (Phase 2),
-  fires only when its output looks unreliable (empty `Doc`, or a block count
-  too low relative to the raw html's text length) and re-parses with an AI
-  tool-use call into the same node-tree `Doc` shape. AI still never runs on
-  the request path — this is a conditional worker job, same as every other
-  Phase 2 stage.
-- Full-pipeline-ready tracking: decided 2026-08-24. `Content.status`
-  intentionally only tracks the required `content_annotation` step (see the
-  entity's own doc comment) — grammar-tagging/comprehension-questions/
-  conversation-kit are independent, best-effort, and don't block it. That
-  left no way to know when a `Content` is *fully* done across every stage,
-  which matters for product reasons (a reader shouldn't see a quiz "pop in"
-  after they've already read the piece) as well as pipeline reasons
-  (`content_grammar_tagging` writes `grammarConstruct` directly onto
-  existing spans in `body` — there's no other way to tell "did this job
-  already run" from an absence of grammar tags, since a paragraph can
-  legitimately have none). `ContentPipelineRun` (scaffolded in Phase 0,
-  ahead of the jobs that populate it — same as `Word`/`Phrase` were)
-  is one row per `(contentId, stage)`; a `Content` is fully ready when none
-  of its rows (across every `ContentPipelineStage` value defined at the
-  time) are `pending`. `failed` counts as resolved too, so a permanently
-  failed best-effort stage can't block readiness forever.
-- `PartOfSpeech` widened from the traditional 8 to 15 values (2026-08-24):
-  added `ProperNoun`, `Auxiliary`, `Determiner`, `Numeral`, `Particle`, and
-  a catch-all `Other`. Rationale: this enum constrains the AI annotation
-  job's tool-use output — a broader, more linguistically complete set (plus
-  an explicit "I'm not sure" escape hatch) reduces hallucination/forced
-  mistagging versus a narrow enum with no safe fallback.
+**Примітка щодо spaCy:** оскільки основний бекенд на NestJS (Node.js), а spaCy — Python,
+потрібен окремий легкий Python-сервіс (FastAPI/Flask) або виклик через child_process/CLI
+з NestJS worker. Рекомендація: окремий маленький HTTP-сервіс `nlp-service`, який приймає
+текст і повертає токенізацію — простіше масштабувати й тестувати ізольовано.
+
+---
+
+## 2. Ролі користувачів
+
+| Роль | Доступ |
+|---|---|
+| Гість (не залогінений) | Читає всі статті, бачить усі tooltip, граматику, вправи. Не може зберігати прогрес. |
+| Зареєстрований (free) | Все те саме + може додавати слова/фрази/граматику в SRD-чергу, ліміт **100 карток** сумарно. |
+| Premium ($4.99/міс) | Без обмежень по кількості карток. (V1: оплата не знімається реально — мок-флоу, див. розділ 8) |
+
+Реєстрація виникає в момент першої дії, що потребує збереження стану (натискання "+" на
+слові) — не раніше, попапом поверх поточної сторінки.
+
+---
+
+## 3. Схема бази даних (PostgreSQL)
+
+### 3.1 Користувачі та авторизація
+
+```sql
+users
+  id, email, google_sub (nullable), created_at
+
+auth_sessions
+  id, user_id, token, expires_at, created_at
+
+auth_challenges          -- passwordless OTP через email
+  id, email, otp_hash, attempts, requested_at, expires_at
+
+subscriptions
+  id, user_id, plan (free|premium), status (active|expired),
+  started_at, current_period_end, is_mock_payment (boolean, default true)
+```
+
+### 3.2 Контент (статті)
+
+```sql
+posts
+  id, title, slug, source_link, source_raw_text,
+  source_type (original|excerpt|reddit_comment|news_snippet),
+  attribution_text,                    -- як коректно вказати джерело на сторінці
+  status (pending|processing|published|failed),
+  cefr_level, published_at, created_at
+
+sentences
+  id, post_id, position, raw_text, cefr_level
+
+sentence_tokens
+  id, sentence_id, position, text, lemma, pos, tag, dep, morph_json,
+  phrasal_verb_group_id (nullable, FK -> phrases.id),
+  is_gerund (boolean), is_idiom_part (boolean),
+  word_id (nullable, FK -> words.id),
+  phrase_id (nullable, FK -> phrases.id)
+
+grammar_matches
+  id, sentence_id, grammar_usage_point_id, confidence,
+  token_start, token_end
+```
+
+### 3.3 Лексика
+
+```sql
+words
+  id, lemma, cefr_level, frequency_rank
+
+word_definitions
+  id, word_id, pos, definition, example
+
+phrases
+  id, text, type (phrasal_verb|idiom|collocation), definition, cefr_level
+
+post_word
+  id, post_id, word_id
+
+post_phrase
+  id, post_id, phrase_id
+```
+
+Список неправильних дієслів (~200 шт) — **не в БД**, статичний JSON-файл у коді
+(`assets/irregular-verbs.json`: base_form, past_simple, past_participle, cefr_level).
+Базова форма лінкується як звичайне слово через `words.lemma`.
+
+### 3.4 Граматика (на основі Cambridge English Grammar Profile)
+
+Джерело: https://englishprofile.org (EGP, 1239 записів). Імпортуються лише
+`USE`- та `FORM/USE`-записи (~574 з 1239) — чисто формальні (`FORM:`) пункти
+стають статичним контентом шпаргалки, а не окремими SRS-одиницями.
+
+```sql
+grammar_categories        -- 19 верхніх категорій (PRESENT, MODALITY, PASSIVES...)
+  id, name, sort_order
+
+grammar_constructions      -- ~90 конструкцій (present simple, going to...)
+  id, category_id, name, slug,
+  cheat_sheet_content (markdown, включно з розділом Form: affirmative/negative/questions),
+  sort_order
+
+grammar_usage_points       -- ~574 USE / FORM+USE записи з EGP
+  id, construction_id, cefr_level,
+  guideword,               -- напр. 'USE: HABITS AND GENERAL FACTS'
+  can_do_statement,
+  example_text
+```
+
+### 3.5 Spaced Repetition (FSRS)
+
+Одна уніфікована таблиця для слів, фраз і граматики — не три окремі:
+
+```sql
+learning_cards
+  id, user_id,
+  word_id (nullable, FK -> words.id),
+  phrase_id (nullable, FK -> phrases.id),
+  grammar_usage_point_id (nullable, FK -> grammar_usage_points.id),
+  due, stability, difficulty, elapsed_days, scheduled_days,
+  reps, lapses, state (new|learning|review|relearning), last_review,
+  created_at,
+  CHECK (
+    (word_id IS NOT NULL)::int +
+    (phrase_id IS NOT NULL)::int +
+    (grammar_usage_point_id IS NOT NULL)::int = 1
+  )
+
+review_logs
+  id, card_id, rating (again|hard|good|easy),
+  reviewed_at, elapsed_days, scheduled_days
+```
+
+Ліміт карток (100 для free) рахується як `COUNT(*) FROM learning_cards WHERE user_id = ?`,
+без розділення по типу.
+
+### 3.6 Skills / прогрес
+
+```sql
+user_skill_progress
+  id, user_id, construction_id,
+  mastery_score (0-100), correct_streak,
+  total_attempts, correct_attempts,
+  unlocked_at (nullable)
+```
+
+`mastery_score` агрегується з усіх `learning_cards`, де `grammar_usage_point_id`
+належить цій `construction_id`.
+
+### 3.7 Pipeline обробки текстів
+
+```sql
+post_processing_jobs
+  id, post_id,
+  stage (fetch|spacy_parse|ai_complexity|ai_grammar|ai_exercises|publish),
+  status (pending|running|done|failed),
+  error_message, started_at, completed_at, retry_count
+```
+
+### 3.8 Публікація на зовнішні канали
+
+```sql
+post_publications
+  id, post_id, platform (telegram|twitter|facebook|ios_push|android_push),
+  external_id, status (pending|published|failed),
+  published_at, error_message
+```
+
+### 3.9 Адмін-бот (Telegram, керування через повідомлення)
+
+```sql
+telegram_updates
+  id, telegram_message_id, raw_payload_json,
+  processed (boolean), created_at
+```
+
+NestJS `@Cron` кожну хвилину викликає Telegram `getUpdates`, фільтрує повідомлення
+за твоїм `telegram_user_id` (з конфігу/env, без окремої таблиці адмінів), парсить
+команди (`/add {link}`, `/retry {post_id}`) і створює відповідні `posts`/`post_processing_jobs`.
+
+### 3.10 Вправи (згенеровані з тексту)
+
+```sql
+exercises
+  id, post_id, type (fill_blank|find_error|multiple_choice|comprehension|reorder),
+  payload_json,        -- питання, варіанти, правильна відповідь
+  source (spacy|ai)     -- більшість генерується без AI (детерміновано з sentence_tokens)
+```
+
+---
+
+## 4. Сторінки сайту
+
+| Маршрут | Опис |
+|---|---|
+| `/` | Стрічка: одразу відкрита остання неопрацьована стаття або swipe-стрічка карток. Кожні 2-3 статті — вставляється картка повторення слів/граматики замість наступної статті. |
+| `/posts/{slug}-{id}` | Текст з інлайн-розбором: підсвітка POS/граматики, tooltip на слові/конструкції, кнопка "+" на кожному слові, вправи та comprehension-питання внизу. |
+| `/practice` | Загальна SRS-черга (слова + фрази + граматика разом), оцінка Again/Hard/Good/Easy. |
+| `/grammar` | Довідник: 19 категорій → 90 конструкцій, фільтр по CEFR, шпаргалка + список USE-пунктів. |
+| `/dictionary` | Особистий словник користувача: усі картки, статус (new/learning/review), пошук, у яких статтях слово зустрічалось. |
+| `/profile` | Прогрес: skills-дерево (90 конструкцій, unlocked/locked), streak, статистика по CEFR. |
+| `/login` | Email + OTP (2 кроки), кнопка "Продовжити з Google" (google_sub вже закладено в схему). |
+| `/pricing` | Опис Premium ($4.99/міс), кнопка "Оплатити" → мок-флоу видає підписку без реального списання. |
+
+Адмінки як окремого веб-розділу немає — управління повністю через Telegram-бота.
+
+---
+
+## 5. Пайплайн обробки тексту (post_processing_jobs)
+
+1. **fetch** — отримати вихідний текст (посилання або текст, надісланий через бот)
+2. **spacy_parse** — токенізація, POS, lemma, morphology, dependency parsing → `sentence_tokens`
+3. **ai_complexity** — визначення CEFR-рівня тексту, оцінка обсягу нової лексики (Claude API)
+4. **ai_grammar** — класифікація граматичних конструкцій у реченнях по закритому списку
+   90 `grammar_constructions`, потім (за потреби) по `grammar_usage_points` всередині обраної
+   конструкції → `grammar_matches`
+5. **ai_exercises** — генерація вправ там, де детермінованого підходу недостатньо
+   (переважна більшість вправ генерується без AI, напряму з `sentence_tokens`)
+6. **publish** — `posts.status = published`, постановка задач у `post_publications`
+
+Кожен стейдж — окремий retry-юніт, статус видно через `post_processing_jobs`,
+керується/перезапускається командами в Telegram-боті.
+
+---
+
+## 6. Формат inline-розмітки (LLM-вивід перед парсингом)
+
+Використовується замість JSON, щоб зменшити галюцинації моделі на довгих текстах.
+
+```
+[Although]{pos:conj,type:subordinator} [she]{pos:pron,role:subject}
+[had never visited]{pos:verb,lemma:visit,tense:past_perfect} [Japan]{pos:propn}
+before, she felt strangely [at home]{type:idiom,meaning:"почуватись комфортно"} there.
+```
+
+Символи `[` `]` `{` `}`, що вже присутні в оригінальному тексті, перед відправкою в LLM
+замінюються на плейсхолдери з приватної області Unicode (`\uE001`...) і повертаються
+назад після парсингу — щоб уникнути конфліктів із розміткою.
+
+Розбір фразових дієслів з розривом (`picked her sister up`) і герундія робиться
+детерміновано через spaCy (`tag=RP`/`dep=prt` для частки, `tag=NN` + `-ing` + перевірка
+залежності — для герундія); LLM підключається тільки для ідіом і колокацій, яких spaCy
+не розпізнає структурно.
+
+---
+
+## 7. Rate limiting (Redis)
+
+- OTP-запит: ліміт по IP (`otp:ip:{ip}`) **і** по email (`otp:email:{email}`) окремо,
+  з TTL — обидва ключі потрібні, бо кожен закриває інший вектор зловживання
+- Feed-сесія гостя: лічильник переглянутих статей у сесії (`session:{cookie_id}:articles_seen`)
+  для чергування "стаття → повторення → стаття" без БД
+- Загальний API rate-limit (per-IP, стандартний NestJS throttler) на публічні ендпоїнти
+
+---
+
+## 8. Монетизація (V1 — мок)
+
+Кнопка "Оплатити" на `/pricing` не інтегрована з реальним платіжним провайдером:
+за натисканням створюється запис у `subscriptions` з `plan=premium`,
+`is_mock_payment=true`, `current_period_end = now() + 1 month`. Структура таблиці
+вже готова для підключення Stripe/іншого провайдера пізніше (додати `payment_provider`,
+`external_subscription_id` як nullable-колонки).
+
+---
+
+## 9. Авторські права на контент
+
+Тексти — короткі уривки (кілька абзаців): фрагмент книги, коментар з Reddit, витяг з
+новини, або оригінальний текст. Для кожного `posts` обов'язково зберігати
+`source_link` і показувати `attribution_text` на сторінці статті. Уникати публікації
+повних статей цілком — тільки короткі витяги з чітким посиланням на оригінал.
+
+---
+
+## 10. Явно поза межами V1 (наступні ітерації)
+
+- AI-компаньйон для розмови по темі статті (генерація промпту + ведення діалогу) —
+  потребує окремого рішення щодо архітектури (проксі через власний AI API vs
+  просто згенерований текст промпту для стороннього чат-боту)
+- Реальна інтеграція оплати (Stripe/інше)
+- Публікація в Twitter/Facebook/мобільні push (структура `post_publications` вже
+  закладена, самі інтеграції — пізніше)
+- Розширення класифікації граматики за межі 90 базових конструкцій
+- Розділення лімітів SRD-карток по типу (зараз єдиний ліміл 100 на всі типи разом)
+
+---
+
+## 11. Довідкові джерела даних
+
+- Cambridge English Grammar Profile (EGP): https://englishprofile.org — 1239 записів,
+  копія у форматі Excel: https://github.com/ninja33/EGP (`asset/egpo.xlsx`)
+- spaCy: https://spacy.io — POS/lemma/dependency parsing, модель `en_core_web_sm`
+- ts-fsrs: https://github.com/open-spaced-repetition/ts-fsrs — SRS-алгоритм
+- wordfreq (Python) — частотність слів для `words.frequency_rank`
+
+---
+
+# Частина II — виконання
+
+Розділи 1–11 вище — **цільова специфікація** (що будуємо). Нижче — як до неї
+дійти від поточного стану гілки `v2`: зафіксовані рішення, аудит наявного коду
+та вертикальні зрізи з чекбоксами. Режим роботи: **інкрементально в `v2`, зріз
+за зрізом**, кожен зріз лишається робочим станом.
+
+---
+
+## 12. Зафіксовані рішення (не перевідкривати)
+
+Перенесено зі старого `PLAN.md` (розділ «Working notes» у git-історії) — усе це
+досі чинне — плюс рішення, ухвалені при переході на новий спек.
+
+- **offset-splice / all-or-nothing.** AI повертає char-offset; код валідує
+  `text[start:end] === form` до будь-якого запису; одна погана анотація завалює
+  всю джобу — жодних часткових записів.
+- **AI ніколи не на HTTP-шляху** — тільки у pg-boss воркерах.
+- **Кожен стейдж пайплайну — окрема ідемпотентна pg-boss джоба.** Перевір
+  наявність результату перед викликом AI («gap-filler, not rewrite»).
+  Ідемпотентність = «чи є вже `done` рядок для (цей post, цей стейдж)» у
+  `post_processing_jobs`, а не «чи є результат десь в іншій таблиці» (для
+  grammar-tagging інакше не визначити).
+- **Flush по одній `PostPart`** в анотаційній джобі — краш посеред джоби не
+  втрачає весь прогрес; part із проставленим `annotatedAt` пропускається при
+  ретраї. `AnnotatePostHandler` свідомо порушує конвенцію «handler не робить
+  flush» саме заради цього.
+- **node-tree + spaCy — два паралельні шари** над одним примітивом (`PostPart`
+  plain-текст + char-offset):
+  - node-tree (`doc/paragraph/text/span` + `ListBlock`, heading level,
+    `LinkNode`, `marks`) — шар рендеру/форматування; несе word/phrase/grammar
+    span через `spliceSpans`.
+  - spaCy `sentences` / `sentence_tokens` — аналітичний шар (POS/lemma/morph/
+    dep), прив'язаний до `post_part_id` + char-offset у plain-тексті тієї ж
+    `PostPart`.
+  - Шари зустрічаються на `Word` / `Phrase` через FK — прямий лінк
+    token ↔ span не потрібен. `grammar_matches` → `sentence_id` + діапазон
+    токенів.
+- **Розрив фразових дієслів і герундій — детерміновано через spaCy**
+  (`tag=RP` / `dep=prt` для частки; `-ing` + перевірка залежності для
+  герундія), не через LLM. LLM підключається лише для ідіом/колокацій, які
+  spaCy структурно не розпізнає.
+- **inline-markup формат** (`[форма]{pos:...,lemma:...}`) для виводу LLM
+  замість JSON — менше галюцинацій на довгих текстах. Символи `[` `]` `{` `}`
+  з оригіналу екрануються в плейсхолдери приватної області Unicode
+  (``...) на час виклику. Реалізація вже є:
+  `domain/parse-annotation-tags.ts`, `domain/annotation-prompt.ts`.
+- **spaCy живе окремим HTTP-сервісом** (`nlp-service`, FastAPI +
+  `en_core_web_sm`), не через `child_process` — простіше масштабувати й
+  тестувати ізольовано.
+- **Список неправильних дієслів — не в БД**: статичний
+  `assets/irregular-verbs.json` (`base_form`, `past_simple`,
+  `past_participle`, `cefr_level`); базова форма лінкується як звичайне слово
+  через `words.lemma`.
+- **З EGP імпортуються тільки `USE` та `FORM/USE` записи** (~574 з 1239) як
+  SRS-одиниці; чисто `FORM:` пункти — статичний контент шпаргалки
+  (`grammar_constructions.cheat_sheet_content`), не окремі одиниці.
+- **Ліміт карток (100 для free)** рахується як
+  `COUNT(*) FROM learning_cards WHERE user_id = ?`, без розбивки за типом.
+- **Адмінки як веб-розділу немає** — керування контентом лише через
+  Telegram-бота.
+
+---
+
+## 13. Аудит наявного коду (`v2`): keep / rework / build
+
+| Область нового спеку | Що є зараз у `v2` | Вердикт |
+|---|---|---|
+| §3.1 `users` / `auth_sessions` / `auth_challenges`, passwordless OTP + Google | модуль `auth` — повний (CQRS, сесії, challenge, Google id-token) | **keep** як є |
+| §3.1 `subscriptions` | — | build (мало) |
+| §3.7 `post_processing_jobs` (6 стейджів) | `PostPipelineRun` (`postId`/`stage`/`status`, unique `(post_id, stage)`), per-stage pg-boss патерн, `worker` host, `queue` CLI | **keep патерн**, узгодити назву + розширити enum стейджів |
+| §2 конвертери text/md/html → `Doc` | `converters/*` + `detect-post-source-format` — повні | **keep** |
+| §6 inline-markup формат LLM | `parse-annotation-tags.ts`, `annotation-prompt.ts` — уже саме ця ідея | **keep / адаптувати** |
+| §3.3 `words` / `word_definitions` / `phrases` | сутності `Word` / `WordDefinition` / `Phrase` | **keep**, +поля (`frequency_rank`, узгодити `cefr`) |
+| core AI-порт | `core/ai/` (`AiClient`, `runTool<T>`, forced tool-use) | **keep**, перевикористати в кожному новому стейджі |
+| §1/§5 `spacy_parse` + `nlp-service` | немає (анотація повністю через AI); чернетка `new/asd.py` | build (Python-сервіс + NestJS-порт) |
+| §3.2 `sentences` / `sentence_tokens` | node-tree `PostPart` + `spliceSpans` + offset-валідація | **rework**: node-tree лишається, spaCy-шар додається паралельно (див. §12) |
+| §5 `ai_complexity` | немає | build |
+| §5 `ai_grammar` → `grammar_matches` | немає | build (потрібні grammar-модель + spaCy спершу) |
+| наявний `content_annotation` (все-AI) | `annotate-post` handler + processor | **rework**: звести до ролі «тільки ідіоми/колокації» поверх spaCy |
+| §3.4 grammar EGP модель + імпорт | немає | build (CLI-імпорт з `egpo.xlsx`) |
+| §3.5 `learning_cards` / `review_logs` (FSRS) | немає | build (`ts-fsrs`) |
+| §3.6 `user_skill_progress` | немає | build |
+| §3.10 `exercises` | немає | build (переважно детерміновано з `sentence_tokens`) |
+| §3.8 `post_publications` | немає | build лише каркас (V1 = тільки telegram) |
+| §3.9 `telegram_updates` + адмін-бот | `cron/scraper` (старий news-парсинг, не про це); `cron-job-host` є | build бот; **видалити `cron/scraper`** |
+| §7 Redis rate limiting + гостьовий feed | `core/redis` є; NestJS throttler | build поверх |
+| §4 Astro + HTMX фронт, 8 сторінок | немає (тільки API: `auth` контролер, `health`) | build (окремий workspace-пакет) |
+| §8 мок-монетизація | немає | build (мало) |
+
+---
+
+## 14. Вертикальні зрізи
+
+Порядок: дані → парсинг → AI → навчання → UI. Кожен зріз тестується через
+CLI/API ще до появи фронтенду.
+
+### Зріз 0 — підготовка
+
+- [x] Розділ 12–15 у `PLAN.md` (цей крок).
+- [x] Видалити `src/entrypoints/cron/scraper/` (cron-host лишається для
+      Telegram getUpdates; `CronModule` тепер порожній mount-point).
+- [x] `content` → `post` вже зроблено: CLI `engofy post ingest`, модуль `post`,
+      `PostPart`/`PostPipelineRun`, колонки `post_id`. Залишки `content_*` є
+      лише в історичних міграціях (`Migration20260824192359`, перейменування в
+      `Migration20260826081301`) — незмінні, лишаємо. Слово «content» у
+      `annotation-prompt.ts` = лінгвістичний термін «content word», не стара
+      сутність.
+- [x] `draft/` (eval-харнес анотаційного промпту) — лишити, знадобиться для
+      зрізу 3 (eval `ai_grammar`).
+
+### Зріз 1 — дані-фундамент (без поведінки)
+
+- Міграції під усі нові таблиці розділу 3 (порожні, без логіки), по одній на
+  логічну групу:
+  - [x] `subscriptions` — `Subscription` entity в `modules/auth/entities/`,
+        enum'и `SubscriptionPlan`/`SubscriptionStatus`, `Migration20260829123821`.
+  - [x] spaCy-шар: `Sentence` (`post_part_id` + `unit_index` + offset,
+        денормалізований `post_id`, `cefr_level` nullable) та `SentenceToken`
+        (raw spaCy `pos`/`tag`/`dep` як text — не enum `PartOfSpeech`;
+        `head_position`, `morph` jsonb, `is_gerund`/`is_idiom_part`,
+        `phrasal_verb_group_id`/`word_id`/`phrase_id` nullable FK).
+        `Migration20260829124255`.
+  - [x] grammar (`modules/post/entities/`): `GrammarCategory`,
+        `GrammarConstruction`, `GrammarUsagePoint` (`cefr_level` = `CefrLevel`),
+        `GrammarMatch` (`token_start`/`token_end` = `SentenceToken.position`,
+        `confidence` real nullable). `Migration20260829124701`.
+  - [x] FSRS (нове `modules/learning/`): `LearningCard` (CHECK
+        `learning_cards_exactly_one_target` — рівно один з
+        `word_id`/`phrase_id`/`grammar_usage_point_id`; поля ts-fsrs Card),
+        `ReviewLog` (append-only, slim). Enum'и `LearningCardState`/
+        `ReviewRating` (text, мапляться на числові ts-fsrs у Зрізі 6).
+  - [x] `UserSkillProgress` (`modules/learning/`, unique
+        `(user_id, construction_id)`), `Exercise` + enum'и
+        `ExerciseType`/`ExerciseSource` (`modules/post/`), `PostPublication` +
+        enum'и `PublicationPlatform`/`PublicationStatus` (unique
+        `(post_id, platform)`), `TelegramUpdate` (нове `modules/telegram/`,
+        `telegram_message_id` bigint unique).
+  - [x] `PostPipelineStage` enum переписано на 7 стейджів (`fetch`/`spacy_parse`/
+        `annotation`/`ai_complexity`/`ai_grammar`/`ai_exercises`/`publish`;
+        старі `grammar_tagging`/`comprehension_questions`/`conversation_kit`
+        прибрано — використовувався тільки `annotation`). `PostPipelineRun` +
+        `started_at`/`error_message`/`retry_count`.
+  - [x] `Word.frequencyRank` (int nullable). **Відкрито:** спека §3.3 кладе
+        `cefr_level` на `words`, код тримає його на `WordDefinition` (per-POS) —
+        не чіпав, бо це зачіпає annotation-пайплайн; розв'язати у Зрізі 3.
+- [x] `assets/irregular-verbs.json` (164 дієслів, `past_simple`/`past_participle`
+      як масиви, `cefr_level`) + доменний парсер/валідатор
+      `modules/post/domain/irregular-verb.ts` (zod, ловить дублі base_form) +
+      CLI `engofy grammar import-irregular-verbs`
+      (`entrypoints/cli/grammar/`, новий `GrammarCliModule`) — ідемпотентно
+      створює `Word` рядки для base_form (case-insensitive dedupe по
+      `words.lemma`). Інфлектовані форми лишаються в JSON, не в БД.
+- [x] `assets/egp.json` (1239 записів, витягнуто з `ninja33/EGP` `egpo.xlsx` →
+      JSON один раз, з чисткою mojibake-апострофів; `index` = стабільний
+      idempotency-ключ) + `assets/README.md` (провенанс) + доменні хелпери
+      `modules/post/domain/egp.ts` (zod, `classifyEgpRecord` use/form,
+      `grammarConstructionSlug` = `category-subcategory` бо subcategory не
+      унікальна, `buildCheatSheet`) + CLI `engofy grammar import-egp`.
+      Прогнано: **19 категорій / 90 конструкцій / 574 usage points** (665
+      FORM/comment → cheat sheet), ідемпотентно (category by name,
+      construction by slug, usage point by `egpIndex`). `GrammarUsagePoint`
+      +`egp_index` (unique nullable), `Migration20260829132257`. xlsx-парсер у
+      залежності **не** додавав — дані заморожені.
+- [x] `assets/word-frequency.txt` (top 50 000 англ. слів, один на рядок,
+      згенеровано раз через `wordfreq` `top_n_list('en',…)` за допомогою `uv`,
+      відфільтровано до буквених токенів) + чистий хелпер
+      `modules/post/domain/word-frequency.ts` (`parseWordFrequencyList` →
+      `Map<word, 1-based rank>`) + CLI `engofy words import-frequency`
+      (новий `WordsCliModule`) — проставляє `words.frequency_rank` на наявних
+      `Word` (case-insensitive по lemma), ідемпотентно. Прогнано: 433/445
+      слів отримали ранг. npm/py-залежність wordfreq **не** додавав.
+
+### Зріз 2 — nlp-service + стейдж `spacy_parse`
+
+- [x] `nlp-service/` (FastAPI + `en_core_web_sm`, `app.py` + pinned
+      `requirements.txt` + `README.md`): `POST /parse` приймає один
+      флеттен-юніт → `{ sentences: [{ text, start, end, tokens: [{ index,
+      text, lemma, pos, tag, dep, morph, head, start, end }] }] }`. Sentence
+      offset — у сабміченому тексті, token offset — у тексті свого речення,
+      `head` — sentence-local індекс (== index для кореня). Герундій/розрив
+      фразових **не** тут — сирі поля spaCy, детермінізм у NestJS-домені.
+      `new/` прибрано з кореня.
+- [x] NestJS `NlpClient` порт (`core/nlp/`) за зразком `core/ai/`:
+      `nlp-client.port.ts` (`NLP_CLIENT`, типи `NlpToken`/`NlpSentence`/
+      `NlpParseResult`), `nlp.config.ts` (`NLP_SERVICE_URL`, timeout),
+      `nlp-client.provider.ts`, `http-nlp-client.service.ts` (global `fetch`
+      + `AbortSignal.timeout`, кидає на не-2xx / транспортну помилку).
+      Зареєстровано в `PostModule`.
+- [x] Стейдж `spacy_parse` (`commands/spacy-parse-post/`, pg-boss
+      `post-spacy-parse`): по `PostPart` → `flattenPostPartUnits` → на юніт
+      `NlpClient.parse` → `sentences` + `sentence_tokens` (offset у
+      plain-тексті юніта; token offset у `Sentence.rawText`). Ідемпотентно
+      через `PostPipelineRun` (стейдж-рівень) + пропуск парта, що вже має
+      `Sentence` рядки; flush по одній `PostPart` (§12). Валідація
+      offset-ів `text[start:end] === form` до запису → `NlpOffsetMismatchError`
+      завалює всю джобу (§12 all-or-nothing). `ingest-post` тепер ставить і
+      `post-annotation`, і `post-spacy-parse` (паралельні шари, §12).
+      Воркер: `SpacyParsePostProcessor` + `SpacyParsePostModule`.
+- [x] Детерміновано в `domain/build-sentences.ts` (юніт-тести):
+      `computePhrasalVerbKeys` — частка (`dep=prt`/`tag=RP`) → голова-дієслово
+      через залежність, ключ `lemma + particle` (напр. `pick up`), спільний
+      для дієслова й усіх фрагментів; хендлер резолвить у `Phrase`
+      (`phrasal_verb`) через `upsert-phrase-id.ts` →
+      `sentence_tokens.phrasal_verb_group_id`. `detectGerund` — `-ing` у
+      номінальній dep-ролі; `VBG` завжди, `NN` лише без власного `det`
+      (`en_core_web_sm` тегає голий герундій-підмет то `VBG`, то `NN`).
+
+### Зріз 3 — AI-стейджі поверх spaCy
+
+- [x] **Structured-output у `core/ai`**: `AiClient.completeStructured<T>({
+      system, userText, tool: { name, description, schema: ZodType<T> } })` —
+      forced single-tool call, `input_schema` з `z.toJSONSchema`, відповідь
+      валідовано `tool.schema.parse`. Fake-и в ispec'ах оновлено.
+- [x] `ai_complexity` (`commands/assess-complexity/`, pg-boss
+      `post-ai-complexity`): один виклик оцінює весь пост + кожне речення по
+      CEFR. Читає `sentences` (тому стоїть після `spacy_parse`; хендлер
+      `spacy_parse` тепер ставить `ai_complexity` при завершенні —
+      pipeline-ланцюг §5). `posts.cefr_level` (нова колонка,
+      `Migration20260829141156`) + `sentences.cefr_level`. `newVocabRatio`
+      лишається у лозі (окремої колонки в §3 нема). Домен
+      `complexity-prompt.ts`: prompt + zod-схема + `buildComplexityUserText`
+      + `indexComplexityLevels` (кидає при пропуску/дублі/out-of-range —
+      §12 all-or-nothing). Ідемпотентно через `PostPipelineRun`. Воркер:
+      `AssessComplexityProcessor`/`Module`. Live-smoke проти Anthropic
+      пройдено.
+- [x] `ai_grammar` → `grammar_matches` (`commands/tag-grammar/`, pg-boss
+      `post-ai-grammar`; `ai_complexity` ставить його при завершенні). Формат —
+      **inline-markup** (рішення користувача), як анотація:
+      `GRAMMAR_SYSTEM_PROMPT` + каталог із БД (`buildGrammarCatalog`: 90
+      конструкцій, кожна зі своїми usage points як `[egpIndex] CEFR
+      guideword — canDo`); модель повертає пронумеровані рядки речень із
+      `⟦span⟧{{g|slug|egpIndex}}`. `parse-grammar-tags.ts` (regex + recon-
+      struct-and-compare, як `parse-annotation-tags`) + `parseGrammarResponse`
+      (рядки → per-sentence spans, `isComplete`, 1 ретрай). `grammar-span-
+      tokens.ts` `spanToTokenRange` — char-span → half-open діапазон
+      `SentenceToken.position`. Хендлер валідує slug ∈ каталог та egpIndex ∈
+      цій конструкції (інакше дроп + warn), резолвить у `GrammarUsagePoint`,
+      пише `GrammarMatch(sentenceId, grammarUsagePointId, tokenStart,
+      tokenEnd)`. Ідемпотентно: `PostPipelineRun` + `nativeDelete` матчів
+      речень при партіал-ретраї. Воркер `TagGrammarProcessor`/`Module`.
+      Live-smoke проти Anthropic пройдено (past-perfect / 1st conditional /
+      could-request розпізнані, валідні egpIndex).
+- [ ] Eval `ai_grammar` через `draft/`-харнес перед мержем. Харнес
+      **побудовано й провалідовано** (`draft/lib/{call-nlp,grammar-catalog,
+      parse-content-sentences,grammar-tag-file}.ts` +
+      `draft/scripts/{run,snapshot,compare}-grammar.ts`, README-секція
+      "Grammar harness"): реюз реальних `parseGrammarResponse` /
+      `parseGrammarTags` / `spanToTokenRange` + та сама drop-драбина, що в
+      `TagGrammarHandler.persistMatch`; каталог відновлюється з
+      `assets/egp.json` тими ж хелперами, що `import-egp` (78 конструкцій /
+      574 usage points — 78, бо handler фільтрує 12 cheat-sheet-only; це
+      рівно те, що йде в prompt); `parse-content-sentences` дзеркалить
+      ingest+`spacy_parse` через живий `nlp-service`. Smoke на `article.md`
+      (16/16 spans persisted, 8 конструкцій, `isComplete:false` після
+      ретраю) і `plain.txt` (3/6 persisted, 3 dropped unknown-slug).
+      **Лишається**: прогнати повний baseline по всіх `examples/content/*`
+      (`snapshot-grammar.ts`, ~$3-4, ~25хв), закомітити його в
+      `draft/baselines/`, переглянути метрики (unknown-slug drops,
+      `isComplete`) — і за потреби підкрутити `grammar-prompt.ts`.
+- [ ] Rework `content_annotation`: spaCy дає POS/lemma/morph; AI лишає тільки
+      ідіоми/колокації, яких spaCy не бачить. Лінк `sentence_tokens.word_id` /
+      `phrase_id`. (Відкладено окремим кроком — рішення користувача; торкає
+      робочий прод-пайплайн.) `words.cefr_level` **лишається per-POS на
+      `WordDefinition`** (рішення користувача — спека §3.3 неформальна).
+
+### Зріз 4 — вправи + публікація статусу
+
+- [x] Детермінована генерація `exercises` з `sentence_tokens`
+      (`domain/build-exercises.ts`, чисті ф-ції + `build-exercises.spec.ts`):
+      **fill_blank** (перше content-слово NOUN/VERB/ADJ/ADV, не крайнє,
+      alpha ≥3), **reorder** (5–14 токенів, детермінований mulberry32-shuffle
+      seed=sentenceId, скіп якщо збігся з оригіналом), **multiple_choice**
+      (fill_blank + 3 дистрактори з пулу `pos|tag` поста, скіп якщо <3),
+      **find_error** (регулярне VBD → base form, не be/have/do, не lemma===text;
+      капіталізація коли на початку речення). Кожен тип capped
+      `maxPerType=8`, вивід стабільно згрупований FB→RO→MC→FE.
+- [x] `ai_exercises` стейдж (`commands/generate-exercises/`, pg-boss
+      `post-ai-exercises`, воркер `GenerateExercisesProcessor`/`Module`;
+      `tag-grammar` ставить його при завершенні — ланцюг тепер
+      spacy_parse→ai_complexity→ai_grammar→ai_exercises→publish). Хендлер:
+      детерміновані `buildExercises` + **один** `completeStructured` виклик
+      для comprehension (`domain/comprehension-prompt.ts`: prompt + zod
+      `comprehensionToolSchema` 2–5 питань × рівно 4 опції + answerIndex 0..3
+      + `comprehension-prompt.spec.ts`). `nativeDelete(Exercise,{postId})` +
+      персист (`source=spacy` для детермінованих, `source=ai` +
+      `type=comprehension` для AI). Ідемпотентно через `PostPipelineRun`.
+      Live-smoke comprehension проти Anthropic пройдено (5 валідних питань).
+- [x] Стейдж `publish` (`commands/publish-post/`, pg-boss `post-publish`,
+      воркер; кінець ланцюга — нічого не ставить далі). `posts.status =
+      published` (нове значення enum + `Migration20260829153800` оновлює
+      `posts_status_check`), `posts.published_at = now()`, `em.upsert`
+      `PostPublication(platform=telegram, status=pending)` на unique
+      `(post_id, platform)` з `onConflictAction:'ignore'` (реальна відправка —
+      Зріз 5). Ідемпотентно через `PostPipelineRun`.
+- Перевірки зелені: `pnpm run type`, `biome check src/`, 397 unit
+      (+build-exercises 15, +comprehension-prompt 4), 89 integration
+      (+generate-exercises 3, +publish-post 2). Не закомічено на `v2`.
+
+### Зріз 5 — Telegram адмін-бот
+
+Новий `modules/telegram/` (config + `services/` + `domain/`), крони в
+`entrypoints/cron/telegram/`, `CronModule` імпортує `TelegramCronModule`.
+`TELEGRAM_BOT_TOKEN`/`TELEGRAM_ADMIN_USER_ID`/`TELEGRAM_CHANNEL_ID` у
+`.env.development` (порожні → обидва крони no-op).
+
+- [x] `@Cron` (1 хв) `PollUpdatesCron` → `PollUpdatesService`: Telegram
+      `getUpdates` (raw `fetch`, `allowed_updates:['message']`), offset =
+      `max(telegram_message_id)+1` з таблиці (raw SQL з
+      `getTransactionContext()`, без окремого курсора). Кожен новий апдейт →
+      рядок `telegram_updates` (unique на `update_id` = ідемпотентність,
+      re-poll = no-op), flush по одному. Фільтр `message.from.id ===
+      TELEGRAM_ADMIN_USER_ID` — не-адмін лише зберігається + `processed=true`.
+- [x] Парсинг команд (`domain/parse-command.ts`, pure + spec, толерує
+      `@botname`): **`/add <text>`** (рішення користувача — вставлений текст,
+      не URL; без fetch-стейджу/деп) → `PostService.ingest({rawText})` →
+      відповідь з `shortId`. **`/retry <post_id>`** → новий
+      `commands/retry-post/` (`nativeDelete` `PostPipelineRun` поста +
+      `status=Pending` + re-enqueue `post-annotation`+`post-spacy-parse` як
+      ingest). Помилка команди → reply з текстом, апдейт усе одно
+      `processed=true`.
+- [x] `post_publications` telegram-адаптер: **cron-polled** (рішення
+      користувача) — `PublishPendingCron` (1 хв) → `PublishPendingService`
+      бере `pending` рядки `platform=telegram` (batch 10), шле анонс у
+      `TELEGRAM_CHANNEL_ID` (`domain/format-announcement.ts`: title + CEFR +
+      `PUBLIC_URL/posts/{slug}-{shortId}`), → `published`+`externalId`
+      (message_id) або `failed`+`errorMessage`, flush по одному.
+- Перевірки зелені: type, biome, 409 unit (+parse-command 7,
+      +format-announcement 5), 99 integration (+poll-updates 5,
+      +publish-pending 3, +retry-post 2). Без міграцій. Не закомічено.
+      Live-smoke неможливий локально (немає бот-токена) — покрито
+      fake-клієнтом в ispec'ах.
+
+### Зріз 6 — SRS (FSRS) + монетизація
+
+Новий `modules/learning/` (facade → command/query → services/domain) +
+`modules/billing/` (subscription-поведінка; сутність `Subscription` лишається
+в `auth/entities/`). Web: `LearningWebModule` (`/learning/*`),
+`BillingWebModule` (`/billing/*`), обидва під глобальним `SessionAuthGuard`.
+
+- [x] `learning_cards` / `review_logs` + `ts-fsrs@5.4`. `FsrsService` —
+      `fsrs(generatorParameters({ enable_short_term: false }))` (для vocab
+      sub-day steps = шум; тримає картку 1:1 з таблицею, без колонки
+      `learning_steps`). `domain/fsrs-mapping.ts` (pure + spec) — Luxon↔Date,
+      text-enum↔numeric `State`/`Rating`. `Migration20260829160035` — 3
+      composite `@Unique` `(user_id, {word|phrase|grammar_usage_point}_id)`
+      (Postgres NULLs distinct → одна картка на таргет).
+- [x] API: `POST /learning/cards` (рівно один з
+      `wordId`/`phraseId`/`grammarUsagePointId`, `.refine` у zod DTO;
+      ідемпотентно — повторний додаток повертає наявну картку; 400 на
+      неіснуючий таргет), `GET /learning/practice?limit=20` (картки з
+      `due<=now`, `due asc`, з денормалізованим `target.primary/secondary`),
+      `POST /learning/cards/:id/review` `{rating}` → перепланування +
+      append `review_logs`. **Skill-progress (`user_skill_progress`) — Зріз 7.**
+- [x] Ліміт `FREE_CARD_LIMIT=100` — `CardLimitService.assertCanAddCard`:
+      `COUNT(*) learning_cards WHERE user_id` (без розбивки за типом, §12),
+      пропускає premium. `CardLimitReachedError extends DomainError` → 400.
+- [x] `subscriptions` мок-флоу: `POST /billing/subscribe` →
+      `ActivateMockSubscriptionCommand` (premium, `isMockPayment=true`,
+      `currentPeriodEnd = max(now, existing) + 1 month` — не дублює рядки),
+      `GET /billing/subscription`. `SubscriptionService.isPremium` = активний
+      premium-рядок з `currentPeriodEnd > now` (знімає ліміт карток).
+- Перевірки зелені: type, biome, 423 unit (+card-target 6, +fsrs-mapping 5,
+      +fsrs.service 3), 117 integration (+add-card 5, +review-card 3,
+      +practice-queue 2, +activate-mock-subscription 2, +learning e2e 4,
+      +billing e2e 2). Дод. деп `ts-fsrs`. Не закомічено.
+
+### Зріз 7 — skills / прогрес
+
+- [ ] `user_skill_progress`: `mastery_score` агрегується з `learning_cards`,
+      де `grammar_usage_point_id` належить конструкції.
+- [ ] Streak, статистика по CEFR.
+
+### Зріз 8 — фронтенд (Astro + HTMX)
+
+Окремий workspace-пакет (`pnpm-workspace.yaml` уже є). Сторінки в порядку:
+
+- [ ] `/posts/{slug}-{id}` — текст з інлайн-розбором, tooltip, «+», вправи.
+- [ ] `/` — стрічка з чергуванням стаття → повторення.
+- [ ] `/practice` — SRS-черга.
+- [ ] `/grammar` — довідник 19 → 90, фільтр CEFR.
+- [ ] `/dictionary` — особистий словник.
+- [ ] `/profile` — skills-дерево, streak.
+- [ ] `/login` — email+OTP (auth уже готовий) + Google.
+- [ ] `/pricing` — мок-оплата.
+
+### Зріз 9 — Redis-поліш
+
+- [ ] OTP rate-limit по IP **і** по email окремо (ключі вже частково є в auth).
+- [ ] Лічильник переглянутих статей гостьової сесії
+      (`session:{cookie_id}:articles_seen`) для чергування без БД.
+- [ ] Загальний per-IP throttle на публічні ендпоїнти.
+
+---
+
+## 15. Прибирання
+
+- ~~`src/entrypoints/cron/scraper/`~~ — видалено (зріз 0).
+- ~~`new/asd.py` + `new/requirements.txt`~~ — перенесено в `nlp-service/`
+  (`app.py` + pinned `requirements.txt`), `new/` прибрано з кореня (зріз 2).
+- `draft/` — лишається як eval-харнес; тримати синхронним із реальним
+  пайплайном.
+- Старий закомічений `PLAN.md` (розділ «Working notes») — джерело для
+  розділу 12; після переносу цінності не має.

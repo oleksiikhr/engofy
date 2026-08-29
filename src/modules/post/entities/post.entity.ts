@@ -12,6 +12,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { generateShortId } from '../domain/generate-short-id.js';
 import { PostSource } from '../embeddables/post-source.embeddable.js';
+import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PostStatus } from '../enums/post-status.enum.js';
 import { PostType } from '../enums/post-type.enum.js';
 
@@ -45,6 +46,11 @@ export class Post {
 
   @Enum({ items: () => PostStatus })
   status: Opt<PostStatus> = PostStatus.Pending;
+
+  // Overall CEFR level of the post text; null until the ai_complexity stage
+  // runs (PLAN.md §5). Per-sentence levels live on `sentences.cefr_level`.
+  @Enum({ items: () => CefrLevel, nullable: true })
+  cefrLevel?: CefrLevel | null;
 
   // Mirrors createdAt for now — there's no draft/publish workflow yet, so
   // "published" and "ingested" are the same moment. Kept as its own field

@@ -1,5 +1,9 @@
-import { flattenDoc, flattenParagraph } from './flatten.js';
-import type { Doc, Paragraph } from './node-tree.types.js';
+import {
+  flattenDoc,
+  flattenParagraph,
+  flattenPostPartUnits,
+} from './flatten.js';
+import type { Doc, ListBlock, Paragraph } from './node-tree.types.js';
 
 describe('flattenParagraph', () => {
   it('concatenates text and span node text with per-child offsets', () => {
@@ -104,6 +108,47 @@ describe('flattenDoc', () => {
         end: 29,
         nodes: [{ index: 0, start: 0, end: 11 }],
       },
+    ]);
+  });
+});
+
+describe('flattenPostPartUnits', () => {
+  it('returns a single unit (index 0) for a paragraph block', () => {
+    const paragraph: Paragraph = {
+      type: 'paragraph',
+      children: [
+        { type: 'text', text: 'The cat ' },
+        {
+          type: 'span',
+          text: 'sat',
+          kind: 'word',
+          wordDefinitionId: 'wd-1',
+          pos: 'verb',
+        },
+        { type: 'text', text: ' down.' },
+      ],
+    };
+
+    expect(flattenPostPartUnits(paragraph)).toEqual([
+      { unitIndex: 0, text: 'The cat sat down.' },
+    ]);
+  });
+
+  it('returns one unit per list item, indexed by item position', () => {
+    const list: ListBlock = {
+      type: 'list',
+      ordered: false,
+      items: [
+        { children: [{ type: 'text', text: 'First item.' }] },
+        { children: [{ type: 'text', text: 'Second item.' }] },
+        { children: [{ type: 'text', text: 'Third item.' }] },
+      ],
+    };
+
+    expect(flattenPostPartUnits(list)).toEqual([
+      { unitIndex: 0, text: 'First item.' },
+      { unitIndex: 1, text: 'Second item.' },
+      { unitIndex: 2, text: 'Third item.' },
     ]);
   });
 });

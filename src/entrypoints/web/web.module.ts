@@ -3,9 +3,16 @@ import type { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-me
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ETagInterceptor } from '../../core/http/interceptors/etag.interceptor.js';
 import { AuthWebModule } from './auth/auth-web.module.js';
+import { BillingWebModule } from './billing/billing-web.module.js';
 import { InternalWebModule } from './internal/internal-web.module.js';
+import { LearningWebModule } from './learning/learning-web.module.js';
 
-const DEFAULT_SUB_MODULES: Type[] = [InternalWebModule, AuthWebModule];
+const DEFAULT_SUB_MODULES: Type[] = [
+  InternalWebModule,
+  AuthWebModule,
+  LearningWebModule,
+  BillingWebModule,
+];
 
 @Module({})
 // biome-ignore lint/complexity/noStaticOnlyClass: NestJS dynamic module pattern (forRoot/forFeature)

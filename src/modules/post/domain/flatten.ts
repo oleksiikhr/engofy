@@ -56,6 +56,26 @@ export function flattenParagraph(paragraph: Paragraph): {
   return flattenNodes(paragraph.children);
 }
 
+// One flattened plain-text unit of a PostPart: a paragraph is a single unit
+// (unitIndex 0), a list is one unit per item. This is the coordinate system
+// the spaCy analysis layer (sentences / sentence_tokens) is anchored to,
+// mirroring flattenDoc's per-unit granularity (see Sentence.unitIndex).
+export interface PartUnit {
+  unitIndex: number;
+  text: string;
+}
+
+export function flattenPostPartUnits(block: Block): PartUnit[] {
+  if (block.type === 'list') {
+    return block.items.map((item, unitIndex) => ({
+      unitIndex,
+      text: flattenNodes(item.children).text,
+    }));
+  }
+
+  return [{ unitIndex: 0, text: flattenNodes(block.children).text }];
+}
+
 function isParagraph(block: Block): block is Paragraph {
   return block.type === 'paragraph';
 }

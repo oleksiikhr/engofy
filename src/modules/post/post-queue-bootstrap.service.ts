@@ -13,5 +13,30 @@ export class PostQueueBootstrapService implements OnApplicationBootstrap {
       policy: 'singleton',
       expireInSeconds: 3600,
     });
+
+    await this.boss.createQueue(QueueName.PostSpacyParse, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
+
+    await this.boss.createQueue(QueueName.PostAiComplexity, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
+
+    await this.boss.createQueue(QueueName.PostAiGrammar, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
+
+    await this.boss.createQueue(QueueName.PostAiExercises, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
+
+    await this.boss.createQueue(QueueName.PostPublish, {
+      policy: 'singleton',
+      expireInSeconds: 3600,
+    });
   }
 }

@@ -49,6 +49,10 @@ function insertAll(text: string, insertions: Insertion[]): string {
 class FakeAiClient implements AiClient {
   callCount = 0;
 
+  completeStructured(): Promise<never> {
+    throw new Error('completeStructured not used by AnnotatePostHandler');
+  }
+
   async complete({ userText }: AiCompleteParams): Promise<string> {
     this.callCount += 1;
 

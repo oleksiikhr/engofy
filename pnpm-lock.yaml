@@ -128,6 +128,9 @@ importers:
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
+      ts-fsrs:
+        specifier: ^5.4.1
+        version: 5.4.1
       undici:
         specifier: ^8.10.0
         version: 8.10.0
@@ -3918,6 +3921,10 @@ packages:
 
   ts-algebra@2.0.0:
     resolution: {integrity: sha512-FPAhNPFMrkwz76P7cdjdmiShwMynZYN6SgOujD1urY4oNm80Ou9oMdmbR45LotcKOXoy7wSmHkRFE6Mxbrhefw==}
+
+  ts-fsrs@5.4.1:
+    resolution: {integrity: sha512-mOp9+oexJexBTkwjg/jQI1aSUQRLIAvbimeKHLSmVdNJPwObugFNKmZkoggH5d6kZ0uaWLboP1Al1DnXAfIb9w==}
+    engines: {node: '>=20.0.0'}
 
   ts-node@10.9.2:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
@@ -7826,6 +7833,8 @@ snapshots:
       ieee754: 1.2.1
 
   ts-algebra@2.0.0: {}
+
+  ts-fsrs@5.4.1: {}
 
   ts-node@10.9.2(@swc/core@1.15.47)(@types/node@24.13.3)(typescript@6.0.3):
     dependencies:

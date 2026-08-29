@@ -22,6 +22,11 @@ export class Word {
   @Property({ type: 'text' })
   lemma!: string;
 
+  // 1-based frequency rank from wordfreq (1 = most common); null until the
+  // frequency import CLI runs (PLAN.md §3.3, Slice 1).
+  @Property({ type: 'integer', nullable: true })
+  frequencyRank?: number | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

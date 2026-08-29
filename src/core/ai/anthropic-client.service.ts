@@ -1,6 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Logger } from '@nestjs/common';
-import type { AiClient, AiCompleteParams } from './ai-client.port.js';
+import { z } from 'zod';
+import type {
+  AiClient,
+  AiCompleteParams,
+  AiCompleteStructuredParams,
+} from './ai-client.port.js';
 
 // $ per 1M tokens, matched against `model` by substring — see the "Current
 // Models" pricing table in Anthropic's docs. Update alongside AI_MODEL.
@@ -49,6 +54,64 @@ export class AnthropicClientService implements AiClient {
     this.client = new Anthropic({ apiKey });
   }
 
+  private logUsage(usage: Anthropic.Usage, label: string): void {
+    this.logger.log(
+      {
+        model: this.model,
+        input_tokens: usage.input_tokens,
+        output_tokens: usage.output_tokens,
+        cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,
+        cache_read_input_tokens: usage.cache_read_input_tokens ?? 0,
+        cost_usd: estimateCostUsd(this.model, usage),
+      },
+      label,
+    );
+  }
+
+  async completeStructured<T>({
+    system,
+    userText,
+    tool,
+  }: AiCompleteStructuredParams<T>): Promise<T> {
+    // Strip the JSON Schema dialect marker — Anthropic's input_schema
+    // validator only wants the object shape itself.
+    const { $schema: _schema, ...inputSchema } = z.toJSONSchema(
+      tool.schema,
+    ) as Record<string, unknown>;
+
+    const response = await this.client.messages.create({
+      model: this.model,
+      max_tokens: 16000,
+      ...(supportsAdaptiveThinking(this.model) && {
+        thinking: { type: 'adaptive' },
+      }),
+      system,
+      tools: [
+        {
+          name: tool.name,
+          description: tool.description,
+          input_schema: inputSchema as Anthropic.Tool.InputSchema,
+        },
+      ],
+      tool_choice: { type: 'tool', name: tool.name },
+      messages: [{ role: 'user', content: userText }],
+    });
+
+    this.logUsage(response.usage, 'ai completeStructured call usage');
+
+    const toolUse = response.content.find(
+      (block): block is Anthropic.ToolUseBlock =>
+        block.type === 'tool_use' && block.name === tool.name,
+    );
+    if (!toolUse) {
+      throw new Error(
+        `AI response did not call the forced tool "${tool.name}" (stop_reason=${response.stop_reason})`,
+      );
+    }
+
+    return tool.schema.parse(toolUse.input);
+  }
+
   async complete({ system, userText }: AiCompleteParams): Promise<string> {
     const response = await this.client.messages.create({
       model: this.model,
@@ -60,18 +123,7 @@ export class AnthropicClientService implements AiClient {
       messages: [{ role: 'user', content: userText }],
     });
 
-    this.logger.log(
-      {
-        model: this.model,
-        input_tokens: response.usage.input_tokens,
-        output_tokens: response.usage.output_tokens,
-        cache_creation_input_tokens:
-          response.usage.cache_creation_input_tokens ?? 0,
-        cache_read_input_tokens: response.usage.cache_read_input_tokens ?? 0,
-        cost_usd: estimateCostUsd(this.model, response.usage),
-      },
-      'ai complete call usage',
-    );
+    this.logUsage(response.usage, 'ai complete call usage');
 
     // max_tokens cuts generation off mid-stream — the caller's own
     // completeness check (comparing the reconstructed plain text against

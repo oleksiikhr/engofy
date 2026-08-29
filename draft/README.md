@@ -1,12 +1,24 @@
-# draft — annotation prompt experiments
+# draft — prompt experiments (annotation + grammar)
 
-Sandbox for A/B-testing the content-annotation LLM prompt/model against the
-REAL production pipeline in `src/modules/post/` — not a separate
-approximation of it. Originally used to validate the plain-text inline-tag
-format that replaced the old JSON tool-call + character-offset schema; that
-port is done (see `src/modules/post/domain/annotation-prompt.ts` and
-`annotate-post.handler.ts`). This harness now exists to test *changes* to
-that prompt/model/algorithm against a recorded baseline before they ship.
+Sandbox for A/B-testing the LLM prompt/model of the `content_annotation` and
+`ai_grammar` stages against the REAL production pipeline in
+`src/modules/post/` — not a separate approximation of it. Both harnesses
+import the actual production domain functions and prompts; only the
+transport is swapped (a direct Anthropic / nlp-service call instead of Nest
+DI), so a recorded baseline reflects production behaviour, not a parallel
+reimplementation.
+
+- **Annotation** (`run.ts` / `snapshot.ts` / `compare.ts`) — originally used
+  to validate the plain-text inline-tag format that replaced the old JSON
+  tool-call + character-offset schema; that port is done (see
+  `src/modules/post/domain/annotation-prompt.ts` and
+  `annotate-post.handler.ts`). Now tests *changes* to that
+  prompt/model/algorithm against a recorded baseline before they ship.
+- **Grammar** (`run-grammar.ts` / `snapshot-grammar.ts` /
+  `compare-grammar.ts`) — the `ai_grammar` stage (PLAN.md §5, Зріз 3): tags
+  every sentence against the closed EGP catalogue of ~90 constructions /
+  ~574 usage points using the same `⟦span⟧{{g|slug|egpIndex}}` inline
+  mechanism. See **Grammar harness** below.
 
 ## Layout
 
@@ -144,6 +156,72 @@ retried, isComplete }], totals: {...same fields, summed...} }], grandTotals:
 Since a single run is one noisy sample, treat one regression flag as "worth
 a second `compare.ts` run before concluding" rather than absolute proof —
 `compare.ts` doesn't average multiple snapshots, it only diffs two.
+
+## Grammar harness
+
+Same idea as the annotation harness, for the `ai_grammar` stage. It reuses
+the real domain functions end to end — `parseGrammarResponse` +
+`parseGrammarTags` (the reconstruct-and-compare completeness check),
+`spanToTokenRange`, and the same drop ladder `TagGrammarHandler.persistMatch`
+applies (unknown slug → missing/out-of-construction `egpIndex` → span covers
+no token → persisted). The catalogue is rebuilt straight from
+`assets/egp.json` with the same helpers `engofy grammar import-egp` uses
+(`classifyEgpRecord`, `grammarConstructionSlug`), so no database is needed;
+the only order difference from the seeded DB is documented in
+`lib/grammar-catalog.ts`.
+
+### Pipeline mirrored
+
+`lib/parse-content-sentences.ts` reproduces ingest + `spacy_parse` without a
+DB: `detectPostSourceFormat` → `convertToDoc` → one PostPart per top-level
+block → `flattenPostPartUnits` → **live `nlp-service` `/parse` call per
+unit** → `buildSentences` (the real offset-validating domain function). The
+result is the exact ordered `Sentence.rawText` / `SentenceToken` list
+`TagGrammarHandler` loads. `lib/grammar-tag-file.ts` then mirrors
+`TagGrammarHandler.callModel` — one AI call, one retry on an incomplete
+parse, later attempt used regardless — and classifies every parsed span by
+its production disposition.
+
+**The `nlp-service` must be running** (`cd nlp-service && .venv/bin/uvicorn
+app:app --host 127.0.0.1 --port 8000`; override with `NLP_SERVICE_URL`).
+Unlike the annotation harness this one also covers the `.html` / `.txt`
+fixtures — `ai_grammar` runs on sentences, so it is format-agnostic.
+
+### Running
+
+```bash
+# ad-hoc, full per-sentence detail, writes draft/results/<ts>-grammar.json
+npx tsx draft/scripts/run-grammar.ts --content=examples/content/article.md
+
+# record a baseline over every examples/content/* fixture
+npx tsx draft/scripts/snapshot-grammar.ts --name=grammar-sonnet-5
+
+# after a prompt/catalogue/parser change, snapshot again and diff
+npx tsx draft/scripts/snapshot-grammar.ts --name=grammar-sonnet-5-candidate
+npx tsx draft/scripts/compare-grammar.ts \
+  draft/baselines/grammar-sonnet-5.json \
+  draft/baselines/grammar-sonnet-5-candidate.json
+```
+
+Flags: `run-grammar.ts` takes `--content=`, `--model=`, `--thinking=true`;
+`snapshot-grammar.ts` also takes `--files=<comma,list>` (default: every
+`.md` / `.html` / `.txt` in `examples/content/`, README excluded) and
+`--name=` (default `grammar-<sanitized-model>`). Model defaults to
+`AI_MODEL` from `.env.development.local`.
+
+### Metrics per file
+
+`spanCount`, `persistedCount`, `distinctConstructions` (distinct persisted
+slugs — a coverage signal), `droppedUnknownSlug` / `droppedBadEgpIndex`
+(model tagged outside the closed catalogue), `droppedNoToken` (span landed
+between tokens), `spansPerSentence`, `isComplete` (whole-response
+reconstruct-and-compare, after the retry), `retried`, `truncated`
+(`max_tokens`). `compare-grammar.ts` flags a file **REGRESSED** only on hard
+failures — `isComplete` true→false, `truncated` false→true, `persistedCount`
+collapsing to 0, or catalogue drops (`droppedUnknownSlug` +
+`droppedBadEgpIndex`) rising — **never** on span/persisted count variance
+alone, since that moves run to run from LLM sampling with zero code change
+(same principle as `compare.ts`). `droppedNoToken` is reported, not flagged.
 
 ## Status
 
