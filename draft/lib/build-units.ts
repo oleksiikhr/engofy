@@ -1,6 +1,6 @@
-import { convertMarkdownToDoc } from '../../src/modules/content/converters/markdown-to-doc.converter.js';
-import type { NodeOffset } from '../../src/modules/content/domain/flatten.js';
-import { flattenDoc } from '../../src/modules/content/domain/flatten.js';
+import { convertMarkdownToDoc } from '../../src/modules/post/converters/markdown-to-doc.converter.js';
+import type { NodeOffset } from '../../src/modules/post/domain/flatten.js';
+import { flattenDoc } from '../../src/modules/post/domain/flatten.js';
 import { splitIntoSentences } from './split-sentences.js';
 
 export interface Unit {
@@ -12,7 +12,7 @@ export interface Unit {
 export type Granularity = 'block' | 'sentence';
 
 // Shared by run.ts and snapshot.ts so both test against exactly the same
-// units the annotate-content pipeline would see — real production parsing
+// units the annotate-post pipeline would see — real production parsing
 // (marked via convertMarkdownToDoc + flattenDoc), not a hand-rolled
 // approximation. See run.ts's original comment (moved here) for why this
 // matters: it's what lets dropSpansCrossingNodeBoundaries run in this

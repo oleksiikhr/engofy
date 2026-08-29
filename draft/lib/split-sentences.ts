@@ -1,5 +1,5 @@
 // Same sentence-boundary heuristic as
-// src/modules/content/domain/split-text-for-annotation.ts, copied rather
+// src/modules/post/domain/split-text-for-annotation.ts, copied rather
 // than imported — this harness is meant to A/B *against* that file's
 // chunking choice (paragraph vs sentence granularity), so it can't share
 // the one implementation with the thing it's evaluating.

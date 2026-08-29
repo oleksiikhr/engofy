@@ -1,11 +1,11 @@
-import { dedupeAnnotations } from '../../src/modules/content/domain/dedupe-annotations.js';
-import { dropIncompleteAnnotations } from '../../src/modules/content/domain/drop-incomplete-annotations.js';
-import { dropSpansCrossingNodeBoundaries } from '../../src/modules/content/domain/drop-spans-crossing-node-boundaries.js';
-import type { NodeOffset } from '../../src/modules/content/domain/flatten.js';
-import { parseAnnotationTags } from '../../src/modules/content/domain/parse-annotation-tags.js';
-import { resolveWordPhraseOverlaps } from '../../src/modules/content/domain/resolve-word-phrase-overlaps.js';
-import type { Annotation } from '../../src/modules/content/domain/validate-annotations.js';
-import { validateAnnotations } from '../../src/modules/content/domain/validate-annotations.js';
+import { dedupeAnnotations } from '../../src/modules/post/domain/dedupe-annotations.js';
+import { dropIncompleteAnnotations } from '../../src/modules/post/domain/drop-incomplete-annotations.js';
+import { dropSpansCrossingNodeBoundaries } from '../../src/modules/post/domain/drop-spans-crossing-node-boundaries.js';
+import type { NodeOffset } from '../../src/modules/post/domain/flatten.js';
+import { parseAnnotationTags } from '../../src/modules/post/domain/parse-annotation-tags.js';
+import { resolveWordPhraseOverlaps } from '../../src/modules/post/domain/resolve-word-phrase-overlaps.js';
+import type { Annotation } from '../../src/modules/post/domain/validate-annotations.js';
+import { validateAnnotations } from '../../src/modules/post/domain/validate-annotations.js';
 import { callClaude } from './call-claude.js';
 
 export interface AnnotateUnitParams {
@@ -45,7 +45,7 @@ function cleanupAnnotations(
   return annotations;
 }
 
-// Mirrors AnnotateContentHandler.computeAnnotations exactly (same
+// Mirrors AnnotatePostHandler.computeAnnotations exactly (same
 // parseAnnotationTags, same whole-block retry on isComplete: false, same
 // cleanup order) so a draft run is a faithful preview of production, not an
 // approximation of it — the only thing swapped out is the transport

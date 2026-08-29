@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { QueueName } from '../../core/queue/queue-names.enum.js';
 import { SendChallengeEmailModule } from './auth/send-challenge-email.module.js';
 import { SendChallengeEmailProcessor } from './auth/send-challenge-email.processor.js';
-import { AnnotateContentModule } from './content/annotate-content.module.js';
-import { AnnotateContentProcessor } from './content/annotate-content.processor.js';
+import { AnnotatePostModule } from './post/annotate-post.module.js';
+import { AnnotatePostProcessor } from './post/annotate-post.processor.js';
 import { WORKER_QUEUES } from './worker.tokens.js';
 import { WorkerRegistrarService } from './worker-registrar.service.js';
 
@@ -13,9 +13,9 @@ const PROCESSOR_CONFIG: Record<string, { processor: Type; module: Type }> = {
     processor: SendChallengeEmailProcessor,
     module: SendChallengeEmailModule,
   },
-  [QueueName.ContentAnnotation]: {
-    processor: AnnotateContentProcessor,
-    module: AnnotateContentModule,
+  [QueueName.PostAnnotation]: {
+    processor: AnnotatePostProcessor,
+    module: AnnotatePostModule,
   },
 };
 

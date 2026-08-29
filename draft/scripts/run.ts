@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { ANNOTATION_SYSTEM_PROMPT } from '../../src/modules/content/domain/annotation-prompt.js';
+import { ANNOTATION_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
 import { annotateUnit } from '../lib/annotate-unit.js';
 import { buildUnits, type Granularity } from '../lib/build-units.js';
 

@@ -1,11 +1,11 @@
 # draft — annotation prompt experiments
 
 Sandbox for A/B-testing the content-annotation LLM prompt/model against the
-REAL production pipeline in `src/modules/content/` — not a separate
+REAL production pipeline in `src/modules/post/` — not a separate
 approximation of it. Originally used to validate the plain-text inline-tag
 format that replaced the old JSON tool-call + character-offset schema; that
-port is done (see `src/modules/content/domain/annotation-prompt.ts` and
-`annotate-content.handler.ts`). This harness now exists to test *changes* to
+port is done (see `src/modules/post/domain/annotation-prompt.ts` and
+`annotate-post.handler.ts`). This harness now exists to test *changes* to
 that prompt/model/algorithm against a recorded baseline before they ship.
 
 ## Layout
@@ -17,16 +17,16 @@ that prompt/model/algorithm against a recorded baseline before they ship.
     is a direct equivalent transport.
   - `build-units.ts` — parses a markdown file with the REAL production
     pipeline (`convertMarkdownToDoc` + `flattenDoc` from
-    `src/modules/content/`, the same `marked`-based converter and flattener
-    `annotate-content.handler.ts` uses) and splits it into `block` (one call
-    per paragraph/list-item, mirroring `ContentPart`) or `sentence` units.
+    `src/modules/post/`, the same `marked`-based converter and flattener
+    `annotate-post.handler.ts` uses) and splits it into `block` (one call
+    per paragraph/list-item, mirroring `PostPart`) or `sentence` units.
   - `split-sentences.ts` — the `--unit=sentence` chunking, a deliberate copy
     of a boundary heuristic production no longer has (chunking was dropped
     in the port) — kept here only to let this harness still test the
     sentence-vs-block granularity question if that ever comes back up.
-  - `annotate-unit.ts` — mirrors `AnnotateContentHandler.computeAnnotations`
+  - `annotate-unit.ts` — mirrors `AnnotatePostHandler.computeAnnotations`
     exactly: calls `parseAnnotationTags` (the REAL one, imported from
-    `src/modules/content/domain/`, not a copy) → if `isComplete: false`,
+    `src/modules/post/domain/`, not a copy) → if `isComplete: false`,
     one retry on the same full text → merge →
     dedupe/resolve-overlaps/drop-incomplete/drop-boundary-crossing →
     `validateAnnotations`. Because it imports the actual production domain
@@ -108,7 +108,7 @@ Flags: `--files=<comma,separated,paths>` (default: every `.md` in
 as the reference point (it's git-tracked on purpose, unlike `results/`).
 
 **2. Make your change** — edit `annotation-prompt.ts`, try a different
-`--model`, or edit the retry/cleanup logic in `annotate-content.handler.ts`
+`--model`, or edit the retry/cleanup logic in `annotate-post.handler.ts`
 (`annotate-unit.ts` will pick it up automatically since it imports the real
 thing).
 
@@ -148,8 +148,8 @@ a second `compare.ts` run before concluding" rather than absolute proof —
 ## Status
 
 The tagged inline-annotation format is live in production
-(`src/modules/content/domain/annotation-prompt.ts` +
-`parse-annotation-tags.ts` + `annotate-content.handler.ts`), replacing the
+(`src/modules/post/domain/annotation-prompt.ts` +
+`parse-annotation-tags.ts` + `annotate-post.handler.ts`), replacing the
 old JSON tool-call/offset schema entirely — no chunking, no separate
 verify-pass call; completeness is checked by reconstructing the raw
 response with tags stripped and comparing it to the original text

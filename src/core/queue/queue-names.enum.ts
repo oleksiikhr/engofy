@@ -1,6 +1,6 @@
 export enum QueueName {
   AuthChallengeEmail = 'auth-challenge-email',
-  ContentAnnotation = 'content-annotation',
+  PostAnnotation = 'post-annotation',
 }
 
 export const ALL_QUEUE_NAMES = Object.values(QueueName);

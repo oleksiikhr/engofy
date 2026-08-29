@@ -1,6 +1,6 @@
 import { CliModule } from './cli.module.js';
-import { ContentCliModule } from './content/content-cli.module.js';
 import { MigrateCliModule } from './migrate/migrate-cli.module.js';
+import { PostCliModule } from './post/post-cli.module.js';
 import { QueueCliModule } from './queue/queue-cli.module.js';
 import { SentryCliModule } from './sentry/sentry-cli.module.js';
 
@@ -19,7 +19,7 @@ describe('CliModule.forCommand', () => {
         SentryCliModule,
         MigrateCliModule,
         QueueCliModule,
-        ContentCliModule,
+        PostCliModule,
       ]),
     );
     expect(imports).toHaveLength(4);
