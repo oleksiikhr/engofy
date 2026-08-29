@@ -16,7 +16,7 @@ export interface GrammarCatalogEntry {
 
 // Static preamble. The construction/usage-point catalogue is appended at
 // call time from the DB (buildGrammarCatalog) since it's seeded data, not a
-// constant. Reuses the inline-tag mechanism of ANNOTATION_SYSTEM_PROMPT:
+// constant. Reuses the inline-tag mechanism of IDIOM_SYSTEM_PROMPT:
 // the model copies each sentence back verbatim, wrapping grammar spans in
 // ⟦⟧ and tagging them — offsets are recovered afterward by
 // parseGrammarTags, never stated by the model.

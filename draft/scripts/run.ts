@@ -1,15 +1,16 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { ANNOTATION_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
+import { IDIOM_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
 import { annotateUnit } from '../lib/annotate-unit.js';
 import { buildUnits, type Granularity } from '../lib/build-units.js';
 
-// 'tagged-v1' now points straight at the real production prompt — kept as
-// the map key (rather than renamed to e.g. 'prod') so existing baselines in
-// draft/baselines/ referencing "tagged-v1" stay meaningful to compare
-// against once the prompt itself gets a v2.
+// The annotation stage is now a thin AI pass: spaCy owns every word, the LLM
+// only tags multi-word idioms / collocations (PLAN.md §6, §12). This harness
+// evals that one prompt. 'idiom-v1' points straight at the production
+// constant; the old 'tagged-v1' (all-words) key is retired so a stale
+// all-words baseline errors loudly instead of comparing apples to oranges.
 const PROMPTS: Record<string, string> = {
-  'tagged-v1': ANNOTATION_SYSTEM_PROMPT,
+  'idiom-v1': IDIOM_SYSTEM_PROMPT,
 };
 
 const FLAG_PREFIX_RE = /^--/;
@@ -32,7 +33,7 @@ function parseArgs(): Args {
 
   return {
     content: flags.get('content') ?? 'examples/content/article-complex.md',
-    prompt: flags.get('prompt') ?? 'tagged-v1',
+    prompt: flags.get('prompt') ?? 'idiom-v1',
     unit: (flags.get('unit') as Granularity) ?? 'block',
     thinking: flags.get('thinking') === 'true',
     model: flags.get('model'),
@@ -84,7 +85,7 @@ async function run(): Promise<void> {
 
     console.log(`--- ${unit.label} ---`);
     console.log(`text: ${unit.text}`);
-    console.log(`annotations: ${result.annotations.length}`);
+    console.log(`idioms/collocations: ${result.annotations.length}`);
     if (result.retried) {
       console.log('retried on isComplete: false with a second call');
     }

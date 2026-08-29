@@ -53,17 +53,10 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
       this.em.persist(part);
     }
 
-    // The node-tree annotation stage and the spaCy analysis stage are
-    // parallel layers over the same PostPart plain text (PLAN.md §12) with
-    // no dependency between them yet — enqueue both. Slice 3 turns this into
-    // a real chain once annotation starts consuming spaCy output.
-    this.outbox.send<PostAnnotationJobData>(
-      this.em,
-      QueueName.PostAnnotation,
-      { postId: post.id },
-      { singletonKey: post.id },
-    );
-
+    // spacy_parse is the pipeline entry point. It fans out on completion to
+    // both downstream branches — the node-tree annotation stage (which now
+    // consumes sentence_tokens) and ai_complexity → ai_grammar →
+    // ai_exercises → publish (PLAN.md §5, §12).
     this.outbox.send<PostSpacyParseJobData>(
       this.em,
       QueueName.PostSpacyParse,

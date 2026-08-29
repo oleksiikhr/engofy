@@ -580,15 +580,36 @@ CLI/API ще до появи фронтенду.
       (`snapshot-grammar.ts`, ~$3-4, ~25хв), закомітити його в
       `draft/baselines/`, переглянути метрики (unknown-slug drops,
       `isComplete`) — і за потреби підкрутити `grammar-prompt.ts`.
-- [ ] Rework `content_annotation`: spaCy дає POS/lemma/morph; AI лишає тільки
-      ідіоми/колокації, яких spaCy не бачить. Лінк `sentence_tokens.word_id` /
-      `phrase_id`. `words.cefr_level` **лишається per-POS на `WordDefinition`**
-      (рішення користувача — спека §3.3 неформальна).
-      **Прода ще нема** (немає прод-БД / користувачів / живого пайплайну — лише
-      локальний dev-стек), тому цей rework можна робити звичайним зрізом без
-      обережності — «торкає робочий пайплайн» означає лише «тримати dev ingest
-      + unit/integration тести зеленими». Раніше було відкладено як «окремий
-      обережний крок» — це знято.
+- [x] Rework `content_annotation` — тонкий AI-шар над spaCy (2026-08-29,
+      uncommitted). `domain/build-token-annotations.ts` (+spec): чиста ф-ція
+      `SentenceRows` → `Annotation[]` в координатах юніта
+      (`sentence.charStart + token.charStart`) — word-анотація на кожен
+      content-токен (UPOS `NOUN/PROPN/VERB/ADJ/ADV` → `PartOfSpeech`; герундій
+      → `verb`), phrase-фрагмент на кожен токен phrasal-verb-групи
+      (`phrasalVerbGroupId`, вже резолвлений `Phrase.id`). AI лишає **лише**
+      multi-word ідіоми/колокації: новий `IDIOM_SYSTEM_PROMPT` (rename з
+      `ANNOTATION_SYSTEM_PROMPT`), той самий inline `⟦…⟧{{p|type|canon|gN}}` +
+      `parseAnnotationTags` + completeness-check + 1 ретрай.
+      `domain/resolve-phrase-overlaps.ts` (+spec): детермінована фраза б'є AI-
+      ідіому, що її перетинає (бо `checkNoOverlaps` all-or-nothing). Хендлер:
+      merge deterministic+AI → `dedupe → resolveWordPhraseOverlaps →
+      resolvePhraseOverlaps → dropSpansCrossingNodeBoundaries →
+      dropIncomplete → validateAnnotations`; splice ті самі
+      `spliceSpans`/`spliceSpansIntoListItem`; `linkSentenceTokens` проставляє
+      `sentence_tokens.word_id` / `phrase_id` (+`is_idiom_part` для
+      ідіом/колокацій) на кожен токен усередині span. Guard
+      `SpacyLayerMissingError` якщо `Sentence` count = 0. Приватний
+      `upsertPhraseId` хендлера замінено на спільний `domain/upsert-phrase-id`.
+      **Wiring:** `ingest`/`retry` більше не ставлять `post-annotation`
+      напряму — `spacy_parse` при завершенні робить fan-out на
+      `post-annotation` **і** `post-ai-complexity` (дві незалежні гілки).
+      **draft/**: annotation-вітка звужена до ідіом/колокацій (`PROMPTS` key
+      `tagged-v1`→`idiom-v1`, `wordCount` метрика прибрана, README-Status
+      переписано). `words.cefr_level` лишається per-POS на `WordDefinition`.
+      Міграції нема (колонки з Зрізу 1). Перевірки: `pnpm run type` +
+      `biome check src/ test/` зелені, unit 456/456, integration 141/141;
+      offset-математика `build-token-annotations` провалідована проти живого
+      nlp-service (2 речення, усі offset'и слайсяться назад у `form`).
 
 ### Зріз 4 — вправи + публікація статусу
 

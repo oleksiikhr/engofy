@@ -1,41 +1,41 @@
-import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
 import { PhraseType } from '../enums/phrase-type.enum.js';
 
-const POS_VALUES = Object.values(PartOfSpeech).join(', ');
-const PHRASE_TYPE_VALUES = Object.values(PhraseType).join(', ');
-
-// Replaces the old JSON tool-call + character-offset schema
-// (formerly annotation-tool.ts) with a plain-text format the model writes
-// inline, so it never has to compute a start/end offset — the model is
-// reliably bad at that, which is what every removed band-aid
-// (recoverAnnotationOffsets, findUncoveredTail, the unconditional
-// draft+verify two-pass, 600-char chunking) existed to work around.
+// The annotation stage is a thin AI layer over spaCy (PLAN.md §5, §6, §12):
+// spaCy (sentence_tokens) already gives POS / lemma / morphology for every
+// word and groups phrasal verbs deterministically, so the LLM's only job
+// here is the one thing spaCy can't see structurally — multi-word idioms and
+// non-compositional collocations.
 //
-// Offsets are recovered afterward, deterministically, by walking the
-// original text for each tagged fragment in order — see
-// parse-annotation-tags.ts. That same module also checks the response for
-// completeness by stripping every tag back out and comparing the result to
-// the original text character-for-character; annotate-post.handler.ts
-// retries once, on the same full text, whenever that check fails, which
-// covers both a response that trails off and one that silently skips a
-// word mid-text — the verify-pass this replaced only ever caught the
-// former.
-export const ANNOTATION_SYSTEM_PROMPT = `You annotate English text for a language-learning app used by learners at every level, A1 through C2.
+// The output format is unchanged from the old all-words prompt: the model
+// echoes the unit text back verbatim and wraps only the fragments it tags,
+// so it never computes an offset. parse-annotation-tags.ts recovers offsets
+// by walking the original text, and flags the response incomplete (→ one
+// retry in annotate-post.handler.ts) if stripping every tag doesn't
+// reconstruct the input character-for-character.
+const IDIOM_PHRASE_TYPES = [PhraseType.Idiom, PhraseType.Collocation].join(
+  ', ',
+);
 
-You are given one paragraph or list item at a time (never the whole document). Your job is to COPY IT BACK OUT IN FULL, character for character, inserting inline tags right after each word or phrase you annotate. Do not summarize, translate, correct, or reformat the text — every character of the input must appear in your output, in the same order, with only tags added.
+export const IDIOM_SYSTEM_PROMPT = `You find multi-word idioms and fixed collocations in English text for a language-learning app.
 
-Tag formats — fields inside a tag are separated by a pipe character "|", never a colon (a lemma or canonical phrase can itself legitimately contain a colon, e.g. a time like "11:47", and that must not be confused with a field separator):
-- A single content word: put the tag immediately after the word, touching it, no space — word{{w|pos|lemma}}. Example: "running{{w|verb|run}}".
-- A phrase (phrasal verb, idiom, collocation) — including a case where the verb and particle sit right next to each other, like "sit down": wrap the exact contiguous fragment in ⟦⟧ and tag right after the closing ⟧, no space — ⟦picked up⟧{{p|phrasal_verb|pick up|g1}}. If the phrase's words are NOT adjacent in the text (e.g. "took her coat off" — the phrasal verb is "take off"), wrap and tag each contiguous fragment separately, reusing the same group id: ⟦took⟧{{p|phrasal_verb|take off|g1}} her coat ⟦off⟧{{p|phrasal_verb|take off|g1}}. The group id only needs to be unique within your own response (g1, g2, g3, ...).
-- Every other word — articles, prepositions, conjunctions, pronouns, determiners, particles, interjections, auxiliary/modal verbs with no independent lexical meaning (is/am/are/was/were, do/does/did, have/has/had as a helper, will/would/can/could/should/must/may/might) — gets copied through with NO tag at all.
-- Never tag a word standalone if it's already inside a ⟦⟧ phrase fragment. Pick one.
-- Tags always use exactly TWO curly braces on each side: {{ and }}. Never a single brace. Wrong: "ask{w|verb|ask}". Right: "ask{{w|verb|ask}}".
+You are given one paragraph or list item at a time (never the whole document). COPY IT BACK OUT IN FULL, character for character — do not summarize, translate, correct, or reformat — inserting an inline tag only around each idiom or collocation you find. Every character of the input must appear in your output, in the same order, with only tags added.
 
-Allowed pos values (word tags only): ${POS_VALUES}
-Allowed phrase types (phrase tags only): ${PHRASE_TYPE_VALUES}
+WHAT TO TAG — and nothing else:
+- Multi-word IDIOMS: a group of 2+ words whose meaning is not the sum of its parts — "at loose ends", "beat around the bush", "once in a blue moon", "a piece of cake", "call it a day".
+- Fixed COLLOCATIONS: a group of 2+ words that habitually go together and would sound wrong reworded — "heavy rain", "make a decision", "pay attention", "strong coffee", "take a risk".
 
-What counts as a content word to tag: every occurrence of every noun, proper noun, verb, adjective, adverb — not just the first occurrence, not just difficult/rare words, every one, since the app serves beginners too.
+DO NOT TAG:
+- Single words. Never emit a one-word tag — spaCy already handles every individual word.
+- Phrasal verbs ("pick up", "take off", "sit down", "turn the light off"). These are detected separately and deterministically. Leave them completely untagged.
+- Ordinary literal word combinations whose meaning is obvious from the words ("red car", "walked slowly", "the big house").
+- Proper names, dates, numbers.
+If a paragraph contains no idiom or collocation, copy it back with no tags at all — that is a correct and expected answer.
 
-Completeness is mandatory: process the ENTIRE given text, from the first character to the last. Stopping partway through and leaving the rest un-copied is a failure.
+TAG FORMAT — wrap the exact contiguous fragment in ⟦⟧ and put the tag right after the closing ⟧, no space:
+⟦heavy rain⟧{{p|collocation|heavy rain|g1}}
+Fields are separated by "|", never ":" (a canonical phrase can legitimately contain a colon). The four fields are: the literal "p", the phrase type, the canonical dictionary form, and a group id.
+- Allowed phrase types: ${IDIOM_PHRASE_TYPES}
+- If the idiom's words are NOT adjacent in the text, wrap and tag each contiguous fragment separately, reusing the same group id: ⟦keep⟧{{p|idiom|keep tabs on|g1}} a close ⟦tab on⟧{{p|idiom|keep tabs on|g1}} him. The group id only needs to be unique within your own response (g1, g2, g3, ...).
+- Tags always use exactly TWO curly braces on each side: {{ and }}. Never a single brace.
 
-Output ONLY the tagged text. No preamble, no explanation, no markdown code fence around it.`;
+Output ONLY the copied-through text with tags. No preamble, no explanation, no markdown code fence.`;

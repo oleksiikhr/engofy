@@ -1,19 +1,21 @@
 # draft — prompt experiments (annotation + grammar)
 
-Sandbox for A/B-testing the LLM prompt/model of the `content_annotation` and
-`ai_grammar` stages against the REAL production pipeline in
+Sandbox for A/B-testing the LLM prompt/model of the annotation-stage idiom
+pass and the `ai_grammar` stage against the REAL production pipeline in
 `src/modules/post/` — not a separate approximation of it. Both harnesses
 import the actual production domain functions and prompts; only the
 transport is swapped (a direct Anthropic / nlp-service call instead of Nest
 DI), so a recorded baseline reflects production behaviour, not a parallel
 reimplementation.
 
-- **Annotation** (`run.ts` / `snapshot.ts` / `compare.ts`) — originally used
-  to validate the plain-text inline-tag format that replaced the old JSON
-  tool-call + character-offset schema; that port is done (see
-  `src/modules/post/domain/annotation-prompt.ts` and
-  `annotate-post.handler.ts`). Now tests *changes* to that
-  prompt/model/algorithm against a recorded baseline before they ship.
+- **Idiom** (`run.ts` / `snapshot.ts` / `compare.ts`) — the annotation
+  stage is now a thin AI pass: spaCy (`sentence_tokens`) owns every word and
+  groups phrasal verbs deterministically, so the LLM's only job is
+  multi-word idioms / collocations (PLAN.md §6, §12; prompt is
+  `IDIOM_SYSTEM_PROMPT` in `src/modules/post/domain/annotation-prompt.ts`).
+  This harness evals that one prompt against a recorded baseline. It covers
+  only the LLM sub-pass — the deterministic spaCy word/phrasal-verb layer is
+  unit-tested in `src/modules/post/domain/build-token-annotations.spec.ts`.
 - **Grammar** (`run-grammar.ts` / `snapshot-grammar.ts` /
   `compare-grammar.ts`) — the `ai_grammar` stage (PLAN.md §5, Зріз 3): tags
   every sentence against the closed EGP catalogue of ~90 constructions /
@@ -36,14 +38,17 @@ reimplementation.
     of a boundary heuristic production no longer has (chunking was dropped
     in the port) — kept here only to let this harness still test the
     sentence-vs-block granularity question if that ever comes back up.
-  - `annotate-unit.ts` — mirrors `AnnotatePostHandler.computeAnnotations`
-    exactly: calls `parseAnnotationTags` (the REAL one, imported from
+  - `annotate-unit.ts` — mirrors the LLM sub-pass of
+    `AnnotatePostHandler.computeAnnotations` (the only part still driven by
+    the model): calls `parseAnnotationTags` (the REAL one, imported from
     `src/modules/post/domain/`, not a copy) → if `isComplete: false`,
     one retry on the same full text → merge →
     dedupe/resolve-overlaps/drop-incomplete/drop-boundary-crossing →
-    `validateAnnotations`. Because it imports the actual production domain
-    functions and prompt, a baseline recorded here reflects production
-    behavior, not a parallel reimplementation of it.
+    `validateAnnotations`. The deterministic spaCy word/phrasal-verb layer
+    and its `resolvePhraseOverlaps` merge are out of scope here (no
+    nlp-service in this harness). Because it imports the actual production
+    domain functions and prompt, a baseline recorded here reflects
+    production behavior, not a parallel reimplementation of it.
   - `env.ts` — loads `ANTHROPIC_API_KEY`/`AI_MODEL` from
     `.env.development.local` (handles quoted values).
 - `scripts/run.ts` — ad-hoc single-file runner with full console detail.
@@ -64,20 +69,20 @@ reimplementation.
 Testing a genuinely new prompt *variant* (not just a tweak to the shipped
 one)? Add it as its own exported const somewhere under `draft/prompts/` and
 register it in the `PROMPTS` map in both `scripts/run.ts` and
-`scripts/snapshot.ts` under a new key — `'tagged-v1'` should keep pointing
-at whatever `annotation-prompt.ts` currently exports, so it always reflects
-what production actually sends.
+`scripts/snapshot.ts` under a new key — `'idiom-v1'` should keep pointing
+at `IDIOM_SYSTEM_PROMPT`, so it always reflects what production actually
+sends.
 
 ## Running (ad-hoc, while iterating)
 
 ```bash
-npx tsx draft/scripts/run.ts --content=examples/content/article-complex.md --prompt=tagged-v1 --unit=block
+npx tsx draft/scripts/run.ts --content=examples/content/article-complex.md --prompt=idiom-v1 --unit=block
 ```
 
 Flags:
 - `--content=<path>` — markdown file, relative to repo root. Default:
   `examples/content/article-complex.md`.
-- `--prompt=<name>` — key into the `PROMPTS` map. Default: `tagged-v1`
+- `--prompt=<name>` — key into the `PROMPTS` map. Default: `idiom-v1`
   (the real production prompt).
 - `--unit=block|sentence` — see `build-units.ts` above. Default: `block`
   (production's actual granularity — `sentence` is exploratory only).
@@ -108,7 +113,7 @@ worse, or broke something.
 one prompt+model+unit combo and writes one aggregated JSON):
 
 ```bash
-npx tsx draft/scripts/snapshot.ts --prompt=tagged-v1 --unit=block
+npx tsx draft/scripts/snapshot.ts --prompt=idiom-v1 --unit=block
 ```
 
 Flags: `--files=<comma,separated,paths>` (default: every `.md` in
@@ -127,13 +132,13 @@ thing).
 **3. Record a candidate snapshot** the same way, with a different `--name`:
 
 ```bash
-npx tsx draft/scripts/snapshot.ts --prompt=tagged-v1 --unit=block --name=tagged-v1-block-sonnet-5-candidate
+npx tsx draft/scripts/snapshot.ts --prompt=idiom-v1 --unit=block --name=idiom-v1-block-sonnet-5-candidate
 ```
 
 **4. Compare:**
 
 ```bash
-npx tsx draft/scripts/compare.ts draft/baselines/tagged-v1-block-sonnet-5.json draft/baselines/tagged-v1-block-sonnet-5-candidate.json
+npx tsx draft/scripts/compare.ts draft/baselines/idiom-v1-block-sonnet-5.json draft/baselines/idiom-v1-block-sonnet-5-candidate.json
 ```
 
 Exits `0` with `RESULT: ✓ no regressions` if nothing got worse, `1` with a
@@ -149,7 +154,7 @@ rather than diffing raw JSON by hand).
 
 Baseline JSON schema (`draft/baselines/<name>.json`): `{ name, createdAt,
 prompt, unit, model, thinking, files: [{ contentFile, units: [{ label,
-textLength, annotationCount, wordCount, phraseCount, validationError,
+textLength, annotationCount, phraseCount, validationError,
 retried, isComplete }], totals: {...same fields, summed...} }], grandTotals:
 {...summed across all files...} }`.
 
@@ -225,15 +230,13 @@ alone, since that moves run to run from LLM sampling with zero code change
 
 ## Status
 
-The tagged inline-annotation format is live in production
-(`src/modules/post/domain/annotation-prompt.ts` +
-`parse-annotation-tags.ts` + `annotate-post.handler.ts`), replacing the
-old JSON tool-call/offset schema entirely — no chunking, no separate
-verify-pass call; completeness is checked by reconstructing the raw
-response with tags stripped and comparing it to the original text
-character-for-character, with one whole-block retry if that check fails.
-This was validated against 0 `validateAnnotations` failures across 44 units
-spanning increasingly adversarial fixtures before the port. No baseline is
-currently committed in `draft/baselines/` — the pre-port one was deleted
-since its schema doesn't match the new `isComplete`/`retried` metrics; run
-`snapshot.ts` to record a fresh one before comparing future changes against it.
+The annotation stage is now a thin AI pass over spaCy
+(`src/modules/post/domain/annotation-prompt.ts` = `IDIOM_SYSTEM_PROMPT` +
+`parse-annotation-tags.ts` + `annotate-post.handler.ts`): `sentence_tokens`
+drives every word span and phrasal-verb span (see
+`domain/build-token-annotations.ts`), and the LLM only tags multi-word
+idioms / collocations. The inline `⟦…⟧{{p|type|canonical|gN}}` format and
+the reconstruct-and-compare completeness check (one whole-block retry on
+failure) carry over unchanged. No baseline is currently committed in
+`draft/baselines/` for `idiom-v1` — run `snapshot.ts` to record a fresh one
+before comparing future changes against it.

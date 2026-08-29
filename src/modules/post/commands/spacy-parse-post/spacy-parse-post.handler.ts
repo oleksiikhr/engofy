@@ -21,6 +21,7 @@ import { PhraseType } from '../../enums/phrase-type.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import type { PostAiComplexityJobData } from '../assess-complexity/assess-complexity.handler.js';
+import type { PostAnnotationJobData } from '../ingest-post/ingest-post.handler.js';
 import { SpacyParsePostCommand } from './spacy-parse-post.command.js';
 
 interface ParsedUnit {
@@ -87,8 +88,16 @@ export class SpacyParsePostHandler
     run.completedAt = DateTime.now();
     this.em.persist(run);
 
-    // Hand off to the next pipeline stage (PLAN.md §5 order). ai_complexity
-    // reads the `sentences` this stage just wrote.
+    // Fan out to both downstream branches (PLAN.md §5, §12): the node-tree
+    // annotation stage (word / phrasal-verb spans from the sentence_tokens
+    // just written, plus an idiom LLM pass) and ai_complexity → ai_grammar
+    // → ai_exercises → publish. The two branches are independent.
+    this.outbox.send<PostAnnotationJobData>(
+      this.em,
+      QueueName.PostAnnotation,
+      { postId },
+      { singletonKey: postId },
+    );
     this.outbox.send<PostAiComplexityJobData>(
       this.em,
       QueueName.PostAiComplexity,

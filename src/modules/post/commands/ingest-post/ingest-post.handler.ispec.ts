@@ -9,13 +9,13 @@ import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { IngestPostCommand } from './ingest-post.command.js';
 import { IngestPostDto } from './ingest-post.dto.js';
-import type { PostAnnotationJobData } from './ingest-post.handler.js';
+import type { PostSpacyParseJobData } from './ingest-post.handler.js';
 
 describe('IngestPostHandler', () => {
   const suite = createIntegrationSuite({ imports: [PostModule] });
   const queue = useQueueSpy(suite);
 
-  it('ingests plain text, auto-detecting the format, and enqueues annotation', async () => {
+  it('ingests plain text, auto-detecting the format, and enqueues the spacy_parse entry point', async () => {
     const post = await suite.command(
       new IngestPostCommand(
         IngestPostDto.create({
@@ -34,10 +34,12 @@ describe('IngestPostHandler', () => {
     expect(parts.length).toBeGreaterThan(0);
     expect(assembleDocFromParts(parts).type).toBe('doc');
 
-    queue.assertSent<PostAnnotationJobData>(
-      QueueName.PostAnnotation,
+    queue.assertSent<PostSpacyParseJobData>(
+      QueueName.PostSpacyParse,
       (data) => data.postId === post.id,
     );
+    // annotation now hangs off spacy_parse's completion, not ingest.
+    queue.assertNotSent(QueueName.PostAnnotation);
   });
 
   it('auto-detects markdown from post shape, no format passed in', async () => {

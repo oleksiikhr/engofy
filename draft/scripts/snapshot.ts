@@ -1,15 +1,15 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { ANNOTATION_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
+import { IDIOM_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
 import { annotateUnit } from '../lib/annotate-unit.js';
 import { buildUnits, type Granularity } from '../lib/build-units.js';
 
-// 'tagged-v1' now points straight at the real production prompt — kept as
-// the map key (rather than renamed to e.g. 'prod') so existing baselines in
-// draft/baselines/ referencing "tagged-v1" stay meaningful to compare
-// against once the prompt itself gets a v2.
+// The annotation stage is now a thin AI pass: spaCy owns every word, the LLM
+// only tags multi-word idioms / collocations (PLAN.md §6, §12). 'idiom-v1'
+// points straight at the production constant; the old 'tagged-v1'
+// (all-words) key is retired.
 const PROMPTS: Record<string, string> = {
-  'tagged-v1': ANNOTATION_SYSTEM_PROMPT,
+  'idiom-v1': IDIOM_SYSTEM_PROMPT,
 };
 
 const FLAG_PREFIX_RE = /^--/;
@@ -46,7 +46,7 @@ function parseArgs(repoRoot: string): Args {
 
   return {
     files,
-    prompt: flags.get('prompt') ?? 'tagged-v1',
+    prompt: flags.get('prompt') ?? 'idiom-v1',
     unit: (flags.get('unit') as Granularity) ?? 'block',
     thinking: flags.get('thinking') === 'true',
     model: flags.get('model'),
@@ -61,8 +61,9 @@ function sanitize(value: string): string {
 interface UnitMetrics {
   label: string;
   textLength: number;
+  // Every annotation is an idiom / collocation phrase now — kept as
+  // `annotationCount` for baseline-diff continuity; `phraseCount` mirrors it.
   annotationCount: number;
-  wordCount: number;
   phraseCount: number;
   validationError: boolean;
   retried: boolean;
@@ -120,9 +121,6 @@ async function snapshotFile(
       thinking: args.thinking,
     });
 
-    const wordCount = result.annotations.filter(
-      (a) => a.kind === 'word',
-    ).length;
     const phraseCount = result.annotations.filter(
       (a) => a.kind === 'phrase',
     ).length;
@@ -131,7 +129,6 @@ async function snapshotFile(
       label: unit.label,
       textLength: unit.text.length,
       annotationCount: result.annotations.length,
-      wordCount,
       phraseCount,
       validationError: result.validationError !== undefined,
       retried: result.retried,

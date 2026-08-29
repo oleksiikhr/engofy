@@ -5,7 +5,6 @@ interface UnitMetrics {
   label: string;
   textLength: number;
   annotationCount: number;
-  wordCount: number;
   phraseCount: number;
   validationError: boolean;
   retried: boolean;

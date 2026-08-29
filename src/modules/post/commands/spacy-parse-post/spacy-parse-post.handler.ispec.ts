@@ -1,11 +1,13 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import {
   NLP_CLIENT,
   type NlpClient,
   type NlpParseResult,
   type NlpToken,
 } from '../../../../core/nlp/nlp-client.port.js';
+import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
@@ -111,6 +113,7 @@ describe('SpacyParsePostHandler', () => {
         builder.overrideProvider(NLP_CLIENT).useValue(fakeNlp),
     },
   );
+  const queue = useQueueSpy(suite);
 
   it('stores sentences and tokens and completes the pipeline run', async () => {
     const { postId, partId } = await createPostWithParagraph(
@@ -138,6 +141,16 @@ describe('SpacyParsePostHandler', () => {
       stage: PostPipelineStage.SpacyParse,
     });
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
+
+    // Fans out to both downstream branches on completion.
+    queue.assertSent<{ postId: string }>(
+      QueueName.PostAnnotation,
+      (d) => d.postId === postId,
+    );
+    queue.assertSent<{ postId: string }>(
+      QueueName.PostAiComplexity,
+      (d) => d.postId === postId,
+    );
   });
 
   it('flags the gerund and groups the discontinuous phrasal verb under one Phrase', async () => {

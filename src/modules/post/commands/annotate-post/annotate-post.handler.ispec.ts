@@ -5,47 +5,90 @@ import {
   type AiClient,
   type AiCompleteParams,
 } from '../../../../core/ai/ai-client.port.js';
+import {
+  NLP_CLIENT,
+  type NlpClient,
+  type NlpParseResult,
+  type NlpToken,
+} from '../../../../core/nlp/nlp-client.port.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
+import { Sentence } from '../../entities/sentence.entity.js';
+import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { Word } from '../../entities/word.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
+import { PhraseType } from '../../enums/phrase-type.enum.js';
 import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { SpacyLayerMissingError } from '../../errors/spacy-layer-missing.error.js';
 import { PostModule } from '../../post.module.js';
+import { SpacyParsePostCommand } from '../spacy-parse-post/spacy-parse-post.command.js';
 import { AnnotatePostCommand } from './annotate-post.command.js';
 
-interface Insertion {
-  at: number;
-  text: string;
+const FIXTURE =
+  'The government picked up momentum and reporters kept tabs on results';
+
+// Minimal pos/tag/dep for each fixture word — enough to drive the content-POS
+// filter in buildTokenAnnotations and the deterministic phrasal-verb grouping
+// in build-sentences.ts.
+const POS: Record<
+  string,
+  { pos: string; tag?: string; dep?: string; lemma?: string; head?: number }
+> = {
+  the: { pos: 'DET', dep: 'det' },
+  government: { pos: 'NOUN' },
+  picked: { pos: 'VERB', tag: 'VBD', dep: 'ROOT', lemma: 'pick' },
+  up: { pos: 'ADP', tag: 'RP', dep: 'prt', head: 2 },
+  momentum: { pos: 'NOUN' },
+  and: { pos: 'CCONJ', dep: 'cc' },
+  reporters: { pos: 'NOUN' },
+  kept: { pos: 'VERB', tag: 'VBD', lemma: 'keep' },
+  tabs: { pos: 'NOUN' },
+  on: { pos: 'ADP', tag: 'IN', dep: 'prep' },
+  results: { pos: 'NOUN' },
+};
+
+// One sentence = whole input, whitespace tokenised so offsets are exact.
+class FakeNlpClient implements NlpClient {
+  async parse(text: string): Promise<NlpParseResult> {
+    const tokens: NlpToken[] = [];
+    const wordRe = /\S+/g;
+    let match: RegExpExecArray | null = wordRe.exec(text);
+    let index = 0;
+
+    while (match !== null) {
+      const raw = match[0];
+      const meta = POS[raw.toLowerCase()] ?? { pos: 'X' };
+      tokens.push({
+        index,
+        text: raw,
+        lemma: meta.lemma ?? raw.toLowerCase(),
+        pos: meta.pos,
+        tag: meta.tag ?? 'XX',
+        dep: meta.dep ?? 'dep',
+        morph: {},
+        head: meta.head ?? index,
+        start: match.index,
+        end: match.index + raw.length,
+      });
+      index += 1;
+      match = wordRe.exec(text);
+    }
+
+    return { sentences: [{ text, start: 0, end: text.length, tokens }] };
+  }
 }
 
-// Inserts each tag at its exact character offset and leaves every other
-// character untouched, applied back-to-front so earlier offsets stay valid
-// as later ones are inserted. This matters beyond just producing the right
-// tags: parseAnnotationTags treats a response as complete only if stripping
-// its tags reconstructs the original text character-for-character, so any
-// insertion scheme that shifted untagged text would make the handler
-// believe the fake's response was truncated and trigger its one retry.
-function insertAll(text: string, insertions: Insertion[]): string {
-  const sorted = [...insertions].sort((a, b) => b.at - a.at);
-  return sorted.reduce(
-    (acc, { at, text: insertText }) =>
-      acc.slice(0, at) + insertText + acc.slice(at),
-    text,
-  );
-}
-
-// Hand-tags the two fixture sentences this ispec uses — good enough to
-// drive the handler's splice/find-or-create logic deterministically without
-// a live API call.
+// Wraps the one idiom in the fixture, echoing everything else verbatim so
+// parseAnnotationTags sees a complete response and never retries.
 class FakeAiClient implements AiClient {
   callCount = 0;
 
@@ -55,35 +98,14 @@ class FakeAiClient implements AiClient {
 
   async complete({ userText }: AiCompleteParams): Promise<string> {
     this.callCount += 1;
-
-    const insertions: Insertion[] = [];
-
-    const govStart = userText.indexOf('government');
-    if (govStart >= 0) {
-      insertions.push({
-        at: govStart + 'government'.length,
-        text: `{{w|${PartOfSpeech.Noun}|government}}`,
-      });
+    const phrase = 'kept tabs on';
+    const at = userText.indexOf(phrase);
+    if (at < 0) {
+      return userText;
     }
-
-    const tookStart = userText.indexOf('took');
-    const offStart = userText.indexOf('off', tookStart);
-    if (tookStart >= 0 && offStart >= 0) {
-      insertions.push(
-        { at: tookStart, text: '⟦' },
-        {
-          at: tookStart + 'took'.length,
-          text: '⟧{{p|phrasal_verb|take off|g1}}',
-        },
-        { at: offStart, text: '⟦' },
-        {
-          at: offStart + 'off'.length,
-          text: '⟧{{p|phrasal_verb|take off|g1}}',
-        },
-      );
-    }
-
-    return insertAll(userText, insertions);
+    return `${userText.slice(0, at)}⟦${phrase}⟧{{p|idiom|keep tabs on|g1}}${userText.slice(
+      at + phrase.length,
+    )}`;
   }
 }
 
@@ -107,7 +129,6 @@ async function createPostWithParagraph(
   em.persist(part);
 
   await em.flush();
-
   return { postId: post.id, partId: part.id };
 }
 
@@ -117,26 +138,39 @@ describe('AnnotatePostHandler', () => {
     { imports: [PostModule] },
     {
       builderHook: (builder) =>
-        builder.overrideProvider(AI_CLIENT).useValue(fakeAi),
+        builder
+          .overrideProvider(AI_CLIENT)
+          .useValue(fakeAi)
+          .overrideProvider(NLP_CLIENT)
+          .useValue(new FakeNlpClient()),
     },
   );
 
-  it('annotates a word, creating Word/WordDefinition and completing the pipeline run', async () => {
-    const { postId, partId } = await createPostWithParagraph(
-      suite.orm.em,
-      'The government announced new rules.',
-    );
-
+  async function parseThenAnnotate(text: string): Promise<string> {
+    const { postId } = await createPostWithParagraph(suite.orm.em, text);
+    await suite.command(new SpacyParsePostCommand(postId));
     await suite.command(new AnnotatePostCommand(postId));
+    return postId;
+  }
+
+  it('builds word spans from spaCy tokens and links sentence_tokens.word_id', async () => {
+    const postId = await parseThenAnnotate(FIXTURE);
 
     const post = await suite.orm.em.findOneOrFail(Post, postId);
     expect(post.status).toBe(PostStatus.Annotated);
 
-    const part = await suite.orm.em.findOneOrFail(PostPart, partId);
+    const part = await suite.orm.em.findOneOrFail(PostPart, { postId });
     expect(part.annotatedAt).not.toBeNull();
+
     const paragraph = part.body as Paragraph;
-    const spanNode = paragraph.children.find((node) => node.type === 'span');
-    expect(spanNode?.text).toBe('government');
+    const wordSpans = paragraph.children.filter(
+      (n) => n.type === 'span' && n.kind === 'word',
+    );
+    const wordTexts = wordSpans.map((n) => n.text);
+    expect(wordTexts).toContain('government');
+    expect(wordTexts).toContain('results');
+    // "tabs" is swallowed by the idiom span — no standalone word span.
+    expect(wordTexts).not.toContain('tabs');
 
     const word = await suite.orm.em.findOneOrFail(Word, {
       lemma: 'government',
@@ -146,6 +180,13 @@ describe('AnnotatePostHandler', () => {
       pos: PartOfSpeech.Noun,
     });
 
+    const sentence = await suite.orm.em.findOneOrFail(Sentence, { postId });
+    const govToken = await suite.orm.em.findOneOrFail(SentenceToken, {
+      sentenceId: sentence.id,
+      text: 'government',
+    });
+    expect(govToken.wordId).toBe(word.id);
+
     const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
       postId,
       stage: PostPipelineStage.Annotation,
@@ -153,45 +194,88 @@ describe('AnnotatePostHandler', () => {
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
   });
 
-  it("groups a non-adjacent phrase's fragments under one Phrase via phraseGroupId", async () => {
-    const { postId } = await createPostWithParagraph(
-      suite.orm.em,
-      'She took her coat off before dinner.',
-    );
-
-    await suite.command(new AnnotatePostCommand(postId));
+  it('splices the AI idiom as a phrase span and marks its tokens is_idiom_part', async () => {
+    const postId = await parseThenAnnotate(FIXTURE);
 
     const phrase = await suite.orm.em.findOneOrFail(Phrase, {
-      phraseText: 'take off',
+      phraseText: 'keep tabs on',
     });
+    expect(phrase.type).toBe(PhraseType.Idiom);
 
-    const parts = await suite.orm.em.find(PostPart, { postId });
-    const paragraph = parts[0]?.body as Paragraph;
-    const phraseSpans = paragraph.children.filter(
-      (node) => node.type === 'span' && node.kind === 'phrase',
+    const part = await suite.orm.em.findOneOrFail(PostPart, { postId });
+    const paragraph = part.body as Paragraph;
+    const idiomSpan = paragraph.children.find(
+      (n) =>
+        n.type === 'span' && n.kind === 'phrase' && n.text === 'kept tabs on',
     );
-    expect(phraseSpans).toHaveLength(2);
+    expect(idiomSpan).toBeDefined();
+
+    const sentence = await suite.orm.em.findOneOrFail(Sentence, { postId });
+    const tokens = await suite.orm.em.find(SentenceToken, {
+      sentenceId: sentence.id,
+      text: { $in: ['kept', 'tabs', 'on'] },
+    });
+    expect(tokens).toHaveLength(3);
+    expect(tokens.every((t) => t.phraseId === phrase.id && t.isIdiomPart)).toBe(
+      true,
+    );
+  });
+
+  it('splices the deterministic phrasal verb and links it back to its Phrase', async () => {
+    const postId = await parseThenAnnotate(FIXTURE);
+
+    const phrase = await suite.orm.em.findOneOrFail(Phrase, {
+      phraseText: 'pick up',
+    });
+    expect(phrase.type).toBe(PhraseType.PhrasalVerb);
+
+    const part = await suite.orm.em.findOneOrFail(PostPart, { postId });
+    const paragraph = part.body as Paragraph;
+    const pvSpans = paragraph.children.filter(
+      (n) =>
+        n.type === 'span' &&
+        n.kind === 'phrase' &&
+        (n.text === 'picked' || n.text === 'up'),
+    );
+    expect(pvSpans).toHaveLength(2);
     expect(
-      phraseSpans.every(
-        (node) =>
-          node.type === 'span' &&
-          node.kind === 'phrase' &&
-          node.phraseId === phrase.id,
+      pvSpans.every(
+        (n) =>
+          n.type === 'span' && n.kind === 'phrase' && n.phraseId === phrase.id,
+      ),
+    ).toBe(true);
+
+    const sentence = await suite.orm.em.findOneOrFail(Sentence, { postId });
+    const tokens = await suite.orm.em.find(SentenceToken, {
+      sentenceId: sentence.id,
+      text: { $in: ['picked', 'up'] },
+    });
+    expect(
+      tokens.every(
+        (t) =>
+          t.phrasalVerbGroupId === phrase.id &&
+          t.phraseId === phrase.id &&
+          !t.isIdiomPart,
       ),
     ).toBe(true);
   });
 
   it('is idempotent — a second run does not call the AI again', async () => {
-    const { postId } = await createPostWithParagraph(
-      suite.orm.em,
-      'The government announced new rules.',
-    );
+    const { postId } = await createPostWithParagraph(suite.orm.em, FIXTURE);
+    await suite.command(new SpacyParsePostCommand(postId));
 
     await suite.command(new AnnotatePostCommand(postId));
     const callsAfterFirstRun = fakeAi.callCount;
 
     await suite.command(new AnnotatePostCommand(postId));
-
     expect(fakeAi.callCount).toBe(callsAfterFirstRun);
+  });
+
+  it('fails when the spaCy layer has not run yet', async () => {
+    const { postId } = await createPostWithParagraph(suite.orm.em, FIXTURE);
+
+    await expect(
+      suite.command(new AnnotatePostCommand(postId)),
+    ).rejects.toThrow(SpacyLayerMissingError);
   });
 });

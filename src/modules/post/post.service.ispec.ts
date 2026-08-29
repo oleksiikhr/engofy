@@ -2,7 +2,7 @@ import { createIntegrationSuite } from '../../../test/setup/int-suite.helper.js'
 import { useQueueSpy } from '../../../test/setup/queue-spy.helper.js';
 import { QueueName } from '../../core/queue/queue-names.enum.js';
 import { IngestPostDto } from './commands/ingest-post/ingest-post.dto.js';
-import type { PostAnnotationJobData } from './commands/ingest-post/ingest-post.handler.js';
+import type { PostSpacyParseJobData } from './commands/ingest-post/ingest-post.handler.js';
 import { Post } from './entities/post.entity.js';
 import { PostStatus } from './enums/post-status.enum.js';
 import { PostModule } from './post.module.js';
@@ -28,17 +28,18 @@ describe('PostService', () => {
       expect(reloaded).toBeDefined();
     });
 
-    it('enqueues an annotation job for the ingested post', async () => {
+    it('enqueues the spacy_parse entry-point job for the ingested post', async () => {
       const service = suite.moduleRef.get(PostService);
 
       const post = await service.ingest(
         IngestPostDto.create({ rawText: 'Another plain text.' }),
       );
 
-      queue.assertSent<PostAnnotationJobData>(
-        QueueName.PostAnnotation,
+      queue.assertSent<PostSpacyParseJobData>(
+        QueueName.PostSpacyParse,
         (data) => data.postId === post.id,
       );
+      queue.assertNotSent(QueueName.PostAnnotation);
     });
   });
 });

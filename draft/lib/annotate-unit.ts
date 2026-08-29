@@ -45,11 +45,14 @@ function cleanupAnnotations(
   return annotations;
 }
 
-// Mirrors AnnotatePostHandler.computeAnnotations exactly (same
-// parseAnnotationTags, same whole-block retry on isComplete: false, same
-// cleanup order) so a draft run is a faithful preview of production, not an
-// approximation of it — the only thing swapped out is the transport
-// (callClaude direct call vs. AiClient.complete over Nest DI).
+// Mirrors the LLM sub-pass of AnnotatePostHandler.computeAnnotations — the
+// only part still driven by the model now that spaCy owns every word
+// (PLAN.md §6, §12): same parseAnnotationTags, same whole-block retry on
+// isComplete: false, same dedupe/overlap/boundary/incomplete cleanup. The
+// deterministic spaCy word/phrasal-verb layer and its
+// resolvePhraseOverlaps merge are out of scope here (no nlp-service in this
+// harness); the only thing swapped out is the transport (callClaude direct
+// call vs. AiClient.complete over Nest DI).
 export async function annotateUnit(
   params: AnnotateUnitParams,
 ): Promise<AnnotateUnitResult> {

@@ -21,6 +21,11 @@ export interface Annotation {
   // sharing one phraseGroupId. Required for every phrase annotation, even a
   // contiguous one (a single-fragment "group").
   phraseGroupId?: string;
+  // Pre-resolved phrases.id, set only for a deterministic phrase annotation
+  // whose Phrase row already exists (a phrasal verb grouped by spaCy in
+  // sentence_tokens.phrasal_verb_group_id). An AI idiom/collocation
+  // annotation leaves this undefined and is resolved by text downstream.
+  phraseId?: string;
 }
 
 const PARTS_OF_SPEECH: readonly string[] = Object.values(PartOfSpeech);

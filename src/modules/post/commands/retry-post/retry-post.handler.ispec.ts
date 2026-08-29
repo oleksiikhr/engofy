@@ -1,6 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
+import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
@@ -38,8 +40,9 @@ async function seedProcessedPost(em: EntityManager): Promise<string> {
 
 describe('RetryPostHandler', () => {
   const suite = createIntegrationSuite({ imports: [PostModule] });
+  const queue = useQueueSpy(suite);
 
-  it('clears the pipeline runs and resets the post to pending', async () => {
+  it('clears the pipeline runs, resets to pending, and re-enqueues only spacy_parse', async () => {
     const postId = await seedProcessedPost(suite.orm.em);
 
     await suite.command(new RetryPostCommand(postId));
@@ -47,6 +50,12 @@ describe('RetryPostHandler', () => {
     expect(await suite.orm.em.count(PostPipelineRun, { postId })).toBe(0);
     const post = await suite.orm.em.findOneOrFail(Post, postId);
     expect(post.status).toBe(PostStatus.Pending);
+
+    queue.assertSent<{ postId: string }>(
+      QueueName.PostSpacyParse,
+      (d) => d.postId === postId,
+    );
+    queue.assertNotSent(QueueName.PostAnnotation);
   });
 
   it('throws when the post does not exist', async () => {
