@@ -4,6 +4,7 @@ import { BillingModule } from '../billing/billing.module.js';
 import { AddCardHandler } from './commands/add-card/add-card.handler.js';
 import { ReviewCardHandler } from './commands/review-card/review-card.handler.js';
 import { LearningService } from './learning.service.js';
+import { GetDictionaryHandler } from './queries/get-dictionary/get-dictionary.handler.js';
 import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practice-queue.handler.js';
 import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
@@ -23,6 +24,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     ReviewCardHandler,
     GetPracticeQueueHandler,
     GetProfileHandler,
+    GetDictionaryHandler,
   ],
   exports: [LearningService],
 })

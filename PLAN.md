@@ -729,8 +729,53 @@ CLI/API ще до появи фронтенду.
 
 ### Зріз 8 — фронтенд (Astro + HTMX)
 
-Окремий workspace-пакет (`pnpm-workspace.yaml` уже є). Сторінки в порядку:
+Рішення (користувач, 2026-08-29): фронт — окремий workspace-пакет `apps/web/`
+(`@engofy/web`), Astro + Tailwind CSS, HTMX через npm. Nest і Astro за одним
+доменом через reverse-proxy, який `/api/*` направляє в Nest **зі зрізанням
+префікса** (nginx `location /api/ { proxy_pass .../; }`, у dev — Vite
+`server.proxy` з `rewrite`) — тому в Nest **немає** глобального префікса, нові
+read-роути суто адитивні. Astro SSR-сторінки звуть Nest по внутрішньому URL,
+прокидаючи вхідний `Cookie`; inline-розбір рендериться на сервері Astro з
+node-tree, tooltip/«+» — HTMX-партіали (§6). Зріз ділиться на 8a (read-API) +
+8b (сторінки).
 
+#### Зріз 8a — нові read-endpoint'и Nest (DONE, 2026-08-29, uncommitted на `v2`)
+
+- [x] `modules/post/queries/`: `get-feed` (published, newest-first,
+      offset-пагінація, plain-text excerpt із перших блоків через
+      `flattenPostPartUnits`), `get-post-detail` (по `shortId`; `assembleDocFromParts`
+      → `Doc` + resolved `annotations.{words,phrases,grammar}` зі spans каталогу
+      node-tree через новий `domain/collect-spans.ts` + `exercises` як є;
+      published-only; **inline-розбір зі spans node-tree, не зі spaCy
+      `sentences`/`grammar_matches`** — §12), `get-grammar-reference` (19 кат →
+      конструкції, опц. `?cefr=` фільтр), `get-grammar-construction` (одна
+      конструкція + cheat sheet + usage points; null → 404).
+- [x] `modules/learning/queries/get-dictionary` — word+phrase SRS-картки
+      користувача (grammar виключено), статус + «у яких постах». «У яких постах»
+      **інтерим**: скан spans node-tree опублікованих постів (немає
+      `post_word`/`post_phrase` — §3.3 його не збудували в Зрізі 1;
+      `sentence_tokens.word_id` порожній до rework annotation). Проєкційна
+      таблиця — правильний фікс пізніше.
+- [x] Фасади: `PostService` +`QueryBus` +`getFeed`/`getPostDetail`/
+      `getGrammarReference`/`getGrammarConstruction`; `LearningService`
+      +`getDictionary`. `cefr-order.ts`+spec переїхали
+      `learning/domain/` → `post/domain/` (post володіє `CefrLevel`).
+- [x] Web-entrypoints: `entrypoints/web/content/` (`ContentController`, усе
+      `@Public()`: `GET /feed`, `/posts/:slugId`, `/grammar`, `/grammar/:slug`;
+      `parse-slug-id.ts` бере хвостовий сегмент `{slug}-{shortId}`),
+      `entrypoints/web/dictionary/` (`DictionaryController` `GET /dictionary`,
+      під глобальним `SessionAuthGuard`). Обидва в `web.module.ts`
+      DEFAULT_SUB_MODULES. Response-DTO дзеркалять view (дати — ISO-string).
+- Перевірки зелені: type, `biome check src/`, 446 unit (+parse-slug-id 5),
+      135 integration (+content e2e 7, +dictionary e2e 3). `migration:check`
+      чистий. Без міграцій. Не закомічено.
+
+#### Зріз 8b — сторінки `apps/web/` (Astro + Tailwind + HTMX), у порядку:
+
+- [ ] Каркас пакета: `apps/web/`, `packages: [".", "apps/*"]` у
+      `pnpm-workspace.yaml`, Astro + Tailwind + HTMX, Vite `/api` proxy,
+      layout + токени (портувати з `../engofy-go/frontend/src/styles/app.css`:
+      indigo/amber, Manrope+Public Sans+IBM Plex Mono woff2).
 - [ ] `/posts/{slug}-{id}` — текст з інлайн-розбором, tooltip, «+», вправи.
 - [ ] `/` — стрічка з чергуванням стаття → повторення.
 - [ ] `/practice` — SRS-черга.
@@ -743,9 +788,6 @@ CLI/API ще до появи фронтенду.
 ### Зріз 9 — Redis-поліш
 
 - [ ] OTP rate-limit по IP **і** по email окремо (ключі вже частково є в auth).
-- [ ] Лічильник переглянутих статей гостьової сесії
-      (`session:{cookie_id}:articles_seen`) для чергування без БД.
-- [ ] Загальний per-IP throttle на публічні ендпоїнти.
 
 ---
 

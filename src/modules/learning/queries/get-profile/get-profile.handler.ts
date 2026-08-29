@@ -1,13 +1,17 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
+import {
+  cefrRank,
+  emptyCefrRecord,
+  minCefr,
+} from '../../../post/domain/cefr-order.js';
 import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import type { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
-import { cefrRank, emptyCefrRecord, minCefr } from '../../domain/cefr-order.js';
 import { computeDailyStreak } from '../../domain/daily-streak.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { ReviewLog } from '../../entities/review-log.entity.js';

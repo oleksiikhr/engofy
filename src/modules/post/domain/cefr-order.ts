@@ -1,4 +1,4 @@
-import { CefrLevel } from '../../post/enums/cefr-level.enum.js';
+import { CefrLevel } from '../enums/cefr-level.enum.js';
 
 // CEFR levels from easiest to hardest.
 export const CEFR_LEVELS: readonly CefrLevel[] = [
