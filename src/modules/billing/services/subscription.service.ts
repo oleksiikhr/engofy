@@ -6,8 +6,9 @@ import { SubscriptionPlan } from '../enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../enums/subscription-status.enum.js';
 
 // Read side of monetization (PLAN.md §8). "Premium" means an active premium
-// row whose period has not lapsed; everything else (no row, expired,
-// free-plan row) is free tier.
+// row whose period has not lapsed; everything else (no row, free-plan row) is
+// free tier. Module-internal — reads reach it through `GetSubscriptionQuery`
+// (D18); not exported from `billing.module.ts`.
 @Injectable()
 export class SubscriptionService {
   constructor(private readonly em: EntityManager) {}
@@ -20,14 +21,10 @@ export class SubscriptionService {
         plan: SubscriptionPlan.Premium,
         status: SubscriptionStatus.Active,
       },
-      { orderBy: { currentPeriodEnd: 'desc' } },
+      { orderBy: { currentPeriodEnd: 'desc' }, disableIdentityMap: true },
     );
 
     const now = DateTime.now();
     return subscriptions.find((s) => s.currentPeriodEnd > now) ?? null;
-  }
-
-  async isPremium(userId: string): Promise<boolean> {
-    return (await this.getActive(userId)) !== null;
   }
 }

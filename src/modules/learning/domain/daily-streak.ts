@@ -15,6 +15,21 @@ export function computeDailyStreak(
       days.add(iso);
     }
   }
+  return streakFromDays(days, now);
+}
+
+// Same result as `computeDailyStreak` for callers that already hold the
+// distinct UTC calendar days as `YYYY-MM-DD` strings — `get-profile` pushes the
+// `DISTINCT (reviewed_at at time zone 'UTC')::date` down to SQL instead of
+// loading every `review_logs` row.
+export function dailyStreakFromUtcDays(
+  utcDays: readonly string[],
+  now: DateTime,
+): number {
+  return streakFromDays(new Set(utcDays), now);
+}
+
+function streakFromDays(days: Set<string>, now: DateTime): number {
   if (days.size === 0) {
     return 0;
   }

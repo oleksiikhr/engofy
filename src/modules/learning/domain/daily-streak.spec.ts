@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { computeDailyStreak } from './daily-streak.js';
+import { computeDailyStreak, dailyStreakFromUtcDays } from './daily-streak.js';
 
 const NOW = DateTime.fromISO('2026-08-29T10:00:00Z', { zone: 'utc' });
 
@@ -49,5 +49,31 @@ describe('computeDailyStreak', () => {
     expect(computeDailyStreak([daysAgo(2), daysAgo(0), daysAgo(1)], NOW)).toBe(
       3,
     );
+  });
+});
+
+describe('dailyStreakFromUtcDays', () => {
+  const day = (n: number) => daysAgo(n).toISODate() as string;
+
+  it('is 0 with no days', () => {
+    expect(dailyStreakFromUtcDays([], NOW)).toBe(0);
+  });
+
+  it('counts consecutive UTC days ending today', () => {
+    expect(dailyStreakFromUtcDays([day(0), day(1), day(2)], NOW)).toBe(3);
+  });
+
+  it('still counts a run that ends yesterday', () => {
+    expect(dailyStreakFromUtcDays([day(1), day(2)], NOW)).toBe(2);
+  });
+
+  it('stops at the first gap and tolerates duplicates', () => {
+    expect(dailyStreakFromUtcDays([day(0), day(0), day(1), day(3)], NOW)).toBe(
+      2,
+    );
+  });
+
+  it('is 0 when the most recent day is two days old', () => {
+    expect(dailyStreakFromUtcDays([day(2), day(3)], NOW)).toBe(0);
   });
 });

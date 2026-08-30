@@ -10,6 +10,7 @@ import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { AddCardCommand } from '../../commands/add-card/add-card.command.js';
 import { ReviewCardCommand } from '../../commands/review-card/review-card.command.js';
+import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
 import { GetProfileQuery } from './get-profile.query.js';
@@ -126,5 +127,38 @@ describe('GetProfileHandler', () => {
     expect(presentSimple?.masteryScore).toBeGreaterThan(0);
     expect(presentSimple?.correctStreak).toBe(1);
     expect(pastPerfect?.locked).toBe(true);
+  });
+
+  // D11: mastery is computed from live FSRS card state on every read, so a
+  // stale (or never-written) stored column never reaches the response.
+  it('derives masteryScore at read time, ignoring the stored column', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const catalog = await seedCatalog(em);
+
+    const card = await suite.command(
+      new AddCardCommand(userId, {
+        grammarUsagePointId: catalog.presentSimplePointId,
+      }),
+    );
+    await suite.command(
+      new ReviewCardCommand(userId, card.id, ReviewRating.Easy),
+    );
+
+    // recordGrammarReview no longer maintains the column — poison it to prove
+    // the read path does not trust it.
+    const progress = await em.findOneOrFail(UserSkillProgress, { userId });
+    expect(progress.masteryScore).toBe(0);
+    progress.masteryScore = 999;
+    await em.flush();
+    em.clear();
+
+    const profile = await suite.query(new GetProfileQuery(userId));
+    const presentSimple = profile.categories
+      .flatMap((c) => c.constructions)
+      .find((c) => c.slug === 'present-present-simple');
+
+    expect(presentSimple?.masteryScore).toBeGreaterThan(0);
+    expect(presentSimple?.masteryScore).toBeLessThanOrEqual(100);
   });
 });

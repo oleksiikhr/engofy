@@ -7,6 +7,7 @@ import { ReviewLog } from '../../entities/review-log.entity.js';
 import { CardNotFoundError } from '../../errors/card-not-found.error.js';
 import { FsrsService } from '../../services/fsrs.service.js';
 import { SkillProgressService } from '../../services/skill-progress.service.js';
+import { type CardView, toCardView } from '../../types/card-view.type.js';
 import { ReviewCardCommand } from './review-card.command.js';
 
 // Grades a card (Again/Hard/Good/Easy), reschedules it via ts-fsrs, and
@@ -20,7 +21,7 @@ export class ReviewCardHandler implements ICommandHandler<ReviewCardCommand> {
     private readonly skillProgress: SkillProgressService,
   ) {}
 
-  async execute(command: ReviewCardCommand): Promise<LearningCard> {
+  async execute(command: ReviewCardCommand): Promise<CardView> {
     const { userId, cardId, rating } = command;
 
     const card = await this.em.findOne(LearningCard, { id: cardId, userId });
@@ -66,6 +67,6 @@ export class ReviewCardHandler implements ICommandHandler<ReviewCardCommand> {
 
     await this.skillProgress.recordGrammarReview(userId, card, rating);
 
-    return card;
+    return toCardView(card);
   }
 }

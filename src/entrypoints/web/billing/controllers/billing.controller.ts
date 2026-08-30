@@ -3,8 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
-import type { Subscription } from '../../../../modules/billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
+import type { SubscriptionView } from '../../../../modules/billing/types/subscription-view.type.js';
 import { SubscriptionResponseDto } from '../dto/subscription-response.dto.js';
 
 const FREE_RESPONSE: SubscriptionResponseDto = {
@@ -14,7 +14,7 @@ const FREE_RESPONSE: SubscriptionResponseDto = {
   isMockPayment: false,
 };
 
-function toDto(subscription: Subscription | null): SubscriptionResponseDto {
+function toDto(subscription: SubscriptionView | null): SubscriptionResponseDto {
   if (!subscription) {
     return FREE_RESPONSE;
   }
@@ -24,7 +24,7 @@ function toDto(subscription: Subscription | null): SubscriptionResponseDto {
     currentPeriodEnd:
       subscription.currentPeriodEnd.toISO() ??
       subscription.currentPeriodEnd.toString(),
-    isMockPayment: subscription.isMockPayment ?? false,
+    isMockPayment: subscription.isMockPayment,
   };
 }
 

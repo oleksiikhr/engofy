@@ -41,6 +41,7 @@
 
 ## `disableIdentityMap` for query handlers
 
-`auth`'s one query uses it (`get-user.handler.ts:11-14`); **no `post` query handler
-does** — a per-request memory / staleness inconsistency. New query handlers should
-match `auth` (or project a read DTO).
+`auth` + every `learning` query handler + `billing`'s `SubscriptionService`
+pass `{ disableIdentityMap: true }` on their reads (Batch E). **Still owed:**
+the `post` query handlers (`get-feed`, `get-post-detail`, `get-grammar-*`). New
+query handlers match `auth`/`learning` (or project a read DTO).

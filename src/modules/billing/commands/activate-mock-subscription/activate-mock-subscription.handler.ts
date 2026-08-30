@@ -5,6 +5,10 @@ import { DateTime } from 'luxon';
 import { Subscription } from '../../entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../enums/subscription-status.enum.js';
+import {
+  type SubscriptionView,
+  toSubscriptionView,
+} from '../../types/subscription-view.type.js';
 import { ActivateMockSubscriptionCommand } from './activate-mock-subscription.command.js';
 
 const PREMIUM_PERIOD = { months: 1 } as const;
@@ -23,7 +27,7 @@ export class ActivateMockSubscriptionHandler
 
   async execute(
     command: ActivateMockSubscriptionCommand,
-  ): Promise<Subscription> {
+  ): Promise<SubscriptionView> {
     const { userId } = command;
     const now = DateTime.now();
 
@@ -42,7 +46,7 @@ export class ActivateMockSubscriptionHandler
         existing.currentPeriodEnd > now ? existing.currentPeriodEnd : now;
       existing.currentPeriodEnd = from.plus(PREMIUM_PERIOD);
       this.logger.log({ userId }, 'mock premium extended');
-      return existing;
+      return toSubscriptionView(existing);
     }
 
     const subscription = new Subscription();
@@ -55,6 +59,6 @@ export class ActivateMockSubscriptionHandler
     this.em.persist(subscription);
 
     this.logger.log({ userId }, 'mock premium activated');
-    return subscription;
+    return toSubscriptionView(subscription);
   }
 }

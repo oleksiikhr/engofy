@@ -54,9 +54,13 @@ describe('AddCardHandler', () => {
     const card = await suite.command(new AddCardCommand(userId, { wordId }));
 
     expect(card.state).toBe(LearningCardState.New);
-    expect(card.wordId).toBe(wordId);
-    expect(card.phraseId).toBeNull();
     expect(card.reps).toBe(0);
+
+    const stored = await suite.orm.em.findOneOrFail(LearningCard, {
+      id: card.id,
+    });
+    expect(stored.wordId).toBe(wordId);
+    expect(stored.phraseId).toBeNull();
   });
 
   it('is idempotent — re-adding the same target returns the existing card', async () => {
@@ -68,6 +72,35 @@ describe('AddCardHandler', () => {
 
     expect(second.id).toBe(first.id);
     expect(await suite.orm.em.count(LearningCard, { userId })).toBe(1);
+  });
+
+  // A racing POST that inserts the card between this request's `findOne` and
+  // its own INSERT resolves via `ON CONFLICT DO NOTHING` (M3 upsert), not a
+  // `UniqueConstraintViolationException` → 500. The serial int-suite shares one
+  // EM so the two inserts can't truly interleave here; seeding the row first
+  // stands in for the loser of the race.
+  it('does not fail when the target card already exists from a racing add', async () => {
+    const userId = uuidv7();
+    const wordId = await seedWord(`w-${uuidv7()}`);
+    suite.orm.em.create(LearningCard, {
+      userId,
+      wordId,
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 0,
+      lapses: 0,
+      state: LearningCardState.New,
+    });
+    await suite.orm.em.flush();
+    suite.orm.em.clear();
+
+    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+
+    expect(card.state).toBe(LearningCardState.New);
+    expect(await suite.orm.em.count(LearningCard, { userId, wordId })).toBe(1);
   });
 
   it('rejects a target id that does not exist', async () => {
@@ -126,6 +159,9 @@ describe('AddCardHandler', () => {
     const wordId = await seedWord(`w-${uuidv7()}`);
 
     const card = await suite.command(new AddCardCommand(userId, { wordId }));
-    expect(card.wordId).toBe(wordId);
+    const stored = await suite.orm.em.findOneOrFail(LearningCard, {
+      id: card.id,
+    });
+    expect(stored.wordId).toBe(wordId);
   });
 });

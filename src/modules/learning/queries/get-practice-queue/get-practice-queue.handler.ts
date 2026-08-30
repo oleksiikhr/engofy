@@ -25,7 +25,11 @@ export class GetPracticeQueueHandler
     const cards = await this.em.find(
       LearningCard,
       { userId: query.userId, due: { $lte: DateTime.now() } },
-      { orderBy: { due: 'asc', createdAt: 'asc' }, limit: query.limit },
+      {
+        orderBy: { due: 'asc', createdAt: 'asc' },
+        limit: query.limit,
+        disableIdentityMap: true,
+      },
     );
     if (cards.length === 0) {
       return [];
@@ -58,13 +62,25 @@ export class GetPracticeQueueHandler
 
     const [words, phrases, usagePoints] = await Promise.all([
       wordIds.length
-        ? this.em.find(Word, { id: { $in: wordIds } })
+        ? this.em.find(
+            Word,
+            { id: { $in: wordIds } },
+            { disableIdentityMap: true },
+          )
         : Promise.resolve([]),
       phraseIds.length
-        ? this.em.find(Phrase, { id: { $in: phraseIds } })
+        ? this.em.find(
+            Phrase,
+            { id: { $in: phraseIds } },
+            { disableIdentityMap: true },
+          )
         : Promise.resolve([]),
       grammarIds.length
-        ? this.em.find(GrammarUsagePoint, { id: { $in: grammarIds } })
+        ? this.em.find(
+            GrammarUsagePoint,
+            { id: { $in: grammarIds } },
+            { disableIdentityMap: true },
+          )
         : Promise.resolve([]),
     ]);
 

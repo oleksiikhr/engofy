@@ -13,6 +13,7 @@ import { InvalidCardTargetError } from '../../errors/invalid-card-target.error.j
 import { CardLimitService } from '../../services/card-limit.service.js';
 import { FsrsService } from '../../services/fsrs.service.js';
 import { SkillProgressService } from '../../services/skill-progress.service.js';
+import { type CardView, toCardView } from '../../types/card-view.type.js';
 import { AddCardCommand } from './add-card.command.js';
 
 // Adds one SRS card for the current user (PLAN.md §3.5). Idempotent: a second
@@ -28,7 +29,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
     private readonly skillProgress: SkillProgressService,
   ) {}
 
-  async execute(command: AddCardCommand): Promise<LearningCard> {
+  async execute(command: AddCardCommand): Promise<CardView> {
     const { userId } = command;
     const target = resolveCardTarget(command.target);
 
@@ -39,7 +40,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
       ...targetFilter(target),
     });
     if (existing) {
-      return existing;
+      return toCardView(existing);
     }
 
     await this.cardLimit.assertCanAddCard(userId);
@@ -59,13 +60,21 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
     card.lapses = scheduling.lapses;
     card.state = scheduling.state;
     card.lastReview = scheduling.lastReview;
-    this.em.persist(card);
+
+    // Idempotent under a concurrent add for the same target: two requests that
+    // both miss the `findOne` above race to insert; the loser's `ON CONFLICT
+    // DO NOTHING` re-selects the winner's row instead of throwing a unique
+    // violation (which would surface as a 500). Commits immediately (M3).
+    const persisted = await this.em.upsert(LearningCard, card, {
+      onConflictFields: onConflictFields(target),
+      onConflictAction: 'ignore',
+    });
 
     if (target.type === 'grammar') {
       await this.skillProgress.unlockConstruction(userId, target.id);
     }
 
-    return card;
+    return toCardView(persisted);
   }
 
   private async assertTargetExists(target: CardTarget): Promise<void> {
@@ -97,5 +106,18 @@ function targetFilter(target: CardTarget): Record<string, string> {
       return { phraseId: target.id };
     default:
       return { grammarUsagePointId: target.id };
+  }
+}
+
+// The composite `@Unique` that guards one card per (user, target). Each target
+// type has its own — the two unused FKs on a given card are always null.
+function onConflictFields(target: CardTarget): (keyof LearningCard)[] {
+  switch (target.type) {
+    case 'word':
+      return ['userId', 'wordId'];
+    case 'phrase':
+      return ['userId', 'phraseId'];
+    default:
+      return ['userId', 'grammarUsagePointId'];
   }
 }

@@ -1,17 +1,18 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
+import { v7 as uuidv7 } from 'uuid';
 import { GrammarUsagePoint } from '../../post/entities/grammar-usage-point.entity.js';
-import { aggregateMasteryScore } from '../domain/mastery.js';
-import { LearningCard } from '../entities/learning-card.entity.js';
+import type { LearningCard } from '../entities/learning-card.entity.js';
 import { UserSkillProgress } from '../entities/user-skill-progress.entity.js';
 import type { ReviewRating } from '../enums/review-rating.enum.js';
 import { ReviewRating as Rating } from '../enums/review-rating.enum.js';
 
 // Keeps `user_skill_progress` in step with the learner's grammar cards
 // (PLAN.md §3.6). A construction is unlocked the moment its first card is
-// added; `masteryScore` is recomputed from FSRS state on every grammar
-// review; the attempt counters are display-only tallies. Callers flush.
+// added; the attempt / streak counters are display-only tallies bumped on each
+// grammar review. `masteryScore` is NOT written here — `get-profile` derives it
+// from live FSRS card state at read time (D11). Callers flush.
 @Injectable()
 export class SkillProgressService {
   constructor(private readonly em: EntityManager) {}
@@ -52,7 +53,6 @@ export class SkillProgressService {
     } else {
       progress.correctStreak = 0;
     }
-    progress.masteryScore = await this.computeMastery(userId, constructionId);
   }
 
   private async constructionOf(
@@ -64,37 +64,21 @@ export class SkillProgressService {
     return point?.constructionId ?? null;
   }
 
+  // Idempotent under a concurrent first review / add for the same construction:
+  // `ON CONFLICT DO NOTHING` re-selects the existing row instead of raising a
+  // unique violation on the `(userId, constructionId)` constraint. Commits
+  // immediately (M3); any counter bumps by the caller ride the facade flush.
   private async loadOrCreate(
     userId: string,
     constructionId: string,
   ): Promise<UserSkillProgress> {
-    const existing = await this.em.findOne(UserSkillProgress, {
-      userId,
-      constructionId,
-    });
-    if (existing) {
-      return existing;
-    }
-    const progress = new UserSkillProgress();
-    progress.userId = userId;
-    progress.constructionId = constructionId;
-    progress.unlockedAt = DateTime.now();
-    this.em.persist(progress);
-    return progress;
-  }
-
-  private async computeMastery(
-    userId: string,
-    constructionId: string,
-  ): Promise<number> {
-    const points = await this.em.find(GrammarUsagePoint, { constructionId });
-    if (points.length === 0) {
-      return 0;
-    }
-    const cards = await this.em.find(LearningCard, {
-      userId,
-      grammarUsagePointId: { $in: points.map((point) => point.id) },
-    });
-    return aggregateMasteryScore(cards);
+    return this.em.upsert(
+      UserSkillProgress,
+      { id: uuidv7(), userId, constructionId, unlockedAt: DateTime.now() },
+      {
+        onConflictFields: ['userId', 'constructionId'],
+        onConflictAction: 'ignore',
+      },
+    );
   }
 }

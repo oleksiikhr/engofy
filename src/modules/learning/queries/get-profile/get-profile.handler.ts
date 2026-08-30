@@ -12,9 +12,9 @@ import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.en
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import type { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
-import { computeDailyStreak } from '../../domain/daily-streak.js';
+import { dailyStreakFromUtcDays } from '../../domain/daily-streak.js';
+import { aggregateMasteryScore } from '../../domain/mastery.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
-import { ReviewLog } from '../../entities/review-log.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { GetProfileQuery } from './get-profile.query.js';
 import type {
@@ -33,19 +33,27 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
   async execute({ userId }: GetProfileQuery): Promise<ProfileView> {
     const [categories, constructions, usagePoints, progress, cards] =
       await Promise.all([
-        this.em.find(GrammarCategory, {}, { orderBy: { sortOrder: 'asc' } }),
+        this.em.find(
+          GrammarCategory,
+          {},
+          { orderBy: { sortOrder: 'asc' }, disableIdentityMap: true },
+        ),
         this.em.find(
           GrammarConstruction,
           {},
-          { orderBy: { sortOrder: 'asc' } },
+          { orderBy: { sortOrder: 'asc' }, disableIdentityMap: true },
         ),
-        this.em.find(GrammarUsagePoint, {}),
-        this.em.find(UserSkillProgress, { userId }),
-        this.em.find(LearningCard, { userId }),
+        this.em.find(GrammarUsagePoint, {}, { disableIdentityMap: true }),
+        this.em.find(
+          UserSkillProgress,
+          { userId },
+          { disableIdentityMap: true },
+        ),
+        this.em.find(LearningCard, { userId }, { disableIdentityMap: true }),
       ]);
 
     const [streak, cefr] = await Promise.all([
-      this.computeStreak(cards),
+      this.computeStreak(cards.map((card) => card.id)),
       this.computeCefrBreakdown(cards, usagePoints),
     ]);
 
@@ -57,19 +65,28 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
         constructions,
         usagePoints,
         progress,
+        cards,
       ),
     };
   }
 
-  private async computeStreak(cards: LearningCard[]): Promise<number> {
-    if (cards.length === 0) {
+  // Distinct UTC review days pushed to SQL — avoids loading every `review_logs`
+  // row for the user just to bucket them by day.
+  private async computeStreak(cardIds: string[]): Promise<number> {
+    if (cardIds.length === 0) {
       return 0;
     }
-    const logs = await this.em.find(ReviewLog, {
-      cardId: { $in: cards.map((card) => card.id) },
-    });
-    return computeDailyStreak(
-      logs.map((log) => log.reviewedAt),
+    const placeholders = cardIds.map(() => '?').join(', ');
+    const rows = await this.em.getConnection().execute<{ day: string }[]>(
+      `SELECT DISTINCT to_char((reviewed_at AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day
+           FROM review_logs
+          WHERE card_id IN (${placeholders})`,
+      cardIds,
+      'all',
+      this.em.getTransactionContext(),
+    );
+    return dailyStreakFromUtcDays(
+      rows.map((row) => row.day),
       DateTime.now(),
     );
   }
@@ -103,10 +120,11 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
     if (wordIds.length === 0) {
       return new Map();
     }
-    const definitions = await this.em.find(WordDefinition, {
-      wordId: { $in: wordIds },
-      cefrLevel: { $ne: null },
-    });
+    const definitions = await this.em.find(
+      WordDefinition,
+      { wordId: { $in: wordIds }, cefrLevel: { $ne: null } },
+      { disableIdentityMap: true },
+    );
     const levels = new Map<string, CefrLevel>();
     for (const definition of definitions) {
       const level = definition.cefrLevel;
@@ -128,7 +146,11 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
     if (phraseIds.length === 0) {
       return new Map();
     }
-    const phrases = await this.em.find(Phrase, { id: { $in: phraseIds } });
+    const phrases = await this.em.find(
+      Phrase,
+      { id: { $in: phraseIds } },
+      { disableIdentityMap: true },
+    );
     const levels = new Map<string, CefrLevel>();
     for (const phrase of phrases) {
       if (phrase.cefrLevel) {
@@ -144,6 +166,7 @@ function buildSkillTree(
   constructions: GrammarConstruction[],
   usagePoints: GrammarUsagePoint[],
   progress: UserSkillProgress[],
+  cards: LearningCard[],
 ): ProfileCategoryView[] {
   const pointsByConstruction = groupBy(
     usagePoints,
@@ -156,6 +179,10 @@ function buildSkillTree(
   const progressByConstruction = new Map(
     progress.map((row) => [row.constructionId, row]),
   );
+  const grammarCardsByPoint = groupBy(
+    cards.filter((card) => card.grammarUsagePointId),
+    (card) => card.grammarUsagePointId as string,
+  );
 
   return categories.map((category) => ({
     name: category.name,
@@ -165,6 +192,7 @@ function buildSkillTree(
           construction,
           pointsByConstruction.get(construction.id) ?? [],
           progressByConstruction.get(construction.id),
+          grammarCardsByPoint,
         ),
     ),
   }));
@@ -174,13 +202,19 @@ function toConstructionView(
   construction: GrammarConstruction,
   points: GrammarUsagePoint[],
   progress: UserSkillProgress | undefined,
+  grammarCardsByPoint: Map<string, LearningCard[]>,
 ): ProfileConstructionView {
+  // Derived at read time from the learner's FSRS card state (D11) — the stored
+  // `user_skill_progress.mastery_score` column is no longer maintained.
+  const constructionCards = points.flatMap(
+    (point) => grammarCardsByPoint.get(point.id) ?? [],
+  );
   return {
     slug: construction.slug,
     name: construction.name,
     cefrLevel: minCefr(points.map((point) => point.cefrLevel)),
     locked: !progress?.unlockedAt,
-    masteryScore: progress?.masteryScore ?? 0,
+    masteryScore: aggregateMasteryScore(constructionCards),
     correctStreak: progress?.correctStreak ?? 0,
   };
 }

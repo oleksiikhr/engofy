@@ -87,7 +87,9 @@ describe('ReviewCardHandler', () => {
     expect(progress.totalAttempts).toBe(1);
     expect(progress.correctAttempts).toBe(1);
     expect(progress.correctStreak).toBe(1);
-    expect(progress.masteryScore).toBeGreaterThan(0);
+    // D11: the stored column is no longer maintained — mastery is derived at
+    // read time in get-profile (see get-profile.handler.ispec).
+    expect(progress.masteryScore).toBe(0);
   });
 
   it('resets the correct streak on an "Again" grade', async () => {

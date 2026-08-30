@@ -18,7 +18,6 @@ describe('ActivateMockSubscriptionHandler', () => {
     );
 
     expect(subscription.plan).toBe(SubscriptionPlan.Premium);
-    expect(subscription.status).toBe(SubscriptionStatus.Active);
     expect(subscription.isMockPayment).toBe(true);
     const monthOut = DateTime.now().plus({ months: 1 });
     expect(

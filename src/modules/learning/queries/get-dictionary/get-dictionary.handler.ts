@@ -29,7 +29,7 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
     const cards = await this.em.find(
       LearningCard,
       { userId, $or: [{ wordId: { $ne: null } }, { phraseId: { $ne: null } }] },
-      { orderBy: { due: 'asc', createdAt: 'asc' } },
+      { orderBy: { due: 'asc', createdAt: 'asc' }, disableIdentityMap: true },
     );
     if (cards.length === 0) {
       return { items: [] };
@@ -40,14 +40,26 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
 
     const [definitions, phrases] = await Promise.all([
       wordIds.length
-        ? this.em.find(WordDefinition, { wordId: { $in: wordIds } })
+        ? this.em.find(
+            WordDefinition,
+            { wordId: { $in: wordIds } },
+            { disableIdentityMap: true },
+          )
         : Promise.resolve([]),
       phraseIds.length
-        ? this.em.find(Phrase, { id: { $in: phraseIds } })
+        ? this.em.find(
+            Phrase,
+            { id: { $in: phraseIds } },
+            { disableIdentityMap: true },
+          )
         : Promise.resolve([]),
     ]);
     const words = wordIds.length
-      ? await this.em.find(Word, { id: { $in: wordIds } })
+      ? await this.em.find(
+          Word,
+          { id: { $in: wordIds } },
+          { disableIdentityMap: true },
+        )
       : [];
 
     const wordById = new Map(words.map((word) => [word.id, word]));
@@ -138,16 +150,18 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
     const posts = await this.em.find(
       Post,
       { status: PostStatus.Published },
-      { orderBy: { publishedAt: 'desc' } },
+      { orderBy: { publishedAt: 'desc' }, disableIdentityMap: true },
     );
     if (posts.length === 0) {
       return emptyUsageIndex();
     }
 
     const postById = new Map(posts.map((post) => [post.id, post]));
-    const parts = await this.em.find(PostPart, {
-      postId: { $in: posts.map((post) => post.id) },
-    });
+    const parts = await this.em.find(
+      PostPart,
+      { postId: { $in: posts.map((post) => post.id) } },
+      { disableIdentityMap: true },
+    );
 
     return indexSpanUsage(parts, postById, wantedDefIds, wantedPhraseIds);
   }

@@ -13,9 +13,9 @@ import { ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
-import type { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
+import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
 import { PracticeQueueQueryDto } from '../dto/practice-queue-query.dto.js';
@@ -26,7 +26,7 @@ function iso(value: DateTime): string {
   return value.toISO() ?? value.toString();
 }
 
-function toCardDto(card: LearningCard): LearningCardResponseDto {
+function toCardDto(card: CardView): LearningCardResponseDto {
   return {
     id: card.id,
     state: card.state,
