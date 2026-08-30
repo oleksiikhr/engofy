@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { PollUpdatesService } from '../../../modules/telegram/services/poll-updates.service.js';
+import { PollUpdatesService } from '../../../modules/telegram/services/shared/poll-updates.service.js';
 import { CronJobHost } from '../cron-job-host.js';
 
 // PLAN.md §3.9: poll Telegram getUpdates once a minute. No-ops when the bot

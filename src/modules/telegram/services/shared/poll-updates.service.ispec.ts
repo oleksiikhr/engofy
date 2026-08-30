@@ -1,13 +1,13 @@
-import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
-import { Post } from '../../post/entities/post.entity.js';
-import TelegramConfig from '../config/telegram.config.js';
-import { TelegramUpdate } from '../entities/telegram-update.entity.js';
-import { TelegramModule } from '../telegram.module.js';
-import { PollUpdatesService } from './poll-updates.service.js';
+import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { Post } from '../../../post/entities/post.entity.js';
+import TelegramConfig from '../../config/telegram.config.js';
+import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
+import { TelegramModule } from '../../telegram.module.js';
 import {
   TelegramClientService,
   type TelegramUpdatePayload,
-} from './telegram-client.service.js';
+} from '../telegram-client.service.js';
+import { PollUpdatesService } from './poll-updates.service.js';
 
 const ADMIN_ID = 42;
 
@@ -35,6 +35,7 @@ class FakeTelegramClient {
   queued: TelegramUpdatePayload[] = [];
   offsets: (number | undefined)[] = [];
   sent: { chatId: string; text: string }[] = [];
+  failSendMessage = false;
 
   async getUpdates(offset?: number): Promise<TelegramUpdatePayload[]> {
     this.offsets.push(offset);
@@ -45,6 +46,9 @@ class FakeTelegramClient {
     chatId: string,
     text: string,
   ): Promise<{ message_id: number }> {
+    if (this.failSendMessage) {
+      throw new Error('telegram sendMessage 502');
+    }
     this.sent.push({ chatId, text });
     return { message_id: 1 };
   }
@@ -74,6 +78,7 @@ describe('PollUpdatesService', () => {
     fakeClient.queued = [];
     fakeClient.offsets = [];
     fakeClient.sent = [];
+    fakeClient.failSendMessage = false;
   });
 
   it('stores an admin /add update and ingests the pasted text', async () => {
@@ -154,5 +159,54 @@ describe('PollUpdatesService', () => {
     });
     expect(row.processed).toBe(true);
     expect(fakeClient.sent.at(-1)?.text).toContain('failed');
+  });
+
+  it('commits the update as processed before dispatch, so a failing command is not retried on re-delivery', async () => {
+    fakeClient.queued = [
+      adminMessage(400, '/retry 01920000-0000-7000-8000-000000000000'),
+    ];
+
+    await service.run();
+    // Telegram re-delivers the same update before the offset advances.
+    await service.run();
+    suite.orm.em.clear();
+
+    // Second run sees the stored row and skips it — only one failure reply.
+    expect(
+      fakeClient.sent.filter((m) => m.text.includes('failed')),
+    ).toHaveLength(1);
+  });
+
+  it('does not reply "Command failed" when only the confirmation send throws', async () => {
+    fakeClient.queued = [adminMessage(500, '/add A tale that ingests fine.')];
+    fakeClient.failSendMessage = true;
+
+    await expect(service.run()).resolves.toBeUndefined();
+    suite.orm.em.clear();
+
+    // The command ran (post created) and the row is processed; the failed
+    // confirmation is swallowed, not surfaced as a command failure.
+    expect(await suite.orm.em.count(Post, {})).toBe(1);
+    const row = await suite.orm.em.findOneOrFail(TelegramUpdate, {
+      updateId: '500',
+    });
+    expect(row.processed).toBe(true);
+    expect(fakeClient.sent).toHaveLength(0);
+  });
+
+  it('no-ops without polling when no admin user id is configured', async () => {
+    const original = FAKE_CONFIG.adminUserId;
+    FAKE_CONFIG.adminUserId = '';
+    try {
+      fakeClient.queued = [adminMessage(600, '/add ignored')];
+
+      await service.run();
+      suite.orm.em.clear();
+
+      expect(fakeClient.offsets).toHaveLength(0);
+      expect(await suite.orm.em.count(TelegramUpdate, {})).toBe(0);
+    } finally {
+      FAKE_CONFIG.adminUserId = original;
+    }
   });
 });

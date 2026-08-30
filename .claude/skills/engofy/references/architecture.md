@@ -1,6 +1,6 @@
 # Architecture — module anatomy & layering
 
-> Reviewed: `auth`, `post` (wave 1). `learning`, `billing`, `telegram`, entrypoints — pending wave 2.
+> Reviewed: `auth`, `post` (wave 1); `learning`, `billing`, `telegram`, entrypoints (wave 2).
 > Baseline: `src/modules/auth`.
 
 ## Layers
@@ -47,7 +47,8 @@ Reference: `src/modules/auth/` tree; `src/modules/auth/auth.module.ts:22-52`.
 | # | Rule | Reference |
 |---|---|---|
 | A1 | The facade is the **only** exported surface for consumers; internal services are never in `exports`. | `auth.module.ts:51` |
-| A2 | A service goes in `services/shared/` **iff** something outside the module imports it; otherwise `services/`. | `services/shared/challenge-mailer.service.ts` ← `entrypoints/worker/auth/send-challenge-email.processor.ts:3` |
+| A2 | A service goes in `services/shared/` **iff** something outside the module imports it; otherwise `services/`. | `auth/services/shared/challenge-mailer.service.ts` ← `entrypoints/worker/auth/send-challenge-email.processor.ts:3`; `telegram/services/shared/{poll-updates,publish-pending,prune-telegram-updates}.service.ts` ← `entrypoints/cron/telegram/*` |
+| A2a | **D15** — a cron-driven poller/pruner has no facade or `commands/`: the `@Cron` host (`entrypoints/cron/`) calls an exported `services/shared/*.run()` that owns its own `em.flush()` (flush-per-row). Sanctioned for pure non-HTTP entrypoint work. | `telegram` module (no `telegram.service.ts`) |
 | A3 | Handlers are thin orchestrators (2–4 statements). All real logic lives in a domain service or a pure `domain/` function. | `commands/verify-login-code/verify-login-code.handler.ts:16-23` |
 | A4 | Every command/query folder file shares the folder name + a role suffix (`.command.ts`, `.handler.ts`, `.dto.ts`, `.query.ts`). | `commands/login-with-google/*` |
 | A5 | Entrypoints depend only on the facade or `services/shared/*`. | `entrypoints/web/auth/controllers/auth.controller.ts:18` |

@@ -31,6 +31,13 @@ describe('parseTelegramCommand', () => {
     expect(parseTelegramCommand('/retry')).toEqual({ kind: 'unknown' });
   });
 
+  it('treats /retry with a non-uuid id as unknown', () => {
+    expect(parseTelegramCommand('/retry not-a-uuid')).toEqual({
+      kind: 'unknown',
+    });
+    expect(parseTelegramCommand('/retry 12345')).toEqual({ kind: 'unknown' });
+  });
+
   it('treats a plain message as unknown', () => {
     expect(parseTelegramCommand('hey there')).toEqual({ kind: 'unknown' });
   });

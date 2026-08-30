@@ -42,6 +42,12 @@ export class PostPublication {
   @Property({ type: 'text', nullable: true })
   errorMessage?: string | null;
 
+  // How many times the telegram publish cron has tried and failed to send this
+  // announcement. Bounds the re-send loop for `failed` rows
+  // (PublishPendingService); `/retry` resets it to 0.
+  @Property({ type: 'int', default: 0 })
+  retryCount: Opt<number> = 0;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

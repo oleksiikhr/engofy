@@ -24,6 +24,7 @@ so `ErrorFilter` is the fallback).
 | E4 | Infra failures: `new Error(msg, { cause })` with a structured `cause`. Use the `err` key when logging so pino's serializer fires (`{ err }`, not `{ cause: err }`). | `core/s3/s3.service.ts:44`; **bug:** `worker.ts:35` uses `{ cause: err }` |
 | E5 | All-or-nothing: validate the whole batch (offsets, annotations) before **any** write; the first bad item throws and aborts the job. | `post/domain/validate-annotations.ts:107-118` |
 | E6 | Grammar tagging is the **sanctioned exception** — drop-with-warn per span, not all-or-nothing. | `post/commands/tag-grammar/tag-grammar.handler.ts:251-279` |
+| E7 | A best-effort side effect that runs **after** the real work succeeded (e.g. a chat confirmation after `ingest`) goes **outside** the `try` that guards the work — inside it, a failed notification reads as the work failing (wrong reply, false-negative Sentry). Swallow + `logger.warn` it instead. | `telegram/services/shared/poll-updates.service.ts` (`dispatch`) |
 
 ## D1 — `DomainError` carries an optional status (done, Batch B)
 

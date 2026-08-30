@@ -134,14 +134,15 @@ New deps: `@nestjs/throttler` ^6.5.0 + `@nest-lab/throttler-storage-redis` ^1.2.
 
 NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a low limit in one suite only, but the integration project runs `isolate:false` (shared module state) + one Redis DB, so a per-file `process.env.THROTTLE_LIMIT` override would leak. Left as a manual/prod check; wiring is type-checked and the guard runs (always-allow) in every web ispec.
 
-### Batch G — telegram / cron (D15)
-- [ ] move `PollUpdatesService` + `PublishPendingService` → `services/shared/`
-- [ ] `PublishPendingService` re-selects `Failed` rows (`retryCount < N` + backoff); `/retry` resets `failed` telegram publications for the post
-- [ ] `poll-updates`: set `row.processed = true` before `dispatch` (or flush the row first)
-- [ ] `poll-updates`: send the `/add` confirmation **outside** the command `try`
-- [ ] UUID-shape validation on `/retry <id>` (in `parse-command.ts`)
-- [ ] no-op `run()` when `config.adminUserId === ''`
-- [ ] daily retention cron pruning `telegram_updates` > 30 days
+### Batch G — telegram / cron (D15) — DONE (fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**109 files / 647 tests**, was 108/636: +1 file, +11 tests) + `pnpm test:cov` gate green (stmts 88.4 / branches 73.7 / funcs 83 / lines 88.8). `pnpm build` regenerated `src/metadata.ts` (`PostPublication.retryCount` — deterministic across rebuilds). `pnpm migration:up` + `pnpm migration:check` green.
+- [x] **layering (#29)** — `git mv` `PollUpdatesService` + `PublishPendingService` (+ ispecs) → `telegram/services/shared/`; new `PruneTelegramUpdatesService` also there. `telegram.module.ts` providers/exports + `poll-updates.cron.ts` / `publish-pending.cron.ts` imports updated. Sanctioned pattern documented: `queue-jobs.md` (Cron pattern + Done Batch G), `architecture.md` (A2 + new A2a). Header comments on both services note the services/shared + own-flush rationale.
+- [x] **failed publications (#30)** — new `post_publications.retry_count` col (`int not null default 0`) — `post-publication.entity.ts:45-49`, `Migration20260830130000`, snapshot hand-patched (17-line insert) + `src/metadata.ts` rebuilt. `PublishPendingService.run()` now selects `{ retryCount: { $lt: 5 }, $or: [{status: Pending}, {status: Failed, updatedAt: {$lte: now-5min}}] }` (`publish-pending.service.ts:39-58`); `publishOne` does `retryCount += 1` on a failed send (`:71`). `RetryPostHandler` re-selects `PostPublication` rows `status=Failed` for the post and resets them to `Pending` + `retryCount=0` + `errorMessage=null` (`published` rows untouched) — `retry-post.handler.ts:62-76`. ispec: `publish-pending` +3 (re-select after backoff / too-soon skip / attempt-limit stop) + retryCount assertion on the existing fail case; `retry-post.handler` +2 (failed→pending reset; published left alone).
+- [x] **poll-updates ordering** — `row.processed = true` set + `em.flush()`ed **before** `dispatch()` (`poll-updates.service.ts:52-61`); `dispatch` no longer touches `processed`. mikroorm.md anti-pattern row added. ispec: +1 ("commits as processed before dispatch, so a failing command is not retried on re-delivery").
+- [x] **poll-updates confirmation** — command runs in the `try` and only computes a `reply` string; the `sendMessage(reply)` is issued **after** the try (`poll-updates.service.ts:114-123`), swallow + `logger.warn` on failure. Error path unchanged (`return` after the error reply). error-handling.md E7 added. ispec: +1 ("does not reply 'Command failed' when only the confirmation send throws").
+- [x] **/retry UUID validation** — `parse-command.ts` adds `UUID_RE`; a `/retry <non-uuid>` returns `{ kind: 'unknown' }` (→ the `UNKNOWN_COMMAND_REPLY`, which shows the correct `/retry <post_id>` form) instead of reaching `findOneOrFail`. security.md row struck. `parse-command.spec.ts` +1.
+- [x] **no-op on empty adminUserId** — `PollUpdatesService.run()` returns early when `config.adminUserId === ''` (`poll-updates.service.ts:34-37`) — no poll, no audit rows. ispec: +1. queue-jobs.md "empty config" bullet updated.
+- [x] **retention cron** — `PruneTelegramUpdatesService.run()` = raw `DELETE FROM telegram_updates WHERE created_at < now()-30d` (DP5, `em.getTransactionContext()`); `PruneTelegramUpdatesCron` `@Cron('0 3 * * *')` in `telegram-cron.module.ts`. Runs unconditionally (cleanup even after the bot is disabled). New `prune-telegram-updates.service.ispec.ts` (2 cases). security.md retention row struck; db-performance.md DP5 example added.
 
 ### Batch H — worker / cli (D16)
 - [ ] D16: add the "CLI importer inline seeding" exception note to `cqrs.md` (doc)

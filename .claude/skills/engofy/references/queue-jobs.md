@@ -48,14 +48,31 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 
 - `@Cron('* * * * *', { waitForCompletion: true })` on a class extending `CronJobHost`.
 - `CronJobHost`: module-level `draining` flag + `inFlightTicks` set awaited by `waitForCronTicksToDrain()` before `app.close()`; each tick wrapped in `Sentry.startNewTrace` → `startSpan({ op: 'function.cron' })`; failure → `captureException` + `logger.error` + rethrow.
-- **D15:** a cron-driven service that mutates state may own its own `em.flush()` (flush-per-row for mid-batch durability). Such services live in `services/shared/`. No facade / CQRS for pure pollers.
-- Empty config (`TELEGRAM_*` unset) → the cron no-ops.
+- **D15:** a cron-driven service that mutates state may own its own `em.flush()` (flush-per-row for mid-batch durability). Such services live in `services/shared/` and are named in the module's `exports`; the `@Cron` host in `entrypoints/cron/` is a thin `CronJobHost` that calls `service.run()`. No facade / CQRS for pure pollers. Reference: `telegram/services/shared/{poll-updates,publish-pending,prune-telegram-updates}.service.ts`.
+- A flush-per-row loop that calls into another method which itself flushes the shared UoW (e.g. `poll-updates` → `postService.ingest()`) must **commit its own row first** — otherwise that inner flush commits the row half-written (Batch G).
+- Empty config → the cron no-ops: no bot token (both pollers), no `channelId` (publish), **no `adminUserId`** (poll — nothing to act on, so it skips the poll entirely rather than storing an audit row a minute). Retention prune runs regardless.
 
 ## Fixes owed (confirmed)
 
 | D | Change |
 |---|---|
 | — | `WORKER_QUEUES` string token → `Symbol()`. (Batch H) |
+
+### Done (Batch G) — telegram / cron (D15)
+
+- `PollUpdatesService` + `PublishPendingService` + new `PruneTelegramUpdatesService`
+  moved to `telegram/services/shared/` (consumed by `entrypoints/cron`).
+- `poll-updates`: audit row marked `processed=true` + flushed **before**
+  `dispatch()`; `/add` confirmation send moved **outside** the command `try`
+  (a failed confirmation no longer reads as "Command failed" / false Sentry);
+  `run()` no-ops when `adminUserId === ''`.
+- `publish-pending`: `run()` re-selects `failed` rows too
+  (`retryCount < MAX_ATTEMPTS` + `updatedAt` backoff), `retryCount++` on each
+  failed send; `RetryPostHandler` resets `failed` telegram publications for the
+  post back to `pending` (`published` rows left alone). New column
+  `post_publications.retry_count` — `Migration20260830130000`.
+- New `PruneTelegramUpdatesCron` (daily 03:00) → 30-day retention `DELETE` on
+  `telegram_updates`.
 
 ### Done (Batch C)
 

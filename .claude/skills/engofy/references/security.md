@@ -26,9 +26,9 @@
 | low | `PUBLIC_URL` unset → CORS `origin: undefined` (permissive) on a credentialed endpoint. Make it required. | — |
 | low | `Sentry.tracesSampleRate` defaults to `1` (100%) per entrypoint. | — |
 | low | converters copy link `href` verbatim — no scheme allow-list (`javascript:`/`data:` reach stored `LinkNode.href`). Admin-supplied, but persisted + rendered. Strip non-`http(s)`/`mailto`. | — |
-| low | `telegram_updates.raw_payload` stores every sender's username + text with no pruning. Add a retention cron. | D15 |
+| ~~low~~ | ~~`telegram_updates.raw_payload` stores every sender's username + text with no pruning~~ — **done (Batch G):** `PruneTelegramUpdatesCron` (daily 03:00) → `PruneTelegramUpdatesService` deletes rows older than 30 days (raw `DELETE`, DP5). | D15 |
 | low | CSRF: none — accepted for V1 (`SameSite=Lax` + POST-only + single origin). Revisit for a third-party embed. | D14 |
-| low | `/retry <id>` passes any `\S+` to `findOneOrFail` → raw pg `invalid input syntax for type uuid` echoed to the admin chat. Validate UUID shape. | — |
+| ~~low~~ | ~~`/retry <id>` passes any `\S+` to `findOneOrFail` → raw pg `invalid input syntax for type uuid`~~ — **done (Batch G):** `parseTelegramCommand` validates the id against a uuid shape and returns `unknown` otherwise (`telegram/domain/parse-command.ts`). | — |
 
 ## Logging redaction
 

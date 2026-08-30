@@ -9,6 +9,7 @@ import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
+import { PostPublication } from '../../entities/post-publication.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { ExerciseSource } from '../../enums/exercise-source.enum.js';
@@ -18,6 +19,8 @@ import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { PublicationPlatform } from '../../enums/publication-platform.enum.js';
+import { PublicationStatus } from '../../enums/publication-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { RetryPostCommand } from './retry-post.command.js';
 
@@ -152,6 +155,55 @@ describe('RetryPostHandler', () => {
       QueueName.PostSpacyParse,
       (d) => d.postId === post.id,
     );
+  });
+
+  it('resets a failed telegram publication so /retry re-announces the post', async () => {
+    const { postId } = await seedProcessedPost(suite.orm.em);
+
+    const publication = new PostPublication();
+    publication.postId = postId;
+    publication.platform = PublicationPlatform.Telegram;
+    publication.status = PublicationStatus.Failed;
+    publication.retryCount = 3;
+    publication.errorMessage = 'chat not found';
+    suite.orm.em.persist(publication);
+    await suite.orm.em.flush();
+    const publicationId = publication.id;
+    suite.orm.em.clear();
+
+    await suite.command(new RetryPostCommand(postId));
+    suite.orm.em.clear();
+
+    const reloaded = await suite.orm.em.findOneOrFail(
+      PostPublication,
+      publicationId,
+    );
+    expect(reloaded.status).toBe(PublicationStatus.Pending);
+    expect(reloaded.retryCount).toBe(0);
+    expect(reloaded.errorMessage).toBeNull();
+  });
+
+  it('leaves an already-published telegram publication untouched on retry', async () => {
+    const { postId } = await seedProcessedPost(suite.orm.em);
+
+    const publication = new PostPublication();
+    publication.postId = postId;
+    publication.platform = PublicationPlatform.Telegram;
+    publication.status = PublicationStatus.Published;
+    publication.externalId = '999';
+    suite.orm.em.persist(publication);
+    await suite.orm.em.flush();
+    const publicationId = publication.id;
+    suite.orm.em.clear();
+
+    await suite.command(new RetryPostCommand(postId));
+    suite.orm.em.clear();
+
+    const reloaded = await suite.orm.em.findOneOrFail(
+      PostPublication,
+      publicationId,
+    );
+    expect(reloaded.status).toBe(PublicationStatus.Published);
   });
 
   it('throws when the post does not exist', async () => {

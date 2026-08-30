@@ -10,6 +10,11 @@ export type TelegramCommand =
 
 const ADD_RE = /^\/add(?:@\w+)?\s+([\s\S]+)$/;
 const RETRY_RE = /^\/retry(?:@\w+)?\s+(\S+)\s*$/;
+// Post ids are uuid v7. `/retry` with anything that isn't a uuid is treated as
+// `unknown` here so a bad id can't reach `findOneOrFail` and echo a raw pg
+// `invalid input syntax for type uuid` back into the admin chat.
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function parseTelegramCommand(rawText: string): TelegramCommand {
   const text = rawText.trim();
@@ -22,7 +27,10 @@ export function parseTelegramCommand(rawText: string): TelegramCommand {
 
   const retry = RETRY_RE.exec(text);
   if (retry) {
-    return { kind: 'retry', postId: retry[1] };
+    const postId = retry[1];
+    return UUID_RE.test(postId)
+      ? { kind: 'retry', postId }
+      : { kind: 'unknown' };
   }
 
   return { kind: 'unknown' };

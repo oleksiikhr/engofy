@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { PublishPendingService } from '../../../modules/telegram/services/publish-pending.service.js';
+import { PublishPendingService } from '../../../modules/telegram/services/shared/publish-pending.service.js';
 import { CronJobHost } from '../cron-job-host.js';
 
 // PLAN.md §3.8: drain `pending` telegram post_publications once a minute.

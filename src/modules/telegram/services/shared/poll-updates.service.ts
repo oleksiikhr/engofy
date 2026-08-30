@@ -1,15 +1,15 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import { IngestPostDto } from '../../post/commands/ingest-post/ingest-post.dto.js';
-import { PostService } from '../../post/post.service.js';
-import TelegramConfig from '../config/telegram.config.js';
-import { parseTelegramCommand } from '../domain/parse-command.js';
-import { TelegramUpdate } from '../entities/telegram-update.entity.js';
+import { IngestPostDto } from '../../../post/commands/ingest-post/ingest-post.dto.js';
+import { PostService } from '../../../post/post.service.js';
+import TelegramConfig from '../../config/telegram.config.js';
+import { parseTelegramCommand } from '../../domain/parse-command.js';
+import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
 import {
   TelegramClientService,
   type TelegramUpdatePayload,
-} from './telegram-client.service.js';
+} from '../telegram-client.service.js';
 
 const UNKNOWN_COMMAND_REPLY =
   'Unknown command. Use "/add <text>" to ingest a post or "/retry <post_id>" to re-run its pipeline.';
@@ -19,6 +19,9 @@ const UNKNOWN_COMMAND_REPLY =
 // admin: `/add <text>` -> ingest, `/retry <post_id>` -> full pipeline re-run.
 // The next poll offset is derived from max(update_id) already stored, so no
 // separate cursor is needed and a re-poll of a stored update is a no-op.
+//
+// Cron-driven, so it lives in services/shared/ and owns its own flush-per-row
+// (D15) — no facade / CQRS for a pure poller.
 @Injectable()
 export class PollUpdatesService {
   private readonly logger = new Logger(PollUpdatesService.name);
@@ -32,7 +35,10 @@ export class PollUpdatesService {
   ) {}
 
   async run(): Promise<void> {
-    if (!this.client.configured) {
+    // No token -> can't poll. No admin id -> every message would be stored and
+    // ignored, so there is nothing to act on; skip the poll entirely rather
+    // than write an audit row a minute for messages we can never process.
+    if (!this.client.configured || this.config.adminUserId === '') {
       return;
     }
 
@@ -41,7 +47,7 @@ export class PollUpdatesService {
 
     for (const update of updates) {
       const updateId = String(update.update_id);
-      // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each update is stored, acted on, and flushed before the next so a mid-tick crash keeps confirmed progress.
+      // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each update's audit row is committed (processed=true) before it's acted on, so a mid-tick crash never re-runs a command.
       const seen = await this.em.count(TelegramUpdate, {
         updateId,
       });
@@ -52,11 +58,16 @@ export class PollUpdatesService {
       const row = new TelegramUpdate();
       row.updateId = updateId;
       row.rawPayload = update as unknown as Record<string, unknown>;
+      // Commit the audit row as processed *before* acting on it. `dispatch` ->
+      // `postService.ingest()`/`retry()` runs its own `em.flush()` on this same
+      // unit of work; anything left unflushed here would ride that inner flush
+      // with processed=false, and a crash in the window would strand the row
+      // forever (offset already advanced, `em.count>0` -> skipped next poll).
+      row.processed = true;
       this.em.persist(row);
+      await this.em.flush();
 
       await this.dispatch(update, row);
-      row.processed = true;
-      await this.em.flush();
     }
   }
 
@@ -92,26 +103,21 @@ export class PollUpdatesService {
     const chatId = String(message.chat.id);
     const command = parseTelegramCommand(message.text);
 
+    let reply: string;
     try {
       if (command.kind === 'add') {
-        // `/add` pastes body text only — no structured attribution channel yet
-        // (Batch G). Defaults to `original` + a generic credit line; the source
-        // type/text can be corrected later once an edit path exists.
+        // `/add` pastes body text only — no structured attribution channel yet.
+        // Defaults to `original` + a generic credit line; the source type/text
+        // can be corrected later once an edit path exists.
         const post = await this.postService.ingest(
           IngestPostDto.create({ rawText: command.text }),
         );
-        await this.client.sendMessage(
-          chatId,
-          `Queued. Post ${post.shortId} is processing.`,
-        );
+        reply = `Queued. Post ${post.shortId} is processing.`;
       } else if (command.kind === 'retry') {
         await this.postService.retry(command.postId);
-        await this.client.sendMessage(
-          chatId,
-          `Re-running the pipeline for post ${command.postId}.`,
-        );
+        reply = `Re-running the pipeline for post ${command.postId}.`;
       } else {
-        await this.client.sendMessage(chatId, UNKNOWN_COMMAND_REPLY);
+        reply = UNKNOWN_COMMAND_REPLY;
       }
     } catch (err) {
       this.logger.error(
@@ -121,7 +127,18 @@ export class PollUpdatesService {
       await this.client
         .sendMessage(chatId, `Command failed: ${errorText(err)}`)
         .catch(() => undefined);
+      return;
     }
+
+    // Deliberately outside the try: the command already succeeded and its
+    // writes are committed, so a failed confirmation send here must not turn
+    // into a "Command failed" reply or a false-negative Sentry event.
+    await this.client.sendMessage(chatId, reply).catch((err: unknown) => {
+      this.logger.warn(
+        { err, updateId: row.updateId },
+        'telegram confirmation send failed',
+      );
+    });
   }
 }
 
