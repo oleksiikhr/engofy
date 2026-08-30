@@ -57,8 +57,10 @@ function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
 export class LearningController {
   constructor(private readonly learning: LearningService) {}
 
-  // Add a word / phrase / grammar point to the SRS queue.
+  // Add a word / phrase / grammar point to the SRS queue. Idempotent — a
+  // re-add returns the existing card, so this is `200`, not `201`.
   @Post('cards')
+  @HttpCode(HttpStatus.OK)
   async addCard(
     @CurrentUser() actor: UserActor,
     @Body() dto: AddCardDto,

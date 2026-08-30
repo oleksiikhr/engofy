@@ -52,7 +52,7 @@ describe('LearningController', () => {
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
       .send({ wordId: word.id })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
     expect(added.body).toMatchObject({ state: 'new', reps: 0 });
     const cardId = added.body.id;
 

@@ -22,7 +22,7 @@
 
 | Sev | Item | D |
 |---|---|---|
-| med | No rate limiting at the web edge (PLAN §7) — only the auth login counter. Add `@nestjs/throttler`. | D14 |
+| ~~med~~ | ~~No rate limiting at the web edge~~ — **done (Batch F):** global `ThrottlerGuard` (`WebThrottlerModule`), Redis storage, `THROTTLE_TTL_MS`/`THROTTLE_LIMIT` (60 s / 300), first `APP_GUARD`. Disabled under test (`skipIf: isTestEnvironment()`). | D14 |
 | low | `PUBLIC_URL` unset → CORS `origin: undefined` (permissive) on a credentialed endpoint. Make it required. | — |
 | low | `Sentry.tracesSampleRate` defaults to `1` (100%) per entrypoint. | — |
 | low | converters copy link `href` verbatim — no scheme allow-list (`javascript:`/`data:` reach stored `LinkNode.href`). Admin-supplied, but persisted + rendered. Strip non-`http(s)`/`mailto`. | — |

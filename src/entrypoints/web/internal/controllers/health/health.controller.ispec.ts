@@ -15,6 +15,8 @@ describe('HealthController', () => {
       const body = response.body as HealthCheckResult;
 
       expect(body.status).toBe('ok');
+      expect(body.info?.database?.status).toBe('up');
+      expect(body.info?.redis?.status).toBe('up');
     });
   });
 });

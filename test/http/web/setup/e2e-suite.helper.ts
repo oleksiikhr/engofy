@@ -47,7 +47,10 @@ export function createWebE2ESuite(
     },
     request(method: HttpMethod, path: string, options?: RequestOptions) {
       const server = request(app.getHttpServer());
-      const req = server[method](path);
+      // `configureApp` mounts every route under the `/api` global prefix
+      // (except `_healthz`); tests still pass bare paths.
+      const url = path.startsWith('/_healthz') ? path : `/api${path}`;
+      const req = server[method](url);
 
       if (options?.authed ?? true) {
         // req.set('Authorization', `Bearer ${TEST_TOKEN}`);

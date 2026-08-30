@@ -95,7 +95,7 @@ describe('DictionaryController', () => {
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
       .send({ wordId: word.id })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
 
     const res = await suite
       .request('get', '/dictionary')
@@ -134,7 +134,7 @@ describe('DictionaryController', () => {
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
       .send({ phraseId: phrase.id })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
 
     const res = await suite
       .request('get', '/dictionary')

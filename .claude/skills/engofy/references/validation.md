@@ -8,7 +8,7 @@
 |---|---|---|
 | V1 | Request body/query/param validation goes through `nestjs-zod` — **never** `class-validator` / `class-transformer` (not dependencies). | `CLAUDE.md` |
 | V2 | Define a `const FooSchema = z.object({...})`, then `class FooDto extends createZodDto(FooSchema) {}` — schema directly above the class, same file. | `auth/commands/verify-login-code/verify-login-code.dto.ts` |
-| V3 | The global pipe is a `nestjs-zod` `ZodValidationPipe` built once via `createZodValidationPipe({ createValidationException: zodValidationExceptionFactory })`, registered **after** `EmptyStringToNullPipe`. | `main.ts:29-31,62-65` |
+| V3 | The global pipe is a `nestjs-zod` `ZodValidationPipe` built once via `createZodValidationPipe({ createValidationException: zodValidationExceptionFactory })`, registered **after** `EmptyStringToNullPipe`. Both are applied by `configureApp(app)` (Batch F). | `entrypoints/web/configure-app.ts` |
 | V4 | `zodValidationExceptionFactory` maps the **first** Zod issue to `{ type: 'validation', message, field }` (`field = issue.path.join('.') \|\| null`) — the `ValidationErrorResponseDto` shape. Do not let it drift back to the raw `ZodError` / `ZodValidationException`. | `core/validation/zod-validation-exception.factory.ts:16-32` |
 | V5 | Cross-field rules → `.refine(...)`. **Pass a `path`** (e.g. `path: ['wordId']`) so `field` is populated — a bare `.refine` yields `field: null`. | `learning/.../add-card.dto.ts:13-21` (currently missing `path`) |
 | V6 | Swagger description for a zod DTO field → `.describe('...')` on the schema (not a `//` comment — that's for plain response DTOs). | `content/dto/feed-query.dto.ts` |
@@ -22,13 +22,15 @@
 `auth` reuses the **command** DTOs from `modules/auth/commands/*/*.dto.ts` (one
 schema serves HTTP + command) — a **tolerated exception**, not the pattern to copy.
 
-## Query-param gotcha (fix owed)
+## Query-param gotcha (fixed, Batch F)
 
-`EmptyStringToNullPipe` runs first and turns `?limit=` / `?cefr=` into `null`.
-`z.coerce.number().default(20)` only defaults on `undefined`, and `.optional()`
-rejects `null` → **400 instead of defaulting**. Fix query fields with
-`.nullish().transform(v => v ?? undefined)`, or exclude query metatypes from the
-empty-to-null pipe.
+`EmptyStringToNullPipe` runs first and turns `?limit=` / `?cefr=` into `null`;
+`z.coerce.number().default(20)` only defaults on `undefined` and `.optional()`
+rejects `null` → used to 400 instead of defaulting. Every query field is now
+wrapped with `queryParam(schema)` from `core/validation/coerce-query.ts` — a
+`z.preprocess` that maps `null` / `''` / `undefined` → `undefined` so the inner
+`.default()` / `.optional()` applies. Reference: `content/dto/feed-query.dto.ts`,
+`content/dto/grammar-reference-query.dto.ts`, `learning/dto/practice-queue-query.dto.ts`.
 
 ## Asset-file validation
 

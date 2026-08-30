@@ -70,7 +70,7 @@ describe('ProfileController', () => {
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
       .send({ grammarUsagePointId: point.id })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
 
     const res = await suite
       .request('get', '/profile')

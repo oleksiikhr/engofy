@@ -1,3 +1,4 @@
+import type { OffsetPage } from '../../../../core/http/dto/offset-page.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 
 export class FeedItemDto {
@@ -24,7 +25,9 @@ export class FeedItemDto {
   readonly sourceLink!: string | null;
 }
 
-export class FeedResponseDto {
+// Shares the `{ items, nextOffset }` envelope with every other offset-paginated
+// list endpoint.
+export class FeedResponseDto implements OffsetPage<FeedItemDto> {
   readonly items!: FeedItemDto[];
 
   // Pass back as `?offset=` for the next page; null on the last page.

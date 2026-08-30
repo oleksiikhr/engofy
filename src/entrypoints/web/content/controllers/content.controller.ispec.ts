@@ -1,5 +1,6 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { HttpStatus } from '@nestjs/common';
+import request from 'supertest';
 import { v7 as uuidv7 } from 'uuid';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
@@ -133,6 +134,25 @@ describe('ContentController', () => {
       sourceLink: 'https://example.com/article',
     });
     expect(item.excerpt).toContain('travel');
+    expect(res.body.nextOffset).toBeNull();
+  });
+
+  it('treats a blank ?limit= / ?offset= as the default, not a 400', async () => {
+    await seedPublishedPost(suite.orm.em);
+
+    const res = await suite
+      .request('get', '/feed?limit=&offset=')
+      .expect(HttpStatus.OK);
+
+    expect(Array.isArray(res.body.items)).toBe(true);
+  });
+
+  it('normalises a 404 body to { message }', async () => {
+    const res = await suite
+      .request('get', '/posts/Zzz00000')
+      .expect(HttpStatus.NOT_FOUND);
+
+    expect(res.body).toEqual({ message: 'Post not found' });
   });
 
   it('returns a post with its node tree, resolved annotations and exercises', async () => {
@@ -223,6 +243,15 @@ describe('ContentController', () => {
         c.constructions.some((con) => con.slug === slug),
       ),
     ).toBe(false);
+
+    // A blank ?cefr= must fall through to "no filter", not 400.
+    await suite.request('get', '/grammar?cefr=').expect(HttpStatus.OK);
+  });
+
+  it('serves under the /api prefix and not at the root', async () => {
+    const server = suite.app.getHttpServer();
+    await request(server).get('/feed').expect(HttpStatus.NOT_FOUND);
+    await request(server).get('/api/feed').expect(HttpStatus.OK);
   });
 
   it('404s an unknown construction slug', async () => {

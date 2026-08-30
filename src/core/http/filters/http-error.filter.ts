@@ -16,7 +16,6 @@ export class HttpErrorFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
     const status = exception.getStatus();
-    const exceptionResponse = exception.getResponse();
 
     if (status >= 500) {
       this.logger.error({ cause: exception }, exception.message);
@@ -26,13 +25,30 @@ export class HttpErrorFilter implements ExceptionFilter {
       this.logger.warn({ cause: exception }, exception.message);
     }
 
-    const payload =
-      status >= 500
-        ? { message: 'Internal server error' }
-        : typeof exceptionResponse === 'object'
-          ? exceptionResponse
-          : { message: exceptionResponse };
+    // Every error body this app emits is `{ message: string }` (matches
+    // `DomainErrorFilter` / `zodValidationExceptionFactory`); don't leak Nest's
+    // `{ statusCode, message, error }` shape for guard 401s / `NotFoundException`.
+    const message =
+      status >= 500 ? 'Internal server error' : extractMessage(exception);
 
-    response.status(status).send(payload);
+    response.status(status).send({ message });
   }
+}
+
+function extractMessage(exception: HttpException): string {
+  const res = exception.getResponse();
+
+  if (typeof res === 'string') {
+    return res;
+  }
+
+  const raw = (res as { message?: unknown }).message;
+  if (typeof raw === 'string') {
+    return raw;
+  }
+  if (Array.isArray(raw) && raw.every((m) => typeof m === 'string')) {
+    return raw.join(', ');
+  }
+
+  return exception.message;
 }

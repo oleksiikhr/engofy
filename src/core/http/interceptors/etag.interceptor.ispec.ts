@@ -11,6 +11,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { createWebE2ESuite } from '../../../../test/http/web/setup/e2e-suite.helper.js';
+import { Public } from '../../../core/decorators/public.decorator.js';
 import { InternalWebModule } from '../../../entrypoints/web/internal/internal-web.module.js';
 import type { CreatedResponseDto } from '../dto/created-response.dto.js';
 import { CachePolicy } from './etag.interceptor.js';
@@ -22,6 +23,9 @@ interface Widget {
   name: string;
 }
 
+// The global `SessionAuthGuard` now applies to every web route (D14); this
+// fixture only exercises the ETag interceptor, so opt the whole controller out.
+@Public()
 @Controller('etag-test')
 class EtagTestController {
   private readonly widgets = new Map<string, Widget>();

@@ -1,12 +1,10 @@
+// The node tree is a pure data shape shared with the SSR renderer; it is
+// referenced (type-only) rather than re-declared here. A standalone structural
+// copy is tracked in REVIEW.md Batch K.
 import type { Doc } from '../../../../modules/post/domain/node-tree.types.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../../../modules/post/enums/exercise-type.enum.js';
-import type {
-  GrammarAnnotationView,
-  PhraseAnnotationView,
-  WordAnnotationView,
-} from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
 
 export class PostExerciseDto {
   readonly id!: string;
@@ -19,15 +17,72 @@ export class PostExerciseDto {
   readonly payload!: Record<string, unknown>;
 }
 
+export class PostWordAnnotationDto {
+  readonly wordDefinitionId!: string;
+
+  // The SRS card target for the inline "+" button (not `wordDefinitionId`).
+  readonly wordId!: string;
+
+  readonly lemma!: string;
+
+  readonly pos!: string;
+
+  readonly definition!: string | null;
+
+  readonly phonetic!: string | null;
+
+  readonly example!: string | null;
+
+  readonly cefrLevel!: CefrLevel | null;
+
+  readonly frequencyRank!: number | null;
+}
+
+export class PostPhraseAnnotationDto {
+  readonly phraseId!: string;
+
+  readonly text!: string;
+
+  readonly type!: string | null;
+
+  readonly definition!: string | null;
+
+  readonly example!: string | null;
+
+  readonly cefrLevel!: CefrLevel | null;
+}
+
+export class PostGrammarUsagePointDto {
+  readonly grammarUsagePointId!: string;
+
+  readonly cefrLevel!: CefrLevel;
+
+  readonly guideword!: string;
+
+  readonly canDoStatement!: string;
+
+  readonly exampleText!: string | null;
+}
+
+export class PostGrammarAnnotationDto {
+  readonly slug!: string;
+
+  readonly name!: string;
+
+  readonly cefrLevel!: CefrLevel | null;
+
+  readonly usagePoints!: PostGrammarUsagePointDto[];
+}
+
 export class PostAnnotationsDto {
   // Keyed by wordDefinitionId (the id on a `word` span).
-  readonly words!: Record<string, WordAnnotationView>;
+  readonly words!: Record<string, PostWordAnnotationDto>;
 
   // Keyed by phraseId.
-  readonly phrases!: Record<string, PhraseAnnotationView>;
+  readonly phrases!: Record<string, PostPhraseAnnotationDto>;
 
   // Keyed by construction slug (a span's `grammarConstruct`).
-  readonly grammar!: Record<string, GrammarAnnotationView>;
+  readonly grammar!: Record<string, PostGrammarAnnotationDto>;
 }
 
 export class PostDetailResponseDto {
