@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
+import { parseDoc } from '../../domain/node-tree.parser.js';
 import type { SpanNode } from '../../domain/node-tree.types.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
 import { Exercise } from '../../entities/exercise.entity.js';
@@ -55,7 +56,11 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       ),
     ]);
 
-    const doc = assembleDocFromParts(parts);
+    // Reassemble the per-part fragments into a Doc and re-validate the whole
+    // tree at read time (PLAN.md §6, D12) — `PostPartBodyType` can't run
+    // `parseDoc` on a bare fragment, so this is where a converter/splice bug
+    // that wrote a malformed node surfaces (InvalidNodeTreeError).
+    const doc = parseDoc(assembleDocFromParts(parts));
     const spans = collectSpanNodes(doc.children);
 
     return {
@@ -64,6 +69,8 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       title: post.title ?? null,
       cefrLevel: post.cefrLevel ?? null,
       publishedAt: post.publishedAt.toISO() ?? post.publishedAt.toString(),
+      attributionText: post.source.attributionText,
+      sourceType: post.source.type,
       sourceLink: post.source.link ?? null,
       doc,
       annotations: await this.resolveAnnotations(spans),

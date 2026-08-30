@@ -9,8 +9,11 @@ export interface FeedItemView {
   publishedAt: string;
   // Plain-text opening of the post, trimmed to ~280 chars.
   excerpt: string;
-  // Source attribution line for the card footer (PLAN.md §9); null when the
-  // post has no source link.
+  // Human-readable source credit for the card footer (PLAN.md §9). Always set.
+  attributionText: string;
+  // How the text relates to its origin (`original` | `excerpt` | …).
+  sourceType: string;
+  // Link back to the original; null when the text is original / has no url.
   sourceLink: string | null;
 }
 

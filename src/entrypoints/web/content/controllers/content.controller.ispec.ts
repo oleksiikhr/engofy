@@ -17,6 +17,7 @@ import { ExerciseType } from '../../../../modules/post/enums/exercise-type.enum.
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
 import { PostPartKind } from '../../../../modules/post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
+import { PostSourceType } from '../../../../modules/post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
 import { ContentWebModule } from '../content-web.module.js';
 
@@ -37,8 +38,10 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
 
   const source = new PostSource();
   source.format = PostSourceFormat.Text;
+  source.type = PostSourceType.NewsSnippet;
   source.rawText = 'She loves to travel widely.';
   source.link = 'https://example.com/article';
+  source.attributionText = 'Example News, "On travel"';
 
   const post = new Post();
   post.source = source;
@@ -122,7 +125,13 @@ describe('ContentController', () => {
     const item = res.body.items.find(
       (entry: { shortId: string }) => entry.shortId === shortId,
     );
-    expect(item).toMatchObject({ title: 'A Short Trip', cefrLevel: 'A2' });
+    expect(item).toMatchObject({
+      title: 'A Short Trip',
+      cefrLevel: 'A2',
+      attributionText: 'Example News, "On travel"',
+      sourceType: 'news_snippet',
+      sourceLink: 'https://example.com/article',
+    });
     expect(item.excerpt).toContain('travel');
   });
 
@@ -143,6 +152,8 @@ describe('ContentController', () => {
     });
     expect(res.body.exercises).toHaveLength(1);
     expect(res.body.sourceLink).toBe('https://example.com/article');
+    expect(res.body.attributionText).toBe('Example News, "On travel"');
+    expect(res.body.sourceType).toBe('news_snippet');
   });
 
   it('accepts a bare short id and 404s an unknown post', async () => {
@@ -163,7 +174,7 @@ describe('ContentController', () => {
     const post = new Post();
     post.source = source;
     post.slug = 'draft';
-    post.status = PostStatus.Annotated;
+    post.status = PostStatus.Processing;
     em.persist(post);
     await em.flush();
 

@@ -161,6 +161,18 @@ describe('TagGrammarHandler', () => {
     expect(await suite.orm.em.count(GrammarMatch, {})).toBe(0);
   });
 
+  it('dedupes an identical span the model repeats instead of failing on the unique constraint', async () => {
+    await seedCatalog(suite.orm.em);
+    const postId = await seedPostWithSentence(suite.orm.em);
+    fakeAi.response =
+      `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.\n` +
+      `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
+
+    await suite.command(new TagGrammarCommand(postId));
+
+    expect(await suite.orm.em.count(GrammarMatch, {})).toBe(1);
+  });
+
   it('is idempotent — a second run neither re-calls the AI nor duplicates matches', async () => {
     await seedCatalog(suite.orm.em);
     const postId = await seedPostWithSentence(suite.orm.em);

@@ -1,7 +1,6 @@
 import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
-  Index,
   PrimaryKey,
   Property,
   Unique,
@@ -20,8 +19,8 @@ export class SentenceToken {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
+  // Covered by the leading column of the composite unique above.
   @Property({ type: 'uuid' })
-  @Index()
   sentenceId!: string;
 
   // Token order within the sentence.

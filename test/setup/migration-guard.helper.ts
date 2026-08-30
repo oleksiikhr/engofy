@@ -20,5 +20,22 @@ export async function ensureMigrated(
   await connection.execute('create schema public');
 
   await orm.migrator.up();
+
+  // Replay is not enough: it only proves the migrations apply, not that they
+  // still describe the current entity metadata (under test `snapshot:false`,
+  // so MikroORM's own check is off — D17). `checkSchema()` diffs the freshly
+  // replayed schema against the entities; a non-empty diff means an entity
+  // changed without a matching migration.
+  if (await orm.migrator.checkSchema()) {
+    const { up } = await orm.schema.getUpdateSchemaMigrationSQL({
+      wrap: false,
+    });
+    throw new Error(
+      `Entity metadata has drifted from the migrations — generate a migration ` +
+        `(pnpm migration:create) or run \`pnpm migration:check\` for details.\n` +
+        `Pending schema diff:\n${up}`,
+    );
+  }
+
   isInitialized = true;
 }

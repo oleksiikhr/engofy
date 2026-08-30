@@ -1,9 +1,9 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
-import { Subscription } from '../../auth/entities/subscription.entity.js';
-import { SubscriptionPlan } from '../../auth/enums/subscription-plan.enum.js';
-import { SubscriptionStatus } from '../../auth/enums/subscription-status.enum.js';
+import { Subscription } from '../entities/subscription.entity.js';
+import { SubscriptionPlan } from '../enums/subscription-plan.enum.js';
+import { SubscriptionStatus } from '../enums/subscription-status.enum.js';
 
 // Read side of monetization (PLAN.md §8). "Premium" means an active premium
 // row whose period has not lapsed; everything else (no row, expired,

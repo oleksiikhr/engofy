@@ -58,6 +58,10 @@ export interface PostDetailView {
   cefrLevel: CefrLevel | null;
   // ISO-8601.
   publishedAt: string;
+  // Source attribution (PLAN.md §9). `attributionText` is always set; the link
+  // is null when the text is original / has no url.
+  attributionText: string;
+  sourceType: string;
   sourceLink: string | null;
   // The reassembled node tree (all PostParts in block order). The frontend
   // SSR-renders this to HTML with per-span classes (PLAN.md §6).

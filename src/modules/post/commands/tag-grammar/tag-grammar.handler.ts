@@ -92,12 +92,16 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
       sentenceId: { $in: sentences.map((s) => s.id) },
     });
 
+    // The (sentence, usage point, token range) composite unique rejects an
+    // exact duplicate at flush; dedupe the model's spans in memory first so a
+    // repeated span is a silent no-op, not a failed job.
+    const seen = new Set<string>();
     let matchCount = 0;
     for (const line of parsed.lines) {
       const sentence = sentences[line.index];
       const tokens = tokensBySentence.get(sentence.id) ?? [];
       for (const span of line.spans) {
-        if (this.persistMatch(sentence.id, span, tokens, catalog)) {
+        if (this.persistMatch(sentence.id, span, tokens, catalog, seen)) {
           matchCount += 1;
         }
       }
@@ -245,6 +249,7 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
     },
     tokens: SentenceToken[],
     catalog: GrammarCatalog,
+    seen: Set<string>,
   ): boolean {
     const validEgpIndexes = catalog.egpIndexesBySlug.get(span.slug);
     if (!validEgpIndexes) {
@@ -275,6 +280,12 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
       );
       return false;
     }
+
+    const key = `${sentenceId}|${usagePointId}|${range.tokenStart}|${range.tokenEnd}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
 
     const grammarMatch = new GrammarMatch();
     grammarMatch.sentenceId = sentenceId;

@@ -42,6 +42,12 @@ export class PostDetailResponseDto {
   // ISO-8601.
   readonly publishedAt!: string;
 
+  // Human-readable source credit (PLAN.md §9); always set.
+  readonly attributionText!: string;
+
+  // `original` | `excerpt` | `reddit_comment` | `news_snippet`.
+  readonly sourceType!: string;
+
   readonly sourceLink!: string | null;
 
   // Reassembled node tree; the frontend SSR-renders it with per-span classes.

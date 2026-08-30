@@ -3,6 +3,7 @@ import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { convertToDoc } from '../../converters/to-doc.converter.js';
+import { deriveAttributionText } from '../../domain/derive-attribution-text.js';
 import { detectPostSourceFormat } from '../../domain/detect-post-source-format.js';
 import { generateSlug } from '../../domain/generate-slug.js';
 import { splitDocIntoParts } from '../../domain/post-parts.js';
@@ -27,13 +28,20 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
   ) {}
 
   async execute(command: IngestPostCommand): Promise<Post> {
-    const { rawText, title, link, type } = command.dto;
+    const { rawText, title, link, type, sourceType, attributionText } =
+      command.dto;
     const format = detectPostSourceFormat(rawText);
 
     const source = new PostSource();
     source.format = format;
+    source.type = sourceType;
     source.rawText = rawText;
     source.link = link ?? null;
+    source.attributionText = deriveAttributionText({
+      attributionText,
+      link,
+      sourceType,
+    });
 
     const post = new Post();
     post.source = source;

@@ -41,11 +41,15 @@ worker processors, `MAILER`, `AnthropicClientService`, `TelegramClientService`.)
 pnpm type                # tsc --noEmit — covers src/ AND test/
 pnpm lint:check          # biome check
 pnpm test:cov            # vitest run --coverage — ENFORCES coverage 80/80/70/80
+pnpm migration:up && pnpm migration:check   # entity/migration drift gate (D17)
 pnpm build && git diff --exit-code src/metadata.ts   # swagger metadata drift
 ```
 
-`pnpm migration:check` is listed in older docs but **the script does not exist**
-and no CI step gates entity/migration drift. See `REVIEW.md` open question 43.
+`pnpm migration:check` (`mikro-orm migration:check`, prod config → `snapshot:true`)
+now exists and runs in CI after the test step. `ensureMigrated`
+(`test/setup/migration-guard.helper.ts`) also fails the whole suite on a pending
+schema diff via `orm.migrator.checkSchema()` after the drop-and-replay. Closes
+`REVIEW.md` open question 43 / D17.
 
 ## Coverage gaps found (wave 1)
 

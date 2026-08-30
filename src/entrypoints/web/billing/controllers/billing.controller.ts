@@ -2,9 +2,9 @@ import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
-import type { Subscription } from '../../../../modules/auth/entities/subscription.entity.js';
-import { SubscriptionPlan } from '../../../../modules/auth/enums/subscription-plan.enum.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
+import type { Subscription } from '../../../../modules/billing/entities/subscription.entity.js';
+import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
 import { SubscriptionResponseDto } from '../dto/subscription-response.dto.js';
 
 const FREE_RESPONSE: SubscriptionResponseDto = {

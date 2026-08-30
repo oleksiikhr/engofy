@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { Subscription } from '../../../auth/entities/subscription.entity.js';
-import { SubscriptionPlan } from '../../../auth/enums/subscription-plan.enum.js';
-import { SubscriptionStatus } from '../../../auth/enums/subscription-status.enum.js';
 import { BillingModule } from '../../billing.module.js';
+import { Subscription } from '../../entities/subscription.entity.js';
+import { SubscriptionPlan } from '../../enums/subscription-plan.enum.js';
+import { SubscriptionStatus } from '../../enums/subscription-status.enum.js';
 import { ActivateMockSubscriptionCommand } from './activate-mock-subscription.command.js';
 
 describe('ActivateMockSubscriptionHandler', () => {

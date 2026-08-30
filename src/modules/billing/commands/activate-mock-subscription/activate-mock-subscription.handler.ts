@@ -2,9 +2,9 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
-import { Subscription } from '../../../auth/entities/subscription.entity.js';
-import { SubscriptionPlan } from '../../../auth/enums/subscription-plan.enum.js';
-import { SubscriptionStatus } from '../../../auth/enums/subscription-status.enum.js';
+import { Subscription } from '../../entities/subscription.entity.js';
+import { SubscriptionPlan } from '../../enums/subscription-plan.enum.js';
+import { SubscriptionStatus } from '../../enums/subscription-status.enum.js';
 import { ActivateMockSubscriptionCommand } from './activate-mock-subscription.command.js';
 
 const PREMIUM_PERIOD = { months: 1 } as const;

@@ -12,12 +12,12 @@
 | DP4 | Slow queries (> `SLOW_QUERY_THRESHOLD`, default 2000 ms) are logged at `warn` with SQL. | `core/database/mikro-orm.logger.ts:75-85` |
 | DP5 | Raw SQL is fine for set-based work the ORM can't express cheaply (`SELECT max(...)`, `distinct ::date`, `lower(col)` upserts) — via `em.getConnection().execute(..., em.getTransactionContext())`. | `telegram/services/poll-updates.service.ts:67-74` |
 
-## Index anti-patterns found (fix owed)
+## Index anti-patterns found — fixed (Batch D)
 
-| Where | Problem |
-|---|---|
-| `sentence.entity.ts:28`, `sentence-token.entity.ts:24`, `learning-card.entity.ts:38` | standalone `@Index()` on a column that is already the **leading** key of a composite `@Unique` on the same entity — redundant btree, extra write cost. Drop it. |
-| `learning_cards` | the hot practice query is `WHERE user_id=? AND due<=? ORDER BY due` — the standalone `due` index doesn't serve it. Add `@Index({ properties: ['userId', 'due'] })`. |
+| Where | Was | Now |
+|---|---|---|
+| `sentence.postPartId`, `sentence_token.sentenceId`, `grammar_match.sentenceId`, `learning_cards.userId` | standalone `@Index()` on a column already the **leading** key of a composite `@Unique` — redundant btree, extra write cost | dropped (`Migration20260830120500`). The composite's own btree serves `WHERE <lead> IN (...)`. |
+| `learning_cards` | standalone `@Index()` on `due` — doesn't serve the practice query `WHERE user_id=? AND due<=? ORDER BY due` | replaced with class-level `@Index({ properties: ['userId', 'due'] })`. |
 
 ## Unbounded reads found (fix owed)
 

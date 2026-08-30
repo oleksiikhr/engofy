@@ -117,7 +117,7 @@ export class AnnotatePostHandler
     }
 
     if (post.status === PostStatus.Pending) {
-      post.status = PostStatus.Annotating;
+      post.status = PostStatus.Processing;
       await this.em.flush();
     }
 
@@ -148,7 +148,7 @@ export class AnnotatePostHandler
       await this.em.flush();
     }
 
-    post.status = PostStatus.Annotated;
+    post.status = PostStatus.Processing;
 
     const run = existingRun ?? new PostPipelineRun();
     run.postId = postId;

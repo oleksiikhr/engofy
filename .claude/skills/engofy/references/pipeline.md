@@ -23,9 +23,29 @@ flowchart LR
   `post-publish` until `PostPipelineRun(stage=Annotation, status=Completed)`
   exists (D6). Reference: `commands/publish-post/publish-post.handler.ts`.
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
-  `PostPipelineStage` starts at `SpacyParse`; the legacy `'fetch'` literal is
-  still permitted by the `post_pipeline_runs_stage_check` constraint (a Batch D
-  migration drops it).
+  `PostPipelineStage` starts at `SpacyParse`; the legacy `'fetch'` literal was
+  dropped from `post_pipeline_runs_stage_check` in `Migration20260830120000`.
+
+### `posts.status` vocabulary (D12, Batch D)
+
+`pending` → `processing` → `published` / `failed`. The old annotation-centric
+`annotating`/`annotated` pair collapsed into a single `processing`
+(`Migration20260830120100`) — the pipeline has more stages than annotation, and
+per-stage progress is on `post_pipeline_runs`, not here. Writers:
+`AnnotatePostHandler` flips `pending → processing`; `PublishPostHandler` sets
+`published`; `JobWorkerHost` sets `failed` on retry exhaustion (P3a);
+`RetryPostHandler` resets to `pending`.
+
+### Source attribution (D12 / PLAN §9 — legal)
+
+`PostSource` carries `type` (`PostSourceType`: `original` | `excerpt` |
+`reddit_comment` | `news_snippet`) + `attributionText` — **both NOT NULL**
+(`Migration20260830120200`, backfilled `original` / link-or-`'Original content'`).
+`IngestPostHandler` derives `attributionText` via
+`domain/derive-attribution-text.ts` (explicit → link → type label). CLI
+`post ingest` exposes `-s/--source-type` + `-a/--attribution`; telegram `/add`
+defaults (no structured channel yet — Batch G). Feed / post-detail views expose
+`attributionText` + `sourceType` (not the bare `source.link`).
 
 ## Rules
 

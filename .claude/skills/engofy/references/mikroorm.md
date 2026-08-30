@@ -34,9 +34,9 @@
 
 | Where | Problem |
 |---|---|
-| `entities/grammar-match.entity.ts` | no unique constraint → partial-write + rerun double-inserts. Add `@Unique` or delete-by-sentence first. |
-| `entities/sentence.entity.ts:28`, `sentence-token.entity.ts:24` | standalone `@Index()` on a column already the leading key of a composite `@Unique` — redundant btree. |
-| `domain/node-tree.parser.ts` + `node-tree.type.ts` | 280-LOC validator + custom type wired to nothing; comment names a non-existent `Post.body`. |
+| ~~`entities/grammar-match.entity.ts` — no unique constraint~~ | **fixed (Batch D)** — composite `@Unique(sentenceId, grammarUsagePointId, tokenStart, tokenEnd)`; `TagGrammarHandler` keeps delete-by-sentence AND dedupes spans in memory before persist. |
+| ~~standalone `@Index()` on a composite-unique leading column~~ | **fixed (Batch D)** — dropped on `sentence.postPartId`, `sentence_token.sentenceId`, `grammar_match.sentenceId`, `learning_cards.userId`; `learning_cards` gained class-level `@Index(['userId','due'])`. `sentence.postId` (denormalised, not in a unique) kept. |
+| `domain/node-tree.parser.ts` + `node-tree.type.ts` | **partly addressed (Batch D)** — `parseDoc` is now wired at read time in `get-post-detail.handler.ts:58`; `node-tree.type.ts` / `post-part-body.type.ts` comments no longer name a non-existent `Post.body`. `NodeTreeType` itself is still mapped to nothing (kept as the drop-in for a future `Post`-level tree column, D12). |
 | `services/complete-login.service.ts:22-31` | backfills `@Unique` `googleSub` after `onConflictAction:'ignore'` — a Google email change can create a 2nd row and violate the constraint on flush. |
 
 ## `disableIdentityMap` for query handlers

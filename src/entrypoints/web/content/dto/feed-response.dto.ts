@@ -15,6 +15,12 @@ export class FeedItemDto {
   // Plain-text opening of the post.
   readonly excerpt!: string;
 
+  // Human-readable source credit (PLAN.md §9); always set.
+  readonly attributionText!: string;
+
+  // `original` | `excerpt` | `reddit_comment` | `news_snippet`.
+  readonly sourceType!: string;
+
   readonly sourceLink!: string | null;
 }
 

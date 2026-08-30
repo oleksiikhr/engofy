@@ -85,7 +85,7 @@ describe('PollUpdatesService', () => {
     const stored = await suite.orm.em.find(TelegramUpdate, {});
     expect(stored).toHaveLength(1);
     expect(stored[0]).toMatchObject({
-      telegramMessageId: '100',
+      updateId: '100',
       processed: true,
     });
 
@@ -123,7 +123,7 @@ describe('PollUpdatesService', () => {
     suite.orm.em.clear();
 
     const row = await suite.orm.em.findOneOrFail(TelegramUpdate, {
-      telegramMessageId: '200',
+      updateId: '200',
     });
     expect(row.processed).toBe(true);
     expect(await suite.orm.em.count(Post, {})).toBe(0);
@@ -150,7 +150,7 @@ describe('PollUpdatesService', () => {
     suite.orm.em.clear();
 
     const row = await suite.orm.em.findOneOrFail(TelegramUpdate, {
-      telegramMessageId: '300',
+      updateId: '300',
     });
     expect(row.processed).toBe(true);
     expect(fakeClient.sent.at(-1)?.text).toContain('failed');

@@ -30,12 +30,15 @@ import { LearningCardState } from '../enums/learning-card-state.enum.js';
 @Unique({ properties: ['userId', 'wordId'] })
 @Unique({ properties: ['userId', 'phraseId'] })
 @Unique({ properties: ['userId', 'grammarUsagePointId'] })
+// Hot path: the practice queue selects a user's cards ordered by `due`.
+@Index({ properties: ['userId', 'due'] })
 export class LearningCard {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
+  // Covered as the leading column of the three composite uniques above and the
+  // (userId, due) index.
   @Property({ type: 'uuid' })
-  @Index()
   userId!: string;
 
   // FK -> words.id
@@ -51,8 +54,9 @@ export class LearningCard {
   grammarUsagePointId?: string | null;
 
   // --- FSRS scheduling state (ts-fsrs Card) ---
+  // Indexed via the (userId, due) composite above — every due-based read is
+  // scoped to one user.
   @Property({ type: LuxonTimestampType })
-  @Index()
   due!: DateTime;
 
   @Property({ type: 'double' })

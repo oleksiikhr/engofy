@@ -28,8 +28,8 @@ export class Sentence {
   @Index()
   postId!: string;
 
+  // Covered by the leading column of the composite unique above.
   @Property({ type: 'uuid' })
-  @Index()
   postPartId!: string;
 
   // Which flattened unit within the part: 0 for a paragraph, the list-item

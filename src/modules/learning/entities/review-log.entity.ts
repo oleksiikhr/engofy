@@ -1,4 +1,3 @@
-import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
@@ -33,7 +32,4 @@ export class ReviewLog {
 
   @Property({ type: 'integer' })
   scheduledDays!: number;
-
-  @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
-  createdAt: Opt<DateTime> = DateTime.now();
 }

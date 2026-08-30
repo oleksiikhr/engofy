@@ -812,7 +812,7 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "unique": false,
+          "unique": true,
           "length": null,
           "precision": null,
           "scale": null,
@@ -897,13 +897,16 @@
         },
         {
           "columnNames": [
-            "sentence_id"
+            "sentence_id",
+            "grammar_usage_point_id",
+            "token_start",
+            "token_end"
           ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "grammar_matches_sentence_id_index",
+          "composite": true,
+          "constraint": true,
+          "keyName": "grammar_matches_sentence_id_grammar_usage_point_i_05997_unique",
           "primary": false,
-          "unique": false
+          "unique": true
         }
       ],
       "checks": [],
@@ -1405,16 +1408,6 @@
       "indexes": [
         {
           "columnNames": [
-            "due"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "learning_cards_due_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "id"
           ],
           "composite": false,
@@ -1426,6 +1419,17 @@
         {
           "columnNames": [
             "user_id",
+            "due"
+          ],
+          "composite": true,
+          "constraint": false,
+          "keyName": "learning_cards_user_id_due_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "user_id",
             "grammar_usage_point_id"
           ],
           "composite": true,
@@ -1433,16 +1437,6 @@
           "keyName": "learning_cards_user_id_grammar_usage_point_id_unique",
           "primary": false,
           "unique": true
-        },
-        {
-          "columnNames": [
-            "user_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "learning_cards_user_id_index",
-          "primary": false,
-          "unique": false
         },
         {
           "columnNames": [
@@ -1470,8 +1464,9 @@
       "checks": [
         {
           "name": "learning_cards_exactly_one_target",
-          "expression": "(word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1",
-          "definition": "check ((word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1)"
+          "expression": "(((word_id IS NOT NULL) + (phrase_id IS NOT NULL)) + (grammar_usage_point_id IS NOT NULL)) = 1",
+          "definition": "CHECK ((((((word_id IS NOT NULL))::integer + ((phrase_id IS NOT NULL))::integer) + ((grammar_usage_point_id IS NOT NULL))::integer) = 1))",
+          "columnName": "grammar_usage_point_id"
         },
         {
           "name": "learning_cards_state_check",
@@ -1639,13 +1634,15 @@
       },
       "indexes": [
         {
-          "columnNames": [],
+          "columnNames": [
+            "lower(phrase_text)"
+          ],
           "composite": false,
-          "constraint": true,
+          "constraint": false,
           "keyName": "phrases_phrase_text_unique_idx",
           "primary": false,
           "unique": true,
-          "expression": "create unique index \"phrases_phrase_text_unique_idx\" on \"phrases\" (lower(\"phrase_text\"))"
+          "expression": "CREATE UNIQUE INDEX phrases_phrase_text_unique_idx ON public.phrases USING btree (lower(phrase_text))"
         },
         {
           "columnNames": [
@@ -1976,7 +1973,6 @@
           "comment": null,
           "collation": null,
           "enumItems": [
-            "fetch",
             "spacy_parse",
             "annotation",
             "ai_complexity",
@@ -2068,8 +2064,8 @@
       "checks": [
         {
           "name": "post_pipeline_runs_stage_check",
-          "expression": "\"stage\" in ('fetch', 'spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish')",
-          "definition": "check (\"stage\" in ('fetch', 'spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish'))",
+          "expression": "\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish')",
+          "definition": "check (\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish'))",
           "columnName": "stage"
         },
         {
@@ -2415,6 +2411,23 @@
           "enumItems": [],
           "mappedType": "text"
         },
+        "source_attribution_text": {
+          "name": "source_attribution_text",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'Original content'",
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
         "source_format": {
           "name": "source_format",
           "type": "text",
@@ -2470,6 +2483,28 @@
           "enumItems": [],
           "mappedType": "text"
         },
+        "source_type": {
+          "name": "source_type",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'original'",
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "original",
+            "excerpt",
+            "reddit_comment",
+            "news_snippet"
+          ],
+          "mappedType": "enum"
+        },
         "status": {
           "name": "status",
           "type": "text",
@@ -2486,8 +2521,7 @@
           "collation": null,
           "enumItems": [
             "pending",
-            "annotating",
-            "annotated",
+            "processing",
             "published",
             "failed"
           ],
@@ -2587,9 +2621,15 @@
           "columnName": "source_format"
         },
         {
+          "name": "posts_source_type_check",
+          "expression": "\"source_type\" in ('original', 'excerpt', 'reddit_comment', 'news_snippet')",
+          "definition": "check (\"source_type\" in ('original', 'excerpt', 'reddit_comment', 'news_snippet'))",
+          "columnName": "source_type"
+        },
+        {
           "name": "posts_status_check",
-          "expression": "\"status\" in ('pending', 'annotating', 'annotated', 'published', 'failed')",
-          "definition": "check (\"status\" in ('pending', 'annotating', 'annotated', 'published', 'failed'))",
+          "expression": "\"status\" in ('pending', 'processing', 'published', 'failed')",
+          "definition": "check (\"status\" in ('pending', 'processing', 'published', 'failed'))",
           "columnName": "status"
         },
         {
@@ -2623,23 +2663,6 @@
           "collation": null,
           "enumItems": [],
           "mappedType": "uuid"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamptz(6)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "unique": false,
-          "length": 6,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "collation": null,
-          "enumItems": [],
-          "mappedType": "datetime"
         },
         "elapsed_days": {
           "name": "elapsed_days",
@@ -3107,16 +3130,6 @@
         },
         {
           "columnNames": [
-            "sentence_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "sentence_tokens_sentence_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "sentence_id",
             "position"
           ],
@@ -3124,7 +3137,8 @@
           "constraint": true,
           "keyName": "sentence_tokens_sentence_id_position_unique",
           "primary": false,
-          "unique": true
+          "unique": true,
+          "expression": "CREATE UNIQUE INDEX sentence_tokens_sentence_id_position_unique ON public.sentence_tokens USING btree (sentence_id, \"position\")"
         }
       ],
       "checks": [],
@@ -3354,16 +3368,6 @@
         },
         {
           "columnNames": [
-            "post_part_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "sentences_post_part_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "post_part_id",
             "unit_index",
             "position"
@@ -3372,7 +3376,8 @@
           "constraint": true,
           "keyName": "sentences_post_part_id_unit_index_position_unique",
           "primary": false,
-          "unique": true
+          "unique": true,
+          "expression": "CREATE UNIQUE INDEX sentences_post_part_id_unit_index_position_unique ON public.sentences USING btree (post_part_id, unit_index, \"position\")"
         }
       ],
       "checks": [
@@ -3511,8 +3516,7 @@
           "comment": null,
           "collation": null,
           "enumItems": [
-            "active",
-            "expired"
+            "active"
           ],
           "mappedType": "enum"
         },
@@ -3582,8 +3586,8 @@
         },
         {
           "name": "subscriptions_status_check",
-          "expression": "\"status\" in ('active', 'expired')",
-          "definition": "check (\"status\" in ('active', 'expired'))",
+          "expression": "\"status\" in ('active')",
+          "definition": "check (\"status\" in ('active'))",
           "columnName": "status"
         }
       ],
@@ -3663,8 +3667,8 @@
           "enumItems": [],
           "mappedType": "json"
         },
-        "telegram_message_id": {
-          "name": "telegram_message_id",
+        "update_id": {
+          "name": "update_id",
           "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
@@ -3694,11 +3698,11 @@
         },
         {
           "columnNames": [
-            "telegram_message_id"
+            "update_id"
           ],
           "composite": false,
           "constraint": true,
-          "keyName": "telegram_updates_telegram_message_id_unique",
+          "keyName": "telegram_updates_update_id_unique",
           "primary": false,
           "unique": true
         }
@@ -4361,13 +4365,15 @@
       },
       "indexes": [
         {
-          "columnNames": [],
+          "columnNames": [
+            "lower(lemma)"
+          ],
           "composite": false,
-          "constraint": true,
+          "constraint": false,
           "keyName": "words_lemma_unique_idx",
           "primary": false,
           "unique": true,
-          "expression": "create unique index \"words_lemma_unique_idx\" on \"words\" (lower(\"lemma\"))"
+          "expression": "CREATE UNIQUE INDEX words_lemma_unique_idx ON public.words USING btree (lower(lemma))"
         },
         {
           "columnNames": [

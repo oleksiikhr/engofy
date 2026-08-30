@@ -157,7 +157,7 @@ describe('AnnotatePostHandler', () => {
     const postId = await parseThenAnnotate(FIXTURE);
 
     const post = await suite.orm.em.findOneOrFail(Post, postId);
-    expect(post.status).toBe(PostStatus.Annotated);
+    expect(post.status).toBe(PostStatus.Processing);
 
     const part = await suite.orm.em.findOneOrFail(PostPart, { postId });
     expect(part.annotatedAt).not.toBeNull();

@@ -1,4 +1,4 @@
-import type { SubscriptionPlan } from '../../../../modules/auth/enums/subscription-plan.enum.js';
+import type { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
 
 export class SubscriptionResponseDto {
   // 'free' when the user has no active premium subscription.

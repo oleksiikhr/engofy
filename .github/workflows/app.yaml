@@ -94,6 +94,13 @@ jobs:
         run: pnpm test:cov --coverage.reporter=text-summary
         if: always()
 
+      # Applies migrations to a clean DB, then fails if entity metadata has
+      # drifted from what the migrations produce (D17). snapshot:true, prod
+      # config (NODE_ENV unset -> production).
+      - name: Migration check
+        run: pnpm migration:up && pnpm migration:check
+        if: always()
+
       # --type-check generates src/metadata.ts — verified by the next step
       - name: Build NestJS
         run: pnpm build

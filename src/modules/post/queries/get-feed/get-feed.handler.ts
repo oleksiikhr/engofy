@@ -33,6 +33,8 @@ export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
       cefrLevel: post.cefrLevel ?? null,
       publishedAt: post.publishedAt.toISO() ?? post.publishedAt.toString(),
       excerpt: excerpts.get(post.id) ?? '',
+      attributionText: post.source.attributionText,
+      sourceType: post.source.type,
       sourceLink: post.source.link ?? null,
     }));
 

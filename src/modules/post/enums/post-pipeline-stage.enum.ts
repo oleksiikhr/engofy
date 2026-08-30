@@ -3,9 +3,7 @@
 //
 // There is no `fetch` stage: ingest takes pasted text synchronously on the
 // HTTP path (PLAN.md §5), so the pipeline starts at `spacy_parse`. A future
-// link-fetch would be a new leading stage. The `post_pipeline_runs_stage_check`
-// constraint still lists the legacy `'fetch'` literal as an accepted-but-unused
-// value; dropping it is a Batch D migration.
+// link-fetch would be a new leading stage.
 export enum PostPipelineStage {
   // spaCy: tokenise, POS/lemma/morph/dep → sentences + sentence_tokens.
   SpacyParse = 'spacy_parse',

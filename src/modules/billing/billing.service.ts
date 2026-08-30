@@ -1,8 +1,8 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import type { Subscription } from '../auth/entities/subscription.entity.js';
 import { ActivateMockSubscriptionCommand } from './commands/activate-mock-subscription/activate-mock-subscription.command.js';
+import type { Subscription } from './entities/subscription.entity.js';
 import { SubscriptionService } from './services/subscription.service.js';
 
 @Injectable()

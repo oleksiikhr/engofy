@@ -5,6 +5,7 @@ import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
+import { PostSourceType } from '../../enums/post-source-type.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { IngestPostCommand } from './ingest-post.command.js';
@@ -76,5 +77,44 @@ describe('IngestPostHandler', () => {
     );
 
     expect(post.source.link).toBe(link);
+  });
+
+  it('defaults source type to original and derives attribution from the link (PLAN.md §9)', async () => {
+    const link = `https://example.com/${randomUUID()}`;
+
+    const post = await suite.command(
+      new IngestPostCommand(
+        IngestPostDto.create({ rawText: 'Some text.', link }),
+      ),
+    );
+
+    expect(post.source.type).toBe(PostSourceType.Original);
+    expect(post.source.attributionText).toBe(link);
+  });
+
+  it('stores an explicit source type and attribution line', async () => {
+    const post = await suite.command(
+      new IngestPostCommand(
+        IngestPostDto.create({
+          rawText: 'A quoted opinion.',
+          sourceType: PostSourceType.RedditComment,
+          attributionText: 'r/books comment by u/someone',
+        }),
+      ),
+    );
+
+    expect(post.source.type).toBe(PostSourceType.RedditComment);
+    expect(post.source.attributionText).toBe('r/books comment by u/someone');
+  });
+
+  it('falls back to a generic attribution label when nothing is provided', async () => {
+    const post = await suite.command(
+      new IngestPostCommand(
+        IngestPostDto.create({ rawText: 'Plain original text.' }),
+      ),
+    );
+
+    expect(post.source.type).toBe(PostSourceType.Original);
+    expect(post.source.attributionText).toBe('Original content');
   });
 });

@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import { PostType } from '../../post/enums/post-type.enum.js';
+import { IngestPostDto } from '../../post/commands/ingest-post/ingest-post.dto.js';
 import { PostService } from '../../post/post.service.js';
 import TelegramConfig from '../config/telegram.config.js';
 import { parseTelegramCommand } from '../domain/parse-command.js';
@@ -40,17 +40,17 @@ export class PollUpdatesService {
     const updates = await this.client.getUpdates(offset);
 
     for (const update of updates) {
-      const messageId = String(update.update_id);
+      const updateId = String(update.update_id);
       // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each update is stored, acted on, and flushed before the next so a mid-tick crash keeps confirmed progress.
       const seen = await this.em.count(TelegramUpdate, {
-        telegramMessageId: messageId,
+        updateId,
       });
       if (seen > 0) {
         continue;
       }
 
       const row = new TelegramUpdate();
-      row.telegramMessageId = messageId;
+      row.updateId = updateId;
       row.rawPayload = update as unknown as Record<string, unknown>;
       this.em.persist(row);
 
@@ -67,7 +67,7 @@ export class PollUpdatesService {
     const rows = await this.em
       .getConnection()
       .execute<{ max: string | null }[]>(
-        'SELECT max(telegram_message_id) AS max FROM telegram_updates',
+        'SELECT max(update_id) AS max FROM telegram_updates',
         [],
         'all',
         this.em.getTransactionContext(),
@@ -94,10 +94,12 @@ export class PollUpdatesService {
 
     try {
       if (command.kind === 'add') {
-        const post = await this.postService.ingest({
-          rawText: command.text,
-          type: PostType.Post,
-        });
+        // `/add` pastes body text only — no structured attribution channel yet
+        // (Batch G). Defaults to `original` + a generic credit line; the source
+        // type/text can be corrected later once an edit path exists.
+        const post = await this.postService.ingest(
+          IngestPostDto.create({ rawText: command.text }),
+        );
         await this.client.sendMessage(
           chatId,
           `Queued. Post ${post.shortId} is processing.`,
@@ -113,7 +115,7 @@ export class PollUpdatesService {
       }
     } catch (err) {
       this.logger.error(
-        { err, updateId: row.telegramMessageId, command: command.kind },
+        { err, updateId: row.updateId, command: command.kind },
         'telegram command failed',
       );
       await this.client
