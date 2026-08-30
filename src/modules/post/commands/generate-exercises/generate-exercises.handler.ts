@@ -139,8 +139,6 @@ export class GenerateExercisesHandler
       { postId },
       { singletonKey: postId },
     );
-
-    await this.em.flush();
   }
 
   private async loadTokens(

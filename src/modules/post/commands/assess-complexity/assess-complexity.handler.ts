@@ -107,7 +107,5 @@ export class AssessComplexityHandler
       { postId },
       { singletonKey: postId },
     );
-
-    await this.em.flush();
   }
 }

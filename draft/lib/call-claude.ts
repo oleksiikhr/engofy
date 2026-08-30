@@ -8,7 +8,7 @@ import { requireEnv } from './env.js';
 // can't silently skew a draft comparison run from weeks earlier.
 const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
   'opus-5': { input: 5, output: 25 },
-  'sonnet-5': { input: 3, output: 15 },
+  'sonnet-5': { input: 2, output: 10 },
   'fable-5': { input: 10, output: 50 },
   'haiku-4-5': { input: 1, output: 5 },
 };

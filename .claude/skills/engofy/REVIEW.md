@@ -70,21 +70,22 @@ Order is a suggestion. **Batch D-attribution is the priority** (PLAN §9 = legal
 Batches are sized to be reviewable + `pnpm type && biome check && pnpm test` green
 as a unit. Doc/PLAN edits (J) are cheapest.
 
-### Batch A — cheap safety fixes (S, low risk)
-- [ ] D18: `await` `sessions.refresh(...)` in `ResolveSessionHandler` (or catch → `Sentry.captureException`, not `() => undefined`)
-- [ ] D18: force `timezone: 'UTC'` in the pg `driverOptions` (`mikro-orm.setup.ts`)
-- [ ] D18: sanitize per-query Sentry breadcrumb (`mikro-orm.logger.ts:58-70`) — `sanitizeSqlParams`, drop `results`, prod-gate
-- [ ] D18: `redis.provider.ts` — add `client.on('error', …)` listener
-- [ ] D18: `ConsoleMailerService` as the no-`RESEND_API_KEY` fallback; throw at bootstrap in prod
-- [ ] `AuthorizationError` → `this.name = new.target.name`
-- [ ] AI: fix Sonnet 5 pricing `{input:2,output:10}` in `anthropic-client.service.ts:14` + `draft/lib/call-claude.ts:11`
-- [ ] AI: `completeStructured` — check `stop_reason === 'max_tokens'` before `parse`
-- [ ] D3: drop redundant `em.flush()` from `assess-complexity` / `tag-grammar` / `generate-exercises` / `publish` / `retry` handlers
+### Batch A — cheap safety fixes (S, low risk) — DONE (fix/batch-a-safety)
+- [x] D18: `await sessions.refresh(dto.token)` in `ResolveSessionHandler` (dropped the floating `.catch(() => undefined)`) — `resolve-session.handler.ts:22`
+- [x] D18: pg session `TimeZone` forced UTC via `options: '-c timezone=UTC'` in `driverOptions` — `mikro-orm.setup.ts:50`; dates.md open-question note closed
+- [x] D18: per-query Sentry breadcrumb — `sanitizeSqlParams` (prod-gated via `isProdEnvironment()`), `results` dropped, only emitted when `context.query` present — `mikro-orm.logger.ts:58-78`; security.md high row closed
+- [x] D18: `redis.provider.ts` — factory now attaches `client.on('error', …)` (Logger, mirrors pg-boss)
+- [x] D18: mailer fallback chain = Resend → `MAIL_USE_MAILHOG` → `ConsoleMailerService`; `isProdEnvironment()` → throw at bootstrap when none set — `mailer.provider.ts`, new `mail.config.ts` `useMailhog`; mail.md D18 + security.md row closed
+- [x] `AuthorizationError` → `this.name = new.target.name` — `authorization.error.ts:4`; error-handling.md note closed
+- [x] AI: Sonnet 5 pricing `{input:2,output:10}` in `anthropic-client.service.ts:14` + `draft/lib/call-claude.ts:11`; ai.md Fixes-owed row closed
+- [x] AI: `completeStructured` throws the distinct `max_tokens` error before `tool.schema.parse` — `anthropic-client.service.ts:100-107`; ai.md AI3 gap + Fixes-owed row closed
+- [x] D3: dropped redundant trailing `em.flush()` from `assess-complexity` / `tag-grammar` / `generate-exercises` / `publish-post` / `retry-post` handlers (facade flush owns it); cqrs.md drift note closed. `pnpm type` + `biome` + `pnpm test` (105 files / 603 tests, incl. 39 ispec) green.
 
-### Batch B — `DomainError` → HTTP status (D1)
-- [ ] add `status` (default 400) to `DomainError`; `DomainErrorFilter` honours it
-- [ ] `TooMany*` → 429, `*NotFound` → 404, unique-conflict cases → 409
-- [ ] keep the OpenAPI global `429` (now reachable); add `409` if used
+### Batch B — `DomainError` → HTTP status (D1) — DONE (fix/batch-a-safety)
+- [x] `DomainError` 2nd ctor arg `status = 400` (plain number, no `HttpStatus` dep) — `core/errors/domain.error.ts`; `DomainErrorFilter` sends `exception.status` instead of hard-coded `BAD_REQUEST` — `domain-error.filter.ts:21`
+- [x] `TooManyLoginRequestsError` + `TooManyAttemptsError` → `super(msg, 429)`; `CardNotFoundError` → `super('Card not found', 404)`. No `*NotFound` for post (Nest `NotFoundException` via `HttpErrorFilter`). No 409 subclass — mechanism ready; the learning `add-card` unique race is Batch E (upsert, not a 409). `CardLimitReachedError` deliberately left `400` (plan-quota, not in the 429/404/409 set) — noted in error-handling.md.
+- [x] OpenAPI global `429` already declared in `build-openapi-document.ts` — now reachable, left as-is; no `409` added (unused)
+- [x] tests: `auth.controller.ispec` — 2 rate-limit cases + the OTP lockout case now expect `TOO_MANY_REQUESTS`; new `learning.controller.ispec` case "returns 404 when reviewing a card that does not exist". error-handling.md D1 + taxonomy + E1/E3 updated; security.md D1 row closed. `pnpm type` + `biome` + `pnpm test` (105 files / 606 tests) green.
 
 ### Batch C — pipeline correctness (D4, D5, D6, D7, D8)
 - [ ] D7: remove `PostPipelineStage.Fetch` + PLAN §5 step 1
@@ -150,14 +151,15 @@ as a unit. Doc/PLAN edits (J) are cheapest.
 - [ ] `e2e-suite.helper.ts` `authed` flag — implement or remove
 - [ ] explicit `hookTimeout` for the integration project; no-op `PG_BOSS` fake by default in `createIntegrationSuite`
 
-### Batch J — PLAN.md + docs (cheapest, do anytime)
-- [ ] §5 — drop the "fetch" step
-- [ ] §6 / §12 — document rare-delimiter + reconstruct-and-compare (no PUA escaping); literal `⟦⟧` in source unsupported
-- [ ] §3.2 — `attribution_text` + `source_type` on `posts`/`PostSource`
-- [ ] §3.3 — note `cefr_level` stays on `word_definitions` (per-POS)
-- [ ] §3.5 — `review_logs` has `reviewed_at` only
-- [ ] §3.7 — `Running` is derived, not stored
-- [ ] §3.9 — `update_id`, `raw_payload` (not `raw_payload_json`), `/add <text>` not `{link}`
+### Batch J — PLAN.md + docs (DONE 2026-08-30)
+- [x] §5 — dropped the "fetch" step; rewrote the stage list to match the real DAG (spacy_parse → fan-out annotation + ai_complexity → ai_grammar → ai_exercises → publish) + idempotency/`/retry` notes
+- [x] §6 + §12 — documented rare-delimiter (`⟦⟧` + `{{}}`) + reconstruct-and-compare; PUA escaping marked NOT implemented / not needed; example updated to the real format
+- [x] §3.7 — `stage` list without `fetch`, `+annotation`; `running` marked derived (`started_at ∧ !completed_at`); note that `Failed`/`error_message`/`retry_count` aren't written yet (D4)
+- [x] §3.3 — `cefr_level` moved to `word_definitions` in the schema block + a post-review note (D12)
+- [x] §3.9 — `update_id` (was `telegram_message_id`), `raw_payload` (was `raw_payload_json`), `/add <text>` (was `/add {link}`) + "pasted text, not URL" note
+- [x] §13 — annotated the `§6` and `§3.3` audit rows; added a new **§13a Пост-рев'ю кодбази** section pointing at `.claude/skills/engofy/` with the top unresolved items table
+- [ ] §3.2 `attribution_text`/`source_type` — already in the §3.2 spec block (Part I); the gap is code-only → tracked in §13a + Batch D, no Part I edit needed
+- [ ] §3.5 `review_logs` `created_at` — not in the §3.5 spec block; code-only drop → Batch D
 
 ### Batch K — misc cleanup / consistency (low, opportunistic)
 - [ ] `post/domain/node-tree.type.ts` → `node-tree-json.type.ts`

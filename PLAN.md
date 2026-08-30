@@ -90,10 +90,10 @@ grammar_matches
 
 ```sql
 words
-  id, lemma, cefr_level, frequency_rank
+  id, lemma, frequency_rank        -- пост-рев'ю: cefr_level НЕ тут, а на word_definitions (per-POS)
 
 word_definitions
-  id, word_id, pos, definition, example
+  id, word_id, pos, definition, example, cefr_level
 
 phrases
   id, text, type (phrasal_verb|idiom|collocation), definition, cefr_level
@@ -174,12 +174,16 @@ user_skill_progress
 ### 3.7 Pipeline обробки текстів
 
 ```sql
-post_processing_jobs
+post_processing_jobs                 -- у коді: PostPipelineRun, unique (post_id, stage)
   id, post_id,
-  stage (fetch|spacy_parse|ai_complexity|ai_grammar|ai_exercises|publish),
-  status (pending|running|done|failed),
+  stage (spacy_parse|annotation|ai_complexity|ai_grammar|ai_exercises|publish),
+  status (pending|done|failed),       -- "running" не зберігається: derived = started_at ∧ !completed_at
   error_message, started_at, completed_at, retry_count
 ```
+
+> Пост-рев'ю (2026-08-30): стейдж `fetch` прибрано (V1 приймає тільки вставлений
+> текст, не URL — D7). `started_at`/`error_message`/`retry_count` + `PostStatus.Failed`
+> ще не пишуться на фейлі — фікс D4 в `.claude/skills/engofy/REVIEW.md`.
 
 ### 3.8 Публікація на зовнішні канали
 
@@ -194,13 +198,14 @@ post_publications
 
 ```sql
 telegram_updates
-  id, telegram_message_id, raw_payload_json,
+  id, update_id (bigint unique), raw_payload,
   processed (boolean), created_at
 ```
 
 NestJS `@Cron` кожну хвилину викликає Telegram `getUpdates`, фільтрує повідомлення
 за твоїм `telegram_user_id` (з конфігу/env, без окремої таблиці адмінів), парсить
-команди (`/add {link}`, `/retry {post_id}`) і створює відповідні `posts`/`post_processing_jobs`.
+команди (`/add <text>`, `/retry {post_id}`). `/add` бере **вставлений текст** (не
+URL — D7): створює `posts` і ставить джобу `post-spacy-parse`.
 
 ### 3.10 Вправи (згенеровані з тексту)
 
@@ -232,18 +237,24 @@ exercises
 
 ## 5. Пайплайн обробки тексту (post_processing_jobs)
 
-1. **fetch** — отримати вихідний текст (посилання або текст, надісланий через бот)
-2. **spacy_parse** — токенізація, POS, lemma, morphology, dependency parsing → `sentence_tokens`
-3. **ai_complexity** — визначення CEFR-рівня тексту, оцінка обсягу нової лексики (Claude API)
-4. **ai_grammar** — класифікація граматичних конструкцій у реченнях по закритому списку
-   90 `grammar_constructions`, потім (за потреби) по `grammar_usage_points` всередині обраної
-   конструкції → `grammar_matches`
-5. **ai_exercises** — генерація вправ там, де детермінованого підходу недостатньо
-   (переважна більшість вправ генерується без AI, напряму з `sentence_tokens`)
-6. **publish** — `posts.status = published`, постановка задач у `post_publications`
+Вхід — вставлений текст (`PostService.ingest({ rawText })`). Стейджу `fetch` немає
+(V1 не тягне URL — D7). Далі:
 
-Кожен стейдж — окремий retry-юніт, статус видно через `post_processing_jobs`,
-керується/перезапускається командами в Telegram-боті.
+1. **spacy_parse** — токенізація, POS, lemma, morphology, dependency parsing →
+   `sentences` / `sentence_tokens`. На завершенні — **fan-out** на дві незалежні гілки:
+2a. **annotation** — тонкий AI-шар над spaCy: детерміновані слова/фразові дієслова
+    зі spaCy + LLM лише для ідіом/колокацій → node-tree spans + `sentence_tokens.word_id`/`phrase_id`
+2b. **ai_complexity** — CEFR-рівень тексту + кожного речення (Claude API)
+3. **ai_grammar** — (після `ai_complexity`) класифікація по закритому списку 90
+   `grammar_constructions` + `grammar_usage_points` → `grammar_matches`
+4. **ai_exercises** — детерміновані вправи з `sentence_tokens` + один AI-виклик на comprehension
+5. **publish** — `posts.status = published`, upsert `post_publications` (V1: тільки telegram).
+   Пост-рев'ю: має чекати на завершення гілки `annotation` (D6).
+
+Кожен стейдж — окрема ідемпотентна pg-boss джоба, ключ ідемпотентності —
+`PostPipelineRun (post_id, stage) = Completed`. Наступний стейдж ставить хендлер,
+що завершив попередній. Керується/перезапускається командами в Telegram-боті
+(`/retry` = повний reprocess з нуля — D5).
 
 ---
 
@@ -252,14 +263,18 @@ exercises
 Використовується замість JSON, щоб зменшити галюцинації моделі на довгих текстах.
 
 ```
-[Although]{pos:conj,type:subordinator} [she]{pos:pron,role:subject}
-[had never visited]{pos:verb,lemma:visit,tense:past_perfect} [Japan]{pos:propn}
-before, she felt strangely [at home]{type:idiom,meaning:"почуватись комфортно"} there.
+She felt strangely ⟦at home⟧{{p|idiom|at home|g1}} in a city she
+⟦had never visited⟧{{g|present-past-perfect|42}} before.
 ```
 
-Символи `[` `]` `{` `}`, що вже присутні в оригінальному тексті, перед відправкою в LLM
-замінюються на плейсхолдери з приватної області Unicode (`\uE001`...) і повертаються
-назад після парсингу — щоб уникнути конфліктів із розміткою.
+Роздільники — рідкісні `⟦` `⟧` (U+27E6/7) + `{{…}}`. Парсер відновлює офсети,
+звіряючи знятий текст із оригіналом символ-у-символ (`isComplete`); неповний
+вивід → 1 ретрай тим самим промптом.
+
+> Пост-рев'ю (2026-08-30 — D13): PUA-escaping `[` `]` `{` `}` (як планувалось
+> раніше) **не реалізовано** й не потрібне з новими роздільниками. Літеральні
+> `⟦`/`⟧`/`{{…}}` у самому тексті не підтримуються — трапляються рідко,
+> деградує до часткової анотації.
 
 Розбір фразових дієслів з розривом (`picked her sister up`) і герундія робиться
 детерміновано через spaCy (`tag=RP`/`dep=prt` для частки, `tag=NN` + `-ing` + перевірка
@@ -362,11 +377,14 @@ before, she felt strangely [at home]{type:idiom,meaning:"почуватись к
   (`tag=RP` / `dep=prt` для частки; `-ing` + перевірка залежності для
   герундія), не через LLM. LLM підключається лише для ідіом/колокацій, які
   spaCy структурно не розпізнає.
-- **inline-markup формат** (`[форма]{pos:...,lemma:...}`) для виводу LLM
-  замість JSON — менше галюцинацій на довгих текстах. Символи `[` `]` `{` `}`
-  з оригіналу екрануються в плейсхолдери приватної області Unicode
-  (``...) на час виклику. Реалізація вже є:
-  `domain/parse-annotation-tags.ts`, `domain/annotation-prompt.ts`.
+- **inline-markup формат** для виводу LLM замість JSON — менше галюцинацій на
+  довгих текстах. Роздільники — рідкісні `⟦` `⟧` (U+27E6/7) + `{{…}}`
+  (`⟦span⟧{{g|slug|egpIndex}}` для граматики, `⟦…⟧{{p|type|canon|gN}}` для
+  ідіом). Модель повертає текст дослівно + теги; парсер звіряє знятий текст із
+  оригіналом символ-у-символ. **PUA-escaping `[]{}` НЕ реалізовано** (D13) —
+  літеральні `⟦⟧`/`{{}}` у тексті не підтримуються (трапляються рідко).
+  Реалізація: `domain/parse-annotation-tags.ts`, `domain/parse-grammar-tags.ts`,
+  `domain/grammar-prompt.ts`.
 - **spaCy живе окремим HTTP-сервісом** (`nlp-service`, FastAPI +
   `en_core_web_sm`), не через `child_process` — простіше масштабувати й
   тестувати ізольовано.
@@ -392,8 +410,8 @@ before, she felt strangely [at home]{type:idiom,meaning:"почуватись к
 | §3.1 `subscriptions` | — | build (мало) |
 | §3.7 `post_processing_jobs` (6 стейджів) | `PostPipelineRun` (`postId`/`stage`/`status`, unique `(post_id, stage)`), per-stage pg-boss патерн, `worker` host, `queue` CLI | **keep патерн**, узгодити назву + розширити enum стейджів |
 | §2 конвертери text/md/html → `Doc` | `converters/*` + `detect-post-source-format` — повні | **keep** |
-| §6 inline-markup формат LLM | `parse-annotation-tags.ts`, `annotation-prompt.ts` — уже саме ця ідея | **keep / адаптувати** |
-| §3.3 `words` / `word_definitions` / `phrases` | сутності `Word` / `WordDefinition` / `Phrase` | **keep**, +поля (`frequency_rank`, узгодити `cefr`) |
+| §6 inline-markup формат LLM | `parse-annotation-tags.ts` / `parse-grammar-tags.ts` — рідкісні `⟦⟧`+`{{}}`, reconstruct-and-compare; PUA-escaping не робили (D13) | **done** |
+| §3.3 `words` / `word_definitions` / `phrases` | сутності `Word` / `WordDefinition` / `Phrase` | **keep**, +`frequency_rank`; `cefr_level` лишається на `word_definitions` per-POS (D12) |
 | core AI-порт | `core/ai/` (`AiClient`, `runTool<T>`, forced tool-use) | **keep**, перевикористати в кожному новому стейджі |
 | §1/§5 `spacy_parse` + `nlp-service` | немає (анотація повністю через AI); чернетка `new/asd.py` | build (Python-сервіс + NestJS-порт) |
 | §3.2 `sentences` / `sentence_tokens` | node-tree `PostPart` + `spliceSpans` + offset-валідація | **rework**: node-tree лишається, spaCy-шар додається паралельно (див. §12) |
@@ -409,6 +427,28 @@ before, she felt strangely [at home]{type:idiom,meaning:"почуватись к
 | §7 Redis rate limiting + гостьовий feed | `core/redis` є; NestJS throttler | build поверх |
 | §4 Astro + HTMX фронт, 8 сторінок | немає (тільки API: `auth` контролер, `health`) | build (окремий workspace-пакет) |
 | §8 мок-монетизація | немає | build (мало) |
+
+---
+
+## 13a. Пост-рев'ю кодбази (2026-08-30)
+
+Повний модуль-за-модулем аудит `v2` → `.claude/skills/engofy/` (skill `engofy` +
+18 reference-файлів + `REVIEW.md`). `REVIEW.md` містить: findings log (2 high,
+~37 medium, ~65 low), 18 підтверджених рішень (D1–D18), fix-бэклог у 11 батчах.
+
+Ключове, що ще **не** зроблено в коді (посилання — номери рішень):
+
+| Тема | Стан | Рішення |
+|---|---|---|
+| `attribution_text` / `source_type` (§3.2, §9 — legal) | **не збудовано** — feed показує голий `source.link` | D12 (Batch D) |
+| `DomainError` → завжди HTTP 400 (429/404/409 неможливі) | flat 400 | D1 |
+| `post_pipeline_runs` не пише `Failed`/`error_message`/`retry_count`; нема dead-letter | лог «завершених», не трекер | D4 |
+| `/retry` не чистить `Sentence`/`GrammarMatch`/… → no-op для parse+annotation | — | D5 |
+| `publish` не чекає на паралельну гілку `annotation` | — | D6 |
+| Команди повертають managed entity через bus | `IngestPost`, `AddCard`, … | D2 |
+| 7/8 post-хендлерів флашать самі (порушення facade-flush) | — | D3 |
+| Rate-limiting на web-edge відсутній (§7) | тільки login-лічильник у Redis | D14 |
+| `words.cefr_level` → фактично на `word_definitions` | лишаємо як є | D12 |
 
 ---
 

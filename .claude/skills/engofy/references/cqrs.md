@@ -46,12 +46,12 @@ sequenceDiagram
 | Handler | Why it flushes | Reference |
 |---|---|---|
 | `AnnotatePostHandler` | flush-per-`PostPart` so a mid-job crash keeps completed parts (a part with `annotatedAt` set is skipped on retry). | PLAN §12; `commands/annotate-post/annotate-post.handler.ts` |
-| `SpacyParsePostHandler` | same flush-per-`PostPart` pattern (add to the doc as exception #2). | `commands/spacy-parse-post/spacy-parse-post.handler.ts:81` |
+| `SpacyParsePostHandler` | same flush-per-`PostPart` pattern. | `commands/spacy-parse-post/spacy-parse-post.handler.ts:81` |
 
-> **Drift found (wave 1):** 7 of 8 `post` handlers currently flush internally; for
-> `assess-complexity` / `tag-grammar` / `generate-exercises` / `publish` / `retry`
-> it is redundant with the facade re-flush and undocumented. Those should be
-> removed. See `REVIEW.md`.
+These two are the **only** sanctioned exceptions. `assess-complexity` /
+`tag-grammar` / `generate-exercises` / `publish` / `retry` previously flushed
+internally too — that was redundant with the facade re-flush and has been removed
+(Batch A, D3).
 
 ## Command constructor shape
 

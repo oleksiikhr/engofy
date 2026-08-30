@@ -21,15 +21,15 @@ flowchart LR
 |---|---|---|
 | ML1 | Rendering is a **pure function** in `<module>/mails/<x>.template.ts` returning `{ subject, text, html }` — no side effects. | `auth/mails/challenge-email.template.ts:11-21` |
 | ML2 | The `services/shared/<x>-mailer.service.ts` binds the template to the `MAILER` port and is invoked from a **worker processor**, never an HTTP path. | `auth/services/shared/challenge-mailer.service.ts` |
-| ML3 | The mailer impl is chosen at DI time by `mailer.provider.ts`: `RESEND_API_KEY` set → Resend, else MailHog SMTP. | `core/mail/mailer.provider.ts:12-18` |
+| ML3 | The mailer impl is chosen at DI time by `mailer.provider.ts`: `RESEND_API_KEY` → Resend; else `MAIL_USE_MAILHOG=true` → MailHog SMTP; else `ConsoleMailerService` (and a bootstrap throw in production). | `core/mail/mailer.provider.ts` |
 | ML4 | Structured params/results as named interfaces, not positional args. | `auth/services/shared/challenge-mailer.service.ts:5-8` |
 
-## D18 — fallback (confirmed)
+## D18 — fallback (done, Batch A)
 
-Change the no-key fallback from MailHog to **`ConsoleMailerService`** (logs a
-clear warning); **throw at bootstrap in production** when neither a Resend key nor
-an explicit MailHog opt-in is present. Today `ConsoleMailerService` exists but is
-referenced nowhere, and a misconfigured prod silently drops mail into a dead SMTP.
+The no-key fallback is **`ConsoleMailerService`** (logs a clear warning);
+production **throws at bootstrap** when neither `RESEND_API_KEY` nor the explicit
+`MAIL_USE_MAILHOG=true` opt-in is set. MailHog is no longer a silent default that
+drops mail into a dead SMTP in a misconfigured prod.
 
 ## Fix owed (tests)
 

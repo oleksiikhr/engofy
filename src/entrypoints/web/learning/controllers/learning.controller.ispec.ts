@@ -83,6 +83,15 @@ describe('LearningController', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
+  it('returns 404 when reviewing a card that does not exist', async () => {
+    const cookie = await login(suite.orm.em);
+    await suite
+      .request('post', `/learning/cards/${uuidv7()}/review`)
+      .set('Cookie', cookie)
+      .send({ rating: 'good' })
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
   it('rejects a body with two targets', async () => {
     const cookie = await login(suite.orm.em);
     await suite

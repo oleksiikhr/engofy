@@ -20,7 +20,7 @@ Adapter `anthropic-client.service.ts` (not `@Injectable` — built by `ai-client
 |---|---|---|
 | AI1 | AI calls run **only in pg-boss processors** (`references/pipeline.md` P1). | PLAN §12 |
 | AI2 | Never trust the raw tool payload — always `tool.schema.parse` it. | `anthropic-client.service.ts:112` |
-| AI3 | `complete()` turns SDK `stop_reason === 'max_tokens'` into a distinct thrown error so the reconstruct-retry loop doesn't spin on a budget problem. `completeStructured` must do the same (**gap** — today a truncated tool call surfaces as an opaque `ZodError`). | `anthropic-client.service.ts:133-137` |
+| AI3 | `complete()` **and** `completeStructured()` turn SDK `stop_reason === 'max_tokens'` into a distinct thrown error so the reconstruct-retry loop doesn't spin on a budget problem (a truncated tool call would otherwise surface as an opaque `ZodError` from `tool.schema.parse`). | `anthropic-client.service.ts` |
 | AI4 | Every call logs a structured usage line (`input`/`output`/`cache` tokens + `cost_usd`). | `anthropic-client.service.ts:57-69` |
 | AI5 | Prompt strings + zod tool schemas live in pure `<module>/domain/*-prompt.ts`. | `post/domain/complexity-prompt.ts` |
 
@@ -63,8 +63,6 @@ annotation. PLAN to be updated to match.
 
 | Sev | Change |
 |---|---|
-| med | Sonnet 5 price in `anthropic-client.service.ts:14` + `draft/lib/call-claude.ts:11` is stale (`{input:3,output:15}` → `{input:2,output:10}`). |
-| med | `completeStructured` must check `stop_reason` (AI3). |
 | med | `supportsAdaptiveThinking` denylists only `haiku` — allowlist adaptive-capable models instead. |
 | med | Stream `complete()` (baseline calls ~114 s — SDK 10-min timeout risk → full paid stage re-run); add `cache_control: { type: 'ephemeral' }` to the large static system prompts. |
 | med | `AnthropicClientService` has no unit spec. |

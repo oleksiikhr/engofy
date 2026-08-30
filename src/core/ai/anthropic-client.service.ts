@@ -11,7 +11,7 @@ import type {
 // Models" pricing table in Anthropic's docs. Update alongside AI_MODEL.
 const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
   'opus-5': { input: 5, output: 25 },
-  'sonnet-5': { input: 3, output: 15 },
+  'sonnet-5': { input: 2, output: 10 },
   'fable-5': { input: 10, output: 50 },
   'haiku-4-5': { input: 1, output: 5 },
   'opus-4-8': { input: 5, output: 25 },
@@ -98,6 +98,15 @@ export class AnthropicClientService implements AiClient {
     });
 
     this.logUsage(response.usage, 'ai completeStructured call usage');
+
+    // A max_tokens-truncated tool call leaves `input` partial, which surfaces
+    // as an opaque `ZodError` from `tool.schema.parse` below — mirror the
+    // distinct, non-retryable error `complete()` raises for the same cause.
+    if (response.stop_reason === 'max_tokens') {
+      throw new Error(
+        `AI response was truncated by max_tokens — output_tokens=${response.usage.output_tokens}`,
+      );
+    }
 
     const toolUse = response.content.find(
       (block): block is Anthropic.ToolUseBlock =>

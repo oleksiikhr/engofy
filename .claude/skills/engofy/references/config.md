@@ -18,7 +18,6 @@
 | Item | D |
 |---|---|
 | The MikroORM connection is configured **outside** `@nestjs/config` (`mikro-orm.setup.ts` hardcodes `engofy/engofy` + `preferEnvVars:true` reading native `MIKRO_ORM_*`). `core/queue/config/queue.config.ts` describes the **same** DB with **different** defaults (`postgres/postgres`) → pg-boss can target different creds. **D18: share the ORM config object — one source.** | D18 |
-| `LuxonTimestampType` writes an offset-less literal into `timestamptz` → Postgres interprets it in the session `TimeZone`; nothing forces UTC. **D18: set `timezone: 'UTC'` in the pg `driverOptions`.** | D18 |
 | `S3_CORS_MAX_AGE` / `S3_PUBLIC_URL` declared but never read. | — |
 | `PUBLIC_URL` has no fallback but is passed to CORS `origin` with `credentials:true`. Make it `envRequiredString`. | — |
 | Token style: `MAILER` is `Symbol('MAILER')`; `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT`/`WORKER_QUEUES` are plain strings. Standardise on `Symbol()`. | — |

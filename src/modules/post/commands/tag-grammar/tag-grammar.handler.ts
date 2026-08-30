@@ -122,8 +122,6 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
       { postId },
       { singletonKey: postId },
     );
-
-    await this.em.flush();
   }
 
   private async loadCatalog(): Promise<GrammarCatalog> {

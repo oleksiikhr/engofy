@@ -19,7 +19,7 @@ export class ResolveSessionHandler
       return null;
     }
 
-    this.sessions.refresh(dto.token).catch(() => undefined);
+    await this.sessions.refresh(dto.token);
 
     return { userId };
   }

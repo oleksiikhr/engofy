@@ -66,7 +66,5 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
     run.status = PostPipelineRunStatus.Completed;
     run.completedAt = DateTime.now();
     this.em.persist(run);
-
-    await this.em.flush();
   }
 }

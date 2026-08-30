@@ -22,10 +22,7 @@
 
 | Sev | Item | D |
 |---|---|---|
-| **high** | `core/database/mikro-orm.logger.ts:58-70` — a Sentry breadcrumb per **query** with inlined bind params (emails, hashes, tokens) + `results` rows, never sanitised, all environments, before the `isEnabled` guard. Run through `sanitizeSqlParams` + drop `results` + gate to prod logic. | D18 |
 | med | No rate limiting at the web edge (PLAN §7) — only the auth login counter. Add `@nestjs/throttler`. | D14 |
-| med | `DomainError` → flat HTTP 400 — `TooManyLoginRequestsError` can't return 429; a limiter that looks enforced isn't visible as one. | D1 |
-| med | No `RESEND_API_KEY` → silent MailHog fallback (mail dropped in a misconfigured prod). Use `ConsoleMailerService` / throw at bootstrap. | D18 |
 | low | `PUBLIC_URL` unset → CORS `origin: undefined` (permissive) on a credentialed endpoint. Make it required. | — |
 | low | `Sentry.tracesSampleRate` defaults to `1` (100%) per entrypoint. | — |
 | low | converters copy link `href` verbatim — no scheme allow-list (`javascript:`/`data:` reach stored `LinkNode.href`). Admin-supplied, but persisted + rendered. Strip non-`http(s)`/`mailto`. | — |

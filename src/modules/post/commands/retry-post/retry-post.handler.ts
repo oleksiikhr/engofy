@@ -39,7 +39,5 @@ export class RetryPostHandler implements ICommandHandler<RetryPostCommand> {
     );
 
     this.logger.log({ postId }, 'pipeline re-run enqueued');
-
-    await this.em.flush();
   }
 }

@@ -1,6 +1,6 @@
 export class AuthorizationError extends Error {
   constructor(message?: string) {
     super(message);
-    this.name = AuthorizationError.name;
+    this.name = new.target.name;
   }
 }

@@ -103,7 +103,7 @@ describe('AuthController', () => {
       await suite
         .request('post', '/auth/login', { authed: false })
         .send({ email })
-        .expect(HttpStatus.BAD_REQUEST);
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
     });
 
     it('rate-limits requests from one IP even across different emails', async () => {
@@ -118,7 +118,7 @@ describe('AuthController', () => {
       await suite
         .request('post', '/auth/login', { authed: false })
         .send({ email: uniqueEmail() })
-        .expect(HttpStatus.BAD_REQUEST);
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
     });
   });
 
@@ -149,10 +149,12 @@ describe('AuthController', () => {
           .expect(HttpStatus.BAD_REQUEST);
       }
 
+      // One past the limit: the challenge is hard-deleted and the error
+      // switches from "invalid code" (400) to TooManyAttemptsError (429).
       await suite
         .request('post', '/auth/login/verify-code', { authed: false })
         .send({ email, code: '000000' })
-        .expect(HttpStatus.BAD_REQUEST);
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
     });
 
     it('sets a session cookie on the right code, resolvable via /auth/me', async () => {

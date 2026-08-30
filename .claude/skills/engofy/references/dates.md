@@ -21,6 +21,7 @@
 - Read: `DateTime.fromSQL(value, { zone: 'utc' })`.
 - Defensively accepts a stray JS `Date`.
 
-> **Open question (wave 1):** the offset-less literal means Postgres interprets it
-> in the session `TimeZone`. Nothing in the repo forces UTC — it currently works
-> only because the `postgres` image defaults to UTC. See `REVIEW.md` open question 15.
+> The offset-less write literal means Postgres interprets it in the session
+> `TimeZone`, so every pg connection forces `options: '-c timezone=UTC'` in
+> `mikro-orm.setup.ts` `driverOptions` (D18) — no longer reliant on the server
+> image default.
