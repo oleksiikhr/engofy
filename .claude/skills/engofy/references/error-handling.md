@@ -49,10 +49,15 @@ export class DomainError extends Error {
 - OpenAPI already declares a global `429` (`build-openapi-document.ts`); it is
   now reachable. No `409` response added (unused).
 
-## Async / pipeline failures
+## Async / pipeline failures (D4 — done, Batch C)
 
-Per **D4**: a failing pipeline stage must leave a trace. Target: `JobWorkerHost`
-writes `PostPipelineRun` `Pending`+`startedAt` on entry, `Failed`+`errorMessage`+
-`retryCount++` on caught error before rethrow; `PostStatus.Failed` on retry
-exhaustion. Today it only rethrows (→ Sentry + pg-boss `failed` state, no row).
-See `references/pipeline.md`, `references/queue-jobs.md`.
+A failing pipeline stage leaves a trace. `JobWorkerHost` (`entrypoints/worker/
+job-worker-host.ts`) writes `PostPipelineRun` `Pending`+`startedAt` on stage
+entry and `Failed`+`errorMessage`+`retryCount++` in the catch **before**
+rethrowing — both on `this.orm.em.fork()` (its own transaction) so the row
+survives the job's rollback. When pg-boss has no attempts left
+(`job.retryCount >= job.retryLimit`) it also sets `PostStatus.Failed`. The
+handler still throws for pg-boss to retry; the paid AI queues carry a
+`deadLetter` so a poison job is quarantined (`core/queue/queue-config.ts`).
+`Running` is derived (`startedAt` set, `completedAt` null), not an enum value.
+See `references/pipeline.md` (P3a), `references/queue-jobs.md`.

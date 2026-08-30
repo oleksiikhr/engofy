@@ -1,8 +1,12 @@
 // The post processing pipeline (PLAN.md §5). Each value is an independent,
 // idempotent pg-boss job with its own PostPipelineRun row.
+//
+// There is no `fetch` stage: ingest takes pasted text synchronously on the
+// HTTP path (PLAN.md §5), so the pipeline starts at `spacy_parse`. A future
+// link-fetch would be a new leading stage. The `post_pipeline_runs_stage_check`
+// constraint still lists the legacy `'fetch'` literal as an accepted-but-unused
+// value; dropping it is a Batch D migration.
 export enum PostPipelineStage {
-  // Resolve the source text (link or bot-supplied text) into post_parts.
-  Fetch = 'fetch',
   // spaCy: tokenise, POS/lemma/morph/dep → sentences + sentence_tokens.
   SpacyParse = 'spacy_parse',
   // Node-tree word/phrase annotation over post_parts (idioms/collocations via

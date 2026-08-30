@@ -11,9 +11,10 @@
 | `OutboxSenderService` | `core/queue/outbox-sender.service.ts` | `send(em, QueueName, data)` — staged in a `WeakMap<em>`, drained on `afterFlush` so the enqueue rides the write txn |
 | `OutboxSubscriber` | `core/queue/outbox.subscriber.ts` | registers on `orm.em` event mgr, `afterFlush → drain` |
 | `withSentryTrace` | `core/queue/sentry-trace.ts` | stamps `_sentryTrace`/`_sentryBaggage` into the payload |
-| `<Module>QueueBootstrapService` | per module | `OnApplicationBootstrap` → `boss.createQueue(QueueName.X)` |
-| `JobWorkerHost<T>` | `entrypoints/worker/job-worker-host.ts` | abstract base for processors |
-| `WorkerRegistrarService` | `entrypoints/worker/worker-registrar.service.ts` | `boss.work(name, jobs => processor.work(jobs))` |
+| `PostQueueBootstrapService` | `modules/post` | **the single `boss.createQueue` authority (D8)** — `OnApplicationBootstrap` declares the dead-letter queue + every `QueueName` (auth queue included) from the shared `QUEUE_DEFINITIONS` map |
+| `QUEUE_DEFINITIONS` / `POST_DEAD_LETTER_QUEUE` | `core/queue/queue-config.ts` | per-queue `createQueue` options: singleton + 1h expiry base, explicit `retryLimit`/`retryDelay`/`retryBackoff`, `deadLetter` on the paid AI stages |
+| `JobWorkerHost<T>` | `entrypoints/worker/job-worker-host.ts` | abstract base for processors; also owns the `PostPipelineRun` lifecycle for a stage job (D4) |
+| `WorkerRegistrarService` | `entrypoints/worker/worker-registrar.service.ts` | **only** `boss.work(name, { includeMetadata: true }, jobs => processor.work(jobs))` — never `createQueue` (D8) |
 | `CronJobHost` | `entrypoints/cron/cron-job-host.ts` | abstract base for `@Cron` classes |
 
 ## Enqueue rules
@@ -35,10 +36,12 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 ```
 
 - One stage = one `QueueName` + one processor + one per-stage `@Module` importing the domain module.
-- A **throw** in `processJob` → caught by `JobWorkerHost.handleOne` → Sentry + log → **rethrown** so pg-boss retries.
+- A **throw** in `processJob` → caught by `JobWorkerHost.handleOne` → (pipeline stages: `PostPipelineRun` set `Failed` on a forked em) → Sentry + log → **rethrown** so pg-boss retries.
 - Job runs inside `withRequestContext(this.orm.em, …)` — its own forked `em`.
+- A pipeline processor overrides `pipelineStage(job): PipelineStageRef` (stage + postId). `JobWorkerHost` then writes the run row `Pending`+`startedAt` before the job and `Failed`+`errorMessage`+`retryCount++` in the catch — on `this.orm.em.fork()` (a separate transaction) so the trace survives the job's rollback. `PostStatus.Failed` is set once `job.retryCount >= job.retryLimit`. Non-pipeline processors (auth e-mail) leave `pipelineStage()` returning `null`.
+- `JobWorkerHost.work` settles each job with `Promise.allSettled`, then re-throws (single reason, or `AggregateError`) so pg-boss still retries the failed job(s). Safe as a batch only because `batchSize` defaults to 1 — a real batch wants pg-boss `perJobResults`.
 - Distributed trace continued from `job.data._sentryTrace` → `startSpan({ op: 'queue.process' })`.
-- The **facade** owns `em.flush()` — the processor just calls one facade method.
+- The **facade** owns `em.flush()` — the processor just calls one facade method. (The run-row bookkeeping above is `JobWorkerHost`'s own forked em, not the facade's.)
 - Worker shutdown leans on `boss.stop()`'s built-in graceful wait (`PgBossLifecycleService`) — **not** a hand-rolled drain like cron. Don't "fix" it to match.
 
 ## Cron pattern
@@ -52,7 +55,20 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 
 | D | Change |
 |---|---|
-| D4 | run row on entry; `Failed`/`errorMessage`/`retryCount` on error; `PostStatus.Failed` on exhaustion; explicit `retryLimit`+backoff per queue; `deadLetter` queue for paid AI stages. `Running` is derived, not an enum value. |
-| D8 | `PostQueueBootstrapService` (extended to **all** `QueueName`s) is the single `createQueue` authority with a shared options const; `WorkerRegistrarService` only `boss.work()`s. |
-| — | `Promise.all(jobs.map(handleOne))` in `JobWorkerHost.work` → `allSettled` + per-job settle (safe today only because `batchSize` defaults to 1). |
-| — | `WORKER_QUEUES` string token → `Symbol()`. |
+| — | `WORKER_QUEUES` string token → `Symbol()`. (Batch H) |
+
+### Done (Batch C)
+
+- **D4** — `JobWorkerHost` writes the run row on entry / failure on a forked em;
+  `PostStatus.Failed` on retry exhaustion; per-queue `retryLimit` + backoff +
+  `deadLetter` for the AI stages (`core/queue/queue-config.ts`). `Running` stays
+  derived.
+- **D8** — `PostQueueBootstrapService` declares every queue from
+  `QUEUE_DEFINITIONS`; `AuthQueueBootstrapService` deleted; `WorkerRegistrarService`
+  only `boss.work()`s (with `includeMetadata: true`).
+- `JobWorkerHost.work` → `Promise.allSettled` + re-throw.
+
+**Caveat:** the single authority lives in `PostModule`, so a worker started with
+*only* non-post queues (`worker auth-challenge-email`) never runs it. Every real
+deployment loads `PostModule` (the web app imports it, and the default worker
+runs all queues), so the queues exist before that worker `work()`s them.

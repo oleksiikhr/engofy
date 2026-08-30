@@ -1,7 +1,7 @@
 import type { OnApplicationBootstrap, Type } from '@nestjs/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import type { Job, PgBoss } from 'pg-boss';
+import type { JobWithMetadata, PgBoss } from 'pg-boss';
 import { PG_BOSS } from '../../core/queue/queue.tokens.js';
 import type { SentryTraceFields } from '../../core/queue/sentry-trace.js';
 import type { JobWorkerHost } from './job-worker-host.js';
@@ -25,9 +25,14 @@ export class WorkerRegistrarService implements OnApplicationBootstrap {
           strict: false,
         });
 
-        await this.boss.createQueue(queueName);
-        await this.boss.work(queueName, (jobs: Job<SentryTraceFields>[]) =>
-          processor.work(jobs),
+        // Queues are declared once by `PostQueueBootstrapService` (D8); the
+        // registrar only attaches a worker. `includeMetadata` gives the
+        // processor `retryCount` / `retryLimit` so `JobWorkerHost` can tell a
+        // final failure from a retriable one (D4).
+        await this.boss.work(
+          queueName,
+          { includeMetadata: true },
+          (jobs: JobWithMetadata<SentryTraceFields>[]) => processor.work(jobs),
         );
 
         this.logger.log(`Registered worker for queue "${queueName}"`);
