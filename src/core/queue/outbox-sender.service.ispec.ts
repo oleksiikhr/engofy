@@ -5,7 +5,9 @@ import { OutboxSenderService } from './outbox-sender.service.js';
 import { QueueName } from './queue-names.enum.js';
 
 describe('OutboxSenderService', () => {
-  const suite = createIntegrationSuite();
+  // This suite reads `pgboss.job` back to prove `drain()` really enqueues on
+  // the em's connection, so it needs a live pg-boss (not the default stub).
+  const suite = createIntegrationSuite({}, { realPgBoss: true });
 
   let outbox: OutboxSenderService;
 

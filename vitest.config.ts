@@ -57,6 +57,10 @@ export default defineConfig({
           fileParallelism: false,
           typecheck: { enabled: false },
           sequence: { groupOrder: 1 },
+          // The first `beforeAll` drops the schema and replays every migration
+          // from zero, then boots a Nest app + Postgres/Redis clients — well
+          // past the 10s default on a cold CI runner.
+          hookTimeout: 60_000,
         },
       },
     ],

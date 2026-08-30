@@ -9,7 +9,7 @@ describe('HealthController', () => {
 
     it('should return application health status', async () => {
       const response = await suite
-        .request('get', '/_healthz', { authed: false })
+        .request('get', '/_healthz')
         .expect(HttpStatus.OK);
 
       const body = response.body as HealthCheckResult;

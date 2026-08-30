@@ -88,9 +88,7 @@ describe('ETagInterceptor', () => {
   // ---------------------------------------------------------------------------
 
   it('does not set ETag when no @CachePolicy decorator is present', async () => {
-    const res = await suite
-      .request('get', '/_healthz', { authed: false })
-      .expect(HttpStatus.OK);
+    const res = await suite.request('get', '/_healthz').expect(HttpStatus.OK);
 
     expect(res.headers.etag).toBeUndefined();
     // Cache-Control may be set by other mechanisms (e.g. @nestjs/terminus) — not our concern here
@@ -123,7 +121,7 @@ describe('ETagInterceptor', () => {
 
   it('sets Cache-Control: public for @CachePolicy("public") routes', async () => {
     const res = await suite
-      .request('get', '/etag-test/public-config', { authed: false })
+      .request('get', '/etag-test/public-config')
       .expect(HttpStatus.OK);
 
     expect(res.headers['cache-control']).toBe('public');

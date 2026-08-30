@@ -109,3 +109,27 @@ jobs:
       - name: Check generated metadata is up to date
         run: git diff --exit-code src/metadata.ts
         if: always()
+
+  nlp-service:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: nlp-service
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: nlp-service/requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      # The spaCy model (offset math is the whole contract) is exercised here.
+      - name: Run tests
+        run: pytest -q

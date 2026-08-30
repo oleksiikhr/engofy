@@ -1,11 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import {
-  AI_CLIENT,
-  type AiClient,
-  type AiCompleteStructuredParams,
-} from '../../../../core/ai/ai-client.port.js';
+import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import type { ComprehensionResult } from '../../domain/comprehension-prompt.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
@@ -35,32 +32,20 @@ const TOKENS: [number, number, string, string, string, string, string][] = [
   [36, 37, '.', '.', 'PUNCT', '.', 'punct'],
 ];
 
-class FakeAiClient implements AiClient {
-  structuredCallCount = 0;
-
-  complete(): Promise<string> {
-    throw new Error('complete not used by GenerateExercisesHandler');
-  }
-
-  async completeStructured<T>(_: AiCompleteStructuredParams<T>): Promise<T> {
-    this.structuredCallCount += 1;
-    const result: ComprehensionResult = {
-      questions: [
-        {
-          question: 'What jumped?',
-          options: ['The fox', 'The dog', 'The cat', 'The bird'],
-          answerIndex: 0,
-        },
-        {
-          question: 'How were the dogs described?',
-          options: ['Lazy', 'Clever', 'Fast', 'Loud'],
-          answerIndex: 0,
-        },
-      ],
-    };
-    return result as T;
-  }
-}
+const FIXTURE_COMPREHENSION: ComprehensionResult = {
+  questions: [
+    {
+      question: 'What jumped?',
+      options: ['The fox', 'The dog', 'The cat', 'The bird'],
+      answerIndex: 0,
+    },
+    {
+      question: 'How were the dogs described?',
+      options: ['Lazy', 'Clever', 'Fast', 'Loud'],
+      answerIndex: 0,
+    },
+  ],
+};
 
 async function seedPostWithSentence(em: EntityManager): Promise<string> {
   const source = new PostSource();
@@ -104,6 +89,7 @@ async function seedPostWithSentence(em: EntityManager): Promise<string> {
 
 describe('GenerateExercisesHandler', () => {
   const fakeAi = new FakeAiClient();
+  fakeAi.onCompleteStructured = () => FIXTURE_COMPREHENSION;
   const suite = createIntegrationSuite(
     { imports: [PostModule] },
     {

@@ -29,7 +29,7 @@ describe('ErrorFilter', () => {
     mockHealthCheckService.check.mockRejectedValueOnce(new Error('Boom'));
 
     const response = await suite
-      .request('get', '/_healthz', { authed: false })
+      .request('get', '/_healthz')
       .expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
     expect(response.body).toEqual({ message: 'Internal server error' });

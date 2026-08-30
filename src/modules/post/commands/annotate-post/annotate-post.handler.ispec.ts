@@ -1,16 +1,12 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
+import {
+  FakeNlpClient,
+  type NlpTokenOverride,
+} from '../../../../../test/fakes/nlp.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import {
-  AI_CLIENT,
-  type AiClient,
-  type AiCompleteParams,
-} from '../../../../core/ai/ai-client.port.js';
-import {
-  NLP_CLIENT,
-  type NlpClient,
-  type NlpParseResult,
-  type NlpToken,
-} from '../../../../core/nlp/nlp-client.port.js';
+import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
+import { NLP_CLIENT } from '../../../../core/nlp/nlp-client.port.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
@@ -39,10 +35,7 @@ const FIXTURE =
 // Minimal pos/tag/dep for each fixture word — enough to drive the content-POS
 // filter in buildTokenAnnotations and the deterministic phrasal-verb grouping
 // in build-sentences.ts.
-const POS: Record<
-  string,
-  { pos: string; tag?: string; dep?: string; lemma?: string; head?: number }
-> = {
+const POS: Record<string, NlpTokenOverride> = {
   the: { pos: 'DET', dep: 'det' },
   government: { pos: 'NOUN' },
   picked: { pos: 'VERB', tag: 'VBD', dep: 'ROOT', lemma: 'pick' },
@@ -56,57 +49,17 @@ const POS: Record<
   results: { pos: 'NOUN' },
 };
 
-// One sentence = whole input, whitespace tokenised so offsets are exact.
-class FakeNlpClient implements NlpClient {
-  async parse(text: string): Promise<NlpParseResult> {
-    const tokens: NlpToken[] = [];
-    const wordRe = /\S+/g;
-    let match: RegExpExecArray | null = wordRe.exec(text);
-    let index = 0;
-
-    while (match !== null) {
-      const raw = match[0];
-      const meta = POS[raw.toLowerCase()] ?? { pos: 'X' };
-      tokens.push({
-        index,
-        text: raw,
-        lemma: meta.lemma ?? raw.toLowerCase(),
-        pos: meta.pos,
-        tag: meta.tag ?? 'XX',
-        dep: meta.dep ?? 'dep',
-        morph: {},
-        head: meta.head ?? index,
-        start: match.index,
-        end: match.index + raw.length,
-      });
-      index += 1;
-      match = wordRe.exec(text);
-    }
-
-    return { sentences: [{ text, start: 0, end: text.length, tokens }] };
-  }
-}
-
 // Wraps the one idiom in the fixture, echoing everything else verbatim so
 // parseAnnotationTags sees a complete response and never retries.
-class FakeAiClient implements AiClient {
-  callCount = 0;
-
-  completeStructured(): Promise<never> {
-    throw new Error('completeStructured not used by AnnotatePostHandler');
+function wrapFixtureIdiom(userText: string): string {
+  const phrase = 'kept tabs on';
+  const at = userText.indexOf(phrase);
+  if (at < 0) {
+    return userText;
   }
-
-  async complete({ userText }: AiCompleteParams): Promise<string> {
-    this.callCount += 1;
-    const phrase = 'kept tabs on';
-    const at = userText.indexOf(phrase);
-    if (at < 0) {
-      return userText;
-    }
-    return `${userText.slice(0, at)}⟦${phrase}⟧{{p|idiom|keep tabs on|g1}}${userText.slice(
-      at + phrase.length,
-    )}`;
-  }
+  return `${userText.slice(0, at)}⟦${phrase}⟧{{p|idiom|keep tabs on|g1}}${userText.slice(
+    at + phrase.length,
+  )}`;
 }
 
 async function createPostWithParagraph(
@@ -134,6 +87,7 @@ async function createPostWithParagraph(
 
 describe('AnnotatePostHandler', () => {
   const fakeAi = new FakeAiClient();
+  fakeAi.onComplete = ({ userText }) => wrapFixtureIdiom(userText);
   const suite = createIntegrationSuite(
     { imports: [PostModule] },
     {
@@ -142,7 +96,7 @@ describe('AnnotatePostHandler', () => {
           .overrideProvider(AI_CLIENT)
           .useValue(fakeAi)
           .overrideProvider(NLP_CLIENT)
-          .useValue(new FakeNlpClient()),
+          .useValue(new FakeNlpClient(POS)),
     },
   );
 
@@ -265,10 +219,10 @@ describe('AnnotatePostHandler', () => {
     await suite.command(new SpacyParsePostCommand(postId));
 
     await suite.command(new AnnotatePostCommand(postId));
-    const callsAfterFirstRun = fakeAi.callCount;
+    const callsAfterFirstRun = fakeAi.completeCallCount;
 
     await suite.command(new AnnotatePostCommand(postId));
-    expect(fakeAi.callCount).toBe(callsAfterFirstRun);
+    expect(fakeAi.completeCallCount).toBe(callsAfterFirstRun);
   });
 
   it('fails when the spaCy layer has not run yet', async () => {

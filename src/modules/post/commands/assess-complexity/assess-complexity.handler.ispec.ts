@@ -1,11 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import {
-  AI_CLIENT,
-  type AiClient,
-  type AiCompleteStructuredParams,
-} from '../../../../core/ai/ai-client.port.js';
+import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import type { ComplexityAssessment } from '../../domain/complexity-prompt.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
@@ -22,30 +19,18 @@ const SENTENCE_INDEX_RE = /^\[(\d+)]/gm;
 
 // Returns a fixed assessment for the two fixture sentences, echoing back
 // whatever indexes it was shown so indexComplexityLevels is satisfied.
-class FakeAiClient implements AiClient {
-  structuredCallCount = 0;
-
-  complete(): Promise<string> {
-    throw new Error('complete not used by AssessComplexityHandler');
-  }
-
-  async completeStructured<T>(
-    params: AiCompleteStructuredParams<T>,
-  ): Promise<T> {
-    this.structuredCallCount += 1;
-    const indexes = [...params.userText.matchAll(SENTENCE_INDEX_RE)].map((m) =>
-      Number(m[1]),
-    );
-    const assessment: ComplexityAssessment = {
-      overall: CefrLevel.B2,
-      newVocabRatio: 0.15,
-      sentences: indexes.map((index) => ({
-        index,
-        level: index === 0 ? CefrLevel.B1 : CefrLevel.C1,
-      })),
-    };
-    return assessment as T;
-  }
+function fixtureAssessment(userText: string): ComplexityAssessment {
+  const indexes = [...userText.matchAll(SENTENCE_INDEX_RE)].map((m) =>
+    Number(m[1]),
+  );
+  return {
+    overall: CefrLevel.B2,
+    newVocabRatio: 0.15,
+    sentences: indexes.map((index) => ({
+      index,
+      level: index === 0 ? CefrLevel.B1 : CefrLevel.C1,
+    })),
+  };
 }
 
 async function createPostWithSentences(
@@ -79,6 +64,7 @@ async function createPostWithSentences(
 
 describe('AssessComplexityHandler', () => {
   const fakeAi = new FakeAiClient();
+  fakeAi.onCompleteStructured = ({ userText }) => fixtureAssessment(userText);
   const suite = createIntegrationSuite(
     { imports: [PostModule] },
     {

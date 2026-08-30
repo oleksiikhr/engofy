@@ -17,6 +17,17 @@ python -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
+## Tests
+
+```bash
+.venv/bin/pip install -r requirements-dev.txt
+.venv/bin/pytest -q
+```
+
+`test_app.py` locks the offset contract (sentence offsets index the request
+text, token offsets index their sentence's text, `head` is sentence-local).
+CI runs it in the `nlp-service` job.
+
 ## Run
 
 ```bash

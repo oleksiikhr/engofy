@@ -13,6 +13,7 @@ export const redisProvider: Provider = {
     const client = new Redis({
       host: config.host,
       port: config.port,
+      db: config.db,
       ...(config.password && { password: config.password }),
     });
 

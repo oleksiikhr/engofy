@@ -1,3 +1,4 @@
+import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Post } from '../../../post/entities/post.entity.js';
 import TelegramConfig from '../../config/telegram.config.js';
@@ -28,30 +29,6 @@ function adminMessage(updateId: number, text: string): TelegramUpdatePayload {
       chat: { id: ADMIN_ID },
     },
   };
-}
-
-class FakeTelegramClient {
-  configured = true;
-  queued: TelegramUpdatePayload[] = [];
-  offsets: (number | undefined)[] = [];
-  sent: { chatId: string; text: string }[] = [];
-  failSendMessage = false;
-
-  async getUpdates(offset?: number): Promise<TelegramUpdatePayload[]> {
-    this.offsets.push(offset);
-    return this.queued;
-  }
-
-  async sendMessage(
-    chatId: string,
-    text: string,
-  ): Promise<{ message_id: number }> {
-    if (this.failSendMessage) {
-      throw new Error('telegram sendMessage 502');
-    }
-    this.sent.push({ chatId, text });
-    return { message_id: 1 };
-  }
 }
 
 describe('PollUpdatesService', () => {

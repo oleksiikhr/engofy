@@ -1,5 +1,6 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
@@ -18,30 +19,6 @@ const FAKE_CONFIG = {
   channelId: '@engofy_test',
   apiBaseUrl: 'http://telegram.invalid',
 };
-
-class FakeTelegramClient {
-  configured = true;
-  sent: { chatId: string; text: string }[] = [];
-  nextError: Error | null = null;
-  nextMessageId = 555;
-
-  async getUpdates(): Promise<[]> {
-    return [];
-  }
-
-  async sendMessage(
-    chatId: string,
-    text: string,
-  ): Promise<{ message_id: number }> {
-    if (this.nextError) {
-      const err = this.nextError;
-      this.nextError = null;
-      throw err;
-    }
-    this.sent.push({ chatId, text });
-    return { message_id: this.nextMessageId };
-  }
-}
 
 async function seedPendingPublication(
   em: EntityManager,
@@ -104,6 +81,7 @@ async function seedPublication(
 
 describe('PublishPendingService', () => {
   const fakeClient = new FakeTelegramClient();
+  fakeClient.nextMessageId = 555;
   let service: PublishPendingService;
 
   const suite = createIntegrationSuite(

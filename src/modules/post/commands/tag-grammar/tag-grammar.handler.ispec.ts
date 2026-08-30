@@ -1,10 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import {
-  AI_CLIENT,
-  type AiClient,
-} from '../../../../core/ai/ai-client.port.js';
+import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
@@ -33,19 +31,7 @@ const TOKEN_SPEC: [number, number, string][] = [
   [34, 35, '.'],
 ];
 
-class FakeAiClient implements AiClient {
-  callCount = 0;
-  response = `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
-
-  completeStructured(): Promise<never> {
-    throw new Error('completeStructured not used by TagGrammarHandler');
-  }
-
-  async complete(): Promise<string> {
-    this.callCount += 1;
-    return this.response;
-  }
-}
+const DEFAULT_GRAMMAR_RESPONSE = `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
 
 async function seedCatalog(em: EntityManager): Promise<void> {
   const category = new GrammarCategory();
@@ -115,6 +101,8 @@ async function seedPostWithSentence(em: EntityManager): Promise<string> {
 
 describe('TagGrammarHandler', () => {
   const fakeAi = new FakeAiClient();
+  let grammarResponse = DEFAULT_GRAMMAR_RESPONSE;
+  fakeAi.onComplete = () => grammarResponse;
   const suite = createIntegrationSuite(
     { imports: [PostModule] },
     {
@@ -124,7 +112,7 @@ describe('TagGrammarHandler', () => {
   );
 
   beforeEach(() => {
-    fakeAi.response = `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
+    grammarResponse = DEFAULT_GRAMMAR_RESPONSE;
   });
 
   it('writes a grammar_match with the token range and resolved usage point', async () => {
@@ -154,7 +142,7 @@ describe('TagGrammarHandler', () => {
   it('drops a span whose usage-point index does not belong to the tagged construction', async () => {
     await seedCatalog(suite.orm.em);
     const postId = await seedPostWithSentence(suite.orm.em);
-    fakeAi.response = `[0] She ⟦had never visited⟧{{g|past-perfect|11111}} Tokyo before.`;
+    grammarResponse = `[0] She ⟦had never visited⟧{{g|past-perfect|11111}} Tokyo before.`;
 
     await suite.command(new TagGrammarCommand(postId));
 
@@ -164,7 +152,7 @@ describe('TagGrammarHandler', () => {
   it('dedupes an identical span the model repeats instead of failing on the unique constraint', async () => {
     await seedCatalog(suite.orm.em);
     const postId = await seedPostWithSentence(suite.orm.em);
-    fakeAi.response =
+    grammarResponse =
       `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.\n` +
       `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
 
@@ -178,11 +166,11 @@ describe('TagGrammarHandler', () => {
     const postId = await seedPostWithSentence(suite.orm.em);
 
     await suite.command(new TagGrammarCommand(postId));
-    const callsAfterFirstRun = fakeAi.callCount;
+    const callsAfterFirstRun = fakeAi.completeCallCount;
 
     await suite.command(new TagGrammarCommand(postId));
 
-    expect(fakeAi.callCount).toBe(callsAfterFirstRun);
+    expect(fakeAi.completeCallCount).toBe(callsAfterFirstRun);
     expect(await suite.orm.em.count(GrammarMatch, {})).toBe(1);
   });
 });

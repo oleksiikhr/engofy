@@ -77,7 +77,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
-    "@faker-js/faker": "^10.5.0",
     "@mikro-orm/cli": "^7.1.11",
     "@mikro-orm/seeder": "^7.1.11",
     "@nestjs/cli": "^11.0.24",
