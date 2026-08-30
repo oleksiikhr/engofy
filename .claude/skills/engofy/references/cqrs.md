@@ -48,10 +48,20 @@ sequenceDiagram
 | `AnnotatePostHandler` | flush-per-`PostPart` so a mid-job crash keeps completed parts (a part with `annotatedAt` set is skipped on retry). | PLAN §12; `commands/annotate-post/annotate-post.handler.ts` |
 | `SpacyParsePostHandler` | same flush-per-`PostPart` pattern. | `commands/spacy-parse-post/spacy-parse-post.handler.ts:81` |
 
-These two are the **only** sanctioned exceptions. `assess-complexity` /
-`tag-grammar` / `generate-exercises` / `publish` / `retry` previously flushed
+These two are the **only** sanctioned CQRS-handler exceptions. `assess-complexity`
+/ `tag-grammar` / `generate-exercises` / `publish` / `retry` previously flushed
 internally too — that was redundant with the facade re-flush and has been removed
 (Batch A, D3).
+
+### Flush outside the CQRS path
+
+Two non-handler contexts legitimately own their own `em.flush()` — they have no
+facade to defer to:
+
+| Context | Why it flushes | Reference |
+|---|---|---|
+| Cron-poller services (`services/shared/*`) | flush-per-row for mid-batch durability; the `@Cron` host is a thin `CronJobHost` that just calls `service.run()`. Full rules in `queue-jobs.md` / `architecture.md` (D15). | `telegram/services/shared/{poll-updates,publish-pending,prune-telegram-updates}.service.ts` |
+| **CLI importer inline seeding (D16)** | A thin one-off / seed importer script (PLAN §1) builds entities inline in the command's `execute()` and calls its own `em.flush()` — no domain service, no facade. Sanctioned for these seed commands; **do not** refactor them into `post` services. `post ingest` is different — it goes through `PostService.ingest`. | `entrypoints/cli/{grammar/grammar-import-egp,grammar/grammar-import-irregular-verbs,words/words-import-frequency}.command.ts` |
 
 ## Command constructor shape
 

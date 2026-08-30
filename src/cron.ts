@@ -34,7 +34,7 @@ try {
   });
 } catch (err) {
   logger
-    ? logger.error({ cause: err }, 'Cron crashed')
+    ? logger.error({ err }, 'Cron crashed')
     : console.error('Cron crashed', err);
   Sentry.captureException(err);
   await app?.close();

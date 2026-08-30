@@ -1,1 +1,1 @@
-export const WORKER_QUEUES = 'WORKER_QUEUES';
+export const WORKER_QUEUES = Symbol('WORKER_QUEUES');

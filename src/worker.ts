@@ -32,7 +32,7 @@ try {
   });
 } catch (err) {
   logger
-    ? logger.error({ cause: err }, 'Worker crashed')
+    ? logger.error({ err }, 'Worker crashed')
     : console.error('Worker crashed', err);
   Sentry.captureException(err);
   await app?.close();

@@ -54,9 +54,12 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 
 ## Fixes owed (confirmed)
 
-| D | Change |
-|---|---|
-| — | `WORKER_QUEUES` string token → `Symbol()`. (Batch H) |
+None outstanding.
+
+### Done (Batch H) — worker / cli (D16)
+
+- `WORKER_QUEUES` DI token is now `Symbol('WORKER_QUEUES')` (mirrors `MAILER`),
+  not a bare string — `entrypoints/worker/worker.tokens.ts`.
 
 ### Done (Batch G) — telegram / cron (D15)
 

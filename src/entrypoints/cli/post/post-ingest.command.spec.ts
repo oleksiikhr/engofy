@@ -2,12 +2,14 @@ import { Logger } from '@nestjs/common';
 import { injectOrm } from '../../../../test/helpers/orm.helper.js';
 import { PostSourceFormat } from '../../../modules/post/enums/post-source-format.enum.js';
 import { PostSourceType } from '../../../modules/post/enums/post-source-type.enum.js';
+import { PostType } from '../../../modules/post/enums/post-type.enum.js';
+import { CliInputError } from '../cli-input.error.js';
 import { InvalidCliFlagError } from '../invalid-cli-flag.error.js';
 import { PostIngestCommand } from './post-ingest.command.js';
 
-vi.mock('node:fs/promises', () => ({ readFile: vi.fn() }));
+vi.mock('node:fs/promises', () => ({ readFile: vi.fn(), access: vi.fn() }));
 
-const { readFile } = await import('node:fs/promises');
+const { readFile, access } = await import('node:fs/promises');
 
 describe('PostIngestCommand', () => {
   let command: PostIngestCommand;
@@ -20,6 +22,7 @@ describe('PostIngestCommand', () => {
       em: {},
     });
     logSpy = vi.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
+    vi.mocked(access).mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -35,6 +38,21 @@ describe('PostIngestCommand', () => {
       PostSourceType.RedditComment,
     );
     expect(() => command.parseSourceType('bogus')).toThrow(InvalidCliFlagError);
+  });
+
+  it('parseType accepts a known value and rejects an unknown one', () => {
+    expect(command.parseType('article')).toBe(PostType.Article);
+    expect(() => command.parseType('bogus')).toThrow(InvalidCliFlagError);
+  });
+
+  it('throws CliInputError when the ingest file does not exist', async () => {
+    vi.mocked(access).mockRejectedValue(new Error('ENOENT'));
+
+    await expect(command.run(['./missing.txt'], {})).rejects.toThrow(
+      CliInputError,
+    );
+    expect(readFile).not.toHaveBeenCalled();
+    expect(ingest).not.toHaveBeenCalled();
   });
 
   it('forwards source type and attribution to the ingest DTO', async () => {

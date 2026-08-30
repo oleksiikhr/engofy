@@ -10,7 +10,7 @@ import { shutdownSentry } from './core/observability/sentry.js';
 
 function reportError(err: unknown, logger?: Logger) {
   logger
-    ? logger.error({ cause: err }, 'CLI command failed')
+    ? logger.error({ err }, 'CLI command failed')
     : console.error('CLI command failed', err);
 
   Sentry.captureException(err);
