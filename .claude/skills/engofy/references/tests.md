@@ -68,8 +68,8 @@ schema diff via `orm.migrator.checkSchema()` after the drop-and-replay. Closes
 | `nlp-service/app.py` | the offset math is the whole contract | **done** — `nlp-service/test_app.py` + CI job (Batch I) |
 | worker processors, `MAILER` / `ChallengeMailerService` | no direct spec | **done** — `post-processors.spec.ts`, `send-challenge-email.processor.spec.ts`, `challenge-mailer.service.spec.ts` (Batch I) |
 | `learning` `CardLimitService` / `SkillProgressService` | no direct spec | **done** — `*.ispec.ts` (Batch I) |
-| `core/database/helpers/change-set.helper.ts`, `request-context.helper.ts` | no `.spec.ts` | owed — Batch K |
-| `post/domain/` | `collect-spans`, `generate-slug`, `generate-short-id`, `upsert-phrase-id`, `annotation-prompt` uncovered | owed — Batch K |
+| `core/database/helpers/change-set.helper.ts`, `request-context.helper.ts` | no `.spec.ts` | **done** — `change-set.helper.spec.ts`, `request-context.helper.spec.ts` (Batch K) |
+| `post/domain/` | `collect-spans`, `generate-slug`, `generate-short-id`, `upsert-phrase-id`, `annotation-prompt` uncovered | **done** (Batch K) — `collect-spans.spec.ts`, `generate-slug.spec.ts`, `generate-short-id.spec.ts` (also documents the `byte % 62` modulo bias + no-retry-on-`@Unique` as a known/accepted weakness), `annotation-prompt.spec.ts`, `upsert-phrase-id.ispec.ts` (raw upsert needs PG); new `span-range.spec.ts` + `core/helpers/slug.helper.spec.ts` for the Batch K extractions |
 
 Dead test scaffolding removed (Batch I): `test/helpers/factory.helper.ts`,
 `@faker-js/faker` dep, `makeChangeSet` / `makeFlushArgs`, the `authed` flag on

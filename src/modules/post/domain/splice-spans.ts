@@ -14,6 +14,7 @@ import type {
   TextNode,
   WordSpanNode,
 } from './node-tree.types.js';
+import { contains } from './span-range.js';
 
 interface BaseSpanInsert {
   start: number;
@@ -48,9 +49,7 @@ function childIndexFor(
   start: number,
   end: number,
 ): number {
-  const match = offsets.find(
-    (offset) => offset.start <= start && end <= offset.end,
-  );
+  const match = offsets.find((offset) => contains(offset, { start, end }));
   if (!match) {
     throw new SpanInsertOutOfNodeError(start, end);
   }

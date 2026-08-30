@@ -25,4 +25,4 @@
 |---|---|---|
 | ~~`learning/queries/get-profile` `computeStreak`~~ | **fixed (Batch E)** — now a single `SELECT DISTINCT to_char((reviewed_at AT TIME ZONE 'UTC')::date, …)` via `em.getConnection().execute` (`dailyStreakFromUtcDays` consumes the day strings). | — |
 | `learning/queries/get-dictionary` | loads **all** published posts + all their `post_parts` + walks every node-tree span on each `/dictionary` hit (stands in for the missing `post_word`/`post_phrase`). Bound it, or build the projection. | D10/D12 |
-| `post/queries/get-feed` | offset pagination on `publishedAt desc` — every new publish shifts the window (the "stable offset" comment is wrong). Keyset on `(publishedAt, id)` or accept + fix the comment. | — |
+| `post/queries/get-feed` | offset pagination on `publishedAt desc` — every new publish shifts the window. Batch K took the cheap path: the misleading "stable offset" comment is now replaced with the truth + a `TODO` for keyset on `(publishedAt, id)` (the query already `orderBy`s that exact tuple). Full keyset is a deferred feature, not a bug. | — |

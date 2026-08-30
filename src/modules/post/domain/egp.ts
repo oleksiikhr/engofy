@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { slugify } from '../../../core/helpers/slug.helper.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 
 // One row of the Cambridge English Grammar Profile (assets/egp.json). See
@@ -34,10 +35,7 @@ export function grammarConstructionSlug(
   category: string,
   subcategory: string,
 ): string {
-  return `${category} ${subcategory}`
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+  return slugify(`${category} ${subcategory}`);
 }
 
 const GUIDEWORD_PREFIX = /^(FORM\/USE|FORM|USE)\s*:?\s*/i;

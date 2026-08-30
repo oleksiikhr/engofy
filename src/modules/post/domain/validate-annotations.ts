@@ -3,6 +3,7 @@ import { PhraseType } from '../enums/phrase-type.enum.js';
 import { InvalidAnnotationOffsetError } from '../errors/invalid-annotation-offset.error.js';
 import { InvalidAnnotationShapeError } from '../errors/invalid-annotation-shape.error.js';
 import { OverlappingAnnotationsError } from '../errors/overlapping-annotations.error.js';
+import { spansOverlap } from './span-range.js';
 
 export interface Annotation {
   start: number;
@@ -98,7 +99,7 @@ function checkNoOverlaps(annotations: Annotation[]): void {
     const previous = sorted[i - 1];
     const current = sorted[i];
 
-    if (previous && current && current.start < previous.end) {
+    if (previous && current && spansOverlap(previous, current)) {
       throw new OverlappingAnnotationsError(current.start, current.end);
     }
   }

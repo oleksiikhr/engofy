@@ -1,8 +1,5 @@
+import { spansOverlap } from './span-range.js';
 import type { Annotation } from './validate-annotations.js';
-
-function spansOverlap(a: Annotation, b: Annotation): boolean {
-  return a.start < b.end && b.start < a.end;
-}
 
 // The system prompt tells the model not to also tag a word standalone when
 // it's covered by a phrase fragment ("pick one"), but that instruction

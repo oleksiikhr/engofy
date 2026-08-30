@@ -24,7 +24,7 @@
 | E3 | Defaulted fields are typed `Opt<T>` and given the default inline. | `entities/user.entity.ts:25-26` |
 | E4 | Timestamps: `type: LuxonTimestampType`, `onCreate: () => DateTime.now()`, `onUpdate` where mutable. See `references/dates.md`. | `entities/user.entity.ts:25-33` |
 | E5 | Enums stored as `text` + a CHECK constraint (not native pg enum); values are `snake_case` strings. | `Migration20260824192359.ts:77-108` |
-| E6 | Enum decorator: **object form** `@Enum({ items: () => X })`. (post has `@Enum(() => X)` shorthand drift in 4 places — don't copy it.) | `entities/subscription.entity.ts:24` |
+| E6 | Enum decorator: **object form** `@Enum({ items: () => X })`. (Batch K converted the last 3 `@Enum(() => X)` shorthands in post — no drift left.) | `entities/subscription.entity.ts:24` |
 | E7 | FKs are bare `@Property({ type: 'uuid' })` columns — **no `@ManyToOne` relations**. "FK → x" lives in a comment only. | `entities/auth-session.entity.ts` `userId`; `entities/sentence-token.entity.ts:70-85` |
 | E8 | Multi-column identity → `@Unique({ properties: [...] })` on the entity. | `entities/post-part.entity.ts:32` |
 | E9 | Case-insensitive uniqueness → raw `expression` unique index (`lower(col)`). New technique vs auth; used by the lexicon. | `entities/word.entity.ts:13-17` |

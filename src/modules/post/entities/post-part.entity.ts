@@ -41,7 +41,7 @@ export class PostPart {
   @Property({ type: 'integer' })
   blockIndex!: number;
 
-  @Enum(() => PostPartKind)
+  @Enum({ items: () => PostPartKind })
   kind!: PostPartKind;
 
   // The whole Block (Paragraph or ListBlock, with all its items) for this

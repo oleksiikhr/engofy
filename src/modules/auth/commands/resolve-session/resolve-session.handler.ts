@@ -14,12 +14,12 @@ export class ResolveSessionHandler
   async execute({
     dto,
   }: ResolveSessionCommand): Promise<ResolvedSession | null> {
-    const userId = await this.sessions.resolveUserId(dto.token);
+    const userId = await this.sessions.resolveUserId(dto.sessionToken);
     if (!userId) {
       return null;
     }
 
-    await this.sessions.refresh(dto.token);
+    await this.sessions.refresh(dto.sessionToken);
 
     return { userId };
   }

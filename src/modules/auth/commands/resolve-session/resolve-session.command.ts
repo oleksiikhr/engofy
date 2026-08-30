@@ -1,5 +1,5 @@
 import { Command } from '@nestjs/cqrs';
-import { ResolveSessionDto } from './resolve-session.dto.js';
+import type { ResolveSessionDto } from './resolve-session.dto.js';
 
 export interface ResolvedSession {
   userId: string;

@@ -4,6 +4,7 @@ import {
   NodeType,
   parse,
 } from 'node-html-parser';
+import { isSafeLinkHref } from '../../../core/helpers/url.helper.js';
 import type {
   Block,
   Doc,
@@ -38,16 +39,24 @@ function wrapLink(el: HTMLElement, marks: Mark[]): TreeNode[] {
   const href = el.getAttribute('href') ?? '';
   const text = el.text;
 
-  return text
-    ? [
-        {
-          type: 'link',
-          text,
-          href,
-          ...(marks.length > 0 ? { marks: [...marks] } : {}),
-        },
-      ]
-    : [];
+  if (!text) {
+    return [];
+  }
+
+  // Reject non-`http(s)`/`mailto` schemes (`javascript:`, `data:`, …) before the
+  // href reaches a stored LinkNode — degrade to plain text, keeping what reads.
+  if (!isSafeLinkHref(href)) {
+    return wrapText(text, marks);
+  }
+
+  return [
+    {
+      type: 'link',
+      text,
+      href,
+      ...(marks.length > 0 ? { marks: [...marks] } : {}),
+    },
+  ];
 }
 
 function convertInlineElement(el: HTMLElement, marks: Mark[]): TreeNode[] {
@@ -119,11 +128,30 @@ function convertBlockElement(el: HTMLElement): Block | undefined {
   return undefined;
 }
 
+// Top-level block elements only: descend through non-block wrappers (<div>, …)
+// but stop at the first block on each path, so a <ul>/<ol> nested inside a <li>
+// is not also emitted as its own top-level block (which duplicated its content).
+function collectBlockElements(node: HtmlNode): HTMLElement[] {
+  if (!(node instanceof HTMLElement)) {
+    return [];
+  }
+
+  const tag = node.tagName?.toLowerCase();
+  if (
+    tag === 'p' ||
+    tag === 'ul' ||
+    tag === 'ol' ||
+    (tag && tag in HEADING_TAGS)
+  ) {
+    return [node];
+  }
+
+  return node.childNodes.flatMap(collectBlockElements);
+}
+
 export function convertHtmlToDoc(rawText: string): Doc {
   const root = parse(rawText);
-  const blockElements = root.querySelectorAll(
-    'p, h1, h2, h3, h4, h5, h6, ul, ol',
-  );
+  const blockElements = root.childNodes.flatMap(collectBlockElements);
 
   const children = blockElements
     .map(convertBlockElement)

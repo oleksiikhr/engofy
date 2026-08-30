@@ -22,7 +22,7 @@ describe('SessionService', () => {
 
   it('resolves the owning user ID for a freshly created session', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     await suite.orm.em.flush();
 
     await expect(sessions.resolveUserId(token)).resolves.toBe(userId);
@@ -36,7 +36,7 @@ describe('SessionService', () => {
 
   it('extends expiresAt once the remaining TTL drops below the refresh threshold', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     await suite.orm.em.flush();
 
     const nearExpiry = DateTime.now().plus({ days: 1 });
@@ -59,7 +59,7 @@ describe('SessionService', () => {
 
   it('removes the session matching the given token', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     await suite.orm.em.flush();
     suite.orm.em.clear();
 
@@ -76,7 +76,7 @@ describe('SessionService', () => {
 
   it('does not touch expiresAt when the session is not near expiry', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     await suite.orm.em.flush();
 
     const before = await suite.orm.em.findOneOrFail(AuthSession, { userId });

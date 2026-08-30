@@ -2,7 +2,7 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 const ResolveSessionSchema = z.object({
-  token: z.string(),
+  sessionToken: z.string().min(16),
 });
 
 export class ResolveSessionDto extends createZodDto(ResolveSessionSchema) {}

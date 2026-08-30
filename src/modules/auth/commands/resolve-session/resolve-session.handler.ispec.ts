@@ -17,17 +17,19 @@ describe('ResolveSessionHandler', () => {
 
   it('resolves the owning user ID for a valid session token', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     await suite.orm.em.flush();
 
-    const result = await suite.command(new ResolveSessionCommand({ token }));
+    const result = await suite.command(
+      new ResolveSessionCommand({ sessionToken: token }),
+    );
 
     expect(result).toEqual({ userId });
   });
 
   it('returns null for an unknown token', async () => {
     const result = await suite.command(
-      new ResolveSessionCommand({ token: 'not-a-real-token' }),
+      new ResolveSessionCommand({ sessionToken: 'not-a-real-token' }),
     );
 
     expect(result).toBeNull();
@@ -35,12 +37,12 @@ describe('ResolveSessionHandler', () => {
 
   it('slides the expiry of a session close to its TTL (awaited refresh)', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     const session = await suite.orm.em.findOneOrFail(AuthSession, { userId });
     session.expiresAt = DateTime.now().plus({ days: 5 });
     await suite.orm.em.flush();
 
-    await suite.command(new ResolveSessionCommand({ token }));
+    await suite.command(new ResolveSessionCommand({ sessionToken: token }));
 
     const refreshed = await suite.orm.em.findOneOrFail(AuthSession, { userId });
     expect(refreshed.expiresAt > DateTime.now().plus({ days: 20 })).toBe(true);
@@ -48,13 +50,13 @@ describe('ResolveSessionHandler', () => {
 
   it('leaves a far-from-expiry session untouched', async () => {
     const userId = randomUUID();
-    const token = await sessions.create(userId);
+    const token = sessions.create(userId);
     const farExpiry = DateTime.now().plus({ days: 25 });
     const session = await suite.orm.em.findOneOrFail(AuthSession, { userId });
     session.expiresAt = farExpiry;
     await suite.orm.em.flush();
 
-    await suite.command(new ResolveSessionCommand({ token }));
+    await suite.command(new ResolveSessionCommand({ sessionToken: token }));
 
     const after = await suite.orm.em.findOneOrFail(AuthSession, { userId });
     expect(after.expiresAt.toMillis()).toBe(farExpiry.toMillis());

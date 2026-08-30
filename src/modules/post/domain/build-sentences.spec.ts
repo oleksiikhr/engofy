@@ -221,6 +221,46 @@ describe('detectGerund', () => {
     ).toBe(false);
   });
 
+  it('does not flag a lexicalised -ing noun tagged NN ("Morning comes early")', () => {
+    expect(
+      gerundOf(
+        [
+          { text: 'Morning', tag: 'NN', pos: 'NOUN', dep: 'nsubj', head: 1 },
+          { text: 'comes', tag: 'VBZ', pos: 'VERB', dep: 'ROOT', head: 1 },
+          { text: 'early', tag: 'RB', pos: 'ADV', dep: 'advmod', head: 1 },
+        ],
+        0,
+      ),
+    ).toBe(false);
+  });
+
+  it('does not flag "Nothing" ("Nothing matters")', () => {
+    expect(
+      gerundOf(
+        [
+          { text: 'Nothing', tag: 'NN', pos: 'NOUN', dep: 'nsubj', head: 1 },
+          { text: 'matters', tag: 'VBZ', pos: 'VERB', dep: 'ROOT', head: 1 },
+        ],
+        0,
+      ),
+    ).toBe(false);
+  });
+
+  it('still flags a stop-listed lemma when spaCy tags it VBG ("Meeting new people is fun")', () => {
+    expect(
+      gerundOf(
+        [
+          { text: 'Meeting', tag: 'VBG', pos: 'VERB', dep: 'nsubj', head: 4 },
+          { text: 'new', tag: 'JJ', pos: 'ADJ', dep: 'amod', head: 2 },
+          { text: 'people', tag: 'NNS', pos: 'NOUN', dep: 'dobj', head: 0 },
+          { text: 'is', tag: 'VBZ', pos: 'AUX', dep: 'ROOT', head: 4 },
+          { text: 'fun', tag: 'NN', pos: 'NOUN', dep: 'attr', head: 3 },
+        ],
+        0,
+      ),
+    ).toBe(true);
+  });
+
   it('does not flag a non -ing token', () => {
     expect(
       gerundOf(

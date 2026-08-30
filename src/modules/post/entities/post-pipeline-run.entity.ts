@@ -21,7 +21,7 @@ export class PostPipelineRun {
   @Property({ type: 'uuid' })
   postId!: string;
 
-  @Enum(() => PostPipelineStage)
+  @Enum({ items: () => PostPipelineStage })
   stage!: PostPipelineStage;
 
   @Enum({ items: () => PostPipelineRunStatus })

@@ -1,8 +1,5 @@
+import { spansOverlap } from './span-range.js';
 import type { Annotation } from './validate-annotations.js';
-
-function overlaps(a: Annotation, b: Annotation): boolean {
-  return a.start < b.end && b.start < a.end;
-}
 
 // A deterministic phrase — a spaCy phrasal-verb group, carrying a
 // pre-resolved `phraseId` — beats an AI idiom/collocation that straddles it.
@@ -28,7 +25,7 @@ export function resolvePhraseOverlaps(annotations: Annotation[]): Annotation[] {
     ) {
       continue;
     }
-    if (deterministic.some((d) => overlaps(annotation, d))) {
+    if (deterministic.some((d) => spansOverlap(annotation, d))) {
       droppedGroups.add(annotation.phraseGroupId);
     }
   }

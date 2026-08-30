@@ -14,7 +14,7 @@ export class SessionService {
     private readonly config: ConfigType<typeof AuthConfig>,
   ) {}
 
-  async create(userId: string): Promise<string> {
+  create(userId: string): string {
     const token = generateToken();
 
     this.em.create(AuthSession, {

@@ -33,7 +33,7 @@
 |---|---|---|
 | N1 | `nlp-service` returns **raw spaCy fields only**. All linguistics (phrasal-verb grouping, gerund detection) is deterministic TS in `build-sentences.ts` — never in Python, never via the LLM. | PLAN §5/§12; `build-sentences.ts:58-119` |
 | N2 | `computePhrasalVerbKeys`: particle (`dep=prt` / `tag=RP`) → head verb via dependency → key `lemma + particle` (`pick up`), shared by the verb and every fragment; the handler resolves it to a `Phrase` (`phrasal_verb`). | `build-sentences.ts` |
-| N3 | `detectGerund`: `-ing` in a nominal dep role; `VBG` always, `NN` only when it has no `det` child (`en_core_web_sm` tags a bare gerund subject inconsistently). | `build-sentences.ts:67-78` |
+| N3 | `detectGerund`: `-ing` in a nominal dep role; `VBG` always, `NN` only when it has no `det` child **and** is not in `LEXICALISED_ING_NOUNS` (Batch K / D13 — ~24 common `-ing` nouns like `morning`, `nothing`, `spring`; consulted for the `NN` branch only, a confident `VBG` still wins). | `build-sentences.ts` |
 | N4 | Both configs ship a working localhost default (`NLP_SERVICE_URL = http://127.0.0.1:8000`) so the app boots without the service. | `core/nlp/nlp.config.ts` |
 
 ## Fixes owed
@@ -42,4 +42,4 @@
 |---|---|
 | med | `nlp-service/app.py` has **no tests** — the offset math is the whole contract. Add a `pytest` for a 2-sentence input with a discontinuous phrasal verb. |
 | low | `http-nlp-client.service.ts:36` casts `response.json() as NlpParseResult` with no shape check — a malformed 200 throws far away in `buildSentences`. Validate at the boundary. |
-| low (D13) | `detectGerund` false-positives on lexicalised `-ing` nouns ("Morning", "ceiling", "Nothing") — add a ~15-entry stop-list. |
+| ~~low (D13)~~ | **done (Batch K)** — `LEXICALISED_ING_NOUNS` stop-list in `build-sentences.ts` short-circuits the `NN` branch; `build-sentences.spec.ts` covers "Morning"/"Nothing" (not flagged) and a `VBG` "Meeting" (still flagged). |

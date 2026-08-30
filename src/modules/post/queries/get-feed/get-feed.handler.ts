@@ -10,9 +10,13 @@ import { GetFeedQuery } from './get-feed.query.js';
 const EXCERPT_MAX_CHARS = 280;
 
 // Backs the `/` feed page (PLAN.md §4): published posts newest first, with a
-// plain-text excerpt built from the leading blocks. Simple offset pagination —
-// the feed is append-only in publish order, so a stable offset is fine and
-// HTMX just requests the next `?offset=`.
+// plain-text excerpt built from the leading blocks. Pagination is a plain
+// LIMIT/OFFSET and is *not* stable: `publishedAt desc` means every new publish
+// shifts all later rows down by one, so a client paging with `?offset=` can
+// see an item twice or miss one across the boundary.
+// TODO: switch to keyset pagination on `(publishedAt, id)` — the query already
+// orders by that exact tuple, so the cursor is `WHERE (published_at, id) <
+// (:cursorPublishedAt, :cursorId)`.
 @QueryHandler(GetFeedQuery)
 export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
   constructor(private readonly em: EntityManager) {}

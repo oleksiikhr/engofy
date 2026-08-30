@@ -14,7 +14,7 @@ export class CompleteLoginService {
 
   async loginByEmail(email: string): Promise<LoginResult> {
     const user = await this.findOrCreateUser(email);
-    const sessionToken = await this.sessions.create(user.id);
+    const sessionToken = this.sessions.create(user.id);
 
     return { userId: user.id, sessionToken };
   }
@@ -26,7 +26,7 @@ export class CompleteLoginService {
       user.googleSub = googleSub;
     }
 
-    const sessionToken = await this.sessions.create(user.id);
+    const sessionToken = this.sessions.create(user.id);
 
     return { userId: user.id, sessionToken };
   }

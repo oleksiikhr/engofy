@@ -13,20 +13,20 @@
 | ST5 | `biome-ignore` always carries a justification string. | `core/queue/outbox-sender.service.ts:48` |
 | ST6 | Structured params/results are named interfaces, not positional args. | `auth/services/challenge.service.ts:39-46` |
 | ST7 | PK: `@PrimaryKey({ type: 'uuid' }) id: string = uuidv7();` — uuid **v7**. Defaulted fields typed `Opt<T>` with the default inline. | `references/mikroorm.md` E2–E3 |
-| ST8 | Entity `@Enum` → object form `@Enum({ items: () => X })`. (post/learning have `@Enum(() => X)` shorthand drift — don't copy.) | `references/mikroorm.md` E6 |
+| ST8 | Entity `@Enum` → object form `@Enum({ items: () => X })`. (Batch K cleared the last 3 `@Enum(() => X)` shorthands in post — no drift left.) | `references/mikroorm.md` E6 |
 | ST9 | Module `providers` group handlers into named `commandHandlers` / `queryHandlers` arrays spread into `providers`. (learning/billing/cli use one flat array — drift.) | `auth/auth.module.ts:22-30` |
-| ST10 | `ConfigModule.forFeature(A, B, C)` is variadic — one call, not three. | drift in `auth.module.ts:33-38`, `telegram.module.ts:13-16` |
+| ST10 | One `ConfigModule.forFeature(X)` call per config namespace. `@nestjs/config`'s `forFeature` takes a **single** factory (verified in the installed dist) — it is *not* variadic, so `auth.module.ts`'s three calls are correct, not drift. | `auth/auth.module.ts:33-35` |
 | ST11 | Never `new Date()` — Luxon `DateTime` only (`references/dates.md`). | `CLAUDE.md` |
 | ST12 | Don't return a managed ORM entity across a module / `CommandBus` boundary — plain value / DTO / id (`references/cqrs.md` Q6, D2). | — |
 
-## Naming drift to avoid (found in review)
+## Naming drift (found in review — all cleared by Batch K)
 
-| Where | Issue |
-|---|---|
-| `post/domain/node-tree.type.ts` vs `node-tree.types.ts` | differ only by a trailing `s` — trivially mis-imported. Rename the custom-type file. |
-| `post/domain/` | 3 slugify implementations (`generateSlug`, `grammarConstructionSlug`, `parse-slug-id`) with different rules. Share one. |
-| `post/domain/` | `spansOverlap` / `overlaps` half-open-interval helper duplicated across 4 files. Extract `domain/span-range.ts`. |
-| `resolve-session.dto.ts` | `token` vs `sessionToken` for the same concept across sibling DTOs; `z.string()` without `.min(16)` that siblings have. |
+| Where | Issue | Resolution |
+|---|---|---|
+| `post/domain/node-tree.type.ts` vs `node-tree.types.ts` | differ only by a trailing `s` — trivially mis-imported. | renamed to `node-tree-json.type.ts` (nothing imported it). |
+| slugify | `generateSlug` + `grammarConstructionSlug` each hand-rolled the same normalise/hyphenate logic with subtly different rules. | shared `core/helpers/slug.helper.ts` `slugify(input, { maxLength? })`; both delegate. `parse-slug-id` is a shortId *parser*, not a generator — left alone. |
+| overlap helpers | `spansOverlap` / `overlaps` / inline `contains` half-open-interval logic duplicated across 5 domain files. | extracted `post/domain/span-range.ts` (`spansOverlap`, `contains`, `SpanRange`); all call sites use it. |
+| `resolve-session.dto.ts` | field `token` (vs `sessionToken` elsewhere); `z.string()` without the `.min(16)` siblings have. | renamed to `sessionToken`, added `.min(16)`; command/handler/guard/service + ispecs updated; DTO imported `import type`. |
 
 ## `biome.json` scope
 

@@ -171,21 +171,24 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] §3.3 — `cefr_level` moved to `word_definitions` in the schema block + a post-review note (D12)
 - [x] §3.9 — `update_id` (was `telegram_message_id`), `raw_payload` (was `raw_payload_json`), `/add <text>` (was `/add {link}`) + "pasted text, not URL" note
 - [x] §13 — annotated the `§6` and `§3.3` audit rows; added a new **§13a Пост-рев'ю кодбази** section pointing at `.claude/skills/engofy/` with the top unresolved items table
-- [ ] §3.2 `attribution_text`/`source_type` — already in the §3.2 spec block (Part I); the gap is code-only → tracked in §13a + Batch D, no Part I edit needed
-- [ ] §3.5 `review_logs` `created_at` — not in the §3.5 spec block; code-only drop → Batch D
+- [x] §3.2 `attribution_text`/`source_type` — resolved in code by Batch D; PLAN Part I needs 0 edits (§3.2 already contains the spec block). Closed in Batch K cleanup.
+- [x] §3.5 `review_logs` `created_at` — resolved in code by Batch D (code-only column drop; never in the §3.5 spec block). PLAN Part I needs 0 edits. Closed in Batch K cleanup.
 
-### Batch K — misc cleanup / consistency (low, opportunistic)
-- [ ] `post/domain/node-tree.type.ts` → `node-tree-json.type.ts`
-- [ ] one shared `slugify` + `domain/span-range.ts` (`spansOverlap`/`contains`)
-- [ ] `resolve-session.dto.ts` — `.min(16)` + rename `token` → `sessionToken`; `import type`
-- [ ] entity `@Enum(() => X)` shorthand → `@Enum({ items: () => X })` (post/learning)
-- [ ] `ConfigModule.forFeature(A, B, …)` variadic (`auth`, `telegram`)
-- [ ] converters — reject non-`http(s)`/`mailto` link `href`; `html-to-doc` block scan → direct children only
-- [ ] `get-feed` — keyset pagination on `(publishedAt, id)` or fix the comment
-- [ ] D13: `detectGerund` stop-list (~15 lexicalised `-ing` nouns)
-- [ ] missing domain specs: `collect-spans`, `generate-slug`, `generate-short-id`, `upsert-phrase-id`, `annotation-prompt`, `change-set.helper`, `request-context.helper`
-- [ ] `SubscriptionService` / `PollUpdatesService` etc. — `services/` vs `services/shared/` audit across all modules
-- [ ] `session.service.create()` — drop needless `async`
+### Batch K — misc cleanup / consistency (DONE 2026-08-30, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**124 files / 737 tests**, was 115/677: +9 files, +60) + `pnpm test:cov` gate green — coverage rose (stmts 89.61→89.99 / branches 75.04→76.15 / funcs 85.54→86.44 / lines 90.01→90.34). `pnpm build` + `git diff --exit-code src/metadata.ts` clean (enum-syntax change is a no-op for metadata). `pnpm migration:check` green — no schema change in this batch.
+- [x] **converters — link `href` allow-list** — new `isSafeLinkHref` (`core/helpers/url.helper.ts`): only absolute `http(s):`/`mailto:` pass; `javascript:`/`data:`/relative/unparseable are rejected. `wrapLink` in both `html-to-doc.converter.ts` + `markdown-to-doc.converter.ts` now degrades an unsafe-href `<a>`/`[]()` to a plain text node (keeps the visible text; also keeps the stored tree valid — `parseLinkNode` demands a non-empty href). `.spec` +3 (html js: degraded, html mailto: kept, md js: degraded) + `url.helper.spec` +3. security.md "known weaknesses" row struck.
+- [x] **`html-to-doc` block scan → top-level only** — `querySelectorAll('p, h1..h6, ul, ol')` (any depth) replaced with `collectBlockElements(root.childNodes)`: descends through non-block wrappers (`<div>`, `<section>`) but stops at the first block on each path, so a `<ul>`/`<ol>` nested inside a `<li>` is no longer *also* emitted as its own top-level list (was duplicating its content). `.spec` +2 (nested `<ul>` → one list block; block inside wrapper `<div>`s still found).
+- [x] **D13: `detectGerund` stop-list** — `LEXICALISED_ING_NOUNS` (~24: morning, evening, ceiling, building, meeting, wedding, feeling, warning, opening, beginning, painting, drawing, meaning, setting, ending, thing, nothing, something, everything, anything, spring, string, king, ring) short-circuits the `NN` branch only — a confident `VBG` tag still wins. `build-sentences.ts`; `build-sentences.spec` +3 ("Morning"/"Nothing" not flagged; stop-listed lemma still flagged when tagged `VBG`). nlp.md N3 + Fixes-owed row updated.
+- [x] **`resolve-session.dto.ts`** — `token` → `sessionToken`, `z.string()` → `z.string().min(16)`. Updated: dto, `resolve-session.command.ts` (`import type` for the DTO), `resolve-session.handler.ts` (`dto.sessionToken`), `auth.service.ts` (`import type`), `session-auth.guard.ts` (`{ sessionToken: token }`), `resolve-session.handler.ispec.ts` (4 call sites). style.md naming-drift row struck.
+- [x] **`session.service.create()` — drop `async`** — no `await` in the body (`em.create` is sync); now `create(userId: string): string`. Call sites in `complete-login.service.ts` (×2) + 2 ispecs had their now-redundant `await` removed; still type-compatible. findings-log `[auth] style` row struck.
+- [x] **entity `@Enum(() => X)` → `@Enum({ items: () => X })`** — the last 3 shorthands: `post-part.entity.ts` (`kind`), `post-pipeline-run.entity.ts` (`stage`), `word-definition.entity.ts` (`pos`). No-op for schema — verified: `pnpm build` → `git diff --exit-code src/metadata.ts` clean, `pnpm migration:check` green. style.md ST8 + mikroorm.md E6 updated (no drift left).
+- [x] **`node-tree.type.ts` → `node-tree-json.type.ts`** — `git mv`; **zero import updates** (nothing imports `NodeTreeType` — it's the dead drop-in for a future `Post`-level tree column, kept per instruction). Resolves the `node-tree.type.ts` vs `node-tree.types.ts` trailing-`s` confusion. style.md naming-drift row struck.
+- [x] **shared `slugify`** — new `core/helpers/slug.helper.ts` `slugify(input, { maxLength? })` (NFKD + combining-mark strip + lowercase + `[^a-z0-9]+ → -` + trim `-` runs). `generateSlug` → `slugify(title, { maxLength: 80 })`; `grammarConstructionSlug` → `slugify(\`${category} ${subcategory}\`)`. Behaviour preserved (existing `egp.spec` grammar-slug cases still pass; `parse-slug-id` is a shortId *parser*, not a slug generator — left alone). New `slug.helper.spec.ts` (6 cases) + `generate-slug.spec.ts` (5). style.md naming-drift row struck.
+- [x] **`post/domain/span-range.ts`** — `SpanRange` + `spansOverlap` (half-open) + `contains`. Replaced the private `overlaps`/`spansOverlap` copies in `resolve-phrase-overlaps.ts` + `resolve-word-phrase-overlaps.ts`, the inline containment checks in `drop-spans-crossing-node-boundaries.ts` + `splice-spans.ts`, and the sorted-sweep predicate in `validate-annotations.ts` (`spansOverlap(previous, current)` — provably identical given the start<end invariant `validateOffsets` enforces first). New `span-range.spec.ts` (10 cases). style.md naming-drift row struck.
+- [x] **`get-feed` comment** — the false "stable offset pagination" comment in `get-feed.handler.ts:12-15` replaced with the truth (every publish shifts the `publishedAt desc` window → a client `?offset=` can double-see or skip an item) + a `TODO` for keyset on `(publishedAt, id)` (the query already `orderBy`s that exact tuple). Full keyset is a deferred feature, not this batch. db-performance.md "unbounded reads" row updated.
+- [x] **missing domain / core-helper specs** — `collect-spans.spec.ts`, `generate-slug.spec.ts`, `generate-short-id.spec.ts` (documents the `byte % 62` modulo bias + the no-retry-on-`@Unique` insert as an accepted weakness — huge id space, `@Unique` on `posts.short_id` is the real guard), `annotation-prompt.spec.ts`, `upsert-phrase-id.ispec.ts` (raw case-insensitive upsert needs PG — `PostModule` suite: insert / CI-text conflict returns same id / original `type` untouched), `core/database/helpers/{change-set,request-context}.helper.spec.ts`. tests.md "coverage gaps" rows struck.
+- [x] **`services/` vs `services/shared/` audit** — swept `auth`/`post`/`learning`/`billing`/`telegram`. **No discrepancies.** All 4 `services/shared/*` are imported from an entrypoint; every non-shared service is imported only within its own module (`SubscriptionService` already left `services/` + dropped from `exports` in Batch E). Recorded as a new "A2 audit (Batch K)" row in architecture.md.
+- [x] **`ConfigModule.forFeature` "variadic"** — NOT a real fix: `@nestjs/config`'s `forFeature(config)` takes a **single** factory (verified in the installed `dist` — extra args are silently dropped). `auth.module.ts`'s three `forFeature(X)` calls are correct, not drift. style.md ST10 rewritten to say so.
 
 ## Findings log
 
@@ -291,16 +294,16 @@ _(populated from subagent reports as waves complete)_
 
 ### Low
 
-- **[auth] validation/style** — `commands/resolve-session/resolve-session.dto.ts:5`:
-  `token: z.string()` lacks `.min(16)` that sibling token DTOs use; field named
-  `token` vs `sessionToken` elsewhere for the same concept.
-- **[auth] style** — `commands/resolve-session/resolve-session.command.ts:2` &
-  `auth.service.ts:14`: `ResolveSessionDto` imported as value, not `import type`,
-  unlike every other DTO import in the module.
-- **[auth] style** — `services/session.service.ts:17-29`: `create()` is `async`
-  with no `await`.
-- **[auth] style** — `auth.module.ts:33-38`: three `ConfigModule.forFeature()`
-  calls where one variadic call would do.
+- ~~**[auth] validation/style**~~ — resolve-session.dto: **fixed (Batch K)** —
+  `token` → `sessionToken`, added `.min(16)`.
+- ~~**[auth] style**~~ — `ResolveSessionDto` value-import: **fixed (Batch K)** —
+  `import type` in `resolve-session.command.ts` + `auth.service.ts`.
+- ~~**[auth] style**~~ — `services/session.service.ts` `create()` `async` with no
+  `await`: **fixed (Batch K)** — now sync `create(): string`; call-site `await`s
+  removed (still compatible).
+- ~~**[auth] style**~~ — `auth.module.ts` three `ConfigModule.forFeature()` calls:
+  **not a bug (Batch K)** — `@nestjs/config`'s `forFeature` takes a single
+  factory (not variadic); one call per namespace is correct. style.md ST10 fixed.
 - **[auth] architecture** — `entities/subscription.entity.ts` + its two enums live
   in `auth` but nothing in the module reads/writes them (see open question on
   ownership; `modules/billing` is the likely home).
@@ -328,9 +331,9 @@ _(populated from subagent reports as waves complete)_
   up through `CommandBus` + facade to callers (telegram module); auth commands
   return plain results/DTOs. Return `post.id` or a small view.
 - **[post] docs** — `tag-grammar.handler.ts:48-49` / `generate-exercises.handler.ts:38-39`
-  comments name the wrong predecessor stage (`spacy_parse` vs `ai_complexity`);
-  `get-feed.handler.ts:13-15` comment claims stable offset pagination but orders
-  `publishedAt desc` (drifts on every publish).
+  comments name the wrong predecessor stage (`spacy_parse` vs `ai_complexity`).
+  ~~`get-feed.handler.ts` "stable offset pagination" comment~~ — **fixed (Batch K)**:
+  comment now states the drift + carries a `TODO` for keyset on `(publishedAt, id)`.
 - **[core] config** — `core/s3/s3.config.ts:14`: `corsMaxAge` (`S3_CORS_MAX_AGE`)
   declared, never read; `S3_PUBLIC_URL` present in env/CI, not consumed.
 - **[core] architecture** — token style inconsistent: `MAILER` is `Symbol('MAILER')`,
@@ -352,17 +355,16 @@ _(populated from subagent reports as waves complete)_
   credentialed endpoint. Make it `envRequiredString` or guard the registration.
 - **[core] observability** — `core/observability/sentry.ts:19`:
   `tracesSampleRate` defaults to `1` (100%) for every entrypoint.
-- **[core] tests** — `core/database/helpers/change-set.helper.ts` &
-  `request-context.helper.ts` have no `.spec.ts` (every `core/helpers/` sibling
-  does); `change-set` encodes non-trivial UoW predicate logic.
+- ~~**[core] tests**~~ — `change-set.helper.ts` / `request-context.helper.ts` no
+  `.spec.ts`: **fixed (Batch K)** — both now have a `.spec.ts` under
+  `core/database/helpers/`.
 - **[core-ai] correctness** — `parse-annotation-tags.ts:91,113` recovers offsets
   via `text.indexOf(fragment, cursor)`; if the model tags only the 2nd of two
   identical word forms, the 1st (untagged) occurrence is matched — reconstruct
   check + `validateAnnotations` still pass, so `word_id` links to the wrong token.
-- **[core-ai] correctness** — `build-sentences.ts:67-78` `detectGerund` flags any
-  `-ing` in a nominal `NN` slot with no determiner; lexicalised `-ing` nouns
-  ("Morning", "ceiling", "Nothing") mis-flagged → wrong `pos: verb`. Stop-list or
-  document. (see open question)
+- ~~**[core-ai] correctness**~~ — `detectGerund` mis-flags lexicalised `-ing`
+  nouns: **fixed (Batch K / D13)** — `LEXICALISED_ING_NOUNS` stop-list on the
+  `NN` branch (`VBG` still trusted). Spec'd.
 - **[core-ai] style** — module-level `/g` `/y` regexes with mutable `.lastIndex`
   as scan cursors in both tag parsers (`parse-annotation-tags.ts`,
   `parse-grammar-tags.ts`); safe only single-threaded/non-reentrant.
@@ -406,21 +408,23 @@ _(populated from subagent reports as waves complete)_
   which `validatePhraseShape` rejects, failing the whole job with a shape error
   that hides the real cause (missing `Phrase` row). Throw a specific error on map
   miss.
-- **[post-data] style** — `domain/node-tree.type.ts` vs `domain/node-tree.types.ts`
-  differ only by a trailing `s`; `@Enum(() => X)` shorthand in 4 entities vs the
-  object form auth uses; 3 slugify implementations with different rules
-  (`generateSlug`, `grammarConstructionSlug` — no length cap / no collision
-  handling — `parse-slug-id`); `overlaps`/`spansOverlap` half-open-interval helper
-  duplicated across 4 domain files; redundant `@Index()` on composite-unique
-  leading columns (`sentence`, `sentence_token`).
-- **[post-data] security** — `converters/{html,markdown}-to-doc.converter.ts`:
-  `wrapLink` copies `href` verbatim, no scheme allow-list (`javascript:`/`data:`
-  pass into stored `LinkNode.href`); admin-supplied so low risk but persisted +
-  rendered. `html-to-doc` block scan `querySelectorAll('p,h1..h6,ul,ol')` matches
-  at any depth → nested lists duplicated as content.
-- **[post-data] tests** — no `.spec.ts` for `collect-spans`, `generate-slug`,
-  `generate-short-id`, `upsert-phrase-id`, `annotation-prompt` (rest of `domain/`
-  is covered); `generate-short-id` has modulo bias + no unique-violation retry.
+- **[post-data] style** — **mostly fixed (Batch K)**: ~~`node-tree.type.ts` vs
+  `node-tree.types.ts`~~ (renamed `node-tree-json.type.ts`); ~~`@Enum(() => X)`
+  shorthand~~ (last 3 converted to object form); ~~3 slugify impls~~ (shared
+  `core/helpers/slug.helper.ts` `slugify`; `parse-slug-id` is a parser, left);
+  ~~`overlaps`/`spansOverlap` dup across 4 files~~ (extracted `domain/span-range.ts`).
+  Still open: redundant `@Index()` on composite-unique leading columns
+  (`sentence`, `sentence_token`) — Batch D already dropped several; any remaining
+  are a migration, out of Batch K scope.
+- ~~**[post-data] security**~~ — **fixed (Batch K)**: `wrapLink` in both
+  converters now rejects non-`http(s)`/`mailto` hrefs (`isSafeLinkHref`) →
+  degrades to a text node; `html-to-doc` block scan is top-level-only
+  (`collectBlockElements`), so a nested `<ul>` is no longer duplicated. Spec'd.
+- ~~**[post-data] tests**~~ — **fixed (Batch K)**: `collect-spans`,
+  `generate-slug`, `generate-short-id`, `annotation-prompt` `.spec.ts` +
+  `upsert-phrase-id.ispec.ts` added; `generate-short-id`'s modulo bias +
+  no-unique-retry documented in its spec as an accepted weakness (huge id space,
+  `@Unique` on `posts.short_id` is the guard).
 
 - **[learning] architecture** — `add-card.handler.ts` / `get-*.handler.ts` /
   `skill-progress.service.ts` `em.find` **~8 `post`-owned tables** (`words`,

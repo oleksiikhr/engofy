@@ -59,6 +59,38 @@ function hasDeterminerChild(tokens: NlpToken[], index: number): boolean {
   return tokens.some((t) => t.head === index && t.dep === 'det');
 }
 
+// Common lexicalised -ing nouns. en_core_web_sm tags these `NN` in a bare
+// nominal slot ("Morning comes early", "Nothing matters", "Spring is here"),
+// which the NN branch below would otherwise mis-flag as a gerund (→ pos: verb
+// in build-token-annotations). Only consulted for the NN case — a confident
+// `VBG` tag is still trusted ("Meeting new people is fun").
+const LEXICALISED_ING_NOUNS: ReadonlySet<string> = new Set([
+  'morning',
+  'evening',
+  'ceiling',
+  'building',
+  'meeting',
+  'wedding',
+  'feeling',
+  'warning',
+  'opening',
+  'beginning',
+  'painting',
+  'drawing',
+  'meaning',
+  'setting',
+  'ending',
+  'thing',
+  'nothing',
+  'something',
+  'everything',
+  'anything',
+  'spring',
+  'string',
+  'king',
+  'ring',
+]);
+
 // Deterministic gerund test (PLAN.md §12): an -ing surface form in a nominal
 // dependency slot. en_core_web_sm tags a bare gerund subject as either VBG
 // ("Reading is fundamental") or NN ("Swimming is good"); the NN case is only
@@ -74,7 +106,10 @@ export function detectGerund(token: NlpToken, tokens: NlpToken[]): boolean {
   if (token.tag === 'VBG') {
     return true;
   }
-  return token.tag === 'NN' && !hasDeterminerChild(tokens, token.index);
+  if (token.tag !== 'NN' || hasDeterminerChild(tokens, token.index)) {
+    return false;
+  }
+  return !LEXICALISED_ING_NOUNS.has(token.text.toLowerCase());
 }
 
 function isParticle(token: NlpToken): boolean {

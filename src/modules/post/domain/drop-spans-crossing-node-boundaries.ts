@@ -1,4 +1,5 @@
 import type { NodeOffset } from './flatten.js';
+import { contains } from './span-range.js';
 import type { Annotation } from './validate-annotations.js';
 
 // The model only ever sees flattened plain text — it has no visibility into
@@ -13,9 +14,6 @@ export function dropSpansCrossingNodeBoundaries(
   annotations: Annotation[],
 ): Annotation[] {
   return annotations.filter((annotation) =>
-    offsets.some(
-      (offset) =>
-        offset.start <= annotation.start && annotation.end <= offset.end,
-    ),
+    offsets.some((offset) => contains(offset, annotation)),
   );
 }
