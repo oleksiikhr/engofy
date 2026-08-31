@@ -59,7 +59,9 @@ describe('PostIngestCommand', () => {
     vi.mocked(readFile).mockResolvedValue('raw file contents');
     ingest.mockResolvedValue({
       id: 'post-id',
-      source: { format: PostSourceFormat.Text },
+      shortId: 'sh0rt',
+      status: 'pending',
+      format: PostSourceFormat.Text,
     });
 
     await command.run(['./some/file.txt'], {
@@ -79,7 +81,9 @@ describe('PostIngestCommand', () => {
     vi.mocked(readFile).mockResolvedValue('raw file contents');
     ingest.mockResolvedValue({
       id: 'post-id',
-      source: { format: PostSourceFormat.Text },
+      shortId: 'sh0rt',
+      status: 'pending',
+      format: PostSourceFormat.Text,
     });
 
     await command.run(['./some/file.txt'], { title: 'A title' });
@@ -97,7 +101,9 @@ describe('PostIngestCommand', () => {
     vi.mocked(readFile).mockResolvedValue('raw file contents');
     ingest.mockResolvedValue({
       id: 'post-id',
-      source: { format: PostSourceFormat.Markdown },
+      shortId: 'sh0rt',
+      status: 'pending',
+      format: PostSourceFormat.Markdown,
     });
 
     await command.run(['./some/file.md'], {});

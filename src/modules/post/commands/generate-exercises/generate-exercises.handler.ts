@@ -35,11 +35,11 @@ export interface PostAiExercisesJobData {
 
 // ai_exercises stage (PLAN.md §5, §3.10): most exercises are built
 // deterministically from `sentence_tokens` (build-exercises.ts, no AI);
-// comprehension questions come from one structured AI call. Reads the spaCy
-// `sentences` / `sentence_tokens`, so it runs after ai_grammar (enqueued by
-// TagGrammarHandler on completion). Idempotent via the stage-level
-// PostPipelineRun row (§12); a partial re-run rebuilds every exercise for the
-// post.
+// comprehension questions come from one structured AI call. Consumes the
+// spaCy `sentences` / `sentence_tokens` from spacy_parse; in the DAG it is
+// the stage after ai_grammar (TagGrammarHandler enqueues it on completion).
+// Idempotent via the stage-level PostPipelineRun row (§12); a partial re-run
+// rebuilds every exercise for the post.
 @CommandHandler(GenerateExercisesCommand)
 export class GenerateExercisesHandler
   implements ICommandHandler<GenerateExercisesCommand>

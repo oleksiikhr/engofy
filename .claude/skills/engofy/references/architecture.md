@@ -54,7 +54,7 @@ Reference: `src/modules/auth/` tree; `src/modules/auth/auth.module.ts:22-52`.
 | A4 | Every command/query folder file shares the folder name + a role suffix (`.command.ts`, `.handler.ts`, `.dto.ts`, `.query.ts`). | `commands/login-with-google/*` |
 | A5 | Entrypoints depend only on the facade or `services/shared/*`. | `entrypoints/web/auth/controllers/auth.controller.ts:18` |
 | A6 | `core/actor` is a discriminated-union **type** only (`{ type: 'user'; id }`), no class/behaviour. | `src/core/actor/actor.ts:1-5` |
-| A7 | Cross-module result types that leave the `CommandBus` are plain DTOs/values, never managed ORM entities. **D2:** `learning`/`billing` commands return views (`CardView`/`SubscriptionView`, Batch E); `IngestPostCommand` still returns a managed `Post` (owed). | `types/login-result.type.ts`; `learning/types/card-view.type.ts` |
+| A7 | Cross-module result types that leave the `CommandBus` are plain DTOs/values, never managed ORM entities. **D2 (done):** `learning`/`billing` commands return views (`CardView`/`SubscriptionView`, Batch E); `IngestPostCommand` returns `IngestedPostView` (Batch N). | `types/login-result.type.ts`; `learning/types/card-view.type.ts`; `post/types/ingested-post-view.type.ts` |
 | A8 | **D10** — a **query** handler may `em.find`/`findOne` another module's tables read-only (e.g. `learning` reads `post`-owned `words`/`phrases`/`grammar_*`). Never from a command, never a write. The eventual fix is a `post` projection / `services/shared/*` lookup; the direct read is sanctioned until then. | `learning/queries/get-dictionary/*`, `get-profile/*` |
 
 ## `core/*` — infrastructure

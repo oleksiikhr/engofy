@@ -64,6 +64,28 @@ const LEADING_PUNCT_RE = /^[("'[“‘]+/;
 // raw output with every recognized tag replaced by its underlying text, so
 // completeness can be checked by exact string comparison against `text`
 // rather than by a length/ratio heuristic.
+//
+// `cursor` (end of the last *resolved* token) is the hard search floor —
+// it guarantees forward progress and stays sane when the model's output has
+// drifted from `text` (a stray `{{}}` adds chars `text` doesn't have). But
+// when the model tags only the later of two identical forms, indexOf from
+// `cursor` would grab the earlier, untagged one. `reconstructed.length` is
+// the position this token *should* sit at (every char emitted before it,
+// tagged or not, is already in `reconstructed`); when reconstruction is
+// still aligned and the fragment sits exactly there, prefer that position.
+function resolveOffset(
+  text: string,
+  fragment: string,
+  cursor: number,
+  expected: number,
+): number {
+  const idx = text.indexOf(fragment, cursor);
+  if (idx !== -1 && idx < expected && text.startsWith(fragment, expected)) {
+    return expected;
+  }
+  return idx;
+}
+
 export function parseAnnotationTags(
   text: string,
   rawInput: string,
@@ -80,6 +102,7 @@ export function parseAnnotationTags(
   while (match !== null) {
     reconstructed += raw.slice(lastIndex, match.index);
     lastIndex = match.index + match[0].length;
+    const expected = reconstructed.length;
 
     if (match[1] !== undefined) {
       const fragment = match[1];
@@ -88,7 +111,7 @@ export function parseAnnotationTags(
       const phraseGroupId = match[4] as string;
       reconstructed += fragment;
 
-      const idx = text.indexOf(fragment, cursor);
+      const idx = resolveOffset(text, fragment, cursor, expected);
       if (idx === -1) {
         allResolved = false;
       } else {
@@ -110,7 +133,7 @@ export function parseAnnotationTags(
       reconstructed += rawWord;
 
       const word = rawWord.replace(LEADING_PUNCT_RE, '');
-      const idx = word ? text.indexOf(word, cursor) : -1;
+      const idx = word ? resolveOffset(text, word, cursor, expected) : -1;
 
       if (idx === -1) {
         allResolved = false;

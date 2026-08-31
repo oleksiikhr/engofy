@@ -10,6 +10,10 @@ import { splitDocIntoParts } from '../../domain/post-parts.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
+import {
+  type IngestedPostView,
+  toIngestedPostView,
+} from '../../types/ingested-post-view.type.js';
 import { IngestPostCommand } from './ingest-post.command.js';
 
 export interface PostAnnotationJobData {
@@ -27,7 +31,7 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
     private readonly outbox: OutboxSenderService,
   ) {}
 
-  async execute(command: IngestPostCommand): Promise<Post> {
+  async execute(command: IngestPostCommand): Promise<IngestedPostView> {
     const { rawText, title, link, type, sourceType, attributionText } =
       command.dto;
     const format = detectPostSourceFormat(rawText);
@@ -72,6 +76,6 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
       { singletonKey: post.id },
     );
 
-    return post;
+    return toIngestedPostView(post);
   }
 }

@@ -20,6 +20,7 @@ importing exactly one domain module + one controller. Sub-modules: `internal`,
 | H6 | Response DTOs: plain classes, `readonly x!: T`, description via a leading `//` comment. **No bare `@ApiProperty()`** (the `@nestjs/swagger` CLI plugin infers type/required/description). | `content/dto/feed-response.dto.ts` |
 | H7 | Convert `DateTime` → ISO `string` **before** it reaches a response DTO, so DTO fields are `string` and the "DateTime needs explicit `@ApiProperty`" rule never triggers. Pick **one** layer for it (see fix). | `learning.controller.ts:25-27` |
 | H8 | Every controller sets `@ApiTags`. No route-level `@ApiResponse`/`@ApiOperation` — DTO schema + the global 400/429/500 responses in `build-openapi-document.ts` only. | `auth.controller.ts:30` |
+| H8a | Authenticated controllers carry `@ApiCookieAuth()` (class-level; method-level on the one authed route of an otherwise-`@Public()` controller, `auth.controller.ts` `me`) — matches the `.addCookieAuth(sessionCookieName)` scheme in `build-openapi-document.ts` (Batch N). | `learning.controller.ts`, `billing.controller.ts`, `dictionary.controller.ts`, `profile.controller.ts` |
 | H9 | `@CachePolicy('private'\|'public')` opts a GET into `ETagInterceptor` (Cache-Control + SHA-1 ETag + 304). Today it's on **zero** routes (dead) — annotate the public GETs or drop the global registration. | `core/http/interceptors/etag.interceptor.ts` |
 
 ## `/api` prefix — D14 (done, Batch F)
@@ -44,10 +45,12 @@ converted.
 `ContentController` now maps every view → DTO through an explicit `to<X>Response`
 function (no structural cast). `PostDetailResponseDto` re-declares the annotation
 shapes as local DTO classes (`PostWordAnnotationDto` etc.) and no longer imports
-`*View` types. **Still owed:** `doc` is still typed via a `type`-only import of
-the domain `Doc`; a standalone structural copy is Batch K. Enum imports
-(`CefrLevel` / `ExerciseType` / `ExerciseSource`) are kept deliberately — shared
-vocabulary, not view shapes.
+`*View` types. `doc` stays a `type`-only import of the domain `Doc` **by
+decision (Batch N):** `node-tree.types.ts` is dependency-free wire-contract data
+deliberately shared with the SSR renderer, not an internal query view;
+re-declaring ~90 lines of recursive discriminated unions would be fragile and
+give a worse OpenAPI schema. Enum imports (`CefrLevel` / `ExerciseType` /
+`ExerciseSource`) are kept deliberately — shared vocabulary, not view shapes.
 
 ## Security posture
 

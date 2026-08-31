@@ -113,6 +113,42 @@ describe('parseAnnotationTags', () => {
     ]);
   });
 
+  it('resolves a tag to the occurrence the model marked, not an identical earlier one', () => {
+    // "cat" appears twice; the model tags only the second. The offset floor
+    // is `reconstructed.length` (which has already passed the first, untagged
+    // "cat"), so the annotation lands on the second occurrence.
+    const text = 'The cat sat. The cat ran.';
+    const raw = 'The cat sat. The cat{{w|noun|cat}} ran.';
+
+    const result = parseAnnotationTags(text, raw);
+
+    expect(result.isComplete).toBe(true);
+    expect(result.annotations).toEqual([
+      {
+        start: 17,
+        end: 20,
+        form: 'cat',
+        kind: 'word',
+        pos: 'noun',
+        lemma: 'cat',
+      },
+    ]);
+  });
+
+  it('resolves each of two identical forms to its own position when both are tagged', () => {
+    const text = 'A round table and a round number.';
+    const raw =
+      'A round{{w|adjective|round}} table and a round{{w|adjective|round}} number.';
+
+    const result = parseAnnotationTags(text, raw);
+
+    expect(result.isComplete).toBe(true);
+    expect(result.annotations.map((a) => [a.start, a.end])).toEqual([
+      [2, 7],
+      [20, 25],
+    ]);
+  });
+
   it('marks the text incomplete when a tagged word cannot be found in the original', () => {
     const text = 'The dog ran.';
     const raw = 'The puppy{{w|noun|puppy}} ran.';

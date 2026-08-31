@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
@@ -29,6 +29,7 @@ function toDto(subscription: SubscriptionView | null): SubscriptionResponseDto {
 }
 
 @ApiTags('billing')
+@ApiCookieAuth()
 @Controller('billing')
 export class BillingController {
   constructor(private readonly billing: BillingService) {}

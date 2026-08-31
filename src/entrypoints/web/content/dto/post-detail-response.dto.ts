@@ -1,6 +1,9 @@
-// The node tree is a pure data shape shared with the SSR renderer; it is
-// referenced (type-only) rather than re-declared here. A standalone structural
-// copy is tracked in REVIEW.md Batch K.
+// `Doc` is the node-tree wire contract — a dependency-free data shape
+// (`node-tree.types.ts` imports nothing) deliberately shared with the SSR
+// renderer, not an internal query view. A type-only import of that leaf
+// module is the intended coupling; re-declaring ~90 lines of recursive
+// discriminated unions here would be fragile and produce a worse OpenAPI
+// schema, so it stays referenced (REVIEW.md Batch N).
 import type { Doc } from '../../../../modules/post/domain/node-tree.types.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';

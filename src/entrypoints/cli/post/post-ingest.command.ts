@@ -95,9 +95,6 @@ export class PostIngestCommand extends CliCommandRunner<IngestOptions> {
       }),
     );
 
-    this.logger.log(
-      { id: post.id, format: post.source.format },
-      'post ingested',
-    );
+    this.logger.log({ id: post.id, format: post.format }, 'post ingested');
   }
 }

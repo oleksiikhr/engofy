@@ -1,11 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import { ProfileResponseDto } from '../dto/profile-response.dto.js';
 
 @ApiTags('profile')
+@ApiCookieAuth()
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly learning: LearningService) {}

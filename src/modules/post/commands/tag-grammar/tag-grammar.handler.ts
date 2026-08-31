@@ -44,11 +44,11 @@ interface GrammarCatalog {
 // closed catalogue of 90 constructions / 574 EGP usage points, using the
 // same inline-⟦⟧-tag mechanism as the annotation stage (offsets recovered
 // deterministically, never stated by the model). Each tagged span is mapped
-// onto SentenceToken positions -> grammar_matches. Reads the spaCy
-// `sentences` / `sentence_tokens`, so it runs after spacy_parse
-// (enqueued by AssessComplexityHandler on completion). Idempotent via the
-// stage-level PostPipelineRun row (§12); a partial re-run rebuilds all
-// matches for the post's sentences.
+// onto SentenceToken positions -> grammar_matches. Consumes the spaCy
+// `sentences` / `sentence_tokens` from spacy_parse; in the DAG it is the
+// stage after ai_complexity (AssessComplexityHandler enqueues it on
+// completion). Idempotent via the stage-level PostPipelineRun row (§12); a
+// partial re-run rebuilds all matches for the post's sentences.
 @CommandHandler(TagGrammarCommand)
 export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
   private readonly logger = new Logger(TagGrammarHandler.name);

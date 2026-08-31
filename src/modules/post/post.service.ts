@@ -10,7 +10,6 @@ import { PublishPostCommand } from './commands/publish-post/publish-post.command
 import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
-import type { Post } from './entities/post.entity.js';
 import type { CefrLevel } from './enums/cefr-level.enum.js';
 import type { FeedView } from './queries/get-feed/feed-view.js';
 import { GetFeedQuery } from './queries/get-feed/get-feed.query.js';
@@ -20,6 +19,7 @@ import { GetGrammarReferenceQuery } from './queries/get-grammar-reference/get-gr
 import type { GrammarReferenceView } from './queries/get-grammar-reference/grammar-reference-view.js';
 import { GetPostDetailQuery } from './queries/get-post-detail/get-post-detail.query.js';
 import type { PostDetailView } from './queries/get-post-detail/post-detail-view.js';
+import type { IngestedPostView } from './types/ingested-post-view.type.js';
 
 @Injectable()
 export class PostService {
@@ -47,7 +47,7 @@ export class PostService {
     return this.queryBus.execute(new GetGrammarConstructionQuery(slug));
   }
 
-  async ingest(dto: IngestPostDto): Promise<Post> {
+  async ingest(dto: IngestPostDto): Promise<IngestedPostView> {
     const post = await this.commandBus.execute(new IngestPostCommand(dto));
 
     await this.em.flush();

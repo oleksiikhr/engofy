@@ -211,7 +211,15 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`http-nlp-client` boundary check** — `response.json()` was cast `as NlpParseResult` with no validation. New `assertParseResult()` checks the `sentences` array + each entry's `text`/`start`/`end`/`tokens` and throws a clear error at the boundary instead of a `TypeError` deep in `buildSentences`. `http-nlp-client.service.spec.ts` +2. nlp.md row struck.
 - [x] **draft idiom-harness fidelity** — `annotateUnit` ran `maxTokens: 8000` vs prod `16000` and never checked `stopReason`. Now sends `MAX_TOKENS = 16000` and records `truncated` from a `max_tokens` stop on either call; `compare.ts` / `snapshot.ts` / `run.ts` surface + count `truncated` as a hard failure (parity with the grammar harness). `draft/` is outside the CI biome/type gate but `pnpm run type` covers it and stays clean.
 
-**Still open (deferred, not trivial — left as-is):** `IngestPostCommand` returns a managed `Post` (D2 tail); `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `complete()` streaming + `cache_control` on static system prompts (ai.md, perf); downstream AI stages re-call the model on every non-`Completed` retry (open q9); `ETagInterceptor` global but `@CachePolicy()` on zero routes; list envelopes (`practice` bare array, `dictionary` `{items}`); `PostDetailResponseDto.doc` `type`-import of domain `Doc`; `@ApiCookieAuth()` on no route; `parse-annotation-tags` `indexOf` offset recovery matching the wrong identical word form; `worker.ts`/`cron.ts` double-`app.close()`; `post` query handlers + `get-dictionary` have no direct `.ispec.ts`; `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
+### Batch N — Wave 3 cross-cutting, third pass (DONE 2026-08-31, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**124 files / 741 tests**, was 124/739: +2 parse-annotation-tags specs) + `pnpm test:cov` gate green — coverage nudged up (stmts 90.02→90.03 / branches 76.18→76.22 / funcs 86.46→86.49 / lines 90.37→90.38). `pnpm build` + `git diff --exit-code src/metadata.ts` clean (`@ApiCookieAuth` + the command type change don't touch metadata). No entity/enum touched → no `migration:check` needed.
+- [x] **`IngestPostCommand` → view (D2 tail)** — new `post/types/ingested-post-view.type.ts` (`IngestedPostView` = `id` / `shortId` / `status` / `format`, `toIngestedPostView(post)`). `IngestPostCommand extends Command<IngestedPostView>`; handler returns the view; `PostService.ingest` retyped. CLI `post ingest` logs `post.format` (was `post.source.format`); telegram `/add` reply already used `post.shortId`. `ingest-post.handler.ispec` reloads the `Post` for `source.*` assertions; `post-ingest.command.spec` mock returns the flat shape. `cqrs.md` Q6 + `architecture.md` A7 updated (D2 now fully done). findings-log row struck.
+- [x] **`parse-annotation-tags` identical-form offset** — `resolveOffset()` prefers `reconstructed.length` (the position the token *should* sit at) when the fragment is exactly there and reconstruction is still aligned, so a tag on the 2nd of two identical forms no longer resolves to the 1st, untagged one; `cursor` stays the hard search floor so a drifted `{{}}` still lets later tags resolve. `.spec` +2 (2nd-of-two; both-tagged land on their own positions). findings-log row struck.
+- [x] **`@ApiCookieAuth()`** — class-level on `LearningController` / `BillingController` / `DictionaryController` / `ProfileController`; method-level on `AuthController.me` (the one authed route of an otherwise-`@Public()` controller). Matches the `.addCookieAuth(sessionCookieName)` scheme already in `build-openapi-document.ts`. New `http-api.md` H8a. findings-log row struck.
+- [x] **pipeline stage-comment fix** — `tag-grammar.handler.ts` / `generate-exercises.handler.ts` header comments said "runs after spacy_parse"; now "consumes spaCy output from spacy_parse; in the DAG it is the stage after ai_complexity / ai_grammar". findings-log row struck.
+- [x] **`PostDetailResponseDto.doc` — decision, not a fix** — `doc` stays a `type`-only import of the dependency-free domain `Doc`: it's wire-contract data deliberately shared with the SSR renderer, not an internal query view, and re-declaring ~90 lines of recursive discriminated unions would be fragile + worse OpenAPI. Comment + `http-api.md` + findings-log updated to record the call.
+
+**Still open (deferred, not trivial — left as-is):** `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `complete()` streaming + `cache_control` on static system prompts (ai.md, perf); downstream AI stages re-call the model on every non-`Completed` retry (open q9); `ETagInterceptor` global but `@CachePolicy()` on zero routes (product decision — annotate the public GETs or drop it); list envelopes (`practice` bare array, `dictionary` `{items}` — breaking wire change, needs `apps/web` coordination); `ContentController` `@Controller()` with no path prefix; `parse-grammar-tags`/`parse-annotation-tags` module-level `/g`/`/y` regex cursors; `challenge.service` upsert-before-outbox atomicity; `worker.ts`/`cron.ts` double-`app.close()`; `post` query handlers + `get-dictionary` have no direct `.ispec.ts` (functionally covered by `content.controller.ispec` + learning controller specs); `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
 
 ## Findings log
 
@@ -353,11 +361,16 @@ _(populated from subagent reports as waves complete)_
   `{ disableIdentityMap: true }` added to every `find`/`findOne`/`findAndCount`
   in `get-feed` / `get-post-detail` / `get-grammar-construction` /
   `get-grammar-reference`, matching the `auth`/`learning` baseline (DP2).
-- **[post] cqrs** — `ingest-post.command.ts` returns a live managed `Post` entity
-  up through `CommandBus` + facade to callers (telegram module); auth commands
-  return plain results/DTOs. Return `post.id` or a small view.
-- **[post] docs** — `tag-grammar.handler.ts:48-49` / `generate-exercises.handler.ts:38-39`
-  comments name the wrong predecessor stage (`spacy_parse` vs `ai_complexity`).
+- ~~**[post] cqrs**~~ — `ingest-post.command.ts` returned a live managed `Post`
+  through `CommandBus` + facade: **fixed (Batch N, D2)** — new
+  `post/types/ingested-post-view.type.ts` (`IngestedPostView` = `id` / `shortId`
+  / `status` / `format` + `toIngestedPostView`); command → `Command<IngestedPostView>`,
+  `PostService.ingest` retyped, CLI + telegram consumers use the flat fields.
+  `ingest-post.handler.ispec` reloads the `Post` for `source.*` assertions.
+- **[post] docs** — ~~`tag-grammar.handler.ts` / `generate-exercises.handler.ts`
+  comments name the wrong predecessor stage~~ **fixed (Batch N)** — both now say
+  "consumes spaCy output from spacy_parse; in the DAG it is the stage after
+  ai_complexity / ai_grammar respectively".
   ~~`get-feed.handler.ts` "stable offset pagination" comment~~ — **fixed (Batch K)**:
   comment now states the drift + carries a `TODO` for keyset on `(publishedAt, id)`.
 - ~~**[core] config**~~ — `s3.config.ts` `corsMaxAge` unused: **fixed (Batch M)**
@@ -387,10 +400,13 @@ _(populated from subagent reports as waves complete)_
 - ~~**[core] tests**~~ — `change-set.helper.ts` / `request-context.helper.ts` no
   `.spec.ts`: **fixed (Batch K)** — both now have a `.spec.ts` under
   `core/database/helpers/`.
-- **[core-ai] correctness** — `parse-annotation-tags.ts:91,113` recovers offsets
-  via `text.indexOf(fragment, cursor)`; if the model tags only the 2nd of two
-  identical word forms, the 1st (untagged) occurrence is matched — reconstruct
-  check + `validateAnnotations` still pass, so `word_id` links to the wrong token.
+- ~~**[core-ai] correctness**~~ — `parse-annotation-tags` resolved offsets via
+  `indexOf(fragment, cursor)`, so a tag on the 2nd of two identical forms landed
+  on the 1st: **fixed (Batch N)** — `resolveOffset()` prefers `reconstructed.length`
+  (the position the token *should* sit at — every char emitted before it is
+  already reconstructed) when the fragment sits exactly there and reconstruction
+  is still aligned; `cursor` stays the hard floor so a drifted `{{}}` still
+  resolves later tags. `.spec` +2.
 - ~~**[core-ai] correctness**~~ — `detectGerund` mis-flags lexicalised `-ing`
   nouns: **fixed (Batch K / D13)** — `LEXICALISED_ING_NOUNS` stop-list on the
   `NN` branch (`VBG` still trusted). Spec'd.
@@ -565,12 +581,13 @@ _(populated from subagent reports as waves complete)_
   DTOs (`modules/auth/commands/*/*.dto.ts`, one schema for HTTP + command);
   `learning`/`content` define web-local `createZodDto` schemas then re-map fields
   in the controller. Pick one for the reference. (see open question 37)
-- **[web] architecture** — `PostDetailResponseDto` imports internal query view
-  types (`WordAnnotationView`, `Doc`, …) from `modules/post/**` and
-  `ContentController` returns the raw `*View` via a structural cast, no mapper —
-  HTTP contract coupled to the module's internal shape. `ContentController` also
-  uses `@Controller()` with **no path prefix** (owns top-level `feed`/`posts`/
-  `grammar` — future collision risk). (see open question 36)
+- **[web] architecture** — ~~`PostDetailResponseDto` imports internal query view
+  types + `ContentController` structural-casts~~ **fixed (Batch F)** — annotation
+  DTOs re-declared locally, explicit `to<X>Response` mappers. `doc` still
+  `type`-imports the domain `Doc` **by decision (Batch N)** — it's dependency-free
+  wire-contract data shared with the SSR renderer, not an internal query view.
+  Still open: `ContentController` uses `@Controller()` with **no path prefix**
+  (owns top-level `feed`/`posts`/`grammar` — future collision risk).
 - **[web] low** — list-endpoint shapes inconsistent (`feed` `{items,nextOffset}`,
   `practice` bare array, `dictionary` `{items}` unbounded); `DateTime`→ISO
   conversion in 3 different layers depending on module; per-controller
@@ -579,7 +596,9 @@ _(populated from subagent reports as waves complete)_
   which `z.coerce.number().default()` / `.optional()` reject → 400 instead of
   defaulting; `POST /learning/cards` no `@HttpCode` (201 on idempotent hit);
   `clearSessionCookie` sends only `{path:'/'}` (a `__Host-` cookie deletion may
-  need `Secure`); `addCookieAuth` declared but no `@ApiCookieAuth()` on any route;
+  need `Secure`); ~~`addCookieAuth` declared but no `@ApiCookieAuth()` on any
+  route~~ **fixed (Batch N)** — class-level `@ApiCookieAuth()` on
+  learning/billing/dictionary/profile + method-level on `auth` `me`;
   `HealthController` has no `@ApiTags` and `health.check([])` runs zero indicators
   (always 200); ~~`@CurrentUser()` throws bare `Error` → 500 when `actor`
   missing~~ **fixed (Batch M)** — now `UnauthorizedException` (401).

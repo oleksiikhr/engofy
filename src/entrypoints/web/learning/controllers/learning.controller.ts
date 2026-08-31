@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
@@ -53,6 +53,7 @@ function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
 }
 
 @ApiTags('learning')
+@ApiCookieAuth()
 @Controller('learning')
 export class LearningController {
   constructor(private readonly learning: LearningService) {}
