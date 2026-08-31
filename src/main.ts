@@ -48,7 +48,16 @@ if (!isProdEnvironment()) {
   SwaggerModule.setup(config.swagger.path, app, openApiDoc);
 }
 
-await app.register(cors, { origin: config.app.publicUrl, credentials: true });
+// `origin: undefined` + `credentials: true` makes @fastify/cors reflect any
+// Origin — unacceptable on a cookie-authed API. Require an explicit public URL
+// in production; in dev, fall back to reflecting localhost only.
+if (isProdEnvironment() && !config.app.publicUrl) {
+  throw new Error('PUBLIC_URL must be set in production (CORS allowed origin)');
+}
+await app.register(cors, {
+  origin: config.app.publicUrl ?? /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+  credentials: true,
+});
 await app.register(helmet, { contentSecurityPolicy: false });
 await app.register(cookie);
 await app.listen(config.app.port, config.app.host);

@@ -9,6 +9,7 @@ interface UnitMetrics {
   validationError: boolean;
   retried: boolean;
   isComplete: boolean;
+  truncated: boolean;
 }
 
 interface FileSnapshot {
@@ -19,6 +20,7 @@ interface FileSnapshot {
     validationErrorCount: number;
     retriedCount: number;
     incompleteCount: number;
+    truncatedCount: number;
     annotationCount: number;
     inputTokens: number;
     outputTokens: number;
@@ -43,7 +45,8 @@ function loadSnapshot(path: string): Snapshot {
 
 // A unit only counts as regressed on dimensions the whole harness treats as
 // hard failures elsewhere (validateAnnotations, isComplete: false even
-// after the retry) — never on annotationCount, which legitimately varies
+// after the retry, truncated — prod throws on that) — never on
+// annotationCount, which legitimately varies
 // run to run even with no code/prompt/model change (LLM sampling).
 // `retried` is reported but not itself a regression: the retry firing and
 // then resolving is the safety net working as designed, not a defect.
@@ -66,9 +69,13 @@ function compareUnit(
   }
 
   const baselineBad =
-    (baseline.validationError ? 1 : 0) + (baseline.isComplete ? 0 : 1);
+    (baseline.validationError ? 1 : 0) +
+    (baseline.isComplete ? 0 : 1) +
+    (baseline.truncated ? 1 : 0);
   const candidateBad =
-    (candidate.validationError ? 1 : 0) + (candidate.isComplete ? 0 : 1);
+    (candidate.validationError ? 1 : 0) +
+    (candidate.isComplete ? 0 : 1) +
+    (candidate.truncated ? 1 : 0);
 
   if (candidateBad > baselineBad) {
     return 'regressed';
@@ -128,10 +135,10 @@ function compareFile(
     }
 
     const bDesc = b
-      ? `ann=${b.annotationCount} valid=${!b.validationError} complete=${b.isComplete} retried=${b.retried}`
+      ? `ann=${b.annotationCount} valid=${!b.validationError} complete=${b.isComplete} truncated=${b.truncated} retried=${b.retried}`
       : '(missing)';
     const cDesc = c
-      ? `ann=${c.annotationCount} valid=${!c.validationError} complete=${c.isComplete} retried=${c.retried}`
+      ? `ann=${c.annotationCount} valid=${!c.validationError} complete=${c.isComplete} truncated=${c.truncated} retried=${c.retried}`
       : '(missing)';
     lines.push(`  [${verdictIcon(verdict)}] ${label}`);
     lines.push(`      baseline:  ${bDesc}`);
@@ -197,6 +204,9 @@ function main(): void {
   );
   console.log(
     `still incomplete:   ${bt.incompleteCount} -> ${ct.incompleteCount}`,
+  );
+  console.log(
+    `truncated:          ${bt.truncatedCount} -> ${ct.truncatedCount}`,
   );
   console.log(`retried:            ${bt.retriedCount} -> ${ct.retriedCount}`);
   console.log(

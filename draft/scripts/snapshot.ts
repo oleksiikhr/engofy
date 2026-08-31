@@ -1,7 +1,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { IDIOM_SYSTEM_PROMPT } from '../../src/modules/post/domain/annotation-prompt.js';
-import { annotateUnit } from '../lib/annotate-unit.js';
+import { type AnnotateUnitResult, annotateUnit } from '../lib/annotate-unit.js';
 import { buildUnits, type Granularity } from '../lib/build-units.js';
 
 // The annotation stage is now a thin AI pass: spaCy owns every word, the LLM
@@ -68,6 +68,7 @@ interface UnitMetrics {
   validationError: boolean;
   retried: boolean;
   isComplete: boolean;
+  truncated: boolean;
 }
 
 interface FileSnapshot {
@@ -78,6 +79,7 @@ interface FileSnapshot {
     validationErrorCount: number;
     retriedCount: number;
     incompleteCount: number;
+    truncatedCount: number;
     annotationCount: number;
     inputTokens: number;
     outputTokens: number;
@@ -92,12 +94,25 @@ function emptyTotals(): FileSnapshot['totals'] {
     validationErrorCount: 0,
     retriedCount: 0,
     incompleteCount: 0,
+    truncatedCount: 0,
     annotationCount: 0,
     inputTokens: 0,
     outputTokens: 0,
     costUsd: 0,
     elapsedMs: 0,
   };
+}
+
+function unitStatusLine(label: string, result: AnnotateUnitResult): string {
+  const flags = [
+    result.validationError ? 'VALIDATION FAILED' : '',
+    result.truncated ? 'TRUNCATED (max_tokens)' : '',
+    result.retried ? 'retried' : '',
+    result.isComplete ? '' : 'still incomplete after retry',
+  ].filter(Boolean);
+  return `  ${label}: ${result.annotations.length} annotations${
+    flags.length ? `, ${flags.join(', ')}` : ''
+  }`;
 }
 
 async function snapshotFile(
@@ -133,24 +148,21 @@ async function snapshotFile(
       validationError: result.validationError !== undefined,
       retried: result.retried,
       isComplete: result.isComplete,
+      truncated: result.truncated,
     });
 
     totals.unitCount += 1;
     totals.validationErrorCount += result.validationError ? 1 : 0;
     totals.retriedCount += result.retried ? 1 : 0;
     totals.incompleteCount += result.isComplete ? 0 : 1;
+    totals.truncatedCount += result.truncated ? 1 : 0;
     totals.annotationCount += result.annotations.length;
     totals.inputTokens += result.usage.inputTokens;
     totals.outputTokens += result.usage.outputTokens;
     totals.costUsd += result.usage.costUsd;
     totals.elapsedMs += result.usage.elapsedMs;
 
-    console.log(
-      `  ${unit.label}: ${result.annotations.length} annotations` +
-        (result.validationError ? ', VALIDATION FAILED' : '') +
-        (result.retried ? ', retried' : '') +
-        (!result.isComplete ? ', still incomplete after retry' : ''),
-    );
+    console.log(unitStatusLine(unit.label, result));
   }
 
   return { contentFile, units: unitMetrics, totals };
@@ -203,6 +215,7 @@ async function main(): Promise<void> {
   console.log(`validation errors:  ${grandTotals.validationErrorCount}`);
   console.log(`retried:            ${grandTotals.retriedCount}`);
   console.log(`still incomplete:   ${grandTotals.incompleteCount}`);
+  console.log(`truncated:          ${grandTotals.truncatedCount}`);
   console.log(`annotations:        ${grandTotals.annotationCount}`);
   console.log(
     `tokens:             ${grandTotals.inputTokens} in / ${grandTotals.outputTokens} out`,

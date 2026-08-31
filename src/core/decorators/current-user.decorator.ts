@@ -1,5 +1,5 @@
 import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, UnauthorizedException } from '@nestjs/common';
 import type { FastifyRequest } from 'fastify';
 import type { UserActor } from '../actor/actor.js';
 
@@ -9,7 +9,9 @@ export const CurrentUser = createParamDecorator(
     const actor = request.raw.actor;
 
     if (actor?.type !== 'user') {
-      throw new Error('CurrentUser decorator requires an authenticated user');
+      // A route using @CurrentUser without the auth guard (or a guard change
+      // that lets an unauthenticated request through) is a 401, not a 500.
+      throw new UnauthorizedException('Authentication required');
     }
 
     return actor;

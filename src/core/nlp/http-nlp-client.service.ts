@@ -33,7 +33,8 @@ export class HttpNlpClientService implements NlpClient {
       );
     }
 
-    const result = (await response.json()) as NlpParseResult;
+    const payload: unknown = await response.json();
+    const result = assertParseResult(payload, url);
 
     this.logger.log(
       { textLength: text.length, sentences: result.sentences.length },
@@ -42,4 +43,28 @@ export class HttpNlpClientService implements NlpClient {
 
     return result;
   }
+}
+
+// Shallow shape check at the boundary so a malformed 200 fails here with a
+// clear message, not deep inside `buildSentences` with a `TypeError`.
+function assertParseResult(payload: unknown, url: string): NlpParseResult {
+  const sentences = (payload as { sentences?: unknown })?.sentences;
+  if (!Array.isArray(sentences)) {
+    throw new Error(
+      `nlp-service returned an unexpected body (no 'sentences' array): ${url}`,
+    );
+  }
+  for (const sentence of sentences) {
+    if (
+      typeof sentence?.text !== 'string' ||
+      typeof sentence?.start !== 'number' ||
+      typeof sentence?.end !== 'number' ||
+      !Array.isArray(sentence?.tokens)
+    ) {
+      throw new Error(
+        `nlp-service returned a malformed sentence entry: ${url}`,
+      );
+    }
+  }
+  return payload as NlpParseResult;
 }

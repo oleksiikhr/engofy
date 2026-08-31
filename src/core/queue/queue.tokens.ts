@@ -1,1 +1,1 @@
-export const PG_BOSS = 'PG_BOSS';
+export const PG_BOSS = Symbol('PG_BOSS');

@@ -18,7 +18,7 @@
 | Item | D |
 |---|---|
 | The MikroORM connection is configured **outside** `@nestjs/config` (`mikro-orm.setup.ts`, `preferEnvVars:true` reading native `MIKRO_ORM_*`). `queue.config.ts` reads the **same** `MIKRO_ORM_*` vars; Wave 3 aligned its fallback defaults to `engofy/engofy` too, so an env-less run points both at one DB. Full "share one config object" (D18) not done — low value now the vars + defaults match. | D18 |
-| `S3_CORS_MAX_AGE` / `S3_PUBLIC_URL` declared but never read. | — |
-| `PUBLIC_URL` has no fallback but is passed to CORS `origin` with `credentials:true`. Make it `envRequiredString`. | — |
-| Token style: `MAILER` + `WORKER_QUEUES` are `Symbol()` (`WORKER_QUEUES` since Batch H); `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` are still plain strings. Standardise the rest on `Symbol()`. | — |
+| ~~`S3_CORS_MAX_AGE` never read~~ — **fixed (Batch M):** `corsMaxAge` dropped from `s3.config.ts` (bucket CORS is infra, not app config). `S3_PUBLIC_URL` is still only a CI/env var, not in `s3.config.ts` — harmless, left for infra. | — |
+| ~~`PUBLIC_URL` no fallback → CORS `origin: undefined` (permissive) with `credentials:true`~~ — **fixed (Batch M):** `main.ts` throws in production when `PUBLIC_URL` is unset; in dev it falls back to a localhost-only origin regex, never `undefined`. | — |
+| ~~Token style: `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` plain strings~~ — **fixed (Batch M):** all three are now `Symbol()`, matching `MAILER` / `WORKER_QUEUES`. Every DI token in the codebase is a `Symbol`. | — |
 | `.env.test` `MIKRO_ORM_DB_NAME=engofy-testing` vs CI `engofy` — **intentional, not drift:** the local test DB must differ from the local dev DB (`engofy`) because the schema build does `drop schema public cascade`; CI runs a throwaway Postgres container so `engofy` there is safe. | D17 |

@@ -75,7 +75,7 @@ describe('AnthropicClientService', () => {
       ).rejects.toThrow('truncated by max_tokens');
     });
 
-    it('sends adaptive thinking for sonnet but not for haiku', async () => {
+    it('sends adaptive thinking only for allowlisted models', async () => {
       create.mockResolvedValue(textResponse('ok'));
 
       await new AnthropicClientService('key', 'claude-sonnet-5').complete({
@@ -84,8 +84,17 @@ describe('AnthropicClientService', () => {
       });
       expect(create.mock.calls[0][0].thinking).toEqual({ type: 'adaptive' });
 
+      // Haiku 400s on adaptive thinking.
       create.mockClear();
       await new AnthropicClientService('key', 'claude-haiku-4-5').complete({
+        system: 's',
+        userText: 'u',
+      });
+      expect(create.mock.calls[0][0]).not.toHaveProperty('thinking');
+
+      // An unknown / pre-4.6 model id is not on the allowlist either.
+      create.mockClear();
+      await new AnthropicClientService('key', 'claude-3-5-sonnet').complete({
         system: 's',
         userText: 'u',
       });

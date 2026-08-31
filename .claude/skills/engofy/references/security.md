@@ -23,8 +23,8 @@
 | Sev | Item | D |
 |---|---|---|
 | ~~med~~ | ~~No rate limiting at the web edge~~ — **done (Batch F):** global `ThrottlerGuard` (`WebThrottlerModule`), Redis storage, `THROTTLE_TTL_MS`/`THROTTLE_LIMIT` (60 s / 300), first `APP_GUARD`. Disabled under test (`skipIf: isTestEnvironment()`). | D14 |
-| low | `PUBLIC_URL` unset → CORS `origin: undefined` (permissive) on a credentialed endpoint. Make it required. | — |
-| low | `Sentry.tracesSampleRate` defaults to `1` (100%) per entrypoint. | — |
+| ~~low~~ | ~~`PUBLIC_URL` unset → CORS `origin: undefined` (permissive) on a credentialed endpoint~~ — **done (Batch M):** `main.ts` throws in production when `PUBLIC_URL` is unset; dev falls back to a localhost-only origin regex. | — |
+| ~~low~~ | ~~`Sentry.tracesSampleRate` defaults to `1` (100%) per entrypoint~~ — **done (Batch M):** default is now `0.1` in production, `1` elsewhere; `SENTRY_TRACES_SAMPLE_RATE_<ENTRYPOINT>` still overrides. Error `sampleRate` stays `1`. | — |
 | ~~low~~ | ~~converters copy link `href` verbatim — no scheme allow-list~~ — **done (Batch K):** `isSafeLinkHref` (`core/helpers/url.helper.ts`) allows only absolute `http(s):`/`mailto:`; both `html-to-doc` and `markdown-to-doc` `wrapLink` degrade any other href (`javascript:`, `data:`, relative/unparseable) to a plain text node — which also keeps the stored tree valid, since `parseLinkNode` requires a non-empty href. `.spec` cases added. | — |
 | ~~low~~ | ~~`telegram_updates.raw_payload` stores every sender's username + text with no pruning~~ — **done (Batch G):** `PruneTelegramUpdatesCron` (daily 03:00) → `PruneTelegramUpdatesService` deletes rows older than 30 days (raw `DELETE`, DP5). | D15 |
 | low | CSRF: none — accepted for V1 (`SameSite=Lax` + POST-only + single origin). Revisit for a third-party embed. | D14 |

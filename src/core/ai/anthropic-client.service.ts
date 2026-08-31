@@ -21,9 +21,20 @@ const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
 };
 
 // Adaptive thinking is only supported on Sonnet 5 / Opus 5 / Fable 5 and the
-// 4.6+ family — Haiku models 400 on `thinking: { type: 'adaptive' }`.
+// 4.6+ family. Anything else (Haiku, or an older/unknown model id) 400s on
+// `thinking: { type: 'adaptive' }`, so allowlist rather than denylist.
+const ADAPTIVE_THINKING_MODELS = [
+  'sonnet-5',
+  'opus-5',
+  'fable-5',
+  'sonnet-4-6',
+  'opus-4-6',
+  'opus-4-7',
+  'opus-4-8',
+];
+
 function supportsAdaptiveThinking(model: string): boolean {
-  return !model.includes('haiku');
+  return ADAPTIVE_THINKING_MODELS.some((family) => model.includes(family));
 }
 
 function estimateCostUsd(

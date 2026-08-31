@@ -66,7 +66,7 @@ don't copy them for new code.
 | Style | Used by | Shape |
 |---|---|---|
 | Hexagonal port — **canon for new adapters** | `core/ai`, `core/nlp` | `*.port.ts` (`Symbol` token + interface) + `*.provider.ts` (`FactoryProvider`) + adapter `*.service.ts` (not `@Injectable`) + `*.config.ts` |
-| Raw vendor client (grandfathered) | `core/redis`, `core/s3`, `core/queue` | string token + factory provider, no interface |
+| Raw vendor client (grandfathered) | `core/redis`, `core/s3`, `core/queue` | `Symbol()` token (Batch M) + factory provider, no interface |
 | Plain `@Injectable` (grandfathered) | `auth/services/google-id-token-verifier.service.ts`, `telegram`'s inline `fetch` client | class with `@Inject(Config.KEY)`, SDK built inline |
 
 - `@Global()` + a `forRuntime(runtime)` static factory for modules that must be

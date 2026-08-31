@@ -92,6 +92,9 @@ async function run(): Promise<void> {
     if (result.validationError) {
       console.log(`VALIDATION FAILED: ${result.validationError}`);
     }
+    if (result.truncated) {
+      console.log('TRUNCATED (max_tokens) — prod would reject this');
+    }
     if (!result.isComplete) {
       console.log('still incomplete after retry');
     }

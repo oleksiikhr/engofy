@@ -200,7 +200,18 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`config.md` C3** — said `forFeature` is "variadic — one call for several"; corrected to "one call per namespace" to match the Batch K `style.md` ST10 finding.
 - [x] **"fix owed" rows closed by earlier batches but still open in references** — `mail.md` "Fix owed (tests)" → done (Batch I: `mailer.fake.ts` + `challenge-mailer.service.spec.ts`); `nlp.md` "Fixes owed" `app.py` no-tests → done (Batch I: `test_app.py` + CI job); `ai.md` "Fixes owed" `AnthropicClientService` no-spec → done (Batch I). `config.md` token-style + `.env.test`-vs-CI rows refreshed (WORKER_QUEUES is now a Symbol; the DB-name split is intentional, not drift). Matching findings-log rows struck.
 
-**Still open (deferred, not trivial — left as-is):** `IngestPostCommand` returns a managed `Post` (D2 tail); `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `supportsAdaptiveThinking` denylist→allowlist + `complete()` streaming/`cache_control` (ai.md, perf); `http-nlp-client` response shape check; `Sentry.tracesSampleRate` default 1; `PUBLIC_URL` CORS fallback; `S3_CORS_MAX_AGE`/`S3_PUBLIC_URL` unread; `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` string tokens; `worker.ts`/`cron.ts` double-`app.close()`; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
+### Batch M — Wave 3 cross-cutting, second pass (DONE 2026-08-31, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**124 files / 739 tests**, was 124/737: +2 nlp-boundary specs) + `pnpm test:cov` gate green — coverage nudged up (stmts 89.99→90.02 / branches 76.15→76.18 / funcs 86.44→86.46 / lines 90.34→90.37). No entity/enum touched → no `pnpm build` / `migration:check` needed.
+- [x] **DI tokens → `Symbol()`** — `PG_BOSS`, `REDIS_CLIENT`, `S3_CLIENT` (`*.tokens.ts`) converted from string constants to `Symbol('…')`. Consumers import the const, so zero call-site churn; no string-literal token usage anywhere (grep-verified). Every DI token in the codebase is now a `Symbol`. `config.md` + `architecture.md` + findings-log rows struck.
+- [x] **`@CurrentUser()` → 401** — the decorator threw a bare `Error` (→ 500) when `actor` was missing; now `UnauthorizedException`. Defence-in-depth (the global guard 401s first in every real flow), so no dedicated spec — a `@Public()` route using `@CurrentUser` would be self-contradictory. `core/decorators/current-user.decorator.ts`.
+- [x] **`Sentry.tracesSampleRate`** — was `1` (100%) everywhere; default is now `0.1` in production, `1` elsewhere. `SENTRY_TRACES_SAMPLE_RATE_<ENTRYPOINT>` still overrides; error `sampleRate` stays `1`. `sentry.ts`. security.md row struck.
+- [x] **`PUBLIC_URL` / CORS** — `origin: undefined` + `credentials:true` made `@fastify/cors` reflect any Origin. `main.ts` now throws in production when `PUBLIC_URL` is unset; in dev it falls back to `^http://(localhost|127.0.0.1)(:\d+)?$`, never `undefined`. security.md + config.md rows struck.
+- [x] **`S3_CORS_MAX_AGE`** — `corsMaxAge` dropped from `s3.config.ts` (bucket CORS is an infra/bucket-policy concern, nothing in-app applied it; `envNumber` import removed). `S3_PUBLIC_URL` left as a CI/env-only var. config.md row struck.
+- [x] **`supportsAdaptiveThinking` → allowlist** — was `!model.includes('haiku')` (a denylist that would 400 on any older/unknown id). Now an explicit `ADAPTIVE_THINKING_MODELS` allowlist (sonnet-5 / opus-5 / fable-5 / sonnet-4-6 / opus-4-6/-4-7/-4-8). `anthropic-client.service.spec.ts` case extended to assert Haiku *and* a pre-4.6 id get no `thinking` block. ai.md "Fixes owed" row struck.
+- [x] **`http-nlp-client` boundary check** — `response.json()` was cast `as NlpParseResult` with no validation. New `assertParseResult()` checks the `sentences` array + each entry's `text`/`start`/`end`/`tokens` and throws a clear error at the boundary instead of a `TypeError` deep in `buildSentences`. `http-nlp-client.service.spec.ts` +2. nlp.md row struck.
+- [x] **draft idiom-harness fidelity** — `annotateUnit` ran `maxTokens: 8000` vs prod `16000` and never checked `stopReason`. Now sends `MAX_TOKENS = 16000` and records `truncated` from a `max_tokens` stop on either call; `compare.ts` / `snapshot.ts` / `run.ts` surface + count `truncated` as a hard failure (parity with the grammar harness). `draft/` is outside the CI biome/type gate but `pnpm run type` covers it and stays clean.
+
+**Still open (deferred, not trivial — left as-is):** `IngestPostCommand` returns a managed `Post` (D2 tail); `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `complete()` streaming + `cache_control` on static system prompts (ai.md, perf); downstream AI stages re-call the model on every non-`Completed` retry (open q9); `ETagInterceptor` global but `@CachePolicy()` on zero routes; list envelopes (`practice` bare array, `dictionary` `{items}`); `PostDetailResponseDto.doc` `type`-import of domain `Doc`; `@ApiCookieAuth()` on no route; `parse-annotation-tags` `indexOf` offset recovery matching the wrong identical word form; `worker.ts`/`cron.ts` double-`app.close()`; `post` query handlers + `get-dictionary` have no direct `.ispec.ts`; `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
 
 ## Findings log
 
@@ -349,11 +360,12 @@ _(populated from subagent reports as waves complete)_
   comments name the wrong predecessor stage (`spacy_parse` vs `ai_complexity`).
   ~~`get-feed.handler.ts` "stable offset pagination" comment~~ — **fixed (Batch K)**:
   comment now states the drift + carries a `TODO` for keyset on `(publishedAt, id)`.
-- **[core] config** — `core/s3/s3.config.ts:14`: `corsMaxAge` (`S3_CORS_MAX_AGE`)
-  declared, never read; `S3_PUBLIC_URL` present in env/CI, not consumed.
-- **[core] architecture** — token style inconsistent: `MAILER` + `WORKER_QUEUES`
-  are `Symbol()` (`WORKER_QUEUES` since Batch H); `PG_BOSS`/`REDIS_CLIENT`/
-  `S3_CLIENT` are still plain string constants. Standardise the rest on `Symbol()`.
+- ~~**[core] config**~~ — `s3.config.ts` `corsMaxAge` unused: **fixed (Batch M)**
+  — dropped (bucket CORS is infra). `S3_PUBLIC_URL` stays a CI/env-only var
+  (harmless, infra), not in `s3.config.ts`.
+- ~~**[core] architecture**~~ — DI token style: **fixed (Batch M)** —
+  `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` converted to `Symbol()`. Every DI token
+  in the codebase is now a `Symbol` (`MAILER`, `WORKER_QUEUES` were already).
 - ~~**[core] error-handling**~~ — `authorization.error.ts` used
   `this.name = AuthorizationError.name`: **fixed (Batch A)** — now
   `new.target.name`, matching `DomainError`.
@@ -364,12 +376,14 @@ _(populated from subagent reports as waves complete)_
   such script exists and CI runs no migration/snapshot check; generated migrations
   have no idempotency guards (contradicts SKILL.md wording). Add the script + CI
   step, or relax the wording. (see open question)
-- **[core] security** — `main.ts:74` + `core/config/app.config.ts:7`: `publicUrl`
-  has no fallback and is passed to `@fastify/cors` as `origin` with
-  `credentials:true`; unset `PUBLIC_URL` → `origin: undefined` (permissive) on a
-  credentialed endpoint. Make it `envRequiredString` or guard the registration.
-- **[core] observability** — `core/observability/sentry.ts:19`:
-  `tracesSampleRate` defaults to `1` (100%) for every entrypoint.
+- ~~**[core] security**~~ — `publicUrl` unset → CORS `origin: undefined`
+  (permissive) with `credentials:true`: **fixed (Batch M)** — `main.ts` throws in
+  production when `PUBLIC_URL` is unset; dev falls back to a localhost-only
+  origin regex, never `undefined`.
+- ~~**[core] observability**~~ — `sentry.ts` `tracesSampleRate` defaulted to `1`
+  (100%): **fixed (Batch M)** — default `0.1` in production, `1` elsewhere;
+  `SENTRY_TRACES_SAMPLE_RATE_<ENTRYPOINT>` still overrides. Error `sampleRate`
+  stays `1` (want every exception).
 - ~~**[core] tests**~~ — `change-set.helper.ts` / `request-context.helper.ts` no
   `.spec.ts`: **fixed (Batch K)** — both now have a `.spec.ts` under
   `core/database/helpers/`.
@@ -383,9 +397,10 @@ _(populated from subagent reports as waves complete)_
 - **[core-ai] style** — module-level `/g` `/y` regexes with mutable `.lastIndex`
   as scan cursors in both tag parsers (`parse-annotation-tags.ts`,
   `parse-grammar-tags.ts`); safe only single-threaded/non-reentrant.
-- **[core-ai] nlp/error-handling** — `http-nlp-client.service.ts:36`:
-  `response.json()` cast `as NlpParseResult`, no shape check; malformed 200 throws
-  far away in `buildSentences`. Validate at the boundary.
+- ~~**[core-ai] nlp/error-handling**~~ — `http-nlp-client` cast `response.json()`
+  with no shape check: **fixed (Batch M)** — `assertParseResult()` validates the
+  `sentences` array + each entry's `text`/`start`/`end`/`tokens` at the boundary
+  and throws a clear error. `.spec` +2.
 - ~~**[core-ai] tests**~~ — **fixed (Batch I)** — `anthropic-client.service.spec.ts`
   (9 cases: `$schema` strip, tool extraction + missing-tool error, `max_tokens`
   on both methods, adaptive-thinking gate, cost math incl. unknown model);
@@ -395,10 +410,11 @@ _(populated from subagent reports as waves complete)_
   normalisation paths (`INLINE_WS_RE` vs `normalizeInlineWhitespace`) that must
   produce byte-identical output or the round-trip breaks; `:190-192`
   `map[span.charStart] ?? span.charStart` fallback silently masks a mapping bug.
-- **[core-ai] draft fidelity** — idiom harness calls `callClaude` with default
-  `maxTokens:8000` vs prod `16000` (`draft/lib/annotate-unit.ts:61`); harness never
-  checks `stopReason==='max_tokens'` (prod `complete()` throws) — an idiom
-  baseline can hide truncation prod would fail on. Grammar harness is fine.
+- ~~**[core-ai] draft fidelity**~~ — idiom harness ran `maxTokens:8000` vs prod
+  `16000` and never checked `stopReason`: **fixed (Batch M)** — `annotateUnit`
+  now sends `MAX_TOKENS = 16000` and records `truncated` from a `max_tokens`
+  stop; `compare.ts`/`snapshot.ts`/`run.ts` count `truncated` as a hard failure
+  (same as the grammar harness).
 - ~~**[core-ai] docs**~~ — `draft/lib/split-sentences.ts` header referenced a
   removed file `split-text-for-annotation.ts`: **fixed (Wave 3)** — rewritten to
   say prod segments via spaCy and the harness keeps its own splitter on purpose.
@@ -565,8 +581,8 @@ _(populated from subagent reports as waves complete)_
   `clearSessionCookie` sends only `{path:'/'}` (a `__Host-` cookie deletion may
   need `Secure`); `addCookieAuth` declared but no `@ApiCookieAuth()` on any route;
   `HealthController` has no `@ApiTags` and `health.check([])` runs zero indicators
-  (always 200); `@CurrentUser()` throws bare `Error` → 500 (not
-  `UnauthorizedException`) when `actor` missing.
+  (always 200); ~~`@CurrentUser()` throws bare `Error` → 500 when `actor`
+  missing~~ **fixed (Batch M)** — now `UnauthorizedException` (401).
 
 - **[worker] queue-jobs/config** — **two `boss.createQueue` authorities** for the
   same post queues: `worker-registrar.service.ts:28` calls it with **no options**;

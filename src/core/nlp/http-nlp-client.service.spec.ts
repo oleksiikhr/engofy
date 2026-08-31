@@ -3,6 +3,8 @@ import type { NlpParseResult } from './nlp-client.port.js';
 
 const STATUS_AND_BODY = /500.*boom/s;
 const TRANSPORT_FAILURE = /nlp-service request failed/;
+const NO_SENTENCES = /no 'sentences' array/;
+const MALFORMED_SENTENCE = /malformed sentence entry/;
 
 const SAMPLE: NlpParseResult = {
   sentences: [
@@ -77,5 +79,31 @@ describe('HttpNlpClientService', () => {
     const client = new HttpNlpClientService('http://nlp.test:8000', 5000);
 
     await expect(client.parse('x')).rejects.toThrow(TRANSPORT_FAILURE);
+  });
+
+  it('rejects a 200 whose body has no sentences array', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ error: 'oops' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
+
+    const client = new HttpNlpClientService('http://nlp.test:8000', 5000);
+
+    await expect(client.parse('x')).rejects.toThrow(NO_SENTENCES);
+  });
+
+  it('rejects a 200 with a malformed sentence entry', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ sentences: [{ text: 'hi' }] }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
+
+    const client = new HttpNlpClientService('http://nlp.test:8000', 5000);
+
+    await expect(client.parse('x')).rejects.toThrow(MALFORMED_SENTENCE);
   });
 });
