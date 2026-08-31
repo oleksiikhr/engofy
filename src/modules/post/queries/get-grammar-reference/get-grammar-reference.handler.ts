@@ -25,9 +25,17 @@ export class GetGrammarReferenceHandler
     cefr,
   }: GetGrammarReferenceQuery): Promise<GrammarReferenceView> {
     const [categories, constructions, usagePoints] = await Promise.all([
-      this.em.find(GrammarCategory, {}, { orderBy: { sortOrder: 'asc' } }),
-      this.em.find(GrammarConstruction, {}, { orderBy: { sortOrder: 'asc' } }),
-      this.em.find(GrammarUsagePoint, {}),
+      this.em.find(
+        GrammarCategory,
+        {},
+        { orderBy: { sortOrder: 'asc' }, disableIdentityMap: true },
+      ),
+      this.em.find(
+        GrammarConstruction,
+        {},
+        { orderBy: { sortOrder: 'asc' }, disableIdentityMap: true },
+      ),
+      this.em.find(GrammarUsagePoint, {}, { disableIdentityMap: true }),
     ]);
 
     const pointsByConstruction = new Map<string, GrammarUsagePoint[]>();

@@ -21,16 +21,26 @@ export class GetGrammarConstructionHandler
   async execute({
     slug,
   }: GetGrammarConstructionQuery): Promise<GrammarConstructionView | null> {
-    const construction = await this.em.findOne(GrammarConstruction, { slug });
+    const construction = await this.em.findOne(
+      GrammarConstruction,
+      { slug },
+      { disableIdentityMap: true },
+    );
     if (!construction) {
       return null;
     }
 
     const [category, points] = await Promise.all([
-      this.em.findOne(GrammarCategory, { id: construction.categoryId }),
-      this.em.find(GrammarUsagePoint, {
-        constructionId: construction.id,
-      }),
+      this.em.findOne(
+        GrammarCategory,
+        { id: construction.categoryId },
+        { disableIdentityMap: true },
+      ),
+      this.em.find(
+        GrammarUsagePoint,
+        { constructionId: construction.id },
+        { disableIdentityMap: true },
+      ),
     ]);
 
     const sorted = [...points].sort(

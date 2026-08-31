@@ -31,8 +31,10 @@ production **throws at bootstrap** when neither `RESEND_API_KEY` nor the explici
 `MAIL_USE_MAILHOG=true` opt-in is set. MailHog is no longer a silent default that
 drops mail into a dead SMTP in a misconfigured prod.
 
-## Fix owed (tests)
+## Tests (done, Batch I)
 
-The `MAILER` port and `ChallengeMailerService` are **untested** in every tier —
-auth ispecs assert only that the outbox job is staged. Add `test/fakes/mailer.fake.ts`
-(D17) + a unit spec for template rendering.
+`test/fakes/mailer.fake.ts` — canonical `FakeMailer implements Mailer` (records
+`sent`, `nextError` to throw once). `ChallengeMailerService` has a direct unit
+spec (`services/shared/challenge-mailer.service.spec.ts`): template render + send
+through `FakeMailer`, and transport-error propagation. `send-challenge-email`
+processor also spec'd.

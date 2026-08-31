@@ -35,10 +35,11 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   async execute({
     shortId,
   }: GetPostDetailQuery): Promise<PostDetailView | null> {
-    const post = await this.em.findOne(Post, {
-      shortId,
-      status: PostStatus.Published,
-    });
+    const post = await this.em.findOne(
+      Post,
+      { shortId, status: PostStatus.Published },
+      { disableIdentityMap: true },
+    );
     if (!post) {
       return null;
     }
@@ -47,12 +48,12 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       this.em.find(
         PostPart,
         { postId: post.id },
-        { orderBy: { blockIndex: 'asc' } },
+        { orderBy: { blockIndex: 'asc' }, disableIdentityMap: true },
       ),
       this.em.find(
         Exercise,
         { postId: post.id },
-        { orderBy: { createdAt: 'asc', id: 'asc' } },
+        { orderBy: { createdAt: 'asc', id: 'asc' }, disableIdentityMap: true },
       ),
     ]);
 
@@ -104,12 +105,16 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     if (wordDefinitionIds.length === 0) {
       return {};
     }
-    const definitions = await this.em.find(WordDefinition, {
-      id: { $in: wordDefinitionIds },
-    });
-    const words = await this.em.find(Word, {
-      id: { $in: unique(definitions.map((d) => d.wordId)) },
-    });
+    const definitions = await this.em.find(
+      WordDefinition,
+      { id: { $in: wordDefinitionIds } },
+      { disableIdentityMap: true },
+    );
+    const words = await this.em.find(
+      Word,
+      { id: { $in: unique(definitions.map((d) => d.wordId)) } },
+      { disableIdentityMap: true },
+    );
     const wordById = new Map(words.map((word) => [word.id, word]));
 
     const out: Record<string, WordAnnotationView> = {};
@@ -136,7 +141,11 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     if (phraseIds.length === 0) {
       return {};
     }
-    const phrases = await this.em.find(Phrase, { id: { $in: phraseIds } });
+    const phrases = await this.em.find(
+      Phrase,
+      { id: { $in: phraseIds } },
+      { disableIdentityMap: true },
+    );
     const out: Record<string, PhraseAnnotationView> = {};
     for (const phrase of phrases) {
       out[phrase.id] = {
@@ -157,12 +166,16 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     if (slugs.length === 0) {
       return {};
     }
-    const constructions = await this.em.find(GrammarConstruction, {
-      slug: { $in: slugs },
-    });
-    const points = await this.em.find(GrammarUsagePoint, {
-      constructionId: { $in: constructions.map((c) => c.id) },
-    });
+    const constructions = await this.em.find(
+      GrammarConstruction,
+      { slug: { $in: slugs } },
+      { disableIdentityMap: true },
+    );
+    const points = await this.em.find(
+      GrammarUsagePoint,
+      { constructionId: { $in: constructions.map((c) => c.id) } },
+      { disableIdentityMap: true },
+    );
     const pointsByConstruction = new Map<string, GrammarUsagePoint[]>();
     for (const point of points) {
       const list = pointsByConstruction.get(point.constructionId) ?? [];

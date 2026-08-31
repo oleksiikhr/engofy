@@ -63,6 +63,6 @@ annotation. PLAN to be updated to match.
 
 | Sev | Change |
 |---|---|
-| med | `supportsAdaptiveThinking` denylists only `haiku` — allowlist adaptive-capable models instead. |
+| med | `supportsAdaptiveThinking` denylists only `haiku` — allowlist adaptive-capable models instead. (Behaviour is spec'd — Batch I — but still a denylist.) |
 | med | Stream `complete()` (baseline calls ~114 s — SDK 10-min timeout risk → full paid stage re-run); add `cache_control: { type: 'ephemeral' }` to the large static system prompts. |
-| med | `AnthropicClientService` has no unit spec. |
+| ~~med~~ | **done (Batch I)** — `core/ai/anthropic-client.service.spec.ts` (9 cases: text-join, `max_tokens` truncation on both `complete` and `completeStructured`, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking gate, cost math incl. unknown-model `undefined`). |

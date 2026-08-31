@@ -40,6 +40,6 @@
 
 | Sev | Change |
 |---|---|
-| med | `nlp-service/app.py` has **no tests** — the offset math is the whole contract. Add a `pytest` for a 2-sentence input with a discontinuous phrasal verb. |
+| ~~med~~ | **done (Batch I)** — `nlp-service/test_app.py` (`/health`, empty-text 422, offset round-trip for 4 texts incl. whitespace, multi-sentence sentence-relative offsets, the documented `Swimming` example); `requirements-dev.txt` + a dedicated `nlp-service` CI job (`pytest -q`). |
 | low | `http-nlp-client.service.ts:36` casts `response.json() as NlpParseResult` with no shape check — a malformed 200 throws far away in `buildSentences`. Validate at the boundary. |
 | ~~low (D13)~~ | **done (Batch K)** — `LEXICALISED_ING_NOUNS` stop-list in `build-sentences.ts` short-circuits the `NN` branch; `build-sentences.spec.ts` covers "Morning"/"Nothing" (not flagged) and a `VBG` "Meeting" (still flagged). |

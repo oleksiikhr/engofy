@@ -59,10 +59,11 @@ Tables and bullets over prose. Return the whole report as the final message.
 | 4 | worker-cli | `src/entrypoints/worker`, `src/entrypoints/cli` | **done** |
 | 5 | tests | `test/`, vitest, CI | **done** |
 
-## Wave 3 — cross-cutting (not started)
+## Wave 3 — cross-cutting (in progress)
 
 Consistency sweep of every area against the `auth` baseline; fill remaining
-`references/*.md` gaps; resolve accumulated open questions.
+`references/*.md` gaps; resolve accumulated open questions. First pass done —
+see **Batch L** in the fix backlog.
 
 ## Fix backlog (batched — one batch per session; `[ ]` → `[x]` as done)
 
@@ -190,6 +191,17 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`services/` vs `services/shared/` audit** — swept `auth`/`post`/`learning`/`billing`/`telegram`. **No discrepancies.** All 4 `services/shared/*` are imported from an entrypoint; every non-shared service is imported only within its own module (`SubscriptionService` already left `services/` + dropped from `exports` in Batch E). Recorded as a new "A2 audit (Batch K)" row in architecture.md.
 - [x] **`ConfigModule.forFeature` "variadic"** — NOT a real fix: `@nestjs/config`'s `forFeature(config)` takes a **single** factory (verified in the installed `dist` — extra args are silently dropped). `auth.module.ts`'s three `forFeature(X)` calls are correct, not drift. style.md ST10 rewritten to say so.
 
+### Batch L — Wave 3 cross-cutting, first pass (DONE 2026-08-30, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**124 files / 737 tests**, unchanged) + `pnpm test:cov` gate green — coverage unchanged (stmts 89.99 / branches 76.15 / funcs 86.44 / lines 90.34): the code changes are exercised by existing specs, no new logic branch. No entity/enum touched → no `pnpm build` / `migration:check` needed.
+- [x] **DP2 — `post` query handlers** — `{ disableIdentityMap: true }` added to every `find`/`findOne`/`findAndCount` in `get-feed`, `get-post-detail`, `get-grammar-construction`, `get-grammar-reference` (~15 sites). Closes the last DP2/M7 gap — `post` now matches the `auth`/`learning` baseline. `mikroorm.md` "disableIdentityMap" + `db-performance.md` DP2 "Still owed"/"Gap" markers struck; findings-log row struck.
+- [x] **queue DB creds (D18 partial)** — `core/queue/config/queue.config.ts` fallback defaults `postgres/postgres` → `engofy/engofy` (+ a comment), so an env-less local run can't split creds from the ORM. Full "one config object" left undone (low value now vars + defaults match). `config.md` "Known issues" row + findings-log row updated.
+- [x] **`draft/lib/split-sentences.ts`** — header referenced a removed `split-text-for-annotation.ts`; rewritten to state prod segments via spaCy and the harness keeps its own splitter deliberately. findings-log row struck.
+- [x] **D-decision coverage in `references/*.md`** — added the three that were unreferenced: **D9** (hexagonal port = canon for new `core/*` adapters; the other 2 styles grandfathered) → `architecture.md` `core/*` section rewritten (was "unresolved — open q21"); **D10** (read-only cross-module `em.find` from a **query** handler is sanctioned) → new `architecture.md` A8 + `db-performance.md` DP2; **D11** (derive at read time, don't write-cache) → new `db-performance.md` DP6. `architecture.md` A7 annotated with D2's Batch E state; stale "Full review pending wave 2" line removed.
+- [x] **`config.md` C3** — said `forFeature` is "variadic — one call for several"; corrected to "one call per namespace" to match the Batch K `style.md` ST10 finding.
+- [x] **"fix owed" rows closed by earlier batches but still open in references** — `mail.md` "Fix owed (tests)" → done (Batch I: `mailer.fake.ts` + `challenge-mailer.service.spec.ts`); `nlp.md` "Fixes owed" `app.py` no-tests → done (Batch I: `test_app.py` + CI job); `ai.md` "Fixes owed" `AnthropicClientService` no-spec → done (Batch I). `config.md` token-style + `.env.test`-vs-CI rows refreshed (WORKER_QUEUES is now a Symbol; the DB-name split is intentional, not drift). Matching findings-log rows struck.
+
+**Still open (deferred, not trivial — left as-is):** `IngestPostCommand` returns a managed `Post` (D2 tail); `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `supportsAdaptiveThinking` denylist→allowlist + `complete()` streaming/`cache_control` (ai.md, perf); `http-nlp-client` response shape check; `Sentry.tracesSampleRate` default 1; `PUBLIC_URL` CORS fallback; `S3_CORS_MAX_AGE`/`S3_PUBLIC_URL` unread; `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` string tokens; `worker.ts`/`cron.ts` double-`app.close()`; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
+
 ## Findings log
 
 _(populated from subagent reports as waves complete)_
@@ -258,10 +270,11 @@ _(populated from subagent reports as waves complete)_
   400. `TooManyLoginRequests`/`TooManyAttempts` (429), `*NotFound` (404),
   unique-conflict (409) all surface as 400. Let `DomainError` optionally carry a
   status/code the filter honours (default 400). (see open question)
-- **[core] config** — `core/database/mikro-orm.setup.ts:19-23` vs
-  `core/queue/config/queue.config.ts:6-9`: same Postgres DB described twice with
-  divergent defaults (ORM `engofy/engofy`, queue `postgres/postgres`); if
-  `MIKRO_ORM_*` env absent, pg-boss targets different creds. Single source.
+- ~~**[core] config**~~ — `queue.config.ts` had divergent fallback defaults
+  (`postgres/postgres`) from the ORM (`engofy/engofy`): **addressed (Wave 3)** —
+  both read the same `MIKRO_ORM_*` vars and the queue defaults now match
+  `engofy/engofy`, so an env-less run can't split creds. Full "one config
+  object" (D18) left undone — low value now the vars + defaults align.
 - **[core] mail** — `core/mail/mailer.provider.ts:12-18`: no `RESEND_API_KEY` →
   falls back to MailHog SMTP `127.0.0.1:1025`; in misconfigured prod mail is
   silently dropped. `ConsoleMailerService` (logs a warning) exists but is
@@ -324,9 +337,11 @@ _(populated from subagent reports as waves complete)_
   `{policy:'singleton', expireInSeconds:3600}` copy-pasted 6×; 1h expiry may be
   tight for a retried `ai_grammar` call on a long article. Extract a const, loop
   `QueueName`, reconsider expiry for AI stages.
-- **[post] db-performance/cqrs** — post query handlers load managed entities into
-  the identity map for pure reads; auth baseline (`get-user.handler.ts:11-14`)
-  passes `{ disableIdentityMap: true }`. Add it (or read-DTO projection) to match.
+- ~~**[post] db-performance/cqrs**~~ — post query handlers loaded managed
+  entities into the identity map for pure reads: **fixed (Wave 3)** —
+  `{ disableIdentityMap: true }` added to every `find`/`findOne`/`findAndCount`
+  in `get-feed` / `get-post-detail` / `get-grammar-construction` /
+  `get-grammar-reference`, matching the `auth`/`learning` baseline (DP2).
 - **[post] cqrs** — `ingest-post.command.ts` returns a live managed `Post` entity
   up through `CommandBus` + facade to callers (telegram module); auth commands
   return plain results/DTOs. Return `post.id` or a small view.
@@ -336,12 +351,12 @@ _(populated from subagent reports as waves complete)_
   comment now states the drift + carries a `TODO` for keyset on `(publishedAt, id)`.
 - **[core] config** — `core/s3/s3.config.ts:14`: `corsMaxAge` (`S3_CORS_MAX_AGE`)
   declared, never read; `S3_PUBLIC_URL` present in env/CI, not consumed.
-- **[core] architecture** — token style inconsistent: `MAILER` is `Symbol('MAILER')`,
-  `PG_BOSS`/`REDIS_CLIENT`/`S3_CLIENT` are plain string constants. Standardise on
-  `Symbol()`.
-- **[core] error-handling** — `core/errors/authorization.error.ts:5` uses
-  `this.name = AuthorizationError.name` (subclasses would misreport); `DomainError`
-  uses `new.target.name`. Align.
+- **[core] architecture** — token style inconsistent: `MAILER` + `WORKER_QUEUES`
+  are `Symbol()` (`WORKER_QUEUES` since Batch H); `PG_BOSS`/`REDIS_CLIENT`/
+  `S3_CLIENT` are still plain string constants. Standardise the rest on `Symbol()`.
+- ~~**[core] error-handling**~~ — `authorization.error.ts` used
+  `this.name = AuthorizationError.name`: **fixed (Batch A)** — now
+  `new.target.name`, matching `DomainError`.
 - **[core] http-api** — `core/http/filters/http-error.filter.ts:29-35`: `<500`
   `HttpException` with object payload forwards Nest's `{statusCode,message,error}`
   verbatim, diverging from the `{message}` shape of the other filters.
@@ -371,9 +386,11 @@ _(populated from subagent reports as waves complete)_
 - **[core-ai] nlp/error-handling** — `http-nlp-client.service.ts:36`:
   `response.json()` cast `as NlpParseResult`, no shape check; malformed 200 throws
   far away in `buildSentences`. Validate at the boundary.
-- **[core-ai] tests** — `AnthropicClientService` has no unit spec (owns `$schema`
-  stripping, `z.toJSONSchema` shaping, tool extraction, `max_tokens`, cost math);
-  `nlp-service/app.py` has no tests at all (offset math is the whole contract).
+- ~~**[core-ai] tests**~~ — **fixed (Batch I)** — `anthropic-client.service.spec.ts`
+  (9 cases: `$schema` strip, tool extraction + missing-tool error, `max_tokens`
+  on both methods, adaptive-thinking gate, cost math incl. unknown model);
+  `nlp-service/test_app.py` (offset round-trip, multi-sentence, `/health`,
+  empty-text 422) + a dedicated CI job.
 - **[core-ai] style** — `grammar-prompt.ts` has two independent whitespace-
   normalisation paths (`INLINE_WS_RE` vs `normalizeInlineWhitespace`) that must
   produce byte-identical output or the round-trip breaks; `:190-192`
@@ -382,8 +399,9 @@ _(populated from subagent reports as waves complete)_
   `maxTokens:8000` vs prod `16000` (`draft/lib/annotate-unit.ts:61`); harness never
   checks `stopReason==='max_tokens'` (prod `complete()` throws) — an idiom
   baseline can hide truncation prod would fail on. Grammar harness is fine.
-- **[core-ai] docs** — `draft/lib/split-sentences.ts:2-5` references a removed file
-  `split-text-for-annotation.ts`.
+- ~~**[core-ai] docs**~~ — `draft/lib/split-sentences.ts` header referenced a
+  removed file `split-text-for-annotation.ts`: **fixed (Wave 3)** — rewritten to
+  say prod segments via spaCy and the harness keeps its own splitter on purpose.
 
 - **[post-data] mikroorm/pipeline** — `domain/node-tree.parser.ts` (280 LOC, fully
   tested) + `NodeTreeType` (`domain/node-tree.type.ts`) are imported by **nothing**
@@ -430,37 +448,36 @@ _(populated from subagent reports as waves complete)_
   `skill-progress.service.ts` `em.find` **~8 `post`-owned tables** (`words`,
   `phrases`, `grammar_*`, `word_definitions`, `posts`, `post_parts`) + import
   `post/domain/*` directly. No `PostModule` import, no facade/`services/shared`
-  boundary. auth never touches another module's tables — the module's dominant
-  deviation. (see open question 24)
-- **[learning/billing] cqrs** — `AddCardCommand` / `ReviewCardCommand` /
-  `ActivateMockSubscriptionCommand` are typed `Command<LearningCard>` /
-  `Command<Subscription>` and return a **managed ORM entity** through the bus +
-  facade (same class of issue as `IngestPostCommand`). Return an id / plain view.
-- **[billing] cqrs/architecture** — no `queries/` folder; `getActiveSubscription`
-  /`isPremium` call `SubscriptionService` straight from the facade, and
-  `SubscriptionService` (a `services/` file, not `services/shared/`) is in
-  `billing.module.ts` `exports`. auth routes every read through `QueryBus` and
-  exports only the facade. (see open question 26)
-- **[learning] mikroorm/error-handling** — "idempotent" `add-card` and
-  `skill-progress.loadOrCreate` are `findOne`-then-`persist` with no upsert/lock:
-  two concurrent `POST /learning/cards` for the same target both miss `findOne`,
-  both `persist`, 2nd hits the composite `@Unique` on flush →
-  `UniqueConstraintViolationException` (not `DomainError`) → generic 500, not the
-  intended idempotent 200. Use `em.upsert(…, { onConflictAction:'ignore' })` (M3)
-  or catch + re-`findOne`.
-- **[learning] mikroorm** — `masteryScore` is stored and only recomputed inside
-  `recordGrammarReview` (grammar *review*). `unlockConstruction` (2nd grammar card)
-  does not recompute; `get-profile` reads the stale stored value. Зріз 7 ("derive
-  from FSRS state") is half-applied — streak is read-derived, mastery is
-  write-cached. Compute at read time in `get-profile` (like streak/cefr) and make
-  the column display-only. (see open question 25)
-- **[learning] db-performance** — `get-profile.computeStreak` loads **every**
-  `review_logs` row for all the user's cards on each `/profile` hit (unbounded)
-  just to derive distinct UTC days — push `select distinct …::date` to SQL.
-  `get-dictionary` loads **all** published posts + all their parts + walks every
-  node-tree span on every `/dictionary` request (stands in for missing
-  `post_word`/`post_phrase`, PLAN §3.3). No learning query handler uses
-  `disableIdentityMap` (M7).
+  boundary. **Resolved by D10 (Batch E / Wave 3):** read-only cross-module
+  `em.find` **from a query handler** is sanctioned (never a command, never a
+  write); documented in `architecture.md` A8 + `db-performance.md` DP2. The
+  `post` projection / `services/shared` lookup stays the eventual fix.
+- ~~**[learning/billing] cqrs**~~ — commands returned managed ORM entities:
+  **fixed (Batch E, D2)** — `AddCard`/`ReviewCard` → `Command<CardView>`,
+  `ActivateMockSubscription` → `Command<SubscriptionView>`; view types +
+  `to<View>` mappers in `<module>/types/`. `IngestPostCommand` still returns a
+  managed `Post` (owed).
+- ~~**[billing] cqrs/architecture**~~ — no `queries/` folder: **fixed (Batch E,
+  D18)** — `billing/queries/get-subscription/*` added (`GetSubscriptionHandler`
+  → `SubscriptionView | null`); `BillingService` routes through `queryBus`;
+  `SubscriptionService` dropped from `billing.module.ts` `exports` + `isPremium`
+  removed (dead).
+- ~~**[learning] mikroorm/error-handling**~~ — `add-card` /
+  `skill-progress.loadOrCreate` were `findOne`-then-`persist` (racing duplicate →
+  500): **fixed (Batch E)** — both are now `em.upsert(…, onConflictFields,
+  onConflictAction: 'ignore')`, resolving a racing `POST /learning/cards`
+  idempotently.
+- ~~**[learning] mikroorm**~~ — `masteryScore` was write-cached and only
+  recomputed in `recordGrammarReview`: **fixed (Batch E, D11)** — derived at read
+  time in `get-profile` (`aggregateMasteryScore` over the loaded cards);
+  `recordGrammarReview` no longer writes it; column is display-only. See DP6.
+- **[learning] db-performance** — ~~`get-profile.computeStreak` loads every
+  `review_logs` row~~ **fixed (Batch E)** — now `SELECT DISTINCT …::date` raw SQL.
+  ~~No learning query handler uses `disableIdentityMap`~~ **fixed (Batch E)**.
+  Still open: `get-dictionary` loads **all** published posts + all their parts +
+  walks every node-tree span on every `/dictionary` request (stands in for the
+  missing `post_word`/`post_phrase`, PLAN §3.3) — bound it or build the
+  projection (D10/D12).
 - **[telegram] pipeline/error-handling** — `publish-pending.service.ts:34-46`: a
   `Failed` `post_publications` row is **terminal** (`run()` selects only `Pending`);
   a transient Telegram 5xx permanently drops the channel announcement. `/retry`

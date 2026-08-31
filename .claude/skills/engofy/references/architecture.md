@@ -1,6 +1,6 @@
 # Architecture — module anatomy & layering
 
-> Reviewed: `auth`, `post` (wave 1); `learning`, `billing`, `telegram`, entrypoints (wave 2).
+> Reviewed: `auth`, `post` (wave 1); `learning`, `billing`, `telegram`, entrypoints (wave 2); cross-cutting sweep (wave 3).
 > Baseline: `src/modules/auth`.
 
 ## Layers
@@ -54,17 +54,20 @@ Reference: `src/modules/auth/` tree; `src/modules/auth/auth.module.ts:22-52`.
 | A4 | Every command/query folder file shares the folder name + a role suffix (`.command.ts`, `.handler.ts`, `.dto.ts`, `.query.ts`). | `commands/login-with-google/*` |
 | A5 | Entrypoints depend only on the facade or `services/shared/*`. | `entrypoints/web/auth/controllers/auth.controller.ts:18` |
 | A6 | `core/actor` is a discriminated-union **type** only (`{ type: 'user'; id }`), no class/behaviour. | `src/core/actor/actor.ts:1-5` |
-| A7 | Cross-module result types that leave the `CommandBus` are plain DTOs/values, never managed ORM entities. | `types/login-result.type.ts` — **violated** by `IngestPostCommand` (see `REVIEW.md`) |
+| A7 | Cross-module result types that leave the `CommandBus` are plain DTOs/values, never managed ORM entities. **D2:** `learning`/`billing` commands return views (`CardView`/`SubscriptionView`, Batch E); `IngestPostCommand` still returns a managed `Post` (owed). | `types/login-result.type.ts`; `learning/types/card-view.type.ts` |
+| A8 | **D10** — a **query** handler may `em.find`/`findOne` another module's tables read-only (e.g. `learning` reads `post`-owned `words`/`phrases`/`grammar_*`). Never from a command, never a write. The eventual fix is a `post` projection / `services/shared/*` lookup; the direct read is sanctioned until then. | `learning/queries/get-dictionary/*`, `get-profile/*` |
 
 ## `core/*` — infrastructure
 
-Two adapter styles coexist (unresolved — see `REVIEW.md` open question 21):
+**D9 (confirmed):** the hexagonal port pattern is the canon for **new** `core/*`
+external adapters. The other two styles are grandfathered — don't retrofit them,
+don't copy them for new code.
 
 | Style | Used by | Shape |
 |---|---|---|
-| Hexagonal port | `core/ai`, `core/nlp` | `*.port.ts` (`Symbol` token + interface) + `*.provider.ts` (`FactoryProvider`) + adapter `*.service.ts` (not `@Injectable`) + `*.config.ts` |
-| Raw vendor client | `core/redis`, `core/s3`, `core/queue` | string token + factory provider, no interface |
-| Plain `@Injectable` | `auth/services/google-id-token-verifier.service.ts` | class with `@Inject(Config.KEY)`, SDK built inline |
+| Hexagonal port — **canon for new adapters** | `core/ai`, `core/nlp` | `*.port.ts` (`Symbol` token + interface) + `*.provider.ts` (`FactoryProvider`) + adapter `*.service.ts` (not `@Injectable`) + `*.config.ts` |
+| Raw vendor client (grandfathered) | `core/redis`, `core/s3`, `core/queue` | string token + factory provider, no interface |
+| Plain `@Injectable` (grandfathered) | `auth/services/google-id-token-verifier.service.ts`, `telegram`'s inline `fetch` client | class with `@Inject(Config.KEY)`, SDK built inline |
 
 - `@Global()` + a `forRuntime(runtime)` static factory for modules that must be
   everywhere (`Logger`, `PgBoss`); `Redis` is `@Global` plain; `S3` is neither.
@@ -76,4 +79,5 @@ Two adapter styles coexist (unresolved — see `REVIEW.md` open question 21):
 
 `web` · `worker` · `cli` · `cron` — each has its own `main.ts`-style bootstrap that
 imports `bootstrapSentry(runtime)` as a side-effecting import **before** Nest.
-Reference: `src/core/observability/web.ts:1-3`. Full review pending wave 2.
+Reference: `src/core/observability/web.ts:1-3`. See `queue-jobs.md` for the
+worker/cron/cli host patterns.

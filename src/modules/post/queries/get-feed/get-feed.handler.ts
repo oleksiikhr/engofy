@@ -25,7 +25,12 @@ export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
     const [posts, total] = await this.em.findAndCount(
       Post,
       { status: PostStatus.Published },
-      { orderBy: { publishedAt: 'desc', id: 'desc' }, limit, offset },
+      {
+        orderBy: { publishedAt: 'desc', id: 'desc' },
+        limit,
+        offset,
+        disableIdentityMap: true,
+      },
     );
 
     const excerpts = await this.loadExcerpts(posts.map((post) => post.id));
@@ -56,7 +61,10 @@ export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
     const parts = await this.em.find(
       PostPart,
       { postId: { $in: postIds } },
-      { orderBy: { postId: 'asc', blockIndex: 'asc' } },
+      {
+        orderBy: { postId: 'asc', blockIndex: 'asc' },
+        disableIdentityMap: true,
+      },
     );
 
     const byPost = new Map<string, string>();

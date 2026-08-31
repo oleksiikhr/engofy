@@ -7,10 +7,11 @@
 | # | Rule | Reference |
 |---|---|---|
 | DP1 | Batch child loads with `id: { $in: [...] }` + in-memory grouping (`Map`); `Promise.all` for independent finds. **No N+1.** | `post/queries/get-post-detail/get-post-detail.handler.ts:45-56` |
-| DP2 | Read-only query handlers pass `{ disableIdentityMap: true }` on every `find`/`findOne` (or project a plain read DTO). `auth` + all `learning` query handlers + `billing`'s `SubscriptionService` do this (Batch E). **Gap:** `post` query handlers (`get-feed`, `get-post-detail`, `get-grammar-*`) still don't. | `learning/queries/get-profile/get-profile.handler.ts:36-53`; `auth/queries/get-user/get-user.handler.ts:11-16` |
+| DP2 | Read-only query handlers pass `{ disableIdentityMap: true }` on every `find`/`findOne`/`findAndCount` (or project a plain read DTO). `auth` + all `learning` query handlers + `billing`'s `SubscriptionService` (Batch E); all `post` query handlers (`get-feed`, `get-post-detail`, `get-grammar-construction`, `get-grammar-reference`) (Wave 3). | `learning/queries/get-profile/get-profile.handler.ts:36-53`; `auth/queries/get-user/get-user.handler.ts:11-16`; `post/queries/get-post-detail/get-post-detail.handler.ts:38-56` |
 | DP3 | Denormalise a FK when it saves a join on a hot read — with a `// source of truth is X` comment. | `post/entities/sentence.entity.ts:25-29` (`postId` copied from `post_parts`) |
 | DP4 | Slow queries (> `SLOW_QUERY_THRESHOLD`, default 2000 ms) are logged at `warn` with SQL. | `core/database/mikro-orm.logger.ts:75-85` |
 | DP5 | Raw SQL is fine for set-based work the ORM can't express cheaply (`SELECT max(...)`, `distinct ::date`, `lower(col)` upserts, retention `DELETE`s) — via `em.getConnection().execute(..., em.getTransactionContext())`. | `telegram/services/shared/poll-updates.service.ts` (`max(update_id)`); `telegram/services/shared/prune-telegram-updates.service.ts` (30-day `DELETE`) |
+| DP6 | **D11** — a value that is a pure function of rows already loaded for the response is **derived in the query handler**, not write-cached in a column. `get-profile` computes `streak`, `cefr`, and `masteryScore` at read time from the loaded cards; `recordGrammarReview` no longer writes `mastery_score` (the column is display-only / kept for a future report). Write-caching such a value invites staleness (`unlockConstruction` used not to recompute it). | `learning/queries/get-profile/get-profile.handler.ts` (`aggregateMasteryScore`); `learning/services/skill-progress.service.ts` |
 
 ## Index anti-patterns found — fixed (Batch D)
 
