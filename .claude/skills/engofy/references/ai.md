@@ -13,6 +13,12 @@ deliberately split:
 | `completeStructured<T>({ system, userText, tool: { name, description, schema: ZodType<T> } })` | forced single-tool-use; `input_schema` from `z.toJSONSchema` (strip `$schema`); response validated `tool.schema.parse` | small structured outputs (complexity, comprehension) |
 
 Adapter `anthropic-client.service.ts` (not `@Injectable` — built by `ai-client.provider.ts`).
+Both methods go through one private `createMessage()` that **streams** every
+request (`messages.stream(params).finalMessage()`) — a whole-article echo-back
+runs ~2 min and a non-streaming `messages.create` risks the SDK's 10-minute
+socket timeout, which would fail the paid stage and force a full re-run.
+`finalMessage()` returns the same assembled `Message` (`content` / `usage` /
+`stop_reason`) a blocking call gives, so AI3 / AI4 below are unaffected. Batch R4.
 
 ## Rules
 
@@ -21,7 +27,7 @@ Adapter `anthropic-client.service.ts` (not `@Injectable` — built by `ai-client
 | AI1 | AI calls run **only in pg-boss processors** (`references/pipeline.md` P1). | PLAN §12 |
 | AI2 | Never trust the raw tool payload — always `tool.schema.parse` it. | `anthropic-client.service.ts:112` |
 | AI3 | `complete()` **and** `completeStructured()` turn SDK `stop_reason === 'max_tokens'` into a distinct thrown error so the reconstruct-retry loop doesn't spin on a budget problem (a truncated tool call would otherwise surface as an opaque `ZodError` from `tool.schema.parse`). | `anthropic-client.service.ts` |
-| AI4 | Every call logs a structured usage line (`input`/`output`/`cache` tokens + `cost_usd`). | `anthropic-client.service.ts:57-69` |
+| AI4 | Every call logs a structured usage line (`input`/`output`/`cache` tokens + `cost_usd`) from the streamed final message's `usage`. | `anthropic-client.service.ts` `logUsage` |
 | AI5 | Prompt strings + zod tool schemas live in pure `<module>/domain/*-prompt.ts`. | `post/domain/complexity-prompt.ts` |
 
 ## Inline-markup round-trip
@@ -75,6 +81,6 @@ annotation. PLAN to be updated to match.
 | Sev | Change |
 |---|---|
 | ~~med~~ | **done (Batch M)** — `supportsAdaptiveThinking` is now an allowlist (`ADAPTIVE_THINKING_MODELS`: sonnet-5 / opus-5 / fable-5 / sonnet-4-6 / opus-4-6/-4-7/-4-8). Haiku *and* any unknown/pre-4.6 id → no `thinking` block. Spec covers all three. |
-| med | Stream `complete()` (baseline calls ~114 s — SDK 10-min timeout risk → full paid stage re-run). **← still open** (the cache_control half below is done). |
+| ~~med~~ | **done (Batch R4)** — both `complete()` and `completeStructured()` now stream via a shared `createMessage()` (`messages.stream(params).finalMessage()`), removing the ~114 s non-streaming call's SDK 10-min timeout risk. `finalMessage()` yields the same `Message` shape, so the AI3 `max_tokens` throw + AI4 usage log are byte-for-byte unchanged; `max_tokens` stays 16000 (AI3 guard + draft-harness parity, Batch M). `draft/lib/call-claude.ts` switched to `.stream().finalMessage()` for the same reason. `anthropic-client.service.spec.ts` +1 (asserts `stream` is called, never a non-streaming fallback); the existing 12 cases now run through the streamed path. |
 | ~~med~~ | **done (Batch R)** — `toSystemParam()` wraps a system prompt ≥ 4000 chars as `[{ type: 'text', text, cache_control: { type: 'ephemeral' } }]`; shorter prompts pass through as a plain string unchanged. In practice only the grammar stage's prompt (preamble + full seeded catalogue) clears Anthropic's ~1024-token minimum cacheable prefix, so its retry (a second identical call seconds later) is billed at the cache-read rate. `cache_creation`/`cache_read` tokens were already in the AI4 usage log. `anthropic-client.service.spec.ts` +3. |
 | ~~med~~ | **done (Batch I)** — `core/ai/anthropic-client.service.spec.ts` (9 cases: text-join, `max_tokens` truncation on both `complete` and `completeStructured`, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking gate, cost math incl. unknown-model `undefined`). |

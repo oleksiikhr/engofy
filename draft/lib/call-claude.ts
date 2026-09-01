@@ -62,13 +62,18 @@ export async function callClaude(params: {
   const model = params.model ?? requireEnv('AI_MODEL');
   const start = performance.now();
 
-  const response = await getClient().messages.create({
-    model,
-    max_tokens: params.maxTokens ?? 8000,
-    ...(params.thinking && { thinking: { type: 'adaptive' } }),
-    system: params.system,
-    messages: [{ role: 'user', content: params.userText }],
-  });
+  // Stream (like the production adapter) so a long echo-back pass can't trip
+  // the SDK's 10-minute socket timeout; `finalMessage()` returns the same
+  // assembled `Message` a blocking `messages.create` would.
+  const response = await getClient()
+    .messages.stream({
+      model,
+      max_tokens: params.maxTokens ?? 8000,
+      ...(params.thinking && { thinking: { type: 'adaptive' } }),
+      system: params.system,
+      messages: [{ role: 'user', content: params.userText }],
+    })
+    .finalMessage();
 
   const elapsedMs = performance.now() - start;
   const text = response.content

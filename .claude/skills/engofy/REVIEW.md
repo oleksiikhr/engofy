@@ -258,7 +258,7 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 | # | Item | Why deferred |
 |---|---|---|
 | ~~1~~ | ~~`get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request~~ | **done (Batch R2)** — bounded indexed join `sentence_tokens.word_id`/`phrase_id` → `sentences` → `posts` (`SELECT DISTINCT … ORDER BY published_at DESC` per term kind, raw SQL). No `post_word`/`post_phrase` table + no backfill needed: the annotation stage's `sentence_tokens` link *is* the projection. New `sentence_tokens_word_id`/`phrase_id` indexes (`Migration20260901103351`). Also closes `[learning] architecture` cross-module-reads heaviest case + `[post-data] spec drift` `post_word`/`post_phrase` + open q12. |
-| 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk). ~~+ no `cache_control` on the large static system prompts~~ **cache_control done (Batch R)** — `toSystemParam()`, grammar-stage retry reads from cache. | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop — deferred as the risky half. `ai.md` "Fixes owed". |
+| ~~2~~ | ~~`complete()` non-streaming (~114 s/call → SDK 10-min timeout risk).~~ **done (Batch R4)** — shared `createMessage()` streams both `complete()` + `completeStructured()` (`messages.stream(...).finalMessage()`); the final `Message` shape is identical, so AI3 (`stop_reason` / `max_tokens` throw) + AI4 (usage log) + the reconstruct-retry loop are untouched. `max_tokens` stays 16000. `draft/lib/call-claude.ts` streamed too. ~~+ no `cache_control` on the large static system prompts~~ **cache_control done (Batch R)** — `toSystemParam()`, grammar-stage retry reads from cache. |
 | 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
 | 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
 | ~~5~~ | ~~No direct `.ispec.ts` for `post` query handlers + `get-dictionary`~~ | **done (Batch Q)** — `get-feed` / `get-post-detail` / `get-grammar-construction` / `get-grammar-reference` / `get-dictionary` each have a `.handler.ispec.ts` (12 cases). |
@@ -292,6 +292,12 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`DateTime`→ISO placement** — `DictionaryEntryView.due` changed from `string` back to `DateTime`; `GetDictionaryHandler.wordEntry`/`phraseEntry` pass `card.due` through untouched; `DictionaryController` gained a local `iso()` helper (identical to `learning`/`billing`) and maps `iso(entry.due)` in `toDictionaryEntryDto`. Query results now keep Luxon types to the HTTP edge everywhere. `get-dictionary.handler.ispec.ts` +1 assertion (`DateTime.isDateTime(view.items[0].due)`); `dictionary.controller.ispec.ts` +1 assertion (`due` is a valid ISO string over the wire).
 - [x] **`queue-spy` positional match** — `test/setup/queue-spy.helper.ts`: a `SendCall = Parameters<OutboxSenderService['send']>` alias + `queueName(call)` / `queuePayload<T>(call)` accessors; `assertSent` / `assertNotSent` read through them, so the `send(em, name, data, options?)` positional contract is stated once. Behaviour identical; every queue-spy consumer spec unchanged.
 - [x] **`app.module.ispec.ts` never `.init()`s** — reviewed, kept `.compile()` on purpose and documented why: `.init()` would run `WorkerRegistrarService.onApplicationBootstrap` (`boss.work()`), `@nestjs/schedule` cron timers, and the `PgBoss*` shutdown hooks against real pg-boss / cron infra a DI-graph smoke test must not touch; runtime behaviour of those is covered by their own specs. Comment added, no code change.
+
+### Batch R4 — stream the AI adapter (deferred item #2, hard half) (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 774 tests**, was 131/773: +1) + `pnpm test:cov` gate green (stmts 90.54 / branches 78.60 / funcs 86.95 / lines 90.93). No entity/enum/migration touched → no `pnpm build` / `migration:check`.
+- [x] **`complete()` + `completeStructured()` → streaming (deferred #2, hard half)** — new private `AnthropicClientService.createMessage(params)` = `this.client.messages.stream(params).finalMessage()`; both public methods route their request object through it instead of `this.client.messages.create(...)`. `finalMessage()` consumes the stream internally and returns the same assembled `Anthropic.Message` (`content` / `usage` / `stop_reason`) the blocking call produced, so **AI3** (the distinct `stop_reason === 'max_tokens'` throw, on both methods) and **AI4** (the `logUsage` structured line from `response.usage`, incl. `cache_creation`/`cache_read`) are unchanged — a `max_tokens` stop still resolves normally rather than rejecting. Removes the ~114 s non-streaming call's exposure to the SDK's 10-minute socket timeout (which would fail a paid stage and force a full `/retry`). `max_tokens` deliberately left at 16000 — the AI3 truncation guard stays meaningful and it keeps parity with the draft harness (`MAX_TOKENS`, Batch M); not raised to a streaming-era 64000.
+- [x] **`draft/lib/call-claude.ts`** — same `.messages.stream(...).finalMessage()` switch (outside the CI biome/test gate but covered by `pnpm run type`; `biome check` run manually on the file). Keeps the eval harness from silently hitting the same timeout on a long real run.
+- [x] **`anthropic-client.service.spec.ts`** — mock rewired: `messages.stream` returns `{ finalMessage }` (set per-test via `stream.mockReturnValue` in `beforeEach`), responses go on `finalMessage.mockResolvedValue`; all `create.mock.calls` refs → `stream.mock.calls`. **+1 case** ("streams the request and reads the assembled final message" — asserts `stream`/`finalMessage` each called once and the request carries no `stream` flag, i.e. no non-streaming fallback). The existing 12 cases (text-join, `max_tokens` on both methods, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking allowlist, system-prompt caching ×3, cost math) now exercise the streamed path.
 
 ## Findings log
 
@@ -385,13 +391,19 @@ _(populated from subagent reports as waves complete)_
   a pre-4.6 `AI_MODEL` would be sent `thinking:{type:'adaptive'}` and 400.~~
   **fixed (Batch M)** — explicit `ADAPTIVE_THINKING_MODELS` allowlist; spec
   covers Haiku + a pre-4.6 id.
-- **[core-ai] ai/performance** — non-streaming `messages.create`
+- ~~**[core-ai] ai/performance** — non-streaming `messages.create`
   `max_tokens:16000` for whole-article echo-back (~114 s/call → SDK 10-min
-  timeout risk → full paid stage re-run). Stream `complete()`. **← still open**
-  (`ai.md` "Fixes owed"; deferred perf item). ~~large static system prompts
-  re-sent uncached every call + retry (no `cache_control`)~~ **fixed (Batch R)**
-  — `toSystemParam()` marks a ≥ 4000-char system prompt as an ephemeral cache
-  breakpoint; the grammar stage's preamble+catalogue retry now reads from cache.
+  timeout risk → full paid stage re-run). Stream `complete()`.~~ **fixed
+  (Batch R4)** — both `complete()` and `completeStructured()` route through a
+  shared private `createMessage()` that streams
+  (`messages.stream(params).finalMessage()`); `finalMessage()` returns the same
+  assembled `Message`, so the AI3 `max_tokens` throw + AI4 usage log are
+  unchanged (`max_tokens` stays 16000 — AI3 guard + draft-harness parity).
+  `draft/lib/call-claude.ts` switched the same way. `anthropic-client.service.spec.ts`
+  +1. ~~large static system prompts re-sent uncached every call + retry (no
+  `cache_control`)~~ **fixed (Batch R)** — `toSystemParam()` marks a ≥ 4000-char
+  system prompt as an ephemeral cache breakpoint; the grammar stage's
+  preamble+catalogue retry now reads from cache.
 - ~~**[core-ai] ai/pipeline (stale PLAN)** — PLAN §6/§12 claim PUA escaping of
   `[]{}` "вже є"; not implemented, format changed.~~ **fixed (Batch J, D13)** —
   PLAN §6/§12 rewritten to the real rare-delimiter + reconstruct-and-compare

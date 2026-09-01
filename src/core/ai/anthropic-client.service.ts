@@ -85,6 +85,21 @@ export class AnthropicClientService implements AiClient {
     this.client = new Anthropic({ apiKey });
   }
 
+  // Stream every request rather than blocking on a single non-streaming
+  // response. A whole-article echo-back pass runs ~2 min (and the SDK retries
+  // 5xx/timeouts, so wall-clock can be longer); a non-streaming
+  // `messages.create` risks the SDK's 10-minute socket timeout, which would
+  // fail the paid stage outright and force a full re-run. `finalMessage()`
+  // consumes the stream internally and hands back the same assembled `Message`
+  // (`content` / `usage` / `stop_reason`) the blocking call returned, so the
+  // AI3 truncation check and the AI4 usage log downstream are untouched — a
+  // `max_tokens` stop still resolves normally with `stop_reason === 'max_tokens'`.
+  private createMessage(
+    params: Anthropic.MessageStreamParams,
+  ): Promise<Anthropic.Message> {
+    return this.client.messages.stream(params).finalMessage();
+  }
+
   private logUsage(usage: Anthropic.Usage, label: string): void {
     this.logger.log(
       {
@@ -110,7 +125,7 @@ export class AnthropicClientService implements AiClient {
       tool.schema,
     ) as Record<string, unknown>;
 
-    const response = await this.client.messages.create({
+    const response = await this.createMessage({
       model: this.model,
       max_tokens: 16000,
       ...(supportsAdaptiveThinking(this.model) && {
@@ -153,7 +168,7 @@ export class AnthropicClientService implements AiClient {
   }
 
   async complete({ system, userText }: AiCompleteParams): Promise<string> {
-    const response = await this.client.messages.create({
+    const response = await this.createMessage({
       model: this.model,
       max_tokens: 16000,
       ...(supportsAdaptiveThinking(this.model) && {

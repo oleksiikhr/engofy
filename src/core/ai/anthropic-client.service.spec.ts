@@ -2,11 +2,15 @@ import { Logger } from '@nestjs/common';
 import { z } from 'zod';
 import { AnthropicClientService } from './anthropic-client.service.js';
 
-const create = vi.fn();
+// The service streams every call (`messages.stream(...).finalMessage()`), so the
+// fake `stream` returns an object with a `finalMessage()` promise (re-wired in
+// `beforeEach`); the per-test response is set on `finalMessage`.
+const finalMessage = vi.fn();
+const stream = vi.fn();
 
 vi.mock('@anthropic-ai/sdk', () => ({
   default: class FakeAnthropic {
-    messages = { create };
+    messages = { stream };
   },
 }));
 
@@ -38,7 +42,9 @@ describe('AnthropicClientService', () => {
   let logSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    create.mockReset();
+    finalMessage.mockReset();
+    stream.mockReset();
+    stream.mockReturnValue({ finalMessage });
     logSpy = vi.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
 
@@ -47,8 +53,22 @@ describe('AnthropicClientService', () => {
   });
 
   describe('complete', () => {
+    it('streams the request and reads the assembled final message', async () => {
+      finalMessage.mockResolvedValue(textResponse('streamed'));
+      const client = new AnthropicClientService('key', 'claude-sonnet-5');
+
+      const out = await client.complete({ system: 's', userText: 'u' });
+
+      expect(out).toBe('streamed');
+      expect(stream).toHaveBeenCalledTimes(1);
+      expect(finalMessage).toHaveBeenCalledTimes(1);
+      // A non-streaming `messages.create` would trip the SDK 10-minute timeout
+      // on a ~2-minute echo-back — the adapter must never fall back to it.
+      expect(stream.mock.calls[0][0]).not.toHaveProperty('stream');
+    });
+
     it('joins the text blocks of the response', async () => {
-      create.mockResolvedValue({
+      finalMessage.mockResolvedValue({
         content: [
           { type: 'text', text: 'Hello ' },
           { type: 'thinking', thinking: 'ignored' },
@@ -65,7 +85,7 @@ describe('AnthropicClientService', () => {
     });
 
     it('throws a distinct truncation error on stop_reason max_tokens', async () => {
-      create.mockResolvedValue(
+      finalMessage.mockResolvedValue(
         textResponse('partial', { stop_reason: 'max_tokens' }),
       );
       const client = new AnthropicClientService('key', 'claude-sonnet-5');
@@ -76,35 +96,35 @@ describe('AnthropicClientService', () => {
     });
 
     it('sends adaptive thinking only for allowlisted models', async () => {
-      create.mockResolvedValue(textResponse('ok'));
+      finalMessage.mockResolvedValue(textResponse('ok'));
 
       await new AnthropicClientService('key', 'claude-sonnet-5').complete({
         system: 's',
         userText: 'u',
       });
-      expect(create.mock.calls[0][0].thinking).toEqual({ type: 'adaptive' });
+      expect(stream.mock.calls[0][0].thinking).toEqual({ type: 'adaptive' });
 
       // Haiku 400s on adaptive thinking.
-      create.mockClear();
+      stream.mockClear();
       await new AnthropicClientService('key', 'claude-haiku-4-5').complete({
         system: 's',
         userText: 'u',
       });
-      expect(create.mock.calls[0][0]).not.toHaveProperty('thinking');
+      expect(stream.mock.calls[0][0]).not.toHaveProperty('thinking');
 
       // An unknown / pre-4.6 model id is not on the allowlist either.
-      create.mockClear();
+      stream.mockClear();
       await new AnthropicClientService('key', 'claude-3-5-sonnet').complete({
         system: 's',
         userText: 'u',
       });
-      expect(create.mock.calls[0][0]).not.toHaveProperty('thinking');
+      expect(stream.mock.calls[0][0]).not.toHaveProperty('thinking');
     });
   });
 
   describe('completeStructured', () => {
     it('strips the $schema marker from the tool input_schema', async () => {
-      create.mockResolvedValue(toolResponse({ level: 'B2' }));
+      finalMessage.mockResolvedValue(toolResponse({ level: 'B2' }));
       const client = new AnthropicClientService('key', 'claude-sonnet-5');
 
       await client.completeStructured({
@@ -113,13 +133,13 @@ describe('AnthropicClientService', () => {
         tool: TOOL,
       });
 
-      const inputSchema = create.mock.calls[0][0].tools[0].input_schema;
+      const inputSchema = stream.mock.calls[0][0].tools[0].input_schema;
       expect(inputSchema).not.toHaveProperty('$schema');
       expect(inputSchema.type).toBe('object');
     });
 
     it('parses and returns the forced tool call input', async () => {
-      create.mockResolvedValue(toolResponse({ level: 'C1' }));
+      finalMessage.mockResolvedValue(toolResponse({ level: 'C1' }));
       const client = new AnthropicClientService('key', 'claude-sonnet-5');
 
       const out = await client.completeStructured({
@@ -132,7 +152,7 @@ describe('AnthropicClientService', () => {
     });
 
     it('throws when the model did not call the forced tool', async () => {
-      create.mockResolvedValue(textResponse('no tool call here'));
+      finalMessage.mockResolvedValue(textResponse('no tool call here'));
       const client = new AnthropicClientService('key', 'claude-sonnet-5');
 
       await expect(
@@ -141,7 +161,9 @@ describe('AnthropicClientService', () => {
     });
 
     it('throws the truncation error before schema parsing on max_tokens', async () => {
-      create.mockResolvedValue(toolResponse({}, { stop_reason: 'max_tokens' }));
+      finalMessage.mockResolvedValue(
+        toolResponse({}, { stop_reason: 'max_tokens' }),
+      );
       const client = new AnthropicClientService('key', 'claude-sonnet-5');
 
       await expect(
@@ -154,14 +176,14 @@ describe('AnthropicClientService', () => {
     const bigSystem = `catalogue preamble ${'x'.repeat(5000)}`;
 
     it('marks a large static system prompt as an ephemeral cache breakpoint', async () => {
-      create.mockResolvedValue(textResponse('ok'));
+      finalMessage.mockResolvedValue(textResponse('ok'));
 
       await new AnthropicClientService('key', 'claude-sonnet-5').complete({
         system: bigSystem,
         userText: 'u',
       });
 
-      expect(create.mock.calls[0][0].system).toEqual([
+      expect(stream.mock.calls[0][0].system).toEqual([
         {
           type: 'text',
           text: bigSystem,
@@ -171,25 +193,25 @@ describe('AnthropicClientService', () => {
     });
 
     it('passes a short system prompt straight through as a string', async () => {
-      create.mockResolvedValue(textResponse('ok'));
+      finalMessage.mockResolvedValue(textResponse('ok'));
 
       await new AnthropicClientService('key', 'claude-sonnet-5').complete({
         system: 'short system prompt',
         userText: 'u',
       });
 
-      expect(create.mock.calls[0][0].system).toBe('short system prompt');
+      expect(stream.mock.calls[0][0].system).toBe('short system prompt');
     });
 
     it('also caches the system prompt on completeStructured', async () => {
-      create.mockResolvedValue(toolResponse({ level: 'B1' }));
+      finalMessage.mockResolvedValue(toolResponse({ level: 'B1' }));
 
       await new AnthropicClientService(
         'key',
         'claude-sonnet-5',
       ).completeStructured({ system: bigSystem, userText: 'u', tool: TOOL });
 
-      expect(create.mock.calls[0][0].system).toEqual([
+      expect(stream.mock.calls[0][0].system).toEqual([
         {
           type: 'text',
           text: bigSystem,
@@ -201,7 +223,7 @@ describe('AnthropicClientService', () => {
 
   describe('cost logging', () => {
     it('prices a known model by substring match', async () => {
-      create.mockResolvedValue({
+      finalMessage.mockResolvedValue({
         content: [{ type: 'text', text: 'x' }],
         usage: { input_tokens: 1_000_000, output_tokens: 1_000_000 },
         stop_reason: 'end_turn',
@@ -218,7 +240,7 @@ describe('AnthropicClientService', () => {
     });
 
     it('logs undefined cost for an unknown model', async () => {
-      create.mockResolvedValue({
+      finalMessage.mockResolvedValue({
         content: [{ type: 'text', text: 'x' }],
         usage: { input_tokens: 100, output_tokens: 100 },
         stop_reason: 'end_turn',
