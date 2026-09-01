@@ -37,11 +37,17 @@ Model echoes the text back **verbatim**, adding only tags:
   with partial spans + `logger.warn`.
 - **all-or-nothing**: `validateAnnotations` throws on the first bad offset/shape/
   overlap; the caller writes none of the batch on throw.
-- both parsers build their scan regex **fresh per call** (`buildTokenRe` /
-  `buildTrailerRe`) — a module-level `/g` or `/y` regex carries a mutable
-  `.lastIndex` cursor that is only safe while nothing re-enters the parse
+- every scan regex is built **fresh per call** (`buildTokenRe` / `buildTrailerRe`
+  / `buildNumberedMarkerRe`) — a module-level `/g`/`/y`/`/gm` regex carries a
+  mutable `.lastIndex` cursor that is only safe while nothing re-enters the parse
   mid-scan; a local instance drops that assumption at negligible cost (one
   compile per stage, dwarfed by the model call). Batch O.
+- `grammar-prompt.ts` has **one** whitespace normaliser: `buildGrammarUserText`
+  emits `normalizeInlineWhitespace(text).normalized` (exactly what the parse side
+  reconstruct-and-compares against); `INLINE_WS_RE` only collapses the model's
+  *tagged* echo. A span offset that falls outside the normalised→raw `map`
+  throws (it can't happen given `parseGrammarTags`' invariants — a silent
+  fallback would mask a real bug). Batch O tail.
 
 Reference: `post/domain/parse-annotation-tags.ts`, `parse-grammar-tags.ts`,
 `grammar-prompt.ts`.

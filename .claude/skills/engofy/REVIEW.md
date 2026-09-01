@@ -240,12 +240,13 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`PostDetailResponseDto.doc` — decision, not a fix** — `doc` stays a `type`-only import of the dependency-free domain `Doc`: it's wire-contract data deliberately shared with the SSR renderer, not an internal query view, and re-declaring ~90 lines of recursive discriminated unions would be fragile + worse OpenAPI. Comment + `http-api.md` + findings-log updated to record the call.
 
 ### Batch O — Wave 3 cross-cutting, close-out (DONE 2026-09-01, fix/batch-a-safety)
-`pnpm run type` + `biome check src/ test/` + `pnpm test` (**125 files / 747 tests**, was 124/741: +1 file `close-once.helper.spec`, +6 tests) + `pnpm test:cov` gate green — coverage flat (stmts 90.03→90.04 / branches 76.22→76.28 / funcs 86.49→86.44 / lines 90.38→90.41; the funcs dip is the new bootstrap helper's tiny surface, still far above the 70 gate). No entity/enum touched → no `pnpm build` / `migration:check` needed.
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**125 files / 748 tests**, was 124/741: +1 file `close-once.helper.spec`, +7 tests) + `pnpm test:cov` gate green — coverage flat (stmts 90.03→90.04 / branches 76.22→76.41 / funcs 86.49→86.46 / lines 90.38→90.41). No entity/enum touched → no `pnpm build` / `migration:check` needed. (Committed in two parts: `resolve batch o` + a `tail` commit for the two low-priority findings-log clean-ups.)
 - [x] **D18 — `challenge.service` outbox atomicity** — `ChallengeService.issue` moved off immediate `em.upsert` to `findOne`-then-mutate-or-`em.create` (deferred): the OTP challenge row now commits in the same facade flush as the challenge-email outbox job. Repeated `/auth/login` for the same address still replaces the pending challenge in place (fresh OTP, `attempts = 0`); the rare parallel-login race loses one request to `unique(email)` on flush (commented, mirrors `complete-login`'s googleSub race). `challenge.service.ispec` +2 (in-place replace; deferred-not-immediate). `cqrs.md` Q3–Q5 + `error-handling.md` E8 updated; Medium findings-log row struck.
 - [x] **`worker.ts` / `cron.ts` double `app.close()`** — new `src/entrypoints/close-once.helper.ts` `closeOnce(app)` memoises the first close's promise; both entrypoints route the SIGTERM/SIGINT handler *and* the outer `catch` through it, so a rejected signal-handler close no longer triggers a second teardown from the catch. `close-once.helper.spec.ts` (3 cases: single close across callers, same rejection re-handed, no-op when app never booted). findings-log `[worker/cli] low` clause struck; Batch H deferred `[ ]` → `[x]`.
 - [x] **module-level `/g`/`/y` regex cursors** — `parse-annotation-tags.ts` / `parse-grammar-tags.ts` build their scan regex fresh per call (`buildTokenRe` / `buildTrailerRe`; grammar threads the instance through `consumeClose`), removing the shared mutable `.lastIndex`. Negligible cost — one compile per post-annotation stage, dwarfed by the model call. Existing parser specs cover behaviour unchanged; `ai.md` inline-markup round-trip section + `[core-ai] style` findings-log row updated.
 - [x] **`ETagInterceptor` / `@CachePolicy()` (user decision — option a)** — class-level `@CachePolicy('public')` on `ContentController` (every route there is an anonymous cacheable GET): `feed` / `posts/:slugId` / `grammar` / `grammar/:slug` now emit `Cache-Control: public` + a SHA-1 content ETag and answer a matching `If-None-Match` with 304. `content.controller.ispec` +1 (`Cache-Control` + ETag + 304 revalidation). `http-api.md` H9 + `[web] http-api` findings-log row updated.
 - [x] **downstream AI re-call on retry (open q9 — user decision: accept + document)** — `ai_complexity`/`ai_grammar`/`ai_exercises` re-calling the model on a `Failed`/`Pending`/absent `PostPipelineRun` (then `nativeDelete`+re-write) is a **deliberate full recompute of that stage**, the pipeline-level analogue of `/retry` (P10 / D5). A failed stage rolls its writes back (P3a) so there is no trustworthy partial output to gap-fill; the `Completed` short-circuit already blocks any re-call after success; the extra paid call on a transient failure is bounded. No code change — `pipeline.md` P6a + Known-gaps note, open q9 resolved, `[post] pipeline/ai` findings-log row struck.
+- [x] **tail — two low-priority findings-log clean-ups** — (1) `[auth] cqrs/observability` `resolve-session` unawaited-`refresh` row struck: it was actually fixed in Batch A (`await this.sessions.refresh(...)`, no floating `.catch`) but never marked. (2) `[core-ai] style` `grammar-prompt.ts` double whitespace normaliser: `buildGrammarUserText` now emits `normalizeInlineWhitespace(text).normalized` so the prompt side and the parse-side reconstruct-and-compare share one normaliser; the `map[...] ?? span.charStart` fallback is now an explicit throw (an out-of-range offset from `parseGrammarTags` is a bug, not something to paper over); `NUMBERED_MARKER_RE` localised to `buildNumberedMarkerRe()` (last module-level cursor regex). `grammar-prompt.spec` +1.
 
 **Still open (deferred — big / breaking / infra, consciously not touched):** `get-dictionary` unbounded read (D10/D12 — needs a `post_word`/`post_phrase` projection: new schema + migration, large); `complete()` streaming + `cache_control` on static system prompts (ai.md `Fixes owed`, perf — careful with the streaming SDK API); list envelopes (`practice` bare array, `dictionary` `{items}` — breaking wire change, needs `apps/web` coordination); `ContentController` `@Controller()` with no path prefix (breaking route change); `post` query handlers + `get-dictionary` have no direct `.ispec.ts` (functionally covered by `content.controller.ispec` + learning controller specs); `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
 
@@ -275,11 +276,15 @@ _(populated from subagent reports as waves complete)_
 
 ### Medium
 
-- **[auth] cqrs/observability** — `commands/resolve-session/resolve-session.handler.ts:22`
+- ~~**[auth] cqrs/observability** — `commands/resolve-session/resolve-session.handler.ts:22`
   fires `this.sessions.refresh(...)` as a floating unawaited promise on every
-  authenticated request (via `SessionAuthGuard`): the write escapes the facade
-  `em.flush()` and errors are swallowed (`.catch(() => undefined)`). Await it, or
-  catch to Sentry and document why it is best-effort.
+  authenticated request; the write escapes the facade `em.flush()` and errors are
+  swallowed (`.catch(() => undefined)`).~~ **fixed (Batch A)** — the handler now
+  `await`s `this.sessions.refresh(dto.sessionToken)` (no floating `.catch`), so
+  the sliding-expiry write rides the facade flush and a failure surfaces.
+  `cqrs.md` "behavioural split" note already treats `resolveSession` as a
+  sanctioned Command on a read path (D18 1/4). (Row was left un-struck when
+  Batch A landed — closed in Batch O bookkeeping.)
 - ~~**[auth] queue-jobs/mikroorm** — `services/challenge.service.ts:61` +
   `commands/request-login-code/request-login-code.handler.ts:29-35`: challenge row
   is written with `em.upsert` (immediate) *before* the email job is staged on the
@@ -466,10 +471,19 @@ _(populated from subagent reports as waves complete)_
   on both methods, adaptive-thinking gate, cost math incl. unknown model);
   `nlp-service/test_app.py` (offset round-trip, multi-sentence, `/health`,
   empty-text 422) + a dedicated CI job.
-- **[core-ai] style** — `grammar-prompt.ts` has two independent whitespace-
+- ~~**[core-ai] style** — `grammar-prompt.ts` has two independent whitespace-
   normalisation paths (`INLINE_WS_RE` vs `normalizeInlineWhitespace`) that must
   produce byte-identical output or the round-trip breaks; `:190-192`
-  `map[span.charStart] ?? span.charStart` fallback silently masks a mapping bug.
+  `map[span.charStart] ?? span.charStart` fallback silently masks a mapping bug.~~
+  **fixed (Batch O tail)** — `buildGrammarUserText` now emits
+  `normalizeInlineWhitespace(text).normalized`, so the string the model sees and
+  the string `parseGrammarResponse` reconstruct-and-compares against come from
+  one normaliser (`INLINE_WS_RE` stays only for collapsing the model's *tagged*
+  echo). The `?? span.charStart` fallback is replaced by an explicit throw —
+  `parseGrammarTags` offsets are always inside `map`'s range, so an undefined
+  there is a real bug, now loud instead of a silently-wrong `rawText` offset.
+  Also localised the last module-level cursor regex (`NUMBERED_MARKER_RE` →
+  `buildNumberedMarkerRe`). `grammar-prompt.spec` +1.
 - ~~**[core-ai] draft fidelity**~~ — idiom harness ran `maxTokens:8000` vs prod
   `16000` and never checked `stopReason`: **fixed (Batch M)** — `annotateUnit`
   now sends `MAX_TOKENS = 16000` and records `truncated` from a `max_tokens`

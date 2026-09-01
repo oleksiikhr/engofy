@@ -17,6 +17,12 @@ describe('buildGrammarUserText', () => {
       buildGrammarUserText(['the strongest\nresearch support here', 'Next.']),
     ).toBe('[0] the strongest research support here\n[1] Next.');
   });
+
+  it('trims the ends and collapses internal runs (one normaliser, shared with parse)', () => {
+    expect(buildGrammarUserText(['  padded   out \n', 'ok'])).toBe(
+      '[0] padded out\n[1] ok',
+    );
+  });
 });
 
 describe('buildGrammarCatalog', () => {

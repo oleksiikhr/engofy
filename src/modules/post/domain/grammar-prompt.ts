@@ -106,14 +106,23 @@ export function normalizeInlineWhitespace(text: string): {
 }
 
 export function buildGrammarUserText(sentenceTexts: string[]): string {
+  // The exact per-sentence string the model sees is
+  // `normalizeInlineWhitespace(text).normalized` — the *same* normaliser
+  // `parseGrammarResponse` reconstruct-and-compares the echo against, so the
+  // prompt side and the parse side can't silently drift apart.
   return sentenceTexts
     .map(
-      (text, index) => `[${index}] ${text.replace(INLINE_WS_RE, ' ').trim()}`,
+      (text, index) =>
+        `[${index}] ${normalizeInlineWhitespace(text).normalized}`,
     )
     .join('\n');
 }
 
-const NUMBERED_MARKER_RE = /^\[(\d+)]\s?/gm;
+// Fresh instance per call — a module-level `/gm` regex carries a mutable
+// `.lastIndex`, safe only while nothing re-enters splitNumberedBlocks mid-scan.
+function buildNumberedMarkerRe(): RegExp {
+  return /^\[(\d+)]\s?/gm;
+}
 
 export interface GrammarLineResult {
   index: number;
@@ -135,15 +144,15 @@ export interface ParsedGrammarResponse {
 // the previous Map.set behaviour.
 function splitNumberedBlocks(rawOutput: string): Map<number, string> {
   const markers: { index: number; start: number; bodyStart: number }[] = [];
-  NUMBERED_MARKER_RE.lastIndex = 0;
-  let match: RegExpExecArray | null = NUMBERED_MARKER_RE.exec(rawOutput);
+  const markerRe = buildNumberedMarkerRe();
+  let match: RegExpExecArray | null = markerRe.exec(rawOutput);
   while (match !== null) {
     markers.push({
       index: Number(match[1]),
       start: match.index,
       bodyStart: match.index + match[0].length,
     });
-    match = NUMBERED_MARKER_RE.exec(rawOutput);
+    match = markerRe.exec(rawOutput);
   }
 
   const blocks = new Map<number, string>();
@@ -187,8 +196,18 @@ export function parseGrammarResponse(
     }
 
     const spans = parsed.spans.map((span) => {
-      const charStart = map[span.charStart] ?? span.charStart;
-      const charEnd = map[span.charEnd] ?? span.charEnd;
+      const charStart = map[span.charStart];
+      const charEnd = map[span.charEnd];
+      // parseGrammarTags only emits offsets inside `normalized` (0..length) and
+      // `map` is indexed over exactly that range — an undefined here means the
+      // parser returned an out-of-range span. Fail loud instead of writing a
+      // silently wrong `rawText` offset.
+      if (charStart === undefined || charEnd === undefined) {
+        throw new Error(
+          `grammar span out of range after whitespace mapping (line ${index}, ` +
+            `${span.charStart}..${span.charEnd}, map length ${map.length})`,
+        );
+      }
       return {
         ...span,
         charStart,
