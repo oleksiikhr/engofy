@@ -263,7 +263,7 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 | 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
 | ~~5~~ | ~~No direct `.ispec.ts` for `post` query handlers + `get-dictionary`~~ | **done (Batch Q)** — `get-feed` / `get-post-detail` / `get-grammar-construction` / `get-grammar-reference` / `get-dictionary` each have a `.handler.ispec.ts` (12 cases). |
 | 6 | `apps/web` Playwright + `seed-web-e2e.ts` not in CI; prod nginx `/api` proxy; `apps/web` deploy | Infra, non-checkbox. |
-| 7 | Low nits — **partly done (Batch Q):** ~~"long-polling" comment~~, ~~`telegram-client.service.spec.ts`~~, ~~`DictionaryController` no `toDto`~~. **Left (all cosmetic / no user-facing effect):** telegram `429`/`retry_after` backoff + `TelegramApiError` + `updatedAt` (behaviour + migration, not a nit); `DateTime`→ISO done at handler vs controller depending on module; `queue-spy` positional match; `app.module.ispec.ts` never `.init()`s; `add-card.dto` `.refine` `path: []` (→ `field: null`, which the factory already handles correctly for a cross-field constraint — **not a bug**). |
+| ~~7~~ | ~~Low nits~~ | **done (Batches Q + R3).** Batch Q: "long-polling" comment, `telegram-client.service.spec.ts`, `DictionaryController` `toDto`. Batch R3: `TelegramApiError` (`status`/`description`/`retryAfter` + `isRateLimited`) thrown by the client for API-level rejections, `publish-pending` logs a `429` as rate-limited (precise `retry_after` waiting deferred — needs a per-row next-attempt column, low value for one low-volume channel); `telegram_updates.updated_at` (`Migration20260901120000`); `DictionaryEntryView.due` back to `DateTime`, serialised in the controller like `learning`/`billing`; `queue-spy` positional access behind a `SendCall` alias + accessors; `app.module.ispec.ts` `.compile()`-not-`.init()` documented as deliberate. `add-card.dto` `.refine` `path: []` reviewed in Batch Q — not a bug. |
 
 ### Batch Q — direct query-handler ispecs + low-nit cleanup (DONE 2026-09-01, fix/batch-a-safety)
 `pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 767 tests**, was 125/749: +6 files, +18) + `pnpm test:cov` gate green — coverage rose (stmts 90.05→90.55 / branches 76.47→78.14 / funcs 86.49→87.14 / lines 90.43→90.94). `pnpm build` + `git diff --exit-code src/metadata.ts` clean. No entity/enum touched → no `migration:check` needed.
@@ -284,6 +284,14 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **indexes** — `@Index()` on `SentenceToken.wordId` + `.phraseId` (`sentence-token.entity.ts`); `Migration20260901103351` (`create index sentence_tokens_word_id_index` / `_phrase_id_index`; `down` drops them). `.snapshot-engofy.json` hand-patched (two index entries added to the `sentence_tokens` table — matches the Batch G snapshot approach; `migration:check` → "schema is up-to-date"). Timestamp sorts after `Migration20260830130000`.
 - [x] **no `post_word` / `post_phrase` table, no backfill** — the annotation stage already links every annotated token to its `Word` / `Phrase` on `sentence_tokens` (Slice 3 rework); that link *is* the projection PLAN §3.3 asked for. Open q12 resolved; `[post-data] spec drift` `post_word`/`post_phrase` row + `[learning] db-performance` unbounded-read row + `[learning] architecture` heaviest cross-module read all struck; `db-performance.md` "Unbounded reads" row struck; `dictionary-view.ts` `posts` comment updated.
 - [x] **tests** — `get-dictionary.handler.ispec.ts` rewritten to seed `Sentence` + `SentenceToken` (was node-tree spans): existing de-dup / draft-excluded / grammar-excluded case kept + **+1** "orders the 'appears in' posts newest-published first". `dictionary.controller.ispec.ts` first case reseeded the same way (count unchanged).
+
+### Batch R3 — deferred item #7 (cosmetic / low nits) (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 773 tests**, was 131/771: +2 — telegram-client `429`/retry_after case, publish-pending `429` case) + `pnpm test:cov` gate green (stmts 90.54 / branches 78.60 / funcs 86.93 / lines 90.93). `pnpm build` + `git diff src/metadata.ts` — one expected line added (`TelegramUpdate.updatedAt` in the swagger models), committed. `pnpm migration:up` + `pnpm migration:check` green.
+- [x] **`TelegramApiError` + `429`/`retry_after`** — new `src/modules/telegram/errors/telegram-api.error.ts` (`extends Error`, not `DomainError` — never on an HTTP path): `method` / `status` / `description` / `retryAfter` fields + an `isRateLimited` getter. `TelegramClientService.call` parses `error_code` + `parameters.retry_after` and throws it for every API-level rejection (HTTP error, or 200 + `ok:false`); transport failures stay `new Error(msg, { cause })` per E4. `PublishPendingService.publishOne` catch logs a rate-limited failure distinctly (`rateLimited` + `retryAfter` log fields, `'telegram publication rate-limited'` message); the row still counts one bounded retry and is re-picked after the fixed `RETRY_BACKOFF_MINUTES` window. Precise `retry_after` honouring (waiting the exact hint) deferred — needs a per-row next-attempt timestamp column; single low-volume channel, real hints are seconds. `telegram-client.service.spec.ts` +2 (`TelegramApiError` shape + `isRateLimited:false` on a 403; `retry_after` + `isRateLimited:true` on a 429). `publish-pending.service.ispec.ts` +1 (429 → `Failed`, `errorMessage` carries `retry_after=30s`, `retryCount` bumped).
+- [x] **`telegram_updates.updated_at`** — `TelegramUpdate` was the last audit table without the `onCreate`/`onUpdate` `updatedAt` pair; added it (`type: LuxonTimestampType`). `Migration20260901120000` (`add column … not null default now()` then `drop default`, so existing rows backfill and the final column matches the entity's no-default shape). `.snapshot-engofy.json` hand-patched (one column entry, alphabetical position after `update_id`). `src/metadata.ts` rebuilt (one `updatedAt` line on the `TelegramUpdate` model). Timestamp sorts after `Migration20260901103351`.
+- [x] **`DateTime`→ISO placement** — `DictionaryEntryView.due` changed from `string` back to `DateTime`; `GetDictionaryHandler.wordEntry`/`phraseEntry` pass `card.due` through untouched; `DictionaryController` gained a local `iso()` helper (identical to `learning`/`billing`) and maps `iso(entry.due)` in `toDictionaryEntryDto`. Query results now keep Luxon types to the HTTP edge everywhere. `get-dictionary.handler.ispec.ts` +1 assertion (`DateTime.isDateTime(view.items[0].due)`); `dictionary.controller.ispec.ts` +1 assertion (`due` is a valid ISO string over the wire).
+- [x] **`queue-spy` positional match** — `test/setup/queue-spy.helper.ts`: a `SendCall = Parameters<OutboxSenderService['send']>` alias + `queueName(call)` / `queuePayload<T>(call)` accessors; `assertSent` / `assertNotSent` read through them, so the `send(em, name, data, options?)` positional contract is stated once. Behaviour identical; every queue-spy consumer spec unchanged.
+- [x] **`app.module.ispec.ts` never `.init()`s** — reviewed, kept `.compile()` on purpose and documented why: `.init()` would run `WorkerRegistrarService.onApplicationBootstrap` (`boss.work()`), `@nestjs/schedule` cron timers, and the `PgBoss*` shutdown hooks against real pg-boss / cron infra a DI-graph smoke test must not touch; runtime behaviour of those is covered by their own specs. Comment added, no code change.
 
 ## Findings log
 
@@ -636,10 +644,22 @@ _(populated from subagent reports as waves complete)_
   comment corrected: `timeout: 0` short poll, the once-a-minute cron is the
   interval); ~~no `telegram-client.service.spec.ts`~~ (Batch Q — `configured`,
   short-poll body, result unwrap, transport-wrap `{cause}`, API not-ok + 200/`ok:false`
-  throws). **Still open (low, single-channel MVP):** bare `Error` from the
-  client — no `TelegramApiError`, `429`/`retry_after` not distinguished (no
-  backoff); `TelegramUpdate` has no `updatedAt`; `formatPostAnnouncement(post,
-  publicUrl ?? '')` ships a relative link if `PUBLIC_URL` unset.
+  throws); ~~bare `Error` from the client — no `TelegramApiError`,
+  `429`/`retry_after` not distinguished~~ (Batch R3 — `TelegramApiError`
+  (`errors/telegram-api.error.ts`) carries `status` / `description` /
+  `retryAfter` + an `isRateLimited` flag; `TelegramClientService.call` throws it
+  for any API-level rejection, transport failures stay `new Error(msg,{cause})`
+  per E4; `publish-pending` logs a `429` as `rate-limited` with the
+  `retry_after`. Precise `retry_after` honouring — waiting the exact hint rather
+  than the fixed `RETRY_BACKOFF_MINUTES` window — would need a per-row
+  next-attempt column and is left deferred: single channel, low volume, and
+  real hints are a few seconds, well inside the fixed window);
+  ~~`TelegramUpdate` has no `updatedAt`~~ (Batch R3 — added the
+  `onCreate`/`onUpdate` pair, `Migration20260901120000`; it was the last audit
+  table missing it). **Still open (low, single-channel MVP):**
+  `formatPostAnnouncement(post, publicUrl ?? '')` ships a relative link if
+  `PUBLIC_URL` unset (prod bootstrap already refuses to start without it —
+  `main.ts:54`).
 - **[cron] observed (good, document as-is)** — `CronJobHost` abstract base: drain
   flag + `inFlightTicks` awaited by `waitForCronTicksToDrain()` before
   `app.close()`; `@Cron(…, {waitForCompletion:true})` prevents self-overlap; every
@@ -768,9 +788,15 @@ _(populated from subagent reports as waves complete)_
   (Batch I `createFakePgBoss()` default, `{realPgBoss:true}` opt-out);
   ~~`.env.test` DB name vs CI~~ (Batch L — intentional, documented);
   ~~`post` query handlers + `get-dictionary` no direct `.ispec.ts`~~ (Batch Q —
-  `.handler.ispec.ts` for all 5). **Still open (low):** `queue-spy` matches
-  `send()` args positionally; `app.module.ispec.ts` compiles entrypoint modules
-  but never `.init()`s them.
+  `.handler.ispec.ts` for all 5); ~~`queue-spy` matches `send()` args
+  positionally~~ (Batch R3 — a `SendCall = Parameters<…['send']>` alias +
+  `queueName` / `queuePayload` accessors, so the positional contract lives in
+  one place); ~~`app.module.ispec.ts` compiles entrypoint modules but never
+  `.init()`s them~~ (Batch R3 — kept `.compile()` on purpose, now with a comment
+  explaining why: `.init()` would run `WorkerRegistrarService`'s `boss.work()`,
+  `@nestjs/schedule` cron timers and the pg-boss shutdown hooks against real
+  infra a DI-graph smoke test must not touch; those services have their own
+  specs).
 - **[test] observed (document as-is)** — 3 tiers by suffix; `suite.command` =
   `execute → em.flush() → em.clear()`, `suite.query` = `execute → em.clear()`
   (facade replica); per-test isolation = one Postgres transaction rolled back in
@@ -808,8 +834,11 @@ _(populated from subagent reports as waves complete)_
   `.ispec.ts` for both); ~~`DictionaryController` returns the raw view cast to
   the DTO (no `toDto` mapper)~~ (Batch Q — explicit `toDictionaryEntryDto`);
   ~~no `get-dictionary` `.ispec.ts`~~ (Batch Q — `get-dictionary.handler.ispec.ts`).
-  **Still open (low):** `DateTime`→ISO at handler for dictionary vs controller
-  for practice-queue; flat `providers` array vs auth's grouped
+  ~~`DateTime`→ISO at handler for dictionary vs controller for practice-queue~~
+  (Batch R3 — `DictionaryEntryView.due` is now a `DateTime` and the controller
+  serialises it via a local `iso()` helper, matching `learning` / `billing`;
+  query results keep Luxon types to the edge).
+  **Still open (low):** flat `providers` array vs auth's grouped
   `commandHandlers`/`queryHandlers`; `add-card.dto` `.refine` `path: []` →
   `field: null` (**not a bug** — correct for a cross-field constraint, factory
   handles it); practice-queue drops deleted-target cards while dictionary keeps

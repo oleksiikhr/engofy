@@ -149,6 +149,9 @@ describe('GetDictionaryHandler', () => {
     const view = await suite.query(new GetDictionaryQuery(userId));
 
     expect(view.items).toHaveLength(2);
+    // `due` stays a Luxon DateTime in the view — ISO serialisation happens in
+    // the controller, matching `learning` / `billing`.
+    expect(DateTime.isDateTime(view.items[0].due)).toBe(true);
     const wordEntry = view.items.find((i) => i.type === 'word');
     expect(wordEntry).toMatchObject({
       primary: word.lemma,

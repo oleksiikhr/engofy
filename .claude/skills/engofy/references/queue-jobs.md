@@ -77,6 +77,17 @@ None outstanding.
 - New `PruneTelegramUpdatesCron` (daily 03:00) → 30-day retention `DELETE` on
   `telegram_updates`.
 
+### Done (Batch R3) — telegram nits
+
+- `TelegramClientService` throws `TelegramApiError` (`telegram/errors/`, carries
+  `status` / `description` / `retryAfter` / `isRateLimited`) for API-level
+  rejections; transport failures stay plain `Error` + `cause`. `publish-pending`
+  logs a `429` distinctly (`rate-limited`, with `retry_after`); the retry itself
+  still rides the fixed `RETRY_BACKOFF_MINUTES` window (exact-hint waiting needs
+  a per-row next-attempt column — deferred, one low-volume channel).
+- `telegram_updates.updated_at` added (`Migration20260901120000`) — was the last
+  audit table without the `onCreate`/`onUpdate` pair.
+
 ### Done (Batch C)
 
 - **D4** — `JobWorkerHost` writes the run row on entry / failure on a forked em;

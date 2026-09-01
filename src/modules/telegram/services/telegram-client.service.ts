@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import TelegramConfig from '../config/telegram.config.js';
+import { TelegramApiError } from '../errors/telegram-api.error.js';
 
 // One Telegram message inside a getUpdates result. Only the fields the admin
 // bot needs are typed; the full payload is stored raw on telegram_updates.
@@ -20,6 +21,9 @@ interface TelegramApiResponse<T> {
   ok: boolean;
   result: T;
   description?: string;
+  error_code?: number;
+  // Present on `429` replies: how many seconds to wait before retrying.
+  parameters?: { retry_after?: number };
 }
 
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -82,8 +86,11 @@ export class TelegramClientService {
       .catch(() => null)) as TelegramApiResponse<T> | null;
 
     if (!response.ok || !payload?.ok) {
-      throw new Error(
-        `telegram ${method} responded ${response.status}: ${payload?.description ?? '(no body)'}`,
+      throw new TelegramApiError(
+        method,
+        response.status,
+        payload?.description ?? null,
+        payload?.parameters?.retry_after ?? null,
       );
     }
 

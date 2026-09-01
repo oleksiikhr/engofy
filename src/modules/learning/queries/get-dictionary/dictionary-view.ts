@@ -1,3 +1,4 @@
+import type { DateTime } from 'luxon';
 import type { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import type { LearningCardState } from '../../enums/learning-card-state.enum.js';
 
@@ -13,8 +14,8 @@ export interface DictionaryEntryView {
   // SRS card target id (wordId / phraseId).
   targetId: string;
   state: LearningCardState;
-  // ISO-8601.
-  due: string;
+  // Card due date; the web layer serialises it to ISO-8601 at the edge.
+  due: DateTime;
   // Headword: word lemma or phrase text.
   primary: string;
   // Part of speech for a word entry; null for a phrase.

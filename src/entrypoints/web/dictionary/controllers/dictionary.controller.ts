@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
@@ -27,13 +28,19 @@ export class DictionaryController {
   }
 }
 
+// DateTime -> ISO-8601 at the HTTP edge, mirroring `learning` / `billing`
+// (query results carry Luxon `DateTime`; the controller serialises it).
+function iso(value: DateTime): string {
+  return value.toISO() ?? value.toString();
+}
+
 function toDictionaryEntryDto(entry: DictionaryEntryView): DictionaryEntryDto {
   return {
     cardId: entry.cardId,
     type: entry.type,
     targetId: entry.targetId,
     state: entry.state,
-    due: entry.due,
+    due: iso(entry.due),
     primary: entry.primary,
     secondary: entry.secondary,
     definition: entry.definition,

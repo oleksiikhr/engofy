@@ -49,3 +49,4 @@
 | D7 | drop legacy `'fetch'` from `post_pipeline_runs_stage_check` | done — `Migration20260830120000` |
 | D15 | `post_publications.retry_count` (`int not null default 0`) — bounds the failed-announcement re-send loop | done — `Migration20260830130000` (Batch G) |
 | — | `sentence_tokens_word_id_index` / `_phrase_id_index` — plain btrees for the `/dictionary` usage join (`sentence_tokens` → `sentences` → `posts`) | done — `Migration20260901103351` (Batch R2) |
+| — | `telegram_updates.updated_at` — the last audit table without the `onCreate`/`onUpdate` pair | done — `Migration20260901120000` (Batch R3) |

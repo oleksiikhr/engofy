@@ -30,4 +30,11 @@ export class TelegramUpdate {
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
+
+  @Property({
+    onCreate: () => DateTime.now(),
+    onUpdate: () => DateTime.now(),
+    type: LuxonTimestampType,
+  })
+  updatedAt: Opt<DateTime> = DateTime.now();
 }

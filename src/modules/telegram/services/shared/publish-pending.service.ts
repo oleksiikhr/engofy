@@ -9,6 +9,7 @@ import { PublicationPlatform } from '../../../post/enums/publication-platform.en
 import { PublicationStatus } from '../../../post/enums/publication-status.enum.js';
 import TelegramConfig from '../../config/telegram.config.js';
 import { formatPostAnnouncement } from '../../domain/format-announcement.js';
+import { TelegramApiError } from '../../errors/telegram-api.error.js';
 import { TelegramClientService } from '../telegram-client.service.js';
 
 const BATCH_SIZE = 10;
@@ -94,9 +95,25 @@ export class PublishPendingService {
       publication.retryCount += 1;
       publication.errorMessage =
         err instanceof Error ? err.message : String(err);
+      // A `429` is Telegram asking us to slow down, not a broken announcement.
+      // The row still counts a retry (bounded by MAX_ATTEMPTS) and is re-picked
+      // after the fixed RETRY_BACKOFF_MINUTES window — in practice `retry_after`
+      // is a few seconds, well inside that. Honouring a longer `retry_after`
+      // precisely would need a per-row next-attempt timestamp (deferred: single
+      // channel, low volume).
+      const rateLimited = err instanceof TelegramApiError && err.isRateLimited;
       this.logger.error(
-        { err, postId: publication.postId, retryCount: publication.retryCount },
-        'telegram publication failed',
+        {
+          err,
+          postId: publication.postId,
+          retryCount: publication.retryCount,
+          rateLimited,
+          retryAfter:
+            err instanceof TelegramApiError ? err.retryAfter : undefined,
+        },
+        rateLimited
+          ? 'telegram publication rate-limited'
+          : 'telegram publication failed',
       );
     }
   }

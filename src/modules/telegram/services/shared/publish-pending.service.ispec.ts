@@ -9,6 +9,7 @@ import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js
 import { PublicationPlatform } from '../../../post/enums/publication-platform.enum.js';
 import { PublicationStatus } from '../../../post/enums/publication-status.enum.js';
 import TelegramConfig from '../../config/telegram.config.js';
+import { TelegramApiError } from '../../errors/telegram-api.error.js';
 import { TelegramModule } from '../../telegram.module.js';
 import { TelegramClientService } from '../telegram-client.service.js';
 import { PublishPendingService } from './publish-pending.service.js';
@@ -143,6 +144,31 @@ describe('PublishPendingService', () => {
     );
     expect(publication.status).toBe(PublicationStatus.Failed);
     expect(publication.errorMessage).toContain('chat not found');
+    expect(publication.retryCount).toBe(1);
+  });
+
+  it('records the retry_after on a 429 and still counts the attempt', async () => {
+    const publicationId = await seedPendingPublication(
+      suite.orm.em,
+      'Rate Limited Post',
+    );
+    suite.orm.em.clear();
+    fakeClient.nextError = new TelegramApiError(
+      'sendMessage',
+      429,
+      'Too Many Requests',
+      30,
+    );
+
+    await service.run();
+    suite.orm.em.clear();
+
+    const publication = await suite.orm.em.findOneOrFail(
+      PostPublication,
+      publicationId,
+    );
+    expect(publication.status).toBe(PublicationStatus.Failed);
+    expect(publication.errorMessage).toContain('retry_after=30s');
     expect(publication.retryCount).toBe(1);
   });
 

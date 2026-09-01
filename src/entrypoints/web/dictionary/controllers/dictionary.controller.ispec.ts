@@ -114,6 +114,9 @@ describe('DictionaryController', () => {
       secondary: 'noun',
       definition: 'a sheltered stretch of water',
     });
+    // `due` is serialised to an ISO-8601 string at the controller edge.
+    expect(typeof res.body.items[0].due).toBe('string');
+    expect(DateTime.fromISO(res.body.items[0].due).isValid).toBe(true);
     expect(res.body.items[0].posts).toEqual([
       {
         shortId: post.shortId,
