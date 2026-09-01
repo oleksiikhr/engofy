@@ -75,5 +75,6 @@ annotation. PLAN to be updated to match.
 | Sev | Change |
 |---|---|
 | ~~med~~ | **done (Batch M)** — `supportsAdaptiveThinking` is now an allowlist (`ADAPTIVE_THINKING_MODELS`: sonnet-5 / opus-5 / fable-5 / sonnet-4-6 / opus-4-6/-4-7/-4-8). Haiku *and* any unknown/pre-4.6 id → no `thinking` block. Spec covers all three. |
-| med | Stream `complete()` (baseline calls ~114 s — SDK 10-min timeout risk → full paid stage re-run); add `cache_control: { type: 'ephemeral' }` to the large static system prompts. |
+| med | Stream `complete()` (baseline calls ~114 s — SDK 10-min timeout risk → full paid stage re-run). **← still open** (the cache_control half below is done). |
+| ~~med~~ | **done (Batch R)** — `toSystemParam()` wraps a system prompt ≥ 4000 chars as `[{ type: 'text', text, cache_control: { type: 'ephemeral' } }]`; shorter prompts pass through as a plain string unchanged. In practice only the grammar stage's prompt (preamble + full seeded catalogue) clears Anthropic's ~1024-token minimum cacheable prefix, so its retry (a second identical call seconds later) is billed at the cache-read rate. `cache_creation`/`cache_read` tokens were already in the AI4 usage log. `anthropic-client.service.spec.ts` +3. |
 | ~~med~~ | **done (Batch I)** — `core/ai/anthropic-client.service.spec.ts` (9 cases: text-join, `max_tokens` truncation on both `complete` and `completeStructured`, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking gate, cost math incl. unknown-model `undefined`). |

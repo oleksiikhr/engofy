@@ -150,6 +150,55 @@ describe('AnthropicClientService', () => {
     });
   });
 
+  describe('system prompt caching', () => {
+    const bigSystem = `catalogue preamble ${'x'.repeat(5000)}`;
+
+    it('marks a large static system prompt as an ephemeral cache breakpoint', async () => {
+      create.mockResolvedValue(textResponse('ok'));
+
+      await new AnthropicClientService('key', 'claude-sonnet-5').complete({
+        system: bigSystem,
+        userText: 'u',
+      });
+
+      expect(create.mock.calls[0][0].system).toEqual([
+        {
+          type: 'text',
+          text: bigSystem,
+          cache_control: { type: 'ephemeral' },
+        },
+      ]);
+    });
+
+    it('passes a short system prompt straight through as a string', async () => {
+      create.mockResolvedValue(textResponse('ok'));
+
+      await new AnthropicClientService('key', 'claude-sonnet-5').complete({
+        system: 'short system prompt',
+        userText: 'u',
+      });
+
+      expect(create.mock.calls[0][0].system).toBe('short system prompt');
+    });
+
+    it('also caches the system prompt on completeStructured', async () => {
+      create.mockResolvedValue(toolResponse({ level: 'B1' }));
+
+      await new AnthropicClientService(
+        'key',
+        'claude-sonnet-5',
+      ).completeStructured({ system: bigSystem, userText: 'u', tool: TOOL });
+
+      expect(create.mock.calls[0][0].system).toEqual([
+        {
+          type: 'text',
+          text: bigSystem,
+          cache_control: { type: 'ephemeral' },
+        },
+      ]);
+    });
+  });
+
   describe('cost logging', () => {
     it('prices a known model by substring match', async () => {
       create.mockResolvedValue({

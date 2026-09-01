@@ -258,7 +258,7 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 | # | Item | Why deferred |
 |---|---|---|
 | 1 | `get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request | Needs the `post_word` / `post_phrase` projection (or `sentence_tokens.word_id`/`phrase_id` join): new schema + migration + backfill. Self-contained but large. Folds in `[learning] architecture` cross-module reads + `post_word`/`post_phrase` from `[post-data] spec drift`. |
-| 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk) + no `cache_control` on the large static system prompts | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop. `cache_control` alone is the safe half. `ai.md` "Fixes owed". |
+| 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk). ~~+ no `cache_control` on the large static system prompts~~ **cache_control done (Batch R)** — `toSystemParam()`, grammar-stage retry reads from cache. | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop — deferred as the risky half. `ai.md` "Fixes owed". |
 | 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
 | 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
 | ~~5~~ | ~~No direct `.ispec.ts` for `post` query handlers + `get-dictionary`~~ | **done (Batch Q)** — `get-feed` / `get-post-detail` / `get-grammar-construction` / `get-grammar-reference` / `get-dictionary` each have a `.handler.ispec.ts` (12 cases). |
@@ -272,6 +272,11 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`telegram-client.service.spec.ts`** (nit) — first spec for `TelegramClientService`: `configured` flag, `getUpdates` short-poll body (`timeout: 0`, `allowed_updates`, offset omitted when absent), result unwrap, transport-failure wrap (`{ cause }`), API not-ok → throw with status + description, HTTP-200-but-`ok:false` → throw. `fetch` stubbed via `vi.stubGlobal`.
 - [x] **"long-polling" comment fix** (nit) — `telegram-client.service.ts` header said "long-polling getUpdates"; `getUpdates` uses `timeout: 0` (short poll) — the once-a-minute cron is the interval. Comment corrected.
 - [x] **`add-card.dto` `.refine` `path: []`** — reviewed, **not a bug**: `zodValidationExceptionFactory` maps an empty path to `field: null`, which is the right shape for a cross-field ("exactly one of …") constraint. No change.
+
+### Batch R — AI prompt caching (deferred item #2, safe half) (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 770 tests**, was 131/767: +3 cases) + `pnpm test:cov` gate green — coverage flat/up (stmts 90.55→90.56 / branches 78.14→78.17 / funcs 87.14→87.16 / lines 90.94→90.95). No entity/enum touched → no `pnpm build` / `migration:check` needed.
+- [x] **`cache_control: { type: 'ephemeral' }` on large static system prompts (deferred #2, safe half)** — new `toSystemParam(system)` in `anthropic-client.service.ts`: a system prompt `>= CACHE_CONTROL_MIN_CHARS` (4000, ~Anthropic's 1024-token minimum cacheable prefix) is sent as `[{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }]`; anything shorter passes through as the plain string unchanged (byte-identical request). Used in both `messages.create` calls (`complete` + `completeStructured`). In practice only `tag-grammar`'s prompt (`GRAMMAR_SYSTEM_PROMPT` preamble + full seeded `buildGrammarCatalog` — ~8 KB+) clears the bar, so its one-retry second identical call (fired seconds later when the first echo doesn't reconstruct) is billed at the cache-read rate instead of re-charging the whole catalogue; the annotation/complexity/comprehension prompts are all < 4000 chars and Anthropic would silently decline to cache them anyway. `cache_creation_input_tokens` / `cache_read_input_tokens` were already in the AI4 usage log. `anthropic-client.service.spec.ts` +3 (large prompt → cache breakpoint on `complete`; short prompt → plain string; large prompt → cache breakpoint on `completeStructured`). `ai.md` "Fixes owed" split — cache half **done**, streaming half still open. Findings-log `[core-ai] ai/performance` row + deferred-backlog #2 updated.
+- **Deferred (still open, risky half of #2):** stream `complete()` — baseline calls ~114 s risk the SDK 10-min timeout; touches AI3 (`stop_reason` handling), AI4 (usage log from the final event), and the reconstruct-retry loop. Not in this batch.
 
 ## Findings log
 
@@ -367,10 +372,11 @@ _(populated from subagent reports as waves complete)_
   covers Haiku + a pre-4.6 id.
 - **[core-ai] ai/performance** — non-streaming `messages.create`
   `max_tokens:16000` for whole-article echo-back (~114 s/call → SDK 10-min
-  timeout risk → full paid stage re-run); large static system prompts re-sent
-  uncached every call + retry (no `cache_control`). Stream `complete()` + add
-  `cache_control:{type:'ephemeral'}` to the system block. **← still open**
-  (`ai.md` "Fixes owed"; deferred perf item).
+  timeout risk → full paid stage re-run). Stream `complete()`. **← still open**
+  (`ai.md` "Fixes owed"; deferred perf item). ~~large static system prompts
+  re-sent uncached every call + retry (no `cache_control`)~~ **fixed (Batch R)**
+  — `toSystemParam()` marks a ≥ 4000-char system prompt as an ephemeral cache
+  breakpoint; the grammar stage's preamble+catalogue retry now reads from cache.
 - ~~**[core-ai] ai/pipeline (stale PLAN)** — PLAN §6/§12 claim PUA escaping of
   `[]{}` "вже є"; not implemented, format changed.~~ **fixed (Batch J, D13)** —
   PLAN §6/§12 rewritten to the real rare-delimiter + reconstruct-and-compare

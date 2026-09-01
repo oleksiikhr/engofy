@@ -37,6 +37,26 @@ function supportsAdaptiveThinking(model: string): boolean {
   return ADAPTIVE_THINKING_MODELS.some((family) => model.includes(family));
 }
 
+// Anthropic prompt caching has a minimum cacheable prefix (~1024 tokens for the
+// Sonnet/Opus family); a shorter block keeps the `cache_control` marker but is
+// silently not cached. Only the grammar stage's system prompt (static preamble
+// + the full seeded construction catalogue) clears that bar in practice, so
+// gate on an approximate char count rather than spend a breakpoint slot on the
+// three small prompts (annotation / complexity / comprehension).
+const CACHE_CONTROL_MIN_CHARS = 4000;
+
+// Marks a large, static system prompt as a cache breakpoint so a re-send within
+// the 5-minute TTL — the annotation and grammar stages fire a second identical
+// call seconds later when the first echo doesn't reconstruct — is billed at the
+// cache-read rate instead of re-charging the whole preamble each time. Small
+// prompts pass straight through as a plain string (byte-identical request).
+function toSystemParam(system: string): string | Anthropic.TextBlockParam[] {
+  if (system.length < CACHE_CONTROL_MIN_CHARS) {
+    return system;
+  }
+  return [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }];
+}
+
 function estimateCostUsd(
   model: string,
   usage: Anthropic.Usage,
@@ -96,7 +116,7 @@ export class AnthropicClientService implements AiClient {
       ...(supportsAdaptiveThinking(this.model) && {
         thinking: { type: 'adaptive' },
       }),
-      system,
+      system: toSystemParam(system),
       tools: [
         {
           name: tool.name,
@@ -139,7 +159,7 @@ export class AnthropicClientService implements AiClient {
       ...(supportsAdaptiveThinking(this.model) && {
         thinking: { type: 'adaptive' },
       }),
-      system,
+      system: toSystemParam(system),
       messages: [{ role: 'user', content: userText }],
     });
 
