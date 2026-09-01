@@ -248,7 +248,22 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **downstream AI re-call on retry (open q9 — user decision: accept + document)** — `ai_complexity`/`ai_grammar`/`ai_exercises` re-calling the model on a `Failed`/`Pending`/absent `PostPipelineRun` (then `nativeDelete`+re-write) is a **deliberate full recompute of that stage**, the pipeline-level analogue of `/retry` (P10 / D5). A failed stage rolls its writes back (P3a) so there is no trustworthy partial output to gap-fill; the `Completed` short-circuit already blocks any re-call after success; the extra paid call on a transient failure is bounded. No code change — `pipeline.md` P6a + Known-gaps note, open q9 resolved, `[post] pipeline/ai` findings-log row struck.
 - [x] **tail — two low-priority findings-log clean-ups** — (1) `[auth] cqrs/observability` `resolve-session` unawaited-`refresh` row struck: it was actually fixed in Batch A (`await this.sessions.refresh(...)`, no floating `.catch`) but never marked. (2) `[core-ai] style` `grammar-prompt.ts` double whitespace normaliser: `buildGrammarUserText` now emits `normalizeInlineWhitespace(text).normalized` so the prompt side and the parse-side reconstruct-and-compare share one normaliser; the `map[...] ?? span.charStart` fallback is now an explicit throw (an out-of-range offset from `parseGrammarTags` is a bug, not something to paper over); `NUMBERED_MARKER_RE` localised to `buildNumberedMarkerRe()` (last module-level cursor regex). `grammar-prompt.spec` +1.
 
-**Still open (deferred — big / breaking / infra, consciously not touched):** `get-dictionary` unbounded read (D10/D12 — needs a `post_word`/`post_phrase` projection: new schema + migration, large); `complete()` streaming + `cache_control` on static system prompts (ai.md `Fixes owed`, perf — careful with the streaming SDK API); list envelopes (`practice` bare array, `dictionary` `{items}` — breaking wire change, needs `apps/web` coordination); `ContentController` `@Controller()` with no path prefix (breaking route change); `post` query handlers + `get-dictionary` have no direct `.ispec.ts` (functionally covered by `content.controller.ispec` + learning controller specs); `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
+### Batch P — findings-log reconciliation + small safe fixes (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**125 files / 749 tests**, was 125/748: +1 `build-token-annotations` case) + `pnpm test:cov` gate green (stmts 90.05 / branches 76.47 / funcs 86.49 / lines 90.43). `pnpm build` + `git diff --exit-code src/metadata.ts` clean (new error class isn't in metadata). No entity/enum touched → no `migration:check` needed.
+- [x] **findings-log reconciliation** — swept the whole "Findings log": ~35 findings that Batches A–O actually closed but never struck (High: mikro-orm.logger breadcrumb, retry-post no-op; Medium: no-Failed-run-row, 7/8-handler flush, publish-not-gated, redis error listener, DomainError→status, mail fallback, sonnet-5 pricing, completeStructured stop_reason, adaptive-thinking, PUA/PLAN staleness; Low: Fetch stage, queue singleton copy-paste, http-error.filter shape, migration:check, node-tree parser wiring, grammar-match unique, PostSource attribution, telegram cluster ×5, web guard placement + throttler + 429 + error shape + /api prefix + request-DTO home, worker queue authority + retry/deadLetter + allSettled, cli parseType + importer layering, test cluster ×8, learning/billing cluster) now carry `~~…~~ **fixed (Batch X)**` with the batch + reference. Compound bullets edited sub-clause by sub-clause. Genuinely-open items left standing.
+- [x] **`[auth] complete-login` googleSub race** — accepted for MVP, now carries the explaining comment (`loginByGoogle`): backfilling a `@Unique` `googleSub` onto an email-first row can hit the constraint if the Google email later changes; rare, recoverable by retry.
+- [x] **`[post-data] build-token-annotations` map miss** — `phraseText: … ?? ''` (which `validatePhraseShape` then rejects with a misleading shape error) replaced by `resolvePhraseText()` throwing `MissingPhraseTextError(phraseGroupId)` — a `sentence_token` pointing at a phrasal-verb group with no `Phrase` row now fails with its real cause. New `errors/missing-phrase-text.error.ts`; `build-token-annotations.spec` +1.
+
+**Still open — the deferred backlog (post-Batch-P, accurate list):**
+| # | Item | Why deferred |
+|---|---|---|
+| 1 | `get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request | Needs the `post_word` / `post_phrase` projection (or `sentence_tokens.word_id`/`phrase_id` join): new schema + migration + backfill. Self-contained but large. Folds in `[learning] architecture` cross-module reads + `post_word`/`post_phrase` from `[post-data] spec drift`. |
+| 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk) + no `cache_control` on the large static system prompts | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop. `cache_control` alone is the safe half. `ai.md` "Fixes owed". |
+| 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
+| 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
+| 5 | No direct `.ispec.ts` for `post` query handlers (`get-feed`/`get-post-detail`/`get-grammar-*`) + `get-dictionary` | Functionally covered by `content.controller.ispec` + learning controller specs; additive, low value. |
+| 6 | `apps/web` Playwright + `seed-web-e2e.ts` not in CI; prod nginx `/api` proxy; `apps/web` deploy | Infra, non-checkbox. |
+| 7 | Low nits: telegram (`429`/`retry_after` backoff, `TelegramApiError`, `updatedAt`, "long-polling" comment, `telegram-client.service.spec.ts`); `DictionaryController` no `toDto`; `DateTime`→ISO layer inconsistency; `add-card.dto` `.refine` `path: []`; `queue-spy` positional match; `app.module.ispec.ts` never `.init()`s | Cosmetic / very low impact; no user-facing effect. |
 
 ## Findings log
 
@@ -256,23 +271,22 @@ _(populated from subagent reports as waves complete)_
 
 ### High
 
-- **[core] observability/security** — `core/database/mikro-orm.logger.ts:58-70`:
-  `logQuery` adds a Sentry breadcrumb for **every** query with
-  `message: context.query` (MikroORM inlines all bind params — emails, hashes,
-  tokens) plus `data.results` rows. Never passed through `sanitizeSqlParams`
-  (unlike `beforeSendTransaction` spans), and added *before* the `isEnabled`
-  guard, in all environments. Fix: sanitize `context.query` + drop `results`
-  before the breadcrumb, or gate it behind the same prod logic as spans.
+- ~~**[core] observability/security** — `core/database/mikro-orm.logger.ts:58-70`:
+  `logQuery` adds a Sentry breadcrumb for **every** query with `message:
+  context.query` (inlined bind params) plus `data.results` rows, never
+  sanitised, before the `isEnabled` guard, in all environments.~~ **fixed
+  (Batch A)** — `sanitizeSqlParams` on `context.query`, `results` dropped,
+  emitted only when `context.query` present and prod-gated via
+  `isProdEnvironment()`. `security.md` high row closed.
 
-- **[post] pipeline** — `commands/retry-post/retry-post.handler.ts:26-44`: `/retry`
-  deletes only `PostPipelineRun` rows + resets `post.status`, but `spacy_parse`
-  skips parts that already have `Sentence` rows and `annotate` skips parts with
-  `annotatedAt` set (both keyed on row existence, not the deleted run). So retry
-  silently no-ops parse + annotation — a bad parse/annotation can't be recovered.
-  Handler comment claims "every stage is idempotent on its PostPipelineRun row" —
-  untrue for these two. Fix: also `nativeDelete` `Sentence`/`SentenceToken`/
-  `GrammarMatch`/`Exercise` + null `PostPart.annotatedAt` in the same flush, or
-  make the two guards consult the run row.
+- ~~**[post] pipeline** — `commands/retry-post/retry-post.handler.ts`: `/retry`
+  deletes only `PostPipelineRun` rows, but `spacy_parse` / `annotate` skip on
+  row existence (`Sentence` rows / `annotatedAt`), not the deleted run → retry
+  silently no-ops those two stages.~~ **fixed (Batch C, D5)** — `RetryPostHandler`
+  now `nativeDelete`s `Sentence` / `SentenceToken` / `GrammarMatch` / `Sentence`-
+  scoped rows / `Exercise` / `PostPipelineRun`, nulls every `PostPart.annotatedAt`,
+  resets `posts.status`, re-enqueues only `spacy_parse`. `pipeline.md` P10;
+  `retry-post.handler.ispec` +2.
 
 ### Medium
 
@@ -297,71 +311,63 @@ _(populated from subagent reports as waves complete)_
   (documented, mirrors `complete-login`'s googleSub race). `challenge.service.ispec`
   +2 (in-place replace; deferred-not-immediate). `cqrs.md` Q3–Q5 + `error-handling.md`
   E8 updated.
-- **[post] error-handling/observability** — all stage handlers +
-  `post-pipeline-run.entity.ts:27-41`: no handler ever writes `...Status.Failed`,
-  `startedAt`, `errorMessage`, `retryCount` — only `Completed`. On failure the
-  handler throws, flush rolls back, and **no run row exists at all**;
-  `PostStatus.Failed` is never set. PLAN §5 says stage status is visible via
-  `post_processing_jobs` but a failing stage leaves no trace. Fix: persist run row
-  `Pending`+`startedAt` on entry; on caught error set `Failed`+`errorMessage`+
-  `retryCount++` before rethrow; set `post.status=Failed` when pg-boss retries
-  exhaust.
-- **[post] cqrs** — 7 of 8 post handlers call `em.flush()` internally (only
-  `ingest` follows the facade-flushes rule); for `assess-complexity`, `tag-grammar`,
-  `generate-exercises`, `publish`, `retry` it's redundant with the facade re-flush
-  and undocumented. Drop the trailing flush from those 5; keep the genuine
-  per-`PostPart` flushes in `spacy-parse`/`annotate` and document `spacy-parse` as
-  the second sanctioned exception in `references/cqrs.md`.
-- **[post] pipeline** — `commands/publish-post/publish-post.handler.ts:43-45`:
-  `publish` (end of the ai_* branch) sets `status=Published`+`publishedAt` with no
-  check that the parallel `annotation` fan-out branch finished. Post becomes
-  feed-visible/detail-renderable while inline word/phrase annotations may be
-  absent/partial/failed — the two `spacy_parse` fan-out branches never rejoin.
-  Gate `publish` on `PostPipelineRun(stage=Annotation, status=Completed)`, or make
-  annotation a precondition edge not a parallel branch. (see open question)
-- **[core] error-handling** — `core/redis/redis.provider.ts:7-16`: ioredis client
-  created with no `error` listener; an emitted `error` with no listener crashes
-  the process. `pg-boss.provider.ts` attaches `error`/`warning`. Add
-  `client.on('error', …)` in the factory.
-- **[core] error-handling** — `core/errors/domain.error.ts` + `domain-error.filter.ts:21`:
-  `DomainError` carries only a message; filter maps the whole hierarchy to HTTP
-  400. `TooManyLoginRequests`/`TooManyAttempts` (429), `*NotFound` (404),
-  unique-conflict (409) all surface as 400. Let `DomainError` optionally carry a
-  status/code the filter honours (default 400). (see open question)
+- ~~**[post] error-handling/observability** — no stage handler ever writes
+  `...Status.Failed` / `startedAt` / `errorMessage` / `retryCount`; a failing
+  stage rolls back and leaves no run row, `PostStatus.Failed` never set.~~ **fixed
+  (Batch C, D4)** — `JobWorkerHost` writes `Pending`+`startedAt` on entry and
+  `Failed`+`errorMessage`+`retryCount++` in the catch, both on a forked em / own
+  txn, and sets `PostStatus.Failed` on retry exhaustion. `pipeline.md` P3a.
+- ~~**[post] cqrs** — 7 of 8 post handlers call `em.flush()` internally;
+  redundant with the facade re-flush for `assess-complexity` / `tag-grammar` /
+  `generate-exercises` / `publish` / `retry`.~~ **fixed (Batch A, D3)** — trailing
+  flush dropped from those 5; `spacy-parse` + `annotate` per-`PostPart` flush
+  documented as the 2 sanctioned exceptions in `cqrs.md`.
+- ~~**[post] pipeline** — `publish` sets `status=Published` with no check that
+  the parallel `annotation` fan-out branch finished.~~ **fixed (Batch C, D6)** —
+  `PublishPostHandler` no-ops and re-queues a delayed `post-publish` until
+  `PostPipelineRun(stage=Annotation, status=Completed)` exists. `pipeline.md`
+  Stage-DAG note; `publish-post.handler.ispec` +2.
+- ~~**[core] error-handling** — `core/redis/redis.provider.ts`: ioredis client
+  created with no `error` listener; an emitted `error` crashes the process.~~
+  **fixed (Batch A)** — factory attaches `client.on('error', …)` (Logger,
+  mirrors pg-boss).
+- ~~**[core] error-handling** — `DomainError` carries only a message; the filter
+  maps the whole hierarchy to HTTP 400.~~ **fixed (Batch B, D1)** — `DomainError`
+  2nd ctor arg `status = 400`; `DomainErrorFilter` honours it; `TooMany*` → 429,
+  `CardNotFoundError` → 404. `error-handling.md` D1.
 - ~~**[core] config**~~ — `queue.config.ts` had divergent fallback defaults
   (`postgres/postgres`) from the ORM (`engofy/engofy`): **addressed (Wave 3)** —
   both read the same `MIKRO_ORM_*` vars and the queue defaults now match
   `engofy/engofy`, so an env-less run can't split creds. Full "one config
   object" (D18) left undone — low value now the vars + defaults align.
-- **[core] mail** — `core/mail/mailer.provider.ts:12-18`: no `RESEND_API_KEY` →
-  falls back to MailHog SMTP `127.0.0.1:1025`; in misconfigured prod mail is
-  silently dropped. `ConsoleMailerService` (logs a warning) exists but is
-  referenced nowhere. Use it as the fallback, or throw at bootstrap in prod.
-  (see open question)
-- **[core-ai] ai/observability** — `core/ai/anthropic-client.service.ts:14` +
-  `draft/lib/call-claude.ts:11`: `sonnet-5` priced at `{input:3,output:15}` (that's
-  Sonnet 4.6); Sonnet 5 is `{input:2,output:10}`. Every `cost_usd` log and the
-  committed `grammar-sonnet-5.json` baseline (`$1.63`, true ≈ `$1.08`) overstate
-  ~50%. Fix both tables.
-- **[core-ai] ai/error-handling** — `core/ai/anthropic-client.service.ts:71-113`:
-  `completeStructured` never checks `response.stop_reason`; a `max_tokens`-truncated
-  tool call surfaces as an opaque `ZodError` from `tool.schema.parse`, not the
-  clear truncation error `complete()` raises. Mirror the `complete()` guard.
-- **[core-ai] ai/config** — `core/ai/anthropic-client.service.ts:25-27`:
-  `supportsAdaptiveThinking` only denylists `haiku`; any pre-4.6 `AI_MODEL` would
-  be sent `thinking:{type:'adaptive'}` and 400. Allowlist adaptive-capable models.
-- **[core-ai] ai/performance** — `anthropic-client.service.ts:82-124`:
-  non-streaming `messages.create` `max_tokens:16000` for whole-article echo-back
-  (~114s/call in baseline); long post → SDK 10-min timeout → full paid stage
-  re-run. Also: large static system prompts (grammar catalogue, `IDIOM_SYSTEM_PROMPT`)
-  re-sent uncached every call + retry — no `cache_control`. Stream `complete()` +
-  add `cache_control:{type:'ephemeral'}` to the system block.
-- **[core-ai] ai/pipeline (stale PLAN)** — PLAN §6/§12 claim private-use-area
-  escaping of `[]{}` "вже є"; it is **not** implemented and the format changed
-  (`[form]{pos:…}` → `⟦…⟧{{p|…}}`). A literal `⟦`/`⟧`/`{{…}}` in a source
-  paragraph is eaten as markup → silent partial annotation. Implement the PUA
-  round-trip or update PLAN to record the rare-delimiter + reconstruct-and-compare
-  approach and that literal `⟦⟧` in source is unsupported. (see open question)
+- ~~**[core] mail** — no `RESEND_API_KEY` → falls back to MailHog SMTP; in
+  misconfigured prod mail is silently dropped; `ConsoleMailerService` referenced
+  nowhere.~~ **fixed (Batch A, D18)** — fallback chain Resend → `MAIL_USE_MAILHOG`
+  → `ConsoleMailerService`; `isProdEnvironment()` → throw at bootstrap when none
+  set. `mail.md` D18.
+- ~~**[core-ai] ai/observability** — `sonnet-5` priced at `{input:3,output:15}`
+  (Sonnet 4.6 rate); every `cost_usd` log + the committed baseline overstate
+  ~50%.~~ **fixed (Batch A)** — `{input:2,output:10}` in `anthropic-client.service.ts`
+  + `draft/lib/call-claude.ts`.
+- ~~**[core-ai] ai/error-handling** — `completeStructured` never checks
+  `response.stop_reason`; a truncated tool call surfaces as an opaque `ZodError`.~~
+  **fixed (Batch A)** — throws the distinct `max_tokens` error before
+  `tool.schema.parse`. `ai.md` AI3.
+- ~~**[core-ai] ai/config** — `supportsAdaptiveThinking` only denylists `haiku`;
+  a pre-4.6 `AI_MODEL` would be sent `thinking:{type:'adaptive'}` and 400.~~
+  **fixed (Batch M)** — explicit `ADAPTIVE_THINKING_MODELS` allowlist; spec
+  covers Haiku + a pre-4.6 id.
+- **[core-ai] ai/performance** — non-streaming `messages.create`
+  `max_tokens:16000` for whole-article echo-back (~114 s/call → SDK 10-min
+  timeout risk → full paid stage re-run); large static system prompts re-sent
+  uncached every call + retry (no `cache_control`). Stream `complete()` + add
+  `cache_control:{type:'ephemeral'}` to the system block. **← still open**
+  (`ai.md` "Fixes owed"; deferred perf item).
+- ~~**[core-ai] ai/pipeline (stale PLAN)** — PLAN §6/§12 claim PUA escaping of
+  `[]{}` "вже є"; not implemented, format changed.~~ **fixed (Batch J, D13)** —
+  PLAN §6/§12 rewritten to the real rare-delimiter + reconstruct-and-compare
+  approach; PUA escaping marked NOT implemented / not needed; literal `⟦⟧` in
+  source noted unsupported.
 
 ### Low
 
@@ -375,17 +381,22 @@ _(populated from subagent reports as waves complete)_
 - ~~**[auth] style**~~ — `auth.module.ts` three `ConfigModule.forFeature()` calls:
   **not a bug (Batch K)** — `@nestjs/config`'s `forFeature` takes a single
   factory (not variadic); one call per namespace is correct. style.md ST10 fixed.
-- **[auth] architecture** — `entities/subscription.entity.ts` + its two enums live
-  in `auth` but nothing in the module reads/writes them (see open question on
-  ownership; `modules/billing` is the likely home).
-- **[auth] mikroorm** — `services/complete-login.service.ts:22-31`:
-  `loginByGoogle` backfills `user.googleSub` (`@Unique`) after an
-  `onConflictAction:'ignore'` upsert; a Google email change could create a second
-  row and violate the unique constraint on flush. OK for MVP with a comment.
+- ~~**[auth] architecture** — `subscription.entity.ts` + its two enums live in
+  `auth` but nothing in the module reads/writes them.~~ **fixed (Batch D, D12)** —
+  `git mv`'d to `modules/billing/{entities,enums}/`; all imports rewritten;
+  `SubscriptionStatus.Expired` removed (expiry is `currentPeriodEnd <= now` at
+  read). Migration `120600`.
+- ~~**[auth] mikroorm** — `loginByGoogle` backfills `user.googleSub` (`@Unique`)
+  after an `onConflictAction:'ignore'` upsert; a Google email change could
+  create a second row that violates the constraint on flush.~~ **fixed (Batch P)** —
+  accepted for MVP, now carries the explaining comment (`complete-login.service.ts`
+  `loginByGoogle`).
 
-- **[post] pipeline** — `PostPipelineStage.Fetch` / PLAN §5 step 1 has no handler
-  and no run row; `ingest` is a sync HTTP create and `dto.link` is stored but
-  never fetched. Drop the enum value or write a `Fetch` run row.
+- ~~**[post] pipeline** — `PostPipelineStage.Fetch` / PLAN §5 step 1 has no
+  handler and no run row.~~ **fixed (Batch C, D7)** — enum value removed (starts
+  at `SpacyParse`); legacy `'fetch'` literal dropped from
+  `post_pipeline_runs_stage_check` in `Migration20260830120000`; PLAN §5 step 1
+  gone (Batch J).
 - ~~**[post] pipeline/ai** — downstream AI stages (`assess-complexity`, `tag-grammar`,
   `generate-exercises`) re-call the model on every non-`Completed` run with no
   sub-result check, then wholesale delete/overwrite — not "gap-filler, not
@@ -396,10 +407,12 @@ _(populated from subagent reports as waves complete)_
   gap-fill, and the `Completed` short-circuit already prevents any re-call after
   success. `pipeline.md` P6a + Known-gaps note; `ai.md` unchanged (round-trip
   section already covers it).
-- **[post] queue-jobs** — `post-queue-bootstrap.service.ts:12-40`:
-  `{policy:'singleton', expireInSeconds:3600}` copy-pasted 6×; 1h expiry may be
-  tight for a retried `ai_grammar` call on a long article. Extract a const, loop
-  `QueueName`, reconsider expiry for AI stages.
+- ~~**[post] queue-jobs** — `{policy:'singleton', expireInSeconds:3600}`
+  copy-pasted 6× in `post-queue-bootstrap.service.ts`; 1 h expiry tight for a
+  retried `ai_grammar` on a long article.~~ **fixed (Batch C, D8)** — single
+  `QUEUE_DEFINITIONS` map in `core/queue/queue-config.ts`; `PostQueueBootstrapService`
+  is the only `createQueue` caller and loops it; per-queue `retryLimit` +
+  `retryBackoff` + `deadLetter` (AI stages) live there too.
 - ~~**[post] db-performance/cqrs**~~ — post query handlers loaded managed
   entities into the identity map for pure reads: **fixed (Wave 3)** —
   `{ disableIdentityMap: true }` added to every `find`/`findOne`/`findAndCount`
@@ -426,13 +439,16 @@ _(populated from subagent reports as waves complete)_
 - ~~**[core] error-handling**~~ — `authorization.error.ts` used
   `this.name = AuthorizationError.name`: **fixed (Batch A)** — now
   `new.target.name`, matching `DomainError`.
-- **[core] http-api** — `core/http/filters/http-error.filter.ts:29-35`: `<500`
-  `HttpException` with object payload forwards Nest's `{statusCode,message,error}`
-  verbatim, diverging from the `{message}` shape of the other filters.
-- **[core] migrations** — SKILL.md "Verify" lists `pnpm migration:check` but no
-  such script exists and CI runs no migration/snapshot check; generated migrations
-  have no idempotency guards (contradicts SKILL.md wording). Add the script + CI
-  step, or relax the wording. (see open question)
+- ~~**[core] http-api** — `http-error.filter.ts`: `<500` `HttpException` with an
+  object payload forwards Nest's `{statusCode,message,error}` verbatim.~~ **fixed
+  (Batch F)** — normalised to `{ message: string }` via `extractMessage`; +1
+  ispec asserts a 404 body `=== { message: 'Post not found' }`.
+- ~~**[core] migrations** — SKILL.md lists `pnpm migration:check` but no such
+  script exists and CI runs no migration/snapshot check.~~ **fixed (Batch D,
+  D17)** — `package.json` `mikro-orm` + `migration:{create,up,down,check}`
+  scripts; CI runs `pnpm migration:up && pnpm migration:check`; `ensureMigrated`
+  calls `orm.migrator.checkSchema()` and throws on drift. Source of truth:
+  `references/migrations.md`.
 - ~~**[core] security**~~ — `publicUrl` unset → CORS `origin: undefined`
   (permissive) with `credentials:true`: **fixed (Batch M)** — `main.ts` throws in
   production when `PUBLIC_URL` is unset; dev falls back to a localhost-only
@@ -493,37 +509,34 @@ _(populated from subagent reports as waves complete)_
   removed file `split-text-for-annotation.ts`: **fixed (Wave 3)** — rewritten to
   say prod segments via spaCy and the harness keeps its own splitter on purpose.
 
-- **[post-data] mikroorm/pipeline** — `domain/node-tree.parser.ts` (280 LOC, fully
-  tested) + `NodeTreeType` (`domain/node-tree.type.ts`) are imported by **nothing**
-  in production; `NodeTreeType`'s comment references a non-existent `Post.body`
-  field; `post-part-body.type.ts:7` claims reassembly runs `parseDoc(...)` but
-  `get-post-detail.handler.ts:58` doesn't. Node trees are never re-validated after
-  a converter/splice writes them. Wire `parseDoc` at reassembly, or delete the
-  dead type + fix the comments.
-- **[post-data] mikroorm** — `entities/grammar-match.entity.ts`: no unique
-  constraint; a partial `ai_grammar` write + rerun double-inserts identical
-  matches (stage-run idempotency doesn't protect row-level). Add composite
-  `@Unique` or delete-by-sentence before insert.
-- **[post-data] mikroorm (spec drift)** — several entities disagree with PLAN §3:
-  `words.cefr_level` is on `word_definitions` (per-POS) instead (PLAN §13 "узгодити
-  cefr", still open); `PostSource` has no `attribution_text` / `source_type`
-  (PLAN §3.2 + §9 make attribution mandatory — feed view substitutes the raw URL);
-  `post_pipeline_run_status` has no `Running` (PLAN §3.7 lists it); `posts.status`
-  is annotation-centric (`Annotating/Annotated`) but the pipeline has 7 stages;
-  `post_word`/`post_phrase` join tables not built. (see open questions)
-- **[post-data] ai/error-handling** — `domain/build-token-annotations.ts:67`:
-  `phraseText: phraseTextById.get(id) ?? ''` — a missing map entry yields `''`,
-  which `validatePhraseShape` rejects, failing the whole job with a shape error
-  that hides the real cause (missing `Phrase` row). Throw a specific error on map
-  miss.
-- **[post-data] style** — **mostly fixed (Batch K)**: ~~`node-tree.type.ts` vs
-  `node-tree.types.ts`~~ (renamed `node-tree-json.type.ts`); ~~`@Enum(() => X)`
-  shorthand~~ (last 3 converted to object form); ~~3 slugify impls~~ (shared
-  `core/helpers/slug.helper.ts` `slugify`; `parse-slug-id` is a parser, left);
-  ~~`overlaps`/`spansOverlap` dup across 4 files~~ (extracted `domain/span-range.ts`).
-  Still open: redundant `@Index()` on composite-unique leading columns
-  (`sentence`, `sentence_token`) — Batch D already dropped several; any remaining
-  are a migration, out of Batch K scope.
+- ~~**[post-data] mikroorm/pipeline** — `node-tree.parser.ts` + `NodeTreeType`
+  imported by nothing; `post-part-body.type.ts` claims reassembly runs
+  `parseDoc(...)` but the handler doesn't; node trees never re-validated after a
+  converter/splice.~~ **fixed (Batch D, D12)** — `parseDoc(assembleDocFromParts(...))`
+  wired at `get-post-detail.handler.ts` (read-time re-validation,
+  `InvalidNodeTreeError` on a splice bug); comments corrected; parser kept as the
+  intended validator; type renamed `node-tree-json.type.ts` (Batch K).
+- ~~**[post-data] mikroorm** — `grammar-match.entity.ts`: no unique constraint; a
+  partial `ai_grammar` write + rerun double-inserts.~~ **fixed (Batch D)** —
+  composite `@Unique(sentenceId, grammarUsagePointId, tokenStart, tokenEnd)`;
+  `TagGrammarHandler` also dedupes spans in memory. Migration `120500`.
+- **[post-data] mikroorm (spec drift)** — **mostly fixed (Batch D, D12)**:
+  ~~`PostSource` attribution~~ (added `type` + `attributionText`, NOT NULL);
+  ~~`posts.status` annotation-centric~~ (→ `processing`); ~~`Running` missing~~
+  (derived, not an enum value). Kept-by-decision: `words.cefr_level` stays on
+  `word_definitions` per-POS (PLAN §3.3 updated, Batch J). **Still open:**
+  `post_word`/`post_phrase` join tables not built — the `get-dictionary`
+  projection (D10/D12), the tracked deferred item.
+- ~~**[post-data] ai/error-handling** — `build-token-annotations.ts`
+  `phraseText: phraseTextById.get(id) ?? ''` — a map miss yields `''`, failing
+  the job with a shape error that hides the real cause.~~ **fixed (Batch P)** —
+  `resolvePhraseText` throws `MissingPhraseTextError(phraseGroupId)` on a miss
+  (`errors/missing-phrase-text.error.ts`). `build-token-annotations.spec` +1.
+- ~~**[post-data] style**~~ — **fixed**: ~~`node-tree.type.ts` naming~~,
+  ~~`@Enum(() => X)` shorthand~~, ~~3 slugify impls~~, ~~`spansOverlap` dup~~
+  (all Batch K); ~~redundant `@Index()` on composite-unique leading columns
+  (`sentence.postPartId`, `sentence_token.sentenceId`)~~ dropped in Batch D
+  (Migration `120500`).
 - ~~**[post-data] security**~~ — **fixed (Batch K)**: `wrapLink` in both
   converters now rejects non-`http(s)`/`mailto` hrefs (`isSafeLinkHref`) →
   degrades to a text node; `html-to-doc` block scan is top-level-only
@@ -534,14 +547,14 @@ _(populated from subagent reports as waves complete)_
   no-unique-retry documented in its spec as an accepted weakness (huge id space,
   `@Unique` on `posts.short_id` is the guard).
 
-- **[learning] architecture** — `add-card.handler.ts` / `get-*.handler.ts` /
-  `skill-progress.service.ts` `em.find` **~8 `post`-owned tables** (`words`,
-  `phrases`, `grammar_*`, `word_definitions`, `posts`, `post_parts`) + import
-  `post/domain/*` directly. No `PostModule` import, no facade/`services/shared`
-  boundary. **Resolved by D10 (Batch E / Wave 3):** read-only cross-module
-  `em.find` **from a query handler** is sanctioned (never a command, never a
-  write); documented in `architecture.md` A8 + `db-performance.md` DP2. The
-  `post` projection / `services/shared` lookup stays the eventual fix.
+- ~~**[learning] architecture** — `add-card` / `get-*` handlers +
+  `skill-progress.service.ts` `em.find` ~8 `post`-owned tables + import
+  `post/domain/*` directly, no `PostModule` / `services/shared` boundary.~~
+  **resolved by D10 (Batch E / Wave 3)** — read-only cross-module `em.find`
+  **from a query handler** is sanctioned (never a command, never a write);
+  `architecture.md` A8 + `db-performance.md` DP2. A `post` projection /
+  `services/shared` lookup stays the eventual fix (folds into the
+  `get-dictionary` deferred item).
 - ~~**[learning/billing] cqrs**~~ — commands returned managed ORM entities:
   **fixed (Batch E, D2)** — `AddCard`/`ReviewCard` → `Command<CardView>`,
   `ActivateMockSubscription` → `Command<SubscriptionView>`; view types +
@@ -568,56 +581,52 @@ _(populated from subagent reports as waves complete)_
   walks every node-tree span on every `/dictionary` request (stands in for the
   missing `post_word`/`post_phrase`, PLAN §3.3) — bound it or build the
   projection (D10/D12).
-- **[telegram] pipeline/error-handling** — `publish-pending.service.ts:34-46`: a
-  `Failed` `post_publications` row is **terminal** (`run()` selects only `Pending`);
-  a transient Telegram 5xx permanently drops the channel announcement. `/retry`
-  doesn't recover it — `PublishPostHandler` re-upserts with
-  `onConflictAction:'ignore'`, so the post is re-`Published` with no re-announce.
-  Re-select `Failed` with bounded `retryCount`/backoff, or reset in
-  `RetryPostHandler`.
-- **[telegram] mikroorm/observability** — `poll-updates.service.ts:52-59`: `row`
-  is persisted, then `dispatch()` → `postService.ingest()` runs `em.flush()`
-  **internally** on the same UoW, committing the `telegram_updates` row with
-  `processed=false`; `processed=true` is flushed only afterwards. A crash in the
-  window leaves the row stuck `processed=false` while its post exists — never
-  reprocessed (offset advanced, `em.count>0` → `continue`). Set `processed=true`
-  before `dispatch`, or flush the row once first.
-- **[telegram] style/mikroorm** — `telegram_updates.telegramMessageId` actually
-  stores `update.update_id`, not `message.message_id`; entity comment + PLAN §3.9
-  SQL disagree with PLAN §3.9 prose ("unique на `update_id`"). Rename to `updateId`.
-- **[telegram] error-handling** — `poll-updates.service.ts:95-113`: the `try`
-  wraps both the command call and the success `sendMessage`; if `ingest`/`retry`
-  succeeds but the confirmation send throws, the admin gets `Command failed` and
-  Sentry records a false negative. Send the confirmation outside the `try`.
-- **[telegram] low** — poll cron still runs + stores rows every minute when
-  `TELEGRAM_BOT_TOKEN` is set but `TELEGRAM_ADMIN_USER_ID` empty (only no-ops on
-  missing token); `/retry` accepts any `\S+` → non-UUID reaches `findOneOrFail`
-  → raw pg `invalid input syntax for type uuid` echoed to admin chat; bare
-  `Error` from the client, no `TelegramApiError`, `429`/`retry_after` not
-  distinguished (no backoff); comments say "long-polling" but `getUpdates` uses
-  `timeout: 0` (short poll); `TelegramUpdate` has no `updatedAt`; raw payloads of
-  all senders (incl. non-admin usernames + text) stored with no pruning;
-  `formatPostAnnouncement(post, publicUrl ?? '')` ships a relative link if
-  `PUBLIC_URL` unset; two `ConfigModule.forFeature()` calls; no
-  `telegram-client.service.spec.ts` at all. PLAN Зріз 5 "Без міграцій" is wrong
-  (`Migration20260829124701` creates `telegram_updates` + `post_publications`);
-  §3.9 column name `raw_payload_json` vs actual `raw_payload`; §3.9 `/add {link}`
-  superseded by pasted-text decision.
+- ~~**[telegram] pipeline/error-handling** — a `Failed` `post_publications` row
+  is terminal (`run()` selects only `Pending`); a transient Telegram 5xx
+  permanently drops the announcement and `/retry` doesn't recover it.~~ **fixed
+  (Batch G, D15 #30)** — `post_publications.retry_count` col; `PublishPendingService`
+  re-selects `Failed` rows (`retryCount < 5` + `updatedAt` backoff);
+  `RetryPostHandler` resets `Failed` rows for the post to `Pending`. `pipeline.md`
+  P11.
+- ~~**[telegram] mikroorm/observability** — `poll-updates`: the
+  `telegram_updates` row is committed `processed=false` by `ingest()`'s internal
+  flush; `processed=true` only afterwards → a crash in the window strands it.~~
+  **fixed (Batch G)** — `row.processed = true` set + `em.flush()`ed **before**
+  `dispatch()`; `mikroorm.md` anti-pattern row + ispec.
+- ~~**[telegram] style/mikroorm** — `telegram_updates.telegramMessageId` stores
+  `update.update_id`.~~ **fixed (Batch D)** — column + `@Unique` + field renamed
+  `updateId`; `poll-updates.service.ts` + raw SQL + ispec. Migration `120400`.
+- ~~**[telegram] error-handling** — `poll-updates`: the `try` wraps the command
+  call *and* the success `sendMessage`; a failed confirmation reads as the
+  command failing.~~ **fixed (Batch G)** — the command runs in the `try` and only
+  computes a reply string; `sendMessage(reply)` is issued after the `try`,
+  swallow + `logger.warn` on failure. `error-handling.md` E7.
+- **[telegram] low** — **mostly fixed**: ~~poll cron runs when
+  `TELEGRAM_ADMIN_USER_ID` empty~~ (Batch G no-op on empty adminUserId);
+  ~~`/retry` accepts any `\S+`~~ (Batch G `UUID_RE` in `parse-command.ts`);
+  ~~raw payloads stored with no pruning~~ (Batch G `PruneTelegramUpdatesService`
+  daily cron, 30-day retention); ~~PLAN §3.9 `raw_payload_json` / `/add {link}`~~
+  (Batch J). **Still open (low, single-channel MVP):** bare `Error` from the
+  client — no `TelegramApiError`, `429`/`retry_after` not distinguished (no
+  backoff); "long-polling" comment vs `getUpdates timeout: 0`; `TelegramUpdate`
+  has no `updatedAt`; `formatPostAnnouncement(post, publicUrl ?? '')` ships a
+  relative link if `PUBLIC_URL` unset; no `telegram-client.service.spec.ts`.
 - **[cron] observed (good, document as-is)** — `CronJobHost` abstract base: drain
   flag + `inFlightTicks` awaited by `waitForCronTicksToDrain()` before
   `app.close()`; `@Cron(…, {waitForCompletion:true})` prevents self-overlap; every
   tick wrapped in `Sentry.startNewTrace` → `startSpan({op:'function.cron'})`,
   failures `captureException` + `logger.error` + rethrow.
 
-- **[web] architecture/security** — the global `SessionAuthGuard` (`APP_GUARD`) is
-  declared inside `AuthWebModule`, not `web.module.ts` (where `ETagInterceptor`
-  `APP_INTERCEPTOR` is). `WebModule.forRoot(subModules)` takes an arbitrary list;
-  any composition omitting `AuthWebModule` silently unauthenticates every route,
-  no compile-time signal. Move the `APP_GUARD` provider to `web.module.ts`.
-- **[web] security/http-api** — **no rate limiting at the web edge** (PLAN §7):
-  `@nestjs/throttler` is not a dependency; public `content` GETs and cookie-authed
-  `learning`/`billing` POSTs are unthrottled. Only limiter is the Redis counter in
-  `auth`'s challenge service (login only). (see open question 35)
+- ~~**[web] architecture/security** — the global `SessionAuthGuard` `APP_GUARD`
+  is declared in `AuthWebModule`, not `web.module.ts`; a composition omitting
+  `AuthWebModule` silently unauthenticates every route.~~ **fixed (Batch F)** —
+  `APP_GUARD: SessionAuthGuard` + `APP_INTERCEPTOR: ETagInterceptor` moved into
+  `WebModule.forRoot`; every composition is authenticated regardless of
+  sub-modules. `http-api.md` H3.
+- ~~**[web] security/http-api** — no rate limiting at the web edge (PLAN §7).~~
+  **fixed (Batch F, D14 #35)** — `@nestjs/throttler` `ThrottlerGuard` (global,
+  Redis storage) via `WebThrottlerModule`; `THROTTLE_TTL_MS` / `THROTTLE_LIMIT`
+  (60 s / 300); `skipIf: isTestEnvironment()`. `security.md` rate-limit row.
 - ~~**[web] http-api** — `ETagInterceptor` wired globally but `@CachePolicy()` is on
   **zero** routes → it early-returns for every request; public feed/post-detail
   GETs get no `Cache-Control`/`ETag`/304.~~ **fixed (Batch O)** — option (a):
@@ -626,23 +635,24 @@ _(populated from subagent reports as waves complete)_
   `grammar/:slug` now emit `Cache-Control: public` + a SHA-1 ETag and answer a
   matching `If-None-Match` with 304. `content.controller.ispec` +1;
   `http-api.md` H9 updated.
-- **[web] http-api** — OpenAPI advertises a global `429`, but login rate-limiting
-  raises `TooManyLoginRequests` (`DomainError`) → mapped to **400** by
-  `DomainErrorFilter`; **no web endpoint can return 429** (ties to open q16).
-- **[web] http-api** — error-body shape diverges: `HttpErrorFilter` forwards Nest's
-  `{statusCode,message,error}` for `<500` `HttpException`, so guard 401s and
-  `ContentController` 404s differ from the `{message}` shape of
-  `DomainErrorFilter` / `zodValidationExceptionFactory` (ties to the core
-  `http-error.filter` finding).
-- **[web] architecture/http-api** — the `/api` prefix strip is an undocumented
-  deployment coupling (one controller comment); OpenAPI doc has no `/api` server
-  URL so generated client paths (`/feed`) won't match public URLs (`/api/feed`).
-  `setGlobalPrefix('api', { exclude: ['_healthz'] })` or `.addServer('/api')`.
-  (see open question 33)
-- **[web] architecture** — request-DTO location split: `auth` reuses **command**
-  DTOs (`modules/auth/commands/*/*.dto.ts`, one schema for HTTP + command);
-  `learning`/`content` define web-local `createZodDto` schemas then re-map fields
-  in the controller. Pick one for the reference. (see open question 37)
+- ~~**[web] http-api** — OpenAPI advertises a global `429` but no web endpoint
+  can return it (`TooManyLoginRequests` → 400).~~ **fixed (Batch B, D1)** —
+  `TooManyLoginRequestsError` / `TooManyAttemptsError` → `super(msg, 429)`; the
+  declared `429` is now reachable.
+- ~~**[web] http-api** — error-body shape diverges: `HttpErrorFilter` forwards
+  Nest's `{statusCode,message,error}` for `<500` `HttpException`.~~ **fixed
+  (Batch F)** — normalised to `{ message: string }`; +1 ispec.
+- ~~**[web] architecture/http-api** — the `/api` prefix strip is an undocumented
+  deployment coupling; OpenAPI has no `/api` server URL.~~ **fixed (Batch F,
+  D14 #33)** — `setGlobalPrefix('api', { exclude: ['_healthz'] })` in
+  `configureApp`; `.addServer('/api')` + `ignoreGlobalPrefix: true` in the
+  OpenAPI builder; the edge proxy strip stays belt-and-suspenders. `http-api.md`
+  "/api prefix".
+- ~~**[web] architecture** — request-DTO location split (`auth` command-DTO
+  reuse vs `learning`/`content` web-local `createZodDto`).~~ **decided (Batch F,
+  D14 #37)** — web-local `createZodDto` under `entrypoints/web/*/dto/` +
+  controller mapper is the standard; auth's command-DTO reuse is a tolerated
+  exception. `http-api.md` "request-DTO home".
 - **[web] architecture** — ~~`PostDetailResponseDto` imports internal query view
   types + `ContentController` structural-casts~~ **fixed (Batch F)** — annotation
   DTOs re-declared locally, explicit `to<X>Response` mappers. `doc` still
@@ -650,51 +660,43 @@ _(populated from subagent reports as waves complete)_
   wire-contract data shared with the SSR renderer, not an internal query view.
   Still open: `ContentController` uses `@Controller()` with **no path prefix**
   (owns top-level `feed`/`posts`/`grammar` — future collision risk).
-- **[web] low** — list-endpoint shapes inconsistent (`feed` `{items,nextOffset}`,
-  `practice` bare array, `dictionary` `{items}` unbounded); `DateTime`→ISO
-  conversion in 3 different layers depending on module; per-controller
-  `iso()`/`toDto` helpers duplicated; `content` controller mixes `async` and bare
-  promise returns; `EmptyStringToNullPipe` turns `?limit=`/`?cefr=` into `null`
-  which `z.coerce.number().default()` / `.optional()` reject → 400 instead of
-  defaulting; `POST /learning/cards` no `@HttpCode` (201 on idempotent hit);
-  `clearSessionCookie` sends only `{path:'/'}` (a `__Host-` cookie deletion may
-  need `Secure`); ~~`addCookieAuth` declared but no `@ApiCookieAuth()` on any
-  route~~ **fixed (Batch N)** — class-level `@ApiCookieAuth()` on
-  learning/billing/dictionary/profile + method-level on `auth` `me`;
-  `HealthController` has no `@ApiTags` and `health.check([])` runs zero indicators
-  (always 200); ~~`@CurrentUser()` throws bare `Error` → 500 when `actor`
-  missing~~ **fixed (Batch M)** — now `UnauthorizedException` (401).
+- **[web] low** — **mostly fixed**: ~~`EmptyStringToNullPipe` → 400 on
+  `?limit=`/`?cefr=`~~ (Batch F `queryParam` preprocess); ~~`POST /learning/cards`
+  no `@HttpCode`~~ (Batch F → 200); ~~`clearSessionCookie` only `{path:'/'}`~~
+  (Batch F mirrors all four cookie attrs); ~~`addCookieAuth` no `@ApiCookieAuth()`~~
+  (Batch N); ~~`HealthController` no `@ApiTags` / zero indicators~~ (Batch F —
+  DB + Redis Terminus indicators + `@ApiTags('internal')`); ~~`@CurrentUser()`
+  bare `Error` → 500~~ (Batch M → 401). **Still open (low / deferred):**
+  `practice` bare-array + `dictionary` `{items}` list shapes (breaking wire
+  change, needs `apps/web` — deferred); `DateTime`→ISO conversion done at
+  different layers per module; `content` controller mixes `async` and bare
+  promise returns.
 
-- **[worker] queue-jobs/config** — **two `boss.createQueue` authorities** for the
-  same post queues: `worker-registrar.service.ts:28` calls it with **no options**;
-  `PostQueueBootstrapService` with `{policy:'singleton', expireInSeconds:3600}`.
-  Both run in `OnApplicationBootstrap` in the worker; order not guaranteed;
-  `createQueue` upserts options → the bare call can overwrite the policy/expiry.
-  One owner; registrar should only `work()` pre-existing queues.
-- **[worker] queue-jobs/error-handling** — **no `retryLimit`/`retryDelay`/backoff/
-  `deadLetter`** on any queue. A throw → pg-boss default retry, then the job sits
-  in `failed` with no dead-letter, no alert beyond the Sentry event; recovery is
-  the manual `engofy queue retry-failed` CLI. A poison paid-AI job silently
-  strands. Set explicit per-queue retry + a dead-letter queue, or document the
-  manual story. (see open question 40)
-- **[worker] queue-jobs/observability** — `JobWorkerHost` never touches
-  `PostPipelineRun` on failure (catch → Sentry → log → rethrow only) — same gap as
-  the `post` stage-handlers finding; reinforces open q7.
-- **[worker] queue-jobs** — `job-worker-host.ts:20` `work()` does
-  `Promise.all(jobs.map(handleOne))` — one rejection rejects the whole batch; safe
-  only because `boss.work` uses default `batchSize:1`. Use `allSettled` + settle
-  per job, or document the assumption.
-- **[cli] architecture/cqrs** — ~90 LOC of entity seeding (`new GrammarCategory()`,
-  `em.persist`, sort-order bookkeeping) + `em.flush()` inline in
-  `grammar-import-egp` / `import-irregular-verbs` / `words-import-frequency`
-  `execute()` — no domain service/facade, raw `em` from the entrypoint. `post
-  ingest` (same folder) delegates to `PostService.ingest`. Decide: sanctioned
-  "thin importer script" pattern (PLAN §1), or move into `post` domain/services.
-  (see open question 41)
-- **[cli] validation** — `post-ingest.command.ts:40` `parseType` does
-  `return val as PostType` with no check (unlike `queue` commands that validate
-  `--queue` → `InvalidCliFlagError`); invalid `--type` surfaces as a raw
-  `ZodError`. `parseTitle` is a no-op identity.
+- ~~**[worker] queue-jobs/config** — two `boss.createQueue` authorities for the
+  post queues (`worker-registrar` no-options vs `PostQueueBootstrapService`); the
+  bare call can overwrite policy/expiry.~~ **fixed (Batch C, D8)** —
+  `PostQueueBootstrapService` is the only `createQueue` caller (all queues incl.
+  auth); `WorkerRegistrarService` only `boss.work()`s.
+- ~~**[worker] queue-jobs/error-handling** — no `retryLimit`/backoff/`deadLetter`
+  on any queue; a poison paid-AI job silently strands.~~ **fixed (Batch C, D4)** —
+  per-queue `retryLimit` + `retryBackoff` + a `deadLetter` queue for the AI
+  stages in `core/queue/queue-config.ts`.
+- ~~**[worker] queue-jobs/observability** — `JobWorkerHost` never touches
+  `PostPipelineRun` on failure.~~ **fixed (Batch C, D4)** — `recordStageStart` /
+  `recordStageFailure` on a forked em; see the `[post] error-handling` row above.
+- ~~**[worker] queue-jobs** — `work()` does `Promise.all(jobs.map(handleOne))` —
+  one rejection rejects the whole batch.~~ **fixed (Batch C)** —
+  `Promise.allSettled` + re-throw (single reason or `AggregateError`).
+- ~~**[cli] architecture/cqrs** — ~90 LOC of entity seeding + `em.flush()` inline
+  in `grammar-import-*` / `words-import-frequency` `execute()`.~~ **decided
+  (Batch H, D16)** — "thin importer script inline in the CLI `execute()` with its
+  own `em.flush()`" is a sanctioned named exception for one-off / seed commands.
+  `cqrs.md` "Flush outside the CQRS path".
+- ~~**[cli] validation** — `parseType` does `return val as PostType` with no
+  check; invalid `--type` surfaces as a raw `ZodError`.~~ **fixed (Batch H)** —
+  `parseType` checks `Object.values(PostType).includes(...)` → `InvalidCliFlagError`.
+  `parseTitle` kept (nest-commander needs the decorated `@Option` method for the
+  `--title` flag; identity body matches sibling parsers).
 - **[worker/cli] low** — `WORKER_QUEUES` bare string token; **zero spec files** in
   `src/entrypoints/worker/` (CLI side has 9); `spanAttributes()` extension point
   overridden by nothing; `sentry test` / `migrate up|down` extend
@@ -707,54 +709,39 @@ _(populated from subagent reports as waves complete)_
   `{ cause: err }` → `{ err }`; `post ingest <file>` existence check; `WORKER_QUEUES`
   → `Symbol`. Still open: no worker-dir spec files beyond the new helper;
   `parseCommaSeparated` referenced only by its own spec.
-- **[test] migrations/tests** — `test/setup/migration-guard.helper.ts` only
-  drops + replays migrations; it does **not** assert entities-match-migrations. No
-  `pnpm migration:check` script, no CI step; `snapshot:false` under test also
-  disables MikroORM's own check. An entity change with no migration merges green
-  (contradicts SKILL.md + `references/tests.md`). Add the script (prod config,
-  `snapshot:true`) + CI step, and/or fail `ensureMigrated` on a pending diff.
-- **[test] tests** — Redis state is **never reset** (Postgres gets a per-test
-  transaction rollback, Redis does not); only the auth web suite clears `otp:ip:*`.
-  Every rate-limit/counter test relies on `Math.random()` keys never colliding; a
-  fixed key or a mid-run crash leaves counters that fail reruns for the whole TTL.
-  Dedicate a test Redis DB + `FLUSHDB` in `afterEach`, or lint for fixed keys.
-- **[test] tests** — **no shared port fakes**: 4 independent `FakeAiClient`, 2
-  `FakeNlpClient`, 2 `FakeTelegramClient` across 8 ispecs, each a different subset
-  of its port; nothing enforces they satisfy the interface. Add `test/fakes/*.fake.ts`
-  (one canonical `implements XClient` per port). (see open question 44)
-- **[test] tests/mail** — the `MAILER` port and **every worker processor** have
-  **zero tests** (`src/entrypoints/worker/` has 0 spec files vs cli's 9);
-  `ChallengeMailerService` → `MAILER` → Resend/MailHog is never exercised in any
-  tier. Auth ispecs assert only that the outbox job is staged.
-- **[test] tests** — coverage thresholds (80/80/70/80) are a hard CI gate via
-  `test:cov`, yet whole subsystems are untested (all worker processors, `MAILER`,
-  `TelegramClientService`, `AnthropicClientService`, CLI importers,
-  `change-set.helper.ts`). Confirm the gate is actually green (may pass only
-  transitively). (see open question 45)
-- **[test] tests** — **no e2e tier in CI**: `references/tests.md` advertised
-  `*.e2e` as runnable but `test/e2e/` holds only a seed script, `test/http/web`
-  produces `.ispec.ts` that run in the `integration` project, and the real
-  Playwright suite (`apps/web/e2e/*`) is out-of-tree + unautomated.
-  `e2e-suite.helper.ts` `request(…, {authed})` — the `authed` branch body is
-  commented out (dead API that reads as working auth). Rename the tier; add a CI
-  job for seed + Playwright or document e2e as a manual gate. (`references/tests.md`
-  updated to match reality.)
-- **[test] low** — `test/http/web/setup/create-app.helper.ts` hand-copies the 5
-  global filters + 2 pipes from `src/main.ts` (no shared `configureApp(app)`);
-  rollback-across-HTTP isolation works only because `RequestContext` is skipped +
-  every web handler shares the one global `em` (undocumented invariant — a future
-  `em.fork()` on a web path leaks rows); `queue-spy` matches `send()` args
-  positionally (silent miss on signature change); `factory.helper.ts` + `maybe()`
-  + the `@faker-js/faker` dep + `makeChangeSet`/`makeFlushArgs` are **dead**;
-  3 interchangeable "unique datum" idioms; no explicit `hookTimeout` for the
-  integration project (cold-CI flake); `createIntegrationApp` boots a **real**
-  pg-boss for all 39 ispec files though every queue effect is asserted via the
-  `send` spy (add a no-op `PG_BOSS` fake by default); `.env.test`
-  `MIKRO_ORM_DB_NAME=engofy-testing` vs CI `engofy`; `app.module.ispec.ts`
-  compiles entrypoint modules but never `.init()`s them (broken async factory
-  passes); `post` query handlers (`get-feed`, `get-post-detail`,
-  `get-grammar-*`) + learning `get-dictionary` have **no direct `.ispec.ts`**
-  (only via the controller specs).
+- ~~**[test] migrations/tests** — `migration-guard.helper.ts` only drops +
+  replays; no `migration:check`, no CI step.~~ **fixed (Batch D, D17)** —
+  `migration:check` script (prod config, `snapshot:true`) + CI step;
+  `ensureMigrated` calls `orm.migrator.checkSchema()` and throws on drift.
+- ~~**[test] tests** — Redis state is never reset between integration tests.~~
+  **fixed (Batch I)** — `REDIS_DB` (default 0), `.env.test` `REDIS_DB=1`,
+  `redis.flushdb()` in `afterEach` of `useOrmSuiteLifecycle`.
+- ~~**[test] tests** — no shared port fakes (4 `FakeAiClient`, 2 `FakeNlpClient`,
+  2 `FakeTelegramClient`, none `implements`-checked).~~ **fixed (Batch I)** —
+  `test/fakes/{ai,nlp,mailer,telegram,pg-boss}.fake.ts`, one `implements`-checked
+  class per port; all 7 bespoke fakes migrated.
+- ~~**[test] tests/mail** — `MAILER` port + every worker processor have zero
+  tests.~~ **fixed (Batch I)** — `send-challenge-email.processor.spec.ts`,
+  `challenge-mailer.service.spec.ts` (render + send via `FakeMailer`),
+  `post-processors.spec.ts` (all 6 pipeline processors), `anthropic-client.service.spec.ts`.
+- ~~**[test] tests** — coverage gate may pass only transitively.~~ **verified
+  (Batch I)** — gate confirmed green directly; actuals ~90/76/86/90 vs the
+  80/80/70/80 thresholds.
+- **[test] tests** — ~~`e2e-suite.helper.ts` `request(…, {authed})` dead API~~
+  **fixed (Batch I)** — the `authed` flag + `options` param removed (web auth is
+  cookie-based, no `TEST_TOKEN` ever existed). **Still open (deferred, infra):**
+  `apps/web` Playwright + `seed-web-e2e.ts` not in a CI workflow — a manual
+  pre-release gate for now.
+- **[test] low** — **mostly fixed**: ~~hand-copied filters/pipes in
+  `create-app.helper.ts`~~ (Batch F `configureApp`); ~~`factory.helper.ts` /
+  `maybe()` / `@faker-js/faker` / `makeChangeSet` dead~~ (Batch I deleted);
+  ~~no `hookTimeout`~~ (Batch I `60_000`); ~~real pg-boss for every ispec~~
+  (Batch I `createFakePgBoss()` default, `{realPgBoss:true}` opt-out);
+  ~~`.env.test` DB name vs CI~~ (Batch L — intentional, documented). **Still open
+  (low):** `queue-spy` matches `send()` args positionally; `app.module.ispec.ts`
+  compiles entrypoint modules but never `.init()`s them; `post` query handlers +
+  `get-dictionary` have no direct `.ispec.ts` (covered via the controller specs
+  — deferred).
 - **[test] observed (document as-is)** — 3 tiers by suffix; `suite.command` =
   `execute → em.flush() → em.clear()`, `suite.query` = `execute → em.clear()`
   (facade replica); per-test isolation = one Postgres transaction rolled back in
@@ -766,8 +753,9 @@ _(populated from subagent reports as waves complete)_
   `builderHook` + `.overrideProvider().useClass/useValue()`; queue effects via
   `vi.spyOn(OutboxSenderService, 'send')` (no real worker); CI (`app.yaml`): `pnpm
   type` (covers `src/` + `test/`), `biome check`, `pnpm test:cov` (enforces
-  coverage), `pnpm build` + `git diff --exit-code src/metadata.ts`. No
-  `migration:check`, no Playwright.
+  coverage), `pnpm build` + `git diff --exit-code src/metadata.ts`,
+  `pnpm migration:up && pnpm migration:check` (Batch D), a `nlp-service` pytest
+  job (Batch I). Still no Playwright (`apps/web` e2e is a manual gate).
 
 - **[worker/cli] observed (document as-is)** — a throw in `processJob` is caught by
   `JobWorkerHost.handleOne` → Sentry + log → **rethrown** so pg-boss retries; job
@@ -782,19 +770,18 @@ _(populated from subagent reports as waves complete)_
   stay on bare `CommandRunner`; failure → `process.exitCode = 1` (never
   `process.exit()`).
 
-- **[learning/billing] low** — `SubscriptionStatus.Expired` defined + CHECK'd but
-  never written (expiry is time-only at read); `POST /learning/cards` has no
-  `@HttpCode` → 201 even on idempotent re-add; `DictionaryController` returns the
-  raw view cast to the DTO (no `toDto` mapper, unlike every sibling);
-  `DateTime`→ISO conversion happens in the handler for dictionary but the
-  controller for practice-queue; redundant `@Index()` on `learning_cards.userId`
-  (all 3 composite uniques lead with it) + missing `(userId, due)` for the hot
-  practice query; `review_logs` has both `reviewedAt` and `createdAt` (same
-  instant); flat `providers` array vs auth's `commandHandlers`/`queryHandlers`
-  grouping; `add-card.dto` `.refine` uses `path: []` → empty `field` in the error
-  shape; practice-queue silently drops cards whose target row was deleted (returns
-  < `limit`) while dictionary keeps them with `primary: ''`; no `.ispec.ts` for
-  `get-dictionary`, no `.spec.ts` for `CardLimitService` / `SkillProgressService`.
+- **[learning/billing] low** — **mostly fixed**: ~~`SubscriptionStatus.Expired`
+  never written~~ (Batch D removed it); ~~`POST /learning/cards` no `@HttpCode`~~
+  (Batch F → 200); ~~redundant `@Index()` on `learning_cards.userId` + missing
+  `(userId, due)`~~ (Batch D — `@Index(['userId','due'])`); ~~`review_logs` has
+  both `reviewedAt` and `createdAt`~~ (Batch D dropped `created_at`); ~~no
+  `.spec.ts` for `CardLimitService` / `SkillProgressService`~~ (Batch I —
+  `.ispec.ts` for both). **Still open (low):** `DictionaryController` returns the
+  raw view cast to the DTO (no `toDto` mapper); `DateTime`→ISO at handler for
+  dictionary vs controller for practice-queue; flat `providers` array vs auth's
+  grouped `commandHandlers`/`queryHandlers`; `add-card.dto` `.refine` `path: []`
+  → empty `field`; practice-queue drops deleted-target cards while dictionary
+  keeps them with `primary: ''`; no `get-dictionary` `.ispec.ts` (deferred).
 
 ## Decisions (proposed — confirm / override in bulk)
 

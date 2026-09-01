@@ -1,5 +1,6 @@
 import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
 import { PhraseType } from '../enums/phrase-type.enum.js';
+import { MissingPhraseTextError } from '../errors/missing-phrase-text.error.js';
 import type { Annotation } from './validate-annotations.js';
 
 // One spaCy token, as persisted in sentence_tokens (only the fields this
@@ -38,6 +39,19 @@ const CONTENT_POS: Record<string, PartOfSpeech> = {
   ADV: PartOfSpeech.Adverb,
 };
 
+// Canonical phrase text for a phrasal-verb group; a miss is a spacy_parse /
+// annotate data-integrity break, not an empty string to paper over.
+function resolvePhraseText(
+  phraseTextById: Map<string, string>,
+  phraseGroupId: string,
+): string {
+  const phraseText = phraseTextById.get(phraseGroupId);
+  if (phraseText === undefined) {
+    throw new MissingPhraseTextError(phraseGroupId);
+  }
+  return phraseText;
+}
+
 // Builds the deterministic half of the annotation layer straight from the
 // spaCy tokens: a `word` annotation per content-word token and a `phrase`
 // annotation (phrasal_verb, one fragment per token) per
@@ -64,7 +78,10 @@ export function buildTokenAnnotations(
           form: token.text,
           kind: 'phrase',
           phraseType: PhraseType.PhrasalVerb,
-          phraseText: phraseTextById.get(token.phrasalVerbGroupId) ?? '',
+          phraseText: resolvePhraseText(
+            phraseTextById,
+            token.phrasalVerbGroupId,
+          ),
           phraseGroupId: token.phrasalVerbGroupId,
           phraseId: token.phrasalVerbGroupId,
         });

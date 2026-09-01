@@ -1,3 +1,4 @@
+import { MissingPhraseTextError } from '../errors/missing-phrase-text.error.js';
 import {
   buildTokenAnnotations,
   type SentenceRows,
@@ -254,6 +255,28 @@ describe('buildTokenAnnotations', () => {
         phraseId: 'phrase-1',
       },
     ]);
+  });
+
+  it('throws MissingPhraseTextError when a phrasal-verb group has no Phrase row', () => {
+    const sentences: SentenceRows[] = [
+      {
+        charStart: 0,
+        tokens: [
+          token({
+            text: 'picked',
+            pos: 'VERB',
+            lemma: 'pick',
+            charStart: 0,
+            charEnd: 6,
+            phrasalVerbGroupId: 'phrase-missing',
+          }),
+        ],
+      },
+    ];
+
+    expect(() => buildTokenAnnotations(sentences, new Map())).toThrow(
+      MissingPhraseTextError,
+    );
   });
 
   it('does not emit a standalone word for a content token that is part of a phrasal verb', () => {
