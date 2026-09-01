@@ -24,8 +24,11 @@ interface TelegramApiResponse<T> {
 
 const REQUEST_TIMEOUT_MS = 15_000;
 
-// Thin wrapper over the Telegram Bot HTTP API — long-polling getUpdates and
-// sendMessage are all V1 needs, so this is raw `fetch`, no client library.
+// Thin wrapper over the Telegram Bot HTTP API — `getUpdates` and `sendMessage`
+// are all V1 needs, so this is raw `fetch`, no client library. `getUpdates`
+// uses `timeout: 0` (a short poll that returns immediately): the once-a-minute
+// poll cron is the polling interval, so there is nothing to hold the
+// connection open for.
 @Injectable()
 export class TelegramClientService {
   constructor(

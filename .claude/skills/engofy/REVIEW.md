@@ -261,9 +261,17 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 | 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk) + no `cache_control` on the large static system prompts | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop. `cache_control` alone is the safe half. `ai.md` "Fixes owed". |
 | 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
 | 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
-| 5 | No direct `.ispec.ts` for `post` query handlers (`get-feed`/`get-post-detail`/`get-grammar-*`) + `get-dictionary` | Functionally covered by `content.controller.ispec` + learning controller specs; additive, low value. |
+| ~~5~~ | ~~No direct `.ispec.ts` for `post` query handlers + `get-dictionary`~~ | **done (Batch Q)** — `get-feed` / `get-post-detail` / `get-grammar-construction` / `get-grammar-reference` / `get-dictionary` each have a `.handler.ispec.ts` (12 cases). |
 | 6 | `apps/web` Playwright + `seed-web-e2e.ts` not in CI; prod nginx `/api` proxy; `apps/web` deploy | Infra, non-checkbox. |
-| 7 | Low nits: telegram (`429`/`retry_after` backoff, `TelegramApiError`, `updatedAt`, "long-polling" comment, `telegram-client.service.spec.ts`); `DictionaryController` no `toDto`; `DateTime`→ISO layer inconsistency; `add-card.dto` `.refine` `path: []`; `queue-spy` positional match; `app.module.ispec.ts` never `.init()`s | Cosmetic / very low impact; no user-facing effect. |
+| 7 | Low nits — **partly done (Batch Q):** ~~"long-polling" comment~~, ~~`telegram-client.service.spec.ts`~~, ~~`DictionaryController` no `toDto`~~. **Left (all cosmetic / no user-facing effect):** telegram `429`/`retry_after` backoff + `TelegramApiError` + `updatedAt` (behaviour + migration, not a nit); `DateTime`→ISO done at handler vs controller depending on module; `queue-spy` positional match; `app.module.ispec.ts` never `.init()`s; `add-card.dto` `.refine` `path: []` (→ `field: null`, which the factory already handles correctly for a cross-field constraint — **not a bug**). |
+
+### Batch Q — direct query-handler ispecs + low-nit cleanup (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 767 tests**, was 125/749: +6 files, +18) + `pnpm test:cov` gate green — coverage rose (stmts 90.05→90.55 / branches 76.47→78.14 / funcs 86.49→87.14 / lines 90.43→90.94). `pnpm build` + `git diff --exit-code src/metadata.ts` clean. No entity/enum touched → no `migration:check` needed.
+- [x] **direct `.ispec.ts` for the 5 previously-uncovered query handlers** (deferred item #5): `get-feed` (published-only + `(publishedAt, id)` tie-break; `nextOffset` from total not page size; excerpt from leading blocks + word-boundary truncation), `get-post-detail` (null on unknown/non-published; doc reassembly + resolved word annotation + exercises), `get-grammar-construction` (null on unknown slug; usage points sorted by CEFR; construction level = easiest; category name), `get-grammar-reference` (categories in `sortOrder`; easiest CEFR + point count; CEFR filter drops non-matching constructions and emptied categories), `get-dictionary` (empty on no cards; word + phrase entries resolved; "appears in" from published-post spans, de-duped, drafts excluded, grammar cards excluded). 12 cases; all via `suite.query(new XQuery(...))` against the real module.
+- [x] **`DictionaryController` explicit mapper** (nit) — was returning `learning.getDictionary()`'s `DictionaryView` structurally cast to the DTO; now `async` + `view.items.map(toDictionaryEntryDto)` with an explicit field-by-field mapper (matches `ContentController`'s `to<X>` style, so a view/DTO drift can't ride through silently). `dictionary.controller.ispec` unchanged (output identical).
+- [x] **`telegram-client.service.spec.ts`** (nit) — first spec for `TelegramClientService`: `configured` flag, `getUpdates` short-poll body (`timeout: 0`, `allowed_updates`, offset omitted when absent), result unwrap, transport-failure wrap (`{ cause }`), API not-ok → throw with status + description, HTTP-200-but-`ok:false` → throw. `fetch` stubbed via `vi.stubGlobal`.
+- [x] **"long-polling" comment fix** (nit) — `telegram-client.service.ts` header said "long-polling getUpdates"; `getUpdates` uses `timeout: 0` (short poll) — the once-a-minute cron is the interval. Comment corrected.
+- [x] **`add-card.dto` `.refine` `path: []`** — reviewed, **not a bug**: `zodValidationExceptionFactory` maps an empty path to `field: null`, which is the right shape for a cross-field ("exactly one of …") constraint. No change.
 
 ## Findings log
 
@@ -606,11 +614,14 @@ _(populated from subagent reports as waves complete)_
   ~~`/retry` accepts any `\S+`~~ (Batch G `UUID_RE` in `parse-command.ts`);
   ~~raw payloads stored with no pruning~~ (Batch G `PruneTelegramUpdatesService`
   daily cron, 30-day retention); ~~PLAN §3.9 `raw_payload_json` / `/add {link}`~~
-  (Batch J). **Still open (low, single-channel MVP):** bare `Error` from the
+  (Batch J); ~~"long-polling" comment vs `getUpdates timeout: 0`~~ (Batch Q —
+  comment corrected: `timeout: 0` short poll, the once-a-minute cron is the
+  interval); ~~no `telegram-client.service.spec.ts`~~ (Batch Q — `configured`,
+  short-poll body, result unwrap, transport-wrap `{cause}`, API not-ok + 200/`ok:false`
+  throws). **Still open (low, single-channel MVP):** bare `Error` from the
   client — no `TelegramApiError`, `429`/`retry_after` not distinguished (no
-  backoff); "long-polling" comment vs `getUpdates timeout: 0`; `TelegramUpdate`
-  has no `updatedAt`; `formatPostAnnouncement(post, publicUrl ?? '')` ships a
-  relative link if `PUBLIC_URL` unset; no `telegram-client.service.spec.ts`.
+  backoff); `TelegramUpdate` has no `updatedAt`; `formatPostAnnouncement(post,
+  publicUrl ?? '')` ships a relative link if `PUBLIC_URL` unset.
 - **[cron] observed (good, document as-is)** — `CronJobHost` abstract base: drain
   flag + `inFlightTicks` awaited by `waitForCronTicksToDrain()` before
   `app.close()`; `@Cron(…, {waitForCompletion:true})` prevents self-overlap; every
@@ -737,11 +748,11 @@ _(populated from subagent reports as waves complete)_
   `maybe()` / `@faker-js/faker` / `makeChangeSet` dead~~ (Batch I deleted);
   ~~no `hookTimeout`~~ (Batch I `60_000`); ~~real pg-boss for every ispec~~
   (Batch I `createFakePgBoss()` default, `{realPgBoss:true}` opt-out);
-  ~~`.env.test` DB name vs CI~~ (Batch L — intentional, documented). **Still open
-  (low):** `queue-spy` matches `send()` args positionally; `app.module.ispec.ts`
-  compiles entrypoint modules but never `.init()`s them; `post` query handlers +
-  `get-dictionary` have no direct `.ispec.ts` (covered via the controller specs
-  — deferred).
+  ~~`.env.test` DB name vs CI~~ (Batch L — intentional, documented);
+  ~~`post` query handlers + `get-dictionary` no direct `.ispec.ts`~~ (Batch Q —
+  `.handler.ispec.ts` for all 5). **Still open (low):** `queue-spy` matches
+  `send()` args positionally; `app.module.ispec.ts` compiles entrypoint modules
+  but never `.init()`s them.
 - **[test] observed (document as-is)** — 3 tiers by suffix; `suite.command` =
   `execute → em.flush() → em.clear()`, `suite.query` = `execute → em.clear()`
   (facade replica); per-test isolation = one Postgres transaction rolled back in
@@ -776,12 +787,15 @@ _(populated from subagent reports as waves complete)_
   `(userId, due)`~~ (Batch D — `@Index(['userId','due'])`); ~~`review_logs` has
   both `reviewedAt` and `createdAt`~~ (Batch D dropped `created_at`); ~~no
   `.spec.ts` for `CardLimitService` / `SkillProgressService`~~ (Batch I —
-  `.ispec.ts` for both). **Still open (low):** `DictionaryController` returns the
-  raw view cast to the DTO (no `toDto` mapper); `DateTime`→ISO at handler for
-  dictionary vs controller for practice-queue; flat `providers` array vs auth's
-  grouped `commandHandlers`/`queryHandlers`; `add-card.dto` `.refine` `path: []`
-  → empty `field`; practice-queue drops deleted-target cards while dictionary
-  keeps them with `primary: ''`; no `get-dictionary` `.ispec.ts` (deferred).
+  `.ispec.ts` for both); ~~`DictionaryController` returns the raw view cast to
+  the DTO (no `toDto` mapper)~~ (Batch Q — explicit `toDictionaryEntryDto`);
+  ~~no `get-dictionary` `.ispec.ts`~~ (Batch Q — `get-dictionary.handler.ispec.ts`).
+  **Still open (low):** `DateTime`→ISO at handler for dictionary vs controller
+  for practice-queue; flat `providers` array vs auth's grouped
+  `commandHandlers`/`queryHandlers`; `add-card.dto` `.refine` `path: []` →
+  `field: null` (**not a bug** — correct for a cross-field constraint, factory
+  handles it); practice-queue drops deleted-target cards while dictionary keeps
+  them with `primary: ''`.
 
 ## Decisions (proposed — confirm / override in bulk)
 
