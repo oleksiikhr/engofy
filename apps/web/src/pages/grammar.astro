@@ -13,7 +13,7 @@ const cefr = (LEVELS as string[]).includes(cefrParam)
   : null;
 
 const ref = await apiGet<GrammarReference>(
-  cefr ? `/grammar?cefr=${cefr}` : '/grammar',
+  cefr ? `/content/grammar?cefr=${cefr}` : '/content/grammar',
   { request: Astro.request },
 );
 

@@ -259,10 +259,10 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 |---|---|---|
 | ~~1~~ | ~~`get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request~~ | **done (Batch R2)** — bounded indexed join `sentence_tokens.word_id`/`phrase_id` → `sentences` → `posts` (`SELECT DISTINCT … ORDER BY published_at DESC` per term kind, raw SQL). No `post_word`/`post_phrase` table + no backfill needed: the annotation stage's `sentence_tokens` link *is* the projection. New `sentence_tokens_word_id`/`phrase_id` indexes (`Migration20260901103351`). Also closes `[learning] architecture` cross-module-reads heaviest case + `[post-data] spec drift` `post_word`/`post_phrase` + open q12. |
 | ~~2~~ | ~~`complete()` non-streaming (~114 s/call → SDK 10-min timeout risk).~~ **done (Batch R4)** — shared `createMessage()` streams both `complete()` + `completeStructured()` (`messages.stream(...).finalMessage()`); the final `Message` shape is identical, so AI3 (`stop_reason` / `max_tokens` throw) + AI4 (usage log) + the reconstruct-retry loop are untouched. `max_tokens` stays 16000. `draft/lib/call-claude.ts` streamed too. ~~+ no `cache_control` on the large static system prompts~~ **cache_control done (Batch R)** — `toSystemParam()`, grammar-stage retry reads from cache. |
-| 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
-| 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
+| ~~3~~ | ~~List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}`~~ | **done (Batch R5)** — `PracticeQueueResponseDto` + `DictionaryResponseDto` now `implements OffsetPage<T>` (`{ items, nextOffset }`); both return `toOffsetPage(items, null)` — capped single-shot reads, `nextOffset` always null (wire parity only). `apps/web` `types.ts` + `index`/`practice`/`partials/review` updated to read `.items`. |
+| ~~4~~ | ~~`ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`)~~ | **done (Batch R5)** — `@Controller('content')`; routes now `/api/content/{feed,posts/:slugId,grammar,grammar/:slug}`. `apps/web` `api.ts` (+ `/api` prefix, see below) and the 3 content pages point at `/content/*`. |
 | ~~5~~ | ~~No direct `.ispec.ts` for `post` query handlers + `get-dictionary`~~ | **done (Batch Q)** — `get-feed` / `get-post-detail` / `get-grammar-construction` / `get-grammar-reference` / `get-dictionary` each have a `.handler.ispec.ts` (12 cases). |
-| 6 | `apps/web` Playwright + `seed-web-e2e.ts` not in CI; prod nginx `/api` proxy; `apps/web` deploy | Infra, non-checkbox. |
+| 6 | `apps/web` Playwright + `seed-web-e2e.ts` not in CI; prod nginx `/api` proxy; `apps/web` deploy | Infra, non-checkbox. **Partial (Batch R5):** the `apps/web` *code* side of the `/api` contract is fixed — `src/lib/api.ts` `call()` now prepends `/api` (it was hitting bare `/feed` → 404 since Batch F added the global prefix), and the dev Vite proxy stops stripping `/api` (Nest owns the prefix now). Prod nginx config, deploy, and the CI Playwright job are still owed. |
 | ~~7~~ | ~~Low nits~~ | **done (Batches Q + R3).** Batch Q: "long-polling" comment, `telegram-client.service.spec.ts`, `DictionaryController` `toDto`. Batch R3: `TelegramApiError` (`status`/`description`/`retryAfter` + `isRateLimited`) thrown by the client for API-level rejections, `publish-pending` logs a `429` as rate-limited (precise `retry_after` waiting deferred — needs a per-row next-attempt column, low value for one low-volume channel); `telegram_updates.updated_at` (`Migration20260901120000`); `DictionaryEntryView.due` back to `DateTime`, serialised in the controller like `learning`/`billing`; `queue-spy` positional access behind a `SendCall` alias + accessors; `app.module.ispec.ts` `.compile()`-not-`.init()` documented as deliberate. `add-card.dto` `.refine` `path: []` reviewed in Batch Q — not a bug. |
 
 ### Batch Q — direct query-handler ispecs + low-nit cleanup (DONE 2026-09-01, fix/batch-a-safety)
@@ -298,6 +298,13 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **`complete()` + `completeStructured()` → streaming (deferred #2, hard half)** — new private `AnthropicClientService.createMessage(params)` = `this.client.messages.stream(params).finalMessage()`; both public methods route their request object through it instead of `this.client.messages.create(...)`. `finalMessage()` consumes the stream internally and returns the same assembled `Anthropic.Message` (`content` / `usage` / `stop_reason`) the blocking call produced, so **AI3** (the distinct `stop_reason === 'max_tokens'` throw, on both methods) and **AI4** (the `logUsage` structured line from `response.usage`, incl. `cache_creation`/`cache_read`) are unchanged — a `max_tokens` stop still resolves normally rather than rejecting. Removes the ~114 s non-streaming call's exposure to the SDK's 10-minute socket timeout (which would fail a paid stage and force a full `/retry`). `max_tokens` deliberately left at 16000 — the AI3 truncation guard stays meaningful and it keeps parity with the draft harness (`MAX_TOKENS`, Batch M); not raised to a streaming-era 64000.
 - [x] **`draft/lib/call-claude.ts`** — same `.messages.stream(...).finalMessage()` switch (outside the CI biome/test gate but covered by `pnpm run type`; `biome check` run manually on the file). Keeps the eval harness from silently hitting the same timeout on a long real run.
 - [x] **`anthropic-client.service.spec.ts`** — mock rewired: `messages.stream` returns `{ finalMessage }` (set per-test via `stream.mockReturnValue` in `beforeEach`), responses go on `finalMessage.mockResolvedValue`; all `create.mock.calls` refs → `stream.mock.calls`. **+1 case** ("streams the request and reads the assembled final message" — asserts `stream`/`finalMessage` each called once and the request carries no `stream` flag, i.e. no non-streaming fallback). The existing 12 cases (text-join, `max_tokens` on both methods, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking allowlist, system-prompt caching ×3, cost math) now exercise the streamed path.
+
+### Batch R5 — list envelopes + content path prefix (deferred items #3 + #4, coordinated breaking batch) (DONE 2026-09-01, fix/batch-a-safety)
+Breaking wire + route change spanning backend + `apps/web` (in-repo Astro). `pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 774 tests**, unchanged — assertions added to existing ispecs, no new files) + `pnpm test:cov` gate green (stmts 90.54 / branches 78.60 / funcs 86.95 / lines 90.93, flat). `pnpm build` regenerated `src/metadata.ts` (new `PracticeQueueResponseDto` + `DictionaryResponseDto.nextOffset` — two expected additions, committed). No entity/enum/migration → no `migration:check`. **Frontend verification is weaker** (`apps/web` is outside the CI tsc/biome gate, Playwright not in CI): checked locally with `pnpm --dir apps/web run type` (`astro check`, 0 errors), `pnpm --dir apps/web run lint:check` (biome), and `pnpm --dir apps/web run build` — all green.
+- [x] **#4 — `ContentController` `@Controller()` → `@Controller('content')`** — routes are now `/api/content/feed`, `/api/content/posts/:slugId`, `/api/content/grammar`, `/api/content/grammar/:slug` (were top-level under `/api`, a future-collision risk). OpenAPI paths follow automatically (server stays `/api`, so they render `/content/*`). `content.controller.ispec.ts` — all `suite.request` paths reprefixed; the "serves under the /api prefix" case rewritten to assert `/api/content/feed` 200 and `/feed` / `/content/feed` / `/api/feed` all 404. `http-api.md` new "Controller path prefixes" section.
+- [x] **#3 — list envelopes** — `PracticeQueueResponseDto implements OffsetPage<PracticeQueueItemDto>` (was a bare `PracticeQueueItemDto[]`); `DictionaryResponseDto implements OffsetPage<DictionaryEntryDto>` (was `{ items }`). Both controllers now `return toOffsetPage(items.map(toXDto), null)`. `nextOffset` is **always `null`** — both are `?limit=`-capped single-shot reads with no `offset` param; the field is purely for wire-shape parity with `feed` (D14 #36). `learning.controller.ispec` practice case → `queue.body.items` + `nextOffset` null assertion; `dictionary.controller.ispec` → `+1` `nextOffset` null assertion. `http-api.md` "Pagination / list envelopes" marked done.
+- [x] **`apps/web` — `/api` prefix (blocked #3/#4 from being usable)** — `src/lib/api.ts` `call()` now builds `new URL(\`/api${path}\`, API_ORIGIN)`; the SSR client was still calling bare `/feed` etc. and 404ing against Nest ever since Batch F added `setGlobalPrefix('api')`. `astro.config.mjs` dev Vite proxy: dropped the `rewrite: (p) => p.replace(/^\/api/, '')` (Nest owns the prefix now) + comment corrected. This is the code half of deferred #6; prod nginx + deploy still owed there.
+- [x] **`apps/web` — consumers** — `src/lib/types.ts`: new `PracticeQueueResponse` + `DictionaryResponse.nextOffset`. Pages: `index.astro` / `practice.astro` / `partials/review.ts` read `.items` off the practice envelope; `index.astro` / `grammar.astro` / `grammar/[slug].astro` / `posts/[slugId].astro` point at `/content/*`. `dictionary.astro` already read `dict?.items` — no change.
 
 ## Findings log
 
@@ -719,19 +726,23 @@ _(populated from subagent reports as waves complete)_
   DTOs re-declared locally, explicit `to<X>Response` mappers. `doc` still
   `type`-imports the domain `Doc` **by decision (Batch N)** — it's dependency-free
   wire-contract data shared with the SSR renderer, not an internal query view.
-  Still open: `ContentController` uses `@Controller()` with **no path prefix**
-  (owns top-level `feed`/`posts`/`grammar` — future collision risk).
+  ~~Still open: `ContentController` uses `@Controller()` with no path prefix
+  (owns top-level `feed`/`posts`/`grammar` — future collision risk).~~ **fixed
+  (Batch R5)** — `@Controller('content')`; routes are now `/api/content/feed`
+  etc.; `apps/web` pages + ispec updated. `http-api.md` "Controller path
+  prefixes".
 - **[web] low** — **mostly fixed**: ~~`EmptyStringToNullPipe` → 400 on
   `?limit=`/`?cefr=`~~ (Batch F `queryParam` preprocess); ~~`POST /learning/cards`
   no `@HttpCode`~~ (Batch F → 200); ~~`clearSessionCookie` only `{path:'/'}`~~
   (Batch F mirrors all four cookie attrs); ~~`addCookieAuth` no `@ApiCookieAuth()`~~
   (Batch N); ~~`HealthController` no `@ApiTags` / zero indicators~~ (Batch F —
   DB + Redis Terminus indicators + `@ApiTags('internal')`); ~~`@CurrentUser()`
-  bare `Error` → 500~~ (Batch M → 401). **Still open (low / deferred):**
-  `practice` bare-array + `dictionary` `{items}` list shapes (breaking wire
-  change, needs `apps/web` — deferred); `DateTime`→ISO conversion done at
-  different layers per module; `content` controller mixes `async` and bare
-  promise returns.
+  bare `Error` → 500~~ (Batch M → 401); ~~`practice` bare-array + `dictionary`
+  `{items}` list shapes~~ (Batch R5 — both now the `{ items, nextOffset }`
+  `OffsetPage` envelope, `nextOffset` always null since neither paginates;
+  `apps/web` types + pages updated). **Still open (low):** `DateTime`→ISO
+  conversion done at different layers per module; `content` controller mixes
+  `async` and bare promise returns.
 
 - ~~**[worker] queue-jobs/config** — two `boss.createQueue` authorities for the
   post queues (`worker-registrar` no-options vs `PostQueueBootstrapService`); the
@@ -1171,6 +1182,11 @@ _(accumulated across waves — grouped into the Decisions above; kept for tracea
     `modules/post` view types with an explicit mapper, or is the structural-cast
     passthrough intentional (avoid duplication)? Same question for list/pagination
     envelope consistency.
+    → **Resolved (Batch F + R5): explicit mappers + one shared envelope.** Every
+    controller maps view → DTO through a `to<X>` function (no structural cast),
+    and every list endpoint returns `OffsetPage<T>` (`{ items, nextOffset }`) —
+    `feed` (Batch F), `practice` + `dictionary` (Batch R5, `nextOffset` always
+    null as neither paginates). `http-api.md` "Pagination / list envelopes".
 37. **[web] request-DTO home** — reuse module command DTOs (auth style) or always
     web-local `createZodDto` + controller mapper (learning/content style)? Pick
     one for `references/http-api.md`.

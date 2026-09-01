@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { ApiError, apiGet, apiPost } from '../../lib/api';
 import { renderPracticeQueue } from '../../lib/practice-card';
-import type { LearningCard, PracticeItem } from '../../lib/types';
+import type { LearningCard, PracticeQueueResponse } from '../../lib/types';
 
 // HTMX target for the /practice grade buttons. Grades the card via Nest, then
 // re-fetches the queue and returns the next card (or the "all caught up"
@@ -28,10 +28,11 @@ export const POST: APIRoute = async ({ request }) => {
       { rating },
       { request },
     );
-    const next = await apiGet<PracticeItem[]>('/learning/practice?limit=20', {
-      request,
-    });
-    return html(renderPracticeQueue(next));
+    const next = await apiGet<PracticeQueueResponse>(
+      '/learning/practice?limit=20',
+      { request },
+    );
+    return html(renderPracticeQueue(next.items));
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
       return html('<p><a href="/login">Sign in</a> to keep reviewing.</p>');

@@ -3,6 +3,7 @@ import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
+import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { DictionaryEntryView } from '../../../../modules/learning/queries/get-dictionary/dictionary-view.js';
 import {
@@ -24,7 +25,9 @@ export class DictionaryController {
     @CurrentUser() actor: UserActor,
   ): Promise<DictionaryResponseDto> {
     const view = await this.learning.getDictionary(actor.id);
-    return { items: view.items.map(toDictionaryEntryDto) };
+    // The dictionary is returned whole — `nextOffset` is always null (see the
+    // DTO); `toOffsetPage` keeps the wire shape identical to the other lists.
+    return toOffsetPage(view.items.map(toDictionaryEntryDto), null);
   }
 }
 

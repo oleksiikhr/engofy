@@ -175,6 +175,9 @@ export interface DictionaryEntry {
 }
 export interface DictionaryResponse {
   items: DictionaryEntry[];
+  // Always null — the dictionary is returned whole. Present for shape parity
+  // with the other list endpoints.
+  nextOffset: number | null;
 }
 
 // --- practice queue ---
@@ -188,6 +191,12 @@ export interface PracticeItem {
     primary: string;
     secondary: string | null;
   };
+}
+export interface PracticeQueueResponse {
+  items: PracticeItem[];
+  // Always null — the queue is capped at `?limit=` with no offset param.
+  // Present for shape parity with the other list endpoints.
+  nextOffset: number | null;
 }
 
 // --- profile ---

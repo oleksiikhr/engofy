@@ -1,3 +1,4 @@
+import type { OffsetPage } from '../../../../core/http/dto/offset-page.js';
 import type { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 
@@ -37,6 +38,12 @@ export class DictionaryEntryDto {
   readonly posts!: DictionaryPostRefDto[];
 }
 
-export class DictionaryResponseDto {
+// Shares the `{ items, nextOffset }` envelope with every other list endpoint
+// (D14 #36). The dictionary is returned whole — every card, no offset param —
+// so `nextOffset` is always `null`; the field is here for wire consistency, not
+// because this endpoint paginates.
+export class DictionaryResponseDto implements OffsetPage<DictionaryEntryDto> {
   readonly items!: DictionaryEntryDto[];
+
+  readonly nextOffset!: number | null;
 }

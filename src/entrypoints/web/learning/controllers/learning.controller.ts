@@ -13,13 +13,17 @@ import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
+import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
 import { PracticeQueueQueryDto } from '../dto/practice-queue-query.dto.js';
-import { PracticeQueueItemDto } from '../dto/practice-queue-response.dto.js';
+import {
+  PracticeQueueItemDto,
+  PracticeQueueResponseDto,
+} from '../dto/practice-queue-response.dto.js';
 import { ReviewCardDto } from '../dto/review-card.dto.js';
 
 function iso(value: DateTime): string {
@@ -74,14 +78,16 @@ export class LearningController {
     return toCardDto(card);
   }
 
-  // The due-card review queue, soonest first.
+  // The due-card review queue, soonest first. Capped at `?limit=`; no offset
+  // param, so the `{ items, nextOffset }` envelope always carries a null
+  // `nextOffset` (shape parity with the other list endpoints, D14 #36).
   @Get('practice')
   async practiceQueue(
     @CurrentUser() actor: UserActor,
     @Query() query: PracticeQueueQueryDto,
-  ): Promise<PracticeQueueItemDto[]> {
+  ): Promise<PracticeQueueResponseDto> {
     const items = await this.learning.getPracticeQueue(actor.id, query.limit);
-    return items.map(toQueueItemDto);
+    return toOffsetPage(items.map(toQueueItemDto), null);
   }
 
   // Grade a card and reschedule it.

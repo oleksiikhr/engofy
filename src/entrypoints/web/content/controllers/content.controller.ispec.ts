@@ -121,7 +121,9 @@ describe('ContentController', () => {
   it('lists a published post in the feed with an excerpt', async () => {
     const { shortId } = await seedPublishedPost(suite.orm.em);
 
-    const res = await suite.request('get', '/feed').expect(HttpStatus.OK);
+    const res = await suite
+      .request('get', '/content/feed')
+      .expect(HttpStatus.OK);
 
     const item = res.body.items.find(
       (entry: { shortId: string }) => entry.shortId === shortId,
@@ -140,7 +142,9 @@ describe('ContentController', () => {
   it('sets Cache-Control + ETag on a content GET and 304s a matching revalidation', async () => {
     await seedPublishedPost(suite.orm.em);
 
-    const first = await suite.request('get', '/feed').expect(HttpStatus.OK);
+    const first = await suite
+      .request('get', '/content/feed')
+      .expect(HttpStatus.OK);
     expect(first.headers['cache-control']).toBe('public');
     const etag = first.headers.etag as string;
     expect(etag.startsWith('"')).toBe(true);
@@ -149,7 +153,7 @@ describe('ContentController', () => {
     // A matching If-None-Match short-circuits to 304 with no body — proof the
     // ETag the interceptor issued is a real content hash, not a placeholder.
     await suite
-      .request('get', '/feed')
+      .request('get', '/content/feed')
       .set('If-None-Match', etag)
       .expect(HttpStatus.NOT_MODIFIED);
   });
@@ -158,7 +162,7 @@ describe('ContentController', () => {
     await seedPublishedPost(suite.orm.em);
 
     const res = await suite
-      .request('get', '/feed?limit=&offset=')
+      .request('get', '/content/feed?limit=&offset=')
       .expect(HttpStatus.OK);
 
     expect(Array.isArray(res.body.items)).toBe(true);
@@ -166,7 +170,7 @@ describe('ContentController', () => {
 
   it('normalises a 404 body to { message }', async () => {
     const res = await suite
-      .request('get', '/posts/Zzz00000')
+      .request('get', '/content/posts/Zzz00000')
       .expect(HttpStatus.NOT_FOUND);
 
     expect(res.body).toEqual({ message: 'Post not found' });
@@ -178,7 +182,7 @@ describe('ContentController', () => {
     );
 
     const res = await suite
-      .request('get', `/posts/${slug}-${shortId}`)
+      .request('get', `/content/posts/${slug}-${shortId}`)
       .expect(HttpStatus.OK);
 
     expect(res.body.doc.type).toBe('doc');
@@ -196,11 +200,15 @@ describe('ContentController', () => {
   it('accepts a bare short id and 404s an unknown post', async () => {
     const { shortId } = await seedPublishedPost(suite.orm.em);
 
-    await suite.request('get', `/posts/${shortId}`).expect(HttpStatus.OK);
     await suite
-      .request('get', '/posts/a-day-with-no-id')
+      .request('get', `/content/posts/${shortId}`)
+      .expect(HttpStatus.OK);
+    await suite
+      .request('get', '/content/posts/a-day-with-no-id')
       .expect(HttpStatus.NOT_FOUND);
-    await suite.request('get', '/posts/Zzz00000').expect(HttpStatus.NOT_FOUND);
+    await suite
+      .request('get', '/content/posts/Zzz00000')
+      .expect(HttpStatus.NOT_FOUND);
   });
 
   it('does not expose a non-published post', async () => {
@@ -216,14 +224,16 @@ describe('ContentController', () => {
     await em.flush();
 
     await suite
-      .request('get', `/posts/draft-${post.shortId}`)
+      .request('get', `/content/posts/draft-${post.shortId}`)
       .expect(HttpStatus.NOT_FOUND);
   });
 
   it('serves the grammar reference and a single construction', async () => {
     const slug = await seedGrammar(suite.orm.em);
 
-    const index = await suite.request('get', '/grammar').expect(HttpStatus.OK);
+    const index = await suite
+      .request('get', '/content/grammar')
+      .expect(HttpStatus.OK);
     const category = index.body.categories.find(
       (c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
@@ -234,7 +244,7 @@ describe('ContentController', () => {
     ).toMatchObject({ cefrLevel: 'A1', usagePointCount: 1 });
 
     const detail = await suite
-      .request('get', `/grammar/${slug}`)
+      .request('get', `/content/grammar/${slug}`)
       .expect(HttpStatus.OK);
     expect(detail.body).toMatchObject({
       name: 'present simple',
@@ -247,14 +257,14 @@ describe('ContentController', () => {
   it('filters the grammar reference by CEFR level', async () => {
     const slug = await seedGrammar(suite.orm.em);
 
-    const kept = await suite.request('get', '/grammar?cefr=A1');
+    const kept = await suite.request('get', '/content/grammar?cefr=A1');
     expect(
       kept.body.categories.some((c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
       ),
     ).toBe(true);
 
-    const dropped = await suite.request('get', '/grammar?cefr=C2');
+    const dropped = await suite.request('get', '/content/grammar?cefr=C2');
     expect(
       dropped.body.categories.some((c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
@@ -262,18 +272,20 @@ describe('ContentController', () => {
     ).toBe(false);
 
     // A blank ?cefr= must fall through to "no filter", not 400.
-    await suite.request('get', '/grammar?cefr=').expect(HttpStatus.OK);
+    await suite.request('get', '/content/grammar?cefr=').expect(HttpStatus.OK);
   });
 
-  it('serves under the /api prefix and not at the root', async () => {
+  it('serves under the /api/content prefix and not at the root', async () => {
     const server = suite.app.getHttpServer();
     await request(server).get('/feed').expect(HttpStatus.NOT_FOUND);
-    await request(server).get('/api/feed').expect(HttpStatus.OK);
+    await request(server).get('/content/feed').expect(HttpStatus.NOT_FOUND);
+    await request(server).get('/api/feed').expect(HttpStatus.NOT_FOUND);
+    await request(server).get('/api/content/feed').expect(HttpStatus.OK);
   });
 
   it('404s an unknown construction slug', async () => {
     await suite
-      .request('get', '/grammar/no-such-slug')
+      .request('get', '/content/grammar/no-such-slug')
       .expect(HttpStatus.NOT_FOUND);
   });
 });

@@ -30,16 +30,17 @@ import {
 
 // Guest-readable content surface (PLAN.md §2, §4): the post feed, a single
 // post with its inline analysis, and the grammar reference. Served under
-// `/api/*`. Each endpoint maps its module view onto a web DTO explicitly (no
-// structural passthrough) so the HTTP contract stays decoupled from the
-// module's internal query shapes.
+// `/api/content/*` — the path prefix keeps these routes from colliding with a
+// future top-level resource. Each endpoint maps its module view onto a web DTO
+// explicitly (no structural passthrough) so the HTTP contract stays decoupled
+// from the module's internal query shapes.
 //
 // Every route is an anonymous, cacheable GET, so `@CachePolicy('public')` sits
 // on the class: `ETagInterceptor` then emits `Cache-Control: public` + a
 // content ETag and answers a matching `If-None-Match` with 304.
 @ApiTags('content')
 @CachePolicy('public')
-@Controller()
+@Controller('content')
 export class ContentController {
   constructor(private readonly post: PostService) {}
 

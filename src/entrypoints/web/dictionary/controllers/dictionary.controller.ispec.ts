@@ -105,6 +105,7 @@ describe('DictionaryController', () => {
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
+    expect(res.body.nextOffset).toBeNull();
     expect(res.body.items).toHaveLength(1);
     expect(res.body.items[0]).toMatchObject({
       type: 'word',

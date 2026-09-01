@@ -8,9 +8,10 @@ import type { PostDetail } from '../../lib/types';
 const { slugId } = Astro.params;
 const user = await getCurrentUser(Astro.request);
 const post = slugId
-  ? await apiGetOrNull<PostDetail>(`/posts/${encodeURIComponent(slugId)}`, {
-      request: Astro.request,
-    })
+  ? await apiGetOrNull<PostDetail>(
+      `/content/posts/${encodeURIComponent(slugId)}`,
+      { request: Astro.request },
+    )
   : null;
 
 if (!post) {

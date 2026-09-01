@@ -28,17 +28,29 @@ importing exactly one domain module + one controller. Sub-modules: `internal`,
 `configureApp` (see below) calls `setGlobalPrefix('api', { exclude: [{ path:
 '_healthz', method: RequestMethod.ALL }] })`; `build-openapi-document.ts` adds
 `.addServer('/api')` and generates the doc with `ignoreGlobalPrefix: true` (so
-paths stay `/feed` and the server entry re-adds `/api` — no `/api/api`). The
-edge proxy strip stays (belt-and-suspenders). The web ispec helper
-(`e2e-suite.helper.ts` `request()`) prepends `/api` transparently.
+paths stay `/content/feed` and the server entry re-adds `/api` — no `/api/api`).
+The web ispec helper (`e2e-suite.helper.ts` `request()`) prepends `/api`
+transparently; `apps/web`'s `src/lib/api.ts` `call()` does the same for SSR
+fetches (Batch R5 — the app previously hit bare `/feed` and 404'd).
 
-## Pagination — D14 (partial, Batch F)
+## Controller path prefixes
+
+Every web controller declares a path prefix so no route sits at the bare root.
+`ContentController` is `@Controller('content')` (Batch R5) — `content/feed`,
+`content/posts/:slugId`, `content/grammar`, `content/grammar/:slug`, i.e.
+`/api/content/*`. It used to be `@Controller()` (top-level `feed`/`posts`/
+`grammar`), a future-collision risk.
+
+## Pagination / list envelopes — D14 (done, Batches F + R5)
 
 Shared envelope `OffsetPage<T>` = `{ items: T[]; nextOffset: number | null }`
-lives in `core/http/dto/offset-page.ts` (+ `toOffsetPage` builder).
-`FeedResponseDto implements OffsetPage<FeedItemDto>`. **Still owed:** `practice`
-(bare array) and `dictionary` (`{items}`, unbounded — tied to D10/D12) not yet
-converted.
+lives in `core/http/dto/offset-page.ts` (+ `toOffsetPage` builder). **Every**
+list endpoint now returns it: `FeedResponseDto` (real pagination — `nextOffset`
+points at the next page), plus `PracticeQueueResponseDto` and
+`DictionaryResponseDto` (Batch R5). The latter two are limit-capped single-shot
+reads with no `offset` param, so their `nextOffset` is **always `null`** — the
+field is there for wire consistency, not because they paginate. `practice` was a
+bare array and `dictionary` was `{ items }` before R5.
 
 ## Response-DTO independence — D14 (partial, Batch F)
 

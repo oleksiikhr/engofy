@@ -2,6 +2,10 @@
 // browser never talks to Nest directly — it goes through the reverse proxy
 // (prod) or the Vite `/api` proxy (dev). Here we hit Nest at its own origin
 // and forward the visitor's session cookie.
+//
+// Nest serves the whole API under a `/api` global prefix (`configureApp` in the
+// backend); callers here pass the bare resource path (`/feed`, `/auth/me`, …)
+// and `call()` prepends `/api`.
 
 // Nest web server origin. Default matches the repo's dev PORT (8080); set
 // API_ORIGIN in each environment.
@@ -32,7 +36,10 @@ async function call(
   if (cookie) {
     merged.set('cookie', cookie);
   }
-  return fetch(new URL(path, API_ORIGIN), { ...init, headers: merged });
+  return fetch(new URL(`/api${path}`, API_ORIGIN), {
+    ...init,
+    headers: merged,
+  });
 }
 
 // GET JSON. Throws ApiError on any non-2xx (callers catch 401/404 as needed).

@@ -9,7 +9,7 @@ const { slug } = Astro.params;
 const user = await getCurrentUser(Astro.request);
 const con = slug
   ? await apiGetOrNull<GrammarConstructionDetail>(
-      `/grammar/${encodeURIComponent(slug)}`,
+      `/content/grammar/${encodeURIComponent(slug)}`,
       { request: Astro.request },
     )
   : null;

@@ -60,8 +60,9 @@ describe('LearningController', () => {
       .request('get', '/learning/practice?limit=5')
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
-    expect(queue.body).toHaveLength(1);
-    expect(queue.body[0]).toMatchObject({
+    expect(queue.body.nextOffset).toBeNull();
+    expect(queue.body.items).toHaveLength(1);
+    expect(queue.body.items[0]).toMatchObject({
       cardId,
       target: { type: 'word', primary: word.lemma },
     });

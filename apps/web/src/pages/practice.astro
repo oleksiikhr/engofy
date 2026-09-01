@@ -3,13 +3,15 @@ import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
 import { renderPracticeQueue } from '../lib/practice-card';
 import { getCurrentUser } from '../lib/session';
-import type { PracticeItem } from '../lib/types';
+import type { PracticeItem, PracticeQueueResponse } from '../lib/types';
 
 const user = await getCurrentUser(Astro.request);
-const cards = user
-  ? await apiGet<PracticeItem[]>('/learning/practice?limit=20', {
-      request: Astro.request,
-    })
+const cards: PracticeItem[] = user
+  ? (
+      await apiGet<PracticeQueueResponse>('/learning/practice?limit=20', {
+        request: Astro.request,
+      })
+    ).items
   : [];
 
 const initialHtml = user ? renderPracticeQueue(cards) : '';

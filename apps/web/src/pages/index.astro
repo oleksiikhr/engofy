@@ -3,7 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import { apiGet, apiGetOrNull } from '../lib/api';
 import { postUrl } from '../lib/post-url';
 import { getCurrentUser } from '../lib/session';
-import type { FeedItem, FeedResponse, PracticeItem } from '../lib/types';
+import type {
+  FeedItem,
+  FeedResponse,
+  PracticeItem,
+  PracticeQueueResponse,
+} from '../lib/types';
 
 const PAGE_SIZE = 12;
 // Insert one review-break card after every N feed items (PLAN.md §4:
@@ -16,16 +21,18 @@ const offsetParam = Number(Astro.url.searchParams.get('offset') ?? '0');
 const offset = Number.isFinite(offsetParam) && offsetParam > 0 ? offsetParam : 0;
 
 const feed = await apiGet<FeedResponse>(
-  `/feed?limit=${PAGE_SIZE}&offset=${offset}`,
+  `/content/feed?limit=${PAGE_SIZE}&offset=${offset}`,
   { request: Astro.request },
 );
 
 // Due review cards to interleave — signed-in users only; a guest can't have a
 // queue, so the feed stays a plain list for them.
-const dueCards = user
-  ? ((await apiGetOrNull<PracticeItem[]>('/learning/practice?limit=20', {
-      request: Astro.request,
-    })) ?? [])
+const dueCards: PracticeItem[] = user
+  ? ((
+      await apiGetOrNull<PracticeQueueResponse>('/learning/practice?limit=20', {
+        request: Astro.request,
+      })
+    )?.items ?? [])
   : [];
 
 type Row =
