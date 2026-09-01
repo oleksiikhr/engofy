@@ -2,16 +2,15 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import type { SpanNode } from '../../../post/domain/node-tree.types.js';
 import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostPart } from '../../../post/entities/post-part.entity.js';
+import { Sentence } from '../../../post/entities/sentence.entity.js';
+import { SentenceToken } from '../../../post/entities/sentence-token.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
-import { PostPartKind } from '../../../post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
 import { PostSourceType } from '../../../post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
@@ -43,10 +42,19 @@ function card(
   });
 }
 
-function postWithSpan(
+// A published (or draft) post whose spaCy layer links one token to the given
+// word/phrase — the shape GetDictionaryHandler now joins on. `mentions`
+// controls how many linked tokens the post carries (to exercise the
+// per-(term, post) de-duplication).
+function postLinking(
   em: EntityManager,
-  status: PostStatus,
-  span: SpanNode,
+  opts: {
+    status: PostStatus;
+    wordId?: string;
+    phraseId?: string;
+    publishedAt?: DateTime;
+    mentions?: number;
+  },
 ): Post {
   const source = new PostSource();
   source.format = PostSourceFormat.Text;
@@ -57,22 +65,39 @@ function postWithSpan(
   const post = new Post();
   post.source = source;
   post.title = `post-${uuidv7().slice(0, 6)}`;
-  post.status = status;
+  post.status = opts.status;
+  if (opts.publishedAt) {
+    post.publishedAt = opts.publishedAt;
+  }
   em.persist(post);
 
-  em.create(PostPart, {
+  const sentence = em.create(Sentence, {
     postId: post.id,
-    blockIndex: 0,
-    kind: PostPartKind.Paragraph,
-    body: {
-      type: 'paragraph',
-      children: [
-        { type: 'text', text: 'x ' },
-        span,
-        { type: 'text', text: ' y' },
-      ],
-    },
+    postPartId: uuidv7(),
+    unitIndex: 0,
+    position: 0,
+    rawText: 'x term y',
+    charStart: 0,
+    charEnd: 8,
   });
+
+  const mentions = opts.mentions ?? 1;
+  for (let i = 0; i < mentions; i += 1) {
+    em.create(SentenceToken, {
+      sentenceId: sentence.id,
+      position: i,
+      text: 'term',
+      charStart: 0,
+      charEnd: 4,
+      lemma: 'term',
+      pos: 'NOUN',
+      tag: 'NN',
+      dep: 'nsubj',
+      morph: {},
+      wordId: opts.wordId ?? null,
+      phraseId: opts.phraseId ?? null,
+    });
+  }
   return post;
 }
 
@@ -89,7 +114,7 @@ describe('GetDictionaryHandler', () => {
     const userId = uuidv7();
 
     const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 6)}` });
-    const definition = em.create(WordDefinition, {
+    em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a place where ships shelter',
@@ -102,20 +127,20 @@ describe('GetDictionaryHandler', () => {
     card(em, userId, { phraseId: phrase.id });
     card(em, userId, { grammarUsagePointId: uuidv7() }); // excluded — grammar
 
-    const wordSpan: SpanNode = {
-      type: 'span',
-      kind: 'word',
-      text: 'harbour',
-      wordDefinitionId: definition.id,
-      pos: 'NOUN',
-    };
-    const pubA = postWithSpan(em, PostStatus.Published, wordSpan);
-    const pubB = postWithSpan(em, PostStatus.Published, wordSpan);
-    postWithSpan(em, PostStatus.Pending, wordSpan); // draft — must not show
-    const pubPhrase = postWithSpan(em, PostStatus.Published, {
-      type: 'span',
-      kind: 'phrase',
-      text: 'set sail',
+    // Two published posts mention the word (one twice — must collapse to a
+    // single ref); a draft mention must not surface.
+    const pubA = postLinking(em, {
+      status: PostStatus.Published,
+      wordId: word.id,
+      mentions: 2,
+    });
+    const pubB = postLinking(em, {
+      status: PostStatus.Published,
+      wordId: word.id,
+    });
+    postLinking(em, { status: PostStatus.Pending, wordId: word.id }); // draft
+    const pubPhrase = postLinking(em, {
+      status: PostStatus.Published,
       phraseId: phrase.id,
     });
     await em.flush();
@@ -140,6 +165,36 @@ describe('GetDictionaryHandler', () => {
     expect(phraseEntry?.primary).toBe('set sail');
     expect(phraseEntry?.posts.map((p) => p.shortId)).toEqual([
       pubPhrase.shortId,
+    ]);
+  });
+
+  it('orders the "appears in" posts newest-published first', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const word = em.create(Word, { lemma: `tide-${uuidv7().slice(0, 6)}` });
+    await em.flush();
+    card(em, userId, { wordId: word.id });
+
+    const older = postLinking(em, {
+      status: PostStatus.Published,
+      wordId: word.id,
+      publishedAt: DateTime.now().minus({ days: 10 }),
+    });
+    const newer = postLinking(em, {
+      status: PostStatus.Published,
+      wordId: word.id,
+      publishedAt: DateTime.now().minus({ days: 1 }),
+    });
+    await em.flush();
+    em.clear();
+
+    const view = await suite.query(new GetDictionaryQuery(userId));
+
+    const wordEntry = view.items.find((i) => i.type === 'word');
+    expect(wordEntry?.posts.map((p) => p.shortId)).toEqual([
+      newer.shortId,
+      older.shortId,
     ]);
   });
 });

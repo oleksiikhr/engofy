@@ -23,8 +23,8 @@ export interface DictionaryEntryView {
   example: string | null;
   cefrLevel: CefrLevel | null;
   // Published posts whose text contains this word/phrase (PLAN.md §4
-  // `/dictionary`). Derived from the node-tree spans until a post_word /
-  // post_phrase projection exists.
+  // `/dictionary`), newest first. Derived from the sentence_tokens
+  // word_id / phrase_id links via an indexed join to posts.
   posts: DictionaryPostRefView[];
 }
 

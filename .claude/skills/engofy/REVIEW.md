@@ -257,7 +257,7 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 **Still open — the deferred backlog (post-Batch-P, accurate list):**
 | # | Item | Why deferred |
 |---|---|---|
-| 1 | `get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request | Needs the `post_word` / `post_phrase` projection (or `sentence_tokens.word_id`/`phrase_id` join): new schema + migration + backfill. Self-contained but large. Folds in `[learning] architecture` cross-module reads + `post_word`/`post_phrase` from `[post-data] spec drift`. |
+| ~~1~~ | ~~`get-dictionary` unbounded read — loads every published post + all parts + walks every node-tree span per request~~ | **done (Batch R2)** — bounded indexed join `sentence_tokens.word_id`/`phrase_id` → `sentences` → `posts` (`SELECT DISTINCT … ORDER BY published_at DESC` per term kind, raw SQL). No `post_word`/`post_phrase` table + no backfill needed: the annotation stage's `sentence_tokens` link *is* the projection. New `sentence_tokens_word_id`/`phrase_id` indexes (`Migration20260901103351`). Also closes `[learning] architecture` cross-module-reads heaviest case + `[post-data] spec drift` `post_word`/`post_phrase` + open q12. |
 | 2 | `complete()` non-streaming (~114 s/call → SDK 10-min timeout risk). ~~+ no `cache_control` on the large static system prompts~~ **cache_control done (Batch R)** — `toSystemParam()`, grammar-stage retry reads from cache. | Perf; streaming touches AI3 (`stop_reason`) + AI4 (usage log) + the reconstruct-retry loop — deferred as the risky half. `ai.md` "Fixes owed". |
 | 3 | List envelopes: `practice` bare array, `dictionary` `{items}` → `{items,nextOffset}` | Breaking wire change; `apps/web` (in-repo Astro) consumes them — must land backend + frontend together, and `apps/web` is outside the tsc/biome gate + Playwright not in CI. |
 | 4 | `ContentController` `@Controller()` with no path prefix (owns top-level `feed`/`posts`/`grammar`) | Breaking route change; same `apps/web` coordination as #3. |
@@ -277,6 +277,13 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 `pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 770 tests**, was 131/767: +3 cases) + `pnpm test:cov` gate green — coverage flat/up (stmts 90.55→90.56 / branches 78.14→78.17 / funcs 87.14→87.16 / lines 90.94→90.95). No entity/enum touched → no `pnpm build` / `migration:check` needed.
 - [x] **`cache_control: { type: 'ephemeral' }` on large static system prompts (deferred #2, safe half)** — new `toSystemParam(system)` in `anthropic-client.service.ts`: a system prompt `>= CACHE_CONTROL_MIN_CHARS` (4000, ~Anthropic's 1024-token minimum cacheable prefix) is sent as `[{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }]`; anything shorter passes through as the plain string unchanged (byte-identical request). Used in both `messages.create` calls (`complete` + `completeStructured`). In practice only `tag-grammar`'s prompt (`GRAMMAR_SYSTEM_PROMPT` preamble + full seeded `buildGrammarCatalog` — ~8 KB+) clears the bar, so its one-retry second identical call (fired seconds later when the first echo doesn't reconstruct) is billed at the cache-read rate instead of re-charging the whole catalogue; the annotation/complexity/comprehension prompts are all < 4000 chars and Anthropic would silently decline to cache them anyway. `cache_creation_input_tokens` / `cache_read_input_tokens` were already in the AI4 usage log. `anthropic-client.service.spec.ts` +3 (large prompt → cache breakpoint on `complete`; short prompt → plain string; large prompt → cache breakpoint on `completeStructured`). `ai.md` "Fixes owed" split — cache half **done**, streaming half still open. Findings-log `[core-ai] ai/performance` row + deferred-backlog #2 updated.
 - **Deferred (still open, risky half of #2):** stream `complete()` — baseline calls ~114 s risk the SDK 10-min timeout; touches AI3 (`stop_reason` handling), AI4 (usage log from the final event), and the reconstruct-retry loop. Not in this batch.
+
+### Batch R2 — `get-dictionary` bounded usage lookup (deferred item #1) (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**131 files / 771 tests**, was 131/770: +1 case) + `pnpm test:cov` gate green (stmts 90.56 / branches 78.37 / funcs 87.07 / lines 90.95). `pnpm build` + `git diff --exit-code src/metadata.ts` clean (a bare `@Index()` doesn't touch metadata). `pnpm migration:up` + `pnpm migration:check` green.
+- [x] **`get-dictionary` unbounded read → bounded indexed join (deferred #1)** — `GetDictionaryHandler.buildUsageIndex` no longer loads every `PostStatus.Published` post + every `PostPart` + walks every node-tree span via `collectSpanNodes`. It now runs one raw `SELECT DISTINCT st.<word_id|phrase_id> AS target_id, p.short_id, p.slug, p.title, p.published_at FROM sentence_tokens st JOIN sentences s ON s.id = st.sentence_id JOIN posts p ON p.id = s.post_id WHERE p.status = ? AND st.<col> IN (…) ORDER BY p.published_at DESC NULLS LAST` per term kind (`em.getConnection().execute(…, 'all', em.getTransactionContext())`, DP5 style — `<col>` is a fixed literal, ids bound). `DISTINCT` collapses repeat mentions to one ref per (term, post); the SQL `ORDER BY` means the per-term lists come out newest-first with no JS sort. Keyed directly on the card's `word_id` / `phrase_id` (no more word-definition-id indirection / `mergePosts` / `groupIds` / `indexSpanUsage` / `pushRef` — all deleted). Dropped imports: `collectSpanNodes`, `Post`, `PostPart`.
+- [x] **indexes** — `@Index()` on `SentenceToken.wordId` + `.phraseId` (`sentence-token.entity.ts`); `Migration20260901103351` (`create index sentence_tokens_word_id_index` / `_phrase_id_index`; `down` drops them). `.snapshot-engofy.json` hand-patched (two index entries added to the `sentence_tokens` table — matches the Batch G snapshot approach; `migration:check` → "schema is up-to-date"). Timestamp sorts after `Migration20260830130000`.
+- [x] **no `post_word` / `post_phrase` table, no backfill** — the annotation stage already links every annotated token to its `Word` / `Phrase` on `sentence_tokens` (Slice 3 rework); that link *is* the projection PLAN §3.3 asked for. Open q12 resolved; `[post-data] spec drift` `post_word`/`post_phrase` row + `[learning] db-performance` unbounded-read row + `[learning] architecture` heaviest cross-module read all struck; `db-performance.md` "Unbounded reads" row struck; `dictionary-view.ts` `posts` comment updated.
+- [x] **tests** — `get-dictionary.handler.ispec.ts` rewritten to seed `Sentence` + `SentenceToken` (was node-tree spans): existing de-dup / draft-excluded / grammar-excluded case kept + **+1** "orders the 'appears in' posts newest-published first". `dictionary.controller.ispec.ts` first case reseeded the same way (count unchanged).
 
 ## Findings log
 
@@ -538,9 +545,11 @@ _(populated from subagent reports as waves complete)_
   ~~`PostSource` attribution~~ (added `type` + `attributionText`, NOT NULL);
   ~~`posts.status` annotation-centric~~ (→ `processing`); ~~`Running` missing~~
   (derived, not an enum value). Kept-by-decision: `words.cefr_level` stays on
-  `word_definitions` per-POS (PLAN §3.3 updated, Batch J). **Still open:**
+  `word_definitions` per-POS (PLAN §3.3 updated, Batch J). ~~**Still open:**
   `post_word`/`post_phrase` join tables not built — the `get-dictionary`
-  projection (D10/D12), the tracked deferred item.
+  projection (D10/D12)~~ **resolved (Batch R2)** — no join table needed:
+  `sentence_tokens.word_id`/`phrase_id` (linked deterministically by the
+  annotation stage) *is* the projection; `get-dictionary` now joins through it.
 - ~~**[post-data] ai/error-handling** — `build-token-annotations.ts`
   `phraseText: phraseTextById.get(id) ?? ''` — a map miss yields `''`, failing
   the job with a shape error that hides the real cause.~~ **fixed (Batch P)** —
@@ -567,8 +576,9 @@ _(populated from subagent reports as waves complete)_
   **resolved by D10 (Batch E / Wave 3)** — read-only cross-module `em.find`
   **from a query handler** is sanctioned (never a command, never a write);
   `architecture.md` A8 + `db-performance.md` DP2. A `post` projection /
-  `services/shared` lookup stays the eventual fix (folds into the
-  `get-dictionary` deferred item).
+  `services/shared` lookup stays the eventual fix for the ORM `em.find` reads;
+  `get-dictionary`'s usage lookup was the heaviest and is now a bounded raw
+  join on `sentence_tokens` (Batch R2).
 - ~~**[learning/billing] cqrs**~~ — commands returned managed ORM entities:
   **fixed (Batch E, D2)** — `AddCard`/`ReviewCard` → `Command<CardView>`,
   `ActivateMockSubscription` → `Command<SubscriptionView>`; view types +
@@ -591,10 +601,12 @@ _(populated from subagent reports as waves complete)_
 - **[learning] db-performance** — ~~`get-profile.computeStreak` loads every
   `review_logs` row~~ **fixed (Batch E)** — now `SELECT DISTINCT …::date` raw SQL.
   ~~No learning query handler uses `disableIdentityMap`~~ **fixed (Batch E)**.
-  Still open: `get-dictionary` loads **all** published posts + all their parts +
-  walks every node-tree span on every `/dictionary` request (stands in for the
-  missing `post_word`/`post_phrase`, PLAN §3.3) — bound it or build the
-  projection (D10/D12).
+  ~~`get-dictionary` loads **all** published posts + all their parts + walks
+  every node-tree span on every `/dictionary` request~~ **fixed (Batch R2)** —
+  now a bounded, indexed join `sentence_tokens.word_id`/`phrase_id` →
+  `sentences` → `posts` (one `SELECT DISTINCT … ORDER BY published_at DESC` per
+  term kind); new `sentence_tokens_word_id`/`phrase_id` indexes
+  (`Migration20260901103351`). No `post_word`/`post_phrase` table needed.
 - ~~**[telegram] pipeline/error-handling** — a `Failed` `post_publications` row
   is terminal (`run()` selects only `Pending`); a transient Telegram 5xx
   permanently drops the announcement and `/retry` doesn't recover it.~~ **fixed
@@ -1041,6 +1053,11 @@ _(accumulated across waves — grouped into the Decisions above; kept for tracea
     `sentence_tokens.wordId/phraseId` linkage the deliberate replacement for
     "which posts use this word", or is a join table still expected for the
     dictionary reverse-lookup?
+    → **Resolved (Batch R2): no join table.** `sentence_tokens.word_id` /
+    `phrase_id` (set deterministically by the annotation stage) is the
+    projection. `get-dictionary` reverse-lookup is now a bounded indexed join
+    `sentence_tokens` → `sentences` → `posts`; new
+    `sentence_tokens_word_id`/`phrase_id` indexes (`Migration20260901103351`).
 13. **[post-data] `grammar_matches` uniqueness** — dedupe is the handler's job
     (delete-then-insert); should the entity still encode a composite `@Unique` as
     a safety net?

@@ -3156,6 +3156,26 @@
           "primary": false,
           "unique": true,
           "expression": "CREATE UNIQUE INDEX sentence_tokens_sentence_id_position_unique ON public.sentence_tokens USING btree (sentence_id, \"position\")"
+        },
+        {
+          "columnNames": [
+            "word_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "sentence_tokens_word_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "phrase_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "sentence_tokens_phrase_id_index",
+          "primary": false,
+          "unique": false
         }
       ],
       "checks": [],

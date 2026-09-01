@@ -14,11 +14,11 @@ import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { Phrase } from '../../../../modules/post/entities/phrase.entity.js';
 import { Post } from '../../../../modules/post/entities/post.entity.js';
-import { PostPart } from '../../../../modules/post/entities/post-part.entity.js';
+import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
+import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
-import { PostPartKind } from '../../../../modules/post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
@@ -56,7 +56,7 @@ describe('DictionaryController', () => {
     const cookie = await login(em);
 
     const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 8)}` });
-    const definition = em.create(WordDefinition, {
+    em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a sheltered stretch of water',
@@ -70,24 +70,27 @@ describe('DictionaryController', () => {
     post.slug = 'down-by-the-water';
     post.status = PostStatus.Published;
     em.persist(post);
-    em.create(PostPart, {
+    const sentence = em.create(Sentence, {
       postId: post.id,
-      blockIndex: 0,
-      kind: PostPartKind.Paragraph,
-      body: {
-        type: 'paragraph',
-        children: [
-          { type: 'text', text: 'The ' },
-          {
-            type: 'span',
-            kind: 'word',
-            text: 'harbour',
-            wordDefinitionId: definition.id,
-            pos: 'NOUN',
-          },
-          { type: 'text', text: ' was calm.' },
-        ],
-      },
+      postPartId: uuidv7(),
+      unitIndex: 0,
+      position: 0,
+      rawText: 'The harbour was calm.',
+      charStart: 0,
+      charEnd: 21,
+    });
+    em.create(SentenceToken, {
+      sentenceId: sentence.id,
+      position: 1,
+      text: 'harbour',
+      charStart: 4,
+      charEnd: 11,
+      lemma: 'harbour',
+      pos: 'NOUN',
+      tag: 'NN',
+      dep: 'nsubj',
+      morph: {},
+      wordId: word.id,
     });
     await em.flush();
 

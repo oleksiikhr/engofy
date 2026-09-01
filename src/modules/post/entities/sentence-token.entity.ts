@@ -1,6 +1,7 @@
 import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
+  Index,
   PrimaryKey,
   Property,
   Unique,
@@ -76,11 +77,15 @@ export class SentenceToken {
   isIdiomPart: Opt<boolean> = false;
 
   // Linked by the annotation stage (Slice 3 rework). FK -> words.id.
+  // Indexed: `/dictionary` derives each card term's "appears in" post list by
+  // joining sentence_tokens -> sentences -> posts on this column.
   @Property({ type: 'uuid', nullable: true })
+  @Index()
   wordId?: string | null;
 
-  // FK -> phrases.id.
+  // FK -> phrases.id. Indexed for the same `/dictionary` join as wordId.
   @Property({ type: 'uuid', nullable: true })
+  @Index()
   phraseId?: string | null;
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
