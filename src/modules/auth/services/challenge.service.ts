@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import type { Redis } from 'ioredis';
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import { REDIS_CLIENT } from '../../../core/redis/redis.tokens.js';
 import AuthConfig from '../config/auth.config.js';
 import {
@@ -57,24 +56,33 @@ export class ChallengeService {
   async issue(email: string): Promise<IssuedChallenge> {
     const normalized = normalizeEmail(email);
     const otp = generateOtp();
+    const otpHash = hashSecret(otp);
+    const expiresAt = DateTime.now().plus({
+      milliseconds: this.config.challengeTtlMs,
+    });
 
-    await this.em.upsert(
-      AuthChallenge,
-      {
-        id: uuidv7(),
+    // Persist deferred (not em.upsert): the challenge row must commit in the
+    // same facade flush as the challenge-email outbox job — an immediate write
+    // here plus a flush failure would leave a challenge no email was sent for.
+    // A repeated /auth/login for the same address replaces the pending
+    // challenge in place (fresh OTP, reset attempts). The rare parallel-login
+    // race loses one request to the unique(email) constraint on flush —
+    // acceptable for MVP (mirrors complete-login's googleSub race).
+    const existing = await this.em.findOne(AuthChallenge, {
+      email: normalized,
+    });
+    if (existing) {
+      existing.otpHash = otpHash;
+      existing.attempts = 0;
+      existing.expiresAt = expiresAt;
+    } else {
+      this.em.create(AuthChallenge, {
         email: normalized,
-        otpHash: hashSecret(otp),
+        otpHash,
         attempts: 0,
-        expiresAt: DateTime.now().plus({
-          milliseconds: this.config.challengeTtlMs,
-        }),
-      },
-      {
-        onConflictFields: ['email'],
-        onConflictAction: 'merge',
-        onConflictExcludeFields: ['id'],
-      },
-    );
+        expiresAt,
+      });
+    }
 
     return { email: normalized, otp };
   }

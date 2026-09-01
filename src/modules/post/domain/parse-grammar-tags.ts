@@ -23,10 +23,15 @@ export interface ParseGrammarTagsResult {
 
 const OPEN = '⟦';
 const CLOSE = '⟧';
+
 // The {{g|slug|egpIndex}} trailer that must follow a closing ⟧. egpIndex is
 // optional (⟦span⟧{{g|slug}}); single braces are tolerated like
-// parse-annotation-tags.ts. Sticky so it only matches immediately after ⟧.
-const TRAILER_RE = /\{{1,2}g\|([a-z0-9-]+)(?:\|(\d+))?\}{1,2}/y;
+// parse-annotation-tags.ts. Sticky (`/y`) so it only matches immediately after
+// ⟧. Built fresh per parse call — a module-level sticky regex carries a
+// mutable `.lastIndex`, safe only while nothing re-enters the walk mid-scan.
+function buildTrailerRe(): RegExp {
+  return /\{{1,2}g\|([a-z0-9-]+)(?:\|(\d+))?\}{1,2}/y;
+}
 
 interface WalkState {
   plain: string;
@@ -43,9 +48,10 @@ function consumeClose(
   openStack: number[],
   spans: GrammarSpan[],
   state: WalkState,
+  trailerRe: RegExp,
 ): void {
-  TRAILER_RE.lastIndex = state.index + 1;
-  const trailer = TRAILER_RE.exec(rawInput);
+  trailerRe.lastIndex = state.index + 1;
+  const trailer = trailerRe.exec(rawInput);
   if (!trailer) {
     // A bare ⟧ with no tag — keep the char so reconstruction diverges.
     state.intact = false;
@@ -88,6 +94,7 @@ export function parseGrammarTags(
   const spans: GrammarSpan[] = [];
   const openStack: number[] = [];
   const state: WalkState = { plain: '', intact: true, index: 0 };
+  const trailerRe = buildTrailerRe();
   const n = rawInput.length;
 
   while (state.index < n) {
@@ -96,7 +103,7 @@ export function parseGrammarTags(
       openStack.push(state.plain.length);
       state.index += 1;
     } else if (ch === CLOSE) {
-      consumeClose(rawInput, text, openStack, spans, state);
+      consumeClose(rawInput, text, openStack, spans, state, trailerRe);
     } else {
       state.plain += ch;
       state.index += 1;

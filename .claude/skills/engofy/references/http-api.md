@@ -21,7 +21,7 @@ importing exactly one domain module + one controller. Sub-modules: `internal`,
 | H7 | Convert `DateTime` → ISO `string` **before** it reaches a response DTO, so DTO fields are `string` and the "DateTime needs explicit `@ApiProperty`" rule never triggers. Pick **one** layer for it (see fix). | `learning.controller.ts:25-27` |
 | H8 | Every controller sets `@ApiTags`. No route-level `@ApiResponse`/`@ApiOperation` — DTO schema + the global 400/429/500 responses in `build-openapi-document.ts` only. | `auth.controller.ts:30` |
 | H8a | Authenticated controllers carry `@ApiCookieAuth()` (class-level; method-level on the one authed route of an otherwise-`@Public()` controller, `auth.controller.ts` `me`) — matches the `.addCookieAuth(sessionCookieName)` scheme in `build-openapi-document.ts` (Batch N). | `learning.controller.ts`, `billing.controller.ts`, `dictionary.controller.ts`, `profile.controller.ts` |
-| H9 | `@CachePolicy('private'\|'public')` opts a GET into `ETagInterceptor` (Cache-Control + SHA-1 ETag + 304). Today it's on **zero** routes (dead) — annotate the public GETs or drop the global registration. | `core/http/interceptors/etag.interceptor.ts` |
+| H9 | `@CachePolicy('private'\|'public')` opts a GET into `ETagInterceptor` (Cache-Control + SHA-1 ETag + 304). `ContentController` carries `@CachePolicy('public')` at class level (Batch O) — every route there is an anonymous, cacheable GET. Add it (method- or class-level) to any future public GET; the interceptor no-ops on unannotated routes and on non-GET. | `entrypoints/web/content/controllers/content.controller.ts`; `core/http/interceptors/etag.interceptor.ts` |
 
 ## `/api` prefix — D14 (done, Batch F)
 

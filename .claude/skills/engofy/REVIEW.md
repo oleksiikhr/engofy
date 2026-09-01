@@ -59,11 +59,31 @@ Tables and bullets over prose. Return the whole report as the final message.
 | 4 | worker-cli | `src/entrypoints/worker`, `src/entrypoints/cli` | **done** |
 | 5 | tests | `test/`, vitest, CI | **done** |
 
-## Wave 3 — cross-cutting (in progress)
+## Wave 3 — cross-cutting (complete)
 
 Consistency sweep of every area against the `auth` baseline; fill remaining
-`references/*.md` gaps; resolve accumulated open questions. First pass done —
-see **Batch L** in the fix backlog.
+`references/*.md` gaps; resolve accumulated open questions. Ran as **Batches L–O**
+in the fix backlog:
+
+- **L** — DP2 `disableIdentityMap` on the `post` query handlers; `queue.config`
+  creds aligned to `engofy/engofy`; D9/D10/D11 written into the reference files;
+  closed "fix owed" rows left over from Batch I.
+- **M** — DI tokens → `Symbol`; `@CurrentUser()` → 401; Sentry `tracesSampleRate`
+  0.1 in prod; `PUBLIC_URL` / CORS guard; drop `S3_CORS_MAX_AGE`;
+  `supportsAdaptiveThinking` → allowlist; `http-nlp-client` `assertParseResult()`;
+  draft idiom-harness `maxTokens` / `truncated` parity.
+- **N** — `IngestPostCommand` → `IngestedPostView` (D2 tail); `parse-annotation-tags`
+  identical-form offset bug; `@ApiCookieAuth()` on the authed controllers;
+  pipeline stage comments; `PostDetailResponseDto.doc` kept as a `type`-import
+  by decision.
+- **O** — `challenge.service` outbox atomicity (D18); `worker.ts`/`cron.ts`
+  double-`app.close()` (`closeOnce`); per-call tag-parser regexes;
+  `@CachePolicy('public')` on `ContentController` (user decision); downstream AI
+  re-call on retry accepted as intentional (user decision, open q9).
+
+All 48 open questions are now grouped into D1–D18 and resolved. Remaining items
+are consciously deferred (big / breaking / infra) — see the "Still open" note at
+the end of Batch O.
 
 ## Fix backlog (batched — one batch per session; `[ ]` → `[x]` as done)
 
@@ -152,7 +172,7 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] `post ingest --type` validation — `parseType` now checks `Object.values(PostType).includes(...)` and throws `InvalidCliFlagError('--type')` (mirrors `parseSourceType` / the `queue` commands) instead of the unchecked `return val as PostType` that let a bad `--type` surface as a raw `ZodError` — `post-ingest.command.ts:44-49`. `post-ingest.command.spec.ts` +1 case. **`parseTitle` kept** (not dropped): nest-commander registers an option only from its decorated `@Option` method, so removing it would remove the `--title` flag that `execute()` consumes; the identity body matches the sibling `parseAttribution` parser added in Batch D.
 - [x] bootstrap crash logs `{ cause: err }` → `{ err }` so pino's error serializer fires — `cli.ts:13`, `cron.ts:37`, `worker.ts:35`. `error-handling.md` E4 row: dropped the `worker.ts:35` **bug** note, now "(fixed Batch H)" — `error-handling.md:24`.
 - [x] `post ingest <file>` — `execute()` runs `await access(file)` before `readFile`; on failure throws the new `CliInputError('Ingest file not found: <path>')` (`entrypoints/cli/cli-input.error.ts`, sibling of `InvalidCliFlagError`) so a path typo reads as user error, not an ENOENT infra fault — `post-ingest.command.ts:76-84`. `post-ingest.command.spec.ts` +1 case (`access` rejects → `CliInputError`, `readFile`/`ingest` not called; `access` reset in `beforeEach`).
-- [ ] **not done (optional, out of strict list):** `worker.ts` SIGTERM handler can call `app.close()` twice when the first rejects (reject → outer catch `await app?.close()` again). Left untouched — `cron.ts` shares the shape; needs a guarded close flag; findings-log "low".
+- [x] **(deferred to Batch O)** `worker.ts` / `cron.ts` SIGTERM handler could call `app.close()` twice when the first rejects — done in Batch O via the shared `closeOnce(app)` helper.
 
 ### Batch I — tests (D17) — DONE (fix/batch-a-safety)
 `pnpm run type` + `biome check src/ test/` + `pnpm test` (**115 files / 677 tests**, was 109/649: +6 files, +28) + `pnpm test:cov` gate green — coverage rose across the board (stmts 88.46→89.61 / branches 73.73→75.04 / funcs 83.1→85.54 / lines 88.82→90.01). `pnpm build` + `git diff --exit-code src/metadata.ts` clean. `pnpm migration:check` green — no schema change. `nlp-service` pytest: 8 passed.
@@ -219,7 +239,15 @@ NOTE — no dedicated throttler ispec: a deterministic rate-limit test needs a l
 - [x] **pipeline stage-comment fix** — `tag-grammar.handler.ts` / `generate-exercises.handler.ts` header comments said "runs after spacy_parse"; now "consumes spaCy output from spacy_parse; in the DAG it is the stage after ai_complexity / ai_grammar". findings-log row struck.
 - [x] **`PostDetailResponseDto.doc` — decision, not a fix** — `doc` stays a `type`-only import of the dependency-free domain `Doc`: it's wire-contract data deliberately shared with the SSR renderer, not an internal query view, and re-declaring ~90 lines of recursive discriminated unions would be fragile + worse OpenAPI. Comment + `http-api.md` + findings-log updated to record the call.
 
-**Still open (deferred, not trivial — left as-is):** `get-dictionary` unbounded read (D10/D12 — needs the `post_word`/`post_phrase` projection); `complete()` streaming + `cache_control` on static system prompts (ai.md, perf); downstream AI stages re-call the model on every non-`Completed` retry (open q9); `ETagInterceptor` global but `@CachePolicy()` on zero routes (product decision — annotate the public GETs or drop it); list envelopes (`practice` bare array, `dictionary` `{items}` — breaking wire change, needs `apps/web` coordination); `ContentController` `@Controller()` with no path prefix; `parse-grammar-tags`/`parse-annotation-tags` module-level `/g`/`/y` regex cursors; `challenge.service` upsert-before-outbox atomicity; `worker.ts`/`cron.ts` double-`app.close()`; `post` query handlers + `get-dictionary` have no direct `.ispec.ts` (functionally covered by `content.controller.ispec` + learning controller specs); `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
+### Batch O — Wave 3 cross-cutting, close-out (DONE 2026-09-01, fix/batch-a-safety)
+`pnpm run type` + `biome check src/ test/` + `pnpm test` (**125 files / 747 tests**, was 124/741: +1 file `close-once.helper.spec`, +6 tests) + `pnpm test:cov` gate green — coverage flat (stmts 90.03→90.04 / branches 76.22→76.28 / funcs 86.49→86.44 / lines 90.38→90.41; the funcs dip is the new bootstrap helper's tiny surface, still far above the 70 gate). No entity/enum touched → no `pnpm build` / `migration:check` needed.
+- [x] **D18 — `challenge.service` outbox atomicity** — `ChallengeService.issue` moved off immediate `em.upsert` to `findOne`-then-mutate-or-`em.create` (deferred): the OTP challenge row now commits in the same facade flush as the challenge-email outbox job. Repeated `/auth/login` for the same address still replaces the pending challenge in place (fresh OTP, `attempts = 0`); the rare parallel-login race loses one request to `unique(email)` on flush (commented, mirrors `complete-login`'s googleSub race). `challenge.service.ispec` +2 (in-place replace; deferred-not-immediate). `cqrs.md` Q3–Q5 + `error-handling.md` E8 updated; Medium findings-log row struck.
+- [x] **`worker.ts` / `cron.ts` double `app.close()`** — new `src/entrypoints/close-once.helper.ts` `closeOnce(app)` memoises the first close's promise; both entrypoints route the SIGTERM/SIGINT handler *and* the outer `catch` through it, so a rejected signal-handler close no longer triggers a second teardown from the catch. `close-once.helper.spec.ts` (3 cases: single close across callers, same rejection re-handed, no-op when app never booted). findings-log `[worker/cli] low` clause struck; Batch H deferred `[ ]` → `[x]`.
+- [x] **module-level `/g`/`/y` regex cursors** — `parse-annotation-tags.ts` / `parse-grammar-tags.ts` build their scan regex fresh per call (`buildTokenRe` / `buildTrailerRe`; grammar threads the instance through `consumeClose`), removing the shared mutable `.lastIndex`. Negligible cost — one compile per post-annotation stage, dwarfed by the model call. Existing parser specs cover behaviour unchanged; `ai.md` inline-markup round-trip section + `[core-ai] style` findings-log row updated.
+- [x] **`ETagInterceptor` / `@CachePolicy()` (user decision — option a)** — class-level `@CachePolicy('public')` on `ContentController` (every route there is an anonymous cacheable GET): `feed` / `posts/:slugId` / `grammar` / `grammar/:slug` now emit `Cache-Control: public` + a SHA-1 content ETag and answer a matching `If-None-Match` with 304. `content.controller.ispec` +1 (`Cache-Control` + ETag + 304 revalidation). `http-api.md` H9 + `[web] http-api` findings-log row updated.
+- [x] **downstream AI re-call on retry (open q9 — user decision: accept + document)** — `ai_complexity`/`ai_grammar`/`ai_exercises` re-calling the model on a `Failed`/`Pending`/absent `PostPipelineRun` (then `nativeDelete`+re-write) is a **deliberate full recompute of that stage**, the pipeline-level analogue of `/retry` (P10 / D5). A failed stage rolls its writes back (P3a) so there is no trustworthy partial output to gap-fill; the `Completed` short-circuit already blocks any re-call after success; the extra paid call on a transient failure is bounded. No code change — `pipeline.md` P6a + Known-gaps note, open q9 resolved, `[post] pipeline/ai` findings-log row struck.
+
+**Still open (deferred — big / breaking / infra, consciously not touched):** `get-dictionary` unbounded read (D10/D12 — needs a `post_word`/`post_phrase` projection: new schema + migration, large); `complete()` streaming + `cache_control` on static system prompts (ai.md `Fixes owed`, perf — careful with the streaming SDK API); list envelopes (`practice` bare array, `dictionary` `{items}` — breaking wire change, needs `apps/web` coordination); `ContentController` `@Controller()` with no path prefix (breaking route change); `post` query handlers + `get-dictionary` have no direct `.ispec.ts` (functionally covered by `content.controller.ispec` + learning controller specs); `apps/web` Playwright not in CI; prod nginx `/api` proxy + `apps/web` deploy (infra, non-checkbox).
 
 ## Findings log
 
@@ -252,12 +280,18 @@ _(populated from subagent reports as waves complete)_
   authenticated request (via `SessionAuthGuard`): the write escapes the facade
   `em.flush()` and errors are swallowed (`.catch(() => undefined)`). Await it, or
   catch to Sentry and document why it is best-effort.
-- **[auth] queue-jobs/mikroorm** — `services/challenge.service.ts:61` +
+- ~~**[auth] queue-jobs/mikroorm** — `services/challenge.service.ts:61` +
   `commands/request-login-code/request-login-code.handler.ts:29-35`: challenge row
   is written with `em.upsert` (immediate) *before* the email job is staged on the
   outbox and drained by the facade flush → row and job enqueue are not atomic,
-  defeating the outbox pattern. Persist the challenge deferred (`em.create`/
-  `persist`) so it commits with the outbox job.
+  defeating the outbox pattern.~~ **fixed (Batch O)** — `ChallengeService.issue`
+  is now `findOne`-then-mutate-or-`em.create` (deferred): the challenge row rides
+  the same facade flush as the challenge-email outbox job. Repeated `/auth/login`
+  still replaces the pending challenge in place (fresh OTP, `attempts = 0`); the
+  rare parallel-login race loses one request to `unique(email)` on flush
+  (documented, mirrors `complete-login`'s googleSub race). `challenge.service.ispec`
+  +2 (in-place replace; deferred-not-immediate). `cqrs.md` Q3–Q5 + `error-handling.md`
+  E8 updated.
 - **[post] error-handling/observability** — all stage handlers +
   `post-pipeline-run.entity.ts:27-41`: no handler ever writes `...Status.Failed`,
   `startedAt`, `errorMessage`, `retryCount` — only `Completed`. On failure the
@@ -347,11 +381,16 @@ _(populated from subagent reports as waves complete)_
 - **[post] pipeline** — `PostPipelineStage.Fetch` / PLAN §5 step 1 has no handler
   and no run row; `ingest` is a sync HTTP create and `dto.link` is stored but
   never fetched. Drop the enum value or write a `Fetch` run row.
-- **[post] pipeline/ai** — downstream AI stages (`assess-complexity`, `tag-grammar`,
+- ~~**[post] pipeline/ai** — downstream AI stages (`assess-complexity`, `tag-grammar`,
   `generate-exercises`) re-call the model on every non-`Completed` run with no
   sub-result check, then wholesale delete/overwrite — not "gap-filler, not
-  rewrite" (PLAN §12). Accept + document, or add a cheap "already has rows" short-
-  circuit. (see open question)
+  rewrite" (PLAN §12).~~ **fixed (Batch O)** — accepted + documented as
+  intentional (option a, open q9). A stage retry is a full recompute of that
+  stage — the same stance as `/retry` at the pipeline level (P10 / D5); a failed
+  stage rolls its writes back (P3a) so there is no trustworthy partial output to
+  gap-fill, and the `Completed` short-circuit already prevents any re-call after
+  success. `pipeline.md` P6a + Known-gaps note; `ai.md` unchanged (round-trip
+  section already covers it).
 - **[post] queue-jobs** — `post-queue-bootstrap.service.ts:12-40`:
   `{policy:'singleton', expireInSeconds:3600}` copy-pasted 6×; 1h expiry may be
   tight for a retried `ai_grammar` call on a long article. Extract a const, loop
@@ -410,9 +449,14 @@ _(populated from subagent reports as waves complete)_
 - ~~**[core-ai] correctness**~~ — `detectGerund` mis-flags lexicalised `-ing`
   nouns: **fixed (Batch K / D13)** — `LEXICALISED_ING_NOUNS` stop-list on the
   `NN` branch (`VBG` still trusted). Spec'd.
-- **[core-ai] style** — module-level `/g` `/y` regexes with mutable `.lastIndex`
+- ~~**[core-ai] style** — module-level `/g` `/y` regexes with mutable `.lastIndex`
   as scan cursors in both tag parsers (`parse-annotation-tags.ts`,
-  `parse-grammar-tags.ts`); safe only single-threaded/non-reentrant.
+  `parse-grammar-tags.ts`); safe only single-threaded/non-reentrant.~~ **fixed
+  (Batch O)** — each parser now builds its scan regex fresh per call
+  (`buildTokenRe` / `buildTrailerRe`; grammar threads the instance through
+  `consumeClose`), so there is no shared mutable cursor. Negligible cost (one
+  compile per stage). Existing parser specs cover it; `ai.md` round-trip section
+  updated.
 - ~~**[core-ai] nlp/error-handling**~~ — `http-nlp-client` cast `response.json()`
   with no shape check: **fixed (Batch M)** — `assertParseResult()` validates the
   `sentences` array + each entry's `text`/`start`/`end`/`tokens` at the boundary
@@ -560,10 +604,14 @@ _(populated from subagent reports as waves complete)_
   `@nestjs/throttler` is not a dependency; public `content` GETs and cookie-authed
   `learning`/`billing` POSTs are unthrottled. Only limiter is the Redis counter in
   `auth`'s challenge service (login only). (see open question 35)
-- **[web] http-api** — `ETagInterceptor` wired globally but `@CachePolicy()` is on
+- ~~**[web] http-api** — `ETagInterceptor` wired globally but `@CachePolicy()` is on
   **zero** routes → it early-returns for every request; public feed/post-detail
-  GETs get no `Cache-Control`/`ETag`/304. Annotate the GETs or drop the
-  registration.
+  GETs get no `Cache-Control`/`ETag`/304.~~ **fixed (Batch O)** — option (a):
+  class-level `@CachePolicy('public')` on `ContentController` (every route there
+  is an anonymous cacheable GET), so `feed` / `posts/:slugId` / `grammar` /
+  `grammar/:slug` now emit `Cache-Control: public` + a SHA-1 ETag and answer a
+  matching `If-None-Match` with 304. `content.controller.ispec` +1;
+  `http-api.md` H9 updated.
 - **[web] http-api** — OpenAPI advertises a global `429`, but login rate-limiting
   raises `TooManyLoginRequests` (`DomainError`) → mapped to **400** by
   `DomainErrorFilter`; **no web endpoint can return 429** (ties to open q16).
@@ -637,11 +685,14 @@ _(populated from subagent reports as waves complete)_
   `src/entrypoints/worker/` (CLI side has 9); `spanAttributes()` extension point
   overridden by nothing; `sentry test` / `migrate up|down` extend
   `CliCommandRunner` (acquire a forked `em` + request context) but never use `em`;
-  `worker.ts` SIGTERM handler can double-`app.close()` on reject; bootstrap crash
-  logs use `{ cause: err }` instead of `{ err }` so pino's error serializer
-  doesn't fire; `post ingest <file>` passed to `readFile` with no existence check
-  → ENOENT becomes a Sentry event for user error; `parseCommaSeparated`
-  (`cli-args.helper.ts`) referenced only by its own spec.
+  ~~`worker.ts` SIGTERM handler can double-`app.close()` on reject~~ **fixed
+  (Batch O)** — shared `closeOnce(app)` helper (`src/entrypoints/close-once.helper.ts`)
+  memoises the first close's promise; both `worker.ts` and `cron.ts` route the
+  signal handler and the outer `catch` through it. `close-once.helper.spec.ts`
+  (3 cases). Also fixed earlier (Batch H, not struck here): bootstrap crash logs
+  `{ cause: err }` → `{ err }`; `post ingest <file>` existence check; `WORKER_QUEUES`
+  → `Symbol`. Still open: no worker-dir spec files beyond the new helper;
+  `parseCommaSeparated` referenced only by its own spec.
 - **[test] migrations/tests** — `test/setup/migration-guard.helper.ts` only
   drops + replays migrations; it does **not** assert entities-match-migrations. No
   `pnpm migration:check` script, no CI step; `snapshot:false` under test also
@@ -954,6 +1005,11 @@ _(accumulated across waves — grouped into the Decisions above; kept for tracea
 9. **[post] AI stage retries** — is re-calling the model on every non-`Completed`
    retry acceptable cost-wise, or should `ai_complexity`/`ai_grammar`/`ai_exercises`
    short-circuit on existing partial output ("gap-filler, not rewrite", PLAN §12)?
+   → **Resolved (Batch O): accepted as intentional.** A stage retry is a full
+   recompute of that stage (same stance as `/retry` / D5). A failed stage rolls
+   its writes back (P3a) so there is no trustworthy partial output to gap-fill;
+   the `Completed` short-circuit already prevents re-calls after success; the
+   extra paid call on a transient failure is bounded. `pipeline.md` P6a.
 10. **[post-data] word-level CEFR** — `cefr_level` on `words` (PLAN §3.3) or only
     on `word_definitions` (current)? SRS difficulty + feed level-filter need a
     per-word answer.

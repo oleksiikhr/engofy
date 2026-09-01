@@ -37,6 +37,11 @@ Model echoes the text back **verbatim**, adding only tags:
   with partial spans + `logger.warn`.
 - **all-or-nothing**: `validateAnnotations` throws on the first bad offset/shape/
   overlap; the caller writes none of the batch on throw.
+- both parsers build their scan regex **fresh per call** (`buildTokenRe` /
+  `buildTrailerRe`) — a module-level `/g` or `/y` regex carries a mutable
+  `.lastIndex` cursor that is only safe while nothing re-enters the parse
+  mid-scan; a local instance drops that assumption at negligible cost (one
+  compile per stage, dwarfed by the model call). Batch O.
 
 Reference: `post/domain/parse-annotation-tags.ts`, `parse-grammar-tags.ts`,
 `grammar-prompt.ts`.

@@ -20,11 +20,12 @@ so `ErrorFilter` is the fallback).
 |---|---|---|
 | E1 | One error class per failure mode, `extends DomainError`, `super(message)` — the base sets `this.name = new.target.name`. Pass a second `super(message, status)` arg **only** for non-400 cases (`429`/`404`/`409`). | `auth/errors/too-many-attempts.error.ts:3-7`; `auth/errors/too-many-login-requests.error.ts` |
 | E2 | Constructor args interpolated into the message are fine (`post` does it) — same base contract as auth's static messages. | `post/errors/overlapping-span-insert.error.ts` |
-| E3 | Services/handlers **throw**; the concrete HTTP mapping stays in `DomainErrorFilter` — a subclass only *declares* its status via the `super()` arg, never touches `HttpStatus` or a response. | `auth/services/challenge.service.ts:87` |
+| E3 | Services/handlers **throw**; the concrete HTTP mapping stays in `DomainErrorFilter` — a subclass only *declares* its status via the `super()` arg, never touches `HttpStatus` or a response. | `auth/services/challenge.service.ts` (`consumeByOtp`) |
 | E4 | Infra failures: `new Error(msg, { cause })` with a structured `cause`. Use the `err` key when logging so pino's serializer fires (`{ err }`, not `{ cause: err }`). | `core/s3/s3.service.ts:44`; bootstrap crash logs in `cli.ts` / `cron.ts` / `worker.ts` (fixed Batch H) |
 | E5 | All-or-nothing: validate the whole batch (offsets, annotations) before **any** write; the first bad item throws and aborts the job. | `post/domain/validate-annotations.ts:107-118` |
 | E6 | Grammar tagging is the **sanctioned exception** — drop-with-warn per span, not all-or-nothing. | `post/commands/tag-grammar/tag-grammar.handler.ts:251-279` |
 | E7 | A best-effort side effect that runs **after** the real work succeeded (e.g. a chat confirmation after `ingest`) goes **outside** the `try` that guards the work — inside it, a failed notification reads as the work failing (wrong reply, false-negative Sentry). Swallow + `logger.warn` it instead. | `telegram/services/shared/poll-updates.service.ts` (`dispatch`) |
+| E8 | A row a queued job will read (e.g. the OTP challenge behind a challenge-email job) must be a **deferred** write, so it commits in the same facade flush/transaction as `OutboxSenderService.send`. An immediate `em.upsert` there auto-commits on its own; if the facade flush that stages the job then fails, the challenge row is already persisted but no email was ever queued. Fixed Batch O: `ChallengeService.issue` is `findOne`-then-mutate-or-`em.create`. See `cqrs.md` Q4/Q5. | `auth/services/challenge.service.ts` (`issue`) |
 
 ## D1 — `DomainError` carries an optional status (done, Batch B)
 

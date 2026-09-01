@@ -37,6 +37,47 @@ describe('ChallengeService', () => {
       );
     });
 
+    it('re-issuing for the same email replaces the pending challenge', async () => {
+      const email = uniqueEmail();
+
+      const first = await challenges.issue(email);
+      await suite.orm.em.flush();
+
+      const second = await challenges.issue(email);
+      await suite.orm.em.flush();
+
+      // Only one row survives, and the old OTP is dead.
+      const rows = await suite.orm.em
+        .getConnection()
+        .execute<{ count: string }[]>(
+          'SELECT count(*)::text as count FROM auth_challenges WHERE email = ?',
+          [email],
+          'all',
+          suite.orm.em.getTransactionContext(),
+        );
+      expect(rows[0].count).toBe('1');
+
+      await expect(challenges.consumeByOtp(email, first.otp)).rejects.toThrow(
+        InvalidOrExpiredChallengeError,
+      );
+      await expect(challenges.consumeByOtp(email, second.otp)).resolves.toEqual(
+        { email },
+      );
+    });
+
+    it('defers the challenge row to the flush (atomic with the email job)', async () => {
+      const email = uniqueEmail();
+
+      await challenges.issue(email);
+
+      // Still only queued in the UoW — it commits with the outbox email job on
+      // the facade flush, not the moment issue() returns.
+      const stack = [...suite.orm.em.getUnitOfWork().getPersistStack()];
+      expect(stack).toHaveLength(1);
+
+      await suite.orm.em.flush();
+    });
+
     it('rejects a wrong code without consuming the challenge', async () => {
       const email = uniqueEmail();
       const issued = await challenges.issue(email);

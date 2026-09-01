@@ -13,6 +13,12 @@ export interface ParseAnnotationTagsResult {
   isComplete: boolean;
 }
 
+// Builds the tag matcher fresh per parse call. A module-level `/g` regex
+// carries a mutable `.lastIndex` scan cursor, which is only safe while nothing
+// re-enters the parser mid-scan; a local instance removes that assumption at
+// negligible cost (one compile per post-annotation stage, dwarfed by the AI
+// call that produced the input).
+//
 // Matches either a phrase fragment — ⟦fragment text⟧{{p|type|canonical|groupId}} —
 // or a single tagged word — word{{w|pos|lemma}}. The ⟦⟧ wrapper only exists
 // for phrases, since a fragment there can be more than one token ("picked
@@ -33,8 +39,9 @@ export interface ParseAnnotationTagsResult {
 // happily backtrack into swallowing a stray `{` (e.g. capturing "Two{" as
 // the word, leaving a single "{" to satisfy `\{{1,2}`) before ever trying
 // the intended split. Excluding braces removes that ambiguity outright.
-const TOKEN_RE =
-  /⟦([^⟧]+)⟧\{{1,2}p\|([a-z_]+)\|([^|{}]+)\|([^|{}]+)\}{1,2}|([^\s{}]+)\{{1,2}w\|([a-z_]+)\|([^|{}]+)\}{1,2}/g;
+function buildTokenRe(): RegExp {
+  return /⟦([^⟧]+)⟧\{{1,2}p\|([a-z_]+)\|([^|{}]+)\|([^|{}]+)\}{1,2}|([^\s{}]+)\{{1,2}w\|([a-z_]+)\|([^|{}]+)\}{1,2}/g;
+}
 
 // A stray ⟦⟧ wrapper sometimes ends up around a single word tagged with
 // {{w|...}} (word-kind, not phrase-kind) — the wrapper only means anything
@@ -91,14 +98,14 @@ export function parseAnnotationTags(
   rawInput: string,
 ): ParseAnnotationTagsResult {
   const raw = stripStrayWordWrappers(rawInput);
+  const tokenRe = buildTokenRe();
   const annotations: Annotation[] = [];
   let reconstructed = '';
   let lastIndex = 0;
   let cursor = 0;
   let allResolved = true;
 
-  TOKEN_RE.lastIndex = 0;
-  let match: RegExpExecArray | null = TOKEN_RE.exec(raw);
+  let match: RegExpExecArray | null = tokenRe.exec(raw);
   while (match !== null) {
     reconstructed += raw.slice(lastIndex, match.index);
     lastIndex = match.index + match[0].length;
@@ -150,7 +157,7 @@ export function parseAnnotationTags(
       }
     }
 
-    match = TOKEN_RE.exec(raw);
+    match = tokenRe.exec(raw);
   }
   reconstructed += raw.slice(lastIndex);
 

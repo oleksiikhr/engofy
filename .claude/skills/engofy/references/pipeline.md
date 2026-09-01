@@ -57,7 +57,8 @@ defaults (no structured channel yet — Batch G). Feed / post-detail views expos
 | P3a | `JobWorkerHost` owns the run-row lifecycle around the handler (D4): it writes `Pending` + `startedAt` on stage entry and, on a caught throw, `Failed` + `errorMessage` + `retryCount++` — both on a **forked em / own transaction** so the failure survives the job's rollback. The handler still writes `Completed` itself. `Running` is derived (`startedAt` set, `completedAt` null), not an enum value. On pg-boss retry exhaustion (`retryCount >= retryLimit`) the host sets `PostStatus.Failed`. | `entrypoints/worker/job-worker-host.ts`; processors override `pipelineStage(job)` |
 | P4 | Per-`PostPart` skip is the finer-grained guard inside a stage (part with `Sentence` rows / `annotatedAt` set is skipped), with flush-per-part. `/retry` clears these guards from scratch (see P10). | `spacy-parse-post.handler.ts:71-82` |
 | P5 | All-or-nothing before any write: validate every char offset (`text.slice(start,end) === form`) and every annotation; the first bad one throws and aborts the whole job. | `domain/validate-annotations.ts:107-118`; `errors/nlp-offset-mismatch.error.ts` |
-| P6 | "Gap-filler, not rewrite": check for an existing result before calling AI. Honoured at part-granularity by `spacy_parse`/`annotate`. | PLAN §12 |
+| P6 | "Gap-filler, not rewrite": check for an existing result before calling AI. Honoured at part-granularity by `spacy_parse`/`annotate`. The 3 downstream AI stages (`ai_complexity`/`ai_grammar`/`ai_exercises`) **deliberately don't** — see P6a. | PLAN §12 |
+| P6a | `ai_complexity` / `ai_grammar` / `ai_exercises` short-circuit only on `existingRun?.status === Completed` (P3). On a `Failed`/`Pending`/absent run they re-call the model and `nativeDelete`+re-write their rows wholesale — a stage retry is a **full recompute of that stage**, the same stance as `/retry` at the pipeline level (P10 / D5). This is intentional (Batch O, open q9): a failed stage rolls its writes back (P3a), so there is no trustworthy partial output to gap-fill, and the extra paid call on a transient failure is bounded and cheaper than reasoning about half-applied state. `Completed` still means zero re-calls after success. | `assess-complexity.handler.ts:48-54`; `tag-grammar.handler.ts:65-69`; `generate-exercises.handler.ts:58-62` |
 | P7 | Rebuild-style stages `nativeDelete` prior output for the post/sentence, then re-persist. | `tag-grammar.handler.ts:91-93`; `generate-exercises.handler.ts:99` |
 | P8 | Grammar tagging deliberately **drops-with-warn** (not all-or-nothing) for unknown slug / out-of-construction egpIndex / zero-token span. | `tag-grammar.handler.ts:251-279` (sanctioned, PLAN Зріз 3) |
 | P9 | Downstream AI stages hard-fail if the spaCy layer is absent (`sentences.length === 0`); annotation throws typed `SpacyLayerMissingError`. | `assess-complexity.handler.ts:63-67` |
@@ -66,9 +67,9 @@ defaults (no structured channel yet — Batch G). Feed / post-detail views expos
 
 ## Known gaps (wave 1 — see `REVIEW.md`)
 
-| Sev | Gap |
-|---|---|
-| low | P6 not honoured by the 3 downstream AI stages — they re-call the model on every non-`Completed` retry then wholesale overwrite. |
+_None outstanding._
 
 _Resolved in Batch C: `/retry` no-op (→ P10 / D5); no run-row on failure (→ P3a / D4);_
 _`publish` not gated on `annotation` (→ Stage DAG note / D6)._
+_Resolved in Batch O: downstream AI stages re-calling the model on a non-`Completed`_
+_retry is a deliberate full-recompute, not a bug (→ P6a / open q9)._

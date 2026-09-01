@@ -8,6 +8,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../../core/decorators/public.decorator.js';
 import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
+import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor.js';
 import { PostService } from '../../../../modules/post/post.service.js';
 import type {
   FeedItemView,
@@ -32,7 +33,12 @@ import {
 // `/api/*`. Each endpoint maps its module view onto a web DTO explicitly (no
 // structural passthrough) so the HTTP contract stays decoupled from the
 // module's internal query shapes.
+//
+// Every route is an anonymous, cacheable GET, so `@CachePolicy('public')` sits
+// on the class: `ETagInterceptor` then emits `Cache-Control: public` + a
+// content ETag and answers a matching `If-None-Match` with 304.
 @ApiTags('content')
+@CachePolicy('public')
 @Controller()
 export class ContentController {
   constructor(private readonly post: PostService) {}

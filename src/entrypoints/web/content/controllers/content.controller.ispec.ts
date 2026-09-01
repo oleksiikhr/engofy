@@ -137,6 +137,23 @@ describe('ContentController', () => {
     expect(res.body.nextOffset).toBeNull();
   });
 
+  it('sets Cache-Control + ETag on a content GET and 304s a matching revalidation', async () => {
+    await seedPublishedPost(suite.orm.em);
+
+    const first = await suite.request('get', '/feed').expect(HttpStatus.OK);
+    expect(first.headers['cache-control']).toBe('public');
+    const etag = first.headers.etag as string;
+    expect(etag.startsWith('"')).toBe(true);
+    expect(etag.length).toBeGreaterThan(2);
+
+    // A matching If-None-Match short-circuits to 304 with no body — proof the
+    // ETag the interceptor issued is a real content hash, not a placeholder.
+    await suite
+      .request('get', '/feed')
+      .set('If-None-Match', etag)
+      .expect(HttpStatus.NOT_MODIFIED);
+  });
+
   it('treats a blank ?limit= / ?offset= as the default, not a 400', async () => {
     await seedPublishedPost(suite.orm.em);
 
