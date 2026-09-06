@@ -9,3 +9,7 @@ node_modules
 .env.*.local
 draft/results/*
 !draft/results/.gitkeep
+
+# Production env (real values); only .env.production.example is committed
+.env.production
+infra/.env.production
