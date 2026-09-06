@@ -149,7 +149,9 @@ function main(): void {
   const baseline = loadSnapshot(resolve(repoRoot, baselinePath));
   const candidate = loadSnapshot(resolve(repoRoot, candidatePath));
 
-  console.log(`Baseline:  ${baseline.name} (${baseline.model}, ${baseline.createdAt})`);
+  console.log(
+    `Baseline:  ${baseline.name} (${baseline.model}, ${baseline.createdAt})`,
+  );
   console.log(
     `Candidate: ${candidate.name} (${candidate.model}, ${candidate.createdAt})\n`,
   );

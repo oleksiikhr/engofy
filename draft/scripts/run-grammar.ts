@@ -59,9 +59,7 @@ async function run(): Promise<void> {
           ? ` tokens ${span.tokenStart}..${span.tokenEnd}`
           : '';
       const tag =
-        span.disposition === 'persisted'
-          ? '✓'
-          : `✗ ${span.disposition}`;
+        span.disposition === 'persisted' ? '✓' : `✗ ${span.disposition}`;
       console.log(
         `  ${tag}  "${span.form}"  {g|${span.slug}|${span.egpIndex ?? '—'}}${range}`,
       );

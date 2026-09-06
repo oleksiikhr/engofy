@@ -8,8 +8,8 @@ import {
 } from '../../src/modules/post/domain/egp.js';
 import {
   buildGrammarCatalog,
-  type GrammarCatalogEntry,
   GRAMMAR_SYSTEM_PROMPT,
+  type GrammarCatalogEntry,
 } from '../../src/modules/post/domain/grammar-prompt.js';
 
 export interface GrammarCatalog {

@@ -120,6 +120,33 @@ export async function grammarTagFile(
     parsed = parseGrammarResponse(sentenceTexts, await call());
   }
 
+  const { sentences: tagged, totals } = collectTaggedSentences(
+    parsed.lines,
+    sentences,
+    catalog,
+  );
+
+  return {
+    sentences: tagged,
+    totals,
+    isComplete: parsed.isComplete,
+    retried,
+    truncated,
+    usage,
+  };
+}
+
+type ParsedLine = ReturnType<typeof parseGrammarResponse>['lines'][number];
+type ParsedSpan = ParsedLine['spans'][number];
+
+// Runs the drop ladder over every parsed span and rolls the dispositions up
+// into the totals. Split out of grammarTagFile only to keep that function's
+// cognitive complexity in check.
+function collectTaggedSentences(
+  lines: ParsedLine[],
+  sentences: HarnessSentence[],
+  catalog: GrammarCatalog,
+): { sentences: TaggedSentence[]; totals: GrammarTagTotals } {
   const tagged: TaggedSentence[] = [];
   const totals: GrammarTagTotals = {
     sentenceCount: sentences.length,
@@ -132,39 +159,14 @@ export async function grammarTagFile(
   };
   const persistedSlugs = new Set<string>();
 
-  for (const line of parsed.lines) {
+  for (const line of lines) {
     const sentence = sentences[line.index];
-    const spans: TaggedSpan[] = [];
-
-    for (const span of line.spans) {
+    const spans = line.spans.map((span) => {
       totals.spanCount += 1;
-      const disposition = classifySpan(span, sentence, catalog);
-      const entry: TaggedSpan = {
-        form: span.form,
-        slug: span.slug,
-        egpIndex: span.egpIndex,
-        disposition,
-      };
-
-      if (disposition === 'persisted') {
-        // classifySpan already proved the range resolves.
-        const range = spanToTokenRange(span, sentence.tokens);
-        if (range) {
-          entry.tokenStart = range.tokenStart;
-          entry.tokenEnd = range.tokenEnd;
-        }
-        totals.persistedCount += 1;
-        persistedSlugs.add(span.slug);
-      } else if (disposition === 'unknown-slug') {
-        totals.droppedUnknownSlug += 1;
-      } else if (disposition === 'bad-egp-index') {
-        totals.droppedBadEgpIndex += 1;
-      } else {
-        totals.droppedNoToken += 1;
-      }
-
-      spans.push(entry);
-    }
+      const entry = tagSpan(span, sentence, catalog);
+      tallySpan(entry, totals, persistedSlugs);
+      return entry;
+    });
 
     tagged.push({
       label: sentence.label,
@@ -175,21 +177,63 @@ export async function grammarTagFile(
   }
 
   totals.distinctConstructions = persistedSlugs.size;
+  return { sentences: tagged, totals };
+}
 
-  return {
-    sentences: tagged,
-    totals,
-    isComplete: parsed.isComplete,
-    retried,
-    truncated,
-    usage,
+function tagSpan(
+  span: ParsedSpan,
+  sentence: HarnessSentence,
+  catalog: GrammarCatalog,
+): TaggedSpan {
+  const disposition = classifySpan(span, sentence, catalog);
+  const entry: TaggedSpan = {
+    form: span.form,
+    slug: span.slug,
+    egpIndex: span.egpIndex,
+    disposition,
   };
+  if (disposition === 'persisted') {
+    // classifySpan already proved the range resolves.
+    const range = spanToTokenRange(span, sentence.tokens);
+    if (range) {
+      entry.tokenStart = range.tokenStart;
+      entry.tokenEnd = range.tokenEnd;
+    }
+  }
+  return entry;
+}
+
+const DROP_TOTALS: Record<
+  Exclude<SpanDisposition, 'persisted'>,
+  keyof GrammarTagTotals
+> = {
+  'unknown-slug': 'droppedUnknownSlug',
+  'bad-egp-index': 'droppedBadEgpIndex',
+  'no-token': 'droppedNoToken',
+};
+
+function tallySpan(
+  entry: TaggedSpan,
+  totals: GrammarTagTotals,
+  persistedSlugs: Set<string>,
+): void {
+  if (entry.disposition === 'persisted') {
+    totals.persistedCount += 1;
+    persistedSlugs.add(entry.slug);
+    return;
+  }
+  totals[DROP_TOTALS[entry.disposition]] += 1;
 }
 
 // Same drop ladder as TagGrammarHandler.persistMatch: unknown slug ->
 // missing/out-of-construction egpIndex -> span covers no token -> persisted.
 function classifySpan(
-  span: { slug: string; egpIndex: number | null; charStart: number; charEnd: number },
+  span: {
+    slug: string;
+    egpIndex: number | null;
+    charStart: number;
+    charEnd: number;
+  },
   sentence: HarnessSentence,
   catalog: GrammarCatalog,
 ): SpanDisposition {

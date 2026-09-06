@@ -8,9 +8,10 @@ import type { NlpParseResult } from '../../src/core/nlp/nlp-client.port.js';
 const TRAILING_SLASH = /\/$/;
 
 function baseUrl(): string {
-  return (
-    process.env.NLP_SERVICE_URL ?? 'http://127.0.0.1:8000'
-  ).replace(TRAILING_SLASH, '');
+  return (process.env.NLP_SERVICE_URL ?? 'http://127.0.0.1:8000').replace(
+    TRAILING_SLASH,
+    '',
+  );
 }
 
 export async function callNlp(text: string): Promise<NlpParseResult> {

@@ -1,9 +1,4 @@
-import {
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { buildGrammarCatalogFromAsset } from '../lib/grammar-catalog.js';
 import { grammarTagFile } from '../lib/grammar-tag-file.js';

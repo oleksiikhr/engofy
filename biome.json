@@ -10,7 +10,7 @@
       "**",
       "!src/metadata.ts",
       "!src/core/database/migrations/*.json",
-      "!apps/**"
+      "!apps"
     ]
   },
   "formatter": {
