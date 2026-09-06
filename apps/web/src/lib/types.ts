@@ -122,6 +122,8 @@ export interface PostDetail {
   cefrLevel: CefrLevel | null;
   publishedAt: string;
   sourceLink: string | null;
+  sourceType: string;
+  attributionText: string;
   doc: Doc;
   annotations: {
     words: Record<string, WordAnnotation>;

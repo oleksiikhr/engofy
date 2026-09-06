@@ -103,10 +103,20 @@ interface ComprehensionView {
 }
 
 function toComprehension(ex: Ex): ComprehensionView {
-  const raw = (ex.payload as Record<string, unknown>).questions;
+  const p = ex.payload as Record<string, unknown>;
+  // The pipeline emits one comprehension question per exercise row, flat on
+  // the payload (`{ question, options, answerIndex }`). Older/aggregate shapes
+  // may still carry a `questions` array — accept both.
+  const raw = p.questions;
   const questions = Array.isArray(raw)
     ? (raw as { question: string; options: string[]; answerIndex: number }[])
-    : [];
+    : [
+        {
+          question: String(p.question ?? ''),
+          options: Array.isArray(p.options) ? (p.options as string[]) : [],
+          answerIndex: Number(p.answerIndex ?? -1),
+        },
+      ].filter((q) => q.question !== '' && q.options.length > 0);
   return { id: ex.id, questions };
 }
 
@@ -132,12 +142,21 @@ const comprehension: ComprehensionView[] = post.exercises
       </div>
       <h1>{post.title ?? 'Untitled'}</h1>
       {
-        post.sourceLink && (
+        (post.sourceType !== 'original' || post.sourceLink) && (
           <p class="post-head__source">
-            Source:{' '}
-            <a href={post.sourceLink} rel="noopener noreferrer" target="_blank">
-              {post.sourceLink}
-            </a>
+            {post.sourceType !== 'original' && <span>{post.attributionText}</span>}
+            {post.sourceLink && (
+              <>
+                {post.sourceType !== 'original' ? ' — ' : 'Source: '}
+                <a
+                  href={post.sourceLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {post.sourceLink}
+                </a>
+              </>
+            )}
           </p>
         )
       }
