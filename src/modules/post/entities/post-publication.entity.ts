@@ -2,7 +2,6 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
-  Index,
   PrimaryKey,
   Property,
   Unique,
@@ -22,8 +21,8 @@ export class PostPublication {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
+  // Covered as the leading column of the (postId, platform) composite unique.
   @Property({ type: 'uuid' })
-  @Index()
   postId!: string;
 
   @Enum({ items: () => PublicationPlatform })

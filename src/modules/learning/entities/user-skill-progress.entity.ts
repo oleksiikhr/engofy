@@ -1,7 +1,6 @@
 import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
-  Index,
   PrimaryKey,
   Property,
   Unique,
@@ -19,8 +18,9 @@ export class UserSkillProgress {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
+  // Covered as the leading column of the (userId, constructionId) composite
+  // unique — every read of this table is scoped to one user.
   @Property({ type: 'uuid' })
-  @Index()
   userId!: string;
 
   // FK -> grammar_constructions.id

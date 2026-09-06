@@ -2277,16 +2277,6 @@
         },
         {
           "columnNames": [
-            "post_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "post_publications_post_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "post_id",
             "platform"
           ],
@@ -3137,6 +3127,16 @@
       "indexes": [
         {
           "columnNames": [
+            "phrase_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "sentence_tokens_phrase_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
             "id"
           ],
           "composite": false,
@@ -3164,16 +3164,6 @@
           "composite": false,
           "constraint": false,
           "keyName": "sentence_tokens_word_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "phrase_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "sentence_tokens_phrase_id_index",
           "primary": false,
           "unique": false
         }
@@ -3962,16 +3952,6 @@
           "keyName": "user_skill_progress_user_id_construction_id_unique",
           "primary": false,
           "unique": true
-        },
-        {
-          "columnNames": [
-            "user_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "user_skill_progress_user_id_index",
-          "primary": false,
-          "unique": false
         }
       ],
       "checks": [],
