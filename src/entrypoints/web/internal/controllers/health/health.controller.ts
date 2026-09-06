@@ -8,7 +8,18 @@ import {
 import { Public } from '../../../../../core/decorators/public.decorator.js';
 import { RedisHealthIndicator } from './redis.health.js';
 
-// Readiness probe (PLAN.md §7): 200 only when Postgres and Redis both answer.
+// Two probes, deliberately separated (PLAN.md §7):
+//
+//   GET /_healthz        liveness  — the process is up and the event loop
+//                        answers. No dependency checks. This is what the
+//                        container runtime (Docker/Swarm HEALTHCHECK) polls;
+//                        a Redis/Postgres blip must NOT make the orchestrator
+//                        kill an otherwise-serving task.
+//
+//   GET /_healthz/ready  readiness — 200 only when Postgres AND Redis answer.
+//                        For a load balancer / manual check deciding whether
+//                        to send traffic. A failure here is a 503 via
+//                        HealthCheckErrorFilter.
 @ApiTags('internal')
 @Public()
 @Controller('_healthz')
@@ -20,8 +31,13 @@ export class HealthController {
   ) {}
 
   @Get()
+  live(): { status: 'ok' } {
+    return { status: 'ok' };
+  }
+
+  @Get('ready')
   @HealthCheck()
-  check() {
+  ready() {
     return this.health.check([
       () => this.db.pingCheck('database'),
       () => this.redis.pingCheck('redis'),

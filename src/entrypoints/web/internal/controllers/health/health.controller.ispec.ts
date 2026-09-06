@@ -4,12 +4,22 @@ import { createWebE2ESuite } from '../../../../../../test/http/web/setup/e2e-sui
 import { InternalWebModule } from '../../internal-web.module.js';
 
 describe('HealthController', () => {
-  describe('/_healthz (GET)', () => {
-    const suite = createWebE2ESuite({ imports: [InternalWebModule] });
+  const suite = createWebE2ESuite({ imports: [InternalWebModule] });
 
-    it('should return application health status', async () => {
+  describe('/_healthz (GET) — liveness', () => {
+    it('returns 200 { status: ok } with no dependency checks', async () => {
       const response = await suite
         .request('get', '/_healthz')
+        .expect(HttpStatus.OK);
+
+      expect(response.body).toEqual({ status: 'ok' });
+    });
+  });
+
+  describe('/_healthz/ready (GET) — readiness', () => {
+    it('reports database and redis up', async () => {
+      const response = await suite
+        .request('get', '/_healthz/ready')
         .expect(HttpStatus.OK);
 
       const body = response.body as HealthCheckResult;

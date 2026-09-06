@@ -25,6 +25,16 @@ describe('parseTrustProxy', () => {
     expect(parseTrustProxy('FALSE')).toBe(false);
   });
 
+  it('returns a number for a bare integer hop count', () => {
+    expect(parseTrustProxy('1')).toBe(1);
+    expect(parseTrustProxy('0')).toBe(0);
+    expect(parseTrustProxy('2')).toBe(2);
+  });
+
+  it('treats an integer with surrounding whitespace as a hop count', () => {
+    expect(parseTrustProxy('  1  ')).toBe(1);
+  });
+
   it('returns a single-element array for a single IP', () => {
     expect(parseTrustProxy('127.0.0.1')).toEqual(['127.0.0.1']);
   });

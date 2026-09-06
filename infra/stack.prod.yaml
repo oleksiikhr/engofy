@@ -117,13 +117,14 @@ services:
     secrets: *nest-secrets
     networks: [engofy]
     healthcheck:
-      # /_healthz is a readiness probe (200 only when Postgres AND Redis
-      # answer). retries*interval tolerates a short Redis/DB blip before Swarm
-      # recreates the task. busybox wget ships in the node:alpine image.
+      # /_healthz is the LIVENESS probe — process up, no dependency checks — so
+      # a Postgres/Redis blip does not make Swarm kill a serving task.
+      # Readiness (DB + Redis) is /_healthz/ready, for manual / LB use.
+      # busybox wget ships in the node:alpine image.
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/_healthz >/dev/null 2>&1 || exit 1"]
-      interval: 20s
+      interval: 15s
       timeout: 5s
-      retries: 5
+      retries: 3
       start_period: 40s
     stop_grace_period: 30s
     deploy:
