@@ -49,4 +49,30 @@ describe('dropSpansCrossingNodeBoundaries', () => {
       1,
     );
   });
+
+  it('drops a span that falls inside a link node (keeps the link atomic)', () => {
+    const linkChildren: Node[] = [
+      { type: 'text', text: 'Read it on ' },
+      { type: 'link', text: "the author's site", href: 'https://example.com' },
+      { type: 'text', text: ' instead.' },
+    ];
+    const flattened = flattenNodes(linkChildren);
+    const linkNode = flattened.offsets[1];
+
+    // "author" — entirely within the link node's text.
+    const annotations: Annotation[] = [
+      {
+        start: linkNode.start + 4,
+        end: linkNode.start + 10,
+        form: 'author',
+        kind: 'word',
+        pos: 'noun',
+        lemma: 'author',
+      },
+    ];
+
+    expect(
+      dropSpansCrossingNodeBoundaries(flattened.offsets, annotations),
+    ).toHaveLength(0);
+  });
 });

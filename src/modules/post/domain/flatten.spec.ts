@@ -26,9 +26,9 @@ describe('flattenParagraph', () => {
 
     expect(text).toBe('The cat sat on the mat.');
     expect(offsets).toEqual([
-      { index: 0, start: 0, end: 8 },
-      { index: 1, start: 8, end: 11 },
-      { index: 2, start: 11, end: 23 },
+      { index: 0, start: 0, end: 8, type: 'text' },
+      { index: 1, start: 8, end: 11, type: 'span' },
+      { index: 2, start: 11, end: 23, type: 'text' },
     ]);
   });
 
@@ -100,13 +100,13 @@ describe('flattenDoc', () => {
         blockIndex: 0,
         start: 0,
         end: 16,
-        nodes: [{ index: 0, start: 0, end: 16 }],
+        nodes: [{ index: 0, start: 0, end: 16, type: 'text' }],
       },
       {
         blockIndex: 1,
         start: 18,
         end: 29,
-        nodes: [{ index: 0, start: 0, end: 11 }],
+        nodes: [{ index: 0, start: 0, end: 11, type: 'text' }],
       },
     ]);
   });
