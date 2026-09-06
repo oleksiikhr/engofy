@@ -40,6 +40,35 @@ export function grammarConstructionSlug(
 
 const GUIDEWORD_PREFIX = /^(FORM\/USE|FORM|USE)\s*:?\s*/i;
 
+// Every EGP example sentence ends with a corpus-provenance tag in parentheses
+// — "(Malaysia; A2 WAYSTAGE; 2008; Chinese; Pass)", "(C1 Polish)" — and the
+// can-do / example text carries cross-reference markers ("► reported speech")
+// and redaction placeholders ("[?]", a lone " ? "). None of that is meaningful
+// to a learner, so it is stripped on import (PLAN.md §3.4). Kept here next to
+// the other EGP parsing so the harness and the importer clean text the same way.
+const CORPUS_TAG_RE =
+  /\s*\((?=[^)]*(?:BREAKTHROUGH|WAYSTAGE|THRESHOLD|VANTAGE|EFFECTIVE OPERATIONAL PROFICIENCY|MASTERY|First Certificate|\bA1\b|\bA2\b|\bB1\b|\bB2\b|\bC1\b|\bC2\b))[^()]*\)/g;
+const XREF_MARKER_RE = /\s*►[^\n]*/g;
+const REDACTION_RE = /\s*\[\?\]|\s+\?(?=\s)/g;
+
+export function cleanEgpText(text: string): string {
+  return text
+    .replace(CORPUS_TAG_RE, '')
+    .replace(XREF_MARKER_RE, '')
+    .replace(REDACTION_RE, '')
+    .replace(/[ \t]+([.,;:!?])/g, '$1')
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+// `cleanEgpText` for the nullable example field: a record with no example, or
+// one that cleans down to nothing, stores null.
+export function cleanEgpExample(example: string | null): string | null {
+  return (example && cleanEgpText(example)) || null;
+}
+
 // Markdown cheat sheet for a construction, built from its non-USE records
 // (grouped input is the caller's job — pass every EGP record for one
 // construction). Returns null when there's nothing form-related to show.
@@ -52,7 +81,7 @@ export function buildCheatSheet(records: EgpRecord[]): string | null {
   const lines = ['## Form', ''];
   for (const r of formRecords) {
     const label = r.guideword.trim().replace(GUIDEWORD_PREFIX, '') || 'Form';
-    const canDo = r.can_do.trim();
+    const canDo = cleanEgpText(r.can_do);
     lines.push(`- **${label}** — ${r.level}${canDo ? ` — ${canDo}` : ''}`);
   }
 

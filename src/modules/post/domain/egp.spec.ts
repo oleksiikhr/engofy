@@ -4,6 +4,7 @@ import { CefrLevel } from '../enums/cefr-level.enum.js';
 import {
   buildCheatSheet,
   classifyEgpRecord,
+  cleanEgpText,
   type EgpRecord,
   grammarConstructionSlug,
   parseEgpRecords,
@@ -72,6 +73,43 @@ describe('buildCheatSheet', () => {
     ]);
 
     expect(md).toBe('## Form\n\n- **BARE** — B1');
+  });
+});
+
+describe('cleanEgpText', () => {
+  it('strips the trailing corpus-provenance tag from each sentence', () => {
+    expect(
+      cleanEgpText(
+        'It was cheap but beautiful. (Malaysia; A2 WAYSTAGE; 2008; Chinese; Pass)',
+      ),
+    ).toBe('It was cheap but beautiful.');
+  });
+
+  it('strips a bare "(LEVEL Language)" tag', () => {
+    expect(cleanEgpText('Women are not being paid. (C1 Polish)')).toBe(
+      'Women are not being paid.',
+    );
+  });
+
+  it('drops cross-reference markers and redaction placeholders', () => {
+    expect(
+      cleanEgpText('Can use the past perfect simple. ► reported speech'),
+    ).toBe('Can use the past perfect simple.');
+    expect(
+      cleanEgpText('[?] one morning she was listening to the radio.'),
+    ).toBe('one morning she was listening to the radio.');
+  });
+
+  it('cleans every sentence of a multi-line example and keeps the split', () => {
+    expect(
+      cleanEgpText(
+        'The weather was cloudy but fine. (A2 WAYSTAGE; 2009; Spanish - Latin American; Pass)\n\nIt was cheap. (Malaysia; A2 WAYSTAGE; 2008; Chinese; Pass)',
+      ),
+    ).toBe('The weather was cloudy but fine.\n\nIt was cheap.');
+  });
+
+  it('leaves already-clean text untouched', () => {
+    expect(cleanEgpText('I go to work by bus.')).toBe('I go to work by bus.');
   });
 });
 

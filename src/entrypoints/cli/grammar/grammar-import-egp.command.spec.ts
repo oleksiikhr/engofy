@@ -74,6 +74,33 @@ describe('GrammarImportEgpCommand', () => {
     );
   });
 
+  it('strips corpus-provenance tags and cross-reference markers from the stored text', async () => {
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify([
+        {
+          index: 3,
+          category: 'PAST',
+          subcategory: 'perfect simple',
+          level: 'B1',
+          guideword: 'USE: TIME UP TO THEN',
+          can_do: 'Can talk about a time before another time. ► past simple',
+          example:
+            'He had lost a lot of blood. (Greece; B2 VANTAGE; 1993; Greek; Pass)',
+        },
+      ]),
+    );
+    find.mockResolvedValue([]);
+
+    await command.run([], {});
+
+    const point = persist.mock.calls[2][0];
+    expect(point).toMatchObject({
+      egpIndex: 3,
+      canDoStatement: 'Can talk about a time before another time.',
+      exampleText: 'He had lost a lot of blood.',
+    });
+  });
+
   it('updates an existing usage point matched by egpIndex instead of inserting', async () => {
     const existing = { egpIndex: 2, guideword: 'stale', canDoStatement: 'old' };
     find
