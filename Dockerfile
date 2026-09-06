@@ -65,6 +65,12 @@ ENV NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+# Reference-data files the CLI importers read as
+# `join(process.cwd(), 'assets', ...)` — cwd is /app/dist at runtime, and
+# `nest build` does not copy the top-level assets/ into dist/. Needed by
+# `node cli grammar import-egp` / `import-irregular-verbs` /
+# `words import-frequency` (docs/deploy.md seed step).
+COPY --from=build /app/assets ./dist/assets
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
 
