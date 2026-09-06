@@ -35,7 +35,7 @@ docker service create \
   --env MIKRO_ORM_DB_NAME=engofy \
   --secret source=engofy_db_password,target=mikro_orm_password \
   --detach \
-  "$NEST_IMAGE" node migrate >/dev/null
+  "$NEST_IMAGE" node cli migrate up >/dev/null
 
 state=""
 ok=0

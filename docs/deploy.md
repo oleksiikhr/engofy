@@ -168,8 +168,8 @@ IMAGE_TAG=v0.1.0 ./deploy.sh          # after CI has pushed the v0.1.0 images
 1. `docker pull` the Nest image for `$IMAGE_TAG`.
 2. Runs migrations as a **one-shot swarm service** (`engofy_migrate`,
    `--restart-condition none`, on the overlay, `engofy_db_password` mounted) →
-   `node migrate`. Waits for the task to `Complete`, prints its logs, removes
-   it. **Aborts the deploy if it did not complete cleanly.**
+   `node cli migrate up`. Waits for the task to `Complete`, prints its logs,
+   removes it. **Aborts the deploy if it did not complete cleanly.**
 3. `docker stack deploy -c stack.prod.yaml --with-registry-auth --prune engofy`.
 
 Watch it come up:
@@ -221,7 +221,8 @@ cd /opt/engofy/infra && IMAGE_TAG=v0.1.9 ./deploy.sh
 
 A migration is **not** auto-rolled-back. If a release added a migration and you
 must go back, restore the DB from backup (§7) or write a down-migration and run
-`node migrate` — decide per case. Keep releases with schema changes small.
+`node cli migrate down` — decide per case. Keep releases with schema changes
+small.
 
 ---
 
@@ -230,9 +231,10 @@ must go back, restore the DB from backup (§7) or write a down-migration and run
 - The gate: CI (`app.yaml`) runs `pnpm migration:up && pnpm migration:check`
   against a clean DB on every push — entities drifting from migrations fails CI
   (D17).
-- At deploy: `deploy.sh` runs `node migrate` (compiled `src/migrate.ts` —
-  `MikroORM.init(config).migrator.up()`), which works in the `--prod` runtime
-  image where `pnpm migration:up` cannot.
+- At deploy: `deploy.sh` runs `node cli migrate up` (the app's own
+  `nest-commander` CLI — `src/entrypoints/cli/migrate/`, `orm.migrator.up()`),
+  which works in the `--prod` runtime image. `pnpm migration:up` does not — it
+  needs the mikro-orm CLI + swc loader, which are devDeps.
 - Ad-hoc, against the live DB: just re-run `cd /opt/engofy/infra && IMAGE_TAG=<current> ./deploy.sh`. Its migrate step is idempotent (`no pending migrations` on a no-op) and it only re-deploys the stack if migration succeeded. If you want migrate **without** a stack redeploy, run just that one-shot service by hand — same flags `deploy.sh` uses:
 
   ```bash
@@ -241,7 +243,7 @@ must go back, restore the DB from backup (§7) or write a down-migration and run
     -e NODE_ENV=production -e MIKRO_ORM_HOST=postgres -e MIKRO_ORM_PORT=5432 \
     -e MIKRO_ORM_USER=engofy -e MIKRO_ORM_DB_NAME=engofy \
     --secret source=engofy_db_password,target=mikro_orm_password \
-    ghcr.io/oleksiikhr/engofy:<TAG> node migrate
+    ghcr.io/oleksiikhr/engofy:<TAG> node cli migrate up
   docker service logs engofy_migrate
   docker service rm engofy_migrate
   ```

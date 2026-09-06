@@ -37,12 +37,12 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # ------------------------------------------------------------------------------
 # Runtime stage
 #
-# One image, five entrypoints — the Swarm services override `command:`:
-#   node main     web (HTTP, Fastify)            — default CMD
-#   node worker   pg-boss worker host
-#   node cron     @nestjs/schedule pollers (run EXACTLY 1 replica)
-#   node migrate  one-shot: apply pending migrations, then exit (pre-rollout)
-#   node cli      importers / queue tools (one-shot)
+# One image, four entrypoints — the Swarm services override `command:`:
+#   node main            web (HTTP, Fastify)                  — default CMD
+#   node worker          pg-boss worker host
+#   node cron            @nestjs/schedule pollers (EXACTLY 1 replica)
+#   node cli <cmd...>    one-shot tools — migrations (`node cli migrate up`),
+#                        importers, queue tools
 # WORKDIR is /app/dist so every form is a bare `node <name>`.
 #
 # tini is PID 1: it forwards SIGTERM to node (graceful shutdown — closeOnce,
