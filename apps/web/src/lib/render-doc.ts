@@ -61,7 +61,13 @@ function renderInline(node: InlineNode): string {
       node.marks,
     );
   }
-  // span
+  // span. A grammar construct painted across a run of words leaves
+  // whitespace-only fragments between the annotated tokens; wrapping those as
+  // interactive spans adds stray highlights and junk tab stops, so emit them
+  // as plain text.
+  if (node.text.trim() === '') {
+    return wrapMarks(esc(node.text), node.marks);
+  }
   return wrapMarks(
     `<span ${spanAttrs(node)}>${esc(node.text)}</span>`,
     node.marks,

@@ -137,14 +137,27 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
   max-width: 72rem;
   margin: 0 auto;
 }
 .site-header .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+@media (max-width: 40rem) {
+  .site-header {
+    padding: 0.85rem 1rem;
+  }
+  .site-header nav {
+    gap: 0.5rem 1rem;
+  }
+  .site-header .nav-links {
+    gap: 0.4rem 0.9rem;
+  }
 }
 .site-header a {
   text-decoration: none;
@@ -211,6 +224,27 @@ a:hover {
 .analysis :where(p) {
   margin: 0 0 0.9rem;
 }
+/* Tailwind Preflight resets list markers; restore them for rendered body
+   content (markdown/article posts, grammar cheat sheets). */
+.analysis :where(ul, ol) {
+  margin: 0 0 0.9rem;
+  padding-left: 1.5rem;
+}
+.analysis :where(ul) {
+  list-style: disc;
+}
+.analysis :where(ol) {
+  list-style: decimal;
+}
+.analysis :where(li) {
+  margin: 0 0 0.25rem;
+}
+.analysis :where(blockquote) {
+  margin: 0 0 0.9rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--color-border-strong);
+  color: var(--color-ink-soft);
+}
 .analysis .word {
   border-bottom: 2px solid var(--color-highlight);
   cursor: help;
@@ -240,6 +274,9 @@ a:hover {
   position: absolute;
   z-index: 40;
   max-width: min(22rem, calc(100vw - 2rem));
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--color-paper);
   border: 1px solid var(--color-border-strong);
   border-radius: 0.6rem;
