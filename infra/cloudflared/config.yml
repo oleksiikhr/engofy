@@ -1,0 +1,48 @@
+# Cloudflare Tunnel ingress for engofy. Loaded into the `cloudflared` Swarm
+# service as the `engofy_cloudflared_config` Docker config:
+#
+#   docker config create engofy_cloudflared_config infra/cloudflared/config.yml
+#
+# The matching credentials JSON (from `cloudflared tunnel create engofy`) is a
+# Swarm secret `engofy_cloudflared_credentials`. Replace <TUNNEL_ID> below with
+# the id that command prints (also the credentials file's stem). Rotating the
+# config = `docker config` is immutable, so create a new one
+# (`engofy_cloudflared_config_v2`), point the service at it, remove the old.
+#
+# Routing: engofy.com is a single host (keeps the __Host-session cookie valid).
+# /api/* -> the Nest API, everything else -> the Astro SSR frontend. Both are
+# overlay-internal service names; nothing is published to the host and the
+# Hetzner firewall denies all inbound, so this tunnel is the only ingress.
+
+tunnel: <TUNNEL_ID>
+credentials-file: /etc/cloudflared/credentials.json
+
+# QUIC to the edge; fall back to http2 if UDP/7844 is blocked.
+protocol: auto
+no-autoupdate: true
+# Prometheus + /ready on the overlay (not published). `wget -qO-
+# http://<task-ip>:2000/ready` from another container if you need to check.
+metrics: 0.0.0.0:2000
+loglevel: info
+
+ingress:
+  # API — path-routed to Nest. Nest owns the /api prefix itself
+  # (configureApp -> setGlobalPrefix('api')), so forward the path unchanged.
+  - hostname: engofy.com
+    path: ^/api(/.*)?$
+    service: http://web:8080
+    originRequest:
+      connectTimeout: 30s
+      # AI-backed endpoints are slow; don't let the edge time out a valid call.
+      # (browser traffic goes through Astro SSR, but Swagger / direct calls hit
+      # here too.)
+      noHappyEyeballs: false
+
+  # Everything else -> Astro SSR.
+  - hostname: engofy.com
+    service: http://apps-web:4321
+    originRequest:
+      connectTimeout: 30s
+
+  # Required catch-all.
+  - service: http_status:404
