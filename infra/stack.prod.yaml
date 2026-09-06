@@ -47,10 +47,6 @@ x-nest-secrets: &nest-secrets
     target: resend_api_key           # -> RESEND_API_KEY
   - source: engofy_telegram_bot_token
     target: telegram_bot_token       # -> TELEGRAM_BOT_TOKEN
-  - source: engofy_s3_access_key
-    target: s3_access_key            # -> S3_ACCESS_KEY
-  - source: engofy_s3_secret_key
-    target: s3_secret_key            # -> S3_SECRET_KEY
   - source: engofy_sentry_dsn
     target: sentry_dsn               # -> SENTRY_DSN
 
@@ -63,10 +59,6 @@ x-worker-secrets: &worker-secrets
     target: resend_api_key           # -> RESEND_API_KEY
   - source: engofy_telegram_bot_token
     target: telegram_bot_token       # -> TELEGRAM_BOT_TOKEN
-  - source: engofy_s3_access_key
-    target: s3_access_key            # -> S3_ACCESS_KEY
-  - source: engofy_s3_secret_key
-    target: s3_secret_key            # -> S3_SECRET_KEY
   - source: engofy_sentry_dsn
     target: sentry_dsn               # -> SENTRY_DSN
   - source: engofy_anthropic_api_key
@@ -105,10 +97,6 @@ secrets:
   engofy_resend_api_key:
     external: true
   engofy_telegram_bot_token:
-    external: true
-  engofy_s3_access_key:
-    external: true
-  engofy_s3_secret_key:
     external: true
   engofy_sentry_dsn:
     external: true

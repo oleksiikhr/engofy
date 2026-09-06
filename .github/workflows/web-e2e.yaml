@@ -43,8 +43,6 @@ jobs:
       REDIS_HOST: localhost
       REDIS_PORT: '6379'
       PUBLIC_URL: http://localhost:4321
-      S3_BUCKET: engofy
-      S3_REGION: us-east-1
       API_ORIGIN: http://localhost:8080
       WEB_BASE_URL: http://localhost:4321
 
