@@ -30,6 +30,9 @@ const links = [
       }
     </div>
     <div class="nav-links">
+      <a href="/pricing" aria-current={active === 'pricing' ? 'page' : undefined}>
+        Pricing
+      </a>
       {
         user ? (
           <form method="post" action="/logout" style="margin: 0;">
