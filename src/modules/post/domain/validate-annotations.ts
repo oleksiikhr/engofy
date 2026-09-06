@@ -3,6 +3,7 @@ import { PhraseType } from '../enums/phrase-type.enum.js';
 import { InvalidAnnotationOffsetError } from '../errors/invalid-annotation-offset.error.js';
 import { InvalidAnnotationShapeError } from '../errors/invalid-annotation-shape.error.js';
 import { OverlappingAnnotationsError } from '../errors/overlapping-annotations.error.js';
+import { spansOverlap } from './span-range.js';
 
 export interface Annotation {
   start: number;
@@ -21,6 +22,11 @@ export interface Annotation {
   // sharing one phraseGroupId. Required for every phrase annotation, even a
   // contiguous one (a single-fragment "group").
   phraseGroupId?: string;
+  // Pre-resolved phrases.id, set only for a deterministic phrase annotation
+  // whose Phrase row already exists (a phrasal verb grouped by spaCy in
+  // sentence_tokens.phrasal_verb_group_id). An AI idiom/collocation
+  // annotation leaves this undefined and is resolved by text downstream.
+  phraseId?: string;
 }
 
 const PARTS_OF_SPEECH: readonly string[] = Object.values(PartOfSpeech);
@@ -93,7 +99,7 @@ function checkNoOverlaps(annotations: Annotation[]): void {
     const previous = sorted[i - 1];
     const current = sorted[i];
 
-    if (previous && current && current.start < previous.end) {
+    if (previous && current && spansOverlap(previous, current)) {
       throw new OverlappingAnnotationsError(current.start, current.end);
     }
   }

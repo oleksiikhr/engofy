@@ -34,7 +34,9 @@ export class SessionAuthGuard implements CanActivate {
       throw new UnauthorizedException('Authentication required');
     }
 
-    const resolved = await this.authService.resolveSession({ token });
+    const resolved = await this.authService.resolveSession({
+      sessionToken: token,
+    });
 
     if (!resolved) {
       if (isPublic) {

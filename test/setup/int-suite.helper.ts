@@ -3,10 +3,12 @@ import type { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { ModuleMetadata } from '@nestjs/common';
 import { Command, CommandBus, Query, QueryBus } from '@nestjs/cqrs';
 import type { TestingModule } from '@nestjs/testing';
+import type { Redis } from 'ioredis';
+import { REDIS_CLIENT } from '../../src/core/redis/redis.tokens.js';
 import {
   createIntegrationApp,
   type IntegrationApp,
-  type TestingBuilderHook,
+  type IntegrationAppConfig,
 } from './create-app.helper.js';
 import { useOrmSuiteLifecycle } from './orm-suite-lifecycle.helper.js';
 
@@ -17,7 +19,7 @@ export interface IntegrationSuite extends IntegrationApp {
 
 export function createIntegrationSuite(
   metadata: ModuleMetadata = {},
-  config: { builderHook?: TestingBuilderHook } = {},
+  config: IntegrationAppConfig = {},
 ): IntegrationSuite {
   let moduleRef: TestingModule;
   let orm: MikroORM<PostgreSqlDriver>;
@@ -30,7 +32,10 @@ export function createIntegrationSuite(
     queryBus = moduleRef.get(QueryBus);
   });
 
-  useOrmSuiteLifecycle(() => orm);
+  useOrmSuiteLifecycle(
+    () => orm,
+    () => moduleRef.get<Redis>(REDIS_CLIENT, { strict: false }),
+  );
 
   afterAll(async () => {
     await moduleRef?.close();

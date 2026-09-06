@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiPost, apiPostRaw } from '../lib/api';
+import { getCurrentUser } from '../lib/session';
+
+// Already signed in? Nothing to do here.
+const current = await getCurrentUser(Astro.request);
+if (current) {
+  return Astro.redirect('/');
+}
+
+const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID ?? '';
+
+let step: 'email' | 'code' = 'email';
+let email = '';
+let error: string | null = null;
+let notice: string | null = null;
+
+// Deep link straight to the code step (the address already has a pending
+// challenge, e.g. the user reopened the tab).
+const qpEmail = Astro.url.searchParams.get('email');
+if (
+  Astro.request.method === 'GET' &&
+  Astro.url.searchParams.get('step') === 'code' &&
+  qpEmail
+) {
+  step = 'code';
+  email = qpEmail;
+}
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = form.get('action');
+  email = String(form.get('email') ?? '').trim();
+
+  if (action === 'request-code') {
+    try {
+      await apiPost('/auth/login', { email });
+      step = 'code';
+      notice = `We sent a 6-digit code to ${email}.`;
+    } catch {
+      error = 'Enter a valid email address.';
+    }
+  } else if (action === 'verify-code') {
+    const code = String(form.get('code') ?? '').trim();
+    const res = await apiPostRaw('/auth/login/verify-code', { email, code });
+    if (res.ok) {
+      const headers = new Headers({ location: '/' });
+      for (const cookie of res.headers.getSetCookie()) {
+        headers.append('set-cookie', cookie);
+      }
+      return new Response(null, { status: 303, headers });
+    }
+    step = 'code';
+    error = 'That code did not match. Request a new one and try again.';
+  } else if (action === 'google') {
+    const credential = String(form.get('credential') ?? '');
+    const res = await apiPostRaw('/auth/google', { credential });
+    if (res.ok) {
+      const headers = new Headers({ location: '/' });
+      for (const cookie of res.headers.getSetCookie()) {
+        headers.append('set-cookie', cookie);
+      }
+      return new Response(null, { status: 303, headers });
+    }
+    error = 'Google sign-in failed. Try the email option below.';
+  }
+}
+---
+
+<Layout title="Sign in — Engofy" user={null}>
+  <div class="auth">
+    <h1>Sign in</h1>
+    <p class="auth__lead">
+      No password — we email you a one-time code. New here? An account is created
+      the first time you sign in.
+    </p>
+
+    {error && <p class="auth__error" role="alert">{error}</p>}
+    {notice && <p class="auth__notice">{notice}</p>}
+
+    {
+      step === 'email' ? (
+        <form method="post" class="auth__form">
+          <input type="hidden" name="action" value="request-code" />
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            value={email}
+          />
+          <button class="btn" type="submit">
+            Email me a code
+          </button>
+        </form>
+      ) : (
+        <form method="post" class="auth__form">
+          <input type="hidden" name="action" value="verify-code" />
+          <input type="hidden" name="email" value={email} />
+          <label for="code">6-digit code</label>
+          <input
+            id="code"
+            name="code"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            required
+            autocomplete="one-time-code"
+          />
+          <button class="btn" type="submit">
+            Verify and sign in
+          </button>
+          <button
+            class="btn btn--ghost"
+            type="submit"
+            name="action"
+            value="request-code"
+            formnovalidate
+          >
+            Use a different email
+          </button>
+        </form>
+      )
+    }
+
+    {
+      googleClientId && (
+        <>
+          <div class="auth__or">or</div>
+          <form method="post" id="google-form">
+            <input type="hidden" name="action" value="google" />
+            <input type="hidden" name="credential" id="google-credential" />
+          </form>
+          <div
+            id="g_id_onload"
+            data-client_id={googleClientId}
+            data-callback="onGoogleCredential"
+            data-auto_prompt="false"
+          />
+          <div class="g_id_signin" data-type="standard" data-width="280" />
+          <script is:inline src="https://accounts.google.com/gsi/client" async />
+          <script is:inline>
+            window.onGoogleCredential = function (response) {
+              document.getElementById('google-credential').value =
+                response.credential;
+              document.getElementById('google-form').submit();
+            };
+          </script>
+        </>
+      )
+    }
+  </div>
+</Layout>
+
+<style>
+  .auth {
+    max-width: 24rem;
+    margin: 1rem auto 0;
+  }
+  .auth__lead {
+    color: var(--color-ink-soft);
+    margin-bottom: 1.5rem;
+  }
+  .auth__form {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .auth__form label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .auth__form input {
+    font: inherit;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .auth__form .btn {
+    justify-content: center;
+    margin-top: 0.4rem;
+  }
+  .auth__error {
+    background: var(--color-highlight-wash);
+    color: var(--color-danger);
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-control);
+    font-size: 0.9rem;
+  }
+  .auth__notice {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+  }
+  .auth__or {
+    text-align: center;
+    color: var(--color-ink-faint);
+    margin: 1.5rem 0 1rem;
+    font-size: 0.85rem;
+  }
+</style>

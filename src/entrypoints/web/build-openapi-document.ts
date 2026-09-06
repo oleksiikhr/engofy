@@ -18,6 +18,10 @@ export async function buildOpenApiDocument(
   authConfig: ConfigType<typeof AuthConfig>,
 ): Promise<OpenAPIObject> {
   const swaggerDocument = new DocumentBuilder()
+    // The routes are generated with `ignoreGlobalPrefix` below; this server
+    // entry puts the `/api` prefix back so generated client paths match the
+    // public URLs (D14).
+    .addServer('/api')
     .addCookieAuth(authConfig.sessionCookieName)
     .addGlobalResponse({
       status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -61,6 +65,7 @@ export async function buildOpenApiDocument(
   return cleanupOpenApiDoc(
     SwaggerModule.createDocument(app, swaggerDocument, {
       extraModels: [ValidationErrorResponseDto],
+      ignoreGlobalPrefix: true,
     }),
   );
 }

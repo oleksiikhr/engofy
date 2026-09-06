@@ -21,7 +21,7 @@ export class WordDefinition {
   @Property({ type: 'uuid' })
   wordId!: string;
 
-  @Enum(() => PartOfSpeech)
+  @Enum({ items: () => PartOfSpeech })
   pos!: PartOfSpeech;
 
   @Property({ type: 'text', nullable: true })

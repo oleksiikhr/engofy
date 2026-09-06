@@ -14,7 +14,7 @@ export class CompleteLoginService {
 
   async loginByEmail(email: string): Promise<LoginResult> {
     const user = await this.findOrCreateUser(email);
-    const sessionToken = await this.sessions.create(user.id);
+    const sessionToken = this.sessions.create(user.id);
 
     return { userId: user.id, sessionToken };
   }
@@ -22,11 +22,16 @@ export class CompleteLoginService {
   async loginByGoogle(email: string, googleSub: string): Promise<LoginResult> {
     const user = await this.findOrCreateUser(email, googleSub);
 
+    // Backfill `googleSub` on a row first created by an email login. `googleSub`
+    // is `@Unique`, so if the same Google account's primary email later changes
+    // Google-side, a second row could take this `googleSub` and the flush would
+    // hit the unique constraint. Accepted for MVP — Google email changes are
+    // rare and the 500 is recoverable by retrying the login.
     if (user.googleSub !== googleSub) {
       user.googleSub = googleSub;
     }
 
-    const sessionToken = await this.sessions.create(user.id);
+    const sessionToken = this.sessions.create(user.id);
 
     return { userId: user.id, sessionToken };
   }

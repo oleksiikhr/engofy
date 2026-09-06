@@ -1,0 +1,45 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import type { CurrentUser } from '../lib/types';
+import '../styles/app.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  user?: CurrentUser | null;
+  active?: string;
+  measure?: boolean;
+}
+
+const {
+  title = 'Engofy',
+  description = 'Learn English through short authentic texts.',
+  user = null,
+  active,
+  measure = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <SiteHeader user={user} active={active} />
+    <main class:list={['site-main', { 'reading-measure': measure }]}>
+      <slot />
+    </main>
+    <script>
+      // The npm ESM build doesn't self-assign window.htmx (unlike the CDN
+      // script build). Pages call window.htmx.process(...) after injecting
+      // markup client-side (reader tooltip, etc.).
+      import htmx from 'htmx.org';
+      window.htmx = htmx;
+    </script>
+  </body>
+</html>

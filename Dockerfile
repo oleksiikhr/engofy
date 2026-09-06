@@ -36,8 +36,28 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 # ------------------------------------------------------------------------------
 # Runtime stage
+#
+# One image, four entrypoints — the Swarm services override `command:`:
+#   node main            web (HTTP, Fastify)                  — default CMD
+#   node worker          pg-boss worker host
+#   node cron            @nestjs/schedule pollers (EXACTLY 1 replica)
+#   node cli <cmd...>    one-shot tools — migrations (`node cli migrate up`),
+#                        importers, queue tools
+# WORKDIR is /app/dist so every form is a bare `node <name>`.
+#
+# tini is PID 1: it forwards SIGTERM to node (graceful shutdown — closeOnce,
+# pg-boss boss.stop(), cron drain) and reaps any orphans. Equivalent to
+# `docker run --init`, but baked in so it does not depend on the Swarm runtime.
+# docker-entrypoint.sh runs next: it exports any attached `docker secret`
+# (/run/secrets/*) as an env var, then `exec "$@"` runs the service command
+# as the same PID (tini stays PID 1).
+#
+# No HEALTHCHECK here — only `node main` serves HTTP (/_healthz). worker/cron
+# have no port, so per-service `healthcheck:` lives in stack.prod.yaml instead.
 # ------------------------------------------------------------------------------
 FROM node:${NODE_IMAGE} AS runtime
+
+RUN apk add --no-cache 'tini=~0.19.0'
 
 WORKDIR /app
 
@@ -45,9 +65,12 @@ ENV NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
 
 USER 1000:1000
 
 WORKDIR /app/dist
 
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "main"]

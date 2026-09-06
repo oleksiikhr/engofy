@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import type { Redis } from 'ioredis';
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import { REDIS_CLIENT } from '../../../core/redis/redis.tokens.js';
 import AuthConfig from '../config/auth.config.js';
 import {
@@ -16,12 +15,24 @@ import { AuthChallenge } from '../entities/auth-challenge.entity.js';
 import { InvalidOrExpiredChallengeError } from '../errors/invalid-or-expired-challenge.error.js';
 import { TooManyAttemptsError } from '../errors/too-many-attempts.error.js';
 
+// Bumps the per-email and per-IP counters together in one round-trip, arming a
+// TTL on each the first time it appears in the window. Returns 1 when both stay
+// within their limits, 0 as soon as either is exceeded — the two keys close
+// different abuse vectors (one email from many IPs, many emails from one IP), so
+// both must pass. Both counters increment even when the other already denies.
 const ALLOW_REQUEST_SCRIPT = `
-local count = redis.call('INCR', KEYS[1])
-if count == 1 then
+local emailCount = redis.call('INCR', KEYS[1])
+if emailCount == 1 then
   redis.call('PEXPIRE', KEYS[1], ARGV[1])
 end
-return count
+local ipCount = redis.call('INCR', KEYS[2])
+if ipCount == 1 then
+  redis.call('PEXPIRE', KEYS[2], ARGV[1])
+end
+if emailCount > tonumber(ARGV[2]) or ipCount > tonumber(ARGV[3]) then
+  return 0
+end
+return 1
 `;
 
 export interface IssuedChallenge {
@@ -45,24 +56,33 @@ export class ChallengeService {
   async issue(email: string): Promise<IssuedChallenge> {
     const normalized = normalizeEmail(email);
     const otp = generateOtp();
+    const otpHash = hashSecret(otp);
+    const expiresAt = DateTime.now().plus({
+      milliseconds: this.config.challengeTtlMs,
+    });
 
-    await this.em.upsert(
-      AuthChallenge,
-      {
-        id: uuidv7(),
+    // Persist deferred (not em.upsert): the challenge row must commit in the
+    // same facade flush as the challenge-email outbox job — an immediate write
+    // here plus a flush failure would leave a challenge no email was sent for.
+    // A repeated /auth/login for the same address replaces the pending
+    // challenge in place (fresh OTP, reset attempts). The rare parallel-login
+    // race loses one request to the unique(email) constraint on flush —
+    // acceptable for MVP (mirrors complete-login's googleSub race).
+    const existing = await this.em.findOne(AuthChallenge, {
+      email: normalized,
+    });
+    if (existing) {
+      existing.otpHash = otpHash;
+      existing.attempts = 0;
+      existing.expiresAt = expiresAt;
+    } else {
+      this.em.create(AuthChallenge, {
         email: normalized,
-        otpHash: hashSecret(otp),
+        otpHash,
         attempts: 0,
-        expiresAt: DateTime.now().plus({
-          milliseconds: this.config.challengeTtlMs,
-        }),
-      },
-      {
-        onConflictFields: ['email'],
-        onConflictAction: 'merge',
-        onConflictExcludeFields: ['id'],
-      },
-    );
+        expiresAt,
+      });
+    }
 
     return { email: normalized, otp };
   }
@@ -97,18 +117,20 @@ export class ChallengeService {
     return { email: challenge.email };
   }
 
-  async allowRequest(email: string): Promise<boolean> {
+  async allowRequest(email: string, ip: string): Promise<boolean> {
     const normalized = normalizeEmail(email);
-    const key = `auth:rate-limit:${normalized}`;
 
-    const count = await this.redis.eval(
+    const allowed = await this.redis.eval(
       ALLOW_REQUEST_SCRIPT,
-      1,
-      key,
+      2,
+      `otp:email:${normalized}`,
+      `otp:ip:${ip || 'unknown'}`,
       this.config.requestLimitWindowMs,
+      this.config.requestLimitPerEmail,
+      this.config.requestLimitPerIp,
     );
 
-    return (count as number) <= this.config.requestLimitPerEmail;
+    return allowed === 1;
   }
 
   private async incrementAttempts(email: string): Promise<number | null> {

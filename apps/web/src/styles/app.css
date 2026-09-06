@@ -1,0 +1,301 @@
+@import "tailwindcss";
+
+/* Manrope (display), Public Sans (body/UI) and IBM Plex Mono (numeric stats),
+   all SIL OFL 1.1, vendored as static woff2 (Latin subset only) rather than a
+   webfont CDN request so guest pages have no external dependency. Only the
+   weights used below are loaded. Ported from the previous Go site
+   (../engofy-go/frontend/src/styles/app.css). */
+@font-face {
+  font-family: "Manrope";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/manrope-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Public Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/publicsans-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Public Sans";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/publicsans-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/ibmplexmono-600.woff2") format("woff2");
+}
+
+/* Design tokens — one brand accent, a separate amber highlight for new-word
+   discovery (kept off links/buttons so it doesn't compete), a small neutral
+   scale, and semantic accents for the FSRS review grades. Every token is
+   redefined for dark mode below via plain :root reassignment (Tailwind v4
+   hoists @theme regardless of nesting, so a nested @theme would leak). */
+@theme {
+  --color-brand: #3b4cf6;
+  --color-brand-strong: #2634c2;
+  --color-brand-wash: #eceeff;
+  --color-highlight: #dd9a2e;
+  --color-highlight-wash: #fbf1de;
+  --color-success: #16915f;
+  --color-warning: #c47a0e;
+  --color-danger: #d1392c;
+
+  --color-ink: #10131a;
+  --color-ink-soft: #5c6472;
+  --color-ink-faint: #8991a0;
+  --color-paper: #ffffff;
+  --color-paper-soft: #f5f6f9;
+  --color-border: #e3e6ed;
+  --color-border-strong: #c9cedb;
+
+  --font-display: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  --radius-control: 0.375rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-brand: #8b96ff;
+    --color-brand-strong: #aab2ff;
+    --color-brand-wash: #1c2040;
+    --color-highlight: #e8b654;
+    --color-highlight-wash: #2c2413;
+    --color-success: #3fcb92;
+    --color-warning: #e2a03f;
+    --color-danger: #ef6b5e;
+
+    --color-ink: #eceef2;
+    --color-ink-soft: #a7adba;
+    --color-ink-faint: #6b7280;
+    --color-paper: #0b0d12;
+    --color-paper-soft: #14161d;
+    --color-border: #262a35;
+    --color-border-strong: #363c4a;
+  }
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.55;
+  color: var(--color-ink);
+  background: var(--color-paper);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 1rem;
+}
+h2 {
+  font-size: 1.125rem;
+  margin: 0 0 0.5rem;
+}
+
+a {
+  color: var(--color-brand);
+}
+a:hover {
+  color: var(--color-brand-strong);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+}
+
+/* --- Layout shell --- */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 1.5rem;
+}
+.site-header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+.site-header .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.site-header a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.site-header a[aria-current="page"],
+.site-header a:hover {
+  color: var(--color-brand);
+}
+.site-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+.reading-measure {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+/* --- Reusable atoms --- */
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-paper);
+  padding: 1.25rem;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-brand);
+  background: var(--color-brand);
+  color: #fff;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--color-brand-strong);
+  border-color: var(--color-brand-strong);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--color-brand);
+}
+.btn--ghost:hover {
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+}
+
+/* --- Inline analysis in the reader (PLAN.md §6) --- */
+.analysis :where(p) {
+  margin: 0 0 0.9rem;
+}
+.analysis .word {
+  border-bottom: 2px solid var(--color-highlight);
+  cursor: help;
+}
+.analysis .phrase {
+  border-bottom: 2px dotted var(--color-highlight);
+  cursor: help;
+}
+.analysis .grammar {
+  background: var(--color-brand-wash);
+  border-radius: 0.2rem;
+  padding: 0 0.1rem;
+}
+.analysis .add-card {
+  border: 0;
+  background: transparent;
+  color: var(--color-brand);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 0.2rem;
+}
+
+/* --- Reader tooltip + inline "add to deck" (built client-side, so these
+   selectors must be global — Astro scoped styles never reach innerHTML'd
+   nodes). --- */
+.analysis-tip {
+  position: absolute;
+  z-index: 40;
+  max-width: min(22rem, calc(100vw - 2rem));
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.6rem;
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.35);
+  padding: 0.8rem 0.9rem;
+  font-size: 0.9rem;
+}
+.analysis-tip__block + .analysis-tip__block {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.75rem;
+}
+.analysis-tip__head {
+  margin: 0 0 0.35rem;
+}
+.analysis-tip p {
+  margin: 0 0 0.4rem;
+}
+.analysis-tip__eg {
+  color: var(--color-ink-soft);
+  font-style: italic;
+}
+.analysis-tip__up {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+}
+.add-card__form {
+  margin: 0.2rem 0 0;
+}
+.add-card__msg {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+.add-card__msg--ok {
+  color: var(--color-success);
+  font-weight: 600;
+}
+.add-card__msg--err {
+  color: var(--color-danger);
+}
+
+/* --- FSRS review grade buttons --- */
+button[value="again"] {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+}
+button[value="hard"] {
+  border-color: var(--color-warning);
+  background: var(--color-warning);
+}
+button[value="good"] {
+  border-color: var(--color-success);
+  background: var(--color-success);
+}
+button[value="easy"] {
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+}

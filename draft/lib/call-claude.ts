@@ -8,7 +8,7 @@ import { requireEnv } from './env.js';
 // can't silently skew a draft comparison run from weeks earlier.
 const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
   'opus-5': { input: 5, output: 25 },
-  'sonnet-5': { input: 3, output: 15 },
+  'sonnet-5': { input: 2, output: 10 },
   'fable-5': { input: 10, output: 50 },
   'haiku-4-5': { input: 1, output: 5 },
 };
@@ -62,13 +62,18 @@ export async function callClaude(params: {
   const model = params.model ?? requireEnv('AI_MODEL');
   const start = performance.now();
 
-  const response = await getClient().messages.create({
-    model,
-    max_tokens: params.maxTokens ?? 8000,
-    ...(params.thinking && { thinking: { type: 'adaptive' } }),
-    system: params.system,
-    messages: [{ role: 'user', content: params.userText }],
-  });
+  // Stream (like the production adapter) so a long echo-back pass can't trip
+  // the SDK's 10-minute socket timeout; `finalMessage()` returns the same
+  // assembled `Message` a blocking `messages.create` would.
+  const response = await getClient()
+    .messages.stream({
+      model,
+      max_tokens: params.maxTokens ?? 8000,
+      ...(params.thinking && { thinking: { type: 'adaptive' } }),
+      system: params.system,
+      messages: [{ role: 'user', content: params.userText }],
+    })
+    .finalMessage();
 
   const elapsedMs = performance.now() - start;
   const text = response.content

@@ -57,6 +57,21 @@ describe('convertMarkdownToDoc', () => {
     ]);
   });
 
+  it('degrades a link with an unsafe href to plain text', () => {
+    const doc = convertMarkdownToDoc('Click [here](javascript:alert) now.');
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'Click ' },
+          { type: 'text', text: 'here' },
+          { type: 'text', text: ' now.' },
+        ],
+      },
+    ]);
+  });
+
   it('converts an unordered list to a ListBlock', () => {
     const doc = convertMarkdownToDoc('- First item\n- Second item');
 

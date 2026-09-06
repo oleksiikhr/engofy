@@ -16,12 +16,19 @@ export interface AnnotateUnitParams {
   thinking?: boolean;
 }
 
+// Prod (`AnthropicClientService`) sends `max_tokens: 16000` and throws on a
+// `max_tokens` stop. This harness must use the same ceiling and record the
+// truncation, or a baseline can look clean while hiding output prod rejects.
+const MAX_TOKENS = 16000;
+
 export interface AnnotateUnitResult {
   annotations: Annotation[];
   rawModelOutput: string;
   retried: boolean;
   retryRawModelOutput?: string;
   isComplete: boolean;
+  // A call stopped on `max_tokens` — prod would have thrown here.
+  truncated: boolean;
   validationError?: string;
   usage: {
     inputTokens: number;
@@ -45,17 +52,27 @@ function cleanupAnnotations(
   return annotations;
 }
 
-// Mirrors AnnotatePostHandler.computeAnnotations exactly (same
-// parseAnnotationTags, same whole-block retry on isComplete: false, same
-// cleanup order) so a draft run is a faithful preview of production, not an
-// approximation of it — the only thing swapped out is the transport
-// (callClaude direct call vs. AiClient.complete over Nest DI).
+// Mirrors the LLM sub-pass of AnnotatePostHandler.computeAnnotations — the
+// only part still driven by the model now that spaCy owns every word
+// (PLAN.md §6, §12): same parseAnnotationTags, same whole-block retry on
+// isComplete: false, same dedupe/overlap/boundary/incomplete cleanup. The
+// deterministic spaCy word/phrasal-verb layer and its
+// resolvePhraseOverlaps merge are out of scope here (no nlp-service in this
+// harness); the only thing swapped out is the transport (callClaude direct
+// call vs. AiClient.complete over Nest DI).
 export async function annotateUnit(
   params: AnnotateUnitParams,
 ): Promise<AnnotateUnitResult> {
   const { system, text, nodeOffsets, model, thinking } = params;
 
-  const call = await callClaude({ system, userText: text, model, thinking });
+  const call = await callClaude({
+    system,
+    userText: text,
+    model,
+    thinking,
+    maxTokens: MAX_TOKENS,
+  });
+  let truncated = call.stopReason === 'max_tokens';
   const usage = {
     inputTokens: call.usage.inputTokens,
     outputTokens: call.usage.outputTokens,
@@ -75,8 +92,10 @@ export async function annotateUnit(
       userText: text,
       model,
       thinking,
+      maxTokens: MAX_TOKENS,
     });
     retryRawModelOutput = retryCall.text;
+    truncated = truncated || retryCall.stopReason === 'max_tokens';
 
     usage.inputTokens += retryCall.usage.inputTokens;
     usage.outputTokens += retryCall.usage.outputTokens;
@@ -104,6 +123,7 @@ export async function annotateUnit(
     retried: retryRawModelOutput !== undefined,
     retryRawModelOutput,
     isComplete,
+    truncated,
     validationError,
     usage,
   };

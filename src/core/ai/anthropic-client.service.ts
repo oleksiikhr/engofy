@@ -1,12 +1,17 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Logger } from '@nestjs/common';
-import type { AiClient, AiCompleteParams } from './ai-client.port.js';
+import { z } from 'zod';
+import type {
+  AiClient,
+  AiCompleteParams,
+  AiCompleteStructuredParams,
+} from './ai-client.port.js';
 
 // $ per 1M tokens, matched against `model` by substring — see the "Current
 // Models" pricing table in Anthropic's docs. Update alongside AI_MODEL.
 const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
   'opus-5': { input: 5, output: 25 },
-  'sonnet-5': { input: 3, output: 15 },
+  'sonnet-5': { input: 2, output: 10 },
   'fable-5': { input: 10, output: 50 },
   'haiku-4-5': { input: 1, output: 5 },
   'opus-4-8': { input: 5, output: 25 },
@@ -16,9 +21,40 @@ const PRICING_PER_MTOK: Record<string, { input: number; output: number }> = {
 };
 
 // Adaptive thinking is only supported on Sonnet 5 / Opus 5 / Fable 5 and the
-// 4.6+ family — Haiku models 400 on `thinking: { type: 'adaptive' }`.
+// 4.6+ family. Anything else (Haiku, or an older/unknown model id) 400s on
+// `thinking: { type: 'adaptive' }`, so allowlist rather than denylist.
+const ADAPTIVE_THINKING_MODELS = [
+  'sonnet-5',
+  'opus-5',
+  'fable-5',
+  'sonnet-4-6',
+  'opus-4-6',
+  'opus-4-7',
+  'opus-4-8',
+];
+
 function supportsAdaptiveThinking(model: string): boolean {
-  return !model.includes('haiku');
+  return ADAPTIVE_THINKING_MODELS.some((family) => model.includes(family));
+}
+
+// Anthropic prompt caching has a minimum cacheable prefix (~1024 tokens for the
+// Sonnet/Opus family); a shorter block keeps the `cache_control` marker but is
+// silently not cached. Only the grammar stage's system prompt (static preamble
+// + the full seeded construction catalogue) clears that bar in practice, so
+// gate on an approximate char count rather than spend a breakpoint slot on the
+// three small prompts (annotation / complexity / comprehension).
+const CACHE_CONTROL_MIN_CHARS = 4000;
+
+// Marks a large, static system prompt as a cache breakpoint so a re-send within
+// the 5-minute TTL — the annotation and grammar stages fire a second identical
+// call seconds later when the first echo doesn't reconstruct — is billed at the
+// cache-read rate instead of re-charging the whole preamble each time. Small
+// prompts pass straight through as a plain string (byte-identical request).
+function toSystemParam(system: string): string | Anthropic.TextBlockParam[] {
+  if (system.length < CACHE_CONTROL_MIN_CHARS) {
+    return system;
+  }
+  return [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }];
 }
 
 function estimateCostUsd(
@@ -49,29 +85,100 @@ export class AnthropicClientService implements AiClient {
     this.client = new Anthropic({ apiKey });
   }
 
-  async complete({ system, userText }: AiCompleteParams): Promise<string> {
-    const response = await this.client.messages.create({
+  // Stream every request rather than blocking on a single non-streaming
+  // response. A whole-article echo-back pass runs ~2 min (and the SDK retries
+  // 5xx/timeouts, so wall-clock can be longer); a non-streaming
+  // `messages.create` risks the SDK's 10-minute socket timeout, which would
+  // fail the paid stage outright and force a full re-run. `finalMessage()`
+  // consumes the stream internally and hands back the same assembled `Message`
+  // (`content` / `usage` / `stop_reason`) the blocking call returned, so the
+  // AI3 truncation check and the AI4 usage log downstream are untouched — a
+  // `max_tokens` stop still resolves normally with `stop_reason === 'max_tokens'`.
+  private createMessage(
+    params: Anthropic.MessageStreamParams,
+  ): Promise<Anthropic.Message> {
+    return this.client.messages.stream(params).finalMessage();
+  }
+
+  private logUsage(usage: Anthropic.Usage, label: string): void {
+    this.logger.log(
+      {
+        model: this.model,
+        input_tokens: usage.input_tokens,
+        output_tokens: usage.output_tokens,
+        cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,
+        cache_read_input_tokens: usage.cache_read_input_tokens ?? 0,
+        cost_usd: estimateCostUsd(this.model, usage),
+      },
+      label,
+    );
+  }
+
+  async completeStructured<T>({
+    system,
+    userText,
+    tool,
+  }: AiCompleteStructuredParams<T>): Promise<T> {
+    // Strip the JSON Schema dialect marker — Anthropic's input_schema
+    // validator only wants the object shape itself.
+    const { $schema: _schema, ...inputSchema } = z.toJSONSchema(
+      tool.schema,
+    ) as Record<string, unknown>;
+
+    const response = await this.createMessage({
       model: this.model,
       max_tokens: 16000,
       ...(supportsAdaptiveThinking(this.model) && {
         thinking: { type: 'adaptive' },
       }),
-      system,
+      system: toSystemParam(system),
+      tools: [
+        {
+          name: tool.name,
+          description: tool.description,
+          input_schema: inputSchema as Anthropic.Tool.InputSchema,
+        },
+      ],
+      tool_choice: { type: 'tool', name: tool.name },
       messages: [{ role: 'user', content: userText }],
     });
 
-    this.logger.log(
-      {
-        model: this.model,
-        input_tokens: response.usage.input_tokens,
-        output_tokens: response.usage.output_tokens,
-        cache_creation_input_tokens:
-          response.usage.cache_creation_input_tokens ?? 0,
-        cache_read_input_tokens: response.usage.cache_read_input_tokens ?? 0,
-        cost_usd: estimateCostUsd(this.model, response.usage),
-      },
-      'ai complete call usage',
+    this.logUsage(response.usage, 'ai completeStructured call usage');
+
+    // A max_tokens-truncated tool call leaves `input` partial, which surfaces
+    // as an opaque `ZodError` from `tool.schema.parse` below — mirror the
+    // distinct, non-retryable error `complete()` raises for the same cause.
+    if (response.stop_reason === 'max_tokens') {
+      throw new Error(
+        `AI response was truncated by max_tokens — output_tokens=${response.usage.output_tokens}`,
+      );
+    }
+
+    const toolUse = response.content.find(
+      (block): block is Anthropic.ToolUseBlock =>
+        block.type === 'tool_use' && block.name === tool.name,
     );
+    if (!toolUse) {
+      throw new Error(
+        `AI response did not call the forced tool "${tool.name}" (stop_reason=${response.stop_reason})`,
+      );
+    }
+
+    return tool.schema.parse(toolUse.input);
+  }
+
+  async complete({ system, userText }: AiCompleteParams): Promise<string> {
+    const response = await this.createMessage({
+      model: this.model,
+      max_tokens: 16000,
+      ...(supportsAdaptiveThinking(this.model) && {
+        thinking: { type: 'adaptive' },
+      }),
+      system: toSystemParam(system),
+      messages: [{ role: 'user', content: userText }],
+    });
+
+    this.logUsage(response.usage, 'ai complete call usage');
 
     // max_tokens cuts generation off mid-stream — the caller's own
     // completeness check (comparing the reconstructed plain text against

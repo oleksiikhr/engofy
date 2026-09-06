@@ -21,7 +21,7 @@ export class RequestLoginCodeHandler
   async execute(command: RequestLoginCodeCommand): Promise<void> {
     const email = normalizeEmail(command.dto.email);
 
-    const allowed = await this.challenges.allowRequest(email);
+    const allowed = await this.challenges.allowRequest(email, command.ip);
     if (!allowed) {
       throw new TooManyLoginRequestsError();
     }

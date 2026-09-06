@@ -22,7 +22,14 @@ export function clearSessionCookie(
   reply: FastifyReply,
   config: AuthConfigType,
 ): void {
-  reply.clearCookie(config.sessionCookieName, { path: '/' });
+  // Deletion only takes effect when every attribute matches the cookie that
+  // was set — mirror `setSessionCookie`.
+  reply.clearCookie(config.sessionCookieName, {
+    path: '/',
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+  });
 }
 
 export function readSessionCookie(

@@ -1,0 +1,31 @@
+{
+  "name": "@engofy/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "astro": "astro",
+    "type": "astro check",
+    "lint": "biome check . --write --unsafe",
+    "lint:check": "biome check .",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.4",
+    "astro": "^7.2.9",
+    "htmx.org": "2.0.10"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@biomejs/biome": "^2.5.7",
+    "@playwright/test": "^1.62.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^26.1.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "^6.0.3"
+  }
+}

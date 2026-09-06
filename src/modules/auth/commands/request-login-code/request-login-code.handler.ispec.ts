@@ -13,12 +13,16 @@ describe('RequestLoginCodeHandler', () => {
 
   const uniqueEmail = () =>
     `user-${Math.random().toString(36).slice(2)}@example.com`;
+  const uniqueIp = () => `ip-${Math.random().toString(36).slice(2)}`;
 
   it('issues a challenge for a normalized email and enqueues the challenge email', async () => {
     const email = uniqueEmail();
 
     await suite.command(
-      new RequestLoginCodeCommand({ email: ` ${email.toUpperCase()} ` }),
+      new RequestLoginCodeCommand(
+        { email: ` ${email.toUpperCase()} ` },
+        uniqueIp(),
+      ),
     );
 
     const challenge = await suite.orm.em.findOneOrFail(AuthChallenge, {
@@ -29,14 +33,30 @@ describe('RequestLoginCodeHandler', () => {
 
   it('throws once the per-email request limit is exceeded', async () => {
     const email = uniqueEmail();
+    const ip = uniqueIp();
 
     for (let i = 0; i < config().requestLimitPerEmail; i++) {
       // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
-      await suite.command(new RequestLoginCodeCommand({ email }));
+      await suite.command(new RequestLoginCodeCommand({ email }, ip));
     }
 
     await expect(
-      suite.command(new RequestLoginCodeCommand({ email })),
+      suite.command(new RequestLoginCodeCommand({ email }, ip)),
+    ).rejects.toThrow(TooManyLoginRequestsError);
+  });
+
+  it('throws once the per-IP request limit is exceeded, across emails', async () => {
+    const ip = uniqueIp();
+
+    for (let i = 0; i < config().requestLimitPerIp; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
+      await suite.command(
+        new RequestLoginCodeCommand({ email: uniqueEmail() }, ip),
+      );
+    }
+
+    await expect(
+      suite.command(new RequestLoginCodeCommand({ email: uniqueEmail() }, ip)),
     ).rejects.toThrow(TooManyLoginRequestsError);
   });
 });

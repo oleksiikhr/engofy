@@ -6,9 +6,11 @@ import * as Sentry from '@sentry/nestjs';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module.js';
 import { shutdownSentry } from './core/observability/sentry.js';
+import { closeOnce } from './entrypoints/close-once.helper.js';
 
 let logger: Logger | undefined;
 let app: INestApplicationContext | undefined;
+let closeApp: () => Promise<void> = () => Promise.resolve();
 
 const queues = process.argv[2] ? process.argv[2].split(',') : [];
 
@@ -16,6 +18,7 @@ try {
   app = await NestFactory.createApplicationContext(AppModule.worker(queues), {
     bufferLogs: true,
   });
+  closeApp = closeOnce(app);
 
   logger = app.get<Logger>(Logger);
   app.useLogger(logger);
@@ -27,15 +30,15 @@ try {
   );
 
   await new Promise<void>((resolve, reject) => {
-    process.once('SIGTERM', () => app?.close().then(resolve, reject));
-    process.once('SIGINT', () => app?.close().then(resolve, reject));
+    process.once('SIGTERM', () => closeApp().then(resolve, reject));
+    process.once('SIGINT', () => closeApp().then(resolve, reject));
   });
 } catch (err) {
   logger
-    ? logger.error({ cause: err }, 'Worker crashed')
+    ? logger.error({ err }, 'Worker crashed')
     : console.error('Worker crashed', err);
   Sentry.captureException(err);
-  await app?.close();
+  await closeApp();
   process.exitCode = 1;
 } finally {
   await shutdownSentry();

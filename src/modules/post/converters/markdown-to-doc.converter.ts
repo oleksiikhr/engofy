@@ -1,4 +1,5 @@
 import { marked, type Token, type Tokens } from 'marked';
+import { isSafeLinkHref } from '../../../core/helpers/url.helper.js';
 import type {
   Block,
   Doc,
@@ -21,16 +22,24 @@ function wrapText(text: string, marks: Mark[]): Node[] {
 }
 
 function wrapLink(token: Tokens.Link, marks: Mark[]): Node[] {
-  return token.text
-    ? [
-        {
-          type: 'link',
-          text: token.text,
-          href: token.href,
-          ...(marks.length > 0 ? { marks: [...marks] } : {}),
-        },
-      ]
-    : [];
+  if (!token.text) {
+    return [];
+  }
+
+  // Reject non-`http(s)`/`mailto` schemes (`javascript:`, `data:`, …) before the
+  // href reaches a stored LinkNode — degrade to plain text, keeping what reads.
+  if (!isSafeLinkHref(token.href)) {
+    return wrapText(token.text, marks);
+  }
+
+  return [
+    {
+      type: 'link',
+      text: token.text,
+      href: token.href,
+      ...(marks.length > 0 ? { marks: [...marks] } : {}),
+    },
+  ];
 }
 
 function convertInlineToken(token: Token, marks: Mark[]): Node[] {

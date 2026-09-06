@@ -21,14 +21,24 @@ export class PostPipelineRun {
   @Property({ type: 'uuid' })
   postId!: string;
 
-  @Enum(() => PostPipelineStage)
+  @Enum({ items: () => PostPipelineStage })
   stage!: PostPipelineStage;
 
   @Enum({ items: () => PostPipelineRunStatus })
   status: Opt<PostPipelineRunStatus> = PostPipelineRunStatus.Pending;
 
   @Property({ type: LuxonTimestampType, nullable: true })
+  startedAt?: DateTime | null;
+
+  @Property({ type: LuxonTimestampType, nullable: true })
   completedAt?: DateTime | null;
+
+  // Last failure message for this stage, cleared on a successful rerun.
+  @Property({ type: 'text', nullable: true })
+  errorMessage?: string | null;
+
+  @Property({ type: 'integer', default: 0 })
+  retryCount: Opt<number> = 0;
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();

@@ -13,6 +13,12 @@ export interface ParseAnnotationTagsResult {
   isComplete: boolean;
 }
 
+// Builds the tag matcher fresh per parse call. A module-level `/g` regex
+// carries a mutable `.lastIndex` scan cursor, which is only safe while nothing
+// re-enters the parser mid-scan; a local instance removes that assumption at
+// negligible cost (one compile per post-annotation stage, dwarfed by the AI
+// call that produced the input).
+//
 // Matches either a phrase fragment — ⟦fragment text⟧{{p|type|canonical|groupId}} —
 // or a single tagged word — word{{w|pos|lemma}}. The ⟦⟧ wrapper only exists
 // for phrases, since a fragment there can be more than one token ("picked
@@ -33,8 +39,9 @@ export interface ParseAnnotationTagsResult {
 // happily backtrack into swallowing a stray `{` (e.g. capturing "Two{" as
 // the word, leaving a single "{" to satisfy `\{{1,2}`) before ever trying
 // the intended split. Excluding braces removes that ambiguity outright.
-const TOKEN_RE =
-  /⟦([^⟧]+)⟧\{{1,2}p\|([a-z_]+)\|([^|{}]+)\|([^|{}]+)\}{1,2}|([^\s{}]+)\{{1,2}w\|([a-z_]+)\|([^|{}]+)\}{1,2}/g;
+function buildTokenRe(): RegExp {
+  return /⟦([^⟧]+)⟧\{{1,2}p\|([a-z_]+)\|([^|{}]+)\|([^|{}]+)\}{1,2}|([^\s{}]+)\{{1,2}w\|([a-z_]+)\|([^|{}]+)\}{1,2}/g;
+}
 
 // A stray ⟦⟧ wrapper sometimes ends up around a single word tagged with
 // {{w|...}} (word-kind, not phrase-kind) — the wrapper only means anything
@@ -64,22 +71,45 @@ const LEADING_PUNCT_RE = /^[("'[“‘]+/;
 // raw output with every recognized tag replaced by its underlying text, so
 // completeness can be checked by exact string comparison against `text`
 // rather than by a length/ratio heuristic.
+//
+// `cursor` (end of the last *resolved* token) is the hard search floor —
+// it guarantees forward progress and stays sane when the model's output has
+// drifted from `text` (a stray `{{}}` adds chars `text` doesn't have). But
+// when the model tags only the later of two identical forms, indexOf from
+// `cursor` would grab the earlier, untagged one. `reconstructed.length` is
+// the position this token *should* sit at (every char emitted before it,
+// tagged or not, is already in `reconstructed`); when reconstruction is
+// still aligned and the fragment sits exactly there, prefer that position.
+function resolveOffset(
+  text: string,
+  fragment: string,
+  cursor: number,
+  expected: number,
+): number {
+  const idx = text.indexOf(fragment, cursor);
+  if (idx !== -1 && idx < expected && text.startsWith(fragment, expected)) {
+    return expected;
+  }
+  return idx;
+}
+
 export function parseAnnotationTags(
   text: string,
   rawInput: string,
 ): ParseAnnotationTagsResult {
   const raw = stripStrayWordWrappers(rawInput);
+  const tokenRe = buildTokenRe();
   const annotations: Annotation[] = [];
   let reconstructed = '';
   let lastIndex = 0;
   let cursor = 0;
   let allResolved = true;
 
-  TOKEN_RE.lastIndex = 0;
-  let match: RegExpExecArray | null = TOKEN_RE.exec(raw);
+  let match: RegExpExecArray | null = tokenRe.exec(raw);
   while (match !== null) {
     reconstructed += raw.slice(lastIndex, match.index);
     lastIndex = match.index + match[0].length;
+    const expected = reconstructed.length;
 
     if (match[1] !== undefined) {
       const fragment = match[1];
@@ -88,7 +118,7 @@ export function parseAnnotationTags(
       const phraseGroupId = match[4] as string;
       reconstructed += fragment;
 
-      const idx = text.indexOf(fragment, cursor);
+      const idx = resolveOffset(text, fragment, cursor, expected);
       if (idx === -1) {
         allResolved = false;
       } else {
@@ -110,7 +140,7 @@ export function parseAnnotationTags(
       reconstructed += rawWord;
 
       const word = rawWord.replace(LEADING_PUNCT_RE, '');
-      const idx = word ? text.indexOf(word, cursor) : -1;
+      const idx = word ? resolveOffset(text, word, cursor, expected) : -1;
 
       if (idx === -1) {
         allResolved = false;
@@ -127,7 +157,7 @@ export function parseAnnotationTags(
       }
     }
 
-    match = TOKEN_RE.exec(raw);
+    match = tokenRe.exec(raw);
   }
   reconstructed += raw.slice(lastIndex);
 

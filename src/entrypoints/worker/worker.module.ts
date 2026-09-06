@@ -5,6 +5,16 @@ import { SendChallengeEmailModule } from './auth/send-challenge-email.module.js'
 import { SendChallengeEmailProcessor } from './auth/send-challenge-email.processor.js';
 import { AnnotatePostModule } from './post/annotate-post.module.js';
 import { AnnotatePostProcessor } from './post/annotate-post.processor.js';
+import { AssessComplexityModule } from './post/assess-complexity.module.js';
+import { AssessComplexityProcessor } from './post/assess-complexity.processor.js';
+import { GenerateExercisesModule } from './post/generate-exercises.module.js';
+import { GenerateExercisesProcessor } from './post/generate-exercises.processor.js';
+import { PublishPostModule } from './post/publish-post.module.js';
+import { PublishPostProcessor } from './post/publish-post.processor.js';
+import { SpacyParsePostModule } from './post/spacy-parse-post.module.js';
+import { SpacyParsePostProcessor } from './post/spacy-parse-post.processor.js';
+import { TagGrammarModule } from './post/tag-grammar.module.js';
+import { TagGrammarProcessor } from './post/tag-grammar.processor.js';
 import { WORKER_QUEUES } from './worker.tokens.js';
 import { WorkerRegistrarService } from './worker-registrar.service.js';
 
@@ -16,6 +26,26 @@ const PROCESSOR_CONFIG: Record<string, { processor: Type; module: Type }> = {
   [QueueName.PostAnnotation]: {
     processor: AnnotatePostProcessor,
     module: AnnotatePostModule,
+  },
+  [QueueName.PostSpacyParse]: {
+    processor: SpacyParsePostProcessor,
+    module: SpacyParsePostModule,
+  },
+  [QueueName.PostAiComplexity]: {
+    processor: AssessComplexityProcessor,
+    module: AssessComplexityModule,
+  },
+  [QueueName.PostAiGrammar]: {
+    processor: TagGrammarProcessor,
+    module: TagGrammarModule,
+  },
+  [QueueName.PostAiExercises]: {
+    processor: GenerateExercisesProcessor,
+    module: GenerateExercisesModule,
+  },
+  [QueueName.PostPublish]: {
+    processor: PublishPostProcessor,
+    module: PublishPostModule,
   },
 };
 

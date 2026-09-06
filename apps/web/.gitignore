@@ -1,0 +1,16 @@
+# build output
+dist/
+# generated types
+.astro/
+# deps
+node_modules/
+# playwright
+test-results/
+playwright-report/
+e2e/.auth/
+/blob-report/
+/playwright/.cache/
+# env
+.env
+.env.production
+.env.*.local

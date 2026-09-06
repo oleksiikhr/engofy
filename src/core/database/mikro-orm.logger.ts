@@ -7,6 +7,8 @@ import type {
 } from '@mikro-orm/core';
 import { Logger as NestLogger } from '@nestjs/common';
 import * as Sentry from '@sentry/nestjs';
+import { isProdEnvironment } from '../enums/environment.enum.js';
+import { sanitizeSqlParams } from '../helpers/sql.helper.js';
 
 export class MikroOrmLogger implements Logger {
   private readonly logger = new NestLogger(MikroOrmLogger.name);
@@ -56,17 +58,25 @@ export class MikroOrmLogger implements Logger {
   }
 
   logQuery(context: LogContext): void {
-    Sentry.addBreadcrumb({
-      category: 'db.query',
-      type: 'query',
-      level: 'info',
-      message: context.query,
-      data: {
-        executionTimeMs: context?.took,
-        affected: context.affected,
-        results: context.results,
-      },
-    });
+    if (context.query) {
+      Sentry.addBreadcrumb({
+        category: 'db.query',
+        type: 'query',
+        level: 'info',
+        // MikroORM inlines every bind param (emails, hashes, tokens) into the
+        // SQL string. Sanitize in production, mirroring how
+        // `beforeSendTransaction` treats `db.statement` spans in
+        // `core/observability/sentry.ts`. `results` rows are dropped entirely —
+        // they can carry the same secrets.
+        message: isProdEnvironment()
+          ? sanitizeSqlParams(context.query)
+          : context.query,
+        data: {
+          executionTimeMs: context?.took,
+          affected: context.affected,
+        },
+      });
+    }
 
     if (!this.isEnabled('query', context) || !context.query) {
       return;

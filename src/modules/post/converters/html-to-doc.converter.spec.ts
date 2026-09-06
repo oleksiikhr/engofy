@@ -67,6 +67,40 @@ describe('convertHtmlToDoc', () => {
     ]);
   });
 
+  it('degrades an <a> with an unsafe href to plain text', () => {
+    const doc = convertHtmlToDoc(
+      '<p>Click <a href="javascript:alert(1)">here</a> now.</p>',
+    );
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'Click ' },
+          { type: 'text', text: 'here' },
+          { type: 'text', text: ' now.' },
+        ],
+      },
+    ]);
+  });
+
+  it('keeps a mailto: <a> as a LinkNode', () => {
+    const doc = convertHtmlToDoc(
+      '<p>Email <a href="mailto:hi@example.com">us</a>.</p>',
+    );
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'Email ' },
+          { type: 'link', text: 'us', href: 'mailto:hi@example.com' },
+          { type: 'text', text: '.' },
+        ],
+      },
+    ]);
+  });
+
   it('converts <ul>/<ol> to a ListBlock', () => {
     const doc = convertHtmlToDoc(
       '<ul><li>First item</li><li>Second item</li></ul>',
@@ -80,6 +114,30 @@ describe('convertHtmlToDoc', () => {
           { children: [{ type: 'text', text: 'First item' }] },
           { children: [{ type: 'text', text: 'Second item' }] },
         ],
+      },
+    ]);
+  });
+
+  it('does not emit a nested <ul> as its own top-level block', () => {
+    const doc = convertHtmlToDoc(
+      '<ul><li>Parent<ul><li>Child</li></ul></li></ul>',
+    );
+
+    // One list block only — the nested <ul> is folded into its parent <li>,
+    // not duplicated as a second top-level list.
+    expect(doc.children).toHaveLength(1);
+    expect(doc.children[0]).toMatchObject({ type: 'list', ordered: false });
+  });
+
+  it('finds block elements nested inside wrapper <div>s', () => {
+    const doc = convertHtmlToDoc(
+      '<div><section><p>Deep paragraph.</p></section></div>',
+    );
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Deep paragraph.' }],
       },
     ]);
   });

@@ -2,7 +2,6 @@ import {
   type ArgumentsHost,
   Catch,
   type ExceptionFilter,
-  HttpStatus,
   Logger,
 } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
@@ -18,7 +17,7 @@ export class DomainErrorFilter implements ExceptionFilter {
 
     this.logger.warn({ cause: exception }, exception.message);
 
-    response.status(HttpStatus.BAD_REQUEST).send({
+    response.status(exception.status).send({
       message: exception.message,
     });
   }

@@ -16,7 +16,13 @@ export function bootstrapSentry(runtime: AppRuntime): void {
     debug: envBool('SENTRY_DEBUG'),
     spotlight: env !== Environment.Production,
     enableLogs: true,
-    tracesSampleRate: envNumber(`SENTRY_TRACES_SAMPLE_RATE_${key}`, 1),
+    // Tracing is expensive at 100%. Sample down in production by default;
+    // `SENTRY_TRACES_SAMPLE_RATE_<ENTRYPOINT>` overrides per runtime. Error
+    // events (`sampleRate`) stay at 100% — we want every exception.
+    tracesSampleRate: envNumber(
+      `SENTRY_TRACES_SAMPLE_RATE_${key}`,
+      env === Environment.Production ? 0.1 : 1,
+    ),
     sampleRate: envNumber(`SENTRY_SAMPLE_RATE_${key}`, 1),
     integrations: [Sentry.extraErrorDataIntegration()],
     ignoreSpans: [

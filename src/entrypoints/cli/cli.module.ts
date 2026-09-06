@@ -1,15 +1,19 @@
 import type { DynamicModule, Type } from '@nestjs/common';
 import { Module } from '@nestjs/common';
+import { GrammarCliModule } from './grammar/grammar-cli.module.js';
 import { MigrateCliModule } from './migrate/migrate-cli.module.js';
 import { PostCliModule } from './post/post-cli.module.js';
 import { QueueCliModule } from './queue/queue-cli.module.js';
 import { SentryCliModule } from './sentry/sentry-cli.module.js';
+import { WordsCliModule } from './words/words-cli.module.js';
 
 const COMMAND_MODULES: Record<string, Type> = {
   sentry: SentryCliModule,
   migrate: MigrateCliModule,
   queue: QueueCliModule,
   post: PostCliModule,
+  grammar: GrammarCliModule,
+  words: WordsCliModule,
 };
 
 @Module({})

@@ -5,7 +5,6 @@ import AppConfig from '../../core/config/app.config.js';
 import MailConfig from '../../core/mail/mail.config.js';
 import { mailerProvider } from '../../core/mail/mailer.provider.js';
 import { AuthService } from './auth.service.js';
-import { AuthQueueBootstrapService } from './auth-queue-bootstrap.service.js';
 import { LoginWithGoogleHandler } from './commands/login-with-google/login-with-google.handler.js';
 import { LogoutHandler } from './commands/logout/logout.handler.js';
 import { RequestLoginCodeHandler } from './commands/request-login-code/request-login-code.handler.js';
@@ -44,7 +43,6 @@ const queryHandlers = [GetUserHandler];
     GoogleIdTokenVerifierService,
     ChallengeMailerService,
     mailerProvider,
-    AuthQueueBootstrapService,
     ...commandHandlers,
     ...queryHandlers,
   ],

@@ -1,0 +1,53 @@
+import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import type { UserActor } from '../../../../core/actor/actor.js';
+import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
+import { BillingService } from '../../../../modules/billing/billing.service.js';
+import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
+import type { SubscriptionView } from '../../../../modules/billing/types/subscription-view.type.js';
+import { SubscriptionResponseDto } from '../dto/subscription-response.dto.js';
+
+const FREE_RESPONSE: SubscriptionResponseDto = {
+  plan: SubscriptionPlan.Free,
+  active: false,
+  currentPeriodEnd: null,
+  isMockPayment: false,
+};
+
+function toDto(subscription: SubscriptionView | null): SubscriptionResponseDto {
+  if (!subscription) {
+    return FREE_RESPONSE;
+  }
+  return {
+    plan: subscription.plan,
+    active: true,
+    currentPeriodEnd:
+      subscription.currentPeriodEnd.toISO() ??
+      subscription.currentPeriodEnd.toString(),
+    isMockPayment: subscription.isMockPayment,
+  };
+}
+
+@ApiTags('billing')
+@ApiCookieAuth()
+@Controller('billing')
+export class BillingController {
+  constructor(private readonly billing: BillingService) {}
+
+  // Mock checkout (PLAN.md §8): grants a month of premium, no real payment.
+  @Post('subscribe')
+  @HttpCode(HttpStatus.OK)
+  async subscribe(
+    @CurrentUser() actor: UserActor,
+  ): Promise<SubscriptionResponseDto> {
+    const subscription = await this.billing.activateMockSubscription(actor.id);
+    return toDto(subscription);
+  }
+
+  @Get('subscription')
+  async current(
+    @CurrentUser() actor: UserActor,
+  ): Promise<SubscriptionResponseDto> {
+    return toDto(await this.billing.getActiveSubscription(actor.id));
+  }
+}

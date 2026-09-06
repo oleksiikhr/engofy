@@ -10,7 +10,7 @@ import {
   Res,
 } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
@@ -39,8 +39,11 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async requestCode(@Body() dto: RequestLoginCodeDto): Promise<void> {
-    await this.auth.requestLoginCode(dto);
+  async requestCode(
+    @Body() dto: RequestLoginCodeDto,
+    @Req() request: FastifyRequest,
+  ): Promise<void> {
+    await this.auth.requestLoginCode(dto, request.ip);
   }
 
   @Public()
@@ -87,6 +90,7 @@ export class AuthController {
     clearSessionCookie(reply, this.authConfig);
   }
 
+  @ApiCookieAuth()
   @Get('me')
   async me(@CurrentUser() actor: UserActor): Promise<CurrentUserResponseDto> {
     const user = await this.auth.getUser(actor.id);

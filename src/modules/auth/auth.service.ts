@@ -11,7 +11,7 @@ import {
   type ResolvedSession,
   ResolveSessionCommand,
 } from './commands/resolve-session/resolve-session.command.js';
-import { ResolveSessionDto } from './commands/resolve-session/resolve-session.dto.js';
+import type { ResolveSessionDto } from './commands/resolve-session/resolve-session.dto.js';
 import { VerifyLoginCodeCommand } from './commands/verify-login-code/verify-login-code.command.js';
 import type { VerifyLoginCodeDto } from './commands/verify-login-code/verify-login-code.dto.js';
 import type { User } from './entities/user.entity.js';
@@ -26,8 +26,8 @@ export class AuthService {
     private readonly queryBus: QueryBus,
   ) {}
 
-  async requestLoginCode(dto: RequestLoginCodeDto): Promise<void> {
-    await this.commandBus.execute(new RequestLoginCodeCommand(dto));
+  async requestLoginCode(dto: RequestLoginCodeDto, ip: string): Promise<void> {
+    await this.commandBus.execute(new RequestLoginCodeCommand(dto, ip));
 
     await this.em.flush();
   }

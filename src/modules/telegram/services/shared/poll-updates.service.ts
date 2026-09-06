@@ -1,0 +1,147 @@
+import { EntityManager } from '@mikro-orm/postgresql';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
+import { IngestPostDto } from '../../../post/commands/ingest-post/ingest-post.dto.js';
+import { PostService } from '../../../post/post.service.js';
+import TelegramConfig from '../../config/telegram.config.js';
+import { parseTelegramCommand } from '../../domain/parse-command.js';
+import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
+import {
+  TelegramClientService,
+  type TelegramUpdatePayload,
+} from '../telegram-client.service.js';
+
+const UNKNOWN_COMMAND_REPLY =
+  'Unknown command. Use "/add <text>" to ingest a post or "/retry <post_id>" to re-run its pipeline.';
+
+// Polls Telegram getUpdates (PLAN.md §3.9), stores every new update on
+// telegram_updates for audit, and acts on the ones sent by the configured
+// admin: `/add <text>` -> ingest, `/retry <post_id>` -> full pipeline re-run.
+// The next poll offset is derived from max(update_id) already stored, so no
+// separate cursor is needed and a re-poll of a stored update is a no-op.
+//
+// Cron-driven, so it lives in services/shared/ and owns its own flush-per-row
+// (D15) — no facade / CQRS for a pure poller.
+@Injectable()
+export class PollUpdatesService {
+  private readonly logger = new Logger(PollUpdatesService.name);
+
+  constructor(
+    private readonly em: EntityManager,
+    private readonly client: TelegramClientService,
+    private readonly postService: PostService,
+    @Inject(TelegramConfig.KEY)
+    private readonly config: ConfigType<typeof TelegramConfig>,
+  ) {}
+
+  async run(): Promise<void> {
+    // No token -> can't poll. No admin id -> every message would be stored and
+    // ignored, so there is nothing to act on; skip the poll entirely rather
+    // than write an audit row a minute for messages we can never process.
+    if (!this.client.configured || this.config.adminUserId === '') {
+      return;
+    }
+
+    const offset = await this.nextOffset();
+    const updates = await this.client.getUpdates(offset);
+
+    for (const update of updates) {
+      const updateId = String(update.update_id);
+      // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — each update's audit row is committed (processed=true) before it's acted on, so a mid-tick crash never re-runs a command.
+      const seen = await this.em.count(TelegramUpdate, {
+        updateId,
+      });
+      if (seen > 0) {
+        continue;
+      }
+
+      const row = new TelegramUpdate();
+      row.updateId = updateId;
+      row.rawPayload = update as unknown as Record<string, unknown>;
+      // Commit the audit row as processed *before* acting on it. `dispatch` ->
+      // `postService.ingest()`/`retry()` runs its own `em.flush()` on this same
+      // unit of work; anything left unflushed here would ride that inner flush
+      // with processed=false, and a crash in the window would strand the row
+      // forever (offset already advanced, `em.count>0` -> skipped next poll).
+      row.processed = true;
+      this.em.persist(row);
+      await this.em.flush();
+
+      await this.dispatch(update, row);
+    }
+  }
+
+  private async nextOffset(): Promise<number | undefined> {
+    // Raw aggregate — pass the active transaction context so it sees rows
+    // this same unit of work has already flushed (and so tests that run in a
+    // rolled-back transaction see their own setup).
+    const rows = await this.em
+      .getConnection()
+      .execute<{ max: string | null }[]>(
+        'SELECT max(update_id) AS max FROM telegram_updates',
+        [],
+        'all',
+        this.em.getTransactionContext(),
+      );
+    const max = rows[0]?.max;
+    return max === null || max === undefined ? undefined : Number(max) + 1;
+  }
+
+  private async dispatch(
+    update: TelegramUpdatePayload,
+    row: TelegramUpdate,
+  ): Promise<void> {
+    const message = update.message;
+    if (
+      !message?.text ||
+      !message.from ||
+      String(message.from.id) !== this.config.adminUserId
+    ) {
+      return;
+    }
+
+    const chatId = String(message.chat.id);
+    const command = parseTelegramCommand(message.text);
+
+    let reply: string;
+    try {
+      if (command.kind === 'add') {
+        // `/add` pastes body text only — no structured attribution channel yet.
+        // Defaults to `original` + a generic credit line; the source type/text
+        // can be corrected later once an edit path exists.
+        const post = await this.postService.ingest(
+          IngestPostDto.create({ rawText: command.text }),
+        );
+        reply = `Queued. Post ${post.shortId} is processing.`;
+      } else if (command.kind === 'retry') {
+        await this.postService.retry(command.postId);
+        reply = `Re-running the pipeline for post ${command.postId}.`;
+      } else {
+        reply = UNKNOWN_COMMAND_REPLY;
+      }
+    } catch (err) {
+      this.logger.error(
+        { err, updateId: row.updateId, command: command.kind },
+        'telegram command failed',
+      );
+      await this.client
+        .sendMessage(chatId, `Command failed: ${errorText(err)}`)
+        .catch(() => undefined);
+      return;
+    }
+
+    // Deliberately outside the try: the command already succeeded and its
+    // writes are committed, so a failed confirmation send here must not turn
+    // into a "Command failed" reply or a false-negative Sentry event.
+    await this.client.sendMessage(chatId, reply).catch((err: unknown) => {
+      this.logger.warn(
+        { err, updateId: row.updateId },
+        'telegram confirmation send failed',
+      );
+    });
+  }
+}
+
+function errorText(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}

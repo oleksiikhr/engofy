@@ -1,0 +1,986 @@
+[
+  {
+    "base_form": "arise",
+    "past_simple": ["arose"],
+    "past_participle": ["arisen"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "awake",
+    "past_simple": ["awoke"],
+    "past_participle": ["awoken"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "be",
+    "past_simple": ["was", "were"],
+    "past_participle": ["been"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "bear",
+    "past_simple": ["bore"],
+    "past_participle": ["borne"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "beat",
+    "past_simple": ["beat"],
+    "past_participle": ["beaten"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "become",
+    "past_simple": ["became"],
+    "past_participle": ["become"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "begin",
+    "past_simple": ["began"],
+    "past_participle": ["begun"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "behold",
+    "past_simple": ["beheld"],
+    "past_participle": ["beheld"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "bend",
+    "past_simple": ["bent"],
+    "past_participle": ["bent"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "bet",
+    "past_simple": ["bet"],
+    "past_participle": ["bet"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "bid",
+    "past_simple": ["bid"],
+    "past_participle": ["bid"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "bind",
+    "past_simple": ["bound"],
+    "past_participle": ["bound"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "bite",
+    "past_simple": ["bit"],
+    "past_participle": ["bitten"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "bleed",
+    "past_simple": ["bled"],
+    "past_participle": ["bled"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "blow",
+    "past_simple": ["blew"],
+    "past_participle": ["blown"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "break",
+    "past_simple": ["broke"],
+    "past_participle": ["broken"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "breed",
+    "past_simple": ["bred"],
+    "past_participle": ["bred"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "bring",
+    "past_simple": ["brought"],
+    "past_participle": ["brought"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "broadcast",
+    "past_simple": ["broadcast"],
+    "past_participle": ["broadcast"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "build",
+    "past_simple": ["built"],
+    "past_participle": ["built"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "burn",
+    "past_simple": ["burned", "burnt"],
+    "past_participle": ["burned", "burnt"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "burst",
+    "past_simple": ["burst"],
+    "past_participle": ["burst"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "buy",
+    "past_simple": ["bought"],
+    "past_participle": ["bought"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "cast",
+    "past_simple": ["cast"],
+    "past_participle": ["cast"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "catch",
+    "past_simple": ["caught"],
+    "past_participle": ["caught"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "choose",
+    "past_simple": ["chose"],
+    "past_participle": ["chosen"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "cling",
+    "past_simple": ["clung"],
+    "past_participle": ["clung"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "come",
+    "past_simple": ["came"],
+    "past_participle": ["come"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "cost",
+    "past_simple": ["cost"],
+    "past_participle": ["cost"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "creep",
+    "past_simple": ["crept"],
+    "past_participle": ["crept"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "cut",
+    "past_simple": ["cut"],
+    "past_participle": ["cut"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "deal",
+    "past_simple": ["dealt"],
+    "past_participle": ["dealt"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "dig",
+    "past_simple": ["dug"],
+    "past_participle": ["dug"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "do",
+    "past_simple": ["did"],
+    "past_participle": ["done"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "draw",
+    "past_simple": ["drew"],
+    "past_participle": ["drawn"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "dream",
+    "past_simple": ["dreamed", "dreamt"],
+    "past_participle": ["dreamed", "dreamt"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "drink",
+    "past_simple": ["drank"],
+    "past_participle": ["drunk"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "drive",
+    "past_simple": ["drove"],
+    "past_participle": ["driven"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "eat",
+    "past_simple": ["ate"],
+    "past_participle": ["eaten"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "fall",
+    "past_simple": ["fell"],
+    "past_participle": ["fallen"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "feed",
+    "past_simple": ["fed"],
+    "past_participle": ["fed"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "feel",
+    "past_simple": ["felt"],
+    "past_participle": ["felt"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "fight",
+    "past_simple": ["fought"],
+    "past_participle": ["fought"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "find",
+    "past_simple": ["found"],
+    "past_participle": ["found"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "flee",
+    "past_simple": ["fled"],
+    "past_participle": ["fled"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "fling",
+    "past_simple": ["flung"],
+    "past_participle": ["flung"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "fly",
+    "past_simple": ["flew"],
+    "past_participle": ["flown"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "forbid",
+    "past_simple": ["forbade"],
+    "past_participle": ["forbidden"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "forecast",
+    "past_simple": ["forecast"],
+    "past_participle": ["forecast"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "foresee",
+    "past_simple": ["foresaw"],
+    "past_participle": ["foreseen"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "forget",
+    "past_simple": ["forgot"],
+    "past_participle": ["forgotten"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "forgive",
+    "past_simple": ["forgave"],
+    "past_participle": ["forgiven"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "forgo",
+    "past_simple": ["forwent"],
+    "past_participle": ["forgone"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "freeze",
+    "past_simple": ["froze"],
+    "past_participle": ["frozen"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "get",
+    "past_simple": ["got"],
+    "past_participle": ["got", "gotten"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "give",
+    "past_simple": ["gave"],
+    "past_participle": ["given"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "go",
+    "past_simple": ["went"],
+    "past_participle": ["gone"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "grind",
+    "past_simple": ["ground"],
+    "past_participle": ["ground"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "grow",
+    "past_simple": ["grew"],
+    "past_participle": ["grown"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "hang",
+    "past_simple": ["hung"],
+    "past_participle": ["hung"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "have",
+    "past_simple": ["had"],
+    "past_participle": ["had"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "hear",
+    "past_simple": ["heard"],
+    "past_participle": ["heard"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "hide",
+    "past_simple": ["hid"],
+    "past_participle": ["hidden"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "hit",
+    "past_simple": ["hit"],
+    "past_participle": ["hit"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "hold",
+    "past_simple": ["held"],
+    "past_participle": ["held"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "hurt",
+    "past_simple": ["hurt"],
+    "past_participle": ["hurt"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "keep",
+    "past_simple": ["kept"],
+    "past_participle": ["kept"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "kneel",
+    "past_simple": ["knelt", "kneeled"],
+    "past_participle": ["knelt", "kneeled"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "know",
+    "past_simple": ["knew"],
+    "past_participle": ["known"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "lay",
+    "past_simple": ["laid"],
+    "past_participle": ["laid"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "lead",
+    "past_simple": ["led"],
+    "past_participle": ["led"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "lean",
+    "past_simple": ["leaned", "leant"],
+    "past_participle": ["leaned", "leant"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "leap",
+    "past_simple": ["leaped", "leapt"],
+    "past_participle": ["leaped", "leapt"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "learn",
+    "past_simple": ["learned", "learnt"],
+    "past_participle": ["learned", "learnt"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "leave",
+    "past_simple": ["left"],
+    "past_participle": ["left"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "lend",
+    "past_simple": ["lent"],
+    "past_participle": ["lent"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "let",
+    "past_simple": ["let"],
+    "past_participle": ["let"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "lie",
+    "past_simple": ["lay"],
+    "past_participle": ["lain"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "light",
+    "past_simple": ["lit", "lighted"],
+    "past_participle": ["lit", "lighted"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "lose",
+    "past_simple": ["lost"],
+    "past_participle": ["lost"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "make",
+    "past_simple": ["made"],
+    "past_participle": ["made"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "mean",
+    "past_simple": ["meant"],
+    "past_participle": ["meant"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "meet",
+    "past_simple": ["met"],
+    "past_participle": ["met"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "mistake",
+    "past_simple": ["mistook"],
+    "past_participle": ["mistaken"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "misunderstand",
+    "past_simple": ["misunderstood"],
+    "past_participle": ["misunderstood"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "overcome",
+    "past_simple": ["overcame"],
+    "past_participle": ["overcome"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "overhear",
+    "past_simple": ["overheard"],
+    "past_participle": ["overheard"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "overtake",
+    "past_simple": ["overtook"],
+    "past_participle": ["overtaken"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "pay",
+    "past_simple": ["paid"],
+    "past_participle": ["paid"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "prove",
+    "past_simple": ["proved"],
+    "past_participle": ["proven", "proved"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "put",
+    "past_simple": ["put"],
+    "past_participle": ["put"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "quit",
+    "past_simple": ["quit"],
+    "past_participle": ["quit"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "read",
+    "past_simple": ["read"],
+    "past_participle": ["read"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "rebuild",
+    "past_simple": ["rebuilt"],
+    "past_participle": ["rebuilt"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "repay",
+    "past_simple": ["repaid"],
+    "past_participle": ["repaid"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "ride",
+    "past_simple": ["rode"],
+    "past_participle": ["ridden"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "ring",
+    "past_simple": ["rang"],
+    "past_participle": ["rung"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "rise",
+    "past_simple": ["rose"],
+    "past_participle": ["risen"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "run",
+    "past_simple": ["ran"],
+    "past_participle": ["run"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "say",
+    "past_simple": ["said"],
+    "past_participle": ["said"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "see",
+    "past_simple": ["saw"],
+    "past_participle": ["seen"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "seek",
+    "past_simple": ["sought"],
+    "past_participle": ["sought"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "sell",
+    "past_simple": ["sold"],
+    "past_participle": ["sold"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "send",
+    "past_simple": ["sent"],
+    "past_participle": ["sent"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "set",
+    "past_simple": ["set"],
+    "past_participle": ["set"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "sew",
+    "past_simple": ["sewed"],
+    "past_participle": ["sewn", "sewed"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "shake",
+    "past_simple": ["shook"],
+    "past_participle": ["shaken"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "shine",
+    "past_simple": ["shone"],
+    "past_participle": ["shone"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "shoot",
+    "past_simple": ["shot"],
+    "past_participle": ["shot"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "show",
+    "past_simple": ["showed"],
+    "past_participle": ["shown", "showed"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "shrink",
+    "past_simple": ["shrank"],
+    "past_participle": ["shrunk"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "shut",
+    "past_simple": ["shut"],
+    "past_participle": ["shut"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "sing",
+    "past_simple": ["sang"],
+    "past_participle": ["sung"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "sink",
+    "past_simple": ["sank"],
+    "past_participle": ["sunk"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "sit",
+    "past_simple": ["sat"],
+    "past_participle": ["sat"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "sleep",
+    "past_simple": ["slept"],
+    "past_participle": ["slept"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "slide",
+    "past_simple": ["slid"],
+    "past_participle": ["slid"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "sling",
+    "past_simple": ["slung"],
+    "past_participle": ["slung"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "smell",
+    "past_simple": ["smelled", "smelt"],
+    "past_participle": ["smelled", "smelt"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "sow",
+    "past_simple": ["sowed"],
+    "past_participle": ["sown", "sowed"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "speak",
+    "past_simple": ["spoke"],
+    "past_participle": ["spoken"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "speed",
+    "past_simple": ["sped", "speeded"],
+    "past_participle": ["sped", "speeded"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "spell",
+    "past_simple": ["spelled", "spelt"],
+    "past_participle": ["spelled", "spelt"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "spend",
+    "past_simple": ["spent"],
+    "past_participle": ["spent"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "spill",
+    "past_simple": ["spilled", "spilt"],
+    "past_participle": ["spilled", "spilt"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "spin",
+    "past_simple": ["spun"],
+    "past_participle": ["spun"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "spit",
+    "past_simple": ["spat", "spit"],
+    "past_participle": ["spat", "spit"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "split",
+    "past_simple": ["split"],
+    "past_participle": ["split"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "spoil",
+    "past_simple": ["spoiled", "spoilt"],
+    "past_participle": ["spoiled", "spoilt"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "spread",
+    "past_simple": ["spread"],
+    "past_participle": ["spread"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "spring",
+    "past_simple": ["sprang"],
+    "past_participle": ["sprung"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "stand",
+    "past_simple": ["stood"],
+    "past_participle": ["stood"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "steal",
+    "past_simple": ["stole"],
+    "past_participle": ["stolen"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "stick",
+    "past_simple": ["stuck"],
+    "past_participle": ["stuck"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "sting",
+    "past_simple": ["stung"],
+    "past_participle": ["stung"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "stink",
+    "past_simple": ["stank"],
+    "past_participle": ["stunk"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "strike",
+    "past_simple": ["struck"],
+    "past_participle": ["struck"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "string",
+    "past_simple": ["strung"],
+    "past_participle": ["strung"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "swear",
+    "past_simple": ["swore"],
+    "past_participle": ["sworn"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "sweep",
+    "past_simple": ["swept"],
+    "past_participle": ["swept"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "swim",
+    "past_simple": ["swam"],
+    "past_participle": ["swum"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "swing",
+    "past_simple": ["swung"],
+    "past_participle": ["swung"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "take",
+    "past_simple": ["took"],
+    "past_participle": ["taken"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "teach",
+    "past_simple": ["taught"],
+    "past_participle": ["taught"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "tear",
+    "past_simple": ["tore"],
+    "past_participle": ["torn"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "tell",
+    "past_simple": ["told"],
+    "past_participle": ["told"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "think",
+    "past_simple": ["thought"],
+    "past_participle": ["thought"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "throw",
+    "past_simple": ["threw"],
+    "past_participle": ["thrown"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "thrust",
+    "past_simple": ["thrust"],
+    "past_participle": ["thrust"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "tread",
+    "past_simple": ["trod"],
+    "past_participle": ["trodden", "trod"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "understand",
+    "past_simple": ["understood"],
+    "past_participle": ["understood"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "undertake",
+    "past_simple": ["undertook"],
+    "past_participle": ["undertaken"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "upset",
+    "past_simple": ["upset"],
+    "past_participle": ["upset"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "wake",
+    "past_simple": ["woke"],
+    "past_participle": ["woken"],
+    "cefr_level": "A2"
+  },
+  {
+    "base_form": "wear",
+    "past_simple": ["wore"],
+    "past_participle": ["worn"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "weave",
+    "past_simple": ["wove"],
+    "past_participle": ["woven"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "weep",
+    "past_simple": ["wept"],
+    "past_participle": ["wept"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "win",
+    "past_simple": ["won"],
+    "past_participle": ["won"],
+    "cefr_level": "A1"
+  },
+  {
+    "base_form": "wind",
+    "past_simple": ["wound"],
+    "past_participle": ["wound"],
+    "cefr_level": "B1"
+  },
+  {
+    "base_form": "withdraw",
+    "past_simple": ["withdrew"],
+    "past_participle": ["withdrawn"],
+    "cefr_level": "B2"
+  },
+  {
+    "base_form": "withhold",
+    "past_simple": ["withheld"],
+    "past_participle": ["withheld"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "withstand",
+    "past_simple": ["withstood"],
+    "past_participle": ["withstood"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "wring",
+    "past_simple": ["wrung"],
+    "past_participle": ["wrung"],
+    "cefr_level": "C1"
+  },
+  {
+    "base_form": "write",
+    "past_simple": ["wrote"],
+    "past_participle": ["written"],
+    "cefr_level": "A1"
+  }
+]

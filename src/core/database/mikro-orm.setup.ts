@@ -46,5 +46,10 @@ export default defineConfig({
     statement_timeout: envNumber('DB_STATEMENT_TIMEOUT_MS', 30_000),
     query_timeout: envNumber('DB_QUERY_TIMEOUT_MS', 30_000),
     connectionTimeoutMillis: envNumber('DB_CONNECTION_TIMEOUT_MS', 10_000),
+    // Force the session TimeZone to UTC on every connection. `LuxonTimestampType`
+    // writes an offset-less wall-time literal into `timestamptz`, which Postgres
+    // interprets in the session TimeZone — anything other than UTC silently
+    // shifts the stored instant. Don't rely on the server/image default.
+    options: '-c timezone=UTC',
   },
 });

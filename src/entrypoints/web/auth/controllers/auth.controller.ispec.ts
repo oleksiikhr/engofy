@@ -20,6 +20,10 @@ describe('AuthController', () => {
   const uniqueEmail = () =>
     `user-${Math.random().toString(36).slice(2)}@example.com`;
 
+  // The per-IP OTP counter (every request here is from the same loopback
+  // address) is shared Redis state; `useOrmSuiteLifecycle` FLUSHDB's the
+  // dedicated test Redis DB after each test, so no manual cleanup is needed.
+
   async function issueChallenge(
     em: EntityManager,
     email: string,
@@ -57,21 +61,21 @@ describe('AuthController', () => {
   describe('POST /auth/login', () => {
     it('accepts a valid email and returns a generic response', async () => {
       await suite
-        .request('post', '/auth/login', { authed: false })
+        .request('post', '/auth/login')
         .send({ email: uniqueEmail() })
         .expect(HttpStatus.OK);
     });
 
     it('rejects an invalid email with a validation error', async () => {
       await suite
-        .request('post', '/auth/login', { authed: false })
+        .request('post', '/auth/login')
         .send({ email: 'not-an-email' })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
     it('rejects a missing email with a validation error', async () => {
       await suite
-        .request('post', '/auth/login', { authed: false })
+        .request('post', '/auth/login')
         .send({})
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -82,29 +86,44 @@ describe('AuthController', () => {
       for (let i = 0; i < config().requestLimitPerEmail; i++) {
         // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared rate-limit counter the next depends on.
         await suite
-          .request('post', '/auth/login', { authed: false })
+          .request('post', '/auth/login')
           .send({ email })
           .expect(HttpStatus.OK);
       }
 
       await suite
-        .request('post', '/auth/login', { authed: false })
+        .request('post', '/auth/login')
         .send({ email })
-        .expect(HttpStatus.BAD_REQUEST);
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
+    });
+
+    it('rate-limits requests from one IP even across different emails', async () => {
+      for (let i = 0; i < config().requestLimitPerIp; i++) {
+        // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared per-IP counter the next depends on.
+        await suite
+          .request('post', '/auth/login')
+          .send({ email: uniqueEmail() })
+          .expect(HttpStatus.OK);
+      }
+
+      await suite
+        .request('post', '/auth/login')
+        .send({ email: uniqueEmail() })
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
     });
   });
 
   describe('POST /auth/login/verify-code', () => {
     it('rejects a wrong code', async () => {
       await suite
-        .request('post', '/auth/login/verify-code', { authed: false })
+        .request('post', '/auth/login/verify-code')
         .send({ email: uniqueEmail(), code: '000000' })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
     it('rejects a code that is not 6 digits with a validation error', async () => {
       await suite
-        .request('post', '/auth/login/verify-code', { authed: false })
+        .request('post', '/auth/login/verify-code')
         .send({ email: uniqueEmail(), code: '123' })
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -116,15 +135,17 @@ describe('AuthController', () => {
       for (let i = 0; i < config().otpMaxAttempts; i++) {
         // biome-ignore lint/performance/noAwaitInLoops: requests must be sequential — each one mutates the shared attempts counter the next depends on.
         await suite
-          .request('post', '/auth/login/verify-code', { authed: false })
+          .request('post', '/auth/login/verify-code')
           .send({ email, code: '000000' })
           .expect(HttpStatus.BAD_REQUEST);
       }
 
+      // One past the limit: the challenge is hard-deleted and the error
+      // switches from "invalid code" (400) to TooManyAttemptsError (429).
       await suite
-        .request('post', '/auth/login/verify-code', { authed: false })
+        .request('post', '/auth/login/verify-code')
         .send({ email, code: '000000' })
-        .expect(HttpStatus.BAD_REQUEST);
+        .expect(HttpStatus.TOO_MANY_REQUESTS);
     });
 
     it('sets a session cookie on the right code, resolvable via /auth/me', async () => {
@@ -132,7 +153,7 @@ describe('AuthController', () => {
       const issued = await issueChallenge(suite.orm.em, email);
 
       const verifyResponse = await suite
-        .request('post', '/auth/login/verify-code', { authed: false })
+        .request('post', '/auth/login/verify-code')
         .send({ email, code: issued.otp })
         .expect(HttpStatus.OK);
 
@@ -141,7 +162,7 @@ describe('AuthController', () => {
       const cookie = extractCookie(verifyResponse);
 
       const meResponse = await suite
-        .request('get', '/auth/me', { authed: false })
+        .request('get', '/auth/me')
         .set('Cookie', cookie)
         .expect(HttpStatus.OK);
 
@@ -152,14 +173,14 @@ describe('AuthController', () => {
   describe('POST /auth/google', () => {
     it('rejects a credential it cannot verify (no GOOGLE_CLIENT_ID configured in tests)', async () => {
       await suite
-        .request('post', '/auth/google', { authed: false })
+        .request('post', '/auth/google')
         .send({ credential: 'not-a-real-google-id-token' })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
     it('rejects a credential shorter than the minimum length with a validation error', async () => {
       await suite
-        .request('post', '/auth/google', { authed: false })
+        .request('post', '/auth/google')
         .send({ credential: 'too-short' })
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -167,17 +188,13 @@ describe('AuthController', () => {
 
   describe('GET /auth/me', () => {
     it('requires an authenticated session', async () => {
-      await suite
-        .request('get', '/auth/me', { authed: false })
-        .expect(HttpStatus.UNAUTHORIZED);
+      await suite.request('get', '/auth/me').expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
   describe('POST /auth/logout', () => {
     it('is a no-op without a session and clears the cookie either way', async () => {
-      await suite
-        .request('post', '/auth/logout', { authed: false })
-        .expect(HttpStatus.NO_CONTENT);
+      await suite.request('post', '/auth/logout').expect(HttpStatus.NO_CONTENT);
     });
 
     it('invalidates an active session', async () => {
@@ -185,19 +202,19 @@ describe('AuthController', () => {
       const issued = await issueChallenge(suite.orm.em, email);
 
       const verifyResponse = await suite
-        .request('post', '/auth/login/verify-code', { authed: false })
+        .request('post', '/auth/login/verify-code')
         .send({ email, code: issued.otp })
         .expect(HttpStatus.OK);
 
       const cookie = extractCookie(verifyResponse);
 
       await suite
-        .request('post', '/auth/logout', { authed: false })
+        .request('post', '/auth/logout')
         .set('Cookie', cookie)
         .expect(HttpStatus.NO_CONTENT);
 
       await suite
-        .request('get', '/auth/me', { authed: false })
+        .request('get', '/auth/me')
         .set('Cookie', cookie)
         .expect(HttpStatus.UNAUTHORIZED);
     });

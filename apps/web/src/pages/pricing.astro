@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet, apiPost } from '../lib/api';
+import { getCurrentUser } from '../lib/session';
+import type { Subscription } from '../lib/types';
+
+const FREE_LIMIT = 100;
+const user = await getCurrentUser(Astro.request);
+
+let sub: Subscription | null = user
+  ? await apiGet<Subscription>('/billing/subscription', {
+      request: Astro.request,
+    })
+  : null;
+let justUpgraded = false;
+let error: string | null = null;
+
+if (Astro.request.method === 'POST' && user) {
+  const form = await Astro.request.formData();
+  if (form.get('action') === 'subscribe') {
+    try {
+      sub = await apiPost<Subscription>('/billing/subscribe', undefined, {
+        request: Astro.request,
+      });
+      justUpgraded = true;
+    } catch {
+      error = 'Could not start the subscription — please try again.';
+    }
+  }
+}
+
+const isPremium = sub?.plan === 'premium' && sub.active;
+const renews = sub?.currentPeriodEnd
+  ? new Date(sub.currentPeriodEnd).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  : null;
+---
+
+<Layout title="Pricing — Engofy" user={user} active="pricing">
+  <div class="pricing">
+    <h1>Go further with Premium</h1>
+
+    {error && <p class="pricing__error" role="alert">{error}</p>}
+    {
+      justUpgraded && (
+        <p class="pricing__ok" role="status">
+          You're on Premium{renews ? ` until ${renews}` : ''}. Enjoy unlimited
+          cards!
+        </p>
+      )
+    }
+
+    <div class="plans">
+      <section class="plan">
+        <h2>Free</h2>
+        <p class="plan__price">$0</p>
+        <ul>
+          <li>Every article, tooltip and exercise</li>
+          <li>Grammar reference and skills tree</li>
+          <li>Up to {FREE_LIMIT} saved cards</li>
+        </ul>
+      </section>
+
+      <section class:list={['plan', 'plan--featured', { 'plan--current': isPremium }]}>
+        <h2>Premium</h2>
+        <p class="plan__price">$4.99<span>/month</span></p>
+        <ul>
+          <li><strong>Unlimited</strong> saved cards</li>
+          <li>Everything in Free</li>
+          <li>Supports the project</li>
+        </ul>
+
+        {
+          isPremium ? (
+            <p class="plan__state" data-testid="premium-active">
+              Active{renews ? ` — renews ${renews}` : ''}
+            </p>
+          ) : user ? (
+            <form method="post">
+              <input type="hidden" name="action" value="subscribe" />
+              <button class="btn" type="submit">
+                Upgrade to Premium
+              </button>
+              <p class="plan__note">
+                Mock checkout — no card required, no real charge (PLAN §8).
+              </p>
+            </form>
+          ) : (
+            <a class="btn" href="/login">
+              Sign in to upgrade
+            </a>
+          )
+        }
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .pricing {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  .pricing__ok {
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-control);
+    font-weight: 600;
+  }
+  .pricing__error {
+    background: var(--color-highlight-wash);
+    color: var(--color-danger);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-control);
+  }
+  .plans {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+  @media (min-width: 40rem) {
+    .plans {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .plan {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .plan--featured {
+    border-color: var(--color-brand);
+  }
+  .plan--current {
+    background: var(--color-brand-wash);
+  }
+  .plan__price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin: 0.25rem 0 0.75rem;
+  }
+  .plan__price span {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-ink-soft);
+  }
+  .plan ul {
+    padding-left: 1.1rem;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .plan__state {
+    font-weight: 600;
+    color: var(--color-brand-strong);
+    margin: 0;
+  }
+  .plan__note {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    margin: 0.5rem 0 0;
+  }
+</style>

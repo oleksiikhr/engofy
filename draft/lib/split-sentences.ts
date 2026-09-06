@@ -1,8 +1,7 @@
-// Same sentence-boundary heuristic as
-// src/modules/post/domain/split-text-for-annotation.ts, copied rather
-// than imported — this harness is meant to A/B *against* that file's
-// chunking choice (paragraph vs sentence granularity), so it can't share
-// the one implementation with the thing it's evaluating.
+// A self-contained sentence-boundary heuristic for this eval harness only.
+// The production pipeline segments sentences via spaCy (`nlp-service`), not a
+// regex — this harness deliberately keeps its own cheap splitter so it can A/B
+// chunking granularity (paragraph vs sentence) without pulling in the service.
 export function splitIntoSentences(text: string): string[] {
   const pattern = /[.!?](?=\s|$)/g;
   const sentences: string[] = [];

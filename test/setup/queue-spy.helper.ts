@@ -11,6 +11,14 @@ export interface QueueSpy {
   assertNotSent(name: QueueName): void;
 }
 
+// A single recorded `OutboxSenderService.send(em, name, data, options?)` call.
+// The spy reads the queue name / payload out of it by that shape; kept behind
+// these two accessors so a signature change only has to be reflected here.
+type SendCall = Parameters<OutboxSenderService['send']>;
+
+const queueName = (call: SendCall): string => call[1];
+const queuePayload = <T>(call: SendCall): T => call[2] as T;
+
 export function useQueueSpy(suite: IntegrationSuite): QueueSpy {
   let sendSpy: MockInstance<OutboxSenderService['send']>;
 
@@ -24,16 +32,17 @@ export function useQueueSpy(suite: IntegrationSuite): QueueSpy {
       predicate?: (data: T) => boolean,
     ): T {
       const match = sendSpy.mock.calls.find(
-        ([, jobName, data]) =>
-          jobName === name && (!predicate || predicate(data as T)),
+        (call) =>
+          queueName(call) === name &&
+          (!predicate || predicate(queuePayload<T>(call))),
       );
 
       expect(match, `expected a "${name}" job to have been sent`).toBeTruthy();
 
-      return match?.[2] as T;
+      return queuePayload<T>(match as SendCall);
     },
     assertNotSent(name: QueueName): void {
-      expect(sendSpy.mock.calls.some(([, jobName]) => jobName === name)).toBe(
+      expect(sendSpy.mock.calls.some((call) => queueName(call) === name)).toBe(
         false,
       );
     },

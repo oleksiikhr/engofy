@@ -6,15 +6,18 @@ import * as Sentry from '@sentry/nestjs';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module.js';
 import { shutdownSentry } from './core/observability/sentry.js';
+import { closeOnce } from './entrypoints/close-once.helper.js';
 import { waitForCronTicksToDrain } from './entrypoints/cron/cron-job-host.js';
 
 let logger: Logger | undefined;
 let app: INestApplicationContext | undefined;
+let closeApp: () => Promise<void> = () => Promise.resolve();
 
 try {
   app = await NestFactory.createApplicationContext(AppModule.cron(), {
     bufferLogs: true,
   });
+  closeApp = closeOnce(app);
 
   logger = app.get<Logger>(Logger);
   app.useLogger(logger);
@@ -25,7 +28,7 @@ try {
       try {
         await waitForCronTicksToDrain();
       } finally {
-        await app?.close();
+        await closeApp();
       }
     };
 
@@ -34,10 +37,10 @@ try {
   });
 } catch (err) {
   logger
-    ? logger.error({ cause: err }, 'Cron crashed')
+    ? logger.error({ err }, 'Cron crashed')
     : console.error('Cron crashed', err);
   Sentry.captureException(err);
-  await app?.close();
+  await closeApp();
   process.exitCode = 1;
 } finally {
   await shutdownSentry();
