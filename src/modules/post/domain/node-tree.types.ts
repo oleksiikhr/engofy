@@ -60,6 +60,10 @@ export interface Paragraph {
   // Paragraph rather than as a separate node type so the AI annotation
   // pipeline (flattenDoc/spliceSpans) keeps treating it exactly like prose.
   level?: HeadingLevel;
+  // Present and true => this paragraph is quoted material (<blockquote> /
+  // markdown `>`), flattened to a paragraph for the same reason as `level`.
+  // Mutually exclusive with `level` in practice.
+  quote?: boolean;
   children: Node[];
 }
 

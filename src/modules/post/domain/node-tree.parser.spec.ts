@@ -69,6 +69,36 @@ describe('parseDoc', () => {
     ).toThrow(InvalidNodeTreeError);
   });
 
+  it('parses a quoted paragraph', () => {
+    const doc = parseDoc({
+      type: 'doc',
+      children: [
+        {
+          type: 'paragraph',
+          quote: true,
+          children: [{ type: 'text', text: 'Quoted.' }],
+        },
+      ],
+    });
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        quote: true,
+        children: [{ type: 'text', text: 'Quoted.' }],
+      },
+    ]);
+  });
+
+  it('rejects a non-boolean "quote"', () => {
+    expect(() =>
+      parseDoc({
+        type: 'doc',
+        children: [{ type: 'paragraph', quote: 'yes', children: [] }],
+      }),
+    ).toThrow(InvalidNodeTreeError);
+  });
+
   it('parses text/span marks', () => {
     const doc = parseDoc({
       type: 'doc',

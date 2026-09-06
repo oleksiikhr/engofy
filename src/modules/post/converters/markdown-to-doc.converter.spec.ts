@@ -23,6 +23,22 @@ describe('convertMarkdownToDoc', () => {
     ]);
   });
 
+  it('keeps a `>` blockquote as a quoted paragraph', () => {
+    const doc = convertMarkdownToDoc(
+      'Before.\n\n> A line worth keeping.\n\nAfter.',
+    );
+
+    expect(doc.children).toEqual([
+      { type: 'paragraph', children: [{ type: 'text', text: 'Before.' }] },
+      {
+        type: 'paragraph',
+        quote: true,
+        children: [{ type: 'text', text: 'A line worth keeping.' }],
+      },
+      { type: 'paragraph', children: [{ type: 'text', text: 'After.' }] },
+    ]);
+  });
+
   it('preserves bold and italic as marks on text nodes', () => {
     const doc = convertMarkdownToDoc('Plain **bold** and *italic* text.');
 

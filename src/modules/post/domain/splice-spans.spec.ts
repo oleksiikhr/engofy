@@ -146,6 +146,26 @@ describe('spliceSpans', () => {
     expect(result.level).toBe(2);
   });
 
+  it('preserves the paragraph quote flag on the returned paragraph', () => {
+    const paragraph: Paragraph = {
+      type: 'paragraph',
+      quote: true,
+      children: [{ type: 'text', text: 'Breaking negotiate news' }],
+    };
+
+    const result = spliceSpans(paragraph, [
+      {
+        start: 9,
+        end: 18,
+        kind: 'word',
+        wordDefinitionId: 'wd-1',
+        pos: 'verb',
+      },
+    ]);
+
+    expect(result.quote).toBe(true);
+  });
+
   it('does not mutate the input paragraph', () => {
     const paragraph: Paragraph = {
       type: 'paragraph',

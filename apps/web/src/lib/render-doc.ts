@@ -84,6 +84,9 @@ function renderBlock(block: Block): string {
   if (block.level) {
     return `<h${block.level}>${inner}</h${block.level}>`;
   }
+  if (block.quote) {
+    return `<blockquote>${inner}</blockquote>`;
+  }
   return `<p>${inner}</p>`;
 }
 

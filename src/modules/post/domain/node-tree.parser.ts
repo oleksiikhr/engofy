@@ -225,6 +225,17 @@ function parseParagraph(value: Record<string, unknown>): Paragraph {
     paragraph.level = value.level as HeadingLevel;
   }
 
+  if (value.quote !== undefined) {
+    if (typeof value.quote !== 'boolean') {
+      throw new InvalidNodeTreeError(
+        `paragraph has invalid "quote": ${String(value.quote)}`,
+      );
+    }
+    if (value.quote) {
+      paragraph.quote = true;
+    }
+  }
+
   return paragraph;
 }
 

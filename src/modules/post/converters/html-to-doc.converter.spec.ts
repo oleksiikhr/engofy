@@ -31,6 +31,39 @@ describe('convertHtmlToDoc', () => {
     ]);
   });
 
+  it('keeps <blockquote> text as a quoted paragraph', () => {
+    const doc = convertHtmlToDoc(
+      '<p>Before.</p><blockquote>A line worth keeping.</blockquote><p>After.</p>',
+    );
+
+    expect(doc.children).toEqual([
+      { type: 'paragraph', children: [{ type: 'text', text: 'Before.' }] },
+      {
+        type: 'paragraph',
+        quote: true,
+        children: [{ type: 'text', text: 'A line worth keeping.' }],
+      },
+      { type: 'paragraph', children: [{ type: 'text', text: 'After.' }] },
+    ]);
+  });
+
+  it('flattens a <blockquote> wrapping <p>s into one quoted paragraph', () => {
+    const doc = convertHtmlToDoc(
+      '<blockquote><p>first</p><p>second</p></blockquote>',
+    );
+
+    expect(doc.children).toEqual([
+      {
+        type: 'paragraph',
+        quote: true,
+        children: [
+          { type: 'text', text: 'first' },
+          { type: 'text', text: 'second' },
+        ],
+      },
+    ]);
+  });
+
   it('preserves <b>/<strong> and <i>/<em> as marks on text nodes', () => {
     const doc = convertHtmlToDoc(
       '<p>Plain <strong>bold</strong> and <em>italic</em> text.</p>',

@@ -54,6 +54,7 @@ export type InlineNode = TextNode | LinkNode | SpanNode;
 export interface Paragraph {
   type: 'paragraph';
   level?: 1 | 2 | 3 | 4 | 5 | 6;
+  quote?: boolean;
   children: InlineNode[];
 }
 export interface ListItem {

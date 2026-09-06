@@ -241,6 +241,9 @@ export function spliceSpans(
   if (paragraph.level !== undefined) {
     result.level = paragraph.level;
   }
+  if (paragraph.quote !== undefined) {
+    result.quote = paragraph.quote;
+  }
 
   return result;
 }
