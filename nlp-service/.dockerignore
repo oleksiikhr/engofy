@@ -1,0 +1,16 @@
+# Build context is nlp-service/ (see Dockerfile header).
+.venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+
+# Test-only — not needed in the runtime image.
+test_app.py
+requirements-dev.txt
+
+# Docs / local
+README.md
+.gitignore
+Dockerfile
+.dockerignore
