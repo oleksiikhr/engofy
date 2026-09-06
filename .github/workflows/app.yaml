@@ -133,3 +133,40 @@ jobs:
       # The spaCy model (offset math is the whole contract) is exercised here.
       - name: Run tests
         run: pytest -q
+
+  # apps/web (in-repo Astro SSR frontend) is outside the main tsc/biome gate —
+  # its own type (astro check) + lint + build run here. Playwright is a
+  # separate workflow (web-e2e.yaml), not part of this gate.
+  apps-web:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          package_json_file: package.json
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Type check (astro check)
+        run: pnpm --dir apps/web run type
+        if: always()
+
+      - name: Lint check
+        run: pnpm --dir apps/web run lint:check
+        if: always()
+
+      - name: Build
+        run: pnpm --dir apps/web run build
+        if: always()
