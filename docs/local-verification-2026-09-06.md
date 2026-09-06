@@ -1,7 +1,8 @@
 # Local end-to-end verification — 2026-09-06
 
 Pre-deploy pass on `main` @ `a4b9e1a` ("V2 (#1)"). Fixes committed on
-`fix/local-verification` as `Batch T — …` (8 commits). `fix/batch-a-safety`
+`fix/local-verification` as `Batch T — …` (F1–F9 + `Batch T — F3` = 10 commits).
+`fix/batch-a-safety`
 does not exist — it was squash-merged into `main` as "V2 (#1)"; `main`'s tree
 is byte-identical to the old branch tip (`git diff e2fc15e a4b9e1a` empty).
 
@@ -10,9 +11,9 @@ is byte-identical to the old branch tip (`git diff e2fc15e a4b9e1a` empty).
 | Check | Before | After Batch T |
 |---|---|---|
 | `pnpm type` | 0 | 0 |
-| `biome check src/ test/` | clean (580) | clean (574) |
-| `pnpm test` | 131 files / 777 | 131 files / 781 |
-| `pnpm test:cov` | ~90.3 / 78.5 / 86.9 / 90.7 | 90.7 / 78.9 / 87.2 / 91.1 (exit 0) |
+| `biome check src/ test/` | clean (580) | clean |
+| `pnpm test` | 131 files / 777 | 132 files / 795 (was 131 / 781 pre-F3) |
+| `pnpm test:cov` | ~90.3 / 78.5 / 86.9 / 90.7 | 91.3 / 80.0 / 87.5 / 91.8 (exit 0) |
 | `pnpm build` + `git diff src/metadata.ts` | clean | clean |
 | `pnpm migration:up` + `migration:check` | clean (…120000) | clean (…20260906120000) |
 | `nlp-service` `pytest -q` | deps OK, service smoke-tested | unchanged |
@@ -84,7 +85,7 @@ reviewed — sound apart from F4 / F9.
 
 | # | sev | concern | where | problem | status |
 |---|---|---|---|---|---|
-| **F3** | high | pipeline / product | `tag-grammar.handler.ts`, `get-post-detail.handler.ts` | `ai_grammar` writes only `grammar_matches` (token ranges); `get-post-detail` resolves grammar only from node-tree `span.grammarConstruct`, which nothing ever writes → `annotations.grammar = {}` on all 5 posts, reader grammar highlighting dead, paid stage output unused. | **direction agreed** (splice `grammarConstruct` spans into `post_parts.body` from tag-grammar's char ranges) — **own slice, not in Batch T** (parallel-branch write race on `part.body` needs care). |
+| **F3** | high | pipeline / product | `tag-grammar.handler.ts`, `get-post-detail.handler.ts` | `ai_grammar` writes only `grammar_matches` (token ranges); `get-post-detail` resolves grammar only from node-tree `span.grammarConstruct`, which nothing ever writes → `annotations.grammar = {}` on all 5 posts, reader grammar highlighting dead, paid stage output unused. | **fixed** (`Batch T — F3`) — `tag-grammar` gained a second phase: after `grammar_matches` it paints the construction slug onto `post_parts.body` via new `domain/apply-grammar-constructs.ts` (`stripGrammarConstructs` → `paintGrammarConstruct`), gated on `PostPipelineRun(Annotation)=Completed` (mirrors D6) so it is the last writer of `part.body` — no race with the parallel `annotate-post`. Flush-per-`PostPart` (3rd sanctioned `cqrs.md` exception). No new stage / fan-out change / migration. |
 | F4 | high | config / deploy | `nest-cli.json`, `Dockerfile` | importers resolve `join(process.cwd(),'assets',…)`; `nest build` doesn't copy `assets/` into `dist/`, runtime cwd is `/app/dist` → `node cli grammar import-egp` ENOENT in the prod image → empty grammar catalogue. | **fixed** `0442766` — `Dockerfile` `COPY --from=build /app/assets ./dist/assets`. |
 | F7 | medium | converters | `html-to-doc` / `markdown-to-doc` / `node-tree.types.ts` | `<blockquote>` / `> ` content silently discarded (block allow-list `p\|ul\|ol\|h1-6`, no quote block type). | **fixed** `e19e2ca` — `Paragraph.quote?: boolean`; both converters + parser + `spliceSpans` + `render-doc.ts`. Verified live: re-ingest yields 5 parts incl. the quote (was 4). |
 | F1 | medium | http / deploy | `health.controller.ts` + no bootstrap connect | `/_healthz/ready` = 503 "Not connected to database" from `web` boot until the first organic DB query (MikroORM v7 `init()` no longer connects; Terminus probe short-circuits on `!connected`). | **fixed** `fd7dbd2` — `DatabaseBootstrapService` (`OnApplicationBootstrap` → `orm.connect()`) for every runtime. Verified: readiness 200 as the first request after boot. |
@@ -125,12 +126,11 @@ pnpm cli words import-frequency            # 164 ranked
 ## Verdict
 
 **Not deploy-ready as-is** before this session; **F1, F4, F7** were the real
-blockers and are fixed. After Batch T, the remaining gap is:
-
-- **F3 (high)** — reader grammar highlighting is a broken core feature and
-  `ai_grammar` spends money for unused output. Direction is agreed; it needs its
-  own slice. **This is the one thing that should land before (or be consciously
-  deferred with) a real launch.**
+blockers and are fixed. **F3** (reader grammar highlighting dead + paid
+`ai_grammar` output unused) is now fixed too (`Batch T — F3`) — verified by the
+new `apply-grammar-constructs` unit spec, the `tag-grammar` ispec (gated no-op +
+re-queue / paints onto `part.body` / strip+repaint idempotency) and the
+`get-post-detail` ispec (`annotations.grammar` resolved, usage points CEFR-sorted).
 
 Everything else (pipeline, DB, security, Batch S infra) is in shippable shape.
 `docs/deploy.md` (Batch S deliverable #9) is still unwritten — the runbook is a

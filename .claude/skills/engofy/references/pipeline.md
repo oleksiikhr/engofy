@@ -22,6 +22,17 @@ flowchart LR
   They rejoin at `publish`: `PublishPostHandler` no-ops and re-queues a delayed
   `post-publish` until `PostPipelineRun(stage=Annotation, status=Completed)`
   exists (D6). Reference: `commands/publish-post/publish-post.handler.ts`.
+- `ai_grammar` **also gates on the annotation branch** (F3, same mechanism as
+  D6): after writing `grammar_matches` it runs a second phase that paints the
+  construction slug onto `post_parts.body` (`domain/apply-grammar-constructs.ts`
+  — `stripGrammarConstructs` then `paintGrammarConstruct`), because
+  `get-post-detail` resolves `annotations.grammar` from
+  `span.grammarConstruct`, never from `grammar_matches`. Gating on
+  `Annotation=Completed` makes `tag-grammar` the last writer of `part.body`, so
+  there is no race with the parallel `annotate-post`. Flush-per-`PostPart`
+  (`cqrs.md` — 3rd sanctioned exception). No new stage, no fan-out change, no
+  migration (`grammar_only` / `grammarConstruct` already in the node-tree
+  types + parser).
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
   `PostPipelineStage` starts at `SpacyParse`; the legacy `'fetch'` literal was
   dropped from `post_pipeline_runs_stage_check` in `Migration20260830120000`.
@@ -60,7 +71,7 @@ defaults (no structured channel yet — Batch G). Feed / post-detail views expos
 | P6 | "Gap-filler, not rewrite": check for an existing result before calling AI. Honoured at part-granularity by `spacy_parse`/`annotate`. The 3 downstream AI stages (`ai_complexity`/`ai_grammar`/`ai_exercises`) **deliberately don't** — see P6a. | PLAN §12 |
 | P6a | `ai_complexity` / `ai_grammar` / `ai_exercises` short-circuit only on `existingRun?.status === Completed` (P3). On a `Failed`/`Pending`/absent run they re-call the model and `nativeDelete`+re-write their rows wholesale — a stage retry is a **full recompute of that stage**, the same stance as `/retry` at the pipeline level (P10 / D5). This is intentional (Batch O, open q9): a failed stage rolls its writes back (P3a), so there is no trustworthy partial output to gap-fill, and the extra paid call on a transient failure is bounded and cheaper than reasoning about half-applied state. `Completed` still means zero re-calls after success. | `assess-complexity.handler.ts:48-54`; `tag-grammar.handler.ts:65-69`; `generate-exercises.handler.ts:58-62` |
 | P7 | Rebuild-style stages `nativeDelete` prior output for the post/sentence, then re-persist. | `tag-grammar.handler.ts:91-93`; `generate-exercises.handler.ts:99` |
-| P8 | Grammar tagging deliberately **drops-with-warn** (not all-or-nothing) for unknown slug / out-of-construction egpIndex / zero-token span. | `tag-grammar.handler.ts:251-279` (sanctioned, PLAN Зріз 3) |
+| P8 | Grammar tagging deliberately **drops-with-warn** (not all-or-nothing) for unknown slug / out-of-construction egpIndex / zero-token span (in the `grammar_matches` pass) and for a span that only partially covers a `word`/`phrase` node or touches a `link` (in the node-tree paint pass, F3). | `tag-grammar.handler.ts` `persistMatch` / `paintUnit`; `domain/apply-grammar-constructs.ts` (sanctioned, PLAN Зріз 3) |
 | P9 | Downstream AI stages hard-fail if the spaCy layer is absent (`sentences.length === 0`); annotation throws typed `SpacyLayerMissingError`. | `assess-complexity.handler.ts:63-67` |
 | P10 | `/retry` is always a **from-scratch reprocess** (D5): `RetryPostHandler` `nativeDelete`s `Sentence` / `SentenceToken` / `GrammarMatch` / `Exercise` for the post, nulls `PostPart.annotatedAt`, resets any `failed` telegram `post_publications` row back to `pending` (D15 #30 — so a re-published post is actually re-announced; `published` rows are left alone), drops the `PostPipelineRun` rows, resets `posts.status`, and re-enqueues only `spacy_parse`. No `--force` flag. | `commands/retry-post/retry-post.handler.ts` |
 | P11 | `publish` upserts the `post_publications` row `onConflictAction: 'ignore'`, so a re-publish never re-announces on its own — the telegram side owns retry: `PublishPendingService.run()` re-selects `failed` rows (bounded `retry_count` + `updatedAt` backoff), and `/retry` resets them (P10). | `telegram/services/shared/publish-pending.service.ts` |

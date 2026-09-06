@@ -9,6 +9,10 @@ import {
 import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import {
+  paintGrammarConstruct,
+  stripGrammarConstructs,
+} from '../../domain/apply-grammar-constructs.js';
+import {
   buildGrammarCatalog,
   buildGrammarUserText,
   GRAMMAR_SYSTEM_PROMPT,
@@ -18,10 +22,12 @@ import {
   parseGrammarResponse,
 } from '../../domain/grammar-prompt.js';
 import { spanToTokenRange } from '../../domain/grammar-span-tokens.js';
+import type { Block, Node } from '../../domain/node-tree.types.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { Post } from '../../entities/post.entity.js';
+import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
@@ -34,10 +40,43 @@ export interface PostAiGrammarJobData {
   postId: string;
 }
 
+// How long to wait before re-checking the annotation branch while the grammar
+// stage is still gated on it (mirrors publish-post's D6 gate).
+const ANNOTATION_GATE_RETRY_SECONDS = 30;
+
 interface GrammarCatalog {
   systemPrompt: string;
   usagePointIdByEgpIndex: Map<number, string>;
   egpIndexesBySlug: Map<string, Set<number>>;
+  slugByEgpIndex: Map<number, string>;
+}
+
+// One grammar span to paint onto a PostPart's node tree, already re-based into
+// flattened-unit coordinates.
+interface PaintSpan {
+  unitIndex: number;
+  start: number;
+  end: number;
+  slug: string;
+}
+
+// The construction slug get-post-detail.resolveGrammar keys on, taken from the
+// authoritative usage-point catalogue rather than the model's raw slug text.
+// Returns null for a span the grammar_matches pass already dropped (unknown
+// slug / out-of-construction egpIndex) — no need to warn about it twice.
+function resolvePaintSlug(
+  span: { slug: string; egpIndex: number | null },
+  catalog: GrammarCatalog,
+): string | null {
+  const validEgpIndexes = catalog.egpIndexesBySlug.get(span.slug);
+  if (
+    !validEgpIndexes ||
+    span.egpIndex === null ||
+    !validEgpIndexes.has(span.egpIndex)
+  ) {
+    return null;
+  }
+  return catalog.slugByEgpIndex.get(span.egpIndex) ?? null;
 }
 
 // ai_grammar stage (PLAN.md §5): one AI call tags every sentence against the
@@ -71,6 +110,27 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
     }
 
     await this.em.findOneOrFail(Post, postId);
+
+    // Gate on the parallel annotation branch (mirrors publish-post / D6). The
+    // second phase below paints grammarConstruct onto post_parts.body, and
+    // annotate-post writes the same rows off the other fan-out branch. Waiting
+    // for annotation to be Completed makes tag-grammar the last writer of
+    // part.body, so there is no race. In practice annotation finishes well
+    // before ai_complexity -> ai_grammar, so this re-queue rarely fires.
+    const annotationRun = await this.em.findOne(PostPipelineRun, {
+      postId,
+      stage: PostPipelineStage.Annotation,
+    });
+    if (annotationRun?.status !== PostPipelineRunStatus.Completed) {
+      this.outbox.send<PostAiGrammarJobData>(
+        this.em,
+        QueueName.PostAiGrammar,
+        { postId },
+        { singletonKey: postId, startAfter: ANNOTATION_GATE_RETRY_SECONDS },
+      );
+      this.logger.log({ postId }, 'ai_grammar gated on annotation branch');
+      return;
+    }
 
     const sentences = await this.em.find(
       Sentence,
@@ -112,6 +172,9 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
       'ai_grammar tagged',
     );
 
+    // Second phase: paint the same spans onto the reader's node tree (F3).
+    await this.paintGrammarConstructs(postId, parsed, sentences, catalog);
+
     const run = existingRun ?? new PostPipelineRun();
     run.postId = postId;
     run.stage = PostPipelineStage.AiGrammar;
@@ -143,6 +206,7 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
     const slugById = new Map(constructions.map((c) => [c.id, c.slug]));
     const usagePointIdByEgpIndex = new Map<number, string>();
     const egpIndexesBySlug = new Map<string, Set<number>>();
+    const slugByEgpIndex = new Map<number, string>();
     const pointsBySlug = new Map<string, GrammarCatalogUsagePoint[]>();
 
     for (const up of usagePoints) {
@@ -151,6 +215,7 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
         continue;
       }
       usagePointIdByEgpIndex.set(up.egpIndex, up.id);
+      slugByEgpIndex.set(up.egpIndex, slug);
 
       let egpIndexes = egpIndexesBySlug.get(slug);
       if (!egpIndexes) {
@@ -184,6 +249,7 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
       systemPrompt: GRAMMAR_SYSTEM_PROMPT + buildGrammarCatalog(entries),
       usagePointIdByEgpIndex,
       egpIndexesBySlug,
+      slugByEgpIndex,
     };
   }
 
@@ -294,5 +360,116 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
     grammarMatch.tokenEnd = range.tokenEnd;
     this.em.persist(grammarMatch);
     return true;
+  }
+
+  // Second phase (F3): paint each parsed grammar span's construction slug onto
+  // the post_parts node tree, so get-post-detail can resolve
+  // `annotations.grammar` from `span.grammarConstruct` (the read path never
+  // touches `grammar_matches`). Gated on the annotation branch (see execute),
+  // so tag-grammar is the last writer of `part.body` — no race with the
+  // parallel annotate-post. Flush-per-PostPart: the 3rd sanctioned exception
+  // to "a handler doesn't flush" (cqrs.md), same rationale as annotate-post.
+  private async paintGrammarConstructs(
+    postId: string,
+    parsed: ParsedGrammarResponse,
+    sentences: Sentence[],
+    catalog: GrammarCatalog,
+  ): Promise<void> {
+    const spansByPart = new Map<string, PaintSpan[]>();
+    for (const line of parsed.lines) {
+      const sentence = sentences[line.index];
+      for (const span of line.spans) {
+        const slug = resolvePaintSlug(span, catalog);
+        if (!slug) {
+          continue;
+        }
+        const list = spansByPart.get(sentence.postPartId) ?? [];
+        // `rawText` char offsets are relative to the sentence; the sentence is
+        // placed at `charStart` inside the flattened unit — the exact system
+        // flattenParagraph / spliceSpans use.
+        list.push({
+          unitIndex: sentence.unitIndex,
+          start: sentence.charStart + span.charStart,
+          end: sentence.charStart + span.charEnd,
+          slug,
+        });
+        spansByPart.set(sentence.postPartId, list);
+      }
+    }
+
+    const parts = await this.em.find(
+      PostPart,
+      { postId },
+      { orderBy: { blockIndex: 'asc' } },
+    );
+    for (const part of parts) {
+      part.body = this.paintPartBody(part, spansByPart.get(part.id) ?? []);
+      // biome-ignore lint/performance/noAwaitInLoops: flush-per-PostPart (P4 / cqrs.md) so a crash mid-post keeps finished parts.
+      await this.em.flush();
+    }
+  }
+
+  private paintPartBody(part: PostPart, spans: PaintSpan[]): Block {
+    // strip -> repaint from the current model output every run (P7): a partial
+    // stage retry never stacks the previous run's paint.
+    const stripped = stripGrammarConstructs(part.body);
+
+    if (stripped.type === 'list') {
+      return {
+        ...stripped,
+        items: stripped.items.map((item, unitIndex) => ({
+          children: this.paintUnit(
+            part,
+            item.children,
+            spans.filter((span) => span.unitIndex === unitIndex),
+          ),
+        })),
+      };
+    }
+
+    return {
+      ...stripped,
+      children: this.paintUnit(
+        part,
+        stripped.children,
+        spans.filter((span) => span.unitIndex === 0),
+      ),
+    };
+  }
+
+  private paintUnit(
+    part: PostPart,
+    children: Node[],
+    spans: PaintSpan[],
+  ): Node[] {
+    // Longest first: a nested shorter construction painted afterwards re-wraps
+    // only the shared slice, so the more specific slug wins on shared tokens
+    // (V1 limit — one slug per span).
+    const ordered = [...spans].sort(
+      (a, b) => b.end - b.start - (a.end - a.start),
+    );
+
+    let nodes = children;
+    for (const span of ordered) {
+      const painted = paintGrammarConstruct(
+        nodes,
+        { start: span.start, end: span.end },
+        span.slug,
+      );
+      if (painted) {
+        nodes = painted;
+        continue;
+      }
+      this.logger.warn(
+        {
+          postId: part.postId,
+          partId: part.id,
+          unitIndex: span.unitIndex,
+          slug: span.slug,
+        },
+        'ai_grammar: grammar span partially covers a word/phrase span or a link — not painted',
+      );
+    }
+    return nodes;
   }
 }

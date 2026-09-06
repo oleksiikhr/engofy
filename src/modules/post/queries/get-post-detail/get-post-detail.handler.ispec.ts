@@ -3,6 +3,9 @@ import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
+import { GrammarCategory } from '../../entities/grammar-category.entity.js';
+import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
+import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { Word } from '../../entities/word.entity.js';
@@ -100,6 +103,76 @@ describe('GetPostDetailHandler', () => {
     em.clear();
 
     expect(await suite.query(new GetPostDetailQuery(post.shortId))).toBeNull();
+  });
+
+  it('resolves annotations.grammar from a grammar_only span, usage points sorted by CEFR', async () => {
+    const em = suite.orm.em;
+
+    const category = em.create(GrammarCategory, { name: 'PAST', sortOrder: 0 });
+    const construction = em.create(GrammarConstruction, {
+      categoryId: category.id,
+      name: 'past perfect',
+      slug: 'past-perfect',
+      sortOrder: 0,
+    });
+    // inserted B2 first, A2 second — the view must come back A2 first.
+    em.create(GrammarUsagePoint, {
+      constructionId: construction.id,
+      egpIndex: 999,
+      cefrLevel: CefrLevel.B2,
+      guideword: 'later',
+      canDoStatement: 'can do 999',
+    });
+    em.create(GrammarUsagePoint, {
+      constructionId: construction.id,
+      egpIndex: 412,
+      cefrLevel: CefrLevel.A2,
+      guideword: 'earlier',
+      canDoStatement: 'can do 412',
+    });
+
+    const source = new PostSource();
+    source.format = PostSourceFormat.Text;
+    source.type = PostSourceType.Original;
+    source.rawText = 'She had left before noon.';
+    source.attributionText = 'Original content';
+    const post = new Post();
+    post.source = source;
+    post.title = 'Before Noon';
+    post.status = PostStatus.Published;
+    em.persist(post);
+
+    em.create(PostPart, {
+      postId: post.id,
+      blockIndex: 0,
+      kind: PostPartKind.Paragraph,
+      body: {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'She ' },
+          {
+            type: 'span',
+            kind: 'grammar_only',
+            text: 'had left',
+            grammarConstruct: 'past-perfect',
+          },
+          { type: 'text', text: ' before noon.' },
+        ],
+      },
+    });
+    await em.flush();
+
+    const view = await suite.query(new GetPostDetailQuery(post.shortId));
+
+    expect(view?.annotations.grammar['past-perfect']).toMatchObject({
+      slug: 'past-perfect',
+      name: 'past perfect',
+      cefrLevel: CefrLevel.A2,
+      usagePoints: [
+        { cefrLevel: CefrLevel.A2, guideword: 'earlier' },
+        { cefrLevel: CefrLevel.B2, guideword: 'later' },
+      ],
+    });
   });
 
   it('reassembles the doc and resolves the word annotation a span references', async () => {
