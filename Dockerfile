@@ -57,7 +57,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # ------------------------------------------------------------------------------
 FROM node:${NODE_IMAGE} AS runtime
 
-RUN apk add --no-cache tini
+RUN apk add --no-cache 'tini=~0.19.0'
 
 WORKDIR /app
 
