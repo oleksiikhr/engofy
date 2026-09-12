@@ -1,11 +1,17 @@
 import {
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
+  Post as PostRoute,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import type { UserActor } from '../../../../core/actor/actor.js';
+import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
+import { CurrentUserOrNull } from '../../../../core/decorators/current-user-or-null.decorator.js';
 import { Public } from '../../../../core/decorators/public.decorator.js';
 import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor.js';
@@ -53,21 +59,44 @@ export class ContentController {
   }
 
   // One post for `/posts/{slug}-{id}`: node tree + resolved annotations +
-  // exercises.
+  // exercises + the sidebar's per-user card state. The sidebar makes this
+  // response vary by session even though the route stays @Public() for
+  // guests, so it overrides the class-level public cache policy — a shared
+  // cache must never reuse one user's personalized response for another.
   @Public()
+  @CachePolicy('private')
   @Get('posts/:slugId')
   async postDetail(
     @Param('slugId') slugId: string,
+    @CurrentUserOrNull() actor: UserActor | null,
   ): Promise<PostDetailResponseDto> {
     const shortId = parseSlugId(slugId);
     if (!shortId) {
       throw new NotFoundException('Post not found');
     }
-    const view = await this.post.getPostDetail(shortId);
+    const view = await this.post.getPostDetail(shortId, actor?.id ?? null);
     if (!view) {
       throw new NotFoundException('Post not found');
     }
     return toPostDetailResponse(view);
+  }
+
+  // Marks the post read for the current user (PLAN.md §16/§17 Track B) —
+  // fired when the comprehension quiz is submitted, regardless of
+  // correctness. Requires login (unlike every other route here): a guest has
+  // no persistent identity to attach a read record to.
+  @ApiCookieAuth()
+  @PostRoute('posts/:slugId/read')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async markPostRead(
+    @Param('slugId') slugId: string,
+    @CurrentUser() actor: UserActor,
+  ): Promise<void> {
+    const shortId = parseSlugId(slugId);
+    if (!shortId) {
+      throw new NotFoundException('Post not found');
+    }
+    await this.post.markPostRead(actor.id, shortId);
   }
 
   // The `/grammar` reference index: 19 categories → constructions.
@@ -130,6 +159,23 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
       source: exercise.source,
       payload: exercise.payload,
     })),
+    sidebar: {
+      grammar: view.sidebar.grammar.map((entry) => ({
+        slug: entry.slug,
+        name: entry.name,
+        state: entry.state,
+      })),
+      words: view.sidebar.words.map((entry) => ({
+        wordDefinitionId: entry.wordDefinitionId,
+        lemma: entry.lemma,
+        state: entry.state,
+      })),
+      phrases: view.sidebar.phrases.map((entry) => ({
+        phraseId: entry.phraseId,
+        text: entry.text,
+        state: entry.state,
+      })),
+    },
   };
 }
 

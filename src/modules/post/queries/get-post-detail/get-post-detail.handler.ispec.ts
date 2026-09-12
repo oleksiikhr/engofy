@@ -1,6 +1,9 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
+import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
@@ -24,6 +27,7 @@ import { GetPostDetailQuery } from './get-post-detail.query.js';
 async function seedPublishedPost(em: EntityManager): Promise<{
   shortId: string;
   wordDefinitionId: string;
+  wordId: string;
 }> {
   const word = em.create(Word, { lemma: `travel-${uuidv7().slice(0, 8)}` });
   const definition = em.create(WordDefinition, {
@@ -77,7 +81,11 @@ async function seedPublishedPost(em: EntityManager): Promise<{
   });
 
   await em.flush();
-  return { shortId: post.shortId, wordDefinitionId: definition.id };
+  return {
+    shortId: post.shortId,
+    wordDefinitionId: definition.id,
+    wordId: word.id,
+  };
 }
 
 describe('GetPostDetailHandler', () => {
@@ -189,5 +197,47 @@ describe('GetPostDetailHandler', () => {
     });
     expect(view?.exercises).toHaveLength(1);
     expect(view?.exercises[0].type).toBe(ExerciseType.FillBlank);
+  });
+
+  it('gives every sidebar entry state New for a guest (no userId)', async () => {
+    const { shortId, wordDefinitionId } = await seedPublishedPost(suite.orm.em);
+
+    const view = await suite.query(new GetPostDetailQuery(shortId));
+
+    expect(view?.sidebar.words).toEqual([
+      expect.objectContaining({
+        wordDefinitionId,
+        state: LearningCardState.New,
+      }),
+    ]);
+  });
+
+  it("reflects the user's LearningCard state for a word sidebar entry", async () => {
+    const { shortId, wordDefinitionId, wordId } = await seedPublishedPost(
+      suite.orm.em,
+    );
+    const userId = uuidv7();
+    suite.orm.em.create(LearningCard, {
+      userId,
+      wordId,
+      due: DateTime.now(),
+      stability: 30,
+      difficulty: 5,
+      elapsedDays: 3,
+      scheduledDays: 3,
+      reps: 2,
+      lapses: 0,
+      state: LearningCardState.Review,
+    });
+    await suite.orm.em.flush();
+
+    const view = await suite.query(new GetPostDetailQuery(shortId, userId));
+
+    expect(view?.sidebar.words).toEqual([
+      expect.objectContaining({
+        wordDefinitionId,
+        state: LearningCardState.Review,
+      }),
+    ]);
   });
 });

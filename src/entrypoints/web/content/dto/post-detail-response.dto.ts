@@ -4,6 +4,7 @@
 // module is the intended coupling; re-declaring ~90 lines of recursive
 // discriminated unions here would be fragile and produce a worse OpenAPI
 // schema, so it stays referenced (REVIEW.md Batch N).
+import type { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
 import type { Doc } from '../../../../modules/post/domain/node-tree.types.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';
@@ -88,6 +89,41 @@ export class PostAnnotationsDto {
   readonly grammar!: Record<string, PostGrammarAnnotationDto>;
 }
 
+// "In this article" sidebar (PLAN.md §16/§17 Track B) — one entry per unique
+// word/phrase/construction, not per occurrence. `state` is
+// LearningCardState.New for a guest or a target with no card yet.
+export class PostSidebarWordEntryDto {
+  readonly wordDefinitionId!: string;
+
+  readonly lemma!: string;
+
+  readonly state!: LearningCardState;
+}
+
+export class PostSidebarPhraseEntryDto {
+  readonly phraseId!: string;
+
+  readonly text!: string;
+
+  readonly state!: LearningCardState;
+}
+
+export class PostSidebarGrammarEntryDto {
+  readonly slug!: string;
+
+  readonly name!: string;
+
+  readonly state!: LearningCardState;
+}
+
+export class PostSidebarDto {
+  readonly grammar!: PostSidebarGrammarEntryDto[];
+
+  readonly words!: PostSidebarWordEntryDto[];
+
+  readonly phrases!: PostSidebarPhraseEntryDto[];
+}
+
 export class PostDetailResponseDto {
   readonly shortId!: string;
 
@@ -114,4 +150,6 @@ export class PostDetailResponseDto {
   readonly annotations!: PostAnnotationsDto;
 
   readonly exercises!: PostExerciseDto[];
+
+  readonly sidebar!: PostSidebarDto;
 }

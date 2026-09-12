@@ -101,4 +101,24 @@ describe('LearningController', () => {
       .send({ wordId: uuidv7(), phraseId: uuidv7() })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
+  it('reports how many cards are due for the feed badge', async () => {
+    const cookie = await login(suite.orm.em);
+    const word = suite.orm.em.create(Word, { lemma: `due-${uuidv7()}` });
+    await suite.orm.em.flush();
+
+    await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ wordId: word.id })
+      .expect(HttpStatus.OK);
+
+    // A freshly added card is due immediately (FSRS default), so this user
+    // has exactly one due card.
+    const res = await suite
+      .request('get', '/learning/due-count')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(res.body).toEqual({ dueCount: 1 });
+  });
 });

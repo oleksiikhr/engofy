@@ -1,9 +1,11 @@
-// Server-side node-tree -> HTML for the reader page (PLAN.md §6). The inline
-// analysis comes from the node-tree spans the API resolved, NOT the parallel
-// spaCy layer. Output is injected with `set:html`, so every text value is
-// escaped here and only the tag/attribute scaffold is ours.
+// Server-side node-tree -> HTML for the reader page (PLAN.md §6). Word/
+// phrase/grammar spans carry no visible markup any more (PLAN.md §16 —
+// inline highlighting removed in favour of the "In this article" sidebar,
+// built separately from `PostDetail.sidebar` + `.annotations`); a span node
+// renders exactly like a text node. Output is injected with `set:html`, so
+// every text value is escaped here.
 
-import type { Block, Doc, InlineNode, Mark, SpanNode } from './types';
+import type { Block, Doc, InlineNode, Mark } from './types';
 
 const ESCAPE: Record<string, string> = {
   '&': '&amp;',
@@ -29,49 +31,16 @@ function wrapMarks(html: string, marks: Mark[] | undefined): string {
   return out;
 }
 
-// Classes + data-* keys that the tooltip client script reads. A word/phrase
-// span can also carry a grammar construct, so the classes stack.
-function spanAttrs(span: SpanNode): string {
-  const classes: string[] = [];
-  const data: string[] = [];
-  if (span.kind === 'word') {
-    classes.push('word');
-    data.push(`data-word="${esc(span.wordDefinitionId)}"`);
-  } else if (span.kind === 'phrase') {
-    classes.push('phrase');
-    data.push(`data-phrase="${esc(span.phraseId)}"`);
-  }
-  if (span.grammarConstruct) {
-    classes.push('grammar');
-    data.push(`data-grammar="${esc(span.grammarConstruct)}"`);
-  }
-  if (classes.length === 0) {
-    classes.push('grammar');
-  }
-  return `class="${classes.join(' ')}" tabindex="0" role="button" ${data.join(' ')}`;
-}
-
 function renderInline(node: InlineNode): string {
-  if (node.type === 'text') {
-    return wrapMarks(esc(node.text), node.marks);
-  }
   if (node.type === 'link') {
     return wrapMarks(
       `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${esc(node.text)}</a>`,
       node.marks,
     );
   }
-  // span. A grammar construct painted across a run of words leaves
-  // whitespace-only fragments between the annotated tokens; wrapping those as
-  // interactive spans adds stray highlights and junk tab stops, so emit them
-  // as plain text.
-  if (node.text.trim() === '') {
-    return wrapMarks(esc(node.text), node.marks);
-  }
-  return wrapMarks(
-    `<span ${spanAttrs(node)}>${esc(node.text)}</span>`,
-    node.marks,
-  );
+  // 'text' and 'span' render identically — a span is plain prose now, its
+  // wordDefinitionId/phraseId/grammarConstruct only matter to the sidebar.
+  return wrapMarks(esc(node.text), node.marks);
 }
 
 function renderChildren(children: InlineNode[]): string {
