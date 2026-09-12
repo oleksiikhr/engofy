@@ -1,17 +1,18 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
+import { GrammarConstructionPage } from './pages/grammar-construction-page';
+import { GrammarPage } from './pages/grammar-page';
 
 // Slice 8b page 4 — /grammar reference (19 -> 90, CEFR filter) and
 // /grammar/{slug} construction detail.
 
 test.describe('grammar reference', () => {
   test('lists categories and constructions', async ({ page }) => {
-    await page.goto('/grammar');
-    await expect(
-      page.getByRole('heading', { name: 'Grammar reference' }),
-    ).toBeVisible();
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await grammar.expectLoaded();
 
-    const cat = page.locator('.grammar-cat', { hasText: 'E2E: Tenses' });
+    const cat = grammar.categoryByName('E2E: Tenses');
     await expect(cat.getByRole('link', { name: /past perfect/ })).toBeVisible();
     await expect(
       cat.getByRole('link', { name: /present simple/ }),
@@ -19,8 +20,9 @@ test.describe('grammar reference', () => {
   });
 
   test('filters by CEFR level (SSR)', async ({ page }) => {
-    await page.goto('/grammar?cefr=A1');
-    const cat = page.locator('.grammar-cat', { hasText: 'E2E: Tenses' });
+    const grammar = new GrammarPage(page);
+    await grammar.goto('cefr=A1');
+    const cat = grammar.categoryByName('E2E: Tenses');
     await expect(
       cat.getByRole('link', { name: /present simple/ }),
     ).toBeVisible();
@@ -30,53 +32,50 @@ test.describe('grammar reference', () => {
   });
 
   test('filters by CEFR level (HTMX chip)', async ({ page }) => {
-    await page.goto('/grammar');
-    await page.getByRole('link', { name: 'A1', exact: true }).click();
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await grammar.filterByCefr('A1');
     await expect(page).toHaveURL('/grammar?cefr=A1');
-    const cat = page.locator('.grammar-cat', { hasText: 'E2E: Tenses' });
+    const cat = grammar.categoryByName('E2E: Tenses');
     await expect(cat.getByRole('link', { name: /past perfect/ })).toHaveCount(
       0,
     );
-    await expect(page.locator('.chip--on')).toHaveText('A1');
+    await expect(grammar.activeChip).toHaveText('A1');
   });
 
   test('404s an unknown construction', async ({ page }) => {
-    const res = await page.goto('/grammar/no-such-construction');
+    const construction = new GrammarConstructionPage(page);
+    const res = await construction.goto('no-such-construction');
     expect(res?.status()).toBe(404);
   });
 });
 
 test.describe('grammar construction detail', () => {
   test('shows the cheat sheet and usage points', async ({ page }) => {
-    await page.goto('/grammar/e2e-past-perfect');
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.expectLoaded('past perfect');
 
-    await expect(
-      page.getByRole('heading', { name: 'past perfect' }),
-    ).toBeVisible();
-    await expect(page.locator('.con-head .badge')).toHaveText('A2');
-    await expect(page.locator('.cheat')).toContainText('Form');
-    await expect(page.locator('.usage-item')).toHaveCount(2);
+    await expect(construction.badge).toHaveText('A2');
+    await expect(construction.cheatSheet).toContainText('Form');
+    await expect(construction.usageItems).toHaveCount(2);
   });
 
   test('guest gets a sign-in prompt from "+"', async ({ page }) => {
-    await page.goto('/grammar/e2e-past-perfect');
-    await page
-      .locator('.usage-item')
-      .first()
-      .getByRole('button', { name: '+ Add to deck' })
-      .click();
-    await expect(page.locator('.usage-item').first()).toContainText(
-      'Sign in to save',
-    );
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.addUsageToDeck();
+    await expect(construction.usageItem()).toContainText('Sign in to save');
   });
 
   test.describe('signed in', () => {
     test.use({ storageState: AUTHED_STATE });
 
     test('adds a usage point to the deck', async ({ page }) => {
-      await page.goto('/grammar/e2e-present-simple');
-      const item = page.locator('.usage-item').first();
-      await item.getByRole('button', { name: '+ Add to deck' }).click();
+      const construction = new GrammarConstructionPage(page);
+      await construction.goto('e2e-present-simple');
+      const item = construction.usageItem();
+      await construction.addUsageToDeck();
       await expect(item).toContainText('✓ Saved');
     });
   });
