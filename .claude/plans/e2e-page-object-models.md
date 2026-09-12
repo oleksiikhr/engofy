@@ -33,10 +33,10 @@ status: in-progress
 font token) без змін. Цей зріз задає конвенцію (readonly локатори в
 конструкторі, goto/expectLoaded), яку повторюють наступні зрізи.
 
-### [ ] 2. practice + grammar
+### [x] 2. practice + grammar
 - Branch: `e2e-page-object-models-02-practice-grammar`
-- Base: `e2e-page-object-models-01-login-feed-smoke`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/7
 
 Створити `pages/practice-page.ts`, `pages/grammar-page.ts` (список
 `/grammar`), `pages/grammar-construction-page.ts` (деталі
