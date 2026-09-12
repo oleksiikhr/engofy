@@ -455,8 +455,8 @@ CLI/API ще до появи фронтенду. **Усі 10 — DONE, змер�
 - ~~`src/entrypoints/cron/scraper/`~~ — видалено (зріз 0).
 - ~~`new/asd.py` + `new/requirements.txt`~~ — перенесено в `nlp-service/`
   (`app.py` + pinned `requirements.txt`), `new/` прибрано з кореня (зріз 2).
-- `draft/` — лишається як eval-харнес; тримати синхронним із реальним
-  пайплайном.
+- ~~`draft/`~~ — eval-харнес (idiom/grammar/enrichment) видалено разом із
+  baseline'ами; вважали мертвим вантажем без активного тюнінгу промптів.
 - Старий закомічений `PLAN.md` (розділ «Working notes») — джерело для
   розділу 12; після переносу цінності не має.
 
