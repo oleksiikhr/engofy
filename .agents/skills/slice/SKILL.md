@@ -68,11 +68,17 @@ with `Branch`, `Base`, `PR` fields.
 - The slice's `Branch:` already exists locally → this is a resumed session: `git checkout <branch>`
   and continue from the existing diff against `Base:`.
 - Branch doesn't exist yet:
-  - Ask whether to use a `git worktree` for this slice (same question `task` asks per-slice — don't
-    assume the previous slice's choice carries over). If yes: `git worktree add -b <branch> <path>
-    <base>`, `<path>` = `../<repo-dirname>-<branch>` — named after the branch, not the plan slug, since
-    every slice of the same plan shares one slug and would otherwise collide on the same directory. If
-    no: `git checkout -b <branch> <base>` in place.
+  - Check `git worktree list --porcelain` for an existing worktree already on a branch of this plan
+    (branch name starts with `<slug>-`) — that's a worktree an earlier slice created. Worktrees are
+    per-*plan*, not per-slice: reuse it rather than creating a new one, since a fresh worktree per
+    slice throws away build caches, `node_modules`, and IDE state for no reason. Reuse means checking
+    out this slice's branch inside that same directory: `git -C <existing-path> checkout -b <branch>
+    <base>`.
+  - No existing worktree for this plan found: ask whether to use a `git worktree` for this plan (asked
+    once, on its first slice only — later slices of the same plan reuse whatever was decided here, per
+    the rule above). If yes: `git worktree add -b <branch> <path> <base>`, `<path>` =
+    `../<repo-dirname>-<slug>` — named after the plan slug, not the branch, since every later slice
+    reuses this same directory. If no: `git checkout -b <branch> <base>` in place.
   - If `Base:` doesn't exist locally or on origin (typical when the previous slice's PR merged and
     GitHub deleted its branch), its content is already in `main`: branch from `base_branch` instead,
     and update this slice's `Base:` field in memory — it lands in the plan-file commit in Step 6, no
