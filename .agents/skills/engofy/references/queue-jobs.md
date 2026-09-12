@@ -11,8 +11,9 @@
 | `OutboxSenderService` | `core/queue/outbox-sender.service.ts` | `send(em, QueueName, data)` — staged in a `WeakMap<em>`, drained on `afterFlush` so the enqueue rides the write txn |
 | `OutboxSubscriber` | `core/queue/outbox.subscriber.ts` | registers on `orm.em` event mgr, `afterFlush → drain` |
 | `withSentryTrace` | `core/queue/sentry-trace.ts` | stamps `_sentryTrace`/`_sentryBaggage` into the payload |
-| `PostQueueBootstrapService` | `modules/post` | **the single `boss.createQueue` authority (D8)** — `OnApplicationBootstrap` declares the dead-letter queue + every `QueueName` (auth queue included) from the shared `QUEUE_DEFINITIONS` map |
-| `QUEUE_DEFINITIONS` / `POST_DEAD_LETTER_QUEUE` | `core/queue/queue-config.ts` | per-queue `createQueue` options: singleton + 1h expiry base, explicit `retryLimit`/`retryDelay`/`retryBackoff`, `deadLetter` on the paid AI stages |
+| `PostQueueBootstrapService` | `modules/post` | `boss.createQueue` authority for the post pipeline — `OnApplicationBootstrap` declares the dead-letter queue + every post pipeline `QueueName` from `QUEUE_DEFINITIONS` |
+| `AuthQueueBootstrapService` | `modules/auth/services` | `boss.createQueue` for the auth challenge-email queue only, from `AUTH_CHALLENGE_EMAIL_QUEUE` — kept independent of `PostModule` since login must not depend on the content pipeline being loaded (amends D8) |
+| `QUEUE_DEFINITIONS` / `AUTH_CHALLENGE_EMAIL_QUEUE` / `POST_DEAD_LETTER_QUEUE` | `core/queue/queue-config.ts` | per-queue `createQueue` options: singleton + 1h expiry base, explicit `retryLimit`/`retryDelay`/`retryBackoff`, `deadLetter` on the paid AI stages. `QUEUE_DEFINITIONS` covers post pipeline queues only — the auth queue's options are the separate `AUTH_CHALLENGE_EMAIL_QUEUE` const |
 | `JobWorkerHost<T>` | `entrypoints/worker/job-worker-host.ts` | abstract base for processors; also owns the `PostPipelineRun` lifecycle for a stage job (D4) |
 | `WorkerRegistrarService` | `entrypoints/worker/worker-registrar.service.ts` | **only** `boss.work(name, { includeMetadata: true }, jobs => processor.work(jobs))` — never `createQueue` (D8) |
 | `CronJobHost` | `entrypoints/cron/cron-job-host.ts` | abstract base for `@Cron` classes |
@@ -55,6 +56,18 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 ## Fixes owed (confirmed)
 
 None outstanding.
+
+### Done (Batch T) — auth queue independence (amends D8)
+
+- `AuthQueueBootstrapService` (`modules/auth/services`) declares the auth
+  challenge-email queue on its own — reintroduces the per-module bootstrap D8
+  had deleted, scoped to this one queue. Reason: `PostQueueBootstrapService`
+  being the sole authority meant login's queue existed only by accident of
+  `PostModule` also being loaded in the same process; `auth.controller.ispec.ts`
+  and `outbox-sender.service.ispec.ts` passed only via another spec's side
+  effect in the shared test Postgres, not in isolation (`vitest run <file>`).
+  `queue-config.ts` split: `AUTH_CHALLENGE_EMAIL_QUEUE` (own const) vs
+  `QUEUE_DEFINITIONS` (post pipeline queues only, unchanged shape otherwise).
 
 ### Done (Batch H) — worker / cli (D16)
 
@@ -99,7 +112,11 @@ None outstanding.
   only `boss.work()`s (with `includeMetadata: true`).
 - `JobWorkerHost.work` → `Promise.allSettled` + re-throw.
 
-**Caveat:** the single authority lives in `PostModule`, so a worker started with
-*only* non-post queues (`worker auth-challenge-email`) never runs it. Every real
-deployment loads `PostModule` (the web app imports it, and the default worker
-runs all queues), so the queues exist before that worker `work()`s them.
+**Caveat:** `PostQueueBootstrapService` is still the sole authority for post
+pipeline queues, so a worker started with *only* post-pipeline queues and no
+other module importing `PostModule` in the same process would never run it in
+principle — in practice every real deployment loads `PostModule` (the web app
+imports it, and the default worker runs all queues), so those queues exist
+before any worker `work()`s them. The auth challenge-email queue no longer has
+this caveat (amends D8): `AuthQueueBootstrapService` runs wherever `AuthModule` is
+loaded, independent of `PostModule`.
