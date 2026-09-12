@@ -43,10 +43,10 @@ font token) без змін. Цей зріз задає конвенцію (read
 `/grammar/{slug}` — окремий маршрут, окремий клас). Переписати
 `practice.spec.ts`, `grammar.spec.ts`.
 
-### [ ] 3. dictionary + profile + pricing
+### [x] 3. dictionary + profile + pricing
 - Branch: `e2e-page-object-models-03-dictionary-profile-pricing`
-- Base: `e2e-page-object-models-02-practice-grammar`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/8
 
 Створити `pages/dictionary-page.ts`, `pages/profile-page.ts`,
 `pages/pricing-page.ts`. Переписати `dictionary.spec.ts`, `profile.spec.ts`,
