@@ -28,10 +28,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Полагодити три CI-гейти на main
+### [x] 1. Полагодити три CI-гейти на main
 - Branch: `fix-ci-and-queue-test-isolation-01-ci-gates`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/4
 
 Відформатувати `.mcp.json` (`pnpm lint`), перегенерувати `src/metadata.ts` (`pnpm build`) і
 закомітити, оновити `nodemailer` до `>=9.1.0` (`pnpm update nodemailer`). Разом з цим — закомітити вже
