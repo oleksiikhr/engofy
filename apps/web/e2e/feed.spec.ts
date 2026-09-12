@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
 
-// Slice 8b page 2 — `/` feed with article -> review alternation.
+// Slice 8b page 2 — `/` feed. PLAN.md §16/§17 Track B: the forced
+// review-break card inserted every 2-3 posts (PLAN.md §4) was replaced with a
+// soft "N due" badge that never interrupts the post list itself.
 
 test.describe('feed (guest)', () => {
   test('lists published posts and links to the reader', async ({ page }) => {
@@ -18,25 +20,29 @@ test.describe('feed (guest)', () => {
       '/posts/the-cartographer-at-dawn-E2Eread1',
     );
 
-    // No review breaks for a guest — they have no queue.
-    await expect(page.getByTestId('review-break')).toHaveCount(0);
+    // No due badge for a guest — they have no queue.
+    await expect(page.getByTestId('due-badge')).toHaveCount(0);
   });
 });
 
 test.describe('feed (signed in)', () => {
   test.use({ storageState: AUTHED_STATE });
 
-  test('interleaves a review-break card with a due term', async ({ page }) => {
+  test('shows a soft "N due" badge without breaking up the post list', async ({
+    page,
+  }) => {
     await page.goto('/');
 
-    await expect(page.getByText(/cards? due/)).toBeVisible();
+    const badge = page.getByTestId('due-badge');
+    await expect(badge).toBeVisible();
+    await expect(badge).toContainText(/cards? due/);
+    await expect(
+      badge.getByRole('link', { name: 'start a review session' }),
+    ).toHaveAttribute('href', '/practice');
 
-    const brk = page.getByTestId('review-break');
-    await expect(brk).toHaveCount(1);
-    await expect(brk).toContainText('Quick review');
-    await expect(brk.getByRole('link', { name: 'Review now' })).toHaveAttribute(
-      'href',
-      '/practice',
-    );
+    // The post list is a plain sequence of cards — no interstitial rows.
+    await expect(
+      page.getByRole('link', { name: 'The Cartographer at Dawn' }),
+    ).toBeVisible();
   });
 });

@@ -4,9 +4,10 @@ import type { CurrentUser } from '../lib/types';
 interface Props {
   user?: CurrentUser | null;
   active?: string;
+  streak?: number;
 }
 
-const { user = null, active } = Astro.props;
+const { user = null, active, streak = 0 } = Astro.props;
 
 const links = [
   { href: '/', label: 'Feed', key: 'feed' },
@@ -31,6 +32,16 @@ const links = [
     </div>
     <div class="nav-links">
       {
+        user && streak > 0 && (
+          <span class="streak" title={`${streak}-day review streak`}>
+            🔥 {streak}
+          </span>
+        )
+      }
+      <a href="/pricing" aria-current={active === 'pricing' ? 'page' : undefined}>
+        Pricing
+      </a>
+      {
         user ? (
           <form method="post" action="/logout" style="margin: 0;">
             <button class="btn btn--ghost" type="submit">Log out</button>
@@ -42,3 +53,11 @@ const links = [
     </div>
   </nav>
 </header>
+
+<style>
+  .streak {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+</style>

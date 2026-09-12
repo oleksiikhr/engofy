@@ -17,7 +17,7 @@ import { PublishPostCommand } from './publish-post.command.js';
 
 async function seedPost(
   em: EntityManager,
-  opts: { annotationCompleted?: boolean } = {},
+  opts: { annotationCompleted?: boolean; enrichmentCompleted?: boolean } = {},
 ): Promise<string> {
   const source = new PostSource();
   source.format = PostSourceFormat.Text;
@@ -33,6 +33,13 @@ async function seedPost(
     run.status = PostPipelineRunStatus.Completed;
     em.persist(run);
   }
+  if (opts.enrichmentCompleted) {
+    const run = new PostPipelineRun();
+    run.postId = post.id;
+    run.stage = PostPipelineStage.Enrichment;
+    run.status = PostPipelineRunStatus.Completed;
+    em.persist(run);
+  }
 
   await em.flush();
   return post.id;
@@ -43,7 +50,10 @@ describe('PublishPostHandler', () => {
   const queue = useQueueSpy(suite);
 
   it('publishes the post and enqueues a pending telegram publication', async () => {
-    const postId = await seedPost(suite.orm.em, { annotationCompleted: true });
+    const postId = await seedPost(suite.orm.em, {
+      annotationCompleted: true,
+      enrichmentCompleted: true,
+    });
 
     await suite.command(new PublishPostCommand(postId));
 
@@ -66,7 +76,10 @@ describe('PublishPostHandler', () => {
   });
 
   it('is idempotent — a second run keeps one publication row', async () => {
-    const postId = await seedPost(suite.orm.em, { annotationCompleted: true });
+    const postId = await seedPost(suite.orm.em, {
+      annotationCompleted: true,
+      enrichmentCompleted: true,
+    });
 
     await suite.command(new PublishPostCommand(postId));
     await suite.command(new PublishPostCommand(postId));
@@ -74,7 +87,7 @@ describe('PublishPostHandler', () => {
     expect(await suite.orm.em.count(PostPublication, { postId })).toBe(1);
   });
 
-  it('no-ops and re-queues itself until the annotation branch has completed (D6)', async () => {
+  it('no-ops and re-queues itself until both the annotation and enrichment branches have completed', async () => {
     const postId = await seedPost(suite.orm.em);
 
     await suite.command(new PublishPostCommand(postId));
@@ -95,7 +108,25 @@ describe('PublishPostHandler', () => {
     );
   });
 
-  it('publishes once the annotation run flips to completed', async () => {
+  it('stays gated while only the annotation branch has completed', async () => {
+    const postId = await seedPost(suite.orm.em, { annotationCompleted: true });
+
+    await suite.command(new PublishPostCommand(postId));
+
+    const post = await suite.orm.em.findOneOrFail(Post, postId);
+    expect(post.status).not.toBe(PostStatus.Published);
+  });
+
+  it('stays gated while only the enrichment branch has completed', async () => {
+    const postId = await seedPost(suite.orm.em, { enrichmentCompleted: true });
+
+    await suite.command(new PublishPostCommand(postId));
+
+    const post = await suite.orm.em.findOneOrFail(Post, postId);
+    expect(post.status).not.toBe(PostStatus.Published);
+  });
+
+  it('publishes once both the annotation and enrichment runs flip to completed', async () => {
     const postId = await seedPost(suite.orm.em);
 
     await suite.command(new PublishPostCommand(postId));
@@ -105,6 +136,13 @@ describe('PublishPostHandler', () => {
     annotationRun.stage = PostPipelineStage.Annotation;
     annotationRun.status = PostPipelineRunStatus.Completed;
     suite.orm.em.persist(annotationRun);
+
+    const enrichmentRun = new PostPipelineRun();
+    enrichmentRun.postId = postId;
+    enrichmentRun.stage = PostPipelineStage.Enrichment;
+    enrichmentRun.status = PostPipelineRunStatus.Completed;
+    suite.orm.em.persist(enrichmentRun);
+
     await suite.orm.em.flush();
 
     await suite.command(new PublishPostCommand(postId));

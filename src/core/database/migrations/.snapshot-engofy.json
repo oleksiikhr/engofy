@@ -1464,9 +1464,8 @@
       "checks": [
         {
           "name": "learning_cards_exactly_one_target",
-          "expression": "(((word_id IS NOT NULL) + (phrase_id IS NOT NULL)) + (grammar_usage_point_id IS NOT NULL)) = 1",
-          "definition": "CHECK ((((((word_id IS NOT NULL))::integer + ((phrase_id IS NOT NULL))::integer) + ((grammar_usage_point_id IS NOT NULL))::integer) = 1))",
-          "columnName": "grammar_usage_point_id"
+          "expression": "(word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1",
+          "definition": "check ((word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1)"
         },
         {
           "name": "learning_cards_state_check",
@@ -1634,15 +1633,13 @@
       },
       "indexes": [
         {
-          "columnNames": [
-            "lower(phrase_text)"
-          ],
+          "columnNames": [],
           "composite": false,
-          "constraint": false,
+          "constraint": true,
           "keyName": "phrases_phrase_text_unique_idx",
           "primary": false,
           "unique": true,
-          "expression": "CREATE UNIQUE INDEX phrases_phrase_text_unique_idx ON public.phrases USING btree (lower(phrase_text))"
+          "expression": "create unique index \"phrases_phrase_text_unique_idx\" on \"phrases\" (lower(\"phrase_text\"))"
         },
         {
           "columnNames": [
@@ -1977,6 +1974,7 @@
             "annotation",
             "ai_complexity",
             "ai_grammar",
+            "enrichment",
             "ai_exercises",
             "publish"
           ],
@@ -2064,8 +2062,8 @@
       "checks": [
         {
           "name": "post_pipeline_runs_stage_check",
-          "expression": "\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish')",
-          "definition": "check (\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'ai_exercises', 'publish'))",
+          "expression": "\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'ai_exercises', 'publish')",
+          "definition": "check (\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'ai_exercises', 'publish'))",
           "columnName": "stage"
         },
         {
@@ -2277,16 +2275,6 @@
         },
         {
           "columnNames": [
-            "post_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "post_publications_post_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "post_id",
             "platform"
           ],
@@ -2311,6 +2299,107 @@
           "columnName": "status"
         }
       ],
+      "triggers": [],
+      "foreignKeys": {},
+      "comment": null
+    },
+    {
+      "name": "post_reads",
+      "schema": "public",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        },
+        "read_at": {
+          "name": "read_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": true,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "post_reads_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "user_id",
+            "post_id"
+          ],
+          "composite": true,
+          "constraint": true,
+          "keyName": "post_reads_user_id_post_id_unique",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "checks": [],
       "triggers": [],
       "foreignKeys": {},
       "comment": null
@@ -3137,6 +3226,16 @@
       "indexes": [
         {
           "columnNames": [
+            "phrase_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "sentence_tokens_phrase_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
             "id"
           ],
           "composite": false,
@@ -3154,8 +3253,7 @@
           "constraint": true,
           "keyName": "sentence_tokens_sentence_id_position_unique",
           "primary": false,
-          "unique": true,
-          "expression": "CREATE UNIQUE INDEX sentence_tokens_sentence_id_position_unique ON public.sentence_tokens USING btree (sentence_id, \"position\")"
+          "unique": true
         },
         {
           "columnNames": [
@@ -3164,16 +3262,6 @@
           "composite": false,
           "constraint": false,
           "keyName": "sentence_tokens_word_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "phrase_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "sentence_tokens_phrase_id_index",
           "primary": false,
           "unique": false
         }
@@ -3413,8 +3501,7 @@
           "constraint": true,
           "keyName": "sentences_post_part_id_unit_index_position_unique",
           "primary": false,
-          "unique": true,
-          "expression": "CREATE UNIQUE INDEX sentences_post_part_id_unit_index_position_unique ON public.sentences USING btree (post_part_id, unit_index, \"position\")"
+          "unique": true
         }
       ],
       "checks": [
@@ -3962,16 +4049,6 @@
           "keyName": "user_skill_progress_user_id_construction_id_unique",
           "primary": false,
           "unique": true
-        },
-        {
-          "columnNames": [
-            "user_id"
-          ],
-          "composite": false,
-          "constraint": false,
-          "keyName": "user_skill_progress_user_id_index",
-          "primary": false,
-          "unique": false
         }
       ],
       "checks": [],
@@ -4419,15 +4496,13 @@
       },
       "indexes": [
         {
-          "columnNames": [
-            "lower(lemma)"
-          ],
+          "columnNames": [],
           "composite": false,
-          "constraint": false,
+          "constraint": true,
           "keyName": "words_lemma_unique_idx",
           "primary": false,
           "unique": true,
-          "expression": "CREATE UNIQUE INDEX words_lemma_unique_idx ON public.words USING btree (lower(lemma))"
+          "expression": "create unique index \"words_lemma_unique_idx\" on \"words\" (lower(\"lemma\"))"
         },
         {
           "columnNames": [

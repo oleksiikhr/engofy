@@ -239,6 +239,91 @@ collapsing to 0, or catalogue drops (`droppedUnknownSlug` +
 alone, since that moves run to run from LLM sampling with zero code change
 (same principle as `compare.ts`). `droppedNoToken` is reported, not flagged.
 
+## Enrichment harness
+
+Same idea, for the `enrichment` stage (PLAN.md §17 Track A): fills the
+`WordDefinition`/`Phrase` stubs `annotate-post` find-or-creates — one
+`completeStructured` call, `ENRICHMENT_SYSTEM_PROMPT` +
+`buildEnrichmentUserText`/`enrichmentToolSchema`/`indexEnrichmentResult` from
+`src/modules/post/domain/enrichment-prompt.ts`, all reused unmodified.
+
+Unlike the idiom/grammar harnesses, there is no local-content fixture path
+here — the enrichment stage runs on the `WordDefinition`/`Phrase` rows
+`annotate-post` already resolved onto a real post's node-tree spans, and
+reproducing that find-or-create resolution without a database would be a
+parallel reimplementation, not a reuse of production code. So this harness
+opens a standalone MikroORM connection to the local **dev** database (same
+pattern as `test/e2e/seed-web-e2e.ts`, no Nest DI) and reads an already-
+ingested post's real lexicon: `lib/load-post-lexicon.ts` mirrors
+`EnrichLexiconHandler.collectPostLexicon`/`loadPending` — `parseDoc(assembleDocFromParts(parts))`
+→ `collectSpanNodes` → the referenced `Word`/`WordDefinition`/`Phrase` rows.
+Read-only; this harness never persists anything back to the dev DB.
+
+One deliberate difference from production: it does **not** filter to
+`definition IS NULL`. `EnrichLexiconHandler` only ever sends pending rows —
+sending nothing once a post is fully enriched, by design — but a snapshot
+baseline needs a stable, repeatable target set across runs regardless of
+whether an earlier run (or the real pipeline) already filled these rows in
+the dev DB. So `load-post-lexicon.ts` always loads a post's full referenced
+lexicon, closer to how the grammar harness treats its static EGP catalogue
+than to production's incremental gap-fill.
+
+`lib/call-claude-structured.ts` is the direct-transport equivalent of
+`AnthropicClientService.completeStructured` — same forced `tool_choice`,
+`z.toJSONSchema(tool.schema)` input schema, `max_tokens` truncation check,
+and `schema.safeParse` contract, just without Nest DI (the same relationship
+`call-claude.ts` has to production's plain-text `complete()`). Production has
+no retry on this stage (unlike the inline-markup annotation/grammar stages —
+a forced tool call either matches the schema or it doesn't), so
+`lib/enrichment-tag-file.ts` makes exactly one call and reports
+`isComplete: false` with the real error if `indexEnrichmentResult`'s
+all-or-nothing coverage check rejects the response.
+
+### Running
+
+**Requires the local dev Postgres running** (`docker compose up -d postgres`)
+with at least one ingested post, and `NODE_ENV=development` set so
+`mikro-orm.setup.ts` picks up the dev connection defaults (`engofy`/`engofy`
+on `127.0.0.1:5432`) instead of defaulting to production:
+
+```bash
+# one post, full per-word/phrase detail, writes draft/results/<ts>-enrichment.json
+NODE_ENV=development npx tsx draft/scripts/run-enrichment.ts --shortId=<postShortId>
+
+# record a baseline over every `published` post in the dev DB
+NODE_ENV=development npx tsx draft/scripts/snapshot-enrichment.ts --name=enrichment-sonnet-5
+
+# after a prompt/model change, snapshot again and diff
+NODE_ENV=development npx tsx draft/scripts/snapshot-enrichment.ts --name=enrichment-sonnet-5-candidate
+npx tsx draft/scripts/compare-enrichment.ts \
+  draft/baselines/enrichment-sonnet-5.json \
+  draft/baselines/enrichment-sonnet-5-candidate.json
+```
+
+Flags: `run-enrichment.ts` takes `--shortId=` (required), `--model=`,
+`--thinking=true`; `snapshot-enrichment.ts` also takes
+`--shortIds=<comma,list>` (default: every `published` post, ordered by
+`shortId`) and `--name=` (default `enrichment-<sanitized-model>`).
+
+### Metrics per post
+
+`wordCount`/`phraseCount` (the pending target set sent), `wordsMissingPhonetic`
+(the model may legitimately return `null` when unsure — a quality signal, not
+a failure), `cefrCounts` (level distribution across words + phrases),
+`isComplete` (the response covered every index exactly once, no
+duplicates/invented indexes), `truncated` (`max_tokens`), cost/tokens.
+`compare-enrichment.ts` flags a post **REGRESSED** only on hard failures —
+`isComplete` true→false or `truncated` false→true — **never** on word/phrase
+count drift, which just reflects the dev DB's annotated content changing
+between snapshots (same principle as the other two harnesses).
+
+`draft/baselines/enrichment-sonnet-5.json` is the committed baseline: all 9
+published posts in the dev DB at recording time, 314 words + 35 phrases,
+0 incomplete, 0 truncated, $0.2663 total. Spot-checked output quality is
+learner-dictionary grade (e.g. "turn out" → "to happen in a particular way,
+especially one that is different from what was expected", B1; correct IPA
+phonetics on every word).
+
 ## Status
 
 The annotation stage is now a thin AI pass over spaCy

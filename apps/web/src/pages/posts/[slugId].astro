@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { apiGetOrNull } from '../../lib/api';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
-import type { PostDetail } from '../../lib/types';
+import type { CardState, CefrLevel, PostDetail } from '../../lib/types';
 
 const { slugId } = Astro.params;
 const user = await getCurrentUser(Astro.request);
@@ -25,6 +25,105 @@ const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
 });
 
 const bodyHtml = renderDoc(post.doc);
+
+// --- "In this article" sidebar (PLAN.md §16/§17 Track B) ---
+// The sidebar API response only carries `state` per unique entry; merge in
+// the definition/example/wordId already loaded in `annotations` (same data
+// the old inline tooltip read) rather than duplicating it server-side.
+const STATE_LABEL: Record<CardState, string> = {
+  new: 'New',
+  learning: 'Learning',
+  relearning: 'Learning',
+  review: 'Know',
+};
+const STATE_CLASS: Record<CardState, string> = {
+  new: 'new',
+  learning: 'learning',
+  relearning: 'learning',
+  review: 'know',
+};
+
+interface SidebarWordView {
+  wordDefinitionId: string;
+  wordId: string;
+  lemma: string;
+  state: CardState;
+  definition: string | null;
+  example: string | null;
+  cefrLevel: CefrLevel | null;
+}
+interface SidebarPhraseView {
+  phraseId: string;
+  text: string;
+  state: CardState;
+  definition: string | null;
+  example: string | null;
+  cefrLevel: CefrLevel | null;
+}
+interface SidebarGrammarView {
+  slug: string;
+  name: string;
+  state: CardState;
+  cefrLevel: CefrLevel | null;
+}
+
+const sidebarWords: SidebarWordView[] = post.sidebar.words.map((entry) => {
+  const detail = post.annotations.words[entry.wordDefinitionId];
+  return {
+    wordDefinitionId: entry.wordDefinitionId,
+    wordId: detail?.wordId ?? '',
+    lemma: entry.lemma,
+    state: entry.state,
+    definition: detail?.definition ?? null,
+    example: detail?.example ?? null,
+    cefrLevel: detail?.cefrLevel ?? null,
+  };
+});
+const sidebarPhrases: SidebarPhraseView[] = post.sidebar.phrases.map(
+  (entry) => {
+    const detail = post.annotations.phrases[entry.phraseId];
+    return {
+      phraseId: entry.phraseId,
+      text: entry.text,
+      state: entry.state,
+      definition: detail?.definition ?? null,
+      example: detail?.example ?? null,
+      cefrLevel: detail?.cefrLevel ?? null,
+    };
+  },
+);
+const sidebarGrammar: SidebarGrammarView[] = post.sidebar.grammar.map(
+  (entry) => {
+    const detail = post.annotations.grammar[entry.slug];
+    return {
+      slug: entry.slug,
+      name: entry.name,
+      state: entry.state,
+      cefrLevel: detail?.cefrLevel ?? null,
+    };
+  },
+);
+
+// One-line completion summary shown after the quiz (PLAN.md §16) — derived
+// straight from the sidebar's own state distribution, not a separate stat.
+const newLexiconCount = [...sidebarWords, ...sidebarPhrases].filter(
+  (e) => e.state === 'new',
+).length;
+const learningGrammarCount = sidebarGrammar.filter(
+  (e) => e.state === 'learning' || e.state === 'relearning',
+).length;
+const summaryParts: string[] = [];
+if (newLexiconCount > 0) {
+  summaryParts.push(
+    `+${newLexiconCount} new word${newLexiconCount === 1 ? '' : 's'}`,
+  );
+}
+if (learningGrammarCount > 0) {
+  summaryParts.push(
+    `${learningGrammarCount} construction${learningGrammarCount === 1 ? '' : 's'} learning`,
+  );
+}
+const summaryLine = summaryParts.join(' · ');
 
 // --- exercise view models (all casts / normalisation live here; the template
 // only maps over plain data) ---
@@ -103,10 +202,20 @@ interface ComprehensionView {
 }
 
 function toComprehension(ex: Ex): ComprehensionView {
-  const raw = (ex.payload as Record<string, unknown>).questions;
+  const p = ex.payload as Record<string, unknown>;
+  // The pipeline emits one comprehension question per exercise row, flat on
+  // the payload (`{ question, options, answerIndex }`). Older/aggregate shapes
+  // may still carry a `questions` array — accept both.
+  const raw = p.questions;
   const questions = Array.isArray(raw)
     ? (raw as { question: string; options: string[]; answerIndex: number }[])
-    : [];
+    : [
+        {
+          question: String(p.question ?? ''),
+          options: Array.isArray(p.options) ? (p.options as string[]) : [],
+          answerIndex: Number(p.answerIndex ?? -1),
+        },
+      ].filter((q) => q.question !== '' && q.options.length > 0);
   return { id: ex.id, questions };
 }
 
@@ -122,48 +231,127 @@ const comprehension: ComprehensionView[] = post.exercises
   title={`${post.title ?? 'Reading'} — Engofy`}
   user={user}
   active="feed"
-  measure={true}
 >
-  <article>
-    <header class="post-head">
-      <div class="post-head__meta">
-        {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
-        <time datetime={post.publishedAt}>{published}</time>
-      </div>
-      <h1>{post.title ?? 'Untitled'}</h1>
-      {
-        post.sourceLink && (
-          <p class="post-head__source">
-            Source:{' '}
-            <a href={post.sourceLink} rel="noopener noreferrer" target="_blank">
-              {post.sourceLink}
-            </a>
-          </p>
-        )
-      }
-    </header>
+  <div class="reader-layout" data-slug-id={slugId}>
+    <article class="reader-article">
+      <header class="post-head">
+        <div class="post-head__meta">
+          {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
+          <time datetime={post.publishedAt}>{published}</time>
+        </div>
+        <h1>{post.title ?? 'Untitled'}</h1>
+        {
+          (post.sourceType !== 'original' || post.sourceLink) && (
+            <p class="post-head__source">
+              {post.sourceType !== 'original' && <span>{post.attributionText}</span>}
+              {post.sourceLink && (
+                <>
+                  {post.sourceType !== 'original' ? ' — ' : 'Source: '}
+                  <a
+                    href={post.sourceLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {post.sourceLink}
+                  </a>
+                </>
+              )}
+            </p>
+          )
+        }
+      </header>
 
-    <div class="analysis reading-body" set:html={bodyHtml} />
-    <p class="analysis-hint">
-      Underlined words and highlighted phrases carry notes — tap one to see the
-      definition and add it to your deck.
-    </p>
-  </article>
+      <div class="analysis reading-body" set:html={bodyHtml} />
+    </article>
 
-  <script
-    is:inline
-    type="application/json"
-    id="analysis-data"
-    set:html={JSON.stringify(post.annotations)}
-  />
+    <aside class="sidebar" aria-label="In this article">
+      <details class="sidebar__group" open>
+        <summary>
+          Grammar <span class="sidebar__count">{sidebarGrammar.length}</span>
+        </summary>
+        <ul class="sidebar__list">
+          {
+            sidebarGrammar.map((g) => (
+              <li class="sidebar__item">
+                <div class="sidebar__label">
+                  <a href={`/grammar/${g.slug}`}>{g.name}</a>
+                  <span class={`badge badge--${STATE_CLASS[g.state]}`}>
+                    {STATE_LABEL[g.state]}
+                  </span>
+                </div>
+              </li>
+            ))
+          }
+          {sidebarGrammar.length === 0 && <li class="sidebar__empty">None in this article.</li>}
+        </ul>
+      </details>
 
-  <div
-    id="analysis-tip"
-    class="analysis-tip"
-    role="dialog"
-    aria-label="Word notes"
-    hidden
-  >
+      <details class="sidebar__group" open>
+        <summary>
+          Words <span class="sidebar__count">{sidebarWords.length}</span>
+        </summary>
+        <ul class="sidebar__list">
+          {
+            sidebarWords.map((w) => (
+              <li class="sidebar__item">
+                <div class="sidebar__label">
+                  <b>{w.lemma}</b>
+                  <span class={`badge badge--${STATE_CLASS[w.state]}`}>
+                    {STATE_LABEL[w.state]}
+                  </span>
+                </div>
+                {w.definition && <p class="sidebar__def">{w.definition}</p>}
+                {w.state === 'new' && w.wordId && (
+                  <form
+                    hx-post="/partials/add-card"
+                    hx-swap="outerHTML"
+                    hx-target="this"
+                    class="add-card__form"
+                  >
+                    <input type="hidden" name="wordId" value={w.wordId} />
+                    <button type="submit" class="add-card">+ Add to deck</button>
+                  </form>
+                )}
+              </li>
+            ))
+          }
+          {sidebarWords.length === 0 && <li class="sidebar__empty">None in this article.</li>}
+        </ul>
+      </details>
+
+      <details class="sidebar__group" open>
+        <summary>
+          Phrases <span class="sidebar__count">{sidebarPhrases.length}</span>
+        </summary>
+        <ul class="sidebar__list">
+          {
+            sidebarPhrases.map((p) => (
+              <li class="sidebar__item">
+                <div class="sidebar__label">
+                  <b>{p.text}</b>
+                  <span class={`badge badge--${STATE_CLASS[p.state]}`}>
+                    {STATE_LABEL[p.state]}
+                  </span>
+                </div>
+                {p.definition && <p class="sidebar__def">{p.definition}</p>}
+                {p.state === 'new' && (
+                  <form
+                    hx-post="/partials/add-card"
+                    hx-swap="outerHTML"
+                    hx-target="this"
+                    class="add-card__form"
+                  >
+                    <input type="hidden" name="phraseId" value={p.phraseId} />
+                    <button type="submit" class="add-card">+ Add to deck</button>
+                  </form>
+                )}
+              </li>
+            ))
+          }
+          {sidebarPhrases.length === 0 && <li class="sidebar__empty">None in this article.</li>}
+        </ul>
+      </details>
+    </aside>
   </div>
 
   {
@@ -249,139 +437,13 @@ const comprehension: ComprehensionView[] = post.exercises
       </section>
     )
   }
+
+  {
+    summaryLine && (
+      <p class="reader-summary">{summaryLine}</p>
+    )
+  }
 </Layout>
-
-<script is:inline>
-  (() => {
-    const data = JSON.parse(
-      document.getElementById('analysis-data')?.textContent || '{}',
-    );
-    const tip = document.getElementById('analysis-tip');
-    const analysis = document.querySelector('.analysis');
-    if (!tip || !analysis) return;
-
-    const esc = (s) =>
-      String(s ?? '').replace(
-        /[&<>"']/g,
-        (c) =>
-          ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;',
-          })[c],
-      );
-    const badge = (lvl) => (lvl ? `<span class="badge">${esc(lvl)}</span> ` : '');
-    const addForm = (field, id, label) =>
-      `<form hx-post="/partials/add-card" hx-swap="outerHTML" hx-target="this" class="add-card__form">
-        <input type="hidden" name="${field}" value="${esc(id)}" />
-        <button type="submit" class="add-card">+ ${esc(label)}</button>
-      </form>`;
-
-    function contentFor(el) {
-      const wid = el.getAttribute('data-word');
-      const pid = el.getAttribute('data-phrase');
-      const gslug = el.getAttribute('data-grammar');
-      const parts = [];
-      if (wid && data.words && data.words[wid]) {
-        const w = data.words[wid];
-        parts.push(
-          `<div class="analysis-tip__block">
-            <p class="analysis-tip__head">${badge(w.cefrLevel)}<b>${esc(w.lemma)}</b> <i>${esc(w.pos)}</i></p>
-            ${w.definition ? `<p>${esc(w.definition)}</p>` : ''}
-            ${w.example ? `<p class="analysis-tip__eg">“${esc(w.example)}”</p>` : ''}
-            ${addForm('wordId', w.wordId, 'Add word')}
-          </div>`,
-        );
-      }
-      if (pid && data.phrases && data.phrases[pid]) {
-        const ph = data.phrases[pid];
-        parts.push(
-          `<div class="analysis-tip__block">
-            <p class="analysis-tip__head">${badge(ph.cefrLevel)}<b>${esc(ph.text)}</b>${ph.type ? ` <i>${esc(ph.type)}</i>` : ''}</p>
-            ${ph.definition ? `<p>${esc(ph.definition)}</p>` : ''}
-            ${ph.example ? `<p class="analysis-tip__eg">“${esc(ph.example)}”</p>` : ''}
-            ${addForm('phraseId', ph.phraseId, 'Add phrase')}
-          </div>`,
-        );
-      }
-      if (gslug && data.grammar && data.grammar[gslug]) {
-        const g = data.grammar[gslug];
-        const points = (g.usagePoints || [])
-          .map(
-            (up) =>
-              `<div class="analysis-tip__up">
-                <p>${badge(up.cefrLevel)}${esc(up.canDoStatement)}</p>
-                ${up.exampleText ? `<p class="analysis-tip__eg">“${esc(up.exampleText)}”</p>` : ''}
-                ${addForm('grammarUsagePointId', up.grammarUsagePointId, 'Add')}
-              </div>`,
-          )
-          .join('');
-        parts.push(
-          `<div class="analysis-tip__block">
-            <p class="analysis-tip__head">${badge(g.cefrLevel)}<b>${esc(g.name)}</b></p>
-            <p><a href="/grammar/${esc(g.slug)}">Open grammar guide →</a></p>
-            ${points}
-          </div>`,
-        );
-      }
-      return parts.join('');
-    }
-
-    let openEl = null;
-    function open(el) {
-      const html = contentFor(el);
-      if (!html) return;
-      tip.innerHTML = html;
-      tip.hidden = false;
-      openEl = el;
-      const r = el.getBoundingClientRect();
-      tip.style.top = `${window.scrollY + r.bottom + 6}px`;
-      let left = window.scrollX + r.left;
-      const maxLeft =
-        window.scrollX +
-        document.documentElement.clientWidth -
-        tip.offsetWidth -
-        12;
-      if (left > maxLeft) left = Math.max(12, maxLeft);
-      tip.style.left = `${left}px`;
-      if (window.htmx) window.htmx.process(tip);
-    }
-    function close() {
-      tip.hidden = true;
-      openEl = null;
-    }
-
-    analysis.addEventListener('click', (e) => {
-      const el = e.target.closest('[data-word],[data-phrase],[data-grammar]');
-      if (!el) return;
-      if (el === openEl) close();
-      else open(el);
-    });
-    analysis.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      const el = e.target.closest('[data-word],[data-phrase],[data-grammar]');
-      if (!el) return;
-      e.preventDefault();
-      if (el === openEl) close();
-      else open(el);
-    });
-    document.addEventListener('click', (e) => {
-      if (
-        !tip.hidden &&
-        !tip.contains(e.target) &&
-        !e.target.closest('[data-word],[data-phrase],[data-grammar]')
-      ) {
-        close();
-      }
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !tip.hidden) close();
-    });
-    window.addEventListener('resize', close);
-  })();
-</script>
 
 <script is:inline>
   (() => {
@@ -449,6 +511,21 @@ const comprehension: ComprehensionView[] = post.exercises
             if (!sel || sel.value !== fs.getAttribute('data-answer')) ok = false;
           });
           setResult(box, ok);
+
+          // Marks the post read for feed dedup (PLAN.md §16/§17 Track B) —
+          // regardless of correctness, and only once per page view.
+          if (!box.dataset.readMarked) {
+            box.dataset.readMarked = '1';
+            const slugId = document
+              .querySelector('.reader-layout')
+              ?.getAttribute('data-slug-id');
+            if (slugId) {
+              fetch('/partials/mark-read', {
+                method: 'POST',
+                body: new URLSearchParams({ slugId }),
+              }).catch(() => {});
+            }
+          }
         }
       });
     }
@@ -475,12 +552,89 @@ const comprehension: ComprehensionView[] = post.exercises
   .reading-body {
     font-size: 1.075rem;
   }
-  .analysis-hint {
-    margin-top: 1.5rem;
+  .reader-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+  @media (min-width: 960px) {
+    .reader-layout {
+      grid-template-columns: minmax(0, 42rem) minmax(220px, 280px);
+      align-items: start;
+      justify-content: center;
+    }
+  }
+  .reader-article {
+    min-width: 0;
+  }
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  @media (min-width: 960px) {
+    .sidebar {
+      position: sticky;
+      top: 1rem;
+    }
+  }
+  .sidebar__group {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 0.7rem 0.9rem;
+  }
+  .sidebar__group summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sidebar__count {
+    color: var(--color-ink-soft);
+    font-weight: 400;
+    font-size: 0.85rem;
+  }
+  .sidebar__list {
+    list-style: none;
+    margin: 0.7rem 0 0;
+    padding: 0;
+  }
+  .sidebar__item {
+    margin: 0 0 0.75rem;
+  }
+  .sidebar__item:last-child {
+    margin-bottom: 0;
+  }
+  .sidebar__label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .sidebar__def {
+    margin: 0.2rem 0 0;
     font-size: 0.85rem;
     color: var(--color-ink-soft);
-    border-top: 1px solid var(--color-border);
-    padding-top: 0.75rem;
+  }
+  .sidebar__empty {
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+  }
+  .badge--new {
+    background: var(--color-paper-soft);
+    color: var(--color-ink-soft);
+  }
+  .badge--learning {
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
+  }
+  .badge--know {
+    background: var(--color-brand-wash);
+    color: var(--color-success);
+  }
+  .reader-summary {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-brand-strong);
   }
   .exercises {
     margin-top: 2.5rem;

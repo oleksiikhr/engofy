@@ -31,11 +31,13 @@ const PUBLISH_GATE_RETRY_SECONDS = 30;
 // so a re-run never resets a row a later send step already advanced.
 //
 // publish sits at the end of the ai_* branch, but the parallel annotation
-// branch (word / phrase inline markup) fans out from the same spacy_parse
-// completion and never rejoins on its own. So publish is where the two
-// branches meet: it no-ops and re-queues itself until the annotation stage
-// has Completed, otherwise a post could go feed-visible with its inline
-// annotations still missing / failed (D6).
+// and enrichment branches (word/phrase inline markup, word/phrase
+// definitions) fan out from spacy_parse/annotation completion and never
+// rejoin on their own. So publish is where all branches meet: it no-ops and
+// re-queues itself until BOTH the annotation stage (D6) and the enrichment
+// stage (PLAN.md §17 Track A) have Completed, otherwise a post could go
+// feed-visible with its inline annotations or lexicon definitions still
+// missing / failed.
 @CommandHandler(PublishPostCommand)
 export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
   private readonly logger = new Logger(PublishPostHandler.name);
@@ -56,20 +58,32 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
       return;
     }
 
-    const annotationRun = await this.em.findOne(PostPipelineRun, {
-      postId,
-      stage: PostPipelineStage.Annotation,
-    });
-    if (annotationRun?.status !== PostPipelineRunStatus.Completed) {
-      // The annotation branch hasn't finished — don't publish yet. Re-queue a
-      // delayed publish so the two branches rejoin once it does.
+    const [annotationRun, enrichmentRun] = await Promise.all([
+      this.em.findOne(PostPipelineRun, {
+        postId,
+        stage: PostPipelineStage.Annotation,
+      }),
+      this.em.findOne(PostPipelineRun, {
+        postId,
+        stage: PostPipelineStage.Enrichment,
+      }),
+    ]);
+    if (
+      annotationRun?.status !== PostPipelineRunStatus.Completed ||
+      enrichmentRun?.status !== PostPipelineRunStatus.Completed
+    ) {
+      // One of the branches hasn't finished — don't publish yet. Re-queue a
+      // delayed publish so every branch rejoins once it does.
       this.outbox.send<PostPublishJobData>(
         this.em,
         QueueName.PostPublish,
         { postId },
         { singletonKey: postId, startAfter: PUBLISH_GATE_RETRY_SECONDS },
       );
-      this.logger.log({ postId }, 'publish gated on annotation branch');
+      this.logger.log(
+        { postId },
+        'publish gated on annotation/enrichment branches',
+      );
       return;
     }
 

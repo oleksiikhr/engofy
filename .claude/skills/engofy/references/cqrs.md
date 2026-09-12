@@ -47,11 +47,13 @@ sequenceDiagram
 |---|---|---|
 | `AnnotatePostHandler` | flush-per-`PostPart` so a mid-job crash keeps completed parts (a part with `annotatedAt` set is skipped on retry). | PLAN §12; `commands/annotate-post/annotate-post.handler.ts` |
 | `SpacyParsePostHandler` | same flush-per-`PostPart` pattern. | `commands/spacy-parse-post/spacy-parse-post.handler.ts:81` |
+| `TagGrammarHandler` | second phase (F3) paints `grammarConstruct` onto each `post_parts.body`; flush-per-`PostPart` for the same mid-job durability. Gated on `PostPipelineRun(Annotation)=Completed` so it is the last writer of `part.body` (no race with the parallel `annotate-post`). | `commands/tag-grammar/tag-grammar.handler.ts` `paintGrammarConstructs` |
 
-These two are the **only** sanctioned CQRS-handler exceptions. `assess-complexity`
-/ `tag-grammar` / `generate-exercises` / `publish` / `retry` previously flushed
-internally too — that was redundant with the facade re-flush and has been removed
-(Batch A, D3).
+These three are the **only** sanctioned CQRS-handler exceptions. `assess-complexity`
+/ `generate-exercises` / `publish` / `retry` previously flushed internally too —
+that was redundant with the facade re-flush and has been removed (Batch A, D3).
+`tag-grammar`'s tail (run row + `outbox.send`) still rides the facade flush; only
+its per-part paint loop flushes.
 
 ### Flush outside the CQRS path
 

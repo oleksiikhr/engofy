@@ -8,6 +8,7 @@ import type { AppRuntime } from './core/app.js';
 import AppConfig from './core/config/app.config.js';
 import SwaggerConfig from './core/config/swagger.config.js';
 import DatabaseConfig from './core/database/config/database.config.js';
+import { DatabaseBootstrapService } from './core/database/database-bootstrap.service.js';
 import { databaseFactory } from './core/database/mikro-orm.factory.js';
 import { Environment, getEnvironment } from './core/enums/environment.enum.js';
 import { LoggerModule } from './core/logger/logger.module.js';
@@ -50,6 +51,7 @@ export class AppModule {
         PgBossModule.forRuntime(runtime),
         RedisModule,
       ],
+      providers: [DatabaseBootstrapService],
     };
   }
 

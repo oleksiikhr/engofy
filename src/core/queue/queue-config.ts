@@ -40,6 +40,7 @@ export const QUEUE_DEFINITIONS: Record<QueueName, Omit<Queue, 'name'>> = {
   [QueueName.PostAnnotation]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostAiComplexity]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostAiGrammar]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
+  [QueueName.PostAiEnrichment]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostAiExercises]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostPublish]: { ...PIPELINE_BASE, ...DETERMINISTIC_RETRY },
 };

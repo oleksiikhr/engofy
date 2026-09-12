@@ -1,7 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
+import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
+import { mostAdvancedState } from '../../domain/learning-card-state-priority.js';
 import { parseDoc } from '../../domain/node-tree.parser.js';
 import type { SpanNode } from '../../domain/node-tree.types.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
@@ -20,8 +23,15 @@ import type {
   PhraseAnnotationView,
   PostDetailView,
   PostExerciseView,
+  PostSidebarView,
   WordAnnotationView,
 } from './post-detail-view.js';
+
+interface ResolvedAnnotations {
+  words: Record<string, WordAnnotationView>;
+  phrases: Record<string, PhraseAnnotationView>;
+  grammar: Record<string, GrammarAnnotationView>;
+}
 
 // Backs `/posts/{slug}-{id}` (PLAN.md §4, §6): the reassembled node tree plus
 // the lexicon/grammar entries the inline spans reference, and the post's
@@ -34,6 +44,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
 
   async execute({
     shortId,
+    userId,
   }: GetPostDetailQuery): Promise<PostDetailView | null> {
     const post = await this.em.findOne(
       Post,
@@ -63,6 +74,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     // that wrote a malformed node surfaces (InvalidNodeTreeError).
     const doc = parseDoc(assembleDocFromParts(parts));
     const spans = collectSpanNodes(doc.children);
+    const annotations = await this.resolveAnnotations(spans);
 
     return {
       shortId: post.shortId,
@@ -74,12 +86,15 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       sourceType: post.source.type,
       sourceLink: post.source.link ?? null,
       doc,
-      annotations: await this.resolveAnnotations(spans),
+      annotations,
       exercises: exercises.map(toExerciseView),
+      sidebar: await this.buildSidebar(annotations, userId),
     };
   }
 
-  private async resolveAnnotations(spans: SpanNode[]) {
+  private async resolveAnnotations(
+    spans: SpanNode[],
+  ): Promise<ResolvedAnnotations> {
     const wordDefinitionIds = unique(
       spans.map((span) =>
         span.kind === 'word' ? span.wordDefinitionId : null,
@@ -202,6 +217,97 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       };
     }
     return out;
+  }
+
+  // "In this article" sidebar (PLAN.md §16/§17 Track B): one entry per
+  // unique word/phrase/construction already resolved above — never per
+  // occurrence. A guest (userId null) gets every entry New, no DB join.
+  private async buildSidebar(
+    annotations: ResolvedAnnotations,
+    userId: string | null,
+  ): Promise<PostSidebarView> {
+    const wordEntries = Object.values(annotations.words);
+    const phraseEntries = Object.values(annotations.phrases);
+    const grammarEntries = Object.values(annotations.grammar);
+
+    if (!userId) {
+      return {
+        words: wordEntries.map((w) => ({
+          wordDefinitionId: w.wordDefinitionId,
+          lemma: w.lemma,
+          state: LearningCardState.New,
+        })),
+        phrases: phraseEntries.map((p) => ({
+          phraseId: p.phraseId,
+          text: p.text,
+          state: LearningCardState.New,
+        })),
+        grammar: grammarEntries.map((g) => ({
+          slug: g.slug,
+          name: g.name,
+          state: LearningCardState.New,
+        })),
+      };
+    }
+
+    const wordIds = unique(wordEntries.map((w) => w.wordId));
+    const phraseIds = unique(phraseEntries.map((p) => p.phraseId));
+    const usagePointIds = grammarEntries.flatMap((g) =>
+      g.usagePoints.map((up) => up.grammarUsagePointId),
+    );
+
+    const conditions = [
+      wordIds.length > 0 ? { wordId: { $in: wordIds } } : null,
+      phraseIds.length > 0 ? { phraseId: { $in: phraseIds } } : null,
+      usagePointIds.length > 0
+        ? { grammarUsagePointId: { $in: usagePointIds } }
+        : null,
+    ].filter((c): c is NonNullable<typeof c> => c !== null);
+
+    const cards =
+      conditions.length === 0
+        ? []
+        : await this.em.find(
+            LearningCard,
+            { userId, $or: conditions },
+            { disableIdentityMap: true },
+          );
+
+    const stateByWordId = new Map(
+      cards.filter((c) => c.wordId).map((c) => [c.wordId as string, c.state]),
+    );
+    const stateByPhraseId = new Map(
+      cards
+        .filter((c) => c.phraseId)
+        .map((c) => [c.phraseId as string, c.state]),
+    );
+    const stateByUsagePointId = new Map(
+      cards
+        .filter((c) => c.grammarUsagePointId)
+        .map((c) => [c.grammarUsagePointId as string, c.state]),
+    );
+
+    return {
+      words: wordEntries.map((w) => ({
+        wordDefinitionId: w.wordDefinitionId,
+        lemma: w.lemma,
+        state: stateByWordId.get(w.wordId) ?? LearningCardState.New,
+      })),
+      phrases: phraseEntries.map((p) => ({
+        phraseId: p.phraseId,
+        text: p.text,
+        state: stateByPhraseId.get(p.phraseId) ?? LearningCardState.New,
+      })),
+      grammar: grammarEntries.map((g) => ({
+        slug: g.slug,
+        name: g.name,
+        state: mostAdvancedState(
+          g.usagePoints
+            .map((up) => stateByUsagePointId.get(up.grammarUsagePointId))
+            .filter((s): s is LearningCardState => !!s),
+        ),
+      })),
+    };
   }
 }
 

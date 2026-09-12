@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { z } from 'zod';
+import { AiSchemaMismatchError } from './ai-schema-mismatch.error.js';
 import { AnthropicClientService } from './anthropic-client.service.js';
 
 // The service streams every call (`messages.stream(...).finalMessage()`), so the
@@ -169,6 +170,17 @@ describe('AnthropicClientService', () => {
       await expect(
         client.completeStructured({ system: 's', userText: 'u', tool: TOOL }),
       ).rejects.toThrow('truncated by max_tokens');
+    });
+
+    it('throws AiSchemaMismatchError (not a raw ZodError) on a schema-invalid payload', async () => {
+      // Model returned `level` as a number where the schema wants a string —
+      // a shape violation, not a truncation.
+      finalMessage.mockResolvedValue(toolResponse({ level: 42 }));
+      const client = new AnthropicClientService('key', 'claude-sonnet-5');
+
+      await expect(
+        client.completeStructured({ system: 's', userText: 'u', tool: TOOL }),
+      ).rejects.toBeInstanceOf(AiSchemaMismatchError);
     });
   });
 

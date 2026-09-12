@@ -10,6 +10,10 @@ export interface NodeOffset {
   index: number;
   start: number;
   end: number;
+  // The flattened node's tree type — lets consumers keep a `link` node atomic
+  // (annotation spans are not spliced into it, so a citation link is never
+  // broken into fragments).
+  type: Node['type'];
 }
 
 export interface FlattenedUnit {
@@ -40,7 +44,12 @@ export function flattenNodes(children: Node[]): {
 
   for (const node of children) {
     const childText = nodeText(node);
-    offsets.push({ index, start: cursor, end: cursor + childText.length });
+    offsets.push({
+      index,
+      start: cursor,
+      end: cursor + childText.length,
+      type: node.type,
+    });
     text += childText;
     cursor += childText.length;
     index += 1;

@@ -18,6 +18,7 @@ import { LearningService } from '../../../../modules/learning/learning.service.j
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
+import { DueCardCountResponseDto } from '../dto/due-card-count-response.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
 import { PracticeQueueQueryDto } from '../dto/practice-queue-query.dto.js';
 import {
@@ -25,6 +26,7 @@ import {
   PracticeQueueResponseDto,
 } from '../dto/practice-queue-response.dto.js';
 import { ReviewCardDto } from '../dto/review-card.dto.js';
+import { StreakResponseDto } from '../dto/streak-response.dto.js';
 
 function iso(value: DateTime): string {
   return value.toISO() ?? value.toString();
@@ -88,6 +90,24 @@ export class LearningController {
   ): Promise<PracticeQueueResponseDto> {
     const items = await this.learning.getPracticeQueue(actor.id, query.limit);
     return toOffsetPage(items.map(toQueueItemDto), null);
+  }
+
+  // How many of the user's cards are due right now — backs the feed's soft
+  // "N due" badge (PLAN.md §16/§17 Track B), not the queue itself.
+  @Get('due-count')
+  async dueCount(
+    @CurrentUser() actor: UserActor,
+  ): Promise<DueCardCountResponseDto> {
+    const dueCount = await this.learning.getDueCardCount(actor.id);
+    return { dueCount };
+  }
+
+  // Daily review streak — for the header's day-streak display (PLAN.md
+  // §16/§17 Track B), cheaper than the full `/profile` aggregate.
+  @Get('streak')
+  async streak(@CurrentUser() actor: UserActor): Promise<StreakResponseDto> {
+    const streak = await this.learning.getStreak(actor.id);
+    return { streak };
   }
 
   // Grade a card and reschedule it.

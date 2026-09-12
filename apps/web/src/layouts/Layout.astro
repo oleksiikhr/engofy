@@ -1,6 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
-import type { CurrentUser } from '../lib/types';
+import { apiGetOrNull } from '../lib/api';
+import type { CurrentUser, StreakResponse } from '../lib/types';
 import '../styles/app.css';
 
 interface Props {
@@ -18,6 +19,17 @@ const {
   active,
   measure = false,
 } = Astro.props;
+
+// Day streak in the header (PLAN.md §16/§17 Track B) — every page, not just
+// the reader, so it stays a stable "you're on a streak" signal rather than
+// something the reader has to re-establish per article.
+const streak = user
+  ? ((
+      await apiGetOrNull<StreakResponse>('/learning/streak', {
+        request: Astro.request,
+      })
+    )?.streak ?? 0)
+  : 0;
 ---
 
 <!doctype html>
@@ -30,7 +42,7 @@ const {
     <title>{title}</title>
   </head>
   <body>
-    <SiteHeader user={user} active={active} />
+    <SiteHeader user={user} active={active} streak={streak} />
     <main class:list={['site-main', { 'reading-measure': measure }]}>
       <slot />
     </main>

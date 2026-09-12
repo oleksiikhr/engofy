@@ -7,6 +7,7 @@ import { deriveAttributionText } from '../../domain/derive-attribution-text.js';
 import { detectPostSourceFormat } from '../../domain/detect-post-source-format.js';
 import { generateSlug } from '../../domain/generate-slug.js';
 import { splitDocIntoParts } from '../../domain/post-parts.js';
+import { stripRedundantTitleHeading } from '../../domain/strip-redundant-title-heading.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
@@ -55,7 +56,10 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
 
     this.em.persist(post);
 
-    const doc = convertToDoc(format, rawText);
+    const doc = stripRedundantTitleHeading(
+      convertToDoc(format, rawText),
+      post.title,
+    );
     for (const spec of splitDocIntoParts(doc)) {
       const part = new PostPart();
       part.postId = post.id;

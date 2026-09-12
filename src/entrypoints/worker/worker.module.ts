@@ -7,6 +7,8 @@ import { AnnotatePostModule } from './post/annotate-post.module.js';
 import { AnnotatePostProcessor } from './post/annotate-post.processor.js';
 import { AssessComplexityModule } from './post/assess-complexity.module.js';
 import { AssessComplexityProcessor } from './post/assess-complexity.processor.js';
+import { EnrichLexiconModule } from './post/enrich-lexicon.module.js';
+import { EnrichLexiconProcessor } from './post/enrich-lexicon.processor.js';
 import { GenerateExercisesModule } from './post/generate-exercises.module.js';
 import { GenerateExercisesProcessor } from './post/generate-exercises.processor.js';
 import { PublishPostModule } from './post/publish-post.module.js';
@@ -38,6 +40,10 @@ const PROCESSOR_CONFIG: Record<string, { processor: Type; module: Type }> = {
   [QueueName.PostAiGrammar]: {
     processor: TagGrammarProcessor,
     module: TagGrammarModule,
+  },
+  [QueueName.PostAiEnrichment]: {
+    processor: EnrichLexiconProcessor,
+    module: EnrichLexiconModule,
   },
   [QueueName.PostAiExercises]: {
     processor: GenerateExercisesProcessor,

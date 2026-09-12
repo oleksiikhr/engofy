@@ -103,11 +103,30 @@ function convertBlockToken(token: Token): Block | undefined {
     };
   }
 
+  if (token.type === 'blockquote') {
+    // Flattened to a quoted paragraph — the node tree has no dedicated quote
+    // block, so nested paragraphs collapse into one run of inline nodes.
+    return {
+      type: 'paragraph',
+      quote: true,
+      children: convertInlineTokens(blockquoteInlineTokens(token), []),
+    };
+  }
+
   if (token.type === 'list') {
     return convertListToken(token as Tokens.List);
   }
 
   return undefined;
+}
+
+function blockquoteInlineTokens(token: Token): Token[] {
+  const inner = (token as Tokens.Blockquote).tokens ?? [];
+  return inner.flatMap((child) =>
+    'tokens' in child && Array.isArray(child.tokens)
+      ? (child.tokens as Token[])
+      : [child],
+  );
 }
 
 export function convertMarkdownToDoc(rawText: string): Doc {

@@ -1,0 +1,174 @@
+{
+  "name": "enrichment-sonnet-5",
+  "createdAt": "2026-09-12T12:03:36.014Z",
+  "model": "claude-sonnet-5",
+  "thinking": false,
+  "posts": [
+    {
+      "shortId": "E2Efeed2",
+      "title": "Feed Story 2",
+      "wordCount": 0,
+      "phraseCount": 0,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {},
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "elapsedMs": 0
+    },
+    {
+      "shortId": "E2Efeed3",
+      "title": "Feed Story 3",
+      "wordCount": 0,
+      "phraseCount": 0,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {},
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "elapsedMs": 0
+    },
+    {
+      "shortId": "E2Efeed4",
+      "title": "Feed Story 4",
+      "wordCount": 0,
+      "phraseCount": 0,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {},
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "elapsedMs": 0
+    },
+    {
+      "shortId": "E2Eread1",
+      "title": "The Cartographer at Dawn",
+      "wordCount": 1,
+      "phraseCount": 1,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "C2": 1,
+        "C1": 1
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 1463,
+      "outputTokens": 232,
+      "costUsd": 0.005246,
+      "elapsedMs": 2773.576978
+    },
+    {
+      "shortId": "bPFwidAq",
+      "title": "Portugal Trip",
+      "wordCount": 18,
+      "phraseCount": 6,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "A1": 14,
+        "A2": 5,
+        "B1": 4,
+        "B2": 1
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 1759,
+      "outputTokens": 1787,
+      "costUsd": 0.021388,
+      "elapsedMs": 17504.198056
+    },
+    {
+      "shortId": "bVscXH4W",
+      "title": "A Morning at the Market",
+      "wordCount": 58,
+      "phraseCount": 5,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "A1": 52,
+        "A2": 9,
+        "B1": 2
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 2206,
+      "outputTokens": 4283,
+      "costUsd": 0.047242,
+      "elapsedMs": 38232.189433
+    },
+    {
+      "shortId": "cM2Ru3dp",
+      "title": "How to Pack a Carry-On Bag for a Week",
+      "wordCount": 72,
+      "phraseCount": 10,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "A1": 43,
+        "A2": 27,
+        "B1": 9,
+        "B2": 3
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 2460,
+      "outputTokens": 5752,
+      "costUsd": 0.06244,
+      "elapsedMs": 53090.807734
+    },
+    {
+      "shortId": "hgxu0IRQ",
+      "title": "How Remote Work Changed Us",
+      "wordCount": 106,
+      "phraseCount": 8,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "A1": 56,
+        "B2": 4,
+        "A2": 38,
+        "B1": 16
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 2823,
+      "outputTokens": 7652,
+      "costUsd": 0.082166,
+      "elapsedMs": 69412.364597
+    },
+    {
+      "shortId": "z0WfJ4j9",
+      "title": "Libraries Stay Open on Sundays",
+      "wordCount": 59,
+      "phraseCount": 5,
+      "wordsMissingPhonetic": 0,
+      "cefrCounts": {
+        "A1": 42,
+        "B1": 12,
+        "A2": 8,
+        "C1": 1,
+        "B2": 1
+      },
+      "isComplete": true,
+      "truncated": false,
+      "inputTokens": 2220,
+      "outputTokens": 4342,
+      "costUsd": 0.04786,
+      "elapsedMs": 39953.828748
+    }
+  ],
+  "grandTotals": {
+    "postCount": 9,
+    "wordCount": 314,
+    "phraseCount": 35,
+    "wordsMissingPhonetic": 0,
+    "incompleteCount": 0,
+    "truncatedCount": 0,
+    "inputTokens": 12931,
+    "outputTokens": 24048,
+    "costUsd": 0.266342,
+    "elapsedMs": 220966.96554600002
+  }
+}

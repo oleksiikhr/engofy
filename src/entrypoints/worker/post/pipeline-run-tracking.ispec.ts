@@ -61,6 +61,16 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
     post.source = source;
     post.status = PostStatus.Pending;
     em.persist(post);
+
+    // The ai_grammar stage gates on a Completed annotation run before it does
+    // any work; seed one so the job reaches the "no sentences" throw this suite
+    // uses to drive the D4 failure bookkeeping.
+    const annotationRun = new PostPipelineRun();
+    annotationRun.postId = post.id;
+    annotationRun.stage = PostPipelineStage.Annotation;
+    annotationRun.status = PostPipelineRunStatus.Completed;
+    em.persist(annotationRun);
+
     await em.flush();
     seededPostIds.push(post.id);
     return post.id;

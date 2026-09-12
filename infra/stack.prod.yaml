@@ -38,21 +38,31 @@ x-nest-env: &nest-env
 
 x-nest-secrets: &nest-secrets
   # Secret <name on the swarm> mounted at /run/secrets/<target>; the entrypoint
-  # maps <target> -> UPPER_SNAKE env var.
+  # maps <target> -> UPPER_SNAKE env var. Shared by web / worker / cron; the
+  # Anthropic key is added to `worker` only (AI runs only in a pg-boss
+  # processor — no HTTP path, no cron poller calls it).
   - source: engofy_db_password
     target: mikro_orm_password       # -> MIKRO_ORM_PASSWORD
-  - source: engofy_anthropic_api_key
-    target: anthropic_api_key        # -> ANTHROPIC_API_KEY
   - source: engofy_resend_api_key
     target: resend_api_key           # -> RESEND_API_KEY
   - source: engofy_telegram_bot_token
     target: telegram_bot_token       # -> TELEGRAM_BOT_TOKEN
-  - source: engofy_s3_access_key
-    target: s3_access_key            # -> S3_ACCESS_KEY
-  - source: engofy_s3_secret_key
-    target: s3_secret_key            # -> S3_SECRET_KEY
   - source: engofy_sentry_dsn
     target: sentry_dsn               # -> SENTRY_DSN
+
+x-worker-secrets: &worker-secrets
+  # `worker` = the shared set + the Anthropic key (the only entrypoint that
+  # calls the AI). Sequences can't be `<<`-merged in YAML, so it is spelled out.
+  - source: engofy_db_password
+    target: mikro_orm_password       # -> MIKRO_ORM_PASSWORD
+  - source: engofy_resend_api_key
+    target: resend_api_key           # -> RESEND_API_KEY
+  - source: engofy_telegram_bot_token
+    target: telegram_bot_token       # -> TELEGRAM_BOT_TOKEN
+  - source: engofy_sentry_dsn
+    target: sentry_dsn               # -> SENTRY_DSN
+  - source: engofy_anthropic_api_key
+    target: anthropic_api_key        # -> ANTHROPIC_API_KEY
 
 x-deploy-stateless: &deploy-stateless
   update_config:
@@ -87,10 +97,6 @@ secrets:
   engofy_resend_api_key:
     external: true
   engofy_telegram_bot_token:
-    external: true
-  engofy_s3_access_key:
-    external: true
-  engofy_s3_secret_key:
     external: true
   engofy_sentry_dsn:
     external: true
@@ -148,7 +154,7 @@ services:
     environment:
       <<: *nest-env
       SENTRY_TRACES_SAMPLE_RATE_WORKER: "0.1"
-    secrets: *nest-secrets
+    secrets: *worker-secrets
     networks: [engofy]
     stop_grace_period: 120s
     deploy:

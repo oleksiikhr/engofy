@@ -5,6 +5,8 @@ import { SubCommand } from 'nest-commander';
 import {
   buildCheatSheet,
   classifyEgpRecord,
+  cleanEgpExample,
+  cleanEgpText,
   type EgpRecord,
   grammarConstructionSlug,
   parseEgpRecords,
@@ -104,8 +106,8 @@ export class GrammarImportEgpCommand extends CliCommandRunner {
       point.constructionId = construction.id;
       point.cefrLevel = record.level;
       point.guideword = record.guideword;
-      point.canDoStatement = record.can_do;
-      point.exampleText = record.example;
+      point.canDoStatement = cleanEgpText(record.can_do);
+      point.exampleText = cleanEgpExample(record.example);
       usagePoints += 1;
     }
 

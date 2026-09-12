@@ -3,17 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import { apiGet, apiGetOrNull } from '../lib/api';
 import { postUrl } from '../lib/post-url';
 import { getCurrentUser } from '../lib/session';
-import type {
-  FeedItem,
-  FeedResponse,
-  PracticeItem,
-  PracticeQueueResponse,
-} from '../lib/types';
+import type { DueCardCountResponse, FeedResponse } from '../lib/types';
 
 const PAGE_SIZE = 12;
-// Insert one review-break card after every N feed items (PLAN.md §4:
-// "кожні 2-3 статті — картка повторення замість наступної статті").
-const ARTICLES_PER_BREAK = 2;
 
 const user = await getCurrentUser(Astro.request);
 
@@ -25,30 +17,18 @@ const feed = await apiGet<FeedResponse>(
   { request: Astro.request },
 );
 
-// Due review cards to interleave — signed-in users only; a guest can't have a
-// queue, so the feed stays a plain list for them.
-const dueCards: PracticeItem[] = user
+// Soft "N due" badge (PLAN.md §16/§17 Track B) — replaces the old forced
+// review-break card inserted every 2-3 posts (PLAN.md §4): a due date is
+// already FSRS's own pacing signal, so a mandatory feed insertion fights it
+// and works against the "between other things" positioning. Signed-in only —
+// a guest has no queue.
+const dueCount = user
   ? ((
-      await apiGetOrNull<PracticeQueueResponse>('/learning/practice?limit=20', {
+      await apiGetOrNull<DueCardCountResponse>('/learning/due-count', {
         request: Astro.request,
       })
-    )?.items ?? [])
-  : [];
-
-type Row =
-  | { kind: 'post'; post: FeedItem }
-  | { kind: 'break'; card: PracticeItem };
-
-const rows: Row[] = [];
-let cardIdx = 0;
-feed.items.forEach((post, i) => {
-  rows.push({ kind: 'post', post });
-  const boundary = (i + 1) % ARTICLES_PER_BREAK === 0;
-  if (boundary && cardIdx < dueCards.length && i < feed.items.length - 1) {
-    rows.push({ kind: 'break', card: dueCards[cardIdx] });
-    cardIdx += 1;
-  }
-});
+    )?.dueCount ?? 0)
+  : 0;
 
 function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', {
@@ -65,9 +45,9 @@ function fmtDate(iso: string): string {
   {feed.items.length === 0 && <p>No posts published yet.</p>}
 
   {
-    user && dueCards.length > 0 && (
-      <p class="feed__note">
-        {dueCards.length} card{dueCards.length === 1 ? '' : 's'} due —{' '}
+    user && dueCount > 0 && (
+      <p class="feed__note" data-testid="due-badge">
+        {dueCount} card{dueCount === 1 ? '' : 's'} due —{' '}
         <a href="/practice">start a review session</a>.
       </p>
     )
@@ -75,35 +55,20 @@ function fmtDate(iso: string): string {
 
   <ul class="feed">
     {
-      rows.map((row) =>
-        row.kind === 'post' ? (
-          <li class="card">
-            <div class="feed__meta">
-              {row.post.cefrLevel && (
-                <span class="badge">{row.post.cefrLevel}</span>
-              )}
-              <time datetime={row.post.publishedAt}>
-                {fmtDate(row.post.publishedAt)}
-              </time>
-            </div>
-            <h2>
-              <a href={postUrl(row.post)}>{row.post.title ?? 'Untitled'}</a>
-            </h2>
-            <p class="feed__excerpt">{row.post.excerpt}</p>
-          </li>
-        ) : (
-          <li class="card feed__break" data-testid="review-break">
-            <p class="feed__break-kicker">Quick review</p>
-            <p class="feed__break-word">{row.card.target.primary}</p>
-            {row.card.target.secondary && (
-              <p class="feed__break-hint">{row.card.target.secondary}</p>
-            )}
-            <a class="btn" href="/practice">
-              Review now
-            </a>
-          </li>
-        ),
-      )
+      feed.items.map((post) => (
+        <li class="card">
+          <div class="feed__meta">
+            {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
+            <time datetime={post.publishedAt}>
+              {fmtDate(post.publishedAt)}
+            </time>
+          </div>
+          <h2>
+            <a href={postUrl(post)}>{post.title ?? 'Untitled'}</a>
+          </h2>
+          <p class="feed__excerpt">{post.excerpt}</p>
+        </li>
+      ))
     }
   </ul>
 
@@ -162,29 +127,6 @@ function fmtDate(iso: string): string {
   .feed__excerpt {
     margin: 0;
     color: var(--color-ink-soft);
-  }
-  .feed__break {
-    background: var(--color-brand-wash);
-    border-color: var(--color-brand);
-    text-align: center;
-  }
-  .feed__break-kicker {
-    margin: 0 0 0.25rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-brand-strong);
-  }
-  .feed__break-word {
-    margin: 0 0 0.2rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.25rem;
-  }
-  .feed__break-hint {
-    margin: 0 0 0.75rem;
-    color: var(--color-ink-soft);
-    font-size: 0.9rem;
   }
   .feed__pager {
     display: flex;

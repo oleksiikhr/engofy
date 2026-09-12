@@ -7,10 +7,12 @@ import type { CardTargetInput } from './domain/card-target.js';
 import type { ReviewRating } from './enums/review-rating.enum.js';
 import type { DictionaryView } from './queries/get-dictionary/dictionary-view.js';
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
+import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
 import type { PracticeQueueItem } from './queries/get-practice-queue/practice-queue-item.js';
 import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
 import type { ProfileView } from './queries/get-profile/profile-view.js';
+import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
 import type { CardView } from './types/card-view.type.js';
 
 @Injectable()
@@ -58,5 +60,13 @@ export class LearningService {
 
   getDictionary(userId: string): Promise<DictionaryView> {
     return this.queryBus.execute(new GetDictionaryQuery(userId));
+  }
+
+  getDueCardCount(userId: string): Promise<number> {
+    return this.queryBus.execute(new GetDueCardCountQuery(userId));
+  }
+
+  getStreak(userId: string): Promise<number> {
+    return this.queryBus.execute(new GetStreakQuery(userId));
   }
 }

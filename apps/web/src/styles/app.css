@@ -137,14 +137,27 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
   max-width: 72rem;
   margin: 0 auto;
 }
 .site-header .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+@media (max-width: 40rem) {
+  .site-header {
+    padding: 0.85rem 1rem;
+  }
+  .site-header nav {
+    gap: 0.5rem 1rem;
+  }
+  .site-header .nav-links {
+    gap: 0.4rem 0.9rem;
+  }
 }
 .site-header a {
   text-decoration: none;
@@ -211,62 +224,32 @@ a:hover {
 .analysis :where(p) {
   margin: 0 0 0.9rem;
 }
-.analysis .word {
-  border-bottom: 2px solid var(--color-highlight);
-  cursor: help;
+/* Tailwind Preflight resets list markers; restore them for rendered body
+   content (markdown/article posts, grammar cheat sheets). */
+.analysis :where(ul, ol) {
+  margin: 0 0 0.9rem;
+  padding-left: 1.5rem;
 }
-.analysis .phrase {
-  border-bottom: 2px dotted var(--color-highlight);
-  cursor: help;
+.analysis :where(ul) {
+  list-style: disc;
 }
-.analysis .grammar {
-  background: var(--color-brand-wash);
-  border-radius: 0.2rem;
-  padding: 0 0.1rem;
+.analysis :where(ol) {
+  list-style: decimal;
 }
-.analysis .add-card {
-  border: 0;
-  background: transparent;
-  color: var(--color-brand);
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0 0.2rem;
+.analysis :where(li) {
+  margin: 0 0 0.25rem;
 }
-
-/* --- Reader tooltip + inline "add to deck" (built client-side, so these
-   selectors must be global — Astro scoped styles never reach innerHTML'd
-   nodes). --- */
-.analysis-tip {
-  position: absolute;
-  z-index: 40;
-  max-width: min(22rem, calc(100vw - 2rem));
-  background: var(--color-paper);
-  border: 1px solid var(--color-border-strong);
-  border-radius: 0.6rem;
-  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.35);
-  padding: 0.8rem 0.9rem;
-  font-size: 0.9rem;
-}
-.analysis-tip__block + .analysis-tip__block {
-  margin-top: 0.75rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 0.75rem;
-}
-.analysis-tip__head {
-  margin: 0 0 0.35rem;
-}
-.analysis-tip p {
-  margin: 0 0 0.4rem;
-}
-.analysis-tip__eg {
+.analysis :where(blockquote) {
+  margin: 0 0 0.9rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--color-border-strong);
   color: var(--color-ink-soft);
-  font-style: italic;
 }
-.analysis-tip__up {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px dashed var(--color-border);
-}
+/* --- Inline "add to deck" fragments (built client-side by an HTMX swap, so
+   these selectors must be global — Astro scoped styles never reach
+   innerHTML'd/swapped-in nodes). Used by the reader sidebar and the grammar
+   construction page's usage-point list (PLAN.md §16 — no more inline
+   word/phrase/grammar highlighting in article text). --- */
 .add-card__form {
   margin: 0.2rem 0 0;
 }

@@ -3,9 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AnnotatePostCommand } from './commands/annotate-post/annotate-post.command.js';
 import { AssessComplexityCommand } from './commands/assess-complexity/assess-complexity.command.js';
+import {
+  BackfillEnrichmentCommand,
+  type BackfillEnrichmentResult,
+} from './commands/backfill-enrichment/backfill-enrichment.command.js';
+import { EnrichLexiconCommand } from './commands/enrich-lexicon/enrich-lexicon.command.js';
 import { GenerateExercisesCommand } from './commands/generate-exercises/generate-exercises.command.js';
 import { IngestPostCommand } from './commands/ingest-post/ingest-post.command.js';
 import type { IngestPostDto } from './commands/ingest-post/ingest-post.dto.js';
+import { MarkPostReadCommand } from './commands/mark-post-read/mark-post-read.command.js';
 import { PublishPostCommand } from './commands/publish-post/publish-post.command.js';
 import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
@@ -33,8 +39,11 @@ export class PostService {
     return this.queryBus.execute(new GetFeedQuery(limit, offset));
   }
 
-  getPostDetail(shortId: string): Promise<PostDetailView | null> {
-    return this.queryBus.execute(new GetPostDetailQuery(shortId));
+  getPostDetail(
+    shortId: string,
+    userId: string | null = null,
+  ): Promise<PostDetailView | null> {
+    return this.queryBus.execute(new GetPostDetailQuery(shortId, userId));
   }
 
   getGrammarReference(cefr: CefrLevel | null): Promise<GrammarReferenceView> {
@@ -79,6 +88,22 @@ export class PostService {
     await this.em.flush();
   }
 
+  async enrichLexicon(postId: string): Promise<void> {
+    await this.commandBus.execute(new EnrichLexiconCommand(postId));
+
+    await this.em.flush();
+  }
+
+  async backfillEnrichment(): Promise<BackfillEnrichmentResult> {
+    const result: BackfillEnrichmentResult = await this.commandBus.execute(
+      new BackfillEnrichmentCommand(),
+    );
+
+    await this.em.flush();
+
+    return result;
+  }
+
   async generateExercises(postId: string): Promise<void> {
     await this.commandBus.execute(new GenerateExercisesCommand(postId));
 
@@ -93,6 +118,12 @@ export class PostService {
 
   async retry(postId: string): Promise<void> {
     await this.commandBus.execute(new RetryPostCommand(postId));
+
+    await this.em.flush();
+  }
+
+  async markPostRead(userId: string, shortId: string): Promise<void> {
+    await this.commandBus.execute(new MarkPostReadCommand(userId, shortId));
 
     await this.em.flush();
   }

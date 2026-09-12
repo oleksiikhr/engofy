@@ -1,8 +1,17 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { HttpStatus } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
+import { DateTime } from 'luxon';
 import request from 'supertest';
 import { v7 as uuidv7 } from 'uuid';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
+import AuthConfig from '../../../../modules/auth/config/auth.config.js';
+import {
+  generateToken,
+  hashSecret,
+} from '../../../../modules/auth/crypto/token.helper.js';
+import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
+import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { Exercise } from '../../../../modules/post/entities/exercise.entity.js';
 import { GrammarCategory } from '../../../../modules/post/entities/grammar-category.entity.js';
@@ -10,6 +19,7 @@ import { GrammarConstruction } from '../../../../modules/post/entities/grammar-c
 import { GrammarUsagePoint } from '../../../../modules/post/entities/grammar-usage-point.entity.js';
 import { Post } from '../../../../modules/post/entities/post.entity.js';
 import { PostPart } from '../../../../modules/post/entities/post-part.entity.js';
+import { PostRead } from '../../../../modules/post/entities/post-read.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
@@ -20,6 +30,7 @@ import { PostPartKind } from '../../../../modules/post/enums/post-part-kind.enum
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostSourceType } from '../../../../modules/post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
+import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { ContentWebModule } from '../content-web.module.js';
 
 interface SeededPost {
@@ -116,7 +127,26 @@ async function seedGrammar(em: EntityManager): Promise<string> {
 }
 
 describe('ContentController', () => {
-  const suite = createWebE2ESuite({ imports: [ContentWebModule] });
+  const suite = createWebE2ESuite({
+    imports: [ContentWebModule, AuthWebModule],
+  });
+
+  const cookieName = () =>
+    suite.app.get<ConfigType<typeof AuthConfig>>(AuthConfig.KEY, {
+      strict: false,
+    }).sessionCookieName;
+
+  async function login(em: EntityManager): Promise<string> {
+    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const token = generateToken();
+    em.create(AuthSession, {
+      userId: user.id,
+      tokenHash: hashSecret(token),
+      expiresAt: DateTime.now().plus({ days: 1 }),
+    });
+    await em.flush();
+    return `${cookieName()}=${token}`;
+  }
 
   it('lists a published post in the feed with an excerpt', async () => {
     const { shortId } = await seedPublishedPost(suite.orm.em);
@@ -195,6 +225,56 @@ describe('ContentController', () => {
     expect(res.body.sourceLink).toBe('https://example.com/article');
     expect(res.body.attributionText).toBe('Example News, "On travel"');
     expect(res.body.sourceType).toBe('news_snippet');
+
+    // Sidebar (PLAN.md §17 Track B) — a guest gets every entry state "new".
+    expect(res.body.sidebar.words).toEqual([
+      expect.objectContaining({ wordDefinitionId, state: 'new' }),
+    ]);
+  });
+
+  it('marks the post-detail response Cache-Control: private (it varies per session, unlike the other content routes)', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+
+    const res = await suite
+      .request('get', `/content/posts/${slug}-${shortId}`)
+      .expect(HttpStatus.OK);
+
+    expect(res.headers['cache-control']).toBe('private');
+  });
+
+  it('rejects an unauthenticated mark-read request', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/read`)
+      .expect(HttpStatus.UNAUTHORIZED);
+  });
+
+  it('marks a post read for the logged-in user, idempotently', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+    const cookie = await login(suite.orm.em);
+
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+    // A second submit (re-taking the quiz) is a silent no-op.
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+
+    const post = await suite.orm.em.findOneOrFail(Post, { shortId });
+    expect(await suite.orm.em.count(PostRead, { postId: post.id })).toBe(1);
+  });
+
+  it('404s marking an unknown post read', async () => {
+    const cookie = await login(suite.orm.em);
+
+    await suite
+      .request('post', '/content/posts/Zzz00000/read')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NOT_FOUND);
   });
 
   it('accepts a bare short id and 404s an unknown post', async () => {

@@ -121,6 +121,16 @@ function convertBlockElement(el: HTMLElement): Block | undefined {
     return { type: 'paragraph', children: convertInlineChildren(el) };
   }
 
+  if (tag === 'blockquote') {
+    // Flattened to a quoted paragraph — the node tree has no dedicated quote
+    // block, and any inner <p>/<div> collapse into one run of inline nodes.
+    return {
+      type: 'paragraph',
+      quote: true,
+      children: convertInlineChildren(el),
+    };
+  }
+
   if (tag === 'ul' || tag === 'ol') {
     return convertListElement(el);
   }
@@ -139,6 +149,7 @@ function collectBlockElements(node: HtmlNode): HTMLElement[] {
   const tag = node.tagName?.toLowerCase();
   if (
     tag === 'p' ||
+    tag === 'blockquote' ||
     tag === 'ul' ||
     tag === 'ol' ||
     (tag && tag in HEADING_TAGS)
