@@ -571,10 +571,18 @@ enrichment прямо перед фронтенд-переробкою** — н�
       CLI `engofy post backfill-enrichment` — ставить у чергу `enrichment`
       для всіх `published` постів без `Completed`-рядка. Integration-тести
       `backfill-enrichment.handler.ispec.ts`.
-- [ ] **Зріз A4 — eval-харнес.** Розширення `draft/` (як для grammar,
-      `draft/lib/*` + `draft/scripts/{run,snapshot,compare}-*.ts`) — прогін
-      на реальних постах, baseline у `draft/baselines/`, перевірка
-      isComplete/cost/кількості заповнених рядків перед широким рол-аутом.
+- [x] **Зріз A4 — eval-харнес.** Розширення `draft/` (як для grammar,
+      `draft/lib/*` + `draft/scripts/{run,snapshot,compare}-enrichment.ts`).
+      На відміну від idiom/grammar харнесів — без локальних content-фікстур:
+      стейдж працює над `WordDefinition`/`Phrase`, які `annotate-post` вже
+      резолвнув на реальному пості, тож харнес читає їх напряму зі standalone
+      MikroORM-конекшену до dev-БД (`lib/load-post-lexicon.ts`, той самий
+      патерн, що й `test/e2e/seed-web-e2e.ts`; read-only), а не намагається
+      відтворити find-or-create без БД. `lib/call-claude-structured.ts` —
+      прямий еквівалент `AnthropicClientService.completeStructured`.
+      Baseline `draft/baselines/enrichment-sonnet-5.json`: усі 9 `published`
+      постів у dev-БД, 314 слів + 35 фраз, 0 incomplete, 0 truncated,
+      $0.2663.
 
 ### Трек B — Рідер фронтенд «Editorial & Margin Notes»
 
