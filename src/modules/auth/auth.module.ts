@@ -12,6 +12,7 @@ import { ResolveSessionHandler } from './commands/resolve-session/resolve-sessio
 import { VerifyLoginCodeHandler } from './commands/verify-login-code/verify-login-code.handler.js';
 import AuthConfig from './config/auth.config.js';
 import { GetUserHandler } from './queries/get-user/get-user.handler.js';
+import { AuthQueueBootstrapService } from './services/auth-queue-bootstrap.service.js';
 import { ChallengeService } from './services/challenge.service.js';
 import { CompleteLoginService } from './services/complete-login.service.js';
 import { GoogleIdTokenVerifierService } from './services/google-id-token-verifier.service.js';
@@ -37,6 +38,7 @@ const queryHandlers = [GetUserHandler];
   ],
   providers: [
     AuthService,
+    AuthQueueBootstrapService,
     ChallengeService,
     SessionService,
     CompleteLoginService,

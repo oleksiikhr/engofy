@@ -7,12 +7,15 @@ import {
   QUEUE_DEFINITIONS,
 } from '../../core/queue/queue-config.js';
 
-// The single `boss.createQueue` authority for the whole app (D8). Every queue —
-// including the auth challenge-email queue — is declared here from the shared
-// `QUEUE_DEFINITIONS` map, so policy / expiry / retry / dead-letter can't drift
-// between callers. `WorkerRegistrarService` only `boss.work()`s pre-existing
-// queues. Runs on bootstrap of any runtime that imports `PostModule` (web,
-// cron, cli, and every worker that runs a post stage).
+// The single `boss.createQueue` authority for the post pipeline (D8). Every
+// post pipeline queue is declared here from the shared `QUEUE_DEFINITIONS`
+// map, so policy / expiry / retry / dead-letter can't drift between callers.
+// The auth challenge-email queue is declared separately by
+// `AuthQueueBootstrapService` (`modules/auth`) — auth must not depend on
+// `PostModule` being loaded for login to work. `WorkerRegistrarService` only
+// `boss.work()`s pre-existing queues. Runs on bootstrap of any runtime that
+// imports `PostModule` (web, cron, cli, and every worker that runs a post
+// stage).
 @Injectable()
 export class PostQueueBootstrapService implements OnApplicationBootstrap {
   private readonly logger = new Logger(PostQueueBootstrapService.name);
@@ -29,6 +32,6 @@ export class PostQueueBootstrapService implements OnApplicationBootstrap {
       ),
     );
 
-    this.logger.log('pg-boss queues declared');
+    this.logger.log('post pipeline queues declared');
   }
 }

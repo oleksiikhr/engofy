@@ -1,13 +1,20 @@
 import { randomUUID } from 'node:crypto';
 import { RequestContext } from '@mikro-orm/core';
 import { createIntegrationSuite } from '../../../test/setup/int-suite.helper.js';
+import { AuthModule } from '../../modules/auth/auth.module.js';
 import { OutboxSenderService } from './outbox-sender.service.js';
 import { QueueName } from './queue-names.enum.js';
 
 describe('OutboxSenderService', () => {
   // This suite reads `pgboss.job` back to prove `drain()` really enqueues on
   // the em's connection, so it needs a live pg-boss (not the default stub).
-  const suite = createIntegrationSuite({}, { realPgBoss: true });
+  // Uses `QueueName.AuthChallengeEmail` as a stand-in queue for generic outbox
+  // mechanics — `AuthModule` is imported so that queue actually exists
+  // (`AuthQueueBootstrapService` declares it independently of `PostModule`).
+  const suite = createIntegrationSuite(
+    { imports: [AuthModule] },
+    { realPgBoss: true },
+  );
 
   let outbox: OutboxSenderService;
 
