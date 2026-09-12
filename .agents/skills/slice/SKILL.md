@@ -22,11 +22,15 @@ an invalid raw value into any path/command. Then skip to the lookup below.
 **No slug given** → auto-detect, trying each of these in order and stopping at the first that
 resolves:
 
-1. `git branch --show-current` matches a slice's `Branch:` field in some `.claude/plans/*.md` — use
-   that plan, and that *exact* slice, regardless of its checkbox state (this is a resume of known
-   work, not "take the first unchecked one"). This also covers the worktree case with no extra work: a
-   worktree's checked-out branch is local to it, so running this from inside any slice's worktree
-   resolves correctly regardless of how that worktree's directory happens to be named.
+1. `git branch --show-current` matches a slice's `Branch:` field in some `.claude/plans/*.md` **and
+   that slice is still `[ ]`** — use that plan, and that *exact* slice (this is a resume of known work
+   in progress, not "take the first unchecked one"). This also covers the worktree case with no extra
+   work: a worktree's checked-out branch is local to it, so running this from inside any slice's
+   worktree resolves correctly regardless of how that worktree's directory happens to be named. If the
+   matched slice is already `[x]`, it's a closed slice, not work in progress — don't stop here; fall
+   through to the next rule instead. This is the common case right after finishing a slice: the
+   developer is still sitting on its branch and says "continue" meaning the *next* slice, not a redo of
+   this one.
 2. Exactly one file exists under `.claude/plans/*.md` — use it, and say so plainly in the final report
    (Step 7, "Report and stop") so the developer can correct course if the guess was wrong.
 3. Anything else (zero or multiple plans, no branch match) — list every plan found (slug, title, next
@@ -53,8 +57,8 @@ with `Branch`, `Base`, `PR` fields.
 - Every slice already `[x]` — a legacy plan from before Step 6 deleted-on-completion existed. If
   `status` isn't `done`, set it, commit (`mark plan <slug> as done`, lowercase, no prefix), push. If
   already `done`, don't commit an empty diff. Report every PR in the stack in merge order and **stop**.
-- Step 1's branch-match already pinned an exact slice → that's the one to implement, regardless of
-  checkbox state.
+- Step 1's branch-match already pinned an exact slice (always unchecked, per Step 1's own filter) →
+  that's the one to implement.
 - Otherwise take the **first** `[ ]` slice — that's the one to implement now.
 
 ## Step 3 — Prepare git state
@@ -147,9 +151,15 @@ specific to a plan slice:
 
 ## Step 8 — Report and stop
 
-State: which slice completed, its PR URL, how many slices remain, and that continuing means
-re-invoking `task` or this skill with the same slug (same session or a new one — either is fine).
-Never start the next slice in this run.
+State: which slice completed, its PR URL, how many slices remain, and the concrete next action —
+don't leave the developer guessing whether you're waiting on the PR merge or something else. Slices
+stack (Step 3's `Base:` chaining), so the sequence is always: merge this PR, then get off its branch
+(`git checkout <base_branch> && git pull`) before saying "continue" — staying on the just-finished
+slice's branch would otherwise make Step 1's auto-detect re-resolve to this same completed slice
+instead of the next one (Step 1's branch-match rule only fires on a still-`[ ]` slice, but leaving the
+developer to discover that by trial and error defeats the point — say it up front). Continuing itself
+means re-invoking `task` or this skill with the same slug (same session or a new one — either is
+fine). Never start the next slice in this run.
 
 ## Boundaries
 
