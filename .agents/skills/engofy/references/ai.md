@@ -1,6 +1,6 @@
 # AI layer — `core/ai`, structured output, inline-markup
 
-> Reviewed: `core/ai`, `post` prompt/parse domain, `draft/` (wave 1). See `REVIEW.md` D9, D13.
+> Reviewed: `core/ai`, `post` prompt/parse domain (wave 1). See `REVIEW.md` D9, D13.
 
 ## Port
 
@@ -66,21 +66,11 @@ reconstruct-and-compare, **no** PUA escaping; a literal `⟦`/`⟧`/`{{…}}` in
 source paragraph is unsupported (vanishingly rare) and degrades to partial
 annotation. PLAN to be updated to match.
 
-## `draft/` eval harness
-
-- Imports the **real** production domain functions + prompts; only `callClaude` /
-  `callNlp` transports are re-implemented; the pricing table is duplicated on
-  purpose so a prod edit can't retro-skew an old baseline.
-- `snapshot*.ts` writes a committed baseline (`draft/baselines/`); `compare*.ts`
-  flags a regression only on **hard** failures (`isComplete` true→false,
-  `truncated` false→true, persisted→0, catalogue-drops rising) — never on count
-  variance (LLM sampling moves counts).
-
 ## Fixes owed
 
 | Sev | Change |
 |---|---|
 | ~~med~~ | **done (Batch M)** — `supportsAdaptiveThinking` is now an allowlist (`ADAPTIVE_THINKING_MODELS`: sonnet-5 / opus-5 / fable-5 / sonnet-4-6 / opus-4-6/-4-7/-4-8). Haiku *and* any unknown/pre-4.6 id → no `thinking` block. Spec covers all three. |
-| ~~med~~ | **done (Batch R4)** — both `complete()` and `completeStructured()` now stream via a shared `createMessage()` (`messages.stream(params).finalMessage()`), removing the ~114 s non-streaming call's SDK 10-min timeout risk. `finalMessage()` yields the same `Message` shape, so the AI3 `max_tokens` throw + AI4 usage log are byte-for-byte unchanged; `max_tokens` stays 16000 (AI3 guard + draft-harness parity, Batch M). `draft/lib/call-claude.ts` switched to `.stream().finalMessage()` for the same reason. `anthropic-client.service.spec.ts` +1 (asserts `stream` is called, never a non-streaming fallback); the existing 12 cases now run through the streamed path. |
+| ~~med~~ | **done (Batch R4)** — both `complete()` and `completeStructured()` now stream via a shared `createMessage()` (`messages.stream(params).finalMessage()`), removing the ~114 s non-streaming call's SDK 10-min timeout risk. `finalMessage()` yields the same `Message` shape, so the AI3 `max_tokens` throw + AI4 usage log are byte-for-byte unchanged; `max_tokens` stays 16000 (AI3 guard, Batch M). `anthropic-client.service.spec.ts` +1 (asserts `stream` is called, never a non-streaming fallback); the existing 12 cases now run through the streamed path. |
 | ~~med~~ | **done (Batch R)** — `toSystemParam()` wraps a system prompt ≥ 4000 chars as `[{ type: 'text', text, cache_control: { type: 'ephemeral' } }]`; shorter prompts pass through as a plain string unchanged. In practice only the grammar stage's prompt (preamble + full seeded catalogue) clears Anthropic's ~1024-token minimum cacheable prefix, so its retry (a second identical call seconds later) is billed at the cache-read rate. `cache_creation`/`cache_read` tokens were already in the AI4 usage log. `anthropic-client.service.spec.ts` +3. |
 | ~~med~~ | **done (Batch I)** — `core/ai/anthropic-client.service.spec.ts` (9 cases: text-join, `max_tokens` truncation on both `complete` and `completeStructured`, `$schema` strip, forced-tool extraction + missing-tool error, adaptive-thinking gate, cost math incl. unknown-model `undefined`). |

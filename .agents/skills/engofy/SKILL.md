@@ -42,7 +42,7 @@ adding code; a locally-consistent choice beats a globally-better one.
 | `DomainError` hierarchy, HTTP mapping, all-or-nothing | `references/error-handling.md` | `src/modules/*/errors` |
 | pg-boss queues, processors, worker/cron hosts, CLI | `references/queue-jobs.md` | `src/entrypoints/worker`, `src/entrypoints/cron` |
 | Content pipeline: `PostPipelineRun` idempotency, chaining | `references/pipeline.md` | `src/modules/post/commands` |
-| `core/ai` port, `completeStructured`, inline-markup, evals | `references/ai.md` | `src/core/ai`, `draft/` |
+| `core/ai` port, `completeStructured`, inline-markup, evals | `references/ai.md` | `src/core/ai` |
 | `nlp-service`, `NlpClient` port, deterministic spaCy domain | `references/nlp.md` | `src/core/nlp`, `nlp-service/` |
 | Mail port, templates, queued send | `references/mail.md` | `src/modules/auth/mails` |
 | Sessions, token/OTP hashing, rate limits, secrets | `references/security.md` | `src/modules/auth` |
