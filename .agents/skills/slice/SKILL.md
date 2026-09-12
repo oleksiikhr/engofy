@@ -66,10 +66,26 @@ with `Branch`, `Base`, `PR` fields.
 - `git status`: uncommitted changes unrelated to this slice → stop and ask, don't silently discard or
   carry them onto the slice branch.
 - The slice's `Branch:` already exists locally → this is a resumed session: `git checkout <branch>`
-  and continue from the existing diff against `Base:`.
-- Branch doesn't exist yet:
-  - Check `git worktree list --porcelain` for an existing worktree already on a branch of this plan
-    (branch name starts with `<slug>-`) — that's a worktree an earlier slice created. Worktrees are
+  and continue from the existing diff against `Base:`. Skip the rest of this step.
+- Branch doesn't exist yet — resolve the actual base ref before creating anything:
+  - **This is slice 1** → base is `base_branch` (frontmatter). `git checkout <base_branch> && git
+    pull` yourself, right here in the current worktree — don't ask the developer to do this.
+  - **This is slice N>1** → find slice N-1 in the plan and read its `PR:` field:
+    - Empty/`—` → the previous slice was never opened as a PR; this plan is in an inconsistent state.
+      Stop and tell the developer rather than inventing a base.
+    - Set → `gh pr view <PR>` (accepts the URL as-is) `--json state,mergedAt`. Not merged (`OPEN` or
+      `DRAFT`) → **warn** before doing anything else: slices in this plan are meant to run — and
+      deploy — in order; starting this one now stacks it on slice N-1's still-unmerged branch, and if
+      the plan touches any contract another already-deployed consumer depends on (`task`'s Step 2
+      rule — HTTP contract, DB column, queue payload), shipping out of order can break backward
+      compatibility. Ask whether to proceed anyway (stack this branch on slice N-1's branch, as
+      before) or stop here and wait for the merge. Merged → slice N-1's content is already in
+      `base_branch`: `git checkout <base_branch> && git pull` yourself (don't ask the developer), and
+      if this slice's declared `Base:` still names the now-merged-and-deleted slice N-1 branch, update
+      it to `base_branch` in memory — it lands in the plan-file commit in Step 7.
+  - With the base ref resolved, check `git worktree list --porcelain` for an existing worktree already
+    on a branch of this plan (branch name starts with `<slug>-`) — that's a worktree an earlier slice
+    created; per the point above, this session is very likely already sitting inside it. Worktrees are
     per-*plan*, not per-slice: reuse it rather than creating a new one, since a fresh worktree per
     slice throws away build caches, `node_modules`, and IDE state for no reason. Reuse means checking
     out this slice's branch inside that same directory: `git -C <existing-path> checkout -b <branch>
@@ -79,10 +95,6 @@ with `Branch`, `Base`, `PR` fields.
     the rule above). If yes: `git worktree add -b <branch> <path> <base>`, `<path>` =
     `../<repo-dirname>-<slug>` — named after the plan slug, not the branch, since every later slice
     reuses this same directory. If no: `git checkout -b <branch> <base>` in place.
-  - If `Base:` doesn't exist locally or on origin (typical when the previous slice's PR merged and
-    GitHub deleted its branch), its content is already in `main`: branch from `base_branch` instead,
-    and update this slice's `Base:` field in memory — it lands in the plan-file commit in Step 6, no
-    separate PR needed for that correction.
 
 ## Step 4 — Implement the slice
 
@@ -139,14 +151,15 @@ Hand off to `git-workflow`'s Steps 4-7 exactly — same drafting rules, same con
 skip it; this is a deliberate difference from throwaway one-off automation elsewhere). One addition
 specific to a plan slice:
 
-- Base the PR against this slice's `Base:` field, not `main`, unless this is slice 1 — the plan is a
-  stack, not independent PRs.
+- Base the PR against this slice's `Base:` field, already resolved in Step 3 — `base_branch` in the
+  common case (previous slice merged), or the previous slice's own branch if the developer chose to
+  stack on it while still unmerged.
 - Mention in the body which slice this is (`N/<total>` of plan `<slug>`).
 
 ## Step 7 — Update the plan file
 
-- `### [ ] N.` → `### [x] N.`, fill in `PR:`. If Step 3 retargeted `Base:` to `main`, include that
-  correction in the same diff.
+- `### [ ] N.` → `### [x] N.`, fill in `PR:`. If Step 3 retargeted `Base:` to `base_branch`, include
+  that correction in the same diff.
 - Slices remain unchecked → commit on the slice branch: `git add .claude/plans/<slug>.md && git commit
   -m "update plan <slug> after slice N" && git push`.
 - This was the **last** slice (all now `[x]`) → the plan file is no longer needed for future sessions;
@@ -158,14 +171,14 @@ specific to a plan slice:
 ## Step 8 — Report and stop
 
 State: which slice completed, its PR URL, how many slices remain, and the concrete next action —
-don't leave the developer guessing whether you're waiting on the PR merge or something else. Slices
-stack (Step 3's `Base:` chaining), so the sequence is always: merge this PR, then get off its branch
-(`git checkout <base_branch> && git pull`) before saying "continue" — staying on the just-finished
-slice's branch would otherwise make Step 1's auto-detect re-resolve to this same completed slice
-instead of the next one (Step 1's branch-match rule only fires on a still-`[ ]` slice, but leaving the
-developer to discover that by trial and error defeats the point — say it up front). Continuing itself
-means re-invoking `task` or this skill with the same slug (same session or a new one — either is
-fine). Never start the next slice in this run.
+don't leave the developer guessing whether you're waiting on the PR merge or something else. The
+developer does not need to switch branches or pull anything themselves before continuing: Step 3 of
+the next invocation checks whether this PR has merged and, if so, checks out `base_branch` and pulls
+on its own — warning instead, with the backward-compatibility risk spelled out, if it finds this PR
+still open. The one thing still on the developer is merging this PR (and, if the plan involves a
+contract change, actually deploying it) — this skill can't do either. Continuing itself means
+re-invoking `task` or this skill with the same slug (same session or a new one — either is fine).
+Never start the next slice in this run.
 
 ## Boundaries
 
@@ -174,6 +187,8 @@ This skill does **not**:
 - Draft PR titles/bodies, push, or open PRs directly — always delegates to `git-workflow`, confirmation
   gate included.
 - Auto-continue past one slice per invocation.
+- Merge a PR or push a deploy tag — Step 3 only checks whether the previous slice's PR has merged; if
+  not, it warns and asks rather than proceeding silently.
 - Delete branches or worktrees — the `cleanup` skill's job, after the whole stack merges.
 - Invent a check, e2e step, or contract exception that isn't backed by the plan, the diff, or this
   repo's own documented conventions.
