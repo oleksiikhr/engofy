@@ -22,10 +22,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. POM scaffolding + login/feed/smoke
+### [x] 1. POM scaffolding + login/feed/smoke
 - Branch: `e2e-page-object-models-01-login-feed-smoke`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/5
 
 Створити `pages/login-page.ts`, `pages/feed-page.ts`. Переписати
 `login.spec.ts`, `feed.spec.ts` на них; `smoke.spec.ts` використовує
