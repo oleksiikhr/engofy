@@ -78,9 +78,8 @@ build-image-%: ## Build a specific container image
 # ------------------------------------------------------------------------------
 
 .PHONY: setup
-setup: ## Install dependencies, run pending database migrations
+setup: ## Install dependencies, seed dev data
 	$(MAKE) sync
-	$(MAKE) migrate
 	$(MAKE) seed
 
 .PHONY: sync

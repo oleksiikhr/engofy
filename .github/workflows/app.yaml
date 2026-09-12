@@ -115,8 +115,8 @@ jobs:
         run: pytest -q
 
   # apps/web (in-repo Astro SSR frontend) is outside the main tsc/biome gate —
-  # its own type (astro check) + lint + build run here. Playwright is a
-  # separate workflow (web-e2e.yaml), not part of this gate.
+  # its own type (astro check) + lint + build run here. Playwright e2e runs
+  # locally only, not in CI.
   apps-web:
     runs-on: ubuntu-latest
 
