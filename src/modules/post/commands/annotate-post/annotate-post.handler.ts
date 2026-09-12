@@ -35,6 +35,7 @@ import {
 import { upsertPhraseId } from '../../domain/upsert-phrase-id.js';
 import type { Annotation } from '../../domain/validate-annotations.js';
 import { validateAnnotations } from '../../domain/validate-annotations.js';
+import { loadWordFrequencyRanks } from '../../domain/word-frequency.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
@@ -285,6 +286,7 @@ export class AnnotatePostHandler
     const deterministic = buildTokenAnnotations(
       toSentenceRows(sentences),
       await this.loadPhraseTexts(sentences),
+      await loadWordFrequencyRanks(),
     );
 
     const first = parseAnnotationTags(text, await this.callIdiomPrompt(text));

@@ -342,4 +342,75 @@ describe('buildTokenAnnotations', () => {
     const result = buildTokenAnnotations(sentences, new Map());
     expect(result.map((a) => a.start)).toEqual([0, 6]);
   });
+
+  it('drops a word span for a lemma at or below the common-word rank threshold, keeps a rarer one', () => {
+    const sentences: SentenceRows[] = [
+      {
+        charStart: 0,
+        tokens: [
+          token({
+            text: 'work',
+            pos: 'NOUN',
+            lemma: 'work',
+            charStart: 0,
+            charEnd: 4,
+          }),
+          token({
+            text: 'perambulate',
+            pos: 'VERB',
+            lemma: 'perambulate',
+            charStart: 5,
+            charEnd: 16,
+          }),
+        ],
+      },
+    ];
+    const frequencyRanks = new Map([
+      ['work', 100],
+      ['perambulate', 48210],
+    ]);
+
+    const result = buildTokenAnnotations(sentences, new Map(), frequencyRanks);
+
+    expect(result).toEqual([
+      {
+        start: 5,
+        end: 16,
+        form: 'perambulate',
+        kind: 'word',
+        lemma: 'perambulate',
+        pos: 'verb',
+      },
+    ]);
+  });
+
+  it('tags a lemma missing from the frequency list (no rank) as usual', () => {
+    const sentences: SentenceRows[] = [
+      {
+        charStart: 0,
+        tokens: [
+          token({
+            text: 'zeitgeist',
+            pos: 'NOUN',
+            lemma: 'zeitgeist',
+            charStart: 0,
+            charEnd: 9,
+          }),
+        ],
+      },
+    ];
+
+    const result = buildTokenAnnotations(sentences, new Map(), new Map());
+
+    expect(result).toEqual([
+      {
+        start: 0,
+        end: 9,
+        form: 'zeitgeist',
+        kind: 'word',
+        lemma: 'zeitgeist',
+        pos: 'noun',
+      },
+    ]);
+  });
 });

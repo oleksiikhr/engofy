@@ -124,13 +124,18 @@ describe('AnnotatePostHandler', () => {
       (n) => n.type === 'span' && n.kind === 'word',
     );
     const wordTexts = wordSpans.map((n) => n.text);
-    expect(wordTexts).toContain('government');
-    expect(wordTexts).toContain('results');
+    // "government" and "results" are both common enough (assets/word-frequency.txt
+    // rank <= 1500) to be filtered by buildTokenAnnotations's density gate —
+    // "momentum" and "reporters" are rare enough to still get a word span.
+    expect(wordTexts).toContain('momentum');
+    expect(wordTexts).toContain('reporters');
+    expect(wordTexts).not.toContain('government');
+    expect(wordTexts).not.toContain('results');
     // "tabs" is swallowed by the idiom span — no standalone word span.
     expect(wordTexts).not.toContain('tabs');
 
     const word = await suite.orm.em.findOneOrFail(Word, {
-      lemma: 'government',
+      lemma: 'momentum',
     });
     await suite.orm.em.findOneOrFail(WordDefinition, {
       wordId: word.id,
@@ -138,11 +143,11 @@ describe('AnnotatePostHandler', () => {
     });
 
     const sentence = await suite.orm.em.findOneOrFail(Sentence, { postId });
-    const govToken = await suite.orm.em.findOneOrFail(SentenceToken, {
+    const momentumToken = await suite.orm.em.findOneOrFail(SentenceToken, {
       sentenceId: sentence.id,
-      text: 'government',
+      text: 'momentum',
     });
-    expect(govToken.wordId).toBe(word.id);
+    expect(momentumToken.wordId).toBe(word.id);
 
     const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
       postId,

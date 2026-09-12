@@ -39,8 +39,24 @@ const CONTENT_POS: Record<string, PartOfSpeech> = {
   ADV: PartOfSpeech.Adverb,
 };
 
+// A lemma this common is already known at essentially every CEFR level (the
+// low end of assets/word-frequency.txt is core A1/A2 vocabulary — "day",
+// "work", "get", ...). Tagging it as a `word` span was turning every article
+// into 100+ "In this article" sidebar entries, most of them words the reader
+// already knows (found 2026-09-06 as inline "wall of highlighter" clutter,
+// still true of the sidebar after PLAN.md §16 moved annotations there).
+const COMMON_WORD_RANK_THRESHOLD = 1500;
+
 // Canonical phrase text for a phrasal-verb group; a miss is a spacy_parse /
 // annotate data-integrity break, not an empty string to paper over.
+function isCommonWord(
+  frequencyRanks: Map<string, number>,
+  lemma: string,
+): boolean {
+  const rank = frequencyRanks.get(lemma.toLowerCase());
+  return rank !== undefined && rank <= COMMON_WORD_RANK_THRESHOLD;
+}
+
 function resolvePhraseText(
   phraseTextById: Map<string, string>,
   phraseGroupId: string,
@@ -62,6 +78,7 @@ function resolvePhraseText(
 export function buildTokenAnnotations(
   sentences: SentenceRows[],
   phraseTextById: Map<string, string>,
+  frequencyRanks: Map<string, number> = new Map(),
 ): Annotation[] {
   const words: Annotation[] = [];
   const phraseFragments: Annotation[] = [];
@@ -90,6 +107,10 @@ export function buildTokenAnnotations(
 
       const pos = token.isGerund ? PartOfSpeech.Verb : CONTENT_POS[token.pos];
       if (!pos) {
+        continue;
+      }
+
+      if (isCommonWord(frequencyRanks, token.lemma)) {
         continue;
       }
 
