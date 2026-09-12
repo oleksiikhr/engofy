@@ -14,6 +14,9 @@ export enum PostPipelineStage {
   AiComplexity = 'ai_complexity',
   // Grammar constructions per sentence → grammar_matches.
   AiGrammar = 'ai_grammar',
+  // Fills WordDefinition/Phrase definition/example/cefrLevel stubs this
+  // post references (gap-fill, PLAN.md §17 Track A).
+  Enrichment = 'enrichment',
   // Exercises beyond what deterministic generation covers.
   AiExercises = 'ai_exercises',
   // Flip posts.status = published, enqueue post_publications.

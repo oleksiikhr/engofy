@@ -7,6 +7,8 @@ import {
   AI_CLIENT,
   type AiClient,
 } from '../../../../core/ai/ai-client.port.js';
+import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
+import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { IDIOM_SYSTEM_PROMPT } from '../../domain/annotation-prompt.js';
 import {
   buildTokenAnnotations,
@@ -47,6 +49,7 @@ import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { SpacyLayerMissingError } from '../../errors/spacy-layer-missing.error.js';
+import type { PostAiEnrichmentJobData } from '../enrich-lexicon/enrich-lexicon.handler.js';
 import { AnnotatePostCommand } from './annotate-post.command.js';
 
 interface WordRef {
@@ -88,6 +91,10 @@ interface ResolvedLink {
 // per PostPart so a crash keeps finished parts — a part with annotatedAt set
 // is skipped on retry. AnnotatePostHandler deliberately breaks the
 // "handler doesn't flush" convention for exactly this.
+//
+// On completion this also enqueues the `enrichment` stage (PLAN.md §17
+// Track A) — a third branch alongside `ai_complexity`, since enrichment
+// needs the WordDefinition/Phrase links this stage just resolved.
 @CommandHandler(AnnotatePostCommand)
 export class AnnotatePostHandler
   implements ICommandHandler<AnnotatePostCommand>
@@ -97,6 +104,7 @@ export class AnnotatePostHandler
   constructor(
     private readonly em: EntityManager,
     @Inject(AI_CLIENT) private readonly ai: AiClient,
+    private readonly outbox: OutboxSenderService,
   ) {}
 
   async execute(command: AnnotatePostCommand): Promise<void> {
@@ -156,6 +164,16 @@ export class AnnotatePostHandler
     run.status = PostPipelineRunStatus.Completed;
     run.completedAt = DateTime.now();
     this.em.persist(run);
+
+    // Third branch off this stage's completion (PLAN.md §17 Track A),
+    // alongside ai_complexity — enrichment needs the WordDefinition/Phrase
+    // links just resolved above.
+    this.outbox.send<PostAiEnrichmentJobData>(
+      this.em,
+      QueueName.PostAiEnrichment,
+      { postId },
+      { singletonKey: postId },
+    );
 
     await this.em.flush();
   }

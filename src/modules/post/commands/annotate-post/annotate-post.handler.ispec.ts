@@ -5,8 +5,10 @@ import {
   type NlpTokenOverride,
 } from '../../../../../test/fakes/nlp.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import { NLP_CLIENT } from '../../../../core/nlp/nlp-client.port.js';
+import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
@@ -99,6 +101,7 @@ describe('AnnotatePostHandler', () => {
           .useValue(new FakeNlpClient(POS)),
     },
   );
+  const queue = useQueueSpy(suite);
 
   async function parseThenAnnotate(text: string): Promise<string> {
     const { postId } = await createPostWithParagraph(suite.orm.em, text);
@@ -146,6 +149,12 @@ describe('AnnotatePostHandler', () => {
       stage: PostPipelineStage.Annotation,
     });
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
+
+    // Third branch on completion (PLAN.md §17 Track A).
+    queue.assertSent<{ postId: string }>(
+      QueueName.PostAiEnrichment,
+      (d) => d.postId === postId,
+    );
   });
 
   it('splices the AI idiom as a phrase span and marks its tokens is_idiom_part', async () => {
