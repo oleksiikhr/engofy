@@ -1,23 +1,24 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
+import { DictionaryPage } from './pages/dictionary-page';
 
 // Slice 8b page 5 — /dictionary personal word/phrase deck.
 
 test('dictionary prompts a guest to sign in', async ({ page }) => {
-  await page.goto('/dictionary');
-  await expect(
-    page.getByRole('heading', { name: 'Your dictionary' }),
-  ).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();
+  const dictionary = new DictionaryPage(page);
+  await dictionary.goto();
+  await dictionary.expectLoaded();
+  await expect(dictionary.signInLink).toBeVisible();
 });
 
 test.describe('dictionary (signed in)', () => {
   test.use({ storageState: AUTHED_STATE });
 
   test('lists saved words and phrases with context', async ({ page }) => {
-    await page.goto('/dictionary');
+    const dictionary = new DictionaryPage(page);
+    await dictionary.goto();
 
-    const word = page.locator('.dict-entry', { hasText: 'perambulate' });
+    const word = dictionary.entryByText('perambulate');
     await expect(word).toContainText(
       'to walk through or around a place, especially for pleasure',
     );
@@ -25,29 +26,20 @@ test.describe('dictionary (signed in)', () => {
       word.getByRole('link', { name: 'The Cartographer at Dawn' }),
     ).toBeVisible();
 
-    await expect(
-      page.locator('.dict-entry', { hasText: 'at loose ends' }),
-    ).toBeVisible();
+    await expect(dictionary.entryByText('at loose ends')).toBeVisible();
   });
 
   test('search and status filters narrow the list', async ({ page }) => {
-    await page.goto('/dictionary');
+    const dictionary = new DictionaryPage(page);
+    await dictionary.goto();
 
-    await page.getByLabel('Search your dictionary').fill('loose');
-    await expect(
-      page.locator('.dict-entry', { hasText: 'at loose ends' }),
-    ).toBeVisible();
-    await expect(
-      page.locator('.dict-entry', { hasText: 'perambulate' }),
-    ).toBeHidden();
+    await dictionary.search('loose');
+    await expect(dictionary.entryByText('at loose ends')).toBeVisible();
+    await expect(dictionary.entryByText('perambulate')).toBeHidden();
 
-    await page.getByLabel('Search your dictionary').fill('');
-    await page.getByLabel('Filter by status').selectOption('review');
-    await expect(
-      page.locator('.dict-entry', { hasText: 'perambulate' }),
-    ).toBeVisible();
-    await expect(
-      page.locator('.dict-entry', { hasText: 'at loose ends' }),
-    ).toBeHidden();
+    await dictionary.search('');
+    await dictionary.filterByStatus('review');
+    await expect(dictionary.entryByText('perambulate')).toBeVisible();
+    await expect(dictionary.entryByText('at loose ends')).toBeHidden();
   });
 });
