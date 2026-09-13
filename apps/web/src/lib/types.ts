@@ -224,6 +224,8 @@ export interface PracticeItem {
     id: string;
     primary: string;
     secondary: string | null;
+    phonetic: string | null;
+    contextSentence: string | null;
   };
 }
 export interface PracticeQueueResponse {

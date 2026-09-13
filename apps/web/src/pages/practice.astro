@@ -34,12 +34,24 @@ const initialHtml = user ? renderPracticeQueue(cards) : '';
 <script is:inline>
   // "Show answer" toggle, delegated so it survives HTMX swaps of the card.
   document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.practice__reveal');
-    if (!btn) return;
-    const answer = btn.parentElement?.querySelector('.practice__answer');
-    if (answer) {
-      answer.hidden = false;
-      btn.hidden = true;
+    const revealBtn = e.target.closest('.practice__reveal');
+    if (revealBtn) {
+      const answer = revealBtn.parentElement?.querySelector('.practice__answer');
+      if (answer) {
+        answer.hidden = false;
+        revealBtn.hidden = true;
+      }
+      return;
+    }
+
+    // 🔊 pronunciation, client-side only (Web Speech API) — no audio asset.
+    const speakBtn = e.target.closest('.practice__speak');
+    if (speakBtn && 'speechSynthesis' in window) {
+      const text = speakBtn.dataset.speak;
+      if (text) {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      }
     }
   });
 </script>
@@ -81,6 +93,31 @@ const initialHtml = user ? renderPracticeQueue(cards) : '';
   }
   .practice__reveal {
     margin-bottom: 1.5rem;
+  }
+  .practice__phonetic {
+    font-style: italic;
+  }
+  .practice__speak {
+    margin-left: 0.35rem;
+    padding: 0 0.25rem;
+    font-size: 1rem;
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .practice__context {
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-left: 2px solid var(--color-border);
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  .practice__context p {
+    margin: 0 0 0.25rem;
+  }
+  .practice__context cite {
+    font-size: 0.75rem;
+    font-style: normal;
+    color: var(--color-ink-soft);
   }
   .practice__grades {
     display: flex;

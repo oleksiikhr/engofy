@@ -8,7 +8,10 @@ import type { PracticeCardTarget } from './practice-queue-item.js';
 
 // Batched (no N+1) resolution of a set of cards' display targets — shared by
 // every query that renders `LearningCard` rows as practice items
-// (`get-practice-queue`, `get-due-post-cards`).
+// (`get-practice-queue`, `get-due-post-cards`). `contextSentence` is always
+// null here — only `GetPracticeQueueHandler` fills it in afterwards (PLAN.md
+// practice-redesign зріз 1), since it needs the requesting user's read
+// history, which this shared resolver doesn't have.
 export async function resolveCardTargets(
   em: EntityManager,
   cards: LearningCard[],
@@ -57,7 +60,9 @@ export async function resolveCardTargets(
       type: 'word',
       id: definition.id,
       primary: word?.lemma ?? '',
-      secondary: null,
+      secondary: definition.definition ?? null,
+      phonetic: definition.phonetic ?? null,
+      contextSentence: null,
     });
   }
   for (const phrase of phrases) {
@@ -65,7 +70,9 @@ export async function resolveCardTargets(
       type: 'phrase',
       id: phrase.id,
       primary: phrase.phraseText,
-      secondary: null,
+      secondary: phrase.definition ?? null,
+      phonetic: null,
+      contextSentence: null,
     });
   }
   for (const point of usagePoints) {
@@ -74,6 +81,8 @@ export async function resolveCardTargets(
       id: point.id,
       primary: point.guideword,
       secondary: point.canDoStatement,
+      phonetic: null,
+      contextSentence: null,
     });
   }
   return targets;

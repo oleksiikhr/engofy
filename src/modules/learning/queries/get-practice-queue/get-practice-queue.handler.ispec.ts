@@ -2,12 +2,19 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
+import { Post } from '../../../post/entities/post.entity.js';
+import { PostPart } from '../../../post/entities/post-part.entity.js';
+import { PostRead } from '../../../post/entities/post-read.entity.js';
+import { Sentence } from '../../../post/entities/sentence.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
+import { PostPartKind } from '../../../post/enums/post-part-kind.enum.js';
+import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -35,6 +42,96 @@ function card(
     lapses: 0,
     state: LearningCardState.New,
   });
+}
+
+// One post with a single-paragraph PostPart containing the given word span,
+// plus a Sentence covering the whole paragraph (wide charStart/charEnd, so
+// the exact span offset within it doesn't matter for these tests — the
+// offset-precision itself is covered by context-sentence.spec.ts). Enough to
+// drive the зріз 1 context-sentence bridge end to end.
+async function seedPostWithWordSpan(
+  em: EntityManager,
+  wordDefinitionId: string,
+  rawText: string,
+): Promise<string> {
+  const source = new PostSource();
+  source.format = PostSourceFormat.Text;
+  source.rawText = rawText;
+  const post = new Post();
+  post.source = source;
+  em.persist(post);
+
+  const part = em.create(PostPart, {
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [
+        {
+          type: 'span',
+          kind: 'word',
+          text: rawText,
+          wordDefinitionId,
+          pos: 'NOUN',
+        },
+      ],
+    },
+  });
+  em.create(Sentence, {
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText,
+    charStart: 0,
+    charEnd: 9999,
+  });
+  await em.flush();
+  return post.id;
+}
+
+async function seedPostWithPhraseSpan(
+  em: EntityManager,
+  phraseId: string,
+  rawText: string,
+): Promise<string> {
+  const source = new PostSource();
+  source.format = PostSourceFormat.Text;
+  source.rawText = rawText;
+  const post = new Post();
+  post.source = source;
+  em.persist(post);
+
+  const part = em.create(PostPart, {
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [{ type: 'span', kind: 'phrase', text: rawText, phraseId }],
+    },
+  });
+  em.create(Sentence, {
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText,
+    charStart: 0,
+    charEnd: 9999,
+  });
+  await em.flush();
+  return post.id;
+}
+
+function seedRead(
+  em: EntityManager,
+  userId: string,
+  postId: string,
+  readAt: DateTime,
+): void {
+  em.create(PostRead, { userId, postId, readAt });
 }
 
 describe('GetPracticeQueueHandler', () => {
@@ -130,5 +227,178 @@ describe('GetPracticeQueueHandler', () => {
 
     const queue = await suite.query(new GetPracticeQueueQuery(userId, 20));
     expect(queue).toHaveLength(0);
+  });
+
+  it('resolves a word target from WordDefinition instead of hardcoded null', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Adjective,
+      definition: 'lasting a very short time',
+      phonetic: '/ɪˈfemərəl/',
+    });
+    await em.flush();
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      wordDefinitionId: definition.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.secondary).toBe('lasting a very short time');
+    expect(item.target.phonetic).toBe('/ɪˈfemərəl/');
+  });
+
+  it('resolves a phrase target definition, with no phonetic', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const phrase = em.create(Phrase, {
+      phraseText: 'give up',
+      definition: 'to stop trying',
+    });
+    await em.flush();
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      phraseId: phrase.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.secondary).toBe('to stop trying');
+    expect(item.target.phonetic).toBeNull();
+  });
+
+  it('finds a real context sentence for a word from a recently read post', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    await em.flush();
+    const postId = await seedPostWithWordSpan(
+      em,
+      definition.id,
+      'The sunset was ephemeral.',
+    );
+    seedRead(em, userId, postId, DateTime.now());
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      wordDefinitionId: definition.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.contextSentence).toBe('The sunset was ephemeral.');
+  });
+
+  it('finds a real context sentence for a phrase from a recently read post', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const phrase = em.create(Phrase, { phraseText: 'give up' });
+    await em.flush();
+    const postId = await seedPostWithPhraseSpan(
+      em,
+      phrase.id,
+      'Never give up on your goals.',
+    );
+    seedRead(em, userId, postId, DateTime.now());
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      phraseId: phrase.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.contextSentence).toBe('Never give up on your goals.');
+  });
+
+  it('leaves contextSentence null with no fallback when nothing is found', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+      exampleSentence: 'An AI-written example that must not leak through.',
+    });
+    await em.flush();
+    // Read a post, but it doesn't mention this word at all.
+    const otherWord = em.create(Word, { lemma: `other-${uuidv7()}` });
+    const otherDefinition = em.create(WordDefinition, {
+      wordId: otherWord.id,
+      pos: PartOfSpeech.Noun,
+    });
+    await em.flush();
+    const postId = await seedPostWithWordSpan(
+      em,
+      otherDefinition.id,
+      'Something unrelated.',
+    );
+    seedRead(em, userId, postId, DateTime.now());
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      wordDefinitionId: definition.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.contextSentence).toBeNull();
+  });
+
+  it('only searches the last 3 distinct read posts, most recent first', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    await em.flush();
+
+    // The 4th-most-recent read is the only one that mentions the word.
+    const stalePostId = await seedPostWithWordSpan(
+      em,
+      definition.id,
+      'This one should never be reached.',
+    );
+    seedRead(em, userId, stalePostId, DateTime.now().minus({ days: 4 }));
+
+    const fillerDefinitions = Array.from({ length: 3 }, () => {
+      const otherWord = em.create(Word, { lemma: `filler-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: otherWord.id,
+        pos: PartOfSpeech.Noun,
+      });
+    });
+    await em.flush();
+
+    for (const [i, otherDefinition] of fillerDefinitions.entries()) {
+      // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — seedPostWithWordSpan flushes internally on the shared `em`.
+      const postId = await seedPostWithWordSpan(
+        em,
+        otherDefinition.id,
+        `Filler post ${i}.`,
+      );
+      seedRead(em, userId, postId, DateTime.now().minus({ days: i }));
+    }
+
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      wordDefinitionId: definition.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+
+    expect(item.target.contextSentence).toBeNull();
   });
 });

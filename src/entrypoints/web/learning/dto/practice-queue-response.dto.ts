@@ -10,8 +10,16 @@ export class PracticeCardTargetDto {
   // Card front text: word lemma, phrase text, or grammar guideword.
   readonly primary!: string;
 
-  // Supporting line (grammar can-do statement) or null.
+  // Supporting line: word/phrase definition, or grammar can-do statement.
   readonly secondary!: string | null;
+
+  // Word-only (WordDefinition.phonetic); null for phrase/grammar.
+  readonly phonetic!: string | null;
+
+  // A real sentence from one of the learner's last 3 read posts containing
+  // this word/phrase, or null when none was found there. Not populated for
+  // grammar targets yet.
+  readonly contextSentence!: string | null;
 }
 
 export class PracticeQueueItemDto {
