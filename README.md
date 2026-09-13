@@ -94,6 +94,14 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
   the cwd's basename, which differs per worktree and would fight the main stack for the same host
   ports). Postgres/Redis are meant to be one shared instance across all worktrees of this repo, not
   one per worktree.
+- **Two worktrees' app/tests running at the same time will stomp on each other's data by default** —
+  `.env.development`/`.env.test` are the same tracked file checked out identically into every worktree,
+  so every worktree's `MIKRO_ORM_DB_NAME`/`REDIS_DB` points at the same logical database/Redis DB on
+  the one shared stack above. Fine for sequential work (only one worktree's app/tests actually running
+  at a time — the common case). For genuinely concurrent worktrees, rename that worktree's own copy of
+  `MIKRO_ORM_DB_NAME` (and create the DB first — the `engofy` role has `CREATEDB`:
+  `docker compose exec postgres createdb -U engofy <name>`) and pick a different `REDIS_DB` index;
+  otherwise concurrent migrations/tests race on the same schema/rows.
 - **`git push`/`pull` fails with `Permission denied (publickey)`** in a headless/sandboxed environment
   with no ssh-agent identity loaded — switch the remote to HTTPS and use `gh`'s own credentials instead
   of chasing SSH: `gh auth login` (if `gh auth status` shows not logged in) then `gh auth setup-git &&
