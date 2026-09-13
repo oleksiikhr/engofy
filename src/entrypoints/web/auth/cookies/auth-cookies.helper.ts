@@ -38,3 +38,20 @@ export function readSessionCookie(
 ): string | undefined {
   return request.cookies[config.sessionCookieName];
 }
+
+// Short-lived, one-shot signal for the frontend's post-signup onboarding
+// screen — not a persistent column, so it carries no state past its TTL.
+// Readable client-side (not `httpOnly`): the frontend consuming it decides
+// when to clear it, which is out of scope here.
+export function setOnboardingCookie(
+  reply: FastifyReply,
+  config: AuthConfigType,
+): void {
+  reply.setCookie(config.onboardingCookieName, '1', {
+    path: '/',
+    httpOnly: false,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: Math.floor(config.onboardingCookieTtlMs / 1000),
+  });
+}

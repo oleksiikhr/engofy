@@ -58,6 +58,15 @@ describe('AuthController', () => {
     return sessionCookie.split(';')[0];
   }
 
+  function hasCookie(
+    response: { headers: Record<string, unknown> },
+    name: string,
+  ): boolean {
+    const raw = response.headers['set-cookie'];
+    const cookies = Array.isArray(raw) ? raw : [raw];
+    return cookies.some((c) => c?.startsWith(`${name}=`));
+  }
+
   describe('POST /auth/login', () => {
     it('accepts a valid email and returns a generic response', async () => {
       await suite
@@ -167,6 +176,31 @@ describe('AuthController', () => {
         .expect(HttpStatus.OK);
 
       expect(meResponse.body).toMatchObject({ email });
+    });
+
+    it('sets an onboarding cookie for a first-time signup but not a returning login', async () => {
+      const email = uniqueEmail();
+      const firstIssued = await issueChallenge(suite.orm.em, email);
+
+      const firstResponse = await suite
+        .request('post', '/auth/login/verify-code')
+        .send({ email, code: firstIssued.otp })
+        .expect(HttpStatus.OK);
+
+      expect(hasCookie(firstResponse, config().onboardingCookieName)).toBe(
+        true,
+      );
+
+      const secondIssued = await issueChallenge(suite.orm.em, email);
+
+      const secondResponse = await suite
+        .request('post', '/auth/login/verify-code')
+        .send({ email, code: secondIssued.otp })
+        .expect(HttpStatus.OK);
+
+      expect(hasCookie(secondResponse, config().onboardingCookieName)).toBe(
+        false,
+      );
     });
   });
 

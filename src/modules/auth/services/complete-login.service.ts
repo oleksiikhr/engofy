@@ -13,14 +13,14 @@ export class CompleteLoginService {
   ) {}
 
   async loginByEmail(email: string): Promise<LoginResult> {
-    const user = await this.findOrCreateUser(email);
+    const { user, isNewUser } = await this.findOrCreateUser(email);
     const sessionToken = this.sessions.create(user.id);
 
-    return { userId: user.id, sessionToken };
+    return { userId: user.id, sessionToken, isNewUser };
   }
 
   async loginByGoogle(email: string, googleSub: string): Promise<LoginResult> {
-    const user = await this.findOrCreateUser(email, googleSub);
+    const { user, isNewUser } = await this.findOrCreateUser(email, googleSub);
 
     // Backfill `googleSub` on a row first created by an email login. `googleSub`
     // is `@Unique`, so if the same Google account's primary email later changes
@@ -33,17 +33,25 @@ export class CompleteLoginService {
 
     const sessionToken = this.sessions.create(user.id);
 
-    return { userId: user.id, sessionToken };
+    return { userId: user.id, sessionToken, isNewUser };
   }
 
+  // `upsert` stays the concurrency-safe primitive (two simultaneous logins
+  // for the same brand-new email must not create two rows) — generating the
+  // id up front and comparing it to the row `upsert` actually returns tells
+  // us whether this call won the insert (new user) or hit the existing row
+  // (conflict, ignored) without a separate find-then-create race window.
   private async findOrCreateUser(
     email: string,
     googleSub?: string,
-  ): Promise<User> {
-    return this.em.upsert(
+  ): Promise<{ user: User; isNewUser: boolean }> {
+    const id = uuidv7();
+    const user = await this.em.upsert(
       User,
-      { id: uuidv7(), email, googleSub: googleSub ?? null },
+      { id, email, googleSub: googleSub ?? null },
       { onConflictFields: ['email'], onConflictAction: 'ignore' },
     );
+
+    return { user, isNewUser: user.id === id };
   }
 }
