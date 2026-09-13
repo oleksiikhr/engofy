@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -17,7 +18,9 @@ import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
+import type { DispositionView } from '../../../../modules/learning/types/disposition-view.type.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
+import { DispositionResponseDto } from '../dto/disposition-response.dto.js';
 import { DueCardCountResponseDto } from '../dto/due-card-count-response.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
 import { PracticeQueueQueryDto } from '../dto/practice-queue-query.dto.js';
@@ -26,6 +29,7 @@ import {
   PracticeQueueResponseDto,
 } from '../dto/practice-queue-response.dto.js';
 import { ReviewCardDto } from '../dto/review-card.dto.js';
+import { SetDispositionDto } from '../dto/set-disposition.dto.js';
 import { StreakResponseDto } from '../dto/streak-response.dto.js';
 
 function iso(value: DateTime): string {
@@ -41,6 +45,13 @@ function toCardDto(card: CardView): LearningCardResponseDto {
     lapses: card.lapses,
     stability: card.stability,
     difficulty: card.difficulty,
+  };
+}
+
+function toDispositionDto(view: DispositionView): DispositionResponseDto {
+  return {
+    id: view.id,
+    disposition: view.disposition,
   };
 }
 
@@ -120,5 +131,36 @@ export class LearningController {
   ): Promise<LearningCardResponseDto> {
     const card = await this.learning.reviewCard(actor.id, cardId, dto.rating);
     return toCardDto(card);
+  }
+
+  // Removes a card: an unreviewed card is deleted outright, a reviewed one is
+  // archived (its progress and a Known disposition survive).
+  @Delete('cards/:cardId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeCard(
+    @CurrentUser() actor: UserActor,
+    @Param('cardId', ParseUUIDPipe) cardId: string,
+  ): Promise<void> {
+    await this.learning.removeCard(actor.id, cardId);
+  }
+
+  // The "I already know this" / "skip this" control for a target with no
+  // active card.
+  @Post('dispositions')
+  @HttpCode(HttpStatus.OK)
+  async setDisposition(
+    @CurrentUser() actor: UserActor,
+    @Body() dto: SetDispositionDto,
+  ): Promise<DispositionResponseDto> {
+    const view = await this.learning.setDisposition(
+      actor.id,
+      {
+        wordDefinitionId: dto.wordDefinitionId ?? null,
+        phraseId: dto.phraseId ?? null,
+        grammarUsagePointId: dto.grammarUsagePointId ?? null,
+      },
+      dto.disposition,
+    );
+    return toDispositionDto(view);
   }
 }

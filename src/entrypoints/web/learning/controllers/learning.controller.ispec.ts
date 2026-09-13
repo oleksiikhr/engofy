@@ -12,6 +12,8 @@ import {
 import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
 import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
+import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
+import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { LearningWebModule } from '../learning-web.module.js';
 
@@ -120,5 +122,71 @@ describe('LearningController', () => {
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
     expect(res.body).toEqual({ dueCount: 1 });
+  });
+
+  it('deletes an unreviewed card and archives a reviewed one', async () => {
+    const cookie = await login(suite.orm.em);
+    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    await suite.orm.em.flush();
+
+    const added = await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ wordId: word.id })
+      .expect(HttpStatus.OK);
+
+    await suite
+      .request('delete', `/learning/cards/${added.body.id}`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+
+    await suite
+      .request('post', `/learning/cards/${added.body.id}/review`)
+      .set('Cookie', cookie)
+      .send({ rating: 'good' })
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('returns 404 when removing a card that does not exist', async () => {
+    const cookie = await login(suite.orm.em);
+    await suite
+      .request('delete', `/learning/cards/${uuidv7()}`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('sets and overwrites a disposition for a word definition target', async () => {
+    const cookie = await login(suite.orm.em);
+    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    await suite.orm.em.flush();
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    await suite.orm.em.flush();
+
+    const first = await suite
+      .request('post', '/learning/dispositions')
+      .set('Cookie', cookie)
+      .send({ wordDefinitionId: definition.id, disposition: 'skipped' })
+      .expect(HttpStatus.OK);
+    expect(first.body.disposition).toBe('skipped');
+
+    const second = await suite
+      .request('post', '/learning/dispositions')
+      .set('Cookie', cookie)
+      .send({ wordDefinitionId: definition.id, disposition: 'known' })
+      .expect(HttpStatus.OK);
+    expect(second.body.disposition).toBe('known');
+    expect(second.body.id).toBe(first.body.id);
+  });
+
+  it('rejects a disposition body with no target', async () => {
+    const cookie = await login(suite.orm.em);
+    await suite
+      .request('post', '/learning/dispositions')
+      .set('Cookie', cookie)
+      .send({ disposition: 'known' })
+      .expect(HttpStatus.BAD_REQUEST);
   });
 });
