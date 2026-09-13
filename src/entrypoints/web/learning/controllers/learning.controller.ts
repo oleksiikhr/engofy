@@ -65,6 +65,8 @@ function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
       id: item.target.id,
       primary: item.target.primary,
       secondary: item.target.secondary,
+      phonetic: item.target.phonetic,
+      contextSentence: item.target.contextSentence,
     },
   };
 }
