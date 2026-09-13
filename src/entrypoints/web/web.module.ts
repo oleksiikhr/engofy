@@ -10,6 +10,7 @@ import { SessionAuthGuard } from './auth/guards/session-auth.guard.js';
 import { BillingWebModule } from './billing/billing-web.module.js';
 import { ContentWebModule } from './content/content-web.module.js';
 import { DictionaryWebModule } from './dictionary/dictionary-web.module.js';
+import { HomeWebModule } from './home/home-web.module.js';
 import { InternalWebModule } from './internal/internal-web.module.js';
 import { LearningWebModule } from './learning/learning-web.module.js';
 import { ProfileWebModule } from './profile/profile-web.module.js';
@@ -23,6 +24,7 @@ const DEFAULT_SUB_MODULES: Type[] = [
   ProfileWebModule,
   ContentWebModule,
   DictionaryWebModule,
+  HomeWebModule,
 ];
 
 @Module({})
