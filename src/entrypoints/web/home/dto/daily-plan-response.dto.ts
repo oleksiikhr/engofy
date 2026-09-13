@@ -15,6 +15,8 @@ export class DailyPlanResponseDto {
 
   readonly grammarCanDoStatement!: string | null;
 
+  readonly grammarExampleText!: string | null;
+
   // ISO-8601, or null while the session is still in progress.
   readonly completedAt!: string | null;
 }

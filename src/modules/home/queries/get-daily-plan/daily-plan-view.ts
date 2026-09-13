@@ -11,5 +11,9 @@ export interface DailyPlanView {
   grammarUsagePointId: string | null;
   grammarGuideword: string | null;
   grammarCanDoStatement: string | null;
+  // Passive display only (крок 3) — can-do + example, no question. prompt.txt
+  // leaves open whether this should later reuse post-detail-redesign's active
+  // contrastive question instead; revisit once that plan deploys.
+  grammarExampleText: string | null;
   completedAt: DateTime | null;
 }
