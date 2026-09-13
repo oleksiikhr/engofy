@@ -9,6 +9,7 @@ import { LoginWithGoogleHandler } from './commands/login-with-google/login-with-
 import { LogoutHandler } from './commands/logout/logout.handler.js';
 import { RequestLoginCodeHandler } from './commands/request-login-code/request-login-code.handler.js';
 import { ResolveSessionHandler } from './commands/resolve-session/resolve-session.handler.js';
+import { SetCefrLevelHandler } from './commands/set-cefr-level/set-cefr-level.handler.js';
 import { VerifyLoginCodeHandler } from './commands/verify-login-code/verify-login-code.handler.js';
 import AuthConfig from './config/auth.config.js';
 import { GetUserHandler } from './queries/get-user/get-user.handler.js';
@@ -24,6 +25,7 @@ const commandHandlers = [
   LogoutHandler,
   RequestLoginCodeHandler,
   ResolveSessionHandler,
+  SetCefrLevelHandler,
   VerifyLoginCodeHandler,
 ];
 

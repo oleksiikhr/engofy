@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import type { CefrLevel } from '../post/enums/cefr-level.enum.js';
 import { LoginWithGoogleCommand } from './commands/login-with-google/login-with-google.command.js';
 import type { LoginWithGoogleDto } from './commands/login-with-google/login-with-google.dto.js';
 import { LogoutCommand } from './commands/logout/logout.command.js';
@@ -12,6 +13,7 @@ import {
   ResolveSessionCommand,
 } from './commands/resolve-session/resolve-session.command.js';
 import type { ResolveSessionDto } from './commands/resolve-session/resolve-session.dto.js';
+import { SetCefrLevelCommand } from './commands/set-cefr-level/set-cefr-level.command.js';
 import { VerifyLoginCodeCommand } from './commands/verify-login-code/verify-login-code.command.js';
 import type { VerifyLoginCodeDto } from './commands/verify-login-code/verify-login-code.dto.js';
 import type { User } from './entities/user.entity.js';
@@ -60,6 +62,16 @@ export class AuthService {
 
   getUser(userId: string): Promise<User> {
     return this.queryBus.execute(new GetUserQuery(userId));
+  }
+
+  async setCefrLevel(userId: string, cefrLevel: CefrLevel): Promise<CefrLevel> {
+    const result = await this.commandBus.execute(
+      new SetCefrLevelCommand(userId, cefrLevel),
+    );
+
+    await this.em.flush();
+
+    return result;
   }
 
   async resolveSession(

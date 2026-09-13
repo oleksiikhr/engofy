@@ -79,6 +79,7 @@ describe('ProfileController', () => {
 
     expect(res.body.streak).toBe(0);
     expect(res.body.cefr).toMatchObject({ A2: 1 });
+    expect(res.body.cefrLevel).toBe('A1');
     const seeded = res.body.categories.find(
       (c: { name: string }) => c.name === category.name,
     );
@@ -87,6 +88,44 @@ describe('ProfileController', () => {
       cefrLevel: 'A2',
       locked: false,
       masteryScore: 0,
+    });
+  });
+
+  describe('PATCH /profile/cefr-level', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('patch', '/profile/cefr-level')
+        .send({ cefrLevel: CefrLevel.B1 })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('updates the level and reflects it on the next GET /profile', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const patchRes = await suite
+        .request('patch', '/profile/cefr-level')
+        .set('Cookie', cookie)
+        .send({ cefrLevel: CefrLevel.B1 })
+        .expect(HttpStatus.OK);
+
+      expect(patchRes.body).toEqual({ cefrLevel: 'B1' });
+
+      const getRes = await suite
+        .request('get', '/profile')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(getRes.body.cefrLevel).toBe('B1');
+    });
+
+    it('rejects an invalid level', async () => {
+      const cookie = await login(suite.orm.em);
+
+      await suite
+        .request('patch', '/profile/cefr-level')
+        .set('Cookie', cookie)
+        .send({ cefrLevel: 'not-a-level' })
+        .expect(HttpStatus.BAD_REQUEST);
     });
   });
 });
