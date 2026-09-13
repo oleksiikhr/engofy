@@ -73,6 +73,24 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
 | http://localhost:5432               | Postgres                                  |
 | http://localhost:6379               | Redis                                     |
 
+## Troubleshooting
+
+- **`pnpm` fails with `This is a placeholder. pnpm's native binary replaces this file during
+  installation...`** — the version pinned by `packageManager` in `package.json` (managed under
+  `~/.local/share/pnpm/.tools/pnpm/<version>/`) downloaded but never finished its install/build step.
+  Fix: `cd ~/.local/share/pnpm/.tools/pnpm/<version>*/node_modules/pnpm && node install.js`, then retry.
+- **Never `source .env.development`/`.env.test` directly** (e.g. to run a `pnpm`/`mikro-orm` command
+  by hand outside `make`) — `MAIL_FROM_EMAIL=Engofy <noreply@engofy.com>` has an unescaped `<` that
+  bash parses as redirection, breaking `source`/`export -a` outright. Prefix the command with
+  `NODE_ENV=development` (or `test`) instead; NestJS's `ConfigModule` reads the right `.env.*` file
+  itself.
+- **A new `git worktree` has no `node_modules`** (not shared between worktrees) — run `pnpm i`
+  (or `make sync`, which also re-runs pending migrations) inside it before any `pnpm`/`make` command.
+- **`git push`/`pull` fails with `Permission denied (publickey)`** in a headless/sandboxed environment
+  with no ssh-agent identity loaded — switch the remote to HTTPS and use `gh`'s own credentials instead
+  of chasing SSH: `gh auth login` (if `gh auth status` shows not logged in) then `gh auth setup-git &&
+  git remote set-url origin https://github.com/oleksiikhr/engofy.git`.
+
 ## Project Structure
 
 ```

@@ -94,7 +94,10 @@ with `Branch`, `Base`, `PR` fields.
     once, on its first slice only — later slices of the same plan reuse whatever was decided here, per
     the rule above). If yes: `git worktree add -b <branch> <path> <base>`, `<path>` =
     `../<repo-dirname>-<slug>` — named after the plan slug, not the branch, since every later slice
-    reuses this same directory. If no: `git checkout -b <branch> <base>` in place.
+    reuses this same directory. A fresh worktree has no `node_modules` (not shared between worktrees) —
+    run `pnpm i` (or `make sync`, which also re-runs pending migrations) inside it before any
+    `pnpm`/`make` command; see README's Troubleshooting section for other first-run gotchas (env files,
+    git auth). If no: `git checkout -b <branch> <base>` in place.
 
 ## Step 4 — Implement the slice
 
