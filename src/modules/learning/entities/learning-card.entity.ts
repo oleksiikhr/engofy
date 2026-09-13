@@ -83,6 +83,14 @@ export class LearningCard {
   @Property({ type: LuxonTimestampType, nullable: true })
   lastReview?: DateTime | null;
 
+  // Set when the learner removes a card they have already reviewed
+  // (`reps > 0`) instead of deleting it outright — keeps FSRS history while
+  // taking the card out of the practice queue, dictionary, and free-tier cap.
+  // A fresh add for the same target unarchives it rather than creating a new
+  // row (RemoveCardHandler / AddCardHandler).
+  @Property({ type: LuxonTimestampType, nullable: true })
+  archivedAt?: DateTime | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 
