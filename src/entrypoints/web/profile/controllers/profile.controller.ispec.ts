@@ -45,49 +45,68 @@ describe('ProfileController', () => {
     await suite.request('get', '/profile').expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('returns the skills tree, streak and CEFR breakdown', async () => {
+  it('returns the streak and self-reported CEFR level', async () => {
     const cookie = await login(suite.orm.em);
-
-    const category = suite.orm.em.create(GrammarCategory, {
-      name: `CAT-${uuidv7()}`,
-      sortOrder: 1,
-    });
-    const construction = suite.orm.em.create(GrammarConstruction, {
-      categoryId: category.id,
-      name: 'present simple',
-      slug: `slug-${uuidv7()}`,
-      sortOrder: 1,
-    });
-    const point = suite.orm.em.create(GrammarUsagePoint, {
-      constructionId: construction.id,
-      cefrLevel: CefrLevel.A2,
-      guideword: 'USE: habits',
-      canDoStatement: 'Can describe habits.',
-    });
-    await suite.orm.em.flush();
-
-    await suite
-      .request('post', '/learning/cards')
-      .set('Cookie', cookie)
-      .send({ grammarUsagePointId: point.id })
-      .expect(HttpStatus.OK);
 
     const res = await suite
       .request('get', '/profile')
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
-    expect(res.body.streak).toBe(0);
-    expect(res.body.cefr).toMatchObject({ A2: 1 });
-    expect(res.body.cefrLevel).toBe('A1');
-    const seeded = res.body.categories.find(
-      (c: { name: string }) => c.name === category.name,
-    );
-    expect(seeded.constructions[0]).toMatchObject({
-      slug: construction.slug,
-      cefrLevel: 'A2',
-      locked: false,
-      masteryScore: 0,
+    expect(res.body).toEqual({ streak: 0, cefrLevel: 'A1' });
+  });
+
+  describe('GET /profile/progress', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('get', '/profile/progress')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('returns the skills tree, streak and CEFR breakdown', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const category = suite.orm.em.create(GrammarCategory, {
+        name: `CAT-${uuidv7()}`,
+        sortOrder: 1,
+      });
+      const construction = suite.orm.em.create(GrammarConstruction, {
+        categoryId: category.id,
+        name: 'present simple',
+        slug: `slug-${uuidv7()}`,
+        sortOrder: 1,
+      });
+      const point = suite.orm.em.create(GrammarUsagePoint, {
+        constructionId: construction.id,
+        cefrLevel: CefrLevel.A2,
+        guideword: 'USE: habits',
+        canDoStatement: 'Can describe habits.',
+      });
+      await suite.orm.em.flush();
+
+      await suite
+        .request('post', '/learning/cards')
+        .set('Cookie', cookie)
+        .send({ grammarUsagePointId: point.id })
+        .expect(HttpStatus.OK);
+
+      const res = await suite
+        .request('get', '/profile/progress')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body.streak).toBe(0);
+      expect(res.body.cefr).toMatchObject({ A2: 1 });
+      expect(res.body.cefrLevel).toBeUndefined();
+      const seeded = res.body.categories.find(
+        (c: { name: string }) => c.name === category.name,
+      );
+      expect(seeded.constructions[0]).toMatchObject({
+        slug: construction.slug,
+        cefrLevel: 'A2',
+        locked: false,
+        masteryScore: 0,
+      });
     });
   });
 

@@ -38,16 +38,12 @@ export class CefrBreakdownDto {
   readonly C2!: number;
 }
 
-export class ProfileResponseDto {
+export class ProfileProgressResponseDto {
   // Consecutive UTC days with at least one review, ending today or yesterday.
   readonly streak!: number;
 
   // Learner's SRS card count per CEFR level (unclassified targets excluded).
   readonly cefr!: CefrBreakdownDto;
-
-  // The learner's own self-reported level (`users.cefr_level`), changeable
-  // via `PATCH /profile/cefr-level`. Distinct from the `cefr` breakdown above.
-  readonly cefrLevel!: CefrLevel;
 
   // The 19 EGP categories in sort order, each with its constructions.
   readonly categories!: ProfileCategoryDto[];

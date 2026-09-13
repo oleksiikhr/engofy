@@ -24,18 +24,20 @@ grace-періодом.
 
 ## Зрізи
 
-### [ ] 1. Розбиття /profile-запиту: хаб vs progress
+### [x] 1. Розбиття /profile-запиту: хаб vs progress
 - Branch: `profile-hub-redesign-01-split-profile-query`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/16
 
-Нова легка `GetProfileHubQuery`/handler (лише `streak`). Наявний важкий
-`GetProfileHandler` (streak+cefr+categories) переїжджає без змін під новий роут для
-`/profile/progress`. **Рішення для реалізатора:** "статус сьогоднішнього плану" в
-хабі читає `daily_plans.completed_at` — таблиця з паралельного плану
-`daily-session-home`; якщо на момент реалізації її ще нема в `main`, цей зріз іде без
-цього поля (TODO-коментар у коді), додається окремим маленьким зрізом пізніше, коли
-`daily-session-home` буде готовий.
+Наявний важкий `GetProfileHandler` (streak+cefr+categories) переїхав без змін під
+новий роут `GET /profile/progress`. `GET /profile` став легким хабом (`streak` +
+self-reported `cefrLevel`) — реалізатор виявив, що окрема `GetProfileHubQuery` не
+потрібна: стрік уже обслуговує наявний `GetStreakQuery`/`LearningService.getStreak`
+(раніше — лише для reader-хедера), тож контролер просто комбінує його з
+`AuthService.getUser`, без нового CQRS-запиту. `daily_plans.completed_at` ще нема в
+`main` (паралельний план `daily-session-home` не змерджений) — цей зріз іде без
+цього поля (TODO-коментар у `ProfileHubResponseDto`), додається окремим маленьким
+зрізом пізніше.
 
 ### [ ] 2. Календар активності
 - Branch: `profile-hub-redesign-02-activity-calendar`

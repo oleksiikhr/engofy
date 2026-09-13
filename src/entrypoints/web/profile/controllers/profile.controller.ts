@@ -13,7 +13,8 @@ import { AuthService } from '../../../../modules/auth/auth.service.js';
 import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-level/set-cefr-level.dto.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
-import { ProfileResponseDto } from '../dto/profile-response.dto.js';
+import { ProfileHubResponseDto } from '../dto/profile-hub-response.dto.js';
+import { ProfileProgressResponseDto } from '../dto/profile-progress-response.dto.js';
 
 @ApiTags('profile')
 @ApiCookieAuth()
@@ -24,19 +25,32 @@ export class ProfileController {
     private readonly auth: AuthService,
   ) {}
 
-  // Grammar skills tree (19 → 90 constructions, locked/unlocked + mastery),
-  // daily review streak, CEFR card breakdown, and self-reported CEFR level
-  // for the current user.
+  // The light /profile hub: just the daily streak and the self-reported CEFR
+  // level (hub owns display + editing of the level, slice 3). The heavy
+  // skills tree + CEFR breakdown moved to `/profile/progress` unchanged
+  // (profile-hub-redesign slice 1).
   @Get()
-  async profile(@CurrentUser() actor: UserActor): Promise<ProfileResponseDto> {
-    const [view, user] = await Promise.all([
-      this.learning.getProfile(actor.id),
+  async profile(
+    @CurrentUser() actor: UserActor,
+  ): Promise<ProfileHubResponseDto> {
+    const [streak, user] = await Promise.all([
+      this.learning.getStreak(actor.id),
       this.auth.getUser(actor.id),
     ]);
+    return { streak, cefrLevel: user.cefrLevel };
+  }
+
+  // Grammar skills tree (19 → 90 constructions, locked/unlocked + mastery),
+  // daily review streak, and CEFR card breakdown for the current user. Was
+  // `GET /profile` before profile-hub-redesign slice 1 split it off.
+  @Get('progress')
+  async progress(
+    @CurrentUser() actor: UserActor,
+  ): Promise<ProfileProgressResponseDto> {
+    const view = await this.learning.getProfile(actor.id);
     return {
       streak: view.streak,
       cefr: view.cefr,
-      cefrLevel: user.cefrLevel,
       categories: view.categories,
     };
   }
