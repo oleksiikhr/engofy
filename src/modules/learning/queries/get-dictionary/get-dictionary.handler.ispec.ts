@@ -109,6 +109,31 @@ describe('GetDictionaryHandler', () => {
     expect(view.items).toEqual([]);
   });
 
+  it('excludes archived cards', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    await em.flush();
+
+    em.create(LearningCard, {
+      userId,
+      wordId: word.id,
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+      archivedAt: DateTime.now(),
+    });
+    await em.flush();
+
+    const view = await suite.query(new GetDictionaryQuery(userId));
+    expect(view.items).toEqual([]);
+  });
+
   it('resolves each card and lists the published posts the term appears in, de-duplicated', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();

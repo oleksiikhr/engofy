@@ -4,6 +4,7 @@ import { createIntegrationSuite } from '../../../../../test/setup/int-suite.help
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
+import { LearningCard } from '../../entities/learning-card.entity.js';
 import { ReviewLog } from '../../entities/review-log.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
@@ -126,6 +127,20 @@ describe('ReviewCardHandler', () => {
       suite.command(
         new ReviewCardCommand(uuidv7(), uuidv7(), ReviewRating.Again),
       ),
+    ).rejects.toBeInstanceOf(CardNotFoundError);
+  });
+
+  it('rejects reviewing an archived card', async () => {
+    const userId = uuidv7();
+    const cardId = await seedCard(userId);
+    const card = await suite.orm.em.findOneOrFail(LearningCard, {
+      id: cardId,
+    });
+    card.archivedAt = DateTime.now();
+    await suite.orm.em.flush();
+
+    await expect(
+      suite.command(new ReviewCardCommand(userId, cardId, ReviewRating.Good)),
     ).rejects.toBeInstanceOf(CardNotFoundError);
   });
 });

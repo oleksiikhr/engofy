@@ -269,7 +269,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         ? []
         : await this.em.find(
             LearningCard,
-            { userId, $or: conditions },
+            { userId, archivedAt: null, $or: conditions },
             { disableIdentityMap: true },
           );
 

@@ -9,6 +9,7 @@ import { WordDefinition } from '../../../post/entities/word-definition.entity.js
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { AddCardCommand } from '../../commands/add-card/add-card.command.js';
+import { RemoveCardCommand } from '../../commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from '../../commands/review-card/review-card.command.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
@@ -127,6 +128,34 @@ describe('GetProfileHandler', () => {
     expect(presentSimple?.masteryScore).toBeGreaterThan(0);
     expect(presentSimple?.correctStreak).toBe(1);
     expect(pastPerfect?.locked).toBe(true);
+  });
+
+  it('keeps a removed card in the streak but out of the CEFR breakdown', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    await em.flush();
+    em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+      cefrLevel: CefrLevel.B1,
+    });
+    await em.flush();
+
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordId: word.id }),
+    );
+    await suite.command(
+      new ReviewCardCommand(userId, card.id, ReviewRating.Good),
+    );
+    await suite.command(new RemoveCardCommand(userId, card.id));
+    em.clear();
+
+    const profile = await suite.query(new GetProfileQuery(userId));
+
+    expect(profile.streak).toBe(1);
+    expect(profile.cefr.B1).toBe(0);
   });
 
   // D11: mastery is computed from live FSRS card state on every read, so a

@@ -24,7 +24,11 @@ export class ReviewCardHandler implements ICommandHandler<ReviewCardCommand> {
   async execute(command: ReviewCardCommand): Promise<CardView> {
     const { userId, cardId, rating } = command;
 
-    const card = await this.em.findOne(LearningCard, { id: cardId, userId });
+    const card = await this.em.findOne(LearningCard, {
+      id: cardId,
+      userId,
+      archivedAt: null,
+    });
     if (!card) {
       throw new CardNotFoundError();
     }

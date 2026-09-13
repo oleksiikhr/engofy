@@ -19,6 +19,7 @@ export class GetDueCardCountHandler
     return this.em.count(LearningCard, {
       userId,
       due: { $lte: DateTime.now() },
+      archivedAt: null,
     });
   }
 }

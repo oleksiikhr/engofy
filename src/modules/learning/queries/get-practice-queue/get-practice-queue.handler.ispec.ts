@@ -89,4 +89,30 @@ describe('GetPracticeQueueHandler', () => {
     const queue = await suite.query(new GetPracticeQueueQuery(userId, 3));
     expect(queue).toHaveLength(3);
   });
+
+  it('excludes archived cards from the queue', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    await em.flush();
+
+    em.create(LearningCard, {
+      userId,
+      wordId: word.id,
+      due: DateTime.now().minus({ days: 1 }),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+      archivedAt: DateTime.now(),
+    });
+    await em.flush();
+    em.clear();
+
+    const queue = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    expect(queue).toHaveLength(0);
+  });
 });
