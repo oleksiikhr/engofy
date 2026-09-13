@@ -23,6 +23,7 @@ import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   clearSessionCookie,
   readSessionCookie,
+  setOnboardingCookie,
   setSessionCookie,
 } from '../cookies/auth-cookies.helper.js';
 import { CurrentUserResponseDto } from '../dto/current-user-response.dto.js';
@@ -56,6 +57,9 @@ export class AuthController {
     const result = await this.auth.verifyLoginCode(dto);
 
     setSessionCookie(reply, result.sessionToken, this.authConfig);
+    if (result.isNewUser) {
+      setOnboardingCookie(reply, this.authConfig);
+    }
 
     return { userId: result.userId };
   }
@@ -70,6 +74,9 @@ export class AuthController {
     const result = await this.auth.loginWithGoogle(dto);
 
     setSessionCookie(reply, result.sessionToken, this.authConfig);
+    if (result.isNewUser) {
+      setOnboardingCookie(reply, this.authConfig);
+    }
 
     return { userId: result.userId };
   }

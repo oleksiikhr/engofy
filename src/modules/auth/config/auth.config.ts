@@ -17,4 +17,9 @@ export default registerAs('auth', () => ({
     15 * 24 * 60 * 60 * 1000,
   ),
   sessionCookieName: envString('AUTH_SESSION_COOKIE_NAME', '__Host-session'),
+  onboardingCookieName: envString('AUTH_ONBOARDING_COOKIE_NAME', 'onboarding'),
+  onboardingCookieTtlMs: envNumber(
+    'AUTH_ONBOARDING_COOKIE_TTL_MS',
+    5 * 60 * 1000,
+  ),
 }));

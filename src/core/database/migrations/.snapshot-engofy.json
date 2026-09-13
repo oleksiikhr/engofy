@@ -4060,6 +4060,30 @@
       "name": "users",
       "schema": "public",
       "columns": {
+        "cefr_level": {
+          "name": "cefr_level",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'A1'",
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1",
+            "C2"
+          ],
+          "mappedType": "enum"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamptz(6)",
@@ -4178,7 +4202,14 @@
           "unique": true
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "name": "users_cefr_level_check",
+          "expression": "\"cefr_level\" in ('A1', 'A2', 'B1', 'B2', 'C1', 'C2')",
+          "definition": "check (\"cefr_level\" in ('A1', 'A2', 'B1', 'B2', 'C1', 'C2'))",
+          "columnName": "cefr_level"
+        }
+      ],
       "triggers": [],
       "foreignKeys": {},
       "comment": null

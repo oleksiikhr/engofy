@@ -24,6 +24,7 @@ describe('CompleteLoginService', () => {
       await suite.orm.em.flush();
 
       expect(result.sessionToken).toBeTruthy();
+      expect(result.isNewUser).toBe(true);
 
       const user = await suite.orm.em.findOneOrFail(User, {
         id: result.userId,
@@ -47,6 +48,7 @@ describe('CompleteLoginService', () => {
       await suite.orm.em.flush();
 
       expect(result.userId).toBe(existing.id);
+      expect(result.isNewUser).toBe(false);
     });
   });
 
@@ -57,6 +59,8 @@ describe('CompleteLoginService', () => {
 
       const result = await completeLogin.loginByGoogle(email, googleSub);
       await suite.orm.em.flush();
+
+      expect(result.isNewUser).toBe(true);
 
       const user = await suite.orm.em.findOneOrFail(User, {
         id: result.userId,
@@ -76,6 +80,7 @@ describe('CompleteLoginService', () => {
       await suite.orm.em.flush();
 
       expect(result.userId).toBe(existing.id);
+      expect(result.isNewUser).toBe(false);
 
       const user = await suite.orm.em.findOneOrFail(User, {
         id: existing.id,
