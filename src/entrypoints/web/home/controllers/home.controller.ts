@@ -3,8 +3,11 @@ import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
+import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { HomeService } from '../../../../modules/home/home.service.js';
 import type { DailyPlanView } from '../../../../modules/home/queries/get-daily-plan/daily-plan-view.js';
+import { toQueueItemDto } from '../../learning/controllers/learning.controller.js';
+import { PracticeQueueResponseDto } from '../../learning/dto/practice-queue-response.dto.js';
 import { CompleteDailyPlanResponseDto } from '../dto/complete-daily-plan-response.dto.js';
 import { DailyPlanResponseDto } from '../dto/daily-plan-response.dto.js';
 
@@ -18,8 +21,10 @@ function toDailyPlanDto(view: DailyPlanView): DailyPlanResponseDto {
     postSlug: view.postSlug,
     postTitle: view.postTitle,
     postCefrLevel: view.postCefrLevel,
+    isRead: view.isRead,
     grammarUsagePointId: view.grammarUsagePointId,
     grammarGuideword: view.grammarGuideword,
+    grammarConstructionSlug: view.grammarConstructionSlug,
     grammarCanDoStatement: view.grammarCanDoStatement,
     grammarExampleText: view.grammarExampleText,
     completedAt: view.completedAt ? iso(view.completedAt) : null,
@@ -41,6 +46,17 @@ export class HomeController {
   ): Promise<DailyPlanResponseDto> {
     const view = await this.home.getDailyPlan(actor.id);
     return toDailyPlanDto(view);
+  }
+
+  // Крок 2 — due cards whose target occurs in today's post, soonest first.
+  // Same wire shape as `GET /learning/practice` (apps/web reuses its
+  // renderer); this endpoint just scopes it to today's daily-plan post.
+  @Get('daily-plan/cards')
+  async dailyPlanCards(
+    @CurrentUser() actor: UserActor,
+  ): Promise<PracticeQueueResponseDto> {
+    const items = await this.home.getDailyPlanCards(actor.id);
+    return toOffsetPage(items.map(toQueueItemDto), null);
   }
 
   // Ends the linear session (крок 3's final screen) and returns the

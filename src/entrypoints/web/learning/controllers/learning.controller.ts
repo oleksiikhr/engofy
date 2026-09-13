@@ -55,7 +55,9 @@ function toDispositionDto(view: DispositionView): DispositionResponseDto {
   };
 }
 
-function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
+// Exported for reuse by `HomeController`'s daily-session due-cards endpoint
+// (daily-session-home plan, зріз 4) — same `PracticeQueueItem` shape.
+export function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
   return {
     cardId: item.cardId,
     state: item.state,

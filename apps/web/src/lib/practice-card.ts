@@ -53,7 +53,12 @@ function renderAnswerBody(target: PracticeItem['target']): string {
   return `<p>${esc(target.secondary ?? '')}${phonetic}${speak}</p>${context}`;
 }
 
-function renderCard(card: PracticeItem, remaining: number): string {
+function renderCard(
+  card: PracticeItem,
+  remaining: number,
+  partialUrl = '/partials/review',
+  target = '#practice-container',
+): string {
   const t = card.target;
   const buttons = GRADES.map(
     (g) =>
@@ -71,8 +76,8 @@ function renderCard(card: PracticeItem, remaining: number): string {
     <p class="practice__front">${esc(t.primary)}</p>
     ${reveal}
     <form
-      hx-post="/partials/review"
-      hx-target="#practice-container"
+      hx-post="${partialUrl}"
+      hx-target="${target}"
       hx-swap="innerHTML"
       class="practice__grades"
     >
@@ -95,4 +100,23 @@ export function renderPracticeQueue(cards: PracticeItem[]): string {
     return renderDone();
   }
   return renderCard(cards[0], cards.length);
+}
+
+// Крок 2 of the daily session (daily-session-home plan, зріз 4) — same card
+// markup, but grading posts to `/partials/daily-review` (scoped to today's
+// post) and finishing the queue moves on to крок 3 instead of linking away.
+export function renderDailyPracticeQueue(cards: PracticeItem[]): string {
+  if (cards.length === 0) {
+    return `<div class="practice__done" data-testid="practice-done">
+      <p class="practice__done-emoji">✓</p>
+      <h2>All caught up</h2>
+      <p><a href="/?step=3">Continue →</a></p>
+    </div>`;
+  }
+  return renderCard(
+    cards[0],
+    cards.length,
+    '/partials/daily-review',
+    '#daily-practice-container',
+  );
 }
