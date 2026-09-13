@@ -32,10 +32,10 @@ status: in-progress
 персистентної колонки) для одноразового онбординг-екрана, який реалізується пізніше на
 фронтенді.
 
-### [ ] 2. Модель чотирьох станів вивчення (learning_dispositions)
+### [x] 2. Модель чотирьох станів вивчення (learning_dispositions)
 - Branch: `learning-foundation-02-dispositions`
-- Base: `learning-foundation-01-cefr-onboarding`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/13
 
 Нова таблиця `learning_dispositions` (`userId`, `wordDefinitionId?`/`phraseId?`/
 `grammarUsagePointId?`, `disposition: known|skipped`, `createdAt`) з тим самим патерном
