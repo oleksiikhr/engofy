@@ -3,6 +3,8 @@ import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
+import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningDisposition } from '../../entities/learning-disposition.entity.js';
 import { Disposition } from '../../enums/disposition.enum.js';
@@ -33,7 +35,11 @@ describe('RemoveCardHandler', () => {
   it('physically deletes a never-reviewed card', async () => {
     const userId = uuidv7();
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const card = makeCard({ userId, wordId: word.id });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    const card = makeCard({ userId, wordDefinitionId: definition.id });
     await suite.orm.em.flush();
 
     await suite.command(new RemoveCardCommand(userId, card.id));
@@ -68,12 +74,16 @@ describe('RemoveCardHandler', () => {
     expect(disposition.disposition).toBe(Disposition.Known);
   });
 
-  it('archives a reviewed word card without a disposition (word_id has no single sense yet)', async () => {
+  it('archives a reviewed word card and records a Known disposition on that sense', async () => {
     const userId = uuidv7();
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     const card = makeCard({
       userId,
-      wordId: word.id,
+      wordDefinitionId: definition.id,
       reps: 2,
       state: LearningCardState.Learning,
     });
@@ -85,7 +95,12 @@ describe('RemoveCardHandler', () => {
       id: card.id,
     });
     expect(stored.archivedAt).not.toBeNull();
-    expect(await suite.orm.em.count(LearningDisposition, { userId })).toBe(0);
+
+    const disposition = await suite.orm.em.findOneOrFail(LearningDisposition, {
+      userId,
+      wordDefinitionId: definition.id,
+    });
+    expect(disposition.disposition).toBe(Disposition.Known);
   });
 
   it('overwrites an existing disposition rather than duplicating it', async () => {
@@ -116,7 +131,14 @@ describe('RemoveCardHandler', () => {
 
   it('rejects a card id that does not belong to the user', async () => {
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const card = makeCard({ userId: uuidv7(), wordId: word.id });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    const card = makeCard({
+      userId: uuidv7(),
+      wordDefinitionId: definition.id,
+    });
     await suite.orm.em.flush();
 
     await expect(

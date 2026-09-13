@@ -23,7 +23,7 @@ describe('CardLimitService', () => {
     for (let i = 0; i < count; i += 1) {
       em.create(LearningCard, {
         userId,
-        wordId: uuidv7(),
+        wordDefinitionId: uuidv7(),
         due: DateTime.now(),
         stability: 1,
         difficulty: 5,
@@ -59,7 +59,7 @@ describe('CardLimitService', () => {
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     suite.orm.em.create(LearningCard, {
       userId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,

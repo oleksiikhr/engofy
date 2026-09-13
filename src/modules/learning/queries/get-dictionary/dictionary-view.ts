@@ -11,7 +11,7 @@ export interface DictionaryPostRefView {
 export interface DictionaryEntryView {
   cardId: string;
   type: 'word' | 'phrase';
-  // SRS card target id (wordId / phraseId).
+  // SRS card target id (wordDefinitionId / phraseId).
   targetId: string;
   state: LearningCardState;
   // Card due date; the web layer serialises it to ISO-8601 at the edge.

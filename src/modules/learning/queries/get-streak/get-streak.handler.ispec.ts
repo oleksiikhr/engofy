@@ -21,7 +21,7 @@ describe('GetStreakHandler', () => {
 
     const card = em.create(LearningCard, {
       userId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,

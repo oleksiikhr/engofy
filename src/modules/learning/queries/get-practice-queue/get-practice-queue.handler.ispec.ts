@@ -5,7 +5,9 @@ import { createIntegrationSuite } from '../../../../../test/setup/int-suite.help
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
+import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -16,12 +18,12 @@ function card(
   userId: string,
   due: DateTime,
   target: Partial<
-    Pick<LearningCard, 'wordId' | 'phraseId' | 'grammarUsagePointId'>
+    Pick<LearningCard, 'wordDefinitionId' | 'phraseId' | 'grammarUsagePointId'>
   >,
 ): void {
   em.create(LearningCard, {
     userId,
-    wordId: target.wordId ?? null,
+    wordDefinitionId: target.wordDefinitionId ?? null,
     phraseId: target.phraseId ?? null,
     grammarUsagePointId: target.grammarUsagePointId ?? null,
     due,
@@ -43,6 +45,10 @@ describe('GetPracticeQueueHandler', () => {
     const userId = uuidv7();
 
     const word = em.create(Word, { lemma: 'ephemeral' });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Adjective,
+    });
     const phrase = em.create(Phrase, { phraseText: 'pick up' });
     const grammar = em.create(GrammarUsagePoint, {
       constructionId: uuidv7(),
@@ -52,7 +58,9 @@ describe('GetPracticeQueueHandler', () => {
     });
     await em.flush();
 
-    card(em, userId, DateTime.now().minus({ days: 2 }), { wordId: word.id });
+    card(em, userId, DateTime.now().minus({ days: 2 }), {
+      wordDefinitionId: definition.id,
+    });
     card(em, userId, DateTime.now().minus({ hours: 1 }), {
       phraseId: phrase.id,
     });
@@ -73,14 +81,18 @@ describe('GetPracticeQueueHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
 
-    const words = Array.from({ length: 5 }, () =>
-      em.create(Word, { lemma: `w-${uuidv7()}` }),
-    );
+    const definitions = Array.from({ length: 5 }, () => {
+      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+    });
     await em.flush();
 
-    words.forEach((word, i) => {
+    definitions.forEach((definition, i) => {
       card(em, userId, DateTime.now().minus({ minutes: i + 1 }), {
-        wordId: word.id,
+        wordDefinitionId: definition.id,
       });
     });
     await em.flush();
@@ -94,11 +106,15 @@ describe('GetPracticeQueueHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
     const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await em.flush();
 
     em.create(LearningCard, {
       userId,
-      wordId: word.id,
+      wordDefinitionId: definition.id,
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,

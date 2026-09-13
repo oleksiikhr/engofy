@@ -384,7 +384,7 @@ async function seed(orm: MikroORM): Promise<void> {
   // --- SRS cards (dictionary + practice) ---
   const wordCard = em.create(LearningCard, {
     userId: user.id,
-    wordId: word.id,
+    wordDefinitionId: wordDef.id,
     due: now.minus({ days: 1 }),
     stability: 3.2,
     difficulty: 5.4,

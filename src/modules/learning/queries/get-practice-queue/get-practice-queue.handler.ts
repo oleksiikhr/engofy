@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { GetPracticeQueueQuery } from './get-practice-queue.query.js';
 import type {
@@ -14,7 +15,7 @@ import type {
 // The SRS review queue for a user (PLAN.md §4 `/practice`): every card whose
 // `due` has arrived, soonest first, capped at `limit`. Fresh cards are due
 // immediately, so they surface here too. Each card is resolved to its
-// display text with three batched lookups (no N+1).
+// display text with batched lookups (no N+1).
 @QueryHandler(GetPracticeQueueQuery)
 export class GetPracticeQueueHandler
   implements IQueryHandler<GetPracticeQueueQuery>
@@ -60,15 +61,15 @@ export class GetPracticeQueueHandler
   private async loadTargets(
     cards: LearningCard[],
   ): Promise<Map<string, PracticeCardTarget>> {
-    const wordIds = ids(cards, (c) => c.wordId);
+    const wordDefinitionIds = ids(cards, (c) => c.wordDefinitionId);
     const phraseIds = ids(cards, (c) => c.phraseId);
     const grammarIds = ids(cards, (c) => c.grammarUsagePointId);
 
-    const [words, phrases, usagePoints] = await Promise.all([
-      wordIds.length
+    const [definitions, phrases, usagePoints] = await Promise.all([
+      wordDefinitionIds.length
         ? this.em.find(
-            Word,
-            { id: { $in: wordIds } },
+            WordDefinition,
+            { id: { $in: wordDefinitionIds } },
             { disableIdentityMap: true },
           )
         : Promise.resolve([]),
@@ -87,13 +88,23 @@ export class GetPracticeQueueHandler
           )
         : Promise.resolve([]),
     ]);
+    const wordIds = ids(definitions, (d) => d.wordId);
+    const words = wordIds.length
+      ? await this.em.find(
+          Word,
+          { id: { $in: wordIds } },
+          { disableIdentityMap: true },
+        )
+      : [];
+    const wordById = new Map(words.map((word) => [word.id, word]));
 
     const targets = new Map<string, PracticeCardTarget>();
-    for (const word of words) {
-      targets.set(`word:${word.id}`, {
+    for (const definition of definitions) {
+      const word = wordById.get(definition.wordId);
+      targets.set(`word:${definition.id}`, {
         type: 'word',
-        id: word.id,
-        primary: word.lemma,
+        id: definition.id,
+        primary: word?.lemma ?? '',
         secondary: null,
       });
     }
@@ -117,16 +128,16 @@ export class GetPracticeQueueHandler
   }
 }
 
-function ids(
-  cards: LearningCard[],
-  pick: (card: LearningCard) => string | null | undefined,
+function ids<T>(
+  items: T[],
+  pick: (item: T) => string | null | undefined,
 ): string[] {
-  return [...new Set(cards.map(pick).filter((id): id is string => !!id))];
+  return [...new Set(items.map(pick).filter((id): id is string => !!id))];
 }
 
 function targetKey(card: LearningCard): string {
-  if (card.wordId) {
-    return `word:${card.wordId}`;
+  if (card.wordDefinitionId) {
+    return `word:${card.wordDefinitionId}`;
   }
   if (card.phraseId) {
     return `phrase:${card.phraseId}`;

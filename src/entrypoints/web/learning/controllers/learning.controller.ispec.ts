@@ -48,12 +48,16 @@ describe('LearningController', () => {
   it('adds a card, lists it in the practice queue, and reviews it', async () => {
     const cookie = await login(suite.orm.em);
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await suite.orm.em.flush();
 
     const added = await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
-      .send({ wordId: word.id })
+      .send({ wordDefinitionId: definition.id })
       .expect(HttpStatus.OK);
     expect(added.body).toMatchObject({ state: 'new', reps: 0 });
     const cardId = added.body.id;
@@ -100,19 +104,23 @@ describe('LearningController', () => {
     await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
-      .send({ wordId: uuidv7(), phraseId: uuidv7() })
+      .send({ wordDefinitionId: uuidv7(), phraseId: uuidv7() })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('reports how many cards are due for the feed badge', async () => {
     const cookie = await login(suite.orm.em);
     const word = suite.orm.em.create(Word, { lemma: `due-${uuidv7()}` });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await suite.orm.em.flush();
 
     await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
-      .send({ wordId: word.id })
+      .send({ wordDefinitionId: definition.id })
       .expect(HttpStatus.OK);
 
     // A freshly added card is due immediately (FSRS default), so this user
@@ -127,12 +135,16 @@ describe('LearningController', () => {
   it('deletes an unreviewed card and archives a reviewed one', async () => {
     const cookie = await login(suite.orm.em);
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await suite.orm.em.flush();
 
     const added = await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
-      .send({ wordId: word.id })
+      .send({ wordDefinitionId: definition.id })
       .expect(HttpStatus.OK);
 
     await suite

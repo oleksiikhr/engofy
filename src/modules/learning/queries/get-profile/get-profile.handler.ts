@@ -1,11 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
-import {
-  cefrRank,
-  emptyCefrRecord,
-  minCefr,
-} from '../../../post/domain/cefr-order.js';
+import { emptyCefrRecord, minCefr } from '../../../post/domain/cefr-order.js';
 import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
@@ -122,24 +118,21 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
   private async loadWordLevels(
     cards: LearningCard[],
   ): Promise<Map<string, CefrLevel>> {
-    const wordIds = unique(cards.map((card) => card.wordId));
-    if (wordIds.length === 0) {
+    const wordDefinitionIds = unique(
+      cards.map((card) => card.wordDefinitionId),
+    );
+    if (wordDefinitionIds.length === 0) {
       return new Map();
     }
     const definitions = await this.em.find(
       WordDefinition,
-      { wordId: { $in: wordIds }, cefrLevel: { $ne: null } },
+      { id: { $in: wordDefinitionIds }, cefrLevel: { $ne: null } },
       { disableIdentityMap: true },
     );
     const levels = new Map<string, CefrLevel>();
     for (const definition of definitions) {
-      const level = definition.cefrLevel;
-      if (!level) {
-        continue;
-      }
-      const current = levels.get(definition.wordId);
-      if (!current || cefrRank(level) < cefrRank(current)) {
-        levels.set(definition.wordId, level);
+      if (definition.cefrLevel) {
+        levels.set(definition.id, definition.cefrLevel);
       }
     }
     return levels;
@@ -234,8 +227,8 @@ function cardCefrLevel(
   if (card.grammarUsagePointId) {
     return pointLevel.get(card.grammarUsagePointId) ?? null;
   }
-  if (card.wordId) {
-    return wordLevel.get(card.wordId) ?? null;
+  if (card.wordDefinitionId) {
+    return wordLevel.get(card.wordDefinitionId) ?? null;
   }
   if (card.phraseId) {
     return phraseLevel.get(card.phraseId) ?? null;

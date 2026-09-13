@@ -84,7 +84,7 @@ export class LearningController {
     @Body() dto: AddCardDto,
   ): Promise<LearningCardResponseDto> {
     const card = await this.learning.addCard(actor.id, {
-      wordId: dto.wordId ?? null,
+      wordDefinitionId: dto.wordDefinitionId ?? null,
       phraseId: dto.phraseId ?? null,
       grammarUsagePointId: dto.grammarUsagePointId ?? null,
     });

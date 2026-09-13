@@ -1404,8 +1404,8 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
-        "word_id": {
-          "name": "word_id",
+        "word_definition_id": {
+          "name": "word_definition_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -1469,11 +1469,11 @@
         {
           "columnNames": [
             "user_id",
-            "word_id"
+            "word_definition_id"
           ],
           "composite": true,
           "constraint": true,
-          "keyName": "learning_cards_user_id_word_id_unique",
+          "keyName": "learning_cards_user_id_word_definition_id_unique",
           "primary": false,
           "unique": true
         }
@@ -1481,8 +1481,8 @@
       "checks": [
         {
           "name": "learning_cards_exactly_one_target",
-          "expression": "(word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1",
-          "definition": "check ((word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1)"
+          "expression": "(word_definition_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1",
+          "definition": "check ((word_definition_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1)"
         },
         {
           "name": "learning_cards_state_check",

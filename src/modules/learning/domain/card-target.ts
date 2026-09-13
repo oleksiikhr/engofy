@@ -8,19 +8,20 @@ export interface CardTarget {
 }
 
 export interface CardTargetInput {
-  wordId?: string | null;
+  wordDefinitionId?: string | null;
   phraseId?: string | null;
   grammarUsagePointId?: string | null;
 }
 
-// A learning card points at exactly one of word / phrase / grammar usage
-// point (PLAN.md §3.5, mirrored by the learning_cards_exactly_one_target
-// check constraint). Normalises the three nullable ids into one tagged
-// target, rejecting zero or multiple.
+// A learning card points at exactly one of word definition / phrase / grammar
+// usage point (PLAN.md §3.5, mirrored by the learning_cards_exactly_one_target
+// check constraint). A word target is one POS sense (`wordDefinitionId`), not
+// the whole word — normalises the three nullable ids into one tagged target,
+// rejecting zero or multiple.
 export function resolveCardTarget(input: CardTargetInput): CardTarget {
   const targets: CardTarget[] = [];
-  if (input.wordId) {
-    targets.push({ type: 'word', id: input.wordId });
+  if (input.wordDefinitionId) {
+    targets.push({ type: 'word', id: input.wordDefinitionId });
   }
   if (input.phraseId) {
     targets.push({ type: 'phrase', id: input.phraseId });
@@ -31,7 +32,7 @@ export function resolveCardTarget(input: CardTargetInput): CardTarget {
 
   if (targets.length !== 1) {
     throw new InvalidCardTargetError(
-      'Provide exactly one of wordId, phraseId or grammarUsagePointId.',
+      'Provide exactly one of wordDefinitionId, phraseId or grammarUsagePointId.',
     );
   }
 

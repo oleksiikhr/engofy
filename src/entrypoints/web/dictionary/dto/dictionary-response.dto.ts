@@ -15,7 +15,7 @@ export class DictionaryEntryDto {
 
   readonly type!: 'word' | 'phrase';
 
-  // SRS card target id (wordId / phraseId).
+  // SRS card target id (wordDefinitionId / phraseId).
   readonly targetId!: string;
 
   readonly state!: LearningCardState;

@@ -7,7 +7,9 @@ import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.
 import { SubscriptionStatus } from '../../../billing/enums/subscription-status.enum.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
+import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
@@ -25,7 +27,7 @@ function fillLearningCards(
   for (let i = 0; i < count; i += 1) {
     em.create(LearningCard, {
       userId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -41,17 +43,23 @@ function fillLearningCards(
 describe('AddCardHandler', () => {
   const suite = createIntegrationSuite({ imports: [LearningModule] });
 
-  async function seedWord(lemma: string): Promise<string> {
+  async function seedWordDefinition(lemma: string): Promise<string> {
     const word = suite.orm.em.create(Word, { lemma });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await suite.orm.em.flush();
-    return word.id;
+    return definition.id;
   }
 
   it('creates a fresh New card for a word target', async () => {
     const userId = uuidv7();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
-    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
 
     expect(card.state).toBe(LearningCardState.New);
     expect(card.reps).toBe(0);
@@ -59,16 +67,20 @@ describe('AddCardHandler', () => {
     const stored = await suite.orm.em.findOneOrFail(LearningCard, {
       id: card.id,
     });
-    expect(stored.wordId).toBe(wordId);
+    expect(stored.wordDefinitionId).toBe(wordDefinitionId);
     expect(stored.phraseId).toBeNull();
   });
 
   it('is idempotent — re-adding the same target returns the existing card', async () => {
     const userId = uuidv7();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
-    const first = await suite.command(new AddCardCommand(userId, { wordId }));
-    const second = await suite.command(new AddCardCommand(userId, { wordId }));
+    const first = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
+    const second = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
 
     expect(second.id).toBe(first.id);
     expect(await suite.orm.em.count(LearningCard, { userId })).toBe(1);
@@ -81,10 +93,10 @@ describe('AddCardHandler', () => {
   // stands in for the loser of the race.
   it('does not fail when the target card already exists from a racing add', async () => {
     const userId = uuidv7();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     suite.orm.em.create(LearningCard, {
       userId,
-      wordId,
+      wordDefinitionId,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -97,18 +109,22 @@ describe('AddCardHandler', () => {
     await suite.orm.em.flush();
     suite.orm.em.clear();
 
-    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
 
     expect(card.state).toBe(LearningCardState.New);
-    expect(await suite.orm.em.count(LearningCard, { userId, wordId })).toBe(1);
+    expect(
+      await suite.orm.em.count(LearningCard, { userId, wordDefinitionId }),
+    ).toBe(1);
   });
 
   it('unarchives an existing archived card instead of creating a new one', async () => {
     const userId = uuidv7();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     const archived = suite.orm.em.create(LearningCard, {
       userId,
-      wordId,
+      wordDefinitionId,
       due: DateTime.now(),
       stability: 7,
       difficulty: 4,
@@ -121,7 +137,9 @@ describe('AddCardHandler', () => {
     });
     await suite.orm.em.flush();
 
-    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
 
     expect(card.id).toBe(archived.id);
     expect(card.reps).toBe(3);
@@ -135,10 +153,10 @@ describe('AddCardHandler', () => {
   it('does not count an archived card against the free-tier cap', async () => {
     const userId = uuidv7();
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
-    const archivedWordId = await seedWord(`w-${uuidv7()}`);
+    const archivedWordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     suite.orm.em.create(LearningCard, {
       userId,
-      wordId: archivedWordId,
+      wordDefinitionId: archivedWordDefinitionId,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -150,16 +168,20 @@ describe('AddCardHandler', () => {
       archivedAt: DateTime.now(),
     });
     await suite.orm.em.flush();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
-    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
 
     expect(card.state).toBe(LearningCardState.New);
   });
 
   it('rejects a target id that does not exist', async () => {
     await expect(
-      suite.command(new AddCardCommand(uuidv7(), { wordId: uuidv7() })),
+      suite.command(
+        new AddCardCommand(uuidv7(), { wordDefinitionId: uuidv7() }),
+      ),
     ).rejects.toBeInstanceOf(InvalidCardTargetError);
   });
 
@@ -167,10 +189,10 @@ describe('AddCardHandler', () => {
     const userId = uuidv7();
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT);
     await suite.orm.em.flush();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
     await expect(
-      suite.command(new AddCardCommand(userId, { wordId })),
+      suite.command(new AddCardCommand(userId, { wordDefinitionId })),
     ).rejects.toBeInstanceOf(CardLimitReachedError);
   });
 
@@ -210,12 +232,14 @@ describe('AddCardHandler', () => {
       isMockPayment: true,
     });
     await suite.orm.em.flush();
-    const wordId = await seedWord(`w-${uuidv7()}`);
+    const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
-    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId }),
+    );
     const stored = await suite.orm.em.findOneOrFail(LearningCard, {
       id: card.id,
     });
-    expect(stored.wordId).toBe(wordId);
+    expect(stored.wordDefinitionId).toBe(wordDefinitionId);
   });
 });

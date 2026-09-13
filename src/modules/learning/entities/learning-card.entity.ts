@@ -25,9 +25,9 @@ import { LearningCardState } from '../enums/learning-card-state.enum.js';
 @Check({
   name: 'learning_cards_exactly_one_target',
   expression:
-    '(word_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1',
+    '(word_definition_id is not null)::int + (phrase_id is not null)::int + (grammar_usage_point_id is not null)::int = 1',
 })
-@Unique({ properties: ['userId', 'wordId'] })
+@Unique({ properties: ['userId', 'wordDefinitionId'] })
 @Unique({ properties: ['userId', 'phraseId'] })
 @Unique({ properties: ['userId', 'grammarUsagePointId'] })
 // Hot path: the practice queue selects a user's cards ordered by `due`.
@@ -41,9 +41,10 @@ export class LearningCard {
   @Property({ type: 'uuid' })
   userId!: string;
 
-  // FK -> words.id
+  // FK -> word_definitions.id (one word sense, not the whole word — a word
+  // can have several POS senses, each its own SRS target).
   @Property({ type: 'uuid', nullable: true })
-  wordId?: string | null;
+  wordDefinitionId?: string | null;
 
   // FK -> phrases.id
   @Property({ type: 'uuid', nullable: true })

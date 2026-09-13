@@ -250,14 +250,18 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       };
     }
 
-    const wordIds = unique(wordEntries.map((w) => w.wordId));
+    const wordDefinitionIds = unique(
+      wordEntries.map((w) => w.wordDefinitionId),
+    );
     const phraseIds = unique(phraseEntries.map((p) => p.phraseId));
     const usagePointIds = grammarEntries.flatMap((g) =>
       g.usagePoints.map((up) => up.grammarUsagePointId),
     );
 
     const conditions = [
-      wordIds.length > 0 ? { wordId: { $in: wordIds } } : null,
+      wordDefinitionIds.length > 0
+        ? { wordDefinitionId: { $in: wordDefinitionIds } }
+        : null,
       phraseIds.length > 0 ? { phraseId: { $in: phraseIds } } : null,
       usagePointIds.length > 0
         ? { grammarUsagePointId: { $in: usagePointIds } }
@@ -273,8 +277,10 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
             { disableIdentityMap: true },
           );
 
-    const stateByWordId = new Map(
-      cards.filter((c) => c.wordId).map((c) => [c.wordId as string, c.state]),
+    const stateByWordDefinitionId = new Map(
+      cards
+        .filter((c) => c.wordDefinitionId)
+        .map((c) => [c.wordDefinitionId as string, c.state]),
     );
     const stateByPhraseId = new Map(
       cards
@@ -291,7 +297,9 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       words: wordEntries.map((w) => ({
         wordDefinitionId: w.wordDefinitionId,
         lemma: w.lemma,
-        state: stateByWordId.get(w.wordId) ?? LearningCardState.New,
+        state:
+          stateByWordDefinitionId.get(w.wordDefinitionId) ??
+          LearningCardState.New,
       })),
       phrases: phraseEntries.map((p) => ({
         phraseId: p.phraseId,

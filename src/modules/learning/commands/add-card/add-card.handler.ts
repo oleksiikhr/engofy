@@ -3,7 +3,7 @@ import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import {
   type CardTarget,
   resolveCardTarget,
@@ -54,7 +54,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
     const scheduling = this.fsrs.newCard(DateTime.now());
     const card = new LearningCard();
     card.userId = userId;
-    card.wordId = target.type === 'word' ? target.id : null;
+    card.wordDefinitionId = target.type === 'word' ? target.id : null;
     card.phraseId = target.type === 'phrase' ? target.id : null;
     card.grammarUsagePointId = target.type === 'grammar' ? target.id : null;
     card.due = scheduling.due;
@@ -95,7 +95,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
   private findTarget(target: CardTarget): Promise<object | null> {
     switch (target.type) {
       case 'word':
-        return this.em.findOne(Word, { id: target.id });
+        return this.em.findOne(WordDefinition, { id: target.id });
       case 'phrase':
         return this.em.findOne(Phrase, { id: target.id });
       default:
@@ -107,7 +107,7 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
 function targetFilter(target: CardTarget): Record<string, string> {
   switch (target.type) {
     case 'word':
-      return { wordId: target.id };
+      return { wordDefinitionId: target.id };
     case 'phrase':
       return { phraseId: target.id };
     default:
@@ -120,7 +120,7 @@ function targetFilter(target: CardTarget): Record<string, string> {
 function onConflictFields(target: CardTarget): (keyof LearningCard)[] {
   switch (target.type) {
     case 'word':
-      return ['userId', 'wordId'];
+      return ['userId', 'wordDefinitionId'];
     case 'phrase':
       return ['userId', 'phraseId'];
     default:
