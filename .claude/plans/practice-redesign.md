@@ -22,10 +22,10 @@ word/phrase) разом з архітектурною зміною на `word_de
 
 ## Зрізи
 
-### [ ] 1. Реальний reveal-контент (фікс "Show answer")
+### [x] 1. Реальний reveal-контент (фікс "Show answer")
 - Branch: `practice-redesign-01-reveal-content`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/19
 
 `GetPracticeQueueHandler` (`src/modules/learning/queries/get-practice-queue/`)
 резолвить word/phrase-цілі напряму через `WordDefinition`/`Phrase` (definition +
