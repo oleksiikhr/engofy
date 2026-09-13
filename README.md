@@ -73,6 +73,36 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
 | http://localhost:5432               | Postgres                                  |
 | http://localhost:6379               | Redis                                     |
 
+## Troubleshooting
+
+- **`pnpm` fails with `This is a placeholder. pnpm's native binary replaces this file during
+  installation...`** — the version pinned by `packageManager` in `package.json` (managed under
+  `~/.local/share/pnpm/.tools/pnpm/<version>/`) downloaded but never finished its install/build step.
+  Fix: `cd ~/.local/share/pnpm/.tools/pnpm/<version>*/node_modules/pnpm && node install.js`, then retry.
+- **Never `source .env.development`/`.env.test` directly** (e.g. to run a `pnpm`/`mikro-orm` command
+  by hand outside `make`) — `MAIL_FROM_EMAIL=Engofy <noreply@engofy.com>` has an unescaped `<` that
+  bash parses as redirection, breaking `source`/`export -a` outright. Prefix the command with
+  `NODE_ENV=development` (or `test`) instead; NestJS's `ConfigModule` reads the right `.env.*` file
+  itself.
+- **A new `git worktree` has no `node_modules`** (not shared between worktrees) — run `pnpm i`
+  (or `make sync`, which also re-runs pending migrations) inside it before any `pnpm`/`make` command.
+  `.env.development`/`.env.test` need no such copying — they're committed to the repo, so a worktree
+  checks them out like any other tracked file.
+- **Don't run `make up`/`docker compose` from inside a worktree expecting a separate stack** —
+  `compose.yaml` pins `name: engofy`, so it always resolves to the one shared Postgres/Redis/etc.
+  regardless of which worktree directory it's run from (Compose otherwise defaults the project name to
+  the cwd's basename, which differs per worktree and would fight the main stack for the same host
+  ports). Postgres/Redis are meant to be one shared instance across all worktrees of this repo, not
+  one per worktree.
+- **Two worktrees' app/tests running at the same time will stomp on each other's data by default** —
+  `.env.development`/`.env.test` are the same tracked file checked out identically into every worktree,
+  so every worktree's `MIKRO_ORM_DB_NAME`/`REDIS_DB` points at the same logical database/Redis DB on
+  the one shared stack above. Fine for sequential work (only one worktree's app/tests actually running
+  at a time — the common case). For genuinely concurrent worktrees, rename that worktree's own copy of
+  `MIKRO_ORM_DB_NAME` (and create the DB first — the `engofy` role has `CREATEDB`:
+  `docker compose exec postgres createdb -U engofy <name>`) and pick a different `REDIS_DB` index;
+  otherwise concurrent migrations/tests race on the same schema/rows.
+
 ## Project Structure
 
 ```

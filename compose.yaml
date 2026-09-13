@@ -1,3 +1,9 @@
+# Pinned so `docker compose`/`make up` resolve to the same shared stack regardless of which
+# worktree directory it's run from — compose otherwise defaults the project name to the cwd's
+# basename, which differs per worktree and would spin up a second stack fighting over the same
+# host ports (5432, 6379, ...) instead of reusing the one shared Postgres/Redis/etc.
+name: engofy
+
 services:
   postgres:
     image: postgres:18.4-alpine3.24

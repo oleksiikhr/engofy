@@ -189,6 +189,13 @@ Once confirmed:
 git push -u origin <branch>
 ```
 
+If this fails with `Permission denied (publickey)`, that's a headless/sandboxed session with no
+ssh-agent identity loaded, not a repo problem — don't keep retrying SSH. Check `gh auth status`: if
+logged in, switch the remote to HTTPS and use `gh`'s own credentials instead — `gh auth setup-git &&
+git remote set-url origin https://github.com/oleksiikhr/engofy.git` — then retry the push. If `gh auth
+status` also shows not logged in, that needs an interactive `gh auth login` only the developer can
+complete (browser/device code) — ask, don't attempt it yourself.
+
 Write the body to a scratch file first — text can contain quotes, backticks, or `$()` that must never
 be interpolated directly into a shell string:
 
