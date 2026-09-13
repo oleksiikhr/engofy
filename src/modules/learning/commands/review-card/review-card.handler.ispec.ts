@@ -3,7 +3,9 @@ import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
+import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
+import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { ReviewLog } from '../../entities/review-log.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
@@ -19,9 +21,13 @@ describe('ReviewCardHandler', () => {
 
   async function seedCard(userId: string): Promise<string> {
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = suite.orm.em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await suite.orm.em.flush();
     const card = await suite.command(
-      new AddCardCommand(userId, { wordId: word.id }),
+      new AddCardCommand(userId, { wordDefinitionId: definition.id }),
     );
     return card.id;
   }

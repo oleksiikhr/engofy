@@ -61,11 +61,10 @@ export class RemoveCardHandler implements ICommandHandler<RemoveCardCommand> {
   }
 }
 
-// `learning_cards` still keys a word target by `wordId`, not
-// `wordDefinitionId` (learning-foundation §3 migrates this) — a word can
-// have several definitions/POS senses, so there is no single sense to
-// attribute the disposition to yet. Phrase and grammar targets map directly.
 function toDispositionTarget(card: LearningCard): DispositionTarget | null {
+  if (card.wordDefinitionId) {
+    return { type: 'wordDefinition', id: card.wordDefinitionId };
+  }
   if (card.phraseId) {
     return { type: 'phrase', id: card.phraseId };
   }

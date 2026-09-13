@@ -16,7 +16,7 @@ describe('GetDueCardCountHandler', () => {
 
     em.create(LearningCard, {
       userId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,
@@ -40,7 +40,7 @@ describe('GetDueCardCountHandler', () => {
     });
     em.create(LearningCard, {
       userId: otherUserId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,
@@ -60,7 +60,7 @@ describe('GetDueCardCountHandler', () => {
     const userId = uuidv7();
     suite.orm.em.create(LearningCard, {
       userId,
-      wordId: uuidv7(),
+      wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,

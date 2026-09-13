@@ -56,7 +56,7 @@ describe('DictionaryController', () => {
     const cookie = await login(em);
 
     const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 8)}` });
-    em.create(WordDefinition, {
+    const definition = em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a sheltered stretch of water',
@@ -97,7 +97,7 @@ describe('DictionaryController', () => {
     await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
-      .send({ wordId: word.id })
+      .send({ wordDefinitionId: definition.id })
       .expect(HttpStatus.OK);
 
     const res = await suite
@@ -109,7 +109,7 @@ describe('DictionaryController', () => {
     expect(res.body.items).toHaveLength(1);
     expect(res.body.items[0]).toMatchObject({
       type: 'word',
-      targetId: word.id,
+      targetId: definition.id,
       state: 'new',
       primary: word.lemma,
       secondary: 'noun',

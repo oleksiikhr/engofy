@@ -213,13 +213,11 @@ describe('GetPostDetailHandler', () => {
   });
 
   it("reflects the user's LearningCard state for a word sidebar entry", async () => {
-    const { shortId, wordDefinitionId, wordId } = await seedPublishedPost(
-      suite.orm.em,
-    );
+    const { shortId, wordDefinitionId } = await seedPublishedPost(suite.orm.em);
     const userId = uuidv7();
     suite.orm.em.create(LearningCard, {
       userId,
-      wordId,
+      wordDefinitionId,
       due: DateTime.now(),
       stability: 30,
       difficulty: 5,
@@ -239,5 +237,95 @@ describe('GetPostDetailHandler', () => {
         state: LearningCardState.Review,
       }),
     ]);
+  });
+
+  // Regression: two POS senses of the same word must not share SRS state —
+  // a card on one sense used to leak "Review" onto every sense of the word
+  // because the sidebar matched by the shared `wordId`, not the per-sense
+  // `wordDefinitionId` (learning-foundation §3).
+  it('does not leak a card state onto a different sense of the same word', async () => {
+    const em = suite.orm.em;
+    const word = em.create(Word, { lemma: `bank-${uuidv7().slice(0, 8)}` });
+    const nounSense = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+      definition: 'a financial institution',
+    });
+    const verbSense = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Verb,
+      definition: 'to tilt an aircraft',
+    });
+
+    const source = new PostSource();
+    source.format = PostSourceFormat.Text;
+    source.type = PostSourceType.Original;
+    source.rawText = 'The bank will bank sharply.';
+    source.attributionText = 'Original content';
+    const post = new Post();
+    post.source = source;
+    post.title = 'Two Senses';
+    post.status = PostStatus.Published;
+    em.persist(post);
+
+    em.create(PostPart, {
+      postId: post.id,
+      blockIndex: 0,
+      kind: PostPartKind.Paragraph,
+      body: {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'The ' },
+          {
+            type: 'span',
+            kind: 'word',
+            text: 'bank',
+            wordDefinitionId: nounSense.id,
+            pos: 'NOUN',
+          },
+          { type: 'text', text: ' will ' },
+          {
+            type: 'span',
+            kind: 'word',
+            text: 'bank',
+            wordDefinitionId: verbSense.id,
+            pos: 'VERB',
+          },
+          { type: 'text', text: ' sharply.' },
+        ],
+      },
+    });
+
+    const userId = uuidv7();
+    em.create(LearningCard, {
+      userId,
+      wordDefinitionId: nounSense.id,
+      due: DateTime.now(),
+      stability: 30,
+      difficulty: 5,
+      elapsedDays: 3,
+      scheduledDays: 3,
+      reps: 2,
+      lapses: 0,
+      state: LearningCardState.Review,
+    });
+    await em.flush();
+
+    const view = await suite.query(
+      new GetPostDetailQuery(post.shortId, userId),
+    );
+
+    expect(view?.sidebar.words).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          wordDefinitionId: nounSense.id,
+          state: LearningCardState.Review,
+        }),
+        expect.objectContaining({
+          wordDefinitionId: verbSense.id,
+          state: LearningCardState.New,
+        }),
+      ]),
+    );
   });
 });

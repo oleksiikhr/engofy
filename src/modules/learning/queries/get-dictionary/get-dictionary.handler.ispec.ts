@@ -23,12 +23,12 @@ function card(
   em: EntityManager,
   userId: string,
   target: Partial<
-    Pick<LearningCard, 'wordId' | 'phraseId' | 'grammarUsagePointId'>
+    Pick<LearningCard, 'wordDefinitionId' | 'phraseId' | 'grammarUsagePointId'>
   >,
 ): void {
   em.create(LearningCard, {
     userId,
-    wordId: target.wordId ?? null,
+    wordDefinitionId: target.wordDefinitionId ?? null,
     phraseId: target.phraseId ?? null,
     grammarUsagePointId: target.grammarUsagePointId ?? null,
     due: DateTime.now(),
@@ -45,7 +45,8 @@ function card(
 // A published (or draft) post whose spaCy layer links one token to the given
 // word/phrase — the shape GetDictionaryHandler now joins on. `mentions`
 // controls how many linked tokens the post carries (to exercise the
-// per-(term, post) de-duplication).
+// per-(term, post) de-duplication). Note: sentence_tokens still links by the
+// raw `word_id` (deterministic spaCy layer), not `word_definition_id`.
 function postLinking(
   em: EntityManager,
   opts: {
@@ -113,11 +114,15 @@ describe('GetDictionaryHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
     const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await em.flush();
 
     em.create(LearningCard, {
       userId,
-      wordId: word.id,
+      wordDefinitionId: definition.id,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -139,7 +144,7 @@ describe('GetDictionaryHandler', () => {
     const userId = uuidv7();
 
     const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 6)}` });
-    em.create(WordDefinition, {
+    const definition = em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a place where ships shelter',
@@ -148,7 +153,7 @@ describe('GetDictionaryHandler', () => {
     const phrase = em.create(Phrase, { phraseText: 'set sail' });
     await em.flush();
 
-    card(em, userId, { wordId: word.id });
+    card(em, userId, { wordDefinitionId: definition.id });
     card(em, userId, { phraseId: phrase.id });
     card(em, userId, { grammarUsagePointId: uuidv7() }); // excluded — grammar
 
@@ -201,8 +206,12 @@ describe('GetDictionaryHandler', () => {
     const userId = uuidv7();
 
     const word = em.create(Word, { lemma: `tide-${uuidv7().slice(0, 6)}` });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
     await em.flush();
-    card(em, userId, { wordId: word.id });
+    card(em, userId, { wordDefinitionId: definition.id });
 
     const older = postLinking(em, {
       status: PostStatus.Published,

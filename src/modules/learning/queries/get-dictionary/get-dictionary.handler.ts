@@ -1,6 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { cefrRank } from '../../../post/domain/cefr-order.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Word } from '../../../post/entities/word.entity.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
@@ -29,7 +28,7 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
       {
         userId,
         archivedAt: null,
-        $or: [{ wordId: { $ne: null } }, { phraseId: { $ne: null } }],
+        $or: [{ wordDefinitionId: { $ne: null } }, { phraseId: { $ne: null } }],
       },
       { orderBy: { due: 'asc', createdAt: 'asc' }, disableIdentityMap: true },
     );
@@ -37,14 +36,16 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
       return { items: [] };
     }
 
-    const wordIds = unique(cards.map((card) => card.wordId));
+    const wordDefinitionIds = unique(
+      cards.map((card) => card.wordDefinitionId),
+    );
     const phraseIds = unique(cards.map((card) => card.phraseId));
 
     const [definitions, phrases] = await Promise.all([
-      wordIds.length
+      wordDefinitionIds.length
         ? this.em.find(
             WordDefinition,
-            { wordId: { $in: wordIds } },
+            { id: { $in: wordDefinitionIds } },
             { disableIdentityMap: true },
           )
         : Promise.resolve([]),
@@ -56,6 +57,7 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
           )
         : Promise.resolve([]),
     ]);
+    const wordIds = unique(definitions.map((definition) => definition.wordId));
     const words = wordIds.length
       ? await this.em.find(
           Word,
@@ -65,18 +67,20 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
       : [];
 
     const wordById = new Map(words.map((word) => [word.id, word]));
-    const bestDefByWord = pickBestDefinitions(definitions);
+    const definitionById = new Map(definitions.map((d) => [d.id, d]));
     const phraseById = new Map(phrases.map((phrase) => [phrase.id, phrase]));
 
     const usage = await this.buildUsageIndex(wordIds, phraseIds);
 
     const items: DictionaryEntryView[] = cards.map((card) => {
-      if (card.wordId) {
+      if (card.wordDefinitionId) {
+        const definition = definitionById.get(card.wordDefinitionId);
+        const word = definition ? wordById.get(definition.wordId) : undefined;
         return this.wordEntry(
           card,
-          wordById.get(card.wordId),
-          bestDefByWord.get(card.wordId),
-          usage.byWord.get(card.wordId) ?? [],
+          word,
+          definition,
+          (definition && usage.byWord.get(definition.wordId)) ?? [],
         );
       }
       const phraseId = card.phraseId as string;
@@ -99,7 +103,7 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
     return {
       cardId: card.id,
       type: 'word',
-      targetId: card.wordId as string,
+      targetId: card.wordDefinitionId as string,
       state: card.state,
       due: card.due,
       primary: word?.lemma ?? '',
@@ -209,26 +213,6 @@ function collectUsage(
     });
     target.set(row.target_id, list);
   }
-}
-
-function pickBestDefinitions(
-  definitions: WordDefinition[],
-): Map<string, WordDefinition> {
-  const best = new Map<string, WordDefinition>();
-  for (const definition of definitions) {
-    const current = best.get(definition.wordId);
-    if (!current || scoreDefinition(definition) > scoreDefinition(current)) {
-      best.set(definition.wordId, definition);
-    }
-  }
-  return best;
-}
-
-// Prefer a definition that has actual text, then the easiest CEFR level.
-function scoreDefinition(definition: WordDefinition): number {
-  const hasText = definition.definition ? 100 : 0;
-  const level = definition.cefrLevel ? 6 - cefrRank(definition.cefrLevel) : 0;
-  return hasText + level;
 }
 
 function unique(values: (string | null | undefined)[]): string[] {

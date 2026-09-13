@@ -93,7 +93,7 @@ describe('GetProfileHandler', () => {
 
     const word = em.create(Word, { lemma: `w-${uuidv7()}` });
     await em.flush();
-    em.create(WordDefinition, {
+    const definition = em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       cefrLevel: CefrLevel.B1,
@@ -105,7 +105,9 @@ describe('GetProfileHandler', () => {
         grammarUsagePointId: catalog.presentSimplePointId,
       }),
     );
-    await suite.command(new AddCardCommand(userId, { wordId: word.id }));
+    await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId: definition.id }),
+    );
     await suite.command(
       new ReviewCardCommand(userId, grammarCard.id, ReviewRating.Good),
     );
@@ -136,7 +138,7 @@ describe('GetProfileHandler', () => {
 
     const word = em.create(Word, { lemma: `w-${uuidv7()}` });
     await em.flush();
-    em.create(WordDefinition, {
+    const definition = em.create(WordDefinition, {
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       cefrLevel: CefrLevel.B1,
@@ -144,7 +146,7 @@ describe('GetProfileHandler', () => {
     await em.flush();
 
     const card = await suite.command(
-      new AddCardCommand(userId, { wordId: word.id }),
+      new AddCardCommand(userId, { wordDefinitionId: definition.id }),
     );
     await suite.command(
       new ReviewCardCommand(userId, card.id, ReviewRating.Good),

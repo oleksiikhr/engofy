@@ -4,8 +4,9 @@ import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../enums/exercise-type.enum.js';
 
-// Resolved lexicon entry for a `word` span. `wordId` (not `wordDefinitionId`)
-// is the SRS card target for the inline "+" button (PLAN.md §2).
+// Resolved lexicon entry for a `word` span. `wordDefinitionId` (one POS sense,
+// not the whole word) is the SRS card target for the inline "+" button
+// (PLAN.md §2); `wordId` is only the underlying lexeme, for display.
 export interface WordAnnotationView {
   wordDefinitionId: string;
   wordId: string;

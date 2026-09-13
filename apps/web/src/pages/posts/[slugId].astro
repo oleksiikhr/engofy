@@ -28,8 +28,8 @@ const bodyHtml = renderDoc(post.doc);
 
 // --- "In this article" sidebar (PLAN.md §16/§17 Track B) ---
 // The sidebar API response only carries `state` per unique entry; merge in
-// the definition/example/wordId already loaded in `annotations` (same data
-// the old inline tooltip read) rather than duplicating it server-side.
+// the definition/example already loaded in `annotations` (same data the old
+// inline tooltip read) rather than duplicating it server-side.
 const STATE_LABEL: Record<CardState, string> = {
   new: 'New',
   learning: 'Learning',
@@ -45,7 +45,6 @@ const STATE_CLASS: Record<CardState, string> = {
 
 interface SidebarWordView {
   wordDefinitionId: string;
-  wordId: string;
   lemma: string;
   state: CardState;
   definition: string | null;
@@ -71,7 +70,6 @@ const sidebarWords: SidebarWordView[] = post.sidebar.words.map((entry) => {
   const detail = post.annotations.words[entry.wordDefinitionId];
   return {
     wordDefinitionId: entry.wordDefinitionId,
-    wordId: detail?.wordId ?? '',
     lemma: entry.lemma,
     state: entry.state,
     definition: detail?.definition ?? null,
@@ -301,14 +299,18 @@ const comprehension: ComprehensionView[] = post.exercises
                   </span>
                 </div>
                 {w.definition && <p class="sidebar__def">{w.definition}</p>}
-                {w.state === 'new' && w.wordId && (
+                {w.state === 'new' && (
                   <form
                     hx-post="/partials/add-card"
                     hx-swap="outerHTML"
                     hx-target="this"
                     class="add-card__form"
                   >
-                    <input type="hidden" name="wordId" value={w.wordId} />
+                    <input
+                      type="hidden"
+                      name="wordDefinitionId"
+                      value={w.wordDefinitionId}
+                    />
                     <button type="submit" class="add-card">+ Add to deck</button>
                   </form>
                 )}
