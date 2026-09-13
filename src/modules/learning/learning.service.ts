@@ -10,6 +10,7 @@ import type { DispositionTargetInput } from './domain/disposition-target.js';
 import type { Disposition } from './enums/disposition.enum.js';
 import type { ReviewRating } from './enums/review-rating.enum.js';
 import type { DictionaryView } from './queries/get-dictionary/dictionary-view.js';
+import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
@@ -83,8 +84,11 @@ export class LearningService {
     return this.queryBus.execute(new GetProfileQuery(userId));
   }
 
-  getDictionary(userId: string): Promise<DictionaryView> {
-    return this.queryBus.execute(new GetDictionaryQuery(userId));
+  getDictionary(
+    userId: string,
+    options: GetDictionaryOptions,
+  ): Promise<DictionaryView> {
+    return this.queryBus.execute(new GetDictionaryQuery(userId, options));
   }
 
   getDueCardCount(userId: string): Promise<number> {

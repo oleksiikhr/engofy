@@ -11,6 +11,8 @@ import {
 } from '../../../../modules/auth/crypto/token.helper.js';
 import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
 import { User } from '../../../../modules/auth/entities/user.entity.js';
+import { LearningDisposition } from '../../../../modules/learning/entities/learning-disposition.entity.js';
+import { Disposition } from '../../../../modules/learning/enums/disposition.enum.js';
 import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { Phrase } from '../../../../modules/post/entities/phrase.entity.js';
 import { Post } from '../../../../modules/post/entities/post.entity.js';
@@ -35,7 +37,9 @@ describe('DictionaryController', () => {
       strict: false,
     }).sessionCookieName;
 
-  async function login(em: EntityManager): Promise<string> {
+  async function login(
+    em: EntityManager,
+  ): Promise<{ cookie: string; userId: string }> {
     const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
     const token = generateToken();
     em.create(AuthSession, {
@@ -44,16 +48,16 @@ describe('DictionaryController', () => {
       expiresAt: DateTime.now().plus({ days: 1 }),
     });
     await em.flush();
-    return `${cookieName()}=${token}`;
+    return { cookie: `${cookieName()}=${token}`, userId: user.id };
   }
 
   it('rejects an unauthenticated request', async () => {
     await suite.request('get', '/dictionary').expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('returns word cards with status and the posts they appear in', async () => {
+  it('returns word entries with status and the posts they appear in', async () => {
     const em = suite.orm.em;
-    const cookie = await login(em);
+    const { cookie } = await login(em);
 
     const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 8)}` });
     const definition = em.create(WordDefinition, {
@@ -105,19 +109,16 @@ describe('DictionaryController', () => {
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
-    expect(res.body.nextOffset).toBeNull();
+    expect(res.body.nextCursor).toBeNull();
     expect(res.body.items).toHaveLength(1);
     expect(res.body.items[0]).toMatchObject({
       type: 'word',
-      targetId: definition.id,
-      state: 'new',
+      state: 'learning',
+      senseCount: 1,
       primary: word.lemma,
       secondary: 'noun',
       definition: 'a sheltered stretch of water',
     });
-    // `due` is serialised to an ISO-8601 string at the controller edge.
-    expect(typeof res.body.items[0].due).toBe('string');
-    expect(DateTime.fromISO(res.body.items[0].due).isValid).toBe(true);
     expect(res.body.items[0].posts).toEqual([
       {
         shortId: post.shortId,
@@ -127,34 +128,103 @@ describe('DictionaryController', () => {
     ]);
   });
 
-  it('includes phrase cards and omits grammar cards', async () => {
+  it('includes phrase entries and a disposition-only entry with no card', async () => {
     const em = suite.orm.em;
-    const cookie = await login(em);
+    const { cookie, userId } = await login(em);
 
     const phrase = em.create(Phrase, {
       phraseText: `pick up-${uuidv7().slice(0, 8)}`,
       definition: 'to collect someone',
     });
+    const knownPhrase = em.create(Phrase, {
+      phraseText: `break a leg-${uuidv7().slice(0, 8)}`,
+    });
     await em.flush();
+    em.create(LearningDisposition, {
+      userId,
+      phraseId: knownPhrase.id,
+      disposition: Disposition.Known,
+    });
 
     await suite
       .request('post', '/learning/cards')
       .set('Cookie', cookie)
       .send({ phraseId: phrase.id })
       .expect(HttpStatus.OK);
+    await em.flush();
 
     const res = await suite
       .request('get', '/dictionary')
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
-    expect(res.body.items).toEqual([
-      expect.objectContaining({
-        type: 'phrase',
-        targetId: phrase.id,
-        primary: phrase.phraseText,
-        posts: [],
-      }),
-    ]);
+    expect(res.body.items).toHaveLength(2);
+    expect(res.body.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'phrase',
+          state: 'learning',
+          primary: phrase.phraseText,
+          posts: [],
+        }),
+        expect.objectContaining({
+          type: 'phrase',
+          state: 'learned',
+          primary: knownPhrase.phraseText,
+        }),
+      ]),
+    );
+  });
+
+  it('filters by state and search', async () => {
+    const em = suite.orm.em;
+    const { cookie, userId } = await login(em);
+
+    const word = em.create(Word, {
+      lemma: `perambulate-${uuidv7().slice(0, 8)}`,
+    });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Verb,
+    });
+    const skippedPhrase = em.create(Phrase, {
+      phraseText: `at loose ends-${uuidv7().slice(0, 8)}`,
+    });
+    await em.flush();
+
+    await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ wordDefinitionId: definition.id })
+      .expect(HttpStatus.OK);
+    em.create(LearningDisposition, {
+      userId,
+      phraseId: skippedPhrase.id,
+      disposition: Disposition.Skipped,
+    });
+    await em.flush();
+
+    const learningOnly = await suite
+      .request('get', '/dictionary?state=learning')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(learningOnly.body.items).toHaveLength(1);
+    expect(learningOnly.body.items[0].primary).toBe(word.lemma);
+
+    const bySearch = await suite
+      .request('get', `/dictionary?search=${encodeURIComponent('loose ends')}`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(bySearch.body.items).toHaveLength(1);
+    expect(bySearch.body.items[0].primary).toBe(skippedPhrase.phraseText);
+  });
+
+  it('rejects a garbage cursor with 400', async () => {
+    const em = suite.orm.em;
+    const { cookie } = await login(em);
+    await suite
+      .request('get', '/dictionary?cursor=not-a-real-cursor')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.BAD_REQUEST);
   });
 });
