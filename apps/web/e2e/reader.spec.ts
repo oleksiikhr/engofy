@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
+import { ReaderPage } from './pages/reader-page';
 
 // Slice 8b page 1 — /posts/{slug}-{id}: node-tree reading. PLAN.md §16/§17
 // Track B — inline word/phrase/grammar highlighting is gone from the article
@@ -8,54 +9,47 @@ import { AUTHED_STATE } from './auth';
 // Fixtures come from test/e2e/seed-web-e2e.ts (global-setup): word
 // "perambulate", phrase "at loose ends", grammar "past perfect".
 
-const READER_URL = '/posts/the-cartographer-at-dawn-E2Eread1';
+const READER_SLUG = 'the-cartographer-at-dawn-E2Eread1';
 
 test.describe('reader page (guest)', () => {
   test('renders the article body as plain prose, no inline spans', async ({
     page,
   }) => {
-    await page.goto(READER_URL);
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await reader.expectLoaded('The Cartographer at Dawn');
 
-    await expect(
-      page.getByRole('heading', { name: 'The Cartographer at Dawn' }),
-    ).toBeVisible();
-    await expect(page.locator('.post-head .badge')).toHaveText('B1');
+    await expect(reader.badge).toHaveText('B1');
     await expect(
       page.getByRole('link', { name: 'https://example.com/the-cartographer' }),
     ).toBeVisible();
 
-    await expect(page.locator('.analysis')).toContainText('perambulate');
-    await expect(page.locator('.analysis span.word')).toHaveCount(0);
-    await expect(page.locator('.analysis span.phrase')).toHaveCount(0);
-    await expect(page.locator('.analysis span.grammar')).toHaveCount(0);
+    await expect(reader.analysis).toContainText('perambulate');
+    await expect(reader.analysis.locator('span.word')).toHaveCount(0);
+    await expect(reader.analysis.locator('span.phrase')).toHaveCount(0);
+    await expect(reader.analysis.locator('span.grammar')).toHaveCount(0);
   });
 
   test('lists every word/phrase/construction in the sidebar as New', async ({
     page,
   }) => {
-    await page.goto(READER_URL);
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
 
-    const sidebar = page.locator('.sidebar');
-    const grammarGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Grammar',
-    });
+    const grammarGroup = reader.sidebarGroup('Grammar');
     await expect(
       grammarGroup.getByRole('link', { name: 'past perfect' }),
     ).toBeVisible();
     await expect(grammarGroup.locator('.badge--new')).toHaveText('New');
 
-    const wordsGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Words',
-    });
+    const wordsGroup = reader.sidebarGroup('Words');
     await expect(wordsGroup).toContainText('perambulate');
     await expect(wordsGroup).toContainText(
       'to walk through or around a place, especially for pleasure',
     );
     await expect(wordsGroup.locator('.badge--new')).toHaveText('New');
 
-    const phrasesGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Phrases',
-    });
+    const phrasesGroup = reader.sidebarGroup('Phrases');
     await expect(phrasesGroup).toContainText('at loose ends');
     await expect(phrasesGroup.locator('.badge--new')).toHaveText('New');
   });
@@ -63,54 +57,50 @@ test.describe('reader page (guest)', () => {
   test('prompts a guest to sign in when adding a sidebar word to the deck', async ({
     page,
   }) => {
-    await page.goto(READER_URL);
-    const wordsGroup = page.locator('.sidebar__group').filter({
-      hasText: 'Words',
-    });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const wordsGroup = reader.sidebarGroup('Words');
 
-    await wordsGroup.getByRole('button', { name: '+ Add to deck' }).click();
+    await reader.addToDeck(wordsGroup);
     await expect(wordsGroup).toContainText('Sign in to save');
     // HTMX swap, not a navigation.
-    await expect(page).toHaveURL(READER_URL);
+    await expect(page).toHaveURL(`/posts/${READER_SLUG}`);
   });
 
   test('grades a fill-in-the-blank drill', async ({ page }) => {
-    await page.goto(READER_URL);
-    const drill = page.locator('[data-ex-type="fill_blank"]');
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
 
-    await drill.locator('.exercise__blank').fill('nope');
-    await drill.getByRole('button', { name: 'Check' }).click();
-    await expect(drill.locator('.exercise__result')).toHaveText('✗ Try again');
+    await reader.submitFillBlank('nope');
+    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
+      '✗ Try again',
+    );
 
-    await drill.locator('.exercise__blank').fill('perambulate');
-    await drill.getByRole('button', { name: 'Check' }).click();
-    await expect(drill.locator('.exercise__result')).toHaveText('✓ Correct');
+    await reader.submitFillBlank('perambulate');
+    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
+      '✓ Correct',
+    );
   });
 
   test('grades comprehension questions', async ({ page }) => {
-    await page.goto(READER_URL);
-    const box = page.locator('[data-ex-type="comprehension"]');
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
 
-    await box
-      .locator('.exercise__cq')
-      .nth(0)
-      .getByRole('radio', { name: 'Walked around the harbour' })
-      .check();
-    await box
-      .locator('.exercise__cq')
-      .nth(1)
-      .getByRole('radio', { name: 'Twice' })
-      .check();
-    await box.getByRole('button', { name: 'Check answers' }).click();
-    await expect(box.locator('.exercise__result')).toHaveText('✓ Correct');
+    await reader.answerComprehensionQuestion(0, 'Walked around the harbour');
+    await reader.answerComprehensionQuestion(1, 'Twice');
+    await reader.checkComprehension();
+    await expect(reader.comprehension.locator('.exercise__result')).toHaveText(
+      '✓ Correct',
+    );
 
     // A guest has no cards, so both fixture words are "new" — the summary
     // line derives straight from the sidebar's state distribution.
-    await expect(page.locator('.reader-summary')).toHaveText('+2 new words');
+    await expect(reader.summary).toHaveText('+2 new words');
   });
 
   test('404s an unknown post', async ({ page }) => {
-    const res = await page.goto('/posts/nope-ZZZ00000');
+    const reader = new ReaderPage(page);
+    const res = await reader.goto('nope-ZZZ00000');
     expect(res?.status()).toBe(404);
   });
 });
@@ -121,18 +111,12 @@ test.describe('reader page (signed in)', () => {
   test("reflects the user's learning_cards state in the sidebar badges", async ({
     page,
   }) => {
-    await page.goto(READER_URL);
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
 
-    const sidebar = page.locator('.sidebar');
-    const wordsGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Words',
-    });
-    const phrasesGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Phrases',
-    });
-    const grammarGroup = sidebar.locator('.sidebar__group').filter({
-      hasText: 'Grammar',
-    });
+    const wordsGroup = reader.sidebarGroup('Words');
+    const phrasesGroup = reader.sidebarGroup('Phrases');
+    const grammarGroup = reader.sidebarGroup('Grammar');
 
     // Seeded: word card state=Review, phrase card state=Learning, grammar
     // usage-point card state=Review (test/e2e/seed-web-e2e.ts).
@@ -148,24 +132,16 @@ test.describe('reader page (signed in)', () => {
   test('shows a completion summary after the comprehension quiz is checked', async ({
     page,
   }) => {
-    await page.goto(READER_URL);
-    const box = page.locator('[data-ex-type="comprehension"]');
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
 
-    await box
-      .locator('.exercise__cq')
-      .nth(0)
-      .getByRole('radio', { name: 'Walked around the harbour' })
-      .check();
-    await box
-      .locator('.exercise__cq')
-      .nth(1)
-      .getByRole('radio', { name: 'Twice' })
-      .check();
-    await box.getByRole('button', { name: 'Check answers' }).click();
+    await reader.answerComprehensionQuestion(0, 'Walked around the harbour');
+    await reader.answerComprehensionQuestion(1, 'Twice');
+    await reader.checkComprehension();
 
     // All three fixture entries already have cards, so nothing is New/
     // Learning here — the summary line stays absent rather than reading
     // "+0 new words".
-    await expect(page.locator('.reader-summary')).toHaveCount(0);
+    await expect(reader.summary).toHaveCount(0);
   });
 });
