@@ -1,10 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { HomeService } from '../../../../modules/home/home.service.js';
 import type { DailyPlanView } from '../../../../modules/home/queries/get-daily-plan/daily-plan-view.js';
+import { CompleteDailyPlanResponseDto } from '../dto/complete-daily-plan-response.dto.js';
 import { DailyPlanResponseDto } from '../dto/daily-plan-response.dto.js';
 
 function iso(value: DateTime): string {
@@ -20,6 +21,7 @@ function toDailyPlanDto(view: DailyPlanView): DailyPlanResponseDto {
     grammarUsagePointId: view.grammarUsagePointId,
     grammarGuideword: view.grammarGuideword,
     grammarCanDoStatement: view.grammarCanDoStatement,
+    grammarExampleText: view.grammarExampleText,
     completedAt: view.completedAt ? iso(view.completedAt) : null,
   };
 }
@@ -39,5 +41,21 @@ export class HomeController {
   ): Promise<DailyPlanResponseDto> {
     const view = await this.home.getDailyPlan(actor.id);
     return toDailyPlanDto(view);
+  }
+
+  // Ends the linear session (крок 3's final screen) and returns the
+  // summary row — idempotent, so re-submitting keeps the first completion
+  // timestamp; `200`, not `201` (same reasoning as `LearningController#addCard`).
+  @Post('daily-plan/complete')
+  @HttpCode(HttpStatus.OK)
+  async completeDailyPlan(
+    @CurrentUser() actor: UserActor,
+  ): Promise<CompleteDailyPlanResponseDto> {
+    const result = await this.home.completeDailyPlan(actor.id);
+    return {
+      completedAt: iso(result.completedAt),
+      newCardsToday: result.newCardsToday,
+      reviewsToday: result.reviewsToday,
+    };
   }
 }

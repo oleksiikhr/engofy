@@ -86,4 +86,39 @@ describe('HomeController', () => {
       .expect(HttpStatus.OK);
     expect(second.body).toEqual(first.body);
   });
+
+  it('rejects an unauthenticated complete request', async () => {
+    await suite
+      .request('post', '/home/daily-plan/complete')
+      .expect(HttpStatus.UNAUTHORIZED);
+  });
+
+  it('completes the session and reports the day-zero summary', async () => {
+    const cookie = await login(suite.orm.em);
+    await seedPost(suite.orm.em);
+    await suite
+      .request('get', '/home/daily-plan')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+
+    const response = await suite
+      .request('post', '/home/daily-plan/complete')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+
+    expect(response.body).toMatchObject({
+      newCardsToday: 0,
+      reviewsToday: 0,
+    });
+    expect(response.body.completedAt).toEqual(expect.any(String));
+  });
+
+  it('rejects completing before a daily plan has been selected', async () => {
+    const cookie = await login(suite.orm.em);
+
+    await suite
+      .request('post', '/home/daily-plan/complete')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NOT_FOUND);
+  });
 });
