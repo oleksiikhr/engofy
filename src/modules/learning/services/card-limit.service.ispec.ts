@@ -54,6 +54,27 @@ describe('CardLimitService', () => {
     );
   });
 
+  it('does not count archived cards against the cap', async () => {
+    const userId = uuidv7();
+    fillCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
+    suite.orm.em.create(LearningCard, {
+      userId,
+      wordId: uuidv7(),
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+      archivedAt: DateTime.now(),
+    });
+    await suite.orm.em.flush();
+
+    await expect(service.assertCanAddCard(userId)).resolves.toBeUndefined();
+  });
+
   it('lets a premium user past the cap', async () => {
     const userId = uuidv7();
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT + 5);

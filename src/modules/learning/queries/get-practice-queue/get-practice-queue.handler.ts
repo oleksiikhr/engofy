@@ -24,7 +24,11 @@ export class GetPracticeQueueHandler
   async execute(query: GetPracticeQueueQuery): Promise<PracticeQueueItem[]> {
     const cards = await this.em.find(
       LearningCard,
-      { userId: query.userId, due: { $lte: DateTime.now() } },
+      {
+        userId: query.userId,
+        due: { $lte: DateTime.now() },
+        archivedAt: null,
+      },
       {
         orderBy: { due: 'asc', createdAt: 'asc' },
         limit: query.limit,

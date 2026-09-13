@@ -26,7 +26,11 @@ export class GetDictionaryHandler implements IQueryHandler<GetDictionaryQuery> {
   async execute({ userId }: GetDictionaryQuery): Promise<DictionaryView> {
     const cards = await this.em.find(
       LearningCard,
-      { userId, $or: [{ wordId: { $ne: null } }, { phraseId: { $ne: null } }] },
+      {
+        userId,
+        archivedAt: null,
+        $or: [{ wordId: { $ne: null } }, { phraseId: { $ne: null } }],
+      },
       { orderBy: { due: 'asc', createdAt: 'asc' }, disableIdentityMap: true },
     );
     if (cards.length === 0) {

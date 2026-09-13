@@ -55,4 +55,24 @@ describe('GetDueCardCountHandler', () => {
     expect(await suite.query(new GetDueCardCountQuery(userId))).toBe(1);
     expect(await suite.query(new GetDueCardCountQuery(uuidv7()))).toBe(0);
   });
+
+  it('excludes archived cards', async () => {
+    const userId = uuidv7();
+    suite.orm.em.create(LearningCard, {
+      userId,
+      wordId: uuidv7(),
+      due: DateTime.now().minus({ days: 1 }),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+      archivedAt: DateTime.now(),
+    });
+    await suite.orm.em.flush();
+
+    expect(await suite.query(new GetDueCardCountQuery(userId))).toBe(0);
+  });
 });

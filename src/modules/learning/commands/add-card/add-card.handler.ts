@@ -19,7 +19,9 @@ import { AddCardCommand } from './add-card.command.js';
 // Adds one SRS card for the current user (PLAN.md §3.5). Idempotent: a second
 // add for the same target returns the existing card rather than erroring, so
 // the "+" button is safe to double-tap. The free-tier cap is only checked
-// when a genuinely new card would be created.
+// when a genuinely new card would be created. An existing but archived card
+// (RemoveCardHandler, reps > 0) is unarchived in place instead of creating a
+// second row — its FSRS scheduling state carries over unchanged.
 @CommandHandler(AddCardCommand)
 export class AddCardHandler implements ICommandHandler<AddCardCommand> {
   constructor(
@@ -40,6 +42,10 @@ export class AddCardHandler implements ICommandHandler<AddCardCommand> {
       ...targetFilter(target),
     });
     if (existing) {
+      if (existing.archivedAt) {
+        await this.cardLimit.assertCanAddCard(userId);
+        existing.archivedAt = null;
+      }
       return toCardView(existing);
     }
 

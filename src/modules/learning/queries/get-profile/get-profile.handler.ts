@@ -31,7 +31,7 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
   constructor(private readonly em: EntityManager) {}
 
   async execute({ userId }: GetProfileQuery): Promise<ProfileView> {
-    const [categories, constructions, usagePoints, progress, cards] =
+    const [categories, constructions, usagePoints, progress, allCards] =
       await Promise.all([
         this.em.find(
           GrammarCategory,
@@ -52,9 +52,15 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
         this.em.find(LearningCard, { userId }, { disableIdentityMap: true }),
       ]);
 
+    // Streak reads every card ever reviewed (archived included — removing a
+    // card doesn't erase the days it was reviewed on); the CEFR breakdown and
+    // skill tree reflect only what the learner is currently, actively
+    // learning.
+    const activeCards = allCards.filter((card) => !card.archivedAt);
+
     const [streak, cefr] = await Promise.all([
-      this.computeStreak(cards.map((card) => card.id)),
-      this.computeCefrBreakdown(cards, usagePoints),
+      this.computeStreak(allCards.map((card) => card.id)),
+      this.computeCefrBreakdown(activeCards, usagePoints),
     ]);
 
     return {
@@ -65,7 +71,7 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
         constructions,
         usagePoints,
         progress,
-        cards,
+        activeCards,
       ),
     };
   }

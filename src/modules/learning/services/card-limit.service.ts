@@ -20,7 +20,10 @@ export class CardLimitService {
       return;
     }
 
-    const count = await this.em.count(LearningCard, { userId });
+    const count = await this.em.count(LearningCard, {
+      userId,
+      archivedAt: null,
+    });
     if (count >= FREE_CARD_LIMIT) {
       throw new CardLimitReachedError(FREE_CARD_LIMIT);
     }
