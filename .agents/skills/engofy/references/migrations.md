@@ -1,6 +1,6 @@
 # Migrations
 
-> Reviewed: `core/database/migrations`, test migration guard, CI (waves 1–2). See `REVIEW.md` D17.
+> Reviewed: `core/database/migrations`, test migration guard, CI (waves 1–2).
 
 ## Rules
 

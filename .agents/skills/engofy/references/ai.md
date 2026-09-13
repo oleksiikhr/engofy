@@ -1,6 +1,6 @@
 # AI layer — `core/ai`, structured output, inline-markup
 
-> Reviewed: `core/ai`, `post` prompt/parse domain (wave 1). See `REVIEW.md` D9, D13.
+> Reviewed: `core/ai`, `post` prompt/parse domain (wave 1).
 
 ## Port
 

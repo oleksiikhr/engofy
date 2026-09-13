@@ -1,6 +1,6 @@
 # Queues & scheduled jobs — pg-boss, workers, cron
 
-> Reviewed: `core/queue`, `entrypoints/worker`, `entrypoints/cron`, per-module bootstraps (waves 1–2). See `REVIEW.md` D4, D8, D15.
+> Reviewed: `core/queue`, `entrypoints/worker`, `entrypoints/cron`, per-module bootstraps (waves 1–2).
 
 ## Pieces
 

@@ -1,6 +1,6 @@
 # Config
 
-> Reviewed: `core/config`, every module `config/`, `.env.*` (waves 1–2). See `REVIEW.md` D18.
+> Reviewed: `core/config`, every module `config/`, `.env.*` (waves 1–2).
 
 ## Rules
 

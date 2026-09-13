@@ -1,8 +1,7 @@
 # assets/
 
 Static reference data, imported into the DB by `engofy grammar …` CLI
-commands (PLAN.md §3.3, §3.4, Slice 1). Checked in rather than fetched at
-runtime — the sources are frozen.
+commands. Checked in rather than fetched at runtime — the sources are frozen.
 
 ## `egp.json`
 

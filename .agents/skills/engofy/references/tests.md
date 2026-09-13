@@ -58,8 +58,7 @@ The vitest integration project sets an explicit `hookTimeout: 60_000`
 `pnpm migration:check` (`mikro-orm migration:check`, prod config → `snapshot:true`)
 now exists and runs in CI after the test step. `ensureMigrated`
 (`test/setup/migration-guard.helper.ts`) also fails the whole suite on a pending
-schema diff via `orm.migrator.checkSchema()` after the drop-and-replay. Closes
-`REVIEW.md` open question 43 / D17.
+schema diff via `orm.migrator.checkSchema()` after the drop-and-replay. Closes open question 43 / D17.
 
 ## Coverage gaps found (wave 1)
 

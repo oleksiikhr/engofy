@@ -1,6 +1,6 @@
 # HTTP / API — controllers, guards, response DTOs, Swagger
 
-> Reviewed: `entrypoints/web` + `core/http` (waves 1–2). Baseline: `entrypoints/web/auth`. See `REVIEW.md` D14.
+> Reviewed: `entrypoints/web` + `core/http` (waves 1–2). Baseline: `entrypoints/web/auth`.
 
 ## Module composition
 

@@ -1,6 +1,6 @@
 # Validation — `nestjs-zod` request DTOs
 
-> Reviewed: `auth`, `learning`, `content` web DTOs + `core/validation` (waves 1–2). Also in `CLAUDE.md`. See `REVIEW.md` D14 (request-DTO home).
+> Reviewed: `auth`, `learning`, `content` web DTOs + `core/validation` (waves 1–2). Also in `CLAUDE.md`.
 
 ## Rules
 

@@ -1,6 +1,6 @@
 # Mail
 
-> Reviewed: `core/mail`, `auth/mails` + `services/shared` (waves 1–2). See `REVIEW.md` D18.
+> Reviewed: `core/mail`, `auth/mails` + `services/shared` (waves 1–2).
 
 ## Shape
 

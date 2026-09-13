@@ -7,7 +7,7 @@ per request and stores the returned sentences / tokens in `sentences` +
 `sentence_tokens`.
 
 It runs as a separate process (not `child_process`) so it scales and is tested
-in isolation — see PLAN.md §12.
+in isolation.
 
 ## Setup
 

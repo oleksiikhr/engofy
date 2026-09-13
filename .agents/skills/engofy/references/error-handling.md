@@ -1,6 +1,6 @@
 # Error handling — domain errors, HTTP mapping, all-or-nothing
 
-> Reviewed: all modules + `core/http` (waves 1–2). See `REVIEW.md` D1.
+> Reviewed: all modules + `core/http` (waves 1–2).
 
 ## Error taxonomy
 

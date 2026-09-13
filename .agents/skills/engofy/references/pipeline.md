@@ -76,7 +76,7 @@ defaults (no structured channel yet — Batch G). Feed / post-detail views expos
 | P10 | `/retry` is always a **from-scratch reprocess** (D5): `RetryPostHandler` `nativeDelete`s `Sentence` / `SentenceToken` / `GrammarMatch` / `Exercise` for the post, nulls `PostPart.annotatedAt`, resets any `failed` telegram `post_publications` row back to `pending` (D15 #30 — so a re-published post is actually re-announced; `published` rows are left alone), drops the `PostPipelineRun` rows, resets `posts.status`, and re-enqueues only `spacy_parse`. No `--force` flag. | `commands/retry-post/retry-post.handler.ts` |
 | P11 | `publish` upserts the `post_publications` row `onConflictAction: 'ignore'`, so a re-publish never re-announces on its own — the telegram side owns retry: `PublishPendingService.run()` re-selects `failed` rows (bounded `retry_count` + `updatedAt` backoff), and `/retry` resets them (P10). | `telegram/services/shared/publish-pending.service.ts` |
 
-## Known gaps (wave 1 — see `REVIEW.md`)
+## Known gaps (wave 1)
 
 _None outstanding._
 

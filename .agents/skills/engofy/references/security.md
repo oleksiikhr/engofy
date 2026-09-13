@@ -1,6 +1,6 @@
 # Security
 
-> Reviewed: `auth`, `core` (redis/config/logger/observability), web, telegram (waves 1–2). See `REVIEW.md` D1, D14, D18.
+> Reviewed: `auth`, `core` (redis/config/logger/observability), web, telegram (waves 1–2).
 
 ## Rules
 

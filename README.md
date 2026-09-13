@@ -36,6 +36,15 @@ make up        # start Postgres, Redis, Mailpit, Spotlight (Docker)
 make watch      # start the NestJS API with hot reload
 ```
 
+On a fresh database, seed the static reference data (grammar catalogue, irregular
+verbs, word frequency — see [assets/README.md](assets/README.md)):
+
+```bash
+pnpm cli grammar import-egp                # 19 categories / 90 constructions / 574 usage points
+pnpm cli grammar import-irregular-verbs    # ~164 words
+pnpm cli words import-frequency            # ranks existing Word rows
+```
+
 ### Daily workflow
 
 | Command                | Description                                                     |

@@ -68,9 +68,8 @@ adding code; a locally-consistent choice beats a globally-better one.
 ---
 
 _All 18 reference files are current (codebase review waves 1–3, batches A–S,_
-_all done). `REVIEW.md` is now just the compact D1–D18 `Decisions` archive that_
-_individual files cite by number — the raw findings log/fix-backlog history was_
-_folded into each file's own "Fixes owed" table and removed from REVIEW.md to_
-_save context (see `git log` on it for the full history). Where a rule file's_
-_own table has a non-struck row, the code does **not** yet match the stated_
-_target — follow the target for new code._
+_all done). The former `REVIEW.md` D1–D18 decisions log has been folded into_
+_each file's own rows (tagged `D1`, `D9`, etc. inline) and removed — see_
+_`git log -- .agents/skills/engofy/REVIEW.md` for the original archive. Where a_
+_rule file's own table has a non-struck row, the code does **not** yet match_
+_the stated target — follow the target for new code._
