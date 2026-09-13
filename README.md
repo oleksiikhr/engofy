@@ -102,10 +102,6 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
   `MIKRO_ORM_DB_NAME` (and create the DB first — the `engofy` role has `CREATEDB`:
   `docker compose exec postgres createdb -U engofy <name>`) and pick a different `REDIS_DB` index;
   otherwise concurrent migrations/tests race on the same schema/rows.
-- **`git push`/`pull` fails with `Permission denied (publickey)`** in a headless/sandboxed environment
-  with no ssh-agent identity loaded — switch the remote to HTTPS and use `gh`'s own credentials instead
-  of chasing SSH: `gh auth login` (if `gh auth status` shows not logged in) then `gh auth setup-git &&
-  git remote set-url origin https://github.com/oleksiikhr/engofy.git`.
 
 ## Project Structure
 
