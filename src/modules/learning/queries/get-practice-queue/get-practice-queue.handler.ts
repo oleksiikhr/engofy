@@ -3,13 +3,9 @@ import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import { parseDoc } from '../../../post/domain/node-tree.parser.js';
 import { assembleDocFromParts } from '../../../post/domain/post-parts.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { PostPart } from '../../../post/entities/post-part.entity.js';
 import { PostRead } from '../../../post/entities/post-read.entity.js';
 import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import {
   indexBlockSpans,
   type SpanOccurrence,
@@ -21,6 +17,7 @@ import type {
   PracticeCardTarget,
   PracticeQueueItem,
 } from './practice-queue-item.js';
+import { cardTargetKey, resolveCardTargets } from './resolve-card-targets.js';
 
 // How many of the learner's most recent distinct read posts count as "context"
 // for reveal content (PLAN.md practice-redesign зріз 1).
@@ -54,11 +51,12 @@ export class GetPracticeQueueHandler
       return [];
     }
 
-    const targets = await this.loadTargets(query.userId, cards);
+    const targets = await resolveCardTargets(this.em, cards);
+    await this.attachContextSentences(query.userId, targets);
 
     return cards
       .map((card) => {
-        const target = targets.get(targetKey(card));
+        const target = targets.get(cardTargetKey(card));
         if (!target) {
           return null;
         }
@@ -72,91 +70,26 @@ export class GetPracticeQueueHandler
       .filter((item): item is PracticeQueueItem => item !== null);
   }
 
-  private async loadTargets(
+  // Fills in `contextSentence` (PLAN.md practice-redesign зріз 1) for the
+  // word/phrase targets `resolveCardTargets` left null — mutates `targets`
+  // in place since each is a freshly-built object for this request only.
+  private async attachContextSentences(
     userId: string,
-    cards: LearningCard[],
-  ): Promise<Map<string, PracticeCardTarget>> {
-    const wordDefinitionIds = ids(cards, (c) => c.wordDefinitionId);
-    const phraseIds = ids(cards, (c) => c.phraseId);
-    const grammarIds = ids(cards, (c) => c.grammarUsagePointId);
-
-    const [definitions, phrases, usagePoints] = await Promise.all([
-      wordDefinitionIds.length
-        ? this.em.find(
-            WordDefinition,
-            { id: { $in: wordDefinitionIds } },
-            { disableIdentityMap: true },
-          )
-        : Promise.resolve([]),
-      phraseIds.length
-        ? this.em.find(
-            Phrase,
-            { id: { $in: phraseIds } },
-            { disableIdentityMap: true },
-          )
-        : Promise.resolve([]),
-      grammarIds.length
-        ? this.em.find(
-            GrammarUsagePoint,
-            { id: { $in: grammarIds } },
-            { disableIdentityMap: true },
-          )
-        : Promise.resolve([]),
-    ]);
-    const wordIds = ids(definitions, (d) => d.wordId);
-    const words = wordIds.length
-      ? await this.em.find(
-          Word,
-          { id: { $in: wordIds } },
-          { disableIdentityMap: true },
-        )
-      : [];
-    const wordById = new Map(words.map((word) => [word.id, word]));
-
-    const contextKeys = [
-      ...definitions.map((d) => `word:${d.id}`),
-      ...phrases.map((p) => `phrase:${p.id}`),
-    ];
+    targets: Map<string, PracticeCardTarget>,
+  ): Promise<void> {
+    const keys = [...targets.entries()]
+      .filter(([, target]) => target.type === 'word' || target.type === 'phrase')
+      .map(([key]) => key);
     const contextSentenceByKey = await this.loadContextSentences(
       userId,
-      contextKeys,
+      keys,
     );
-
-    const targets = new Map<string, PracticeCardTarget>();
-    for (const definition of definitions) {
-      const word = wordById.get(definition.wordId);
-      const key = `word:${definition.id}`;
-      targets.set(key, {
-        type: 'word',
-        id: definition.id,
-        primary: word?.lemma ?? '',
-        secondary: definition.definition ?? null,
-        phonetic: definition.phonetic ?? null,
-        contextSentence: contextSentenceByKey.get(key) ?? null,
-      });
+    for (const [key, sentence] of contextSentenceByKey) {
+      const target = targets.get(key);
+      if (target) {
+        target.contextSentence = sentence;
+      }
     }
-    for (const phrase of phrases) {
-      const key = `phrase:${phrase.id}`;
-      targets.set(key, {
-        type: 'phrase',
-        id: phrase.id,
-        primary: phrase.phraseText,
-        secondary: phrase.definition ?? null,
-        phonetic: null,
-        contextSentence: contextSentenceByKey.get(key) ?? null,
-      });
-    }
-    for (const point of usagePoints) {
-      targets.set(`grammar:${point.id}`, {
-        type: 'grammar',
-        id: point.id,
-        primary: point.guideword,
-        secondary: point.canDoStatement,
-        phonetic: null,
-        contextSentence: null,
-      });
-    }
-    return targets;
   }
 
   // Batched, bounded search for a real sentence containing each wanted
@@ -235,21 +168,4 @@ export class GetPracticeQueueHandler
     }
     return result;
   }
-}
-
-function ids<T>(
-  items: T[],
-  pick: (item: T) => string | null | undefined,
-): string[] {
-  return [...new Set(items.map(pick).filter((id): id is string => !!id))];
-}
-
-function targetKey(card: LearningCard): string {
-  if (card.wordDefinitionId) {
-    return `word:${card.wordDefinitionId}`;
-  }
-  if (card.phraseId) {
-    return `phrase:${card.phraseId}`;
-  }
-  return `grammar:${card.grammarUsagePointId}`;
 }

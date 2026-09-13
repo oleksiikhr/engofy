@@ -42,10 +42,10 @@ due-карток) — **не починати зріз 1, доки `learning-fou
 `sentences.postId`), через ефективний стан з `learning-foundation` зрізу 2. Новий
 `GET /home/daily-plan` ендпоінт.
 
-### [ ] 2. Крок 2 — due-картки з поста (спільний запит з post-detail-redesign)
+### [x] 2. Крок 2 — due-картки з поста (спільний запит з post-detail-redesign)
 - Branch: `daily-session-home-02-post-due-cards`
-- Base: `daily-session-home-01-plan-selection`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/18
 
 Новий entry-point-agnostic запит (напр. `GetDuePostCardsQuery(postId, userId)`), що
 джойнить `LearningCard` (due ≤ now) через `sentence_tokens`/`grammar_matches` →
