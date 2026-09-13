@@ -103,6 +103,60 @@ describe('AddCardHandler', () => {
     expect(await suite.orm.em.count(LearningCard, { userId, wordId })).toBe(1);
   });
 
+  it('unarchives an existing archived card instead of creating a new one', async () => {
+    const userId = uuidv7();
+    const wordId = await seedWord(`w-${uuidv7()}`);
+    const archived = suite.orm.em.create(LearningCard, {
+      userId,
+      wordId,
+      due: DateTime.now(),
+      stability: 7,
+      difficulty: 4,
+      elapsedDays: 10,
+      scheduledDays: 20,
+      reps: 3,
+      lapses: 1,
+      state: LearningCardState.Review,
+      archivedAt: DateTime.now(),
+    });
+    await suite.orm.em.flush();
+
+    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+
+    expect(card.id).toBe(archived.id);
+    expect(card.reps).toBe(3);
+    const stored = await suite.orm.em.findOneOrFail(LearningCard, {
+      id: card.id,
+    });
+    expect(stored.archivedAt).toBeNull();
+    expect(await suite.orm.em.count(LearningCard, { userId })).toBe(1);
+  });
+
+  it('does not count an archived card against the free-tier cap', async () => {
+    const userId = uuidv7();
+    fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
+    const archivedWordId = await seedWord(`w-${uuidv7()}`);
+    suite.orm.em.create(LearningCard, {
+      userId,
+      wordId: archivedWordId,
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+      archivedAt: DateTime.now(),
+    });
+    await suite.orm.em.flush();
+    const wordId = await seedWord(`w-${uuidv7()}`);
+
+    const card = await suite.command(new AddCardCommand(userId, { wordId }));
+
+    expect(card.state).toBe(LearningCardState.New);
+  });
+
   it('rejects a target id that does not exist', async () => {
     await expect(
       suite.command(new AddCardCommand(uuidv7(), { wordId: uuidv7() })),

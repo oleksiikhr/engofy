@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { BillingModule } from '../billing/billing.module.js';
 import { AddCardHandler } from './commands/add-card/add-card.handler.js';
+import { RemoveCardHandler } from './commands/remove-card/remove-card.handler.js';
 import { ReviewCardHandler } from './commands/review-card/review-card.handler.js';
+import { SetDispositionHandler } from './commands/set-disposition/set-disposition.handler.js';
 import { LearningService } from './learning.service.js';
 import { GetDictionaryHandler } from './queries/get-dictionary/get-dictionary.handler.js';
 import { GetDueCardCountHandler } from './queries/get-due-card-count/get-due-card-count.handler.js';
@@ -24,6 +26,8 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     SkillProgressService,
     AddCardHandler,
     ReviewCardHandler,
+    RemoveCardHandler,
+    SetDispositionHandler,
     GetPracticeQueueHandler,
     GetProfileHandler,
     GetDictionaryHandler,
