@@ -1,137 +1,322 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { apiGet, apiGetOrNull } from '../lib/api';
+import { apiGet, apiPatch, apiPost } from '../lib/api';
+import { renderDailyPracticeQueue } from '../lib/practice-card';
 import { postUrl } from '../lib/post-url';
 import { getCurrentUser } from '../lib/session';
-import type { DueCardCountResponse, FeedResponse } from '../lib/types';
+import type {
+  CefrLevel,
+  CompleteDailyPlanResponse,
+  DailyPlan,
+  PracticeQueueResponse,
+} from '../lib/types';
 
-const PAGE_SIZE = 12;
+const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 const user = await getCurrentUser(Astro.request);
 
-const offsetParam = Number(Astro.url.searchParams.get('offset') ?? '0');
-const offset = Number.isFinite(offsetParam) && offsetParam > 0 ? offsetParam : 0;
-
-const feed = await apiGet<FeedResponse>(
-  `/content/feed?limit=${PAGE_SIZE}&offset=${offset}`,
-  { request: Astro.request },
-);
-
-// Soft "N due" badge (PLAN.md §16/§17 Track B) — replaces the old forced
-// review-break card inserted every 2-3 posts (PLAN.md §4): a due date is
-// already FSRS's own pacing signal, so a mandatory feed insertion fights it
-// and works against the "between other things" positioning. Signed-in only —
-// a guest has no queue.
-const dueCount = user
-  ? ((
-      await apiGetOrNull<DueCardCountResponse>('/learning/due-count', {
-        request: Astro.request,
-      })
-    )?.dueCount ?? 0)
-  : 0;
-
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
+// --- Onboarding (learning-foundation's one-shot post-signup signal) ---
+// Blocks the daily session behind a single CEFR-level prompt while the
+// short-lived `onboarding` cookie is present, then clears it. Handled before
+// the daily plan is ever fetched: the plan picks a post by CEFR±1 the first
+// time it's requested each day, so the learner's real level should be set
+// before that pick happens, not after.
+if (user && Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = form.get('action');
+  if (action === 'save' || action === 'skip') {
+    const level = form.get('cefrLevel');
+    if (
+      action === 'save' &&
+      typeof level === 'string' &&
+      (LEVELS as string[]).includes(level)
+    ) {
+      await apiPatch(
+        '/profile/cefr-level',
+        { cefrLevel: level },
+        { request: Astro.request },
+      ).catch(() => {});
+    }
+    Astro.cookies.delete('onboarding', { path: '/' });
+    return Astro.redirect('/');
+  }
 }
+
+const showOnboarding =
+  !!user && Astro.cookies.get('onboarding')?.value === '1';
+
+let plan: DailyPlan | null = null;
+let summary: CompleteDailyPlanResponse | null = null;
+let cards: PracticeQueueResponse | null = null;
+
+if (user && !showOnboarding) {
+  plan = await apiGet<DailyPlan>('/home/daily-plan', {
+    request: Astro.request,
+  });
+
+  if (plan.completedAt) {
+    // Idempotent — re-submitting on every revisit just recomputes today's
+    // live counts and keeps the original completedAt.
+    summary = await apiPost<CompleteDailyPlanResponse>(
+      '/home/daily-plan/complete',
+      undefined,
+      { request: Astro.request },
+    );
+  } else if (plan.isRead) {
+    cards = await apiGet<PracticeQueueResponse>('/home/daily-plan/cards', {
+      request: Astro.request,
+    });
+  }
+}
+
+const showPractice = !!plan && !summary && plan.isRead && !!cards && cards.items.length > 0;
+const showGrammar = !!plan && !summary && plan.isRead && !!cards && cards.items.length === 0;
+const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 ---
 
-<Layout title="Engofy — Feed" user={user} active="feed">
-  <h1>Latest reading</h1>
-
-  {feed.items.length === 0 && <p>No posts published yet.</p>}
-
+<Layout title="Engofy" user={user} active="feed">
   {
-    user && dueCount > 0 && (
-      <p class="feed__note" data-testid="due-badge">
-        {dueCount} card{dueCount === 1 ? '' : 's'} due —{' '}
-        <a href="/practice">start a review session</a>.
-      </p>
+    !user && (
+      <div class="landing">
+        <section class="landing-hero">
+          <h1>Engofy</h1>
+          <p>Learn English through short authentic texts.</p>
+          <a class="btn" href="/login">Get started</a>
+        </section>
+
+        <section class="landing-section" aria-label="Features">
+          {/* TODO: feature section copy (prompt.txt — "Головна сторінка", guest landing) */}
+        </section>
+
+        <section class="landing-section" aria-label="Product screenshots">
+          {/* TODO: screenshots */}
+        </section>
+
+        <section class="landing-section landing-section--cta">
+          <a class="btn" href="/login">Log in</a>
+        </section>
+      </div>
     )
   }
 
-  <ul class="feed">
-    {
-      feed.items.map((post) => (
-        <li class="card">
-          <div class="feed__meta">
-            {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
-            <time datetime={post.publishedAt}>
-              {fmtDate(post.publishedAt)}
-            </time>
+  {
+    user && showOnboarding && (
+      <section class="card onboarding">
+        <h1>Set your English level</h1>
+        <p>
+          This picks articles and grammar at the right difficulty for you.
+          You can change it later in your profile.
+        </p>
+        <form method="post" class="onboarding__form">
+          <div class="onboarding__levels">
+            {LEVELS.map((lvl) => (
+              <label class="onboarding__level">
+                <input
+                  type="radio"
+                  name="cefrLevel"
+                  value={lvl}
+                  checked={lvl === 'A1'}
+                />
+                {lvl}
+              </label>
+            ))}
           </div>
-          <h2>
-            <a href={postUrl(post)}>{post.title ?? 'Untitled'}</a>
-          </h2>
-          <p class="feed__excerpt">{post.excerpt}</p>
-        </li>
-      ))
-    }
-  </ul>
+          <div class="onboarding__actions">
+            <button class="btn" type="submit" name="action" value="save">
+              Save and continue
+            </button>
+            <button
+              class="btn btn--ghost"
+              type="submit"
+              name="action"
+              value="skip"
+              formnovalidate
+            >
+              Skip
+            </button>
+          </div>
+        </form>
+      </section>
+    )
+  }
 
-  <nav class="feed__pager">
-    {
-      offset > 0 && (
-        <a
-          class="btn btn--ghost"
-          href={offset - PAGE_SIZE > 0 ? `/?offset=${offset - PAGE_SIZE}` : '/'}
-        >
-          ← Newer
-        </a>
-      )
-    }
-    {
-      feed.nextOffset !== null && (
-        <a class="btn btn--ghost" href={`/?offset=${feed.nextOffset}`}>
-          Older →
-        </a>
-      )
-    }
-  </nav>
+  {
+    user && !showOnboarding && plan && summary && (
+      <section class="card session-done" data-testid="session-done">
+        <p class="session-done__emoji">✓</p>
+        <h1>All done for today</h1>
+        <p class="session-done__summary">
+          {[
+            summary.newCardsToday > 0 &&
+              `+${summary.newCardsToday} new word${summary.newCardsToday === 1 ? '' : 's'}`,
+            summary.reviewsToday > 0 &&
+              `${summary.reviewsToday} review${summary.reviewsToday === 1 ? '' : 's'}`,
+          ]
+            .filter(Boolean)
+            .join(' · ') || 'Session complete.'}
+        </p>
+        <p>
+          <a class="btn btn--ghost" href="/posts">Read more articles</a>
+        </p>
+      </section>
+    )
+  }
+
+  {
+    user && !showOnboarding && plan && !summary && !plan.isRead && (
+      <section class="card session-step" data-testid="session-step-read">
+        <p class="session-step__kicker">Today's session · Step 1 of 3</p>
+        {plan.postCefrLevel && <span class="badge">{plan.postCefrLevel}</span>}
+        <h1>{plan.postTitle ?? 'Today’s reading'}</h1>
+        <p>
+          <a
+            class="btn"
+            href={postUrl({ slug: plan.postSlug, shortId: plan.postShortId })}
+          >
+            Start reading
+          </a>
+        </p>
+      </section>
+    )
+  }
+
+  {
+    showPractice && (
+      <section class="card session-step" data-testid="session-step-practice">
+        <p class="session-step__kicker">Today's session · Step 2 of 3</p>
+        <div id="daily-practice-container" set:html={initialPracticeHtml} />
+      </section>
+    )
+  }
+
+  {
+    showGrammar && plan && (
+      <section class="card session-step" data-testid="session-step-grammar">
+        <p class="session-step__kicker">Today's session · Step 3 of 3</p>
+        {
+          plan.grammarGuideword ? (
+            <>
+              <p class="session-grammar__kicker">{plan.grammarGuideword}</p>
+              <p>{plan.grammarCanDoStatement}</p>
+              {plan.grammarExampleText && (
+                <p class="session-grammar__example">
+                  “{plan.grammarExampleText}”
+                </p>
+              )}
+              {plan.grammarConstructionSlug && (
+                <p>
+                  <a href={`/grammar/${plan.grammarConstructionSlug}`}>
+                    Learn more →
+                  </a>
+                </p>
+              )}
+            </>
+          ) : (
+            <p>No new grammar highlight today.</p>
+          )
+        }
+        <form method="post" action="/partials/complete-daily-plan">
+          <button class="btn" type="submit">Finish for today</button>
+        </form>
+      </section>
+    )
+  }
 </Layout>
 
+<script is:inline>
+  // "Show answer" toggle for крок 2's practice card, delegated so it survives
+  // HTMX swaps (same pattern as /practice).
+  document.addEventListener('click', (e) => {
+    const revealBtn = e.target.closest('.practice__reveal');
+    if (revealBtn) {
+      const answer = revealBtn.parentElement?.querySelector('.practice__answer');
+      if (answer) {
+        answer.hidden = false;
+        revealBtn.hidden = true;
+      }
+      return;
+    }
+
+    const speakBtn = e.target.closest('.practice__speak');
+    if (speakBtn && 'speechSynthesis' in window) {
+      const text = speakBtn.dataset.speak;
+      if (text) {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      }
+    }
+  });
+</script>
+
 <style>
-  .feed {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 1rem;
+  .landing-hero {
+    text-align: center;
+    padding: 3rem 1rem;
   }
-  .feed__note {
+  .landing-hero h1 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .landing-hero p {
     color: var(--color-ink-soft);
-    font-size: 0.9rem;
-    margin: 0 0 1rem;
+    margin-bottom: 1.5rem;
   }
-  .feed__meta {
+  .landing-section {
+    padding: 2rem 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .landing-section--cta {
+    text-align: center;
+  }
+
+  .session-step,
+  .session-done,
+  .onboarding {
+    max-width: 32rem;
+    margin: 1rem auto 0;
+    text-align: center;
+  }
+  .session-step__kicker,
+  .session-grammar__kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+    margin: 0 0 0.75rem;
+  }
+  .session-grammar__example {
+    font-style: italic;
+    color: var(--color-ink-soft);
+  }
+  .session-done__emoji {
+    font-size: 2rem;
+    color: var(--color-success);
+    margin: 0;
+  }
+  .session-done__summary {
+    font-weight: 600;
+    color: var(--color-brand-strong);
+  }
+  .onboarding__levels {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.25rem 0;
+  }
+  .onboarding__level {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
-    margin-bottom: 0.35rem;
+    gap: 0.3rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
   }
-  .feed h2 {
-    margin: 0 0 0.4rem;
-  }
-  .feed h2 a {
-    text-decoration: none;
-    color: var(--color-ink);
-  }
-  .feed h2 a:hover {
-    color: var(--color-brand);
-  }
-  .feed__excerpt {
-    margin: 0;
-    color: var(--color-ink-soft);
-  }
-  .feed__pager {
+  .onboarding__actions {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    justify-content: center;
+    gap: 0.6rem;
   }
 </style>

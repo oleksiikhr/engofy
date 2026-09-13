@@ -93,6 +93,29 @@ export async function apiPost<T>(
   return (text ? JSON.parse(text) : undefined) as T;
 }
 
+// PATCH JSON and parse a JSON reply. Only `PATCH /profile/cefr-level` uses
+// this verb (house style otherwise: POST + HttpCode(OK)) — see the backend's
+// own note on that route.
+export async function apiPatch<T>(
+  path: string,
+  body: unknown,
+  options: ApiCallOptions = {},
+): Promise<T> {
+  const res = await call(path, {
+    ...options,
+    method: 'PATCH',
+    body: JSON.stringify(body),
+    headers: {
+      'content-type': 'application/json',
+      ...(options.headers ?? {}),
+    },
+  });
+  if (!res.ok) {
+    throw new ApiError(res.status, path);
+  }
+  return (await res.json()) as T;
+}
+
 // POST JSON and return the raw Response — for auth flows where the caller
 // needs Nest's Set-Cookie header to forward it onto the Astro response.
 export async function apiPostRaw(

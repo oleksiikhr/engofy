@@ -253,6 +253,32 @@ export interface Profile {
   cefr: Record<CefrLevel, number>;
   categories: ProfileCategory[];
 }
+// The light `/profile` hub response (profile-hub-redesign slice 1) — not the
+// full `Profile` above, which is `/profile/progress`.
+export interface ProfileHub {
+  streak: number;
+  cefrLevel: CefrLevel;
+}
+
+// --- daily session (home) ---
+export interface DailyPlan {
+  postShortId: string;
+  postSlug: string | null;
+  postTitle: string | null;
+  postCefrLevel: CefrLevel | null;
+  isRead: boolean;
+  grammarUsagePointId: string | null;
+  grammarGuideword: string | null;
+  grammarConstructionSlug: string | null;
+  grammarCanDoStatement: string | null;
+  grammarExampleText: string | null;
+  completedAt: string | null;
+}
+export interface CompleteDailyPlanResponse {
+  completedAt: string;
+  newCardsToday: number;
+  reviewsToday: number;
+}
 
 // --- auth / billing ---
 export interface CurrentUser {
