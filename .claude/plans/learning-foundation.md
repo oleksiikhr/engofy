@@ -17,10 +17,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. CEFR-рівень користувача та сигнал онбордингу
+### [x] 1. CEFR-рівень користувача та сигнал онбордингу
 - Branch: `learning-foundation-01-cefr-onboarding`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/12
 
 Нова колонка `users.cefrLevel` (NOT NULL DEFAULT 'A1', enum `CefrLevel`) + міграція.
 Виводиться окремим полем у `ProfileView`/`ProfileResponseDto` (не плутати з наявним
