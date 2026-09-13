@@ -78,12 +78,11 @@ export class GetPracticeQueueHandler
     targets: Map<string, PracticeCardTarget>,
   ): Promise<void> {
     const keys = [...targets.entries()]
-      .filter(([, target]) => target.type === 'word' || target.type === 'phrase')
+      .filter(
+        ([, target]) => target.type === 'word' || target.type === 'phrase',
+      )
       .map(([key]) => key);
-    const contextSentenceByKey = await this.loadContextSentences(
-      userId,
-      keys,
-    );
+    const contextSentenceByKey = await this.loadContextSentences(userId, keys);
     for (const [key, sentence] of contextSentenceByKey) {
       const target = targets.get(key);
       if (target) {
