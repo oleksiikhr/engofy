@@ -86,6 +86,14 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
   itself.
 - **A new `git worktree` has no `node_modules`** (not shared between worktrees) — run `pnpm i`
   (or `make sync`, which also re-runs pending migrations) inside it before any `pnpm`/`make` command.
+  `.env.development`/`.env.test` need no such copying — they're committed to the repo, so a worktree
+  checks them out like any other tracked file.
+- **Don't run `make up`/`docker compose` from inside a worktree expecting a separate stack** —
+  `compose.yaml` pins `name: engofy`, so it always resolves to the one shared Postgres/Redis/etc.
+  regardless of which worktree directory it's run from (Compose otherwise defaults the project name to
+  the cwd's basename, which differs per worktree and would fight the main stack for the same host
+  ports). Postgres/Redis are meant to be one shared instance across all worktrees of this repo, not
+  one per worktree.
 - **`git push`/`pull` fails with `Permission denied (publickey)`** in a headless/sandboxed environment
   with no ssh-agent identity loaded — switch the remote to HTTPS and use `gh`'s own credentials instead
   of chasing SSH: `gh auth login` (if `gh auth status` shows not logged in) then `gh auth setup-git &&
