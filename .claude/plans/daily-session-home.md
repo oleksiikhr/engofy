@@ -25,10 +25,10 @@ due-карток) — **не починати зріз 1, доки `learning-fou
 
 ## Зрізи
 
-### [ ] 1. daily_plans таблиця + вибір поста/граматики (крок 0+1)
+### [x] 1. daily_plans таблиця + вибір поста/граматики (крок 0+1)
 - Branch: `daily-session-home-01-plan-selection`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/17
 
 Нова адитивна таблиця `daily_plans` (`userId`, `planDate`, `postId`, `grammarUsagePointId?`,
 `completedAt?`, `createdAt`, UNIQUE(`userId`, `planDate`)) — без staged rollout, немає
