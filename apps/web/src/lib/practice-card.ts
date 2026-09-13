@@ -29,6 +29,30 @@ const TYPE_LABEL: Record<string, string> = {
   grammar: 'Grammar',
 };
 
+// The reveal panel's inner markup for a word/phrase/grammar card that has a
+// `secondary` (definition or can-do statement) to show. Phonetic (word-only)
+// and the 🔊 button sit next to the definition; the context sentence (a real
+// sentence from something the learner actually read, PLAN.md
+// practice-redesign зріз 1 — never a fallback to the AI example) gets its own
+// line with a source label.
+function renderAnswerBody(target: PracticeItem['target']): string {
+  const phonetic = target.phonetic
+    ? ` <span class="practice__phonetic">${esc(target.phonetic)}</span>`
+    : '';
+  const speak =
+    target.type !== 'grammar'
+      ? `<button type="button" class="btn btn--ghost practice__speak" data-speak="${esc(target.primary)}" aria-label="Pronounce ${esc(target.primary)}">🔊</button>`
+      : '';
+  const context = target.contextSentence
+    ? `<blockquote class="practice__context">
+        <p>${esc(target.contextSentence)}</p>
+        <cite>from an article you read</cite>
+      </blockquote>`
+    : '';
+
+  return `<p>${esc(target.secondary ?? '')}${phonetic}${speak}</p>${context}`;
+}
+
 function renderCard(card: PracticeItem, remaining: number): string {
   const t = card.target;
   const buttons = GRADES.map(
@@ -38,7 +62,7 @@ function renderCard(card: PracticeItem, remaining: number): string {
 
   const reveal = t.secondary
     ? `<button type="button" class="btn btn--ghost practice__reveal">Show answer</button>
-       <p class="practice__answer" hidden>${esc(t.secondary)}</p>`
+       <div class="practice__answer" hidden>${renderAnswerBody(t)}</div>`
     : `<p class="practice__answer practice__answer--self">Recall its meaning, then grade yourself.</p>`;
 
   return `<div class="practice__card" data-testid="practice-card">
