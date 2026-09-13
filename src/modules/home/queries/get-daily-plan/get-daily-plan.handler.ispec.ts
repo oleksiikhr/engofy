@@ -41,6 +41,7 @@ describe('GetDailyPlanHandler', () => {
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: HABITS',
       canDoStatement: 'Can talk about habits.',
+      exampleText: 'She usually walks to work.',
     });
     await suite.orm.em.flush();
 
@@ -62,6 +63,7 @@ describe('GetDailyPlanHandler', () => {
       grammarUsagePointId: usagePoint.id,
       grammarGuideword: 'USE: HABITS',
       grammarCanDoStatement: 'Can talk about habits.',
+      grammarExampleText: 'She usually walks to work.',
       completedAt: null,
     });
   });
@@ -82,5 +84,6 @@ describe('GetDailyPlanHandler', () => {
     expect(view?.grammarUsagePointId).toBeNull();
     expect(view?.grammarGuideword).toBeNull();
     expect(view?.grammarCanDoStatement).toBeNull();
+    expect(view?.grammarExampleText).toBeNull();
   });
 });
