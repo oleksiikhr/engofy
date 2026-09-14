@@ -1,9 +1,18 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { User } from '../../../auth/entities/user.entity.js';
+import {
+  EffectiveState,
+  resolveEffectiveState,
+} from '../../../learning/domain/resolve-effective-state.js';
+import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
+import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
+import { mostAdvancedEffectiveState } from '../../domain/effective-state-priority.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
+import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { GetGrammarReferenceQuery } from './get-grammar-reference.query.js';
 import type {
   GrammarReferenceCategoryView,
@@ -23,6 +32,7 @@ export class GetGrammarReferenceHandler
 
   async execute({
     cefr,
+    userId,
   }: GetGrammarReferenceQuery): Promise<GrammarReferenceView> {
     const [categories, constructions, usagePoints] = await Promise.all([
       this.em.find(
@@ -52,28 +62,130 @@ export class GetGrammarReferenceHandler
       constructionsByCategory.set(construction.categoryId, list);
     }
 
+    const stateByConstruction = await this.resolveConstructionStates(
+      usagePoints,
+      pointsByConstruction,
+      userId,
+    );
+
+    const result = this.buildCategoryViews(
+      categories,
+      constructionsByCategory,
+      pointsByConstruction,
+      stateByConstruction,
+      cefr,
+    );
+
+    return { categories: result };
+  }
+
+  private buildCategoryViews(
+    categories: GrammarCategory[],
+    constructionsByCategory: Map<string, GrammarConstruction[]>,
+    pointsByConstruction: Map<string, GrammarUsagePoint[]>,
+    stateByConstruction: Map<string, EffectiveState>,
+    cefr: CefrLevel | null,
+  ): GrammarReferenceCategoryView[] {
     const result: GrammarReferenceCategoryView[] = [];
     for (const category of categories) {
-      const views: GrammarReferenceConstructionView[] = [];
-      for (const construction of constructionsByCategory.get(category.id) ??
-        []) {
-        const points = pointsByConstruction.get(construction.id) ?? [];
-        if (cefr && !points.some((point) => point.cefrLevel === cefr)) {
-          continue;
-        }
-        views.push({
-          slug: construction.slug,
-          name: construction.name,
-          cefrLevel: easiestLevel(points),
-          usagePointCount: points.length,
-        });
-      }
+      const views = this.buildConstructionViews(
+        constructionsByCategory.get(category.id) ?? [],
+        pointsByConstruction,
+        stateByConstruction,
+        cefr,
+      );
       if (views.length > 0) {
         result.push({ name: category.name, constructions: views });
       }
     }
+    return result;
+  }
 
-    return { categories: result };
+  private buildConstructionViews(
+    constructions: GrammarConstruction[],
+    pointsByConstruction: Map<string, GrammarUsagePoint[]>,
+    stateByConstruction: Map<string, EffectiveState>,
+    cefr: CefrLevel | null,
+  ): GrammarReferenceConstructionView[] {
+    const views: GrammarReferenceConstructionView[] = [];
+    for (const construction of constructions) {
+      const points = pointsByConstruction.get(construction.id) ?? [];
+      if (cefr && !points.some((point) => point.cefrLevel === cefr)) {
+        continue;
+      }
+      views.push({
+        slug: construction.slug,
+        name: construction.name,
+        cefrLevel: easiestLevel(points),
+        usagePointCount: points.length,
+        state: stateByConstruction.get(construction.id) ?? EffectiveState.New,
+      });
+    }
+    return views;
+  }
+
+  // One collapsed effective state per construction (learning-foundation's
+  // 4-state model), "most advanced wins" over its usage points — a guest
+  // (userId null) gets every construction New, no DB join.
+  private async resolveConstructionStates(
+    usagePoints: GrammarUsagePoint[],
+    pointsByConstruction: Map<string, GrammarUsagePoint[]>,
+    userId: string | null,
+  ): Promise<Map<string, EffectiveState>> {
+    const result = new Map<string, EffectiveState>();
+    if (!userId || usagePoints.length === 0) {
+      return result;
+    }
+
+    const usagePointIds = usagePoints.map((point) => point.id);
+    const [user, cards, dispositions] = await Promise.all([
+      this.em.findOneOrFail(User, { id: userId }, { disableIdentityMap: true }),
+      this.em.find(
+        LearningCard,
+        {
+          userId,
+          grammarUsagePointId: { $in: usagePointIds },
+          archivedAt: null,
+        },
+        { disableIdentityMap: true },
+      ),
+      this.em.find(
+        LearningDisposition,
+        { userId, grammarUsagePointId: { $in: usagePointIds } },
+        { disableIdentityMap: true },
+      ),
+    ]);
+
+    const cardByPoint = new Map(
+      cards
+        .filter((card) => card.grammarUsagePointId)
+        .map((card) => [card.grammarUsagePointId as string, card]),
+    );
+    const dispositionByPoint = new Map(
+      dispositions
+        .filter((disposition) => disposition.grammarUsagePointId)
+        .map((disposition) => [
+          disposition.grammarUsagePointId as string,
+          disposition.disposition,
+        ]),
+    );
+
+    for (const [constructionId, points] of pointsByConstruction) {
+      const states = points.map((point) => {
+        const card = cardByPoint.get(point.id);
+        return resolveEffectiveState({
+          card: card
+            ? { state: card.state, scheduledDays: card.scheduledDays }
+            : null,
+          disposition: dispositionByPoint.get(point.id) ?? null,
+          targetCefrLevel: point.cefrLevel,
+          userCefrLevel: user.cefrLevel,
+        });
+      });
+      result.set(constructionId, mostAdvancedEffectiveState(states));
+    }
+
+    return result;
   }
 }
 

@@ -1,3 +1,4 @@
+import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 
 export class ConstructionUsagePointDto {
@@ -10,6 +11,10 @@ export class ConstructionUsagePointDto {
   readonly canDoStatement!: string;
 
   readonly exampleText!: string | null;
+
+  // Per-point effective state — gates this point's own "+ Add to deck"
+  // button. EffectiveState.New for a guest or a point with no card yet.
+  readonly state!: EffectiveState;
 }
 
 export class GrammarConstructionResponseDto {
