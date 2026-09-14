@@ -1,17 +1,32 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
-import { postUrl } from '../lib/post-url';
+import { renderDictionaryResults } from '../lib/dictionary-list';
 import { getCurrentUser } from '../lib/session';
 import type { DictionaryResponse } from '../lib/types';
 
-const user = await getCurrentUser(Astro.request);
-const dict = user
-  ? await apiGet<DictionaryResponse>('/dictionary', { request: Astro.request })
-  : null;
+const STATES = [
+  { value: '', label: 'All statuses' },
+  { value: 'learning', label: 'Learning' },
+  { value: 'learned', label: 'Learned' },
+  { value: 'skipped', label: 'Skipped' },
+] as const;
 
-const items = dict?.items ?? [];
-const states = ['new', 'learning', 'review', 'relearning'] as const;
+const user = await getCurrentUser(Astro.request);
+
+const state = Astro.url.searchParams.get('state') ?? '';
+const search = Astro.url.searchParams.get('search') ?? '';
+const query = { state, search };
+
+let resultsHtml = '';
+if (user) {
+  const qs = Astro.url.searchParams.toString();
+  const view = await apiGet<DictionaryResponse>(
+    `/dictionary${qs ? `?${qs}` : ''}`,
+    { request: Astro.request },
+  );
+  resultsHtml = renderDictionaryResults(view, query);
+}
 ---
 
 <Layout title="Dictionary — Engofy" user={user} active="dictionary">
@@ -22,97 +37,43 @@ const states = ['new', 'learning', 'review', 'relearning'] as const;
       <p>
         <a href="/login">Sign in</a> to see the words and phrases you've saved.
       </p>
-    ) : items.length === 0 ? (
-      <p>
-        Nothing saved yet — tap the “+” on a word while reading to add it here.
-      </p>
     ) : (
       <>
-        <div class="dict-controls">
+        <form
+          id="dict-filters"
+          method="get"
+          action="/dictionary"
+          hx-get="/partials/dictionary"
+          hx-target="#dict-results"
+          hx-swap="innerHTML"
+          hx-push-url="true"
+          hx-trigger="input changed delay:400ms, change"
+          class="dict-controls"
+        >
           <input
             id="dict-search"
+            name="search"
             type="search"
-            placeholder="Search words, phrases, definitions…"
+            value={search}
+            placeholder="Search words, phrases…"
             aria-label="Search your dictionary"
           />
-          <select id="dict-state" aria-label="Filter by status">
-            <option value="">All statuses</option>
-            {states.map((s) => (
-              <option value={s}>{s}</option>
+          <select id="dict-state" name="state" aria-label="Filter by status">
+            {STATES.map((s) => (
+              <option value={s.value} selected={s.value === state}>
+                {s.label}
+              </option>
             ))}
           </select>
-        </div>
+        </form>
 
-        <p id="dict-count" class="dict-count">{items.length} entries</p>
-
-        <ul class="dict-list">
-          {items.map((it) => (
-            <li
-              class="dict-entry card"
-              data-state={it.state}
-              data-text={`${it.primary} ${it.secondary ?? ''} ${it.definition ?? ''}`.toLowerCase()}
-            >
-              <div class="dict-entry__head">
-                <span class="dict-entry__term">{it.primary}</span>
-                <span class="badge">{it.type}</span>
-                {it.cefrLevel && <span class="badge">{it.cefrLevel}</span>}
-                <span class={`dict-entry__state dict-entry__state--${it.state}`}>
-                  {it.state}
-                </span>
-              </div>
-              {it.secondary && (
-                <p class="dict-entry__pos">{it.secondary}</p>
-              )}
-              {it.definition && <p class="dict-entry__def">{it.definition}</p>}
-              {it.example && (
-                <p class="dict-entry__eg">“{it.example}”</p>
-              )}
-              {it.posts.length > 0 && (
-                <p class="dict-entry__posts">
-                  Appears in:{' '}
-                  {it.posts.map((p, i) => (
-                    <>
-                      {i > 0 && ', '}
-                      <a href={postUrl(p)}>{p.title ?? 'Untitled'}</a>
-                    </>
-                  ))}
-                </p>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div id="dict-results" set:html={resultsHtml} />
       </>
     )
   }
 </Layout>
 
-<script is:inline>
-  (() => {
-    const search = document.getElementById('dict-search');
-    const stateSel = document.getElementById('dict-state');
-    const count = document.getElementById('dict-count');
-    const entries = Array.from(document.querySelectorAll('.dict-entry'));
-    if (!search || !stateSel) return;
-
-    function apply() {
-      const q = search.value.trim().toLowerCase();
-      const st = stateSel.value;
-      let shown = 0;
-      for (const el of entries) {
-        const matchText = !q || el.getAttribute('data-text').includes(q);
-        const matchState = !st || el.getAttribute('data-state') === st;
-        const show = matchText && matchState;
-        el.hidden = !show;
-        if (show) shown += 1;
-      }
-      if (count) count.textContent = `${shown} entr${shown === 1 ? 'y' : 'ies'}`;
-    }
-    search.addEventListener('input', apply);
-    stateSel.addEventListener('change', apply);
-  })();
-</script>
-
-<style>
+<style is:global>
   .dict-controls {
     display: flex;
     flex-wrap: wrap;
@@ -131,10 +92,9 @@ const states = ['new', 'learning', 'review', 'relearning'] as const;
   .dict-controls input {
     flex: 1 1 16rem;
   }
-  .dict-count {
-    font-size: 0.85rem;
+  .dict-empty {
+    font-size: 0.9rem;
     color: var(--color-ink-soft);
-    margin: 0 0 1rem;
   }
   .dict-list {
     list-style: none;
@@ -155,6 +115,10 @@ const states = ['new', 'learning', 'review', 'relearning'] as const;
     font-weight: 700;
     font-size: 1.1rem;
   }
+  .dict-entry__senses {
+    font-size: 0.75rem;
+    color: var(--color-ink-faint);
+  }
   .dict-entry__state {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -162,10 +126,10 @@ const states = ['new', 'learning', 'review', 'relearning'] as const;
     font-weight: 600;
     color: var(--color-ink-soft);
   }
-  .dict-entry__state--review {
+  .dict-entry__state--learned {
     color: var(--color-success);
   }
-  .dict-entry__state--relearning {
+  .dict-entry__state--skipped {
     color: var(--color-warning);
   }
   .dict-entry__pos {
@@ -185,5 +149,8 @@ const states = ['new', 'learning', 'review', 'relearning'] as const;
     margin: 0.4rem 0 0;
     font-size: 0.85rem;
     color: var(--color-ink-soft);
+  }
+  .dict-more {
+    margin-top: 1rem;
   }
 </style>

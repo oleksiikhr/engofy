@@ -202,12 +202,16 @@ export interface DictionaryPostRef {
   title: string | null;
 }
 export interface DictionaryEntry {
-  cardId: string;
   type: 'word' | 'phrase';
-  targetId: string;
-  state: CardState;
-  due: string;
+  // Headword: word lemma or phrase text — also the `/dictionary/words/...`
+  // `/dictionary/phrases/...` route param.
   primary: string;
+  // `EffectiveState` above; `new` never appears here — every dictionary
+  // entry already has a card or a disposition behind it (see `GetDictionaryHandler`).
+  state: EffectiveState;
+  // How many distinct saved senses of this lemma matched the current filter.
+  // Always 1 for a phrase.
+  senseCount: number;
   secondary: string | null;
   definition: string | null;
   example: string | null;
@@ -216,9 +220,7 @@ export interface DictionaryEntry {
 }
 export interface DictionaryResponse {
   items: DictionaryEntry[];
-  // Always null — the dictionary is returned whole. Present for shape parity
-  // with the other list endpoints.
-  nextOffset: number | null;
+  nextCursor: string | null;
 }
 
 // --- practice queue ---

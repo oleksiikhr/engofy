@@ -1,5 +1,5 @@
-import type { OffsetPage } from '../../../../core/http/dto/offset-page.js';
-import type { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
+import type { CursorPage } from '../../../../core/http/dto/cursor-page.js';
+import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 
 export class DictionaryPostRefDto {
@@ -11,19 +11,15 @@ export class DictionaryPostRefDto {
 }
 
 export class DictionaryEntryDto {
-  readonly cardId!: string;
-
   readonly type!: 'word' | 'phrase';
 
-  // SRS card target id (wordDefinitionId / phraseId).
-  readonly targetId!: string;
-
-  readonly state!: LearningCardState;
-
-  // ISO-8601.
-  readonly due!: string;
-
+  // Also the `/dictionary/[lemma]` / `/dictionary/[phrase]` route param.
   readonly primary!: string;
+
+  // Never `EffectiveState.New` — see `GetDictionaryHandler`.
+  readonly state!: EffectiveState;
+
+  readonly senseCount!: number;
 
   // Part of speech for a word; null for a phrase.
   readonly secondary!: string | null;
@@ -38,12 +34,8 @@ export class DictionaryEntryDto {
   readonly posts!: DictionaryPostRefDto[];
 }
 
-// Shares the `{ items, nextOffset }` envelope with every other list endpoint
-// (D14 #36). The dictionary is returned whole — every card, no offset param —
-// so `nextOffset` is always `null`; the field is here for wire consistency, not
-// because this endpoint paginates.
-export class DictionaryResponseDto implements OffsetPage<DictionaryEntryDto> {
+export class DictionaryResponseDto implements CursorPage<DictionaryEntryDto> {
   readonly items!: DictionaryEntryDto[];
 
-  readonly nextOffset!: number | null;
+  readonly nextCursor!: string | null;
 }
