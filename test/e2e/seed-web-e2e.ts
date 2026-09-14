@@ -20,8 +20,10 @@ import { AuthSession } from '../../src/modules/auth/entities/auth-session.entity
 import { User } from '../../src/modules/auth/entities/user.entity.js';
 import { Subscription } from '../../src/modules/billing/entities/subscription.entity.js';
 import { LearningCard } from '../../src/modules/learning/entities/learning-card.entity.js';
+import { LearningDisposition } from '../../src/modules/learning/entities/learning-disposition.entity.js';
 import { ReviewLog } from '../../src/modules/learning/entities/review-log.entity.js';
 import { UserSkillProgress } from '../../src/modules/learning/entities/user-skill-progress.entity.js';
+import { Disposition } from '../../src/modules/learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../src/modules/learning/enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../src/modules/learning/enums/review-rating.enum.js';
 import { PostSource } from '../../src/modules/post/embeddables/post-source.embeddable.js';
@@ -32,6 +34,8 @@ import { GrammarUsagePoint } from '../../src/modules/post/entities/grammar-usage
 import { Phrase } from '../../src/modules/post/entities/phrase.entity.js';
 import { Post } from '../../src/modules/post/entities/post.entity.js';
 import { PostPart } from '../../src/modules/post/entities/post-part.entity.js';
+import { Sentence } from '../../src/modules/post/entities/sentence.entity.js';
+import { SentenceToken } from '../../src/modules/post/entities/sentence-token.entity.js';
 import { Word } from '../../src/modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../src/modules/post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../src/modules/post/enums/cefr-level.enum.js';
@@ -56,6 +60,11 @@ export const E2E_LOGIN_OTP = '424242';
 
 const WORD_LEMMA = 'perambulate';
 const PHRASE_TEXT = 'at loose ends';
+// Disposition-only dictionary entries (dictionary-redesign слайд 1) — no
+// active card, so /dictionary must resolve their state from
+// `learning_dispositions` alone.
+const KNOWN_PHRASE_TEXT = 'a piece of cake';
+const SKIPPED_PHRASE_TEXT = 'break a leg';
 const CATEGORY_NAME = 'E2E: Tenses';
 
 const ENTITIES = [
@@ -64,10 +73,13 @@ const ENTITIES = [
   AuthChallenge,
   Subscription,
   LearningCard,
+  LearningDisposition,
   ReviewLog,
   UserSkillProgress,
   Post,
   PostPart,
+  Sentence,
+  SentenceToken,
   Exercise,
   Word,
   WordDefinition,
@@ -90,6 +102,7 @@ async function wipe(orm: MikroORM): Promise<void> {
       cardId: { $in: cards.map((c) => c.id) },
     });
     await em.nativeDelete(LearningCard, { userId: user.id });
+    await em.nativeDelete(LearningDisposition, { userId: user.id });
     await em.nativeDelete(UserSkillProgress, { userId: user.id });
     await em.nativeDelete(Subscription, { userId: user.id });
     await em.nativeDelete(AuthSession, { userId: user.id });
@@ -100,6 +113,11 @@ async function wipe(orm: MikroORM): Promise<void> {
     shortId: { $in: [E2E_READER_SHORT_ID, ...E2E_FEED_SHORT_IDS] },
   });
   const postIds = posts.map((p) => p.id);
+  const sentences = await em.find(Sentence, { postId: { $in: postIds } });
+  await em.nativeDelete(SentenceToken, {
+    sentenceId: { $in: sentences.map((s) => s.id) },
+  });
+  await em.nativeDelete(Sentence, { postId: { $in: postIds } });
   await em.nativeDelete(Exercise, { postId: { $in: postIds } });
   await em.nativeDelete(PostPart, { postId: { $in: postIds } });
   await em.nativeDelete(Post, { id: { $in: postIds } });
@@ -133,6 +151,9 @@ async function wipe(orm: MikroORM): Promise<void> {
     await em.nativeDelete(Word, { id: word.id });
   }
   await em.nativeDelete(Phrase, { phraseText: PHRASE_TEXT });
+  await em.nativeDelete(Phrase, {
+    phraseText: { $in: [KNOWN_PHRASE_TEXT, SKIPPED_PHRASE_TEXT] },
+  });
 }
 
 async function seed(orm: MikroORM): Promise<void> {
@@ -155,6 +176,18 @@ async function seed(orm: MikroORM): Promise<void> {
     definition: 'having nothing particular to do; unoccupied',
     exampleSentence: 'With the shop closed, she was at loose ends all week.',
     cefrLevel: CefrLevel.B2,
+  });
+  const knownPhrase = em.create(Phrase, {
+    phraseText: KNOWN_PHRASE_TEXT,
+    type: PhraseType.Idiom,
+    definition: 'something very easy to do',
+    cefrLevel: CefrLevel.A2,
+  });
+  const skippedPhrase = em.create(Phrase, {
+    phraseText: SKIPPED_PHRASE_TEXT,
+    type: PhraseType.Idiom,
+    definition: 'a way of wishing someone good luck',
+    cefrLevel: CefrLevel.A2,
   });
 
   // --- grammar reference ---
@@ -217,7 +250,7 @@ async function seed(orm: MikroORM): Promise<void> {
   reader.publishedAt = now.minus({ days: 1 });
   em.persist(reader);
 
-  em.create(PostPart, {
+  const readerPart1 = em.create(PostPart, {
     postId: reader.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -244,6 +277,47 @@ async function seed(orm: MikroORM): Promise<void> {
     },
     annotatedAt: now,
   });
+
+  // Deterministic spaCy layer for the same paragraph (dictionary-redesign
+  // слайд 1 — the "Appears in" join on /dictionary reads `sentence_tokens`,
+  // not the `PostPart` span annotations above; without this, perambulate /
+  // at loose ends would never show a post reference).
+  const readerSentence = em.create(Sentence, {
+    postId: reader.id,
+    postPartId: readerPart1.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: readerSource.rawText,
+    charStart: 0,
+    charEnd: readerSource.rawText.length,
+  });
+  em.create(SentenceToken, {
+    sentenceId: readerSentence.id,
+    position: 0,
+    text: 'perambulate',
+    charStart: 28,
+    charEnd: 39,
+    lemma: WORD_LEMMA,
+    pos: 'VERB',
+    tag: 'VB',
+    dep: 'ROOT',
+    morph: {},
+    wordId: word.id,
+  });
+  em.create(SentenceToken, {
+    sentenceId: readerSentence.id,
+    position: 1,
+    text: 'at loose ends',
+    charStart: 62,
+    charEnd: 75,
+    lemma: PHRASE_TEXT,
+    pos: 'ADV',
+    tag: 'RB',
+    dep: 'advmod',
+    morph: {},
+    phraseId: phrase.id,
+  });
+
   em.create(PostPart, {
     postId: reader.id,
     blockIndex: 1,
@@ -420,6 +494,16 @@ async function seed(orm: MikroORM): Promise<void> {
     lapses: 1,
     state: LearningCardState.Review,
     lastReview: now.minus({ days: 1 }),
+  });
+  em.create(LearningDisposition, {
+    userId: user.id,
+    phraseId: knownPhrase.id,
+    disposition: Disposition.Known,
+  });
+  em.create(LearningDisposition, {
+    userId: user.id,
+    phraseId: skippedPhrase.id,
+    disposition: Disposition.Skipped,
   });
 
   // --- grammar skill progress + review streak (profile) ---
