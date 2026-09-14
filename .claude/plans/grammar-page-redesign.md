@@ -25,10 +25,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Персоналізація grammar-запитів
+### [x] 1. Персоналізація grammar-запитів
 - Branch: `grammar-page-redesign-01-personalized-queries`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/23
 
 `GetGrammarReferenceQuery`/`GetGrammarConstructionQuery` (`src/modules/post/queries/
 get-grammar-reference/`, `.../get-grammar-construction/`) отримують **опційний**
