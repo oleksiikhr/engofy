@@ -7,6 +7,9 @@ export class GetGrammarReferenceQuery extends Query<GrammarReferenceView> {
     // When set, only constructions with at least one usage point at this
     // level are kept, and categories left with none are dropped.
     readonly cefr: CefrLevel | null,
+    // null for a guest (the route is @Public()) — every construction's
+    // `state` is then EffectiveState.New, no LearningCard/Disposition join.
+    readonly userId: string | null = null,
   ) {
     super();
   }

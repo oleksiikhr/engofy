@@ -99,23 +99,36 @@ export class ContentController {
     await this.post.markPostRead(actor.id, shortId);
   }
 
-  // The `/grammar` reference index: 19 categories → constructions.
+  // The `/grammar` reference index: 19 categories → constructions. Varies by
+  // session once logged in (per-construction state), so it overrides the
+  // class-level public cache policy the same way `postDetail` does.
   @Public()
+  @CachePolicy('private')
   @Get('grammar')
   async grammar(
     @Query() query: GrammarReferenceQueryDto,
+    @CurrentUserOrNull() actor: UserActor | null,
   ): Promise<GrammarReferenceResponseDto> {
-    const view = await this.post.getGrammarReference(query.cefr ?? null);
+    const view = await this.post.getGrammarReference(
+      query.cefr ?? null,
+      actor?.id ?? null,
+    );
     return toGrammarReferenceResponse(view);
   }
 
-  // One construction for `/grammar/{slug}`: cheat sheet + usage points.
+  // One construction for `/grammar/{slug}`: cheat sheet + usage points, each
+  // with its own per-user state gating its "+ Add to deck" button.
   @Public()
+  @CachePolicy('private')
   @Get('grammar/:slug')
   async grammarConstruction(
     @Param('slug') slug: string,
+    @CurrentUserOrNull() actor: UserActor | null,
   ): Promise<GrammarConstructionResponseDto> {
-    const view = await this.post.getGrammarConstruction(slug);
+    const view = await this.post.getGrammarConstruction(
+      slug,
+      actor?.id ?? null,
+    );
     if (!view) {
       throw new NotFoundException('Grammar construction not found');
     }
@@ -228,6 +241,7 @@ function toGrammarReferenceResponse(
         name: construction.name,
         cefrLevel: construction.cefrLevel,
         usagePointCount: construction.usagePointCount,
+        state: construction.state,
       })),
     })),
   };
@@ -248,6 +262,7 @@ function toGrammarConstructionResponse(
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,
       exampleText: point.exampleText,
+      state: point.state,
     })),
   };
 }

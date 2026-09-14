@@ -1,5 +1,12 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { User } from '../../../auth/entities/user.entity.js';
+import {
+  EffectiveState,
+  resolveEffectiveState,
+} from '../../../learning/domain/resolve-effective-state.js';
+import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
+import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
@@ -20,6 +27,7 @@ export class GetGrammarConstructionHandler
 
   async execute({
     slug,
+    userId,
   }: GetGrammarConstructionQuery): Promise<GrammarConstructionView | null> {
     const construction = await this.em.findOne(
       GrammarConstruction,
@@ -47,12 +55,15 @@ export class GetGrammarConstructionHandler
       (a, b) => cefrRank(a.cefrLevel) - cefrRank(b.cefrLevel),
     );
 
+    const stateByPoint = await this.resolvePointStates(sorted, userId);
+
     const usagePoints: ConstructionUsagePointView[] = sorted.map((point) => ({
       grammarUsagePointId: point.id,
       cefrLevel: point.cefrLevel,
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,
       exampleText: point.exampleText ?? null,
+      state: stateByPoint.get(point.id) ?? EffectiveState.New,
     }));
 
     return {
@@ -63,5 +74,64 @@ export class GetGrammarConstructionHandler
       cefrLevel: sorted[0]?.cefrLevel ?? null,
       usagePoints,
     };
+  }
+
+  // Per usage point, not collapsed to one construction-level value (unlike
+  // the reference list) — each point's own "+ Add to deck" button gates on
+  // its own state. A guest (userId null) gets every point New, no DB join.
+  private async resolvePointStates(
+    points: GrammarUsagePoint[],
+    userId: string | null,
+  ): Promise<Map<string, EffectiveState>> {
+    const result = new Map<string, EffectiveState>();
+    if (!userId || points.length === 0) {
+      return result;
+    }
+
+    const pointIds = points.map((point) => point.id);
+    const [user, cards, dispositions] = await Promise.all([
+      this.em.findOneOrFail(User, { id: userId }, { disableIdentityMap: true }),
+      this.em.find(
+        LearningCard,
+        { userId, grammarUsagePointId: { $in: pointIds }, archivedAt: null },
+        { disableIdentityMap: true },
+      ),
+      this.em.find(
+        LearningDisposition,
+        { userId, grammarUsagePointId: { $in: pointIds } },
+        { disableIdentityMap: true },
+      ),
+    ]);
+
+    const cardByPoint = new Map(
+      cards
+        .filter((card) => card.grammarUsagePointId)
+        .map((card) => [card.grammarUsagePointId as string, card]),
+    );
+    const dispositionByPoint = new Map(
+      dispositions
+        .filter((disposition) => disposition.grammarUsagePointId)
+        .map((disposition) => [
+          disposition.grammarUsagePointId as string,
+          disposition.disposition,
+        ]),
+    );
+
+    for (const point of points) {
+      const card = cardByPoint.get(point.id);
+      result.set(
+        point.id,
+        resolveEffectiveState({
+          card: card
+            ? { state: card.state, scheduledDays: card.scheduledDays }
+            : null,
+          disposition: dispositionByPoint.get(point.id) ?? null,
+          targetCefrLevel: point.cefrLevel,
+          userCefrLevel: user.cefrLevel,
+        }),
+      );
+    }
+
+    return result;
   }
 }

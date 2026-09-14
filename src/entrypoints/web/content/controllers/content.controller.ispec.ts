@@ -12,6 +12,8 @@ import {
 } from '../../../../modules/auth/crypto/token.helper.js';
 import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
 import { User } from '../../../../modules/auth/entities/user.entity.js';
+import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
+import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
 import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { Exercise } from '../../../../modules/post/entities/exercise.entity.js';
 import { GrammarCategory } from '../../../../modules/post/entities/grammar-category.entity.js';
@@ -102,7 +104,12 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
   };
 }
 
-async function seedGrammar(em: EntityManager): Promise<string> {
+interface SeededGrammar {
+  slug: string;
+  grammarUsagePointId: string;
+}
+
+async function seedGrammar(em: EntityManager): Promise<SeededGrammar> {
   const slug = `present-simple-${uuidv7().slice(0, 8)}`;
   const category = em.create(GrammarCategory, {
     name: `PRESENT-${uuidv7().slice(0, 8)}`,
@@ -115,7 +122,7 @@ async function seedGrammar(em: EntityManager): Promise<string> {
     cheatSheetContent: '## Form\nSubject + base verb',
     sortOrder: 1,
   });
-  em.create(GrammarUsagePoint, {
+  const point = em.create(GrammarUsagePoint, {
     constructionId: construction.id,
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
@@ -123,7 +130,7 @@ async function seedGrammar(em: EntityManager): Promise<string> {
     exampleText: 'I get up at seven.',
   });
   await em.flush();
-  return slug;
+  return { slug, grammarUsagePointId: point.id };
 }
 
 describe('ContentController', () => {
@@ -136,7 +143,9 @@ describe('ContentController', () => {
       strict: false,
     }).sessionCookieName;
 
-  async function login(em: EntityManager): Promise<string> {
+  async function login(
+    em: EntityManager,
+  ): Promise<{ cookie: string; userId: string }> {
     const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
     const token = generateToken();
     em.create(AuthSession, {
@@ -145,7 +154,7 @@ describe('ContentController', () => {
       expiresAt: DateTime.now().plus({ days: 1 }),
     });
     await em.flush();
-    return `${cookieName()}=${token}`;
+    return { cookie: `${cookieName()}=${token}`, userId: user.id };
   }
 
   it('lists a published post in the feed with an excerpt', async () => {
@@ -252,7 +261,7 @@ describe('ContentController', () => {
 
   it('marks a post read for the logged-in user, idempotently', async () => {
     const { shortId, slug } = await seedPublishedPost(suite.orm.em);
-    const cookie = await login(suite.orm.em);
+    const { cookie } = await login(suite.orm.em);
 
     await suite
       .request('post', `/content/posts/${slug}-${shortId}/read`)
@@ -269,7 +278,7 @@ describe('ContentController', () => {
   });
 
   it('404s marking an unknown post read', async () => {
-    const cookie = await login(suite.orm.em);
+    const { cookie } = await login(suite.orm.em);
 
     await suite
       .request('post', '/content/posts/Zzz00000/read')
@@ -309,7 +318,7 @@ describe('ContentController', () => {
   });
 
   it('serves the grammar reference and a single construction', async () => {
-    const slug = await seedGrammar(suite.orm.em);
+    const { slug } = await seedGrammar(suite.orm.em);
 
     const index = await suite
       .request('get', '/content/grammar')
@@ -321,7 +330,7 @@ describe('ContentController', () => {
     expect(category).toBeTruthy();
     expect(
       category.constructions.find((c: { slug: string }) => c.slug === slug),
-    ).toMatchObject({ cefrLevel: 'A1', usagePointCount: 1 });
+    ).toMatchObject({ cefrLevel: 'A1', usagePointCount: 1, state: 'new' });
 
     const detail = await suite
       .request('get', `/content/grammar/${slug}`)
@@ -331,11 +340,12 @@ describe('ContentController', () => {
       cefrLevel: 'A1',
     });
     expect(detail.body.usagePoints).toHaveLength(1);
+    expect(detail.body.usagePoints[0]).toMatchObject({ state: 'new' });
     expect(detail.body.cheatSheetContent).toContain('Form');
   });
 
   it('filters the grammar reference by CEFR level', async () => {
-    const slug = await seedGrammar(suite.orm.em);
+    const { slug } = await seedGrammar(suite.orm.em);
 
     const kept = await suite.request('get', '/content/grammar?cefr=A1');
     expect(
@@ -353,6 +363,41 @@ describe('ContentController', () => {
 
     // A blank ?cefr= must fall through to "no filter", not 400.
     await suite.request('get', '/content/grammar?cefr=').expect(HttpStatus.OK);
+  });
+
+  it('personalizes grammar state for a logged-in learner and marks the response private', async () => {
+    const { slug, grammarUsagePointId } = await seedGrammar(suite.orm.em);
+    const { cookie, userId } = await login(suite.orm.em);
+    suite.orm.em.create(LearningCard, {
+      userId,
+      grammarUsagePointId,
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 1,
+      elapsedDays: 0,
+      scheduledDays: 1,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+    });
+    await suite.orm.em.flush();
+
+    const index = await suite
+      .request('get', '/content/grammar')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(index.headers['cache-control']).toBe('private');
+    const construction = index.body.categories
+      .flatMap((c: { constructions: { slug: string }[] }) => c.constructions)
+      .find((c: { slug: string }) => c.slug === slug);
+    expect(construction).toMatchObject({ state: 'learning' });
+
+    const detail = await suite
+      .request('get', `/content/grammar/${slug}`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(detail.headers['cache-control']).toBe('private');
+    expect(detail.body.usagePoints[0]).toMatchObject({ state: 'learning' });
   });
 
   it('serves under the /api/content prefix and not at the root', async () => {
