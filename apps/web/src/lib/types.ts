@@ -196,11 +196,6 @@ export interface GrammarConstructionDetail {
 
 // --- dictionary ---
 export type CardState = 'new' | 'learning' | 'review' | 'relearning';
-// The learner-facing four-state model (learning-foundation §2) a dictionary
-// entry carries — distinct from `CardState` above (the raw FSRS state a
-// single card has). `new` never appears on a dictionary entry: every entry
-// already has a card or a disposition behind it (see `GetDictionaryHandler`).
-export type EffectiveState = 'new' | 'learning' | 'learned' | 'skipped';
 export interface DictionaryPostRef {
   shortId: string;
   slug: string | null;
@@ -211,6 +206,8 @@ export interface DictionaryEntry {
   // Headword: word lemma or phrase text — also the `/dictionary/words/...`
   // `/dictionary/phrases/...` route param.
   primary: string;
+  // `EffectiveState` above; `new` never appears here — every dictionary
+  // entry already has a card or a disposition behind it (see `GetDictionaryHandler`).
   state: EffectiveState;
   // How many distinct saved senses of this lemma matched the current filter.
   // Always 1 for a phrase.
