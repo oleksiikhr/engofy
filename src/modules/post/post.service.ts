@@ -46,14 +46,18 @@ export class PostService {
     return this.queryBus.execute(new GetPostDetailQuery(shortId, userId));
   }
 
-  getGrammarReference(cefr: CefrLevel | null): Promise<GrammarReferenceView> {
-    return this.queryBus.execute(new GetGrammarReferenceQuery(cefr));
+  getGrammarReference(
+    cefr: CefrLevel | null,
+    userId: string | null = null,
+  ): Promise<GrammarReferenceView> {
+    return this.queryBus.execute(new GetGrammarReferenceQuery(cefr, userId));
   }
 
   getGrammarConstruction(
     slug: string,
+    userId: string | null = null,
   ): Promise<GrammarConstructionView | null> {
-    return this.queryBus.execute(new GetGrammarConstructionQuery(slug));
+    return this.queryBus.execute(new GetGrammarConstructionQuery(slug, userId));
   }
 
   async ingest(dto: IngestPostDto): Promise<IngestedPostView> {

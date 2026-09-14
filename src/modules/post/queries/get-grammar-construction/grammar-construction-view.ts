@@ -1,3 +1,4 @@
+import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 
 export interface ConstructionUsagePointView {
@@ -6,6 +7,9 @@ export interface ConstructionUsagePointView {
   guideword: string;
   canDoStatement: string;
   exampleText: string | null;
+  // Per-point, not collapsed (unlike the reference list's construction-level
+  // badge): gates that point's own "+ Add to deck" button. New for a guest.
+  state: EffectiveState;
 }
 
 export interface GrammarConstructionView {

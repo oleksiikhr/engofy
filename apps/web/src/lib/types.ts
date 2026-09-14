@@ -165,11 +165,15 @@ export interface PostDetail {
 }
 
 // --- grammar reference ---
+// The learner-facing 4-state model (learning-foundation §2), distinct from
+// the raw FSRS `CardState` below — richer than "has a card or not".
+export type EffectiveState = 'new' | 'learning' | 'learned' | 'skipped';
 export interface GrammarRefConstruction {
   slug: string;
   name: string;
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
+  state: EffectiveState;
 }
 export interface GrammarRefCategory {
   name: string;
@@ -178,13 +182,16 @@ export interface GrammarRefCategory {
 export interface GrammarReference {
   categories: GrammarRefCategory[];
 }
+export interface GrammarConstructionUsagePoint extends GrammarUsagePointRef {
+  state: EffectiveState;
+}
 export interface GrammarConstructionDetail {
   slug: string;
   name: string;
   categoryName: string;
   cheatSheetContent: string | null;
   cefrLevel: CefrLevel | null;
-  usagePoints: GrammarUsagePointRef[];
+  usagePoints: GrammarConstructionUsagePoint[];
 }
 
 // --- dictionary ---

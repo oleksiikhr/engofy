@@ -1,3 +1,4 @@
+import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 
 export interface GrammarReferenceConstructionView {
@@ -6,6 +7,9 @@ export interface GrammarReferenceConstructionView {
   // Easiest CEFR level among the construction's usage points.
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
+  // Most-advanced effective state across the construction's usage points
+  // (grammar-page-redesign зріз 1). EffectiveState.New for a guest.
+  state: EffectiveState;
 }
 
 export interface GrammarReferenceCategoryView {
