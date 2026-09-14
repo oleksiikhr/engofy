@@ -66,19 +66,21 @@ const cheatSheetHtml = con.cheatSheetContent
             {up.exampleText && (
               <p class="usage-item__eg">“{up.exampleText}”</p>
             )}
-            <form
-              hx-post="/partials/add-card"
-              hx-swap="outerHTML"
-              hx-target="this"
-              class="add-card__form"
-            >
-              <input
-                type="hidden"
-                name="grammarUsagePointId"
-                value={up.grammarUsagePointId}
-              />
-              <button type="submit" class="add-card">+ Add to deck</button>
-            </form>
+            {up.state === 'new' && (
+              <form
+                hx-post="/partials/add-card"
+                hx-swap="outerHTML"
+                hx-target="this"
+                class="add-card__form"
+              >
+                <input
+                  type="hidden"
+                  name="grammarUsagePointId"
+                  value={up.grammarUsagePointId}
+                />
+                <button type="submit" class="add-card">+ Add to deck</button>
+              </form>
+            )}
           </li>
         ))
       }
