@@ -14,7 +14,7 @@ import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictiona
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
-import type { PracticeQueueItem } from './queries/get-practice-queue/practice-queue-item.js';
+import type { PracticeQueueResult } from './queries/get-practice-queue/practice-queue-item.js';
 import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
 import type { ProfileView } from './queries/get-profile/profile-view.js';
 import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
@@ -76,8 +76,11 @@ export class LearningService {
   getPracticeQueue(
     userId: string,
     limit: number,
-  ): Promise<PracticeQueueItem[]> {
-    return this.queryBus.execute(new GetPracticeQueueQuery(userId, limit));
+    bypassNewLimit = false,
+  ): Promise<PracticeQueueResult> {
+    return this.queryBus.execute(
+      new GetPracticeQueueQuery(userId, limit, bypassNewLimit),
+    );
   }
 
   getProfile(userId: string): Promise<ProfileView> {

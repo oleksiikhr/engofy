@@ -51,12 +51,18 @@ export class HomeController {
   // Крок 2 — due cards whose target occurs in today's post, soonest first.
   // Same wire shape as `GET /learning/practice` (apps/web reuses its
   // renderer); this endpoint just scopes it to today's daily-plan post.
+  // `GetDuePostCardsQuery` already applies the daily new-card cap internally
+  // but, unlike `GetPracticeQueueQuery`, doesn't report a holdback count —
+  // there's no bypass UI for this single-post scoped list.
   @Get('daily-plan/cards')
   async dailyPlanCards(
     @CurrentUser() actor: UserActor,
   ): Promise<PracticeQueueResponseDto> {
     const items = await this.home.getDailyPlanCards(actor.id);
-    return toOffsetPage(items.map(toQueueItemDto), null);
+    return {
+      ...toOffsetPage(items.map(toQueueItemDto), null),
+      heldBackNewCount: 0,
+    };
   }
 
   // Ends the linear session (крок 3's final screen) and returns the

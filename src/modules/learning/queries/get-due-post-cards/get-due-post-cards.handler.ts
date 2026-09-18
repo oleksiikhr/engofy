@@ -2,20 +2,14 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
+import { capNewCards } from '../../domain/daily-new-card-limit.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
-import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import type { PracticeQueueItem } from '../get-practice-queue/practice-queue-item.js';
 import {
   cardTargetKey,
   resolveCardTargets,
 } from '../get-practice-queue/resolve-card-targets.js';
 import { GetDuePostCardsQuery } from './get-due-post-cards.query.js';
-
-// How many never-reviewed cards Крок 2 of the daily session introduces from
-// one post — reviews of already-known material aren't capped, only the New
-// ones (daily-session-home PLAN, зріз 2). `practice-redesign` reuses this
-// same constant instead of defining its own.
-export const DAILY_NEW_CARD_LIMIT = 12;
 
 interface WordAndPhraseIdsRow {
   word_id: string | null;
@@ -86,7 +80,7 @@ export class GetDuePostCardsHandler
       return [];
     }
 
-    const capped = capNewCards(postCards);
+    const { cards: capped } = capNewCards(postCards);
     const targets = await resolveCardTargets(this.em, capped);
 
     return capped
@@ -169,21 +163,4 @@ export class GetDuePostCardsHandler
     );
     return [...new Set(rows.map((row) => row.grammar_usage_point_id))];
   }
-}
-
-// Keeps every review/relearning card (already-known material isn't capped)
-// but stops adding New ones past `DAILY_NEW_CARD_LIMIT`.
-function capNewCards(cards: LearningCard[]): LearningCard[] {
-  let newCount = 0;
-  const result: LearningCard[] = [];
-  for (const card of cards) {
-    if (card.state === LearningCardState.New) {
-      if (newCount >= DAILY_NEW_CARD_LIMIT) {
-        continue;
-      }
-      newCount += 1;
-    }
-    result.push(card);
-  }
-  return result;
 }

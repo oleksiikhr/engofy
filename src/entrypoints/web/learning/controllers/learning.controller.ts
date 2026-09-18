@@ -97,14 +97,23 @@ export class LearningController {
 
   // The due-card review queue, soonest first. Capped at `?limit=`; no offset
   // param, so the `{ items, nextOffset }` envelope always carries a null
-  // `nextOffset` (shape parity with the other list endpoints, D14 #36).
+  // `nextOffset` (shape parity with the other list endpoints, D14 #36). New
+  // cards are additionally throttled to the daily cap unless
+  // `?bypassNewLimit=true` (practice-redesign зріз 2).
   @Get('practice')
   async practiceQueue(
     @CurrentUser() actor: UserActor,
     @Query() query: PracticeQueueQueryDto,
   ): Promise<PracticeQueueResponseDto> {
-    const items = await this.learning.getPracticeQueue(actor.id, query.limit);
-    return toOffsetPage(items.map(toQueueItemDto), null);
+    const result = await this.learning.getPracticeQueue(
+      actor.id,
+      query.limit,
+      query.bypassNewLimit,
+    );
+    return {
+      ...toOffsetPage(result.items.map(toQueueItemDto), null),
+      heldBackNewCount: result.heldBackNewCount,
+    };
   }
 
   // How many of the user's cards are due right now — backs the feed's soft
