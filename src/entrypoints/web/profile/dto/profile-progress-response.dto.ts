@@ -42,6 +42,11 @@ export class ProfileProgressResponseDto {
   // Consecutive UTC days with at least one review, ending today or yesterday.
   readonly streak!: number;
 
+  // Every distinct UTC day (`YYYY-MM-DD`, ascending) with at least one
+  // review, across the learner's full history — feeds the GitHub-style
+  // contribution calendar.
+  readonly activityDays!: string[];
+
   // Learner's SRS card count per CEFR level (unclassified targets excluded).
   readonly cefr!: CefrBreakdownDto;
 

@@ -96,6 +96,7 @@ describe('ProfileController', () => {
         .expect(HttpStatus.OK);
 
       expect(res.body.streak).toBe(0);
+      expect(res.body.activityDays).toEqual([]);
       expect(res.body.cefr).toMatchObject({ A2: 1 });
       expect(res.body.cefrLevel).toBeUndefined();
       const seeded = res.body.categories.find(
