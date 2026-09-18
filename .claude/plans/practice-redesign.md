@@ -39,10 +39,10 @@ AI-`exampleSentence`. Адитивне поле на `PracticeCardTarget` — н
 контракт-зміною. `apps/web`: визначення+фонетика+🔊+речення з посту з міткою
 джерела ("зі статті, яку ти читав").
 
-### [ ] 2. Денний ліміт нових карток у черзі
+### [x] 2. Денний ліміт нових карток у черзі
 - Branch: `practice-redesign-02-daily-new-card-limit`
-- Base: `practice-redesign-01-reveal-content`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/27
 
 Новий per-user денний throttle (~12-15/день, `learning_cards.createdAt = сьогодні`),
 застосовується лише до карток у стані `New` в `GetPracticeQueueHandler` — due
