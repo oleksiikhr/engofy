@@ -93,6 +93,20 @@ export async function apiPost<T>(
   return (text ? JSON.parse(text) : undefined) as T;
 }
 
+// DELETE with no body; parses a JSON reply if the response isn't empty (Nest
+// returns 204 for `DELETE /learning/cards/:cardId`).
+export async function apiDelete<T = undefined>(
+  path: string,
+  options: ApiCallOptions = {},
+): Promise<T> {
+  const res = await call(path, { ...options, method: 'DELETE' });
+  if (!res.ok) {
+    throw new ApiError(res.status, path);
+  }
+  const text = await res.text();
+  return (text ? JSON.parse(text) : undefined) as T;
+}
+
 // PATCH JSON and parse a JSON reply. Only `PATCH /profile/cefr-level` uses
 // this verb (house style otherwise: POST + HttpCode(OK)) — see the backend's
 // own note on that route.

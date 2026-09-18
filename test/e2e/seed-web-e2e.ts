@@ -170,6 +170,16 @@ async function seed(orm: MikroORM): Promise<void> {
     cefrLevel: CefrLevel.B1,
     exampleSentence: 'They perambulated the gardens after lunch.',
   });
+  // A second, unsaved sense of the same lemma (dictionary-redesign слайд 2) —
+  // no card or disposition, so /dictionary/words/perambulate has a target for
+  // the "Позначити вивченим"/"Пропустити" toggle that's safe to click without
+  // disturbing `wordDef`'s card, which other specs assert stays "learning".
+  em.create(WordDefinition, {
+    wordId: word.id,
+    pos: PartOfSpeech.Noun,
+    definition: 'a leisurely walk',
+    cefrLevel: CefrLevel.C1,
+  });
   const phrase = em.create(Phrase, {
     phraseText: PHRASE_TEXT,
     type: PhraseType.Idiom,

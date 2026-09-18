@@ -223,6 +223,37 @@ export interface DictionaryResponse {
   nextCursor: string | null;
 }
 
+// --- dictionary word detail (/dictionary/words/[lemma]) ---
+export interface WordDictionarySense {
+  wordDefinitionId: string;
+  pos: string;
+  definition: string | null;
+  phonetic: string | null;
+  example: string | null;
+  cefrLevel: CefrLevel | null;
+  state: EffectiveState;
+  // Non-null only when an active LearningCard backs this sense — needed by
+  // the "Видалити" action (`DELETE /learning/cards/:cardId`).
+  cardId: string | null;
+}
+export interface WordDictionaryPost {
+  shortId: string;
+  slug: string | null;
+  title: string | null;
+  isRead: boolean;
+}
+export interface WordDictionaryIrregularForms {
+  pastSimple: string[];
+  pastParticiple: string[];
+}
+export interface WordDictionaryDetail {
+  lemma: string;
+  frequencyRank: number | null;
+  irregularVerb: WordDictionaryIrregularForms | null;
+  senses: WordDictionarySense[];
+  posts: WordDictionaryPost[];
+}
+
 // --- practice queue ---
 export interface PracticeItem {
   cardId: string;
@@ -310,4 +341,8 @@ export interface LearningCard {
   lapses: number;
   stability: number;
   difficulty: number;
+}
+export interface DispositionResponse {
+  id: string;
+  disposition: 'known' | 'skipped';
 }
