@@ -3086,6 +3086,18 @@
           "keyName": "posts_short_id_unique",
           "primary": false,
           "unique": true
+        },
+        {
+          "columnNames": [
+            "status",
+            "published_at",
+            "id"
+          ],
+          "composite": true,
+          "constraint": false,
+          "keyName": "posts_status_published_at_id_index",
+          "primary": false,
+          "unique": false
         }
       ],
       "checks": [
