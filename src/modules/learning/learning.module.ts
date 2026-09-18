@@ -12,6 +12,7 @@ import { GetDuePostCardsHandler } from './queries/get-due-post-cards/get-due-pos
 import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practice-queue.handler.js';
 import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
 import { GetStreakHandler } from './queries/get-streak/get-streak.handler.js';
+import { GetWordDictionaryDetailHandler } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
 import { FsrsService } from './services/fsrs.service.js';
 import { SkillProgressService } from './services/skill-progress.service.js';
@@ -35,6 +36,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     GetDueCardCountHandler,
     GetDuePostCardsHandler,
     GetStreakHandler,
+    GetWordDictionaryDetailHandler,
   ],
   exports: [LearningService],
 })
