@@ -39,10 +39,10 @@ self-reported `cefrLevel`) — реалізатор виявив, що окре�
 цього поля (TODO-коментар у `ProfileHubResponseDto`), додається окремим маленьким
 зрізом пізніше.
 
-### [ ] 2. Календар активності
+### [x] 2. Календар активності
 - Branch: `profile-hub-redesign-02-activity-calendar`
-- Base: `profile-hub-redesign-01-split-profile-query`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/28
 
 Новий запит: distinct UTC-дні з `review_logs` — той самий SQL-патерн, що вже в
 `GetProfileHandler.computeStreak`, тільки без згортання через
