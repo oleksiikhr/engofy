@@ -56,13 +56,13 @@ export function usageActionsHtml(
     `<form hx-post="/partials/grammar-usage-point" hx-target="#${id}" hx-swap="outerHTML">
       <input type="hidden" name="grammarUsagePointId" value="${esc(usagePointId)}" />
       <input type="hidden" name="action" value="${action}" />
-      <button type="submit" class="btn ${extra}">${text}</button>
+      <button type="submit" class="btn btn--sm ${extra}">${text}</button>
     </form>`;
 
   return `<div class="gup-actions" id="${id}">
     ${label}
     ${form('add', '+ Add to deck')}
-    ${form('known', 'I know this', 'btn--ghost')}
+    ${form('known', 'I know this', 'btn--sec')}
     ${note}
   </div>`;
 }

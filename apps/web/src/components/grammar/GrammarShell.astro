@@ -50,14 +50,16 @@ const {
 <style>
   .crumb {
     margin: 0 0 1rem;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 700;
   }
   .con-head {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
   .con-head__cat {
-    margin: 0 0 0.25rem;
-    font-size: 0.7rem;
+    margin: 0 0 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-brand-strong);
@@ -65,10 +67,15 @@ const {
   .con-head h1 {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 2.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
   .con-head__lede :global(p) {
-    margin: 0.5rem 0 0;
+    margin: 0.75rem 0 0;
     font-size: 1.05rem;
     color: var(--color-ink-soft);
   }
@@ -86,13 +93,14 @@ const {
   .gp-table td {
     text-align: left;
     vertical-align: top;
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.75rem;
     border-bottom: 1px solid var(--color-border);
   }
   .gp-table th {
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-ink-soft);
+    color: var(--color-ink-faint);
   }
 </style>

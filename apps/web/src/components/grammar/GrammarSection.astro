@@ -16,7 +16,19 @@ const { title } = Astro.props;
   .gp-section {
     margin-bottom: 2rem;
   }
+  .gp-section :global(h2) {
+    margin: 0 0 0.75rem;
+    font-size: 1.19rem;
+    font-weight: 800;
+  }
   .gp-section :global(p) {
     margin: 0 0 0.75rem;
+  }
+  .gp-section :global(code) {
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.5rem;
+    background: var(--color-paper-soft);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
   }
 </style>

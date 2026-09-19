@@ -34,6 +34,6 @@ export class PostsPage {
   }
 
   level(level: string): Locator {
-    return this.page.locator('.posts-level', { hasText: level });
+    return this.page.locator('.posts-levels .pill', { hasText: level });
   }
 }

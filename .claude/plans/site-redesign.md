@@ -105,10 +105,10 @@ Privacy (Terms і Privacy — коли з'являться сторінки). To
 картка з рейтингом, клавіатурні підказки), Dictionary і детальні сторінки слів/фраз. Скелетони для
 htmx-списків.
 
-### [ ] 8. Grammar
+### [x] 8. Grammar
 - Branch: `site-redesign-08-grammar`
-- Base: `site-redesign-07-posts-practice-dictionary`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/69
 
 Список тем, `GrammarShell` і компоненти (Formula, Example, Compare, UsagePoints, Section), 4
 статичні сторінки, `grammar/[slug]`.
