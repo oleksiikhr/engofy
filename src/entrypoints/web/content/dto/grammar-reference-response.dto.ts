@@ -29,9 +29,4 @@ export class GrammarReferenceGroupDto {
 export class GrammarReferenceResponseDto {
   // The same construction set grouped by the requested `groupBy` axis.
   readonly groups!: GrammarReferenceGroupDto[];
-
-  // Deprecated: same array as `groups`, kept so a client that predates
-  // `groupBy` (always category-grouped) keeps working; remove once
-  // `apps/web` reads `groups`.
-  readonly categories!: GrammarReferenceGroupDto[];
 }

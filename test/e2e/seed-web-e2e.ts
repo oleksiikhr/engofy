@@ -680,30 +680,6 @@ async function seed(orm: MikroORM): Promise<void> {
       ],
     },
   });
-  em.create(Exercise, {
-    postId: reader.id,
-    type: ExerciseType.Comprehension,
-    source: ExerciseSource.Ai,
-    payload: {
-      questions: [
-        {
-          question: 'What did the cartographer do at dawn?',
-          options: [
-            'Walked around the harbour',
-            'Sailed one of the boats',
-            'Drew maps indoors',
-            'Slept until midday',
-          ],
-          answerIndex: 0,
-        },
-        {
-          question: 'How many times had she drawn every coastline?',
-          options: ['Once', 'Twice', 'Three times', 'Never'],
-          answerIndex: 1,
-        },
-      ],
-    },
-  });
 
   // --- extra published posts for the feed / alternation ---
   E2E_FEED_SHORT_IDS.forEach((shortId, i) => {
@@ -820,7 +796,6 @@ async function seed(orm: MikroORM): Promise<void> {
   em.create(UserSkillProgress, {
     userId: user.id,
     constructionId: pastPerfect.id,
-    masteryScore: 41,
     correctStreak: 2,
     totalAttempts: 4,
     correctAttempts: 3,

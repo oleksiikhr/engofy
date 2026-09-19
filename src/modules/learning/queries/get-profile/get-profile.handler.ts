@@ -203,8 +203,7 @@ function toConstructionView(
   progress: UserSkillProgress | undefined,
   grammarCardsByPoint: Map<string, LearningCard[]>,
 ): ProfileConstructionView {
-  // Derived at read time from the learner's FSRS card state (D11) — the stored
-  // `user_skill_progress.mastery_score` column is no longer maintained.
+  // Derived at read time from the learner's FSRS card state.
   const constructionCards = points.flatMap(
     (point) => grammarCardsByPoint.get(point.id) ?? [],
   );

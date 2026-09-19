@@ -7,7 +7,6 @@ import NlpConfig from '../../core/nlp/nlp.config.js';
 import { nlpClientProvider } from '../../core/nlp/nlp-client.provider.js';
 import { AnnotatePostHandler } from './commands/annotate-post/annotate-post.handler.js';
 import { AssessComplexityHandler } from './commands/assess-complexity/assess-complexity.handler.js';
-import { BackfillEnrichmentHandler } from './commands/backfill-enrichment/backfill-enrichment.handler.js';
 import { EnrichLexiconHandler } from './commands/enrich-lexicon/enrich-lexicon.handler.js';
 import { GenerateExercisesHandler } from './commands/generate-exercises/generate-exercises.handler.js';
 import { IngestPostHandler } from './commands/ingest-post/ingest-post.handler.js';
@@ -33,7 +32,6 @@ const commandHandlers = [
   AssessComplexityHandler,
   TagGrammarHandler,
   EnrichLexiconHandler,
-  BackfillEnrichmentHandler,
   GenerateExercisesHandler,
   PublishPostHandler,
   RetryPostHandler,

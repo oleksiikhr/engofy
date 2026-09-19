@@ -217,7 +217,6 @@ describe('AddCardHandler', () => {
     });
     expect(progress).not.toBeNull();
     expect(progress?.unlockedAt).not.toBeNull();
-    expect(progress?.masteryScore).toBe(0);
     expect(progress?.totalAttempts).toBe(0);
   });
 

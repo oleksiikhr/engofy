@@ -14,7 +14,6 @@ import { RemoveCardCommand } from '../../commands/remove-card/remove-card.comman
 import { ReviewCardCommand } from '../../commands/review-card/review-card.command.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { ReviewLog } from '../../entities/review-log.entity.js';
-import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -218,9 +217,7 @@ describe('GetProfileHandler', () => {
     ]);
   });
 
-  // D11: mastery is computed from live FSRS card state on every read, so a
-  // stale (or never-written) stored column never reaches the response.
-  it('derives masteryScore at read time, ignoring the stored column', async () => {
+  it('derives masteryScore from live FSRS card state', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
     const catalog = await seedCatalog(em);
@@ -234,12 +231,6 @@ describe('GetProfileHandler', () => {
       new ReviewCardCommand(userId, card.id, ReviewRating.Easy),
     );
 
-    // recordGrammarReview no longer maintains the column — poison it to prove
-    // the read path does not trust it.
-    const progress = await em.findOneOrFail(UserSkillProgress, { userId });
-    expect(progress.masteryScore).toBe(0);
-    progress.masteryScore = 999;
-    await em.flush();
     em.clear();
 
     const profile = await suite.query(new GetProfileQuery(userId));

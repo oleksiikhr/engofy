@@ -81,7 +81,7 @@ async function seedProcessedPost(em: EntityManager): Promise<SeededPost> {
 
   const exercise = new Exercise();
   exercise.postId = post.id;
-  exercise.type = ExerciseType.Comprehension;
+  exercise.type = ExerciseType.GrammarContrastive;
   exercise.source = ExerciseSource.Ai;
   exercise.payload = {};
   em.persist(exercise);

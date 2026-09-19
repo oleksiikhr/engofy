@@ -337,7 +337,7 @@ function toGrammarReferenceResponse(
       state: construction.state,
     })),
   }));
-  return { groups, categories: groups };
+  return { groups };
 }
 
 function toGrammarConstructionResponse(

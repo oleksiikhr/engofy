@@ -688,7 +688,6 @@
             "fill_blank",
             "find_error",
             "multiple_choice",
-            "comprehension",
             "grammar_contrastive",
             "reorder"
           ],
@@ -743,8 +742,8 @@
         },
         {
           "name": "exercises_type_check",
-          "expression": "\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'grammar_contrastive', 'reorder')",
-          "definition": "check (\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'grammar_contrastive', 'reorder'))",
+          "expression": "\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'grammar_contrastive', 'reorder')",
+          "definition": "check (\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'grammar_contrastive', 'reorder'))",
           "columnName": "type"
         }
       ],
@@ -4490,23 +4489,6 @@
           "collation": null,
           "enumItems": [],
           "mappedType": "uuid"
-        },
-        "mastery_score": {
-          "name": "mastery_score",
-          "type": "smallint",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "unique": false,
-          "length": null,
-          "precision": null,
-          "scale": null,
-          "default": "0",
-          "comment": null,
-          "collation": null,
-          "enumItems": [],
-          "mappedType": "smallint"
         },
         "total_attempts": {
           "name": "total_attempts",

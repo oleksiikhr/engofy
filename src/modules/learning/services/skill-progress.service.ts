@@ -11,8 +11,8 @@ import { ReviewRating as Rating } from '../enums/review-rating.enum.js';
 // Keeps `user_skill_progress` in step with the learner's grammar cards
 // (PLAN.md §3.6). A construction is unlocked the moment its first card is
 // added; the attempt / streak counters are display-only tallies bumped on each
-// grammar review. `masteryScore` is NOT written here — `get-profile` derives it
-// from live FSRS card state at read time (D11). Callers flush.
+// grammar review. Mastery is not stored — `get-profile` derives it from live
+// FSRS card state at read time. Callers flush.
 @Injectable()
 export class SkillProgressService {
   constructor(private readonly em: EntityManager) {}
@@ -30,7 +30,7 @@ export class SkillProgressService {
   }
 
   // Called after a grammar card is graded and rescheduled. Bumps the attempt
-  // tallies and recomputes `masteryScore` for the whole construction.
+  // tallies and the correct-answer streak.
   async recordGrammarReview(
     userId: string,
     card: LearningCard,
