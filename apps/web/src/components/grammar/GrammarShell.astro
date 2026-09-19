@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
+import GrammarUsagePoints from './GrammarUsagePoints.astro';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+  // Set by the pages under `src/grammar-pages/`; the generic fallback leaves it off.
+  handcrafted?: boolean;
+}
+
+const { con, user, handcrafted = false } = Astro.props;
+---
+
+<Layout
+  title={`${con.name} — Grammar — Engofy`}
+  user={user}
+  active="grammar"
+  measure={true}
+>
+  <p class="crumb"><a href="/grammar">← Grammar reference</a></p>
+
+  <header class="con-head">
+    <p class="con-head__cat">{con.categoryName}</p>
+    <h1>
+      {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
+      {con.name}
+    </h1>
+    <div class="con-head__lede"><slot name="lede" /></div>
+  </header>
+
+  <div class="con-body" data-handcrafted={handcrafted ? 'true' : undefined}>
+    <slot />
+  </div>
+
+  <GrammarUsagePoints usagePoints={con.usagePoints} />
+</Layout>
+
+<style>
+  .crumb {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+  }
+  .con-head {
+    margin-bottom: 1.5rem;
+  }
+  .con-head__cat {
+    margin: 0 0 0.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+  }
+  .con-head h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .con-head__lede :global(p) {
+    margin: 0.5rem 0 0;
+    font-size: 1.05rem;
+    color: var(--color-ink-soft);
+  }
+</style>
+
+<!-- Building blocks for handcrafted pages (GrammarSection, GrammarTable, …)
+     render inside the page's own scope, so the shared table rules live here. -->
+<style is:global>
+  .gp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .gp-table th,
+  .gp-table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .gp-table th {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+</style>

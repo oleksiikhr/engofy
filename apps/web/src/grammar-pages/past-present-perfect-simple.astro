@@ -1,0 +1,126 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell con={con} user={user} handcrafted>
+  <Fragment slot="lede">
+    <p>
+      A past event that still matters now. The time it happened is either
+      unfinished or unimportant — what counts is the link to the present.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form">
+    <GrammarFormula
+      label="Statement"
+      parts={['have / has', 'past participle']}
+    />
+    <GrammarFormula
+      label="Negative"
+      parts={['have / has', 'not', 'past participle']}
+    />
+    <GrammarFormula
+      label="Question"
+      parts={['Have / Has', 'subject', 'past participle']}
+    />
+    <GrammarExample>I have lost my keys.</GrammarExample>
+    <GrammarExample note="Use has with he, she and it.">
+      She has not answered yet.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The core idea">
+    <p>
+      The present perfect looks back from now. You are not telling a story
+      about a finished moment in the past — you are saying something about
+      the present that the past event explains.
+    </p>
+    <GrammarExample note="Now I can't get in.">
+      I have lost my keys.
+    </GrammarExample>
+    <GrammarExample note="Now the house is clean.">
+      They have painted the kitchen.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Words that go with it">
+    <table class="gp-table">
+      <thead>
+        <tr><th>Word</th><th>Meaning</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ever / never</code></td>
+          <td>experience in your life so far</td>
+          <td>Have you ever been to Kyiv?</td>
+        </tr>
+        <tr>
+          <td><code>just</code></td>
+          <td>a moment ago</td>
+          <td>I have just seen him.</td>
+        </tr>
+        <tr>
+          <td><code>already</code></td>
+          <td>earlier than expected</td>
+          <td>She has already left.</td>
+        </tr>
+        <tr>
+          <td><code>yet</code></td>
+          <td>not until now (questions, negatives)</td>
+          <td>We haven't finished yet.</td>
+        </tr>
+        <tr>
+          <td><code>for</code></td>
+          <td>how long</td>
+          <td>I have lived here for six years.</td>
+        </tr>
+        <tr>
+          <td><code>since</code></td>
+          <td>from when</td>
+          <td>I have lived here since 2020.</td>
+        </tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake">
+    <p>
+      Do not pair the present perfect with a finished time such as
+      <em>yesterday</em>, <em>last week</em> or <em>in 2019</em>. Those
+      belong to the past simple.
+    </p>
+    <GrammarExample note="Wrong: finished time with the present perfect.">
+      ✗ I have seen him yesterday.
+    </GrammarExample>
+    <GrammarExample note="Right: past simple with a finished time.">
+      ✓ I saw him yesterday.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'a finished time — yesterday, in 2019, two years ago.',
+      },
+      {
+        slug: 'past-present-perfect-continuous',
+        name: 'present perfect continuous',
+        note: 'the activity itself, often still going on.',
+      },
+    ]}
+  />
+</GrammarShell>

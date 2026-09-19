@@ -1,0 +1,112 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell con={con} user={user} handcrafted>
+  <Fragment slot="lede">
+    <p>
+      One short verb, many jobs: ability, permission, requests, offers and
+      possibility. The form never changes — the context tells you which job it
+      is doing.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form">
+    <GrammarFormula label="Statement" parts={['subject', 'can', 'base verb']} />
+    <GrammarFormula
+      label="Negative"
+      parts={['subject', "can't / cannot", 'base verb']}
+    />
+    <GrammarFormula label="Question" parts={['Can', 'subject', 'base verb']} />
+    <GrammarExample note="No -s for he / she / it, and no to before the verb.">
+      She can swim.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="What it does">
+    <table class="gp-table">
+      <thead>
+        <tr><th>Job</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ability</td>
+          <td>I can speak three languages.</td>
+        </tr>
+        <tr>
+          <td>Permission</td>
+          <td>You can park here after six.</td>
+        </tr>
+        <tr>
+          <td>Request</td>
+          <td>Can you open the window?</td>
+        </tr>
+        <tr>
+          <td>Offer</td>
+          <td>Can I help you with that bag?</td>
+        </tr>
+        <tr>
+          <td>Possibility</td>
+          <td>It can get very cold here in winter.</td>
+        </tr>
+        <tr>
+          <td>Deduction (negative)</td>
+          <td>That can't be Anna — she's abroad.</td>
+        </tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="No past form — borrow one">
+    <p>
+      <em>Can</em> has no past tense of its own for a single achievement. Use
+      <em>could</em> for a general past ability and <em>was able to</em> for
+      one specific success.
+    </p>
+    <GrammarExample note="General ability in the past.">
+      When I was ten, I could run for an hour.
+    </GrammarExample>
+    <GrammarExample note="One specific occasion.">
+      The fire spread fast, but everyone was able to get out.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake">
+    <GrammarExample note="Wrong: can is followed by the bare verb.">
+      ✗ She can to swim. / ✗ She cans swim.
+    </GrammarExample>
+    <GrammarExample note="Right.">✓ She can swim.</GrammarExample>
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: 'past ability, and a more polite request.',
+      },
+      {
+        slug: 'modality-may',
+        name: 'may',
+        note: 'more formal permission and possibility.',
+      },
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'a weaker possibility.',
+      },
+    ]}
+  />
+</GrammarShell>

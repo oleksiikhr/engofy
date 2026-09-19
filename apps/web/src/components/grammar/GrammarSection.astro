@@ -1,0 +1,22 @@
+---
+// One titled block of a handcrafted construction page.
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="gp-section">
+  <h2>{title}</h2>
+  <slot />
+</section>
+
+<style>
+  .gp-section {
+    margin-bottom: 2rem;
+  }
+  .gp-section :global(p) {
+    margin: 0 0 0.75rem;
+  }
+</style>

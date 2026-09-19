@@ -55,6 +55,11 @@ export const E2E_READER_SHORT_ID = 'E2Eread1';
 export const E2E_FEED_SHORT_IDS = ['E2Efeed2', 'E2Efeed3', 'E2Efeed4'];
 export const E2E_GRAMMAR_SLUG = 'e2e-past-perfect';
 export const E2E_GRAMMAR_SLUG_2 = 'e2e-present-simple';
+// Both usage points sit above the seeded user's B1 level, so they stay New and
+// the detail-page specs can mutate them without shifting any other page's state.
+export const E2E_GRAMMAR_SLUG_MUTABLE = 'e2e-conditionals';
+// A real EGP slug with a handcrafted page in apps/web/src/grammar-pages.
+export const E2E_GRAMMAR_HANDCRAFTED_SLUG = 'past-present-perfect-simple';
 // Fresh address (no user yet) + a pending OTP challenge, for the /login flow.
 export const E2E_LOGIN_EMAIL = 'login-e2e@engofy.test';
 export const E2E_LOGIN_OTP = '424242';
@@ -143,9 +148,14 @@ async function wipe(orm: MikroORM): Promise<void> {
   await em.nativeDelete(PostPart, { postId: { $in: postIds } });
   await em.nativeDelete(Post, { id: { $in: postIds } });
 
-  const constructions = await em.find(GrammarConstruction, {
-    slug: { $in: [E2E_GRAMMAR_SLUG, E2E_GRAMMAR_SLUG_2] },
+  // By category, not slug: the handcrafted slug is a real EGP one that a dev
+  // database may already hold — only the copy this seed created is removed.
+  const e2eCategory = await em.findOne(GrammarCategory, {
+    name: CATEGORY_NAME,
   });
+  const constructions = e2eCategory
+    ? await em.find(GrammarConstruction, { categoryId: e2eCategory.id })
+    : [];
   await em.nativeDelete(GrammarUsagePoint, {
     constructionId: { $in: constructions.map((c) => c.id) },
   });
@@ -273,6 +283,51 @@ async function seed(orm: MikroORM): Promise<void> {
     canDoStatement: 'Can describe routines and general facts.',
     exampleText: 'The tide comes in twice a day.',
   });
+
+  const conditionals = em.create(GrammarConstruction, {
+    categoryId: category.id,
+    name: 'conditionals',
+    slug: E2E_GRAMMAR_SLUG_MUTABLE,
+    cheatSheetContent: '## Form\n\nIf + past simple, would + base verb.',
+    sortOrder: 4,
+  });
+  em.create(GrammarUsagePoint, {
+    constructionId: conditionals.id,
+    cefrLevel: CefrLevel.B2,
+    guideword: 'USE: UNREAL PRESENT',
+    canDoStatement: 'Can talk about imagined situations in the present.',
+    exampleText: 'If I had more time, I would learn the piano.',
+  });
+  em.create(GrammarUsagePoint, {
+    constructionId: conditionals.id,
+    cefrLevel: CefrLevel.C1,
+    guideword: 'USE: UNREAL PAST',
+    canDoStatement: 'Can talk about imagined situations in the past.',
+    exampleText: 'If she had known, she would have called.',
+  });
+
+  // The handcrafted page's construction: a dev DB that already imported the
+  // EGP has the real one, so it is only created when missing.
+  const handcrafted = await em.findOne(GrammarConstruction, {
+    slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
+  });
+  if (!handcrafted) {
+    const seeded = em.create(GrammarConstruction, {
+      categoryId: category.id,
+      name: 'present perfect simple',
+      slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
+      cheatSheetContent: null,
+      sortOrder: 3,
+    });
+    em.create(GrammarUsagePoint, {
+      constructionId: seeded.id,
+      cefrLevel: CefrLevel.A2,
+      guideword: 'USE: EXPERIENCES',
+      canDoStatement:
+        'Can use the present perfect simple to talk about experiences up to now.',
+      exampleText: 'I have never been to Lisbon.',
+    });
+  }
 
   // --- reader post: node tree with word / phrase / grammar spans ---
   const readerSource = new PostSource();

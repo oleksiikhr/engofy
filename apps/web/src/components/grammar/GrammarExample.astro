@@ -1,0 +1,31 @@
+---
+// An example sentence, optionally with a short note under it.
+interface Props {
+  note?: string;
+}
+
+const { note } = Astro.props;
+---
+
+<figure class="gp-example">
+  <blockquote><slot /></blockquote>
+  {note && <figcaption>{note}</figcaption>}
+</figure>
+
+<style>
+  .gp-example {
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border-left: 3px solid var(--color-highlight);
+    background: var(--color-highlight-wash);
+    border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  }
+  .gp-example blockquote {
+    margin: 0;
+  }
+  .gp-example figcaption {
+    margin-top: 0.15rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+  }
+</style>

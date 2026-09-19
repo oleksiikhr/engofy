@@ -1,0 +1,49 @@
+---
+// The form of a construction as a row of parts: <GrammarFormula parts={['have / has', 'past participle']} />.
+interface Props {
+  label?: string;
+  parts: string[];
+}
+
+const { label, parts } = Astro.props;
+---
+
+<p class="gp-formula">
+  {label && <span class="gp-formula__label">{label}</span>}
+  {
+    parts.map((part, i) => (
+      <>
+        {i > 0 && <span class="gp-formula__plus">+</span>}
+        <code class="gp-formula__part">{part}</code>
+      </>
+    ))
+  }
+</p>
+
+<style>
+  .gp-formula {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.6rem;
+  }
+  .gp-formula__label {
+    min-width: 6rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+  .gp-formula__part {
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-control);
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+  .gp-formula__plus {
+    color: var(--color-ink-faint);
+  }
+</style>
