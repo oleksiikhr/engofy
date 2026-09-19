@@ -3,9 +3,13 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
+import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostRead } from '../../entities/post-read.entity.js';
+import { Sentence } from '../../entities/sentence.entity.js';
+import { SentenceToken } from '../../entities/sentence-token.entity.js';
+import { Word } from '../../entities/word.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
@@ -48,6 +52,36 @@ function seedPost(
   });
 
   return post;
+}
+
+// One sentence with one token linked to a word and/or phrase, on `post`.
+function linkToken(
+  em: EntityManager,
+  post: Post,
+  link: { wordId?: string; phraseId?: string },
+): void {
+  const sentence = em.create(Sentence, {
+    postId: post.id,
+    postPartId: randomUUID(),
+    unitIndex: 0,
+    position: 0,
+    rawText: 'seed.',
+    charStart: 0,
+    charEnd: 5,
+  });
+  em.create(SentenceToken, {
+    sentenceId: sentence.id,
+    position: 0,
+    text: 'seed',
+    charStart: 0,
+    charEnd: 4,
+    lemma: 'seed',
+    pos: 'NOUN',
+    tag: 'NN',
+    dep: 'ROOT',
+    morph: {},
+    ...link,
+  });
 }
 
 describe('GetPostsListHandler', () => {
@@ -188,5 +222,96 @@ describe('GetPostsListHandler', () => {
         new GetPostsListQuery(null, { cursor: 'not-a-real-cursor', limit: 10 }),
       ),
     ).rejects.toThrow(InvalidPostsListCursorError);
+  });
+
+  it('filters by a word (matched via its lemma, case-insensitively) or a phrase', async () => {
+    const em = suite.orm.em;
+    const word = em.create(Word, { lemma: `Harbour-${randomUUID()}` });
+    const phrase = em.create(Phrase, {
+      phraseText: `Take Off-${randomUUID()}`,
+    });
+    const withWord = seedPost(em, { title: 'with-word' });
+    const withPhrase = seedPost(em, { title: 'with-phrase' });
+    const draftWithWord = seedPost(em, {
+      title: 'draft-with-word',
+      status: PostStatus.Pending,
+    });
+    seedPost(em, { title: 'unrelated' });
+    await em.flush();
+    linkToken(em, withWord, { wordId: word.id });
+    linkToken(em, withPhrase, { phraseId: phrase.id });
+    linkToken(em, draftWithWord, { wordId: word.id });
+    await em.flush();
+    em.clear();
+
+    const byWord = await suite.query(
+      new GetPostsListQuery(null, {
+        term: `  ${word.lemma.toUpperCase()} `,
+        limit: 10,
+      }),
+    );
+    expect(byWord.items.map((i) => i.title)).toEqual(['with-word']);
+
+    const byPhrase = await suite.query(
+      new GetPostsListQuery(null, {
+        term: phrase.phraseText.toLowerCase(),
+        limit: 10,
+      }),
+    );
+    expect(byPhrase.items.map((i) => i.title)).toEqual(['with-phrase']);
+
+    const none = await suite.query(
+      new GetPostsListQuery(null, { term: 'no-such-term', limit: 10 }),
+    );
+    expect(none.items).toEqual([]);
+
+    const blank = await suite.query(
+      new GetPostsListQuery(null, { term: '   ', limit: 10 }),
+    );
+    expect(blank.items).toHaveLength(3);
+  });
+
+  it('combines term with the CEFR filter and paginates without duplicates', async () => {
+    const em = suite.orm.em;
+    const word = em.create(Word, { lemma: `anchor-${randomUUID()}` });
+    const posts = [
+      seedPost(em, { title: 'a1-1', cefrLevel: CefrLevel.A1 }),
+      seedPost(em, { title: 'a1-2', cefrLevel: CefrLevel.A1 }),
+      seedPost(em, { title: 'b2-1', cefrLevel: CefrLevel.B2 }),
+    ];
+    await em.flush();
+    // Two sentences per post: a post must still be listed once.
+    for (const post of posts) {
+      linkToken(em, post, { wordId: word.id });
+      linkToken(em, post, { wordId: word.id });
+    }
+    await em.flush();
+    em.clear();
+
+    const filtered = await suite.query(
+      new GetPostsListQuery(null, {
+        term: word.lemma,
+        cefrLevels: [CefrLevel.A1],
+        limit: 10,
+      }),
+    );
+    expect(filtered.items.map((i) => i.title).sort()).toEqual(['a1-1', 'a1-2']);
+
+    const page1 = await suite.query(
+      new GetPostsListQuery(null, { term: word.lemma, limit: 2 }),
+    );
+    expect(page1.items).toHaveLength(2);
+    const page2 = await suite.query(
+      new GetPostsListQuery(null, {
+        term: word.lemma,
+        limit: 2,
+        cursor: page1.nextCursor ?? undefined,
+      }),
+    );
+    expect(page2.items).toHaveLength(1);
+    expect(page2.nextCursor).toBeNull();
+    expect(
+      new Set([...page1.items, ...page2.items].map((i) => i.shortId)).size,
+    ).toBe(3);
   });
 });
