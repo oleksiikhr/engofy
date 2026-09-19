@@ -72,6 +72,9 @@ export const E2E_DELETION_SESSION_TOKEN = 'e2e-deletion-session-token-0000000';
 export const E2E_DELETION_CANCEL_TOKEN = 'e2e-deletion-cancel-token-000000';
 
 const WORD_LEMMA = 'perambulate';
+// A second word in the reader post that no e2e user has saved — what study
+// mode offers to add.
+const STUDY_WORD_LEMMA = 'cartographer';
 const PHRASE_TEXT = 'at loose ends';
 // Disposition-only dictionary entries (dictionary-redesign слайд 1) — no
 // active card, so /dictionary must resolve their state from
@@ -181,10 +184,13 @@ async function wipe(orm: MikroORM): Promise<void> {
     await em.nativeDelete(User, { id: loginUser.id });
   }
 
-  const word = await em.findOne(Word, { lemma: WORD_LEMMA });
-  if (word) {
-    await em.nativeDelete(WordDefinition, { wordId: word.id });
-    await em.nativeDelete(Word, { id: word.id });
+  const words = await em.find(Word, {
+    lemma: { $in: [WORD_LEMMA, STUDY_WORD_LEMMA] },
+  });
+  if (words.length > 0) {
+    const wordIds = words.map((w) => w.id);
+    await em.nativeDelete(WordDefinition, { wordId: { $in: wordIds } });
+    await em.nativeDelete(Word, { id: { $in: wordIds } });
   }
   await em.nativeDelete(Phrase, { phraseText: PHRASE_TEXT });
   await em.nativeDelete(Phrase, {
@@ -207,6 +213,18 @@ async function seed(orm: MikroORM): Promise<void> {
     phonetic: '/pəˈrambjʊleɪt/',
     cefrLevel: CefrLevel.B1,
     exampleSentence: 'They perambulated the gardens after lunch.',
+  });
+  const studyWord = em.create(Word, {
+    lemma: STUDY_WORD_LEMMA,
+    frequencyRank: 9000,
+  });
+  const studyWordDef = em.create(WordDefinition, {
+    wordId: studyWord.id,
+    pos: PartOfSpeech.Noun,
+    definition: 'a person who draws or makes maps',
+    phonetic: '/kɑːˈtɒɡrəfə/',
+    cefrLevel: CefrLevel.B2,
+    exampleSentence: 'The cartographer inked the coastline.',
   });
   // A second, unsaved sense of the same lemma (dictionary-redesign слайд 2) —
   // no card or disposition, so /dictionary/words/perambulate has a target for
@@ -358,7 +376,15 @@ async function seed(orm: MikroORM): Promise<void> {
     body: {
       type: 'paragraph',
       children: [
-        { type: 'text', text: 'The old cartographer would ' },
+        { type: 'text', text: 'The old ' },
+        {
+          type: 'span',
+          kind: 'word',
+          text: 'cartographer',
+          wordDefinitionId: studyWordDef.id,
+          pos: 'NOUN',
+        },
+        { type: 'text', text: ' would ' },
         {
           type: 'span',
           kind: 'word',
