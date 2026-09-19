@@ -41,10 +41,10 @@ get-grammar-reference/`, `.../get-grammar-construction/`) отримують **�
 `/grammar/[slug]`'s "+ Add to deck" (`apps/web/src/pages/grammar/[slug].astro:80`,
 зараз рендериться безумовно) стає умовним від стану.
 
-### [ ] 2. Групування і CEFR-фільтр у списку
+### [x] 2. Групування і CEFR-фільтр у списку
 - Branch: `grammar-page-redesign-02-grouping-cefr-filter`
-- Base: `grammar-page-redesign-01-personalized-queries`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/38
 
 CEFR multi-select фільтр (той самий формат параметра, що вже є) + перемикач
 групування: по категорії (поточний дефолт) / по статичному мапуванню
