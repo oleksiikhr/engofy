@@ -72,6 +72,10 @@ const PHRASE_TEXT = 'at loose ends';
 // `learning_dispositions` alone.
 const KNOWN_PHRASE_TEXT = 'a piece of cake';
 const SKIPPED_PHRASE_TEXT = 'break a leg';
+// Never saved (no card/disposition) — dictionary-redesign слайд 3's
+// /dictionary/phrases/[phrase] known/skip toggle target; safe to mutate
+// without disturbing the other phrases' asserted states.
+const UNSAVED_PHRASE_TEXT = 'under the weather';
 const CATEGORY_NAME = 'E2E: Tenses';
 
 const ENTITIES = [
@@ -169,7 +173,9 @@ async function wipe(orm: MikroORM): Promise<void> {
   }
   await em.nativeDelete(Phrase, { phraseText: PHRASE_TEXT });
   await em.nativeDelete(Phrase, {
-    phraseText: { $in: [KNOWN_PHRASE_TEXT, SKIPPED_PHRASE_TEXT] },
+    phraseText: {
+      $in: [KNOWN_PHRASE_TEXT, SKIPPED_PHRASE_TEXT, UNSAVED_PHRASE_TEXT],
+    },
   });
 }
 
@@ -215,6 +221,14 @@ async function seed(orm: MikroORM): Promise<void> {
     type: PhraseType.Idiom,
     definition: 'a way of wishing someone good luck',
     cefrLevel: CefrLevel.A2,
+  });
+
+  em.create(Phrase, {
+    phraseText: UNSAVED_PHRASE_TEXT,
+    type: PhraseType.Idiom,
+    definition: 'feeling slightly ill',
+    exampleSentence: 'I am a bit under the weather today.',
+    cefrLevel: CefrLevel.C1,
   });
 
   // --- grammar reference ---

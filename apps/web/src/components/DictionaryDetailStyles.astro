@@ -1,0 +1,78 @@
+---
+// Shared styles for the /dictionary/words/[lemma] and
+// /dictionary/phrases/[phrase] detail pages, whose markup comes from
+// lib/dictionary-detail.ts (injected via set:html, hence global).
+---
+
+<style is:global>
+  .wd-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .wd-head__rank {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .wd-sense-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .wd-sense__head {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+  .wd-sense__phonetic {
+    margin: 0 0 0.3rem;
+    color: var(--color-ink-faint);
+  }
+  .wd-sense__def {
+    margin: 0 0 0.3rem;
+  }
+  .wd-sense__eg {
+    margin: 0 0 0.5rem;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+  .wd-sense__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .wd-sense__actions form {
+    display: inline;
+  }
+  .wd-sense__state {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+  .wd-sense__state--learned {
+    color: var(--color-success);
+  }
+  .wd-sense__state--skipped {
+    color: var(--color-warning);
+  }
+  .wd-irregular {
+    margin-bottom: 1.5rem;
+  }
+  .wd-posts__empty {
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+  .wd-posts__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+</style>

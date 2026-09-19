@@ -1,31 +1,31 @@
 import type { APIRoute } from 'astro';
 import { ApiError, apiPost } from '../../lib/api';
-import { senseActionsHtml } from '../../lib/dictionary-detail';
+import { actionsHtml, readActionTarget } from '../../lib/dictionary-detail';
 import type { DispositionResponse } from '../../lib/types';
 
-// HTMX target for the /dictionary/words/[lemma] "Позначити вивченим" /
-// "Пропустити" buttons. Forwards to Nest `POST /learning/dispositions`;
-// setting a disposition never creates a card, so the resulting effective
+// HTMX target for the /dictionary/words/[lemma] and
+// /dictionary/phrases/[phrase] "Позначити вивченим" / "Пропустити" buttons.
+// Forwards to Nest `POST /learning/dispositions`; setting a disposition never creates a card, so the resulting effective
 // state is fully determined by the disposition just written — no re-fetch
 // needed, unlike /partials/remove-card.
 export const POST: APIRoute = async ({ request }) => {
   const form = await request.formData();
-  const wordDefinitionId = form.get('wordDefinitionId');
-  const lemma = form.get('lemma');
   const disposition = form.get('disposition');
+  const target = readActionTarget(form);
 
-  if (
-    typeof wordDefinitionId !== 'string' ||
-    typeof lemma !== 'string' ||
-    (disposition !== 'known' && disposition !== 'skipped')
-  ) {
+  if (!target || (disposition !== 'known' && disposition !== 'skipped')) {
     return new Response('Bad request', { status: 400 });
   }
 
   try {
     await apiPost<DispositionResponse>(
       '/learning/dispositions',
-      { wordDefinitionId, disposition },
+      {
+        ...(target.kind === 'word'
+          ? { wordDefinitionId: target.wordDefinitionId }
+          : { phraseId: target.phraseId }),
+        disposition,
+      },
       { request },
     );
   } catch (error) {
@@ -40,8 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  const html = senseActionsHtml(lemma, {
-    wordDefinitionId,
+  const html = actionsHtml(target, {
     cardId: null,
     state: disposition === 'known' ? 'learned' : 'skipped',
   });

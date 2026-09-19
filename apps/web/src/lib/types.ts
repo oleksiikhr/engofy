@@ -254,6 +254,27 @@ export interface WordDictionaryDetail {
   posts: WordDictionaryPost[];
 }
 
+// --- dictionary phrase detail (/dictionary/phrases/[phrase]) ---
+export interface PhraseDictionaryPost {
+  shortId: string;
+  slug: string | null;
+  title: string | null;
+  isRead: boolean;
+}
+export interface PhraseDictionaryDetail {
+  phraseId: string;
+  phraseText: string;
+  type: string | null;
+  definition: string | null;
+  example: string | null;
+  cefrLevel: CefrLevel | null;
+  state: EffectiveState;
+  // Non-null only when an active LearningCard backs this phrase — needed by
+  // the "Видалити" action (`DELETE /learning/cards/:cardId`).
+  cardId: string | null;
+  posts: PhraseDictionaryPost[];
+}
+
 // --- practice queue ---
 export interface PracticeItem {
   cardId: string;
