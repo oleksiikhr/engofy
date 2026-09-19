@@ -122,7 +122,7 @@ test.describe('reader page (guest)', () => {
     await reader.goto(READER_SLUG);
 
     await reader.wordLabel('perambulate').click();
-    await reader.popup.getByRole('button', { name: '+' }).click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
     await expect(
       reader.popup.getByRole('link', { name: 'Sign in' }),
     ).toBeVisible();
@@ -181,7 +181,7 @@ test.describe('reader page (guest)', () => {
     expect(popupBox.x).toBeLessThan(labelBox.x + labelBox.width);
     expect(popupBox.x + popupBox.width).toBeGreaterThan(labelBox.x);
 
-    await section.getByRole('button', { name: '+' }).click();
+    await section.getByRole('button', { name: 'Add to deck' }).click();
     await expect(section.getByRole('link', { name: 'Sign in' })).toBeVisible();
   });
 
@@ -245,8 +245,8 @@ test.describe('reader page (guest)', () => {
 
     await expect(reader.analysis.locator('[data-tok]')).toHaveCount(0);
 
-    await reader.modeToggle('Parts of speech').click();
-    await expect(reader.modeToggle('Parts of speech')).toHaveAttribute(
+    await reader.modeToggle('Word types').click();
+    await expect(reader.modeToggle('Word types')).toHaveAttribute(
       'aria-pressed',
       'true',
     );
@@ -275,9 +275,45 @@ test.describe('reader page (guest)', () => {
       'By the time the war ended, she had drawn every coastline twice.',
     );
 
-    await reader.modeToggle('Parts of speech').click();
+    await reader.modeToggle('Word types').click();
     await expect(reader.page.locator('body')).not.toHaveClass(/reader-pos/);
     await expect(reader.page.locator('body')).toHaveClass(/reader-tense/);
+  });
+
+  test('function words stay plain until the Function words switch is on, and it is remembered', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const the = reader.token('the').first();
+    const underline = () =>
+      the.evaluate((el) => getComputedStyle(el).borderBottom);
+
+    // The switch belongs to the Word types legend.
+    await expect(reader.functionWordsSwitch).toBeHidden();
+    await reader.modeToggle('Word types').click();
+    await expect(the).toHaveAttribute('data-pos-group', 'fn');
+    await expect(reader.functionWordsSwitch).not.toBeChecked();
+    expect(await underline()).toMatch(/^0px/);
+
+    await reader.functionWordsSwitch.check();
+    expect(await underline()).toMatch(/^2px dotted/);
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-function-words',
+      'on',
+    );
+
+    await page.reload();
+    await expect(reader.functionWordsSwitch).toBeChecked();
+    expect(
+      await reader
+        .token('the')
+        .first()
+        .evaluate((el) => getComputedStyle(el).borderBottom),
+    ).toMatch(/^2px dotted/);
+
+    await reader.functionWordsSwitch.uncheck();
+    expect(await underline()).toMatch(/^0px/);
   });
 
   test('Analyze tags tokens, flags irregular verbs and explains the construction', async ({
@@ -474,7 +510,9 @@ test.describe('reader page (signed in)', () => {
     await reader.grammarLabel('had drawn').click();
     const section = reader.popupSection('grammar');
     await expect(section.locator('.lex-state')).toHaveText('Learning');
-    await expect(section.getByRole('button', { name: '+' })).toHaveCount(0);
+    await expect(
+      section.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
   });
 
   test('popup for a card-backed word shows its state without actions', async ({
@@ -485,9 +523,9 @@ test.describe('reader page (signed in)', () => {
 
     await reader.wordLabel('perambulate').click();
     await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
-    await expect(reader.popup.getByRole('button', { name: '+' })).toHaveCount(
-      0,
-    );
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
   });
 
   test('study mode offers the new word of a block and counts it once saved', async ({
@@ -511,7 +549,7 @@ test.describe('reader page (signed in)', () => {
         body: `<div class="lex-actions" id="${rowId}"><span class="lex-state lex-state--learning" data-state="learning">Learning</span></div>`,
       }),
     );
-    await offer.getByRole('button', { name: '+' }).click();
+    await offer.getByRole('button', { name: 'Add to deck' }).click();
     await expect(offer.locator('.lex-state')).toHaveText('Learning');
 
     await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();

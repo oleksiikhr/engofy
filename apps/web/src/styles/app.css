@@ -681,6 +681,17 @@ body {
   opacity: 0.45;
   cursor: default;
 }
+.toggle--sm {
+  width: 2.375rem;
+  height: 1.375rem;
+}
+.toggle--sm::after {
+  width: 1rem;
+  height: 1rem;
+}
+.toggle--sm:checked::after {
+  transform: translateX(1rem);
+}
 
 /* Button group; the active button carries aria-pressed="true" (or
    aria-checked="true" / .is-on). */
@@ -829,24 +840,59 @@ button[value="easy"] {
 
 /* --- Reader word/phrase popup (built client-side by reader-popup.ts, so
    these selectors must be global). Absolutely positioned in document
-   coordinates: it never takes part in the article's flow. --- */
+   coordinates: it never takes part in the article's flow. The popup carries a
+   tone class (amber for a word/phrase, blue for grammar-only) that colours its
+   border and arrow; each section carries its own. `--arrow-x` and
+   `data-placement` are set by reader-popup.ts. --- */
 .lex-popup {
   position: absolute;
   z-index: 50;
-  width: min(22rem, calc(100vw - 1rem));
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: 1rem;
+  width: min(21.5rem, calc(100vw - 1rem));
+  padding: 1rem 1.125rem 1.125rem;
+  border: 2px solid var(--tone);
+  border-radius: 1.125rem;
   background: var(--color-card);
   color: var(--color-ink);
   box-shadow: var(--shadow-pop);
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 .lex-popup[hidden] {
   display: none;
 }
+.lex-popup::before {
+  content: "";
+  position: absolute;
+  left: var(--arrow-x, 2rem);
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border: 2px solid var(--tone);
+  background: var(--color-card);
+  transform: rotate(45deg);
+}
+.lex-popup[data-placement="below"]::before {
+  top: -10px;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 3px 0 0 0;
+}
+.lex-popup[data-placement="above"]::before {
+  bottom: -10px;
+  border-top: 0;
+  border-left: 0;
+  border-radius: 0 0 3px 0;
+}
 .lex-popup p {
   margin: 0.35rem 0 0;
+}
+.lex-popup__kicker {
+  margin: 0 0 0.35rem;
+  color: var(--tone-ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .lex-popup__head {
   display: flex;
@@ -854,44 +900,48 @@ button[value="easy"] {
   gap: 0.5rem;
 }
 .lex-popup__term {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  font-weight: 800;
   line-height: 1.2;
 }
 .lex-popup__speak {
-  font: inherit;
-  padding: 0.1rem 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-left: auto;
+  padding: 0;
   border: 0;
-  border-radius: 0.5rem;
-  background: transparent;
+  border-radius: 999px;
+  background: var(--color-paper-soft);
+  color: var(--color-ink-soft);
   cursor: pointer;
 }
 .lex-popup__speak:hover {
-  background: var(--color-brand-wash);
-}
-.lex-popup__kicker {
-  flex: 1;
-  color: var(--color-ink-soft);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.lex-popup__term--guide {
-  margin-top: 0.35rem;
-  font-size: 1.05rem;
+  background: var(--tone-wash);
+  color: var(--tone-ink);
 }
 .lex-popup__divider {
-  margin: 0.8rem 0;
+  margin: 0.9rem 0;
   border: 0;
   border-top: 1px solid var(--color-border);
 }
 .lex-popup__sub {
-  color: var(--color-ink-soft);
+  color: var(--color-ink-faint);
   font-size: 0.85rem;
+  font-weight: 700;
+}
+.lex-popup__def {
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
 }
 .lex-popup__example {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.625rem;
+  background: var(--color-paper-soft);
   color: var(--color-ink-soft);
+  font-size: 0.9rem;
   font-style: italic;
 }
 .lex-actions {
@@ -901,8 +951,8 @@ button[value="easy"] {
   gap: 0.5rem;
   margin-top: 0.75rem;
 }
-.lex-actions .btn {
-  padding: 0.25rem 0.75rem;
+.lex-actions form {
+  margin: 0;
 }
 .lex-state {
   font-size: 0.75rem;
@@ -910,23 +960,29 @@ button[value="easy"] {
   color: var(--color-ink-soft);
 }
 .lex-state--learning {
-  color: var(--color-warning);
+  color: var(--color-warning-ink);
 }
 .lex-state--learned {
-  color: var(--color-success);
+  color: var(--color-success-ink);
 }
 
 /* --- Reader toolbar + token layers. `[data-tok]` spans are added client-side
    by reader-tokens.ts the first time a mode is switched on; each mode is a
-   class on <body> (reader-pos / reader-tense / reader-analyze). --- */
+   class on <body> (reader-pos / reader-tense / reader-analyze). Word types are
+   a coloured underline (function words: dotted, only with the Function words
+   switch on — html[data-function-words]); tense is a wash, so the two stack. --- */
 :root {
   --pos-noun: var(--color-blue);
+  --pos-noun-ink: var(--color-blue-ink);
   --pos-verb: var(--color-brand);
+  --pos-verb-ink: var(--color-brand-strong);
   --pos-adj: var(--color-success);
+  --pos-adj-ink: var(--color-success-ink);
   --pos-adv: var(--color-pink);
-  --tense-past: var(--color-warning);
-  --tense-present: var(--color-blue);
-  --tense-future: var(--color-success);
+  --pos-adv-ink: var(--color-pink-ink);
+  --tense-past: var(--color-warning-wash);
+  --tense-present: var(--color-blue-wash);
+  --tense-future: var(--color-success-wash);
 }
 
 /* Article text size: html[data-reader-size] is set before first paint from
@@ -957,27 +1013,36 @@ button[value="easy"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 1.25rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--color-border);
+  gap: 0.625rem;
+  margin: 0 0 1.5rem;
+  padding: 0.875rem 0;
+  border-block: 1px solid var(--color-border);
   background: var(--color-paper);
 }
+/* A toggle pill: tone wash at rest, solid tone (with a check, so the state
+   isn't colour alone) while pressed. */
 .reader-toolbar__btn {
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.3rem 0.8rem;
-  border: 2px solid var(--color-border-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent;
   border-radius: 999px;
-  background: var(--color-card);
-  color: var(--color-ink);
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
   cursor: pointer;
 }
 .reader-toolbar__btn[aria-pressed="true"] {
-  border-color: var(--color-brand);
-  background: var(--color-brand-wash);
-  color: var(--color-brand-strong);
+  background: var(--tone);
+  color: var(--on-tone);
+}
+.reader-toolbar__btn[aria-pressed="true"]::before {
+  content: "✓";
+  content: "✓" / "";
 }
 .reader-toolbar__btn:disabled {
   opacity: 0.4;
@@ -988,59 +1053,86 @@ button[value="easy"] {
   gap: 0.3rem;
   margin-left: auto;
 }
+.reader-toolbar__step {
+  justify-content: center;
+  min-width: 2.5rem;
+  padding-inline: 0.75rem;
+  border-color: var(--color-border-strong);
+  background: transparent;
+  color: var(--color-ink-soft);
+}
 .reader-legend {
   flex-basis: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 0.25rem 1.125rem;
   margin: 0;
-  font-size: 0.8rem;
   color: var(--color-ink-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 .reader-legend[hidden] {
   display: none;
 }
 .reader-legend__item {
-  padding: 0.05rem 0.5rem;
-  border-radius: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.reader-legend__item[data-pos-group]::before,
+.reader-legend__item[data-tense]::before {
+  content: "";
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 999px;
+  background: var(--tone);
+}
+.reader-legend__item[data-tense]::before {
+  border: 1px solid var(--color-border-strong);
+  background: var(--tone-wash);
+}
+.reader-legend__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+  cursor: pointer;
+}
+.reader-legend__sample {
+  border-bottom: 2px dotted var(--color-ink-faint);
 }
 
-.reader-pos [data-pos-group="noun"],
-.reader-legend [data-pos-group="noun"] {
-  --tok: var(--pos-noun);
+.reader-pos [data-tok][data-pos-group="noun"] {
+  color: var(--pos-noun-ink);
+  border-bottom: 2px solid var(--pos-noun);
 }
-.reader-pos [data-pos-group="verb"],
-.reader-legend [data-pos-group="verb"] {
-  --tok: var(--pos-verb);
+.reader-pos [data-tok][data-pos-group="verb"] {
+  color: var(--pos-verb-ink);
+  border-bottom: 2px solid var(--pos-verb);
 }
-.reader-pos [data-pos-group="adj"],
-.reader-legend [data-pos-group="adj"] {
-  --tok: var(--pos-adj);
+.reader-pos [data-tok][data-pos-group="adj"] {
+  color: var(--pos-adj-ink);
+  border-bottom: 2px solid var(--pos-adj);
 }
-.reader-pos [data-pos-group="adv"],
-.reader-legend [data-pos-group="adv"] {
-  --tok: var(--pos-adv);
+.reader-pos [data-tok][data-pos-group="adv"] {
+  color: var(--pos-adv-ink);
+  border-bottom: 2px solid var(--pos-adv);
 }
-.reader-tense [data-tense="past"],
-.reader-legend [data-tense="past"] {
-  --tok: var(--tense-past);
+:root[data-function-words="on"] .reader-pos [data-tok][data-pos-group="fn"] {
+  border-bottom: 2px dotted var(--color-ink-faint);
 }
-.reader-tense [data-tense="present"],
-.reader-legend [data-tense="present"] {
-  --tok: var(--tense-present);
+.reader-tense [data-tok][data-tense="past"] {
+  background: var(--tense-past);
 }
-.reader-tense [data-tense="future"],
-.reader-legend [data-tense="future"] {
-  --tok: var(--tense-future);
+.reader-tense [data-tok][data-tense="present"] {
+  background: var(--tense-present);
 }
-/* Tense wins over POS on a verb when both modes are on. */
-.reader-pos [data-tok][data-pos-group],
-.reader-tense [data-tok][data-tense],
-.reader-legend__item[data-pos-group],
-.reader-legend__item[data-tense] {
-  background: color-mix(in srgb, var(--tok) 20%, transparent);
+.reader-tense [data-tok][data-tense="future"] {
+  background: var(--tense-future);
+}
+.reader-tense [data-tok][data-tense] {
   border-radius: 0.3rem;
-  box-shadow: 0 -0.1em 0 0 color-mix(in srgb, var(--tok) 70%, transparent) inset;
 }
 
 /* Analyze: each token becomes a small column — the word, its POS tag, and for
@@ -1073,13 +1165,13 @@ button[value="easy"] {
   color: var(--color-danger);
 }
 .reader-analyze [data-grammar-usage-point-id] {
-  box-shadow: 0 0.12em 0 0 var(--color-brand);
+  box-shadow: inset 0 -0.14em 0 0 var(--color-blue);
 }
 .lex-popup__contrast {
   display: none;
   padding: 0.5rem 0.6rem;
   border-radius: 0.6rem;
-  background: var(--color-brand-wash);
+  background: var(--tone-wash);
   font-size: 0.9rem;
 }
 .reader-analyze .lex-popup__contrast {

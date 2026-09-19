@@ -21,6 +21,7 @@ const LABEL_ATTR: Record<string, string> = {
 };
 const GAP = 8;
 const EDGE = 8;
+const ARROW_INSET = 28;
 
 interface Target {
   // The span the popup anchors to and marks active.
@@ -121,6 +122,12 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     );
     popup.style.top = `${top + window.scrollY}px`;
     popup.style.left = `${left + window.scrollX}px`;
+    // The arrow points at the anchor, kept clear of the rounded corners.
+    const arrow = Math.min(
+      Math.max(rect.left + rect.width / 2 - left, ARROW_INSET),
+      width - ARROW_INSET,
+    );
+    popup.style.setProperty('--arrow-x', `${arrow}px`);
     popup.dataset.placement = above ? 'above' : 'below';
   }
 
@@ -135,6 +142,8 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     active = target.anchor;
     anchorY = clientY;
     target.anchor.classList.add('is-active');
+    popup.classList.toggle('tone-amber', target.lexical !== null);
+    popup.classList.toggle('tone-blue', target.lexical === null);
     popup.innerHTML = readerPopupHtml(target.lexical, target.grammar, slugId);
     if (!('speechSynthesis' in window)) {
       popup.querySelector('.lex-popup__speak')?.remove();

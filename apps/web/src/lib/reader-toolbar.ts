@@ -7,11 +7,12 @@ import {
 import { wrapTokens } from './reader-tokens';
 import type { ReaderToken } from './types';
 
-// The reader's toolbar: POS colouring, tense colouring and Analyze are three
-// independent toggles (each a class on <body>, styled in app.css); A- / A+
-// steps the article's text size. Enabled modes and the text size are persisted
-// through lib/prefs.ts; the size is applied by CSS from an <html> attribute
-// set before first paint.
+// The reader's toolbar: word types (`pos` mode), tenses and Analyze are three
+// independent toggles (each a class on <body>, styled in app.css). The
+// Function words switch in the word-types legend adds the `fn` group to the
+// colouring; A- / A+ steps the article's text size. Enabled modes, the switch
+// and the text size are persisted through lib/prefs.ts and applied by CSS from
+// <html> attributes set before first paint.
 
 export function initReaderToolbar(
   toolbar: HTMLElement,
@@ -58,6 +59,16 @@ export function initReaderToolbar(
       }
       writePref('readerModes', [...enabled]);
     });
+  }
+
+  const functionWords = toolbar.querySelector<HTMLInputElement>(
+    '[data-function-words]',
+  );
+  if (functionWords) {
+    functionWords.checked = readPref('functionWords');
+    functionWords.addEventListener('change', () =>
+      writePref('functionWords', functionWords.checked),
+    );
   }
 
   let size = readPref('readerSize');
