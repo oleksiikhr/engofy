@@ -4,12 +4,14 @@ import {
   LEXICON_ACTION_MESSAGE,
   type LexiconTarget,
   lexiconActionsHtml,
+  TARGET_FIELD,
 } from '../../lib/reader-lexicon';
 import type { LearningCard } from '../../lib/types';
 
-// HTMX target for the "+" / "I know it" buttons in the reader's word/phrase
-// popup. Forwards to Nest `POST /learning/cards` or `POST
-// /learning/dispositions` and returns the popup's action row in its new state.
+// HTMX target for the "+" / "I know it" buttons in the reader's popup (word,
+// phrase or grammar usage point). Forwards to Nest `POST /learning/cards` or
+// `POST /learning/dispositions` and returns the popup's action row in its new
+// state.
 // Both writes fully determine the resulting state (a card is Learning, a known
 // disposition is Learned), so no re-fetch is needed. On a failure the row
 // stays as it was, with a message.
@@ -21,13 +23,11 @@ function fragment(html: string): Response {
 }
 
 function readTarget(form: FormData): LexiconTarget | null {
-  const wordDefinitionId = form.get('wordDefinitionId');
-  if (typeof wordDefinitionId === 'string' && wordDefinitionId) {
-    return { kind: 'word', id: wordDefinitionId };
-  }
-  const phraseId = form.get('phraseId');
-  if (typeof phraseId === 'string' && phraseId) {
-    return { kind: 'phrase', id: phraseId };
+  for (const kind of Object.keys(TARGET_FIELD) as LexiconTarget['kind'][]) {
+    const id = form.get(TARGET_FIELD[kind]);
+    if (typeof id === 'string' && id) {
+      return { kind, id };
+    }
   }
   return null;
 }
@@ -41,10 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response('Bad request', { status: 400 });
   }
 
-  const ref =
-    target.kind === 'word'
-      ? { wordDefinitionId: target.id }
-      : { phraseId: target.id };
+  const ref = { [TARGET_FIELD[target.kind]]: target.id };
 
   try {
     if (action === 'add') {
