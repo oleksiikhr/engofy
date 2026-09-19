@@ -23,6 +23,9 @@ export class PostsListItemDto {
   readonly sourceType!: string;
 
   readonly sourceLink!: string | null;
+
+  // The current user has read the post; always false for a guest.
+  readonly isRead!: boolean;
 }
 
 export class PostsListResponseDto implements CursorPage<PostsListItemDto> {

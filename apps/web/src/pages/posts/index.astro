@@ -1,0 +1,210 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { ApiError, apiGet, isBadRequest } from '../../lib/api';
+import {
+  CEFR_LEVELS,
+  POSTS_ERROR_HTML,
+  POSTS_INVALID_HTML,
+  parsePostsQuery,
+  renderPostsResults,
+  toApiQuery,
+} from '../../lib/posts-list';
+import { getCurrentUser } from '../../lib/session';
+import type { PostsListResponse } from '../../lib/types';
+
+const user = await getCurrentUser(Astro.request);
+
+const query = parsePostsQuery(Astro.url.searchParams);
+
+let resultsHtml: string;
+try {
+  const view = await apiGet<PostsListResponse>(
+    `/content/posts?${toApiQuery(query)}`,
+    { request: Astro.request },
+  );
+  resultsHtml = renderPostsResults(view, query);
+} catch (error) {
+  if (!(error instanceof ApiError)) {
+    throw error;
+  }
+  resultsHtml = isBadRequest(error) ? POSTS_INVALID_HTML : POSTS_ERROR_HTML;
+}
+---
+
+<Layout title="Posts — Engofy" user={user} active="posts">
+  <h1>Posts</h1>
+
+  <form
+    id="posts-filters"
+    method="get"
+    action="/posts"
+    hx-get="/partials/posts"
+    hx-target="#posts-results"
+    hx-swap="innerHTML"
+    hx-trigger="change, submit"
+    class="posts-controls"
+  >
+    <input
+      id="posts-search"
+      name="term"
+      type="search"
+      value={query.term}
+      list="posts-suggestions"
+      autocomplete="off"
+      placeholder="Search by word or phrase…"
+      aria-label="Search posts by word or phrase"
+      hx-get="/partials/posts-suggestions"
+      hx-trigger="input changed delay:250ms"
+      hx-target="#posts-suggestions"
+      hx-swap="innerHTML"
+      hx-params="term"
+    />
+    <datalist id="posts-suggestions"></datalist>
+
+    <fieldset class="posts-levels">
+      <legend>Level</legend>
+      {
+        CEFR_LEVELS.map((level) => (
+          <label class="posts-level">
+            <input
+              type="checkbox"
+              name="cefr"
+              value={level}
+              checked={query.cefr.includes(level)}
+            />
+            <span>{level}</span>
+          </label>
+        ))
+      }
+    </fieldset>
+
+    {
+      user && (
+        <label class="posts-unread">
+          <input
+            type="checkbox"
+            name="unreadOnly"
+            value="true"
+            checked={query.unreadOnly}
+          />
+          Unread only
+        </label>
+      )
+    }
+
+    <noscript><button class="btn" type="submit">Apply</button></noscript>
+  </form>
+
+  <div id="posts-results" set:html={resultsHtml} />
+</Layout>
+
+<style is:global>
+  .posts-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .posts-controls > input[type='search'] {
+    flex: 1 1 16rem;
+    font: inherit;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .posts-levels {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .posts-levels legend {
+    float: left;
+    padding: 0;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .posts-level {
+    cursor: pointer;
+  }
+  .posts-level input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .posts-level span {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-ink-soft);
+  }
+  .posts-level input:checked + span {
+    background: var(--color-brand-wash);
+    border-color: var(--color-brand);
+    color: var(--color-brand-strong);
+    font-weight: 600;
+  }
+  .posts-level input:focus-visible + span {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+  .posts-unread {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+  .posts-empty {
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+  .posts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .post-card__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+  .post-card__date {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--color-ink-faint);
+  }
+  .post-card__read {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-success);
+  }
+  .post-card__title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+  .post-card__excerpt {
+    margin: 0 0 0.5rem;
+    color: var(--color-ink-soft);
+  }
+  .post-card__source {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-ink-faint);
+  }
+  .posts-more {
+    text-align: center;
+  }
+</style>
