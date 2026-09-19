@@ -38,6 +38,12 @@ const PUBLISH_GATE_RETRY_SECONDS = 30;
 // stage (PLAN.md §17 Track A) have Completed, otherwise a post could go
 // feed-visible with its inline annotations or lexicon definitions still
 // missing / failed.
+//
+// The re-queue loop ends when the post is gone or `posts.status = failed`
+// (set by `JobWorkerHost` on retry exhaustion of any stage). A branch run
+// row being `Failed` is not terminal — pg-boss may still retry it — so it
+// keeps the gate polling. A failed post resumes only via `/retry`, which
+// restarts the chain and enqueues publish again.
 @CommandHandler(PublishPostCommand)
 export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
   private readonly logger = new Logger(PublishPostHandler.name);
@@ -55,6 +61,19 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
       stage: PostPipelineStage.Publish,
     });
     if (existingRun?.status === PostPipelineRunStatus.Completed) {
+      return;
+    }
+
+    const post = await this.em.findOne(Post, postId);
+    if (!post) {
+      this.logger.warn({ postId }, 'publish skipped: post not found');
+      return;
+    }
+    if (post.status === PostStatus.Failed) {
+      this.logger.warn(
+        { postId },
+        'publish skipped: post failed, waiting for retry-post',
+      );
       return;
     }
 
@@ -87,7 +106,6 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
       return;
     }
 
-    const post = await this.em.findOneOrFail(Post, postId);
     post.status = PostStatus.Published;
     post.publishedAt = DateTime.now();
 
