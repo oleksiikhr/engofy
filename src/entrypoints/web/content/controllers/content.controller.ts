@@ -38,6 +38,8 @@ import {
   PostAnnotationsDto,
   PostDetailResponseDto,
 } from '../dto/post-detail-response.dto.js';
+import { PostSuggestionsQueryDto } from '../dto/post-suggestions-query.dto.js';
+import { PostSuggestionsResponseDto } from '../dto/post-suggestions-response.dto.js';
 import { PostsListQueryDto } from '../dto/posts-list-query.dto.js';
 import {
   PostsListItemDto,
@@ -80,11 +82,24 @@ export class ContentController {
   ): Promise<PostsListResponseDto> {
     const view = await this.post.getPostsList(actor?.id ?? null, {
       cefrLevels: query.cefr,
+      term: query.term,
       unreadOnly: query.unreadOnly,
       cursor: query.cursor,
       limit: query.limit,
     });
     return toPostsListResponse(view);
+  }
+
+  // Autocomplete for the `/posts` search box (posts-list-page §2): words and
+  // phrases with a published post behind them. Declared before
+  // `posts/:slugId` so `suggestions` is not parsed as a slug-id.
+  @Public()
+  @Get('posts/suggestions')
+  async postSuggestions(
+    @Query() query: PostSuggestionsQueryDto,
+  ): Promise<PostSuggestionsResponseDto> {
+    const view = await this.post.getPostSuggestions(query.q, query.limit);
+    return { items: view.items.map(({ type, text }) => ({ type, text })) };
   }
 
   // One post for `/posts/{slug}-{id}`: node tree + resolved annotations +

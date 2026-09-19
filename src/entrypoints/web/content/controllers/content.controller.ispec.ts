@@ -22,6 +22,8 @@ import { GrammarUsagePoint } from '../../../../modules/post/entities/grammar-usa
 import { Post } from '../../../../modules/post/entities/post.entity.js';
 import { PostPart } from '../../../../modules/post/entities/post-part.entity.js';
 import { PostRead } from '../../../../modules/post/entities/post-read.entity.js';
+import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
+import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
@@ -255,6 +257,63 @@ describe('ContentController', () => {
 
     // A blank ?cefr= must fall through to "no filter", not 400.
     await suite.request('get', '/content/posts?cefr=').expect(HttpStatus.OK);
+  });
+
+  it('filters the posts archive by a word term and suggests it by prefix', async () => {
+    const em = suite.orm.em;
+    const { shortId } = await seedPublishedPost(em);
+    const word = await em.findOneOrFail(Word, {
+      lemma: { $like: 'travel-%' },
+    });
+    const sentence = em.create(Sentence, {
+      postId: (await em.findOneOrFail(Post, { shortId })).id,
+      postPartId: uuidv7(),
+      unitIndex: 0,
+      position: 0,
+      rawText: 'She loves to travel widely.',
+      charStart: 0,
+      charEnd: 27,
+    });
+    em.create(SentenceToken, {
+      sentenceId: sentence.id,
+      position: 3,
+      text: 'travel',
+      charStart: 13,
+      charEnd: 19,
+      lemma: 'travel',
+      pos: 'VERB',
+      tag: 'VB',
+      dep: 'xcomp',
+      morph: {},
+      wordId: word.id,
+    });
+    await em.flush();
+
+    const hit = await suite
+      .request('get', `/content/posts?term=${word.lemma.toUpperCase()}`)
+      .expect(HttpStatus.OK);
+    expect(hit.body.items.map((i: { shortId: string }) => i.shortId)).toEqual([
+      shortId,
+    ]);
+    const miss = await suite
+      .request('get', '/content/posts?term=nothing-like-this')
+      .expect(HttpStatus.OK);
+    expect(miss.body.items).toEqual([]);
+
+    const suggestions = await suite
+      .request('get', `/content/posts/suggestions?q=${word.lemma.slice(0, 9)}`)
+      .expect(HttpStatus.OK);
+    expect(suggestions.body.items).toContainEqual({
+      type: 'word',
+      text: word.lemma,
+    });
+
+    await suite
+      .request('get', '/content/posts/suggestions')
+      .expect(HttpStatus.BAD_REQUEST);
+    await suite
+      .request('get', '/content/posts/suggestions?q=')
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('excludes an already-read post only when unreadOnly is set for a logged-in user', async () => {
