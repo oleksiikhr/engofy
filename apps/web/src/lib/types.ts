@@ -362,6 +362,8 @@ export interface ProfileHub {
   streak: number;
   cefrLevel: CefrLevel;
   accountDeletion: AccountDeletion | null;
+  // ISO timestamp once today's daily session is done, else null.
+  dailyPlanCompletedAt: string | null;
 }
 // Pending account-deletion request (ISO-8601 timestamps).
 export interface AccountDeletion {

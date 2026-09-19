@@ -6,6 +6,7 @@ export class ProfilePage {
   readonly heading: Locator;
   readonly signInLink: Locator;
   readonly streakStat: Locator;
+  readonly dailyPlanStatus: Locator;
   readonly planStatus: Locator;
   readonly levelForm: Locator;
   readonly deletionBanner: Locator;
@@ -16,6 +17,7 @@ export class ProfilePage {
     this.heading = page.getByRole('heading', { name: 'Profile', exact: true });
     this.signInLink = page.getByRole('link', { name: 'Sign in' });
     this.streakStat = page.locator('.stat', { hasText: 'day streak' });
+    this.dailyPlanStatus = page.getByTestId('daily-plan-status');
     this.planStatus = page.getByTestId('plan-status');
     this.levelForm = page.getByTestId('cefr-level-form');
     this.deletionBanner = page.getByTestId('deletion-banner');

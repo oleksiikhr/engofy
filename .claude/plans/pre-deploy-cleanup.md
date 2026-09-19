@@ -75,10 +75,10 @@ Playwright 83/83; pytest 8/8. Конвеєр: 7 стадій `completed`, $0.05 
 Перевірка: `pnpm exec vitest run src/modules/post`, ручний прогін через `pnpm cli post ingest` з
 навмисно зламаним ключем (окремо, поза CI).
 
-### [ ] 4. Статус щоденного плану в profile hub (TODO)
+### [x] 4. Статус щоденного плану в profile hub (TODO)
 - Branch: `pre-deploy-cleanup-04-profile-daily-plan`
-- Base: `pre-deploy-cleanup-03-publish-gate-stop`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/56
 
 TODO в `src/entrypoints/web/profile/dto/profile-hub-response.dto.ts:16` розблоковано: `daily_plans` і
 `completedAt` уже є (`home.controller.ts`, `daily-plan-response.dto.ts`, `daily-plan.entity.ts`). Додати

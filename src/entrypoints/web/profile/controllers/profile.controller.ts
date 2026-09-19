@@ -17,6 +17,7 @@ import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-leve
 import type { AccountDeletionView } from '../../../../modules/auth/types/account-deletion-view.type.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
+import { HomeService } from '../../../../modules/home/home.service.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import { AccountDeletionResponseDto } from '../dto/account-deletion-response.dto.js';
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
@@ -41,23 +42,30 @@ export class ProfileController {
     private readonly learning: LearningService,
     private readonly auth: AuthService,
     private readonly billing: BillingService,
+    private readonly home: HomeService,
   ) {}
 
-  // The light /profile hub: just the daily streak and the self-reported CEFR
-  // level (hub owns display + editing of the level, slice 3). The heavy
+  // The light /profile hub: the daily streak, whether today's daily session is
+  // done, and the self-reported CEFR level (hub owns display + editing of the
+  // level, slice 3). The heavy
   // skills tree + CEFR breakdown moved to `/profile/progress` unchanged
   // (profile-hub-redesign slice 1).
   @Get()
   async profile(
     @CurrentUser() actor: UserActor,
   ): Promise<ProfileHubResponseDto> {
-    const [streak, user, accountDeletion] = await Promise.all([
-      this.learning.getStreak(actor.id),
-      this.auth.getUser(actor.id),
-      this.auth.getAccountDeletion(actor.id),
-    ]);
+    const [streak, user, accountDeletion, dailyPlanCompletedAt] =
+      await Promise.all([
+        this.learning.getStreak(actor.id),
+        this.auth.getUser(actor.id),
+        this.auth.getAccountDeletion(actor.id),
+        this.home.getDailyPlanCompletedAt(actor.id),
+      ]);
     return {
       streak,
+      dailyPlanCompletedAt: dailyPlanCompletedAt
+        ? (dailyPlanCompletedAt.toUTC().toISO() ?? '')
+        : null,
       cefrLevel: user.cefrLevel,
       accountDeletion: accountDeletion
         ? toAccountDeletionDto(accountDeletion)

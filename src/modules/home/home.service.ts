@@ -21,6 +21,13 @@ export class HomeService {
     private readonly queryBus: QueryBus,
   ) {}
 
+  // Read-only: unlike `getDailyPlan`, never selects or creates today's plan.
+  // Null both when no plan exists yet and when it isn't completed.
+  async getDailyPlanCompletedAt(userId: string): Promise<DateTime | null> {
+    const plan = await this.queryBus.execute(new GetDailyPlanQuery(userId));
+    return plan?.completedAt ?? null;
+  }
+
   async getDailyPlan(userId: string): Promise<DailyPlanView> {
     const existing = await this.queryBus.execute(new GetDailyPlanQuery(userId));
     if (existing) {
