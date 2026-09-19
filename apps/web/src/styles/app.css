@@ -61,8 +61,11 @@
   --radius-control: 0.875rem;
 }
 
+/* Dark tokens. `data-theme` on <html> is the explicit choice (see lib/prefs.ts);
+   with no attribute (auto) the OS preference decides. The two blocks below carry
+   the same declarations — keep them identical. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-paper: #1b1611;
     --color-card: #262019;
     --color-paper-soft: #2e271e;
@@ -107,8 +110,58 @@
   }
 }
 
+:root[data-theme="dark"] {
+  --color-paper: #1b1611;
+  --color-card: #262019;
+  --color-paper-soft: #2e271e;
+  --color-border: #3d3327;
+  --color-border-strong: #7a6849;
+
+  --color-ink: #f6ecdb;
+  --color-ink-soft: #d0c2aa;
+  --color-ink-faint: #a59780;
+
+  --color-brand: #ff9a72;
+  --color-brand-hover: #ffb090;
+  --color-brand-strong: #ffb897;
+  --color-brand-wash: #3b2418;
+  --color-on-brand: #2a1409;
+
+  --color-word: #4b3a12;
+  --color-gram: #22345e;
+
+  --color-success: #6fcf8f;
+  --color-success-ink: #8fdca8;
+  --color-success-wash: #1e3627;
+  --color-on-success: #0f2a18;
+  --color-blue: #8db4ff;
+  --color-blue-ink: #a9c6ff;
+  --color-blue-wash: #1f2f52;
+  --color-on-blue: #0f1e3f;
+  --color-pink: #ff8fb0;
+  --color-pink-ink: #ffa9c4;
+  --color-pink-wash: #43202e;
+  --color-on-pink: #3a0f1f;
+  --color-warning: #f0b84e;
+  --color-warning-ink: #f5c976;
+  --color-warning-wash: #3d2e10;
+  --color-on-warning: #2b1d02;
+  --color-danger: #ff8a7a;
+  --color-danger-wash: #412119;
+  --color-focus: #ffb897;
+
+  --shadow-pop: 0 16px 40px rgb(0 0 0 / 0.5);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
 :root {
   color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {
@@ -659,6 +712,27 @@ button[value="easy"] {
   --tense-future: var(--color-success);
 }
 
+/* Article text size: html[data-reader-size] is set before first paint from
+   localStorage (lib/prefs.ts); absent = the default step. Steps mirror
+   READER_SIZE_STEPS; the reader page reads --reader-font-size. */
+:root {
+  --reader-font-size: 1.2rem;
+}
+:root[data-reader-size="0"] {
+  --reader-font-size: 0.95rem;
+}
+:root[data-reader-size="1"] {
+  --reader-font-size: 1.1rem;
+}
+:root[data-reader-size="3"] {
+  --reader-font-size: 1.35rem;
+}
+:root[data-reader-size="4"] {
+  --reader-font-size: 1.5rem;
+}
+:root[data-reader-size="5"] {
+  --reader-font-size: 1.7rem;
+}
 .reader-toolbar {
   position: sticky;
   top: 0;
