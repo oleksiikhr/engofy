@@ -1,18 +1,25 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+// The /profile hub.
 export class ProfilePage {
   readonly page: Page;
   readonly heading: Locator;
   readonly signInLink: Locator;
   readonly streakStat: Locator;
+  readonly planStatus: Locator;
   readonly levelForm: Locator;
+  readonly deletionBanner: Locator;
+  readonly deleteAccount: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.heading = page.getByRole('heading', { name: 'Your progress' });
+    this.heading = page.getByRole('heading', { name: 'Profile', exact: true });
     this.signInLink = page.getByRole('link', { name: 'Sign in' });
     this.streakStat = page.locator('.stat', { hasText: 'day streak' });
+    this.planStatus = page.getByTestId('plan-status');
     this.levelForm = page.getByTestId('cefr-level-form');
+    this.deletionBanner = page.getByTestId('deletion-banner');
+    this.deleteAccount = page.getByTestId('delete-account');
   }
 
   async goto() {
@@ -31,15 +38,5 @@ export class ProfilePage {
   async saveLevel(level: string) {
     await this.levelOption(level).check();
     await this.levelForm.getByRole('button', { name: 'Save' }).click();
-  }
-
-  cefrCount(level: string): Locator {
-    return this.page.getByTestId(`cefr-${level}`);
-  }
-
-  skillByHref(href: string): Locator {
-    return this.page.locator('.skill', {
-      has: this.page.locator(`a[href="${href}"]`),
-    });
   }
 }
