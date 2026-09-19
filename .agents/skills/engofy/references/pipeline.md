@@ -21,7 +21,10 @@ flowchart LR
 - `spacy_parse` fans out to **two branches** (`annotation`, `ai_complexity`).
   They rejoin at `publish`: `PublishPostHandler` no-ops and re-queues a delayed
   `post-publish` until `PostPipelineRun(stage=Annotation, status=Completed)`
-  exists (D6). Reference: `commands/publish-post/publish-post.handler.ts`.
+  exists (D6). The loop stops (no re-queue, `warn` log) when the post is gone or
+  `posts.status = failed`; a `Failed` branch run row alone keeps it polling,
+  since pg-boss may still retry that stage. Reference:
+  `commands/publish-post/publish-post.handler.ts`.
 - `ai_grammar` **also gates on the annotation branch** (F3, same mechanism as
   D6): after writing `grammar_matches` it runs a second phase that paints the
   construction slug onto `post_parts.body` (`domain/apply-grammar-constructs.ts`

@@ -55,10 +55,10 @@ Playwright 83/83; pytest 8/8. Конвеєр: 7 стадій `completed`, $0.05 
 
 Перевірка: `git grep` не знаходить залишків, `pnpm run type`, `pnpm test`, `pnpm migration:check`.
 
-### [ ] 3. Гейт `publish` не має крутитись безкінечно
+### [x] 3. Гейт `publish` не має крутитись безкінечно
 - Branch: `pre-deploy-cleanup-03-publish-gate-stop`
-- Base: `pre-deploy-cleanup-02-remove-dead-feed`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/55
 
 `PublishPostHandler` (`src/modules/post/commands/publish-post/publish-post.handler.ts`) перепланує себе
 кожні `PUBLISH_GATE_RETRY_SECONDS`, доки `annotation` і `enrichment` не `Completed`. Якщо гілка

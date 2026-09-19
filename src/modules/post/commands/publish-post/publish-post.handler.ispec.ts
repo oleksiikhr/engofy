@@ -17,13 +17,20 @@ import { PublishPostCommand } from './publish-post.command.js';
 
 async function seedPost(
   em: EntityManager,
-  opts: { annotationCompleted?: boolean; enrichmentCompleted?: boolean } = {},
+  opts: {
+    annotationCompleted?: boolean;
+    enrichmentCompleted?: boolean;
+    status?: PostStatus;
+  } = {},
 ): Promise<string> {
   const source = new PostSource();
   source.format = PostSourceFormat.Text;
   source.rawText = 'Some text.';
   const post = new Post();
   post.source = source;
+  if (opts.status) {
+    post.status = opts.status;
+  }
   em.persist(post);
 
   if (opts.annotationCompleted) {
@@ -149,5 +156,47 @@ describe('PublishPostHandler', () => {
 
     const post = await suite.orm.em.findOneOrFail(Post, postId);
     expect(post.status).toBe(PostStatus.Published);
+  });
+
+  it('stops without re-queueing when the post has failed', async () => {
+    const postId = await seedPost(suite.orm.em, {
+      status: PostStatus.Failed,
+      annotationCompleted: true,
+    });
+
+    await suite.command(new PublishPostCommand(postId));
+
+    const post = await suite.orm.em.findOneOrFail(Post, postId);
+    expect(post.status).toBe(PostStatus.Failed);
+    expect(await suite.orm.em.count(PostPublication, { postId })).toBe(0);
+    queue.assertNotSent(QueueName.PostPublish);
+  });
+
+  it('stops without re-queueing when the post no longer exists', async () => {
+    await suite.command(
+      new PublishPostCommand('01900000-0000-7000-8000-000000000000'),
+    );
+
+    queue.assertNotSent(QueueName.PostPublish);
+  });
+
+  it('keeps re-queueing while a branch run is failed but the post is still processing', async () => {
+    const postId = await seedPost(suite.orm.em, {
+      status: PostStatus.Processing,
+      annotationCompleted: true,
+    });
+    const run = new PostPipelineRun();
+    run.postId = postId;
+    run.stage = PostPipelineStage.Enrichment;
+    run.status = PostPipelineRunStatus.Failed;
+    suite.orm.em.persist(run);
+    await suite.orm.em.flush();
+
+    await suite.command(new PublishPostCommand(postId));
+
+    queue.assertSent(
+      QueueName.PostPublish,
+      (data: { postId: string }) => data.postId === postId,
+    );
   });
 });
