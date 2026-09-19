@@ -14,12 +14,10 @@ import {
   type SpanOccurrence,
   sentenceContainsSpan,
 } from '../../domain/context-sentence.js';
-import {
-  capNewCards,
-  DAILY_NEW_CARD_LIMIT,
-} from '../../domain/daily-new-card-limit.js';
+import { capNewCards } from '../../domain/daily-new-card-limit.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
+import { NewCardBudgetService } from '../../services/new-card-budget.service.js';
 import { GetPracticeQueueQuery } from './get-practice-queue.query.js';
 import type {
   PracticeCardTarget,
@@ -58,7 +56,10 @@ const RECENT_READ_POSTS_LIMIT = 3;
 export class GetPracticeQueueHandler
   implements IQueryHandler<GetPracticeQueueQuery>
 {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly newCardBudget: NewCardBudgetService,
+  ) {}
 
   async execute(query: GetPracticeQueueQuery): Promise<PracticeQueueResult> {
     const cards = await this.findDueCards(query);
@@ -76,7 +77,7 @@ export class GetPracticeQueueHandler
       !query.bypassNewLimit &&
       cards.some((card) => card.state === LearningCardState.New)
     ) {
-      const remainingBudget = await this.remainingNewCardBudget(query.userId);
+      const remainingBudget = await this.newCardBudget.remaining(query.userId);
       ({ cards: capped, heldBackCount } = capNewCards(cards, remainingBudget));
     }
 
@@ -146,32 +147,6 @@ export class GetPracticeQueueHandler
       archivedAt: null,
     });
     return count > 0;
-  }
-
-  // How many New cards are still allowed into today's queue: the daily limit
-  // minus however many of the user's cards already graduated from New today
-  // — "graduated" means a card's *earliest* review (every card starts New,
-  // so its first-ever grade is always the one that takes it out of New) falls
-  // within today's UTC calendar day. A raw aggregate (DP5) since the ORM
-  // can't express "first review per card" cheaply.
-  private async remainingNewCardBudget(userId: string): Promise<number> {
-    const startOfToday = DateTime.now().toUTC().startOf('day');
-    const startOfTomorrow = startOfToday.plus({ days: 1 });
-    const rows = await this.em.getConnection().execute<{ count: string }[]>(
-      `SELECT COUNT(*) AS count FROM (
-         SELECT rl.card_id, MIN(rl.reviewed_at) AS first_review
-           FROM review_logs rl
-           JOIN learning_cards lc ON lc.id = rl.card_id
-          WHERE lc.user_id = ?
-          GROUP BY rl.card_id
-       ) first_reviews
-       WHERE first_review >= ? AND first_review < ?`,
-      [userId, startOfToday.toJSDate(), startOfTomorrow.toJSDate()],
-      'all',
-      this.em.getTransactionContext(),
-    );
-    const introducedToday = Number(rows[0]?.count ?? 0);
-    return Math.max(0, DAILY_NEW_CARD_LIMIT - introducedToday);
   }
 
   // Fills in `contextSentence` (PLAN.md practice-redesign зріз 1/3) for the

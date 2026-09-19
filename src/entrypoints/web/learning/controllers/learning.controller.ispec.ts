@@ -205,6 +205,19 @@ describe('LearningController', () => {
     expect(res.body).toEqual({ dueCount: 1 });
   });
 
+  it('reports the full daily new-card budget for a user with no reviews, and rejects a guest', async () => {
+    await suite
+      .request('get', '/learning/new-card-budget')
+      .expect(HttpStatus.UNAUTHORIZED);
+
+    const cookie = await login(suite.orm.em);
+    const res = await suite
+      .request('get', '/learning/new-card-budget')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(res.body).toEqual({ remaining: DAILY_NEW_CARD_LIMIT });
+  });
+
   it('deletes an unreviewed card and archives a reviewed one', async () => {
     const cookie = await login(suite.orm.em);
     const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });

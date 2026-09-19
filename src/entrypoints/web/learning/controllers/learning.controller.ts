@@ -25,6 +25,7 @@ import { AddCardDto } from '../dto/add-card.dto.js';
 import { DispositionResponseDto } from '../dto/disposition-response.dto.js';
 import { DueCardCountResponseDto } from '../dto/due-card-count-response.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
+import { NewCardBudgetResponseDto } from '../dto/new-card-budget-response.dto.js';
 import { PracticeQueueQueryDto } from '../dto/practice-queue-query.dto.js';
 import {
   PracticeQueueItemDto,
@@ -152,6 +153,16 @@ export class LearningController {
   ): Promise<DueCardCountResponseDto> {
     const dueCount = await this.learning.getDueCardCount(actor.id);
     return { dueCount };
+  }
+
+  // How many new cards the user may still add today — backs the reader's
+  // study mode, which stops offering new words once it hits zero.
+  @Get('new-card-budget')
+  async newCardBudget(
+    @CurrentUser() actor: UserActor,
+  ): Promise<NewCardBudgetResponseDto> {
+    const remaining = await this.learning.getNewCardBudget(actor.id);
+    return { remaining };
   }
 
   // Daily review streak — for the header's day-streak display (PLAN.md
