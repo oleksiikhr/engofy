@@ -16,8 +16,6 @@ import {
 import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
-import type { FeedView } from './queries/get-feed/feed-view.js';
-import { GetFeedQuery } from './queries/get-feed/get-feed.query.js';
 import { GetGrammarConstructionQuery } from './queries/get-grammar-construction/get-grammar-construction.query.js';
 import type { GrammarConstructionView } from './queries/get-grammar-construction/grammar-construction-view.js';
 import {
@@ -41,10 +39,6 @@ export class PostService {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
-
-  getFeed(limit: number, offset: number): Promise<FeedView> {
-    return this.queryBus.execute(new GetFeedQuery(limit, offset));
-  }
 
   getPostDetail(
     shortId: string,

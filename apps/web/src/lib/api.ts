@@ -4,7 +4,7 @@
 // and forward the visitor's session cookie.
 //
 // Nest serves the whole API under a `/api` global prefix (`configureApp` in the
-// backend); callers here pass the bare resource path (`/feed`, `/auth/me`, …)
+// backend); callers here pass the bare resource path (`/content/posts`, `/auth/me`, …)
 // and `call()` prepends `/api`.
 
 // Nest web server origin. Default matches the repo's dev PORT (8080); set

@@ -3,8 +3,8 @@
 
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
-// --- feed ---
-export interface FeedItem {
+// --- posts archive (/posts) ---
+export interface PostsListItem {
   shortId: string;
   slug: string | null;
   title: string | null;
@@ -12,14 +12,6 @@ export interface FeedItem {
   publishedAt: string;
   excerpt: string;
   sourceLink: string | null;
-}
-export interface FeedResponse {
-  items: FeedItem[];
-  nextOffset: number | null;
-}
-
-// --- posts archive (/posts) ---
-export interface PostsListItem extends FeedItem {
   attributionText: string;
   sourceType: string;
   isRead: boolean;

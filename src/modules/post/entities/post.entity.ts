@@ -17,7 +17,7 @@ import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PostStatus } from '../enums/post-status.enum.js';
 import { PostType } from '../enums/post-type.enum.js';
 
-// Serves both `/content/feed` and `/content/posts` (posts-list-page §1):
+// Serves `/content/posts` (posts-list-page §1):
 // `WHERE status = ? ORDER BY published_at desc, id desc`, keyset-paginated on
 // the trailing two columns.
 @Index({ properties: ['status', 'publishedAt', 'id'] })
