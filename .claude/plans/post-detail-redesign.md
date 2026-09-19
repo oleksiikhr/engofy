@@ -125,10 +125,10 @@ checkpoint тут** — перший реальний рендер у новом
 зверху, граматична знизу, тонкий розділювач) коли лексична і граматична мітка
 перекриваються на тому самому діапазоні тексту.
 
-### [ ] 9. Тулбар — POS/tense фарбування + Analyze
+### [x] 9. Тулбар — POS/tense фарбування + Analyze
 - Branch: `post-detail-redesign-09-toolbar-analyze`
-- Base: `post-detail-redesign-08-grammar-popup-overlap`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/50
 
 Два незалежні тогли фарбування (POS, tense/construction — детерміновано з наявних
 даних, 0 нового бекенду) + режим Analyze (POS-теги по токенах, позначка

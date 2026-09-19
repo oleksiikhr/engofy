@@ -13,6 +13,7 @@ import { GenerateExercisesHandler } from './commands/generate-exercises/generate
 import { IngestPostHandler } from './commands/ingest-post/ingest-post.handler.js';
 import { MarkPostReadHandler } from './commands/mark-post-read/mark-post-read.handler.js';
 import { PublishPostHandler } from './commands/publish-post/publish-post.handler.js';
+import { ReportLabelHandler } from './commands/report-label/report-label.handler.js';
 import { RetryPostHandler } from './commands/retry-post/retry-post.handler.js';
 import { SpacyParsePostHandler } from './commands/spacy-parse-post/spacy-parse-post.handler.js';
 import { TagGrammarHandler } from './commands/tag-grammar/tag-grammar.handler.js';
@@ -37,6 +38,7 @@ const commandHandlers = [
   PublishPostHandler,
   RetryPostHandler,
   MarkPostReadHandler,
+  ReportLabelHandler,
 ];
 
 const queryHandlers = [

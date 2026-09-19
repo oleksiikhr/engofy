@@ -499,12 +499,39 @@ describe('GetPostDetailHandler', () => {
     ).toEqual([EffectiveState.New, EffectiveState.New]);
   });
 
+  it('places content tokens with POS, tense and irregular-verb forms, dropping stale sentences', async () => {
+    const { shortId } = await seedPostWithGrammarMatches(suite.orm.em);
+
+    const view = await suite.query(new GetPostDetailQuery(shortId));
+
+    // Punctuation and the stale intro sentence are dropped; the list item
+    // carries its item index.
+    expect(
+      view?.annotations.tokens.map((t) => [
+        t.blockIndex,
+        t.itemIndex,
+        t.charStart,
+        t.charEnd,
+        t.pos,
+        t.tense,
+        t.irregular?.base ?? null,
+      ]),
+    ).toEqual([
+      [1, 1, 0, 3, 'PRON', null, null],
+      [1, 1, 4, 7, 'AUX', 'past', 'have'],
+      [1, 1, 8, 12, 'VERB', null, 'leave'],
+      [1, 1, 13, 19, 'ADP', null, null],
+      [1, 1, 20, 24, 'NOUN', null, null],
+    ]);
+  });
+
   it('returns no grammar matches for a post without sentences', async () => {
     const { shortId } = await seedPublishedPost(suite.orm.em);
 
     const view = await suite.query(new GetPostDetailQuery(shortId));
 
     expect(view?.annotations.grammarMatches).toEqual([]);
+    expect(view?.annotations.tokens).toEqual([]);
   });
 });
 
@@ -600,26 +627,27 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
     charStart: 0,
     charEnd: 25,
   });
-  const tokenOffsets: [string, number, number][] = [
-    ['She', 0, 3],
-    ['had', 4, 7],
-    ['left', 8, 12],
-    ['before', 13, 19],
-    ['noon', 20, 24],
-    ['.', 24, 25],
+  const tokenRows: [string, number, number, string, string, object][] = [
+    ['She', 0, 3, 'PRON', 'PRP', {}],
+    ['had', 4, 7, 'AUX', 'VBD', { Tense: 'Past', VerbForm: 'Fin' }],
+    ['left', 8, 12, 'VERB', 'VBN', { Tense: 'Past', VerbForm: 'Part' }],
+    ['before', 13, 19, 'ADP', 'IN', {}],
+    ['noon', 20, 24, 'NOUN', 'NN', {}],
+    ['.', 24, 25, 'PUNCT', '.', {}],
   ];
-  tokenOffsets.forEach(([text, charStart, charEnd], position) => {
+  const lemmas: Record<string, string> = { had: 'have', left: 'leave' };
+  tokenRows.forEach(([text, charStart, charEnd, pos, tag, morph], position) => {
     em.create(SentenceToken, {
       sentenceId: live.id,
       position,
       text,
       charStart,
       charEnd,
-      lemma: text,
-      pos: 'X',
-      tag: 'X',
+      lemma: lemmas[text] ?? text.toLowerCase(),
+      pos,
+      tag,
       dep: 'dep',
-      morph: {},
+      morph: morph as Record<string, string>,
     });
   });
   em.create(SentenceToken, {

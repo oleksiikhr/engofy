@@ -9,7 +9,9 @@ import { LearningCard } from '../../../learning/entities/learning-card.entity.js
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
+import { loadIrregularVerbsByLemma } from '../../domain/irregular-verb.js';
 import { locateGrammarMatch } from '../../domain/locate-grammar-match.js';
+import { locateSentenceTokens } from '../../domain/locate-sentence-tokens.js';
 import { parseDoc } from '../../domain/node-tree.parser.js';
 import type { SpanNode } from '../../domain/node-tree.types.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
@@ -33,6 +35,7 @@ import type {
   PhraseAnnotationView,
   PostDetailView,
   PostExerciseView,
+  TokenView,
   WordAnnotationView,
 } from './post-detail-view.js';
 
@@ -41,6 +44,7 @@ interface ResolvedAnnotations {
   phrases: Record<string, PhraseAnnotationView>;
   grammar: Record<string, GrammarAnnotationView>;
   grammarMatches: GrammarMatchView[];
+  tokens: TokenView[];
 }
 
 interface Viewer {
@@ -141,17 +145,23 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       : null;
     const viewer = userId && userCefrLevel ? { userId, userCefrLevel } : null;
 
-    const [words, phrases, grammarMatches] = await Promise.all([
+    const sentences = await this.em.find(
+      Sentence,
+      { postId },
+      { disableIdentityMap: true },
+    );
+    const [words, phrases, grammarMatches, tokens] = await Promise.all([
       this.resolveWords(wordDefinitionIds, viewer),
       this.resolvePhrases(phraseIds, viewer),
-      this.resolveGrammarMatches(postId, parts, viewer),
+      this.resolveGrammarMatches(sentences, parts, viewer),
+      this.resolveTokens(sentences, parts),
     ]);
     const grammar = await this.resolveGrammar(
       grammarSlugs,
       unique(grammarMatches.map((match) => match.grammarUsagePointId)),
     );
 
-    return { words, phrases, grammar, grammarMatches };
+    return { words, phrases, grammar, grammarMatches, tokens };
   }
 
   private async resolveWords(
@@ -284,15 +294,10 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   // block's unit text. A row that can't be placed (stale sentence text, no
   // covered token) is dropped, not painted on the wrong text.
   private async resolveGrammarMatches(
-    postId: string,
+    sentences: Sentence[],
     parts: PostPart[],
     viewer: Viewer | null,
   ): Promise<GrammarMatchView[]> {
-    const sentences = await this.em.find(
-      Sentence,
-      { postId },
-      { disableIdentityMap: true },
-    );
     if (sentences.length === 0) {
       return [];
     }
@@ -374,6 +379,56 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         a.charStart - b.charStart ||
         a.charEnd - b.charEnd ||
         a.grammarUsagePointId.localeCompare(b.grammarUsagePointId),
+    );
+  }
+
+  // The reader's per-token analysis (POS, tense, irregular verbs): each
+  // spaCy token of a sentence is mapped to a char range in its block's unit
+  // text. A sentence whose text no longer matches the tree is skipped whole.
+  private async resolveTokens(
+    sentences: Sentence[],
+    parts: PostPart[],
+  ): Promise<TokenView[]> {
+    if (sentences.length === 0) {
+      return [];
+    }
+    const [tokens, irregularByLemma] = await Promise.all([
+      this.em.find(
+        SentenceToken,
+        { sentenceId: { $in: sentences.map((s) => s.id) } },
+        { orderBy: { position: 'asc' }, disableIdentityMap: true },
+      ),
+      loadIrregularVerbsByLemma(),
+    ]);
+    const tokensBySentence = new Map<string, SentenceToken[]>();
+    for (const token of tokens) {
+      const list = tokensBySentence.get(token.sentenceId) ?? [];
+      list.push(token);
+      tokensBySentence.set(token.sentenceId, list);
+    }
+    const partIndexById = new Map(parts.map((p, i) => [p.id, i]));
+
+    const out: TokenView[] = [];
+    for (const sentence of sentences) {
+      const blockIndex = partIndexById.get(sentence.postPartId);
+      const part = parts[blockIndex ?? -1];
+      if (blockIndex === undefined || !part) {
+        continue;
+      }
+      for (const token of locateSentenceTokens({
+        block: part.body,
+        sentence,
+        tokens: tokensBySentence.get(sentence.id) ?? [],
+        irregularByLemma,
+      })) {
+        out.push({ blockIndex, ...token });
+      }
+    }
+    return out.sort(
+      (a, b) =>
+        a.blockIndex - b.blockIndex ||
+        (a.itemIndex ?? 0) - (b.itemIndex ?? 0) ||
+        a.charStart - b.charStart,
     );
   }
 

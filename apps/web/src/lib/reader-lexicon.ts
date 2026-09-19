@@ -63,6 +63,8 @@ export interface GrammarLexiconEntry {
   guideword: string;
   canDoStatement: string;
   exampleText: string | null;
+  // "Why this construction, not a competing one" — shown in Analyze mode.
+  contrast: string | null;
   state: EffectiveState;
 }
 
@@ -123,7 +125,27 @@ export function lexiconActionsHtml(
   </div>`;
 }
 
-function lexiconSectionHtml(entry: LexiconEntry): string {
+export function reportRowId(target: LexiconTarget): string {
+  return `lex-report-${target.kind}-${target.id}`;
+}
+
+// "Report a mistake" — posts the label to /partials/report-label, which swaps
+// this row for a thanks note.
+export function reportRowHtml(target: LexiconTarget, slugId: string): string {
+  return `<div class="lex-report" id="${reportRowId(target)}">
+    <form hx-post="/partials/report-label" hx-target="#${reportRowId(target)}" hx-swap="outerHTML">
+      <input type="hidden" name="slugId" value="${esc(slugId)}" />
+      <input type="hidden" name="kind" value="${target.kind}" />
+      <input type="hidden" name="targetId" value="${esc(target.id)}" />
+      <button type="submit" class="lex-report__btn">Report a mistake</button>
+    </form>
+  </div>`;
+}
+
+export const REPORT_DONE_HTML =
+  '<span class="lex-report lex-report--done" role="status">Thanks — reported.</span>';
+
+function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
   const term = entryTerm(entry);
   const sub =
     entry.kind === 'word'
@@ -142,10 +164,14 @@ function lexiconSectionHtml(entry: LexiconEntry): string {
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
   ${entry.example ? `<p class="lex-popup__example">${esc(entry.example)}</p>` : ''}
   ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
+  ${reportRowHtml({ kind: entry.kind, id: entry.id }, slugId)}
 </section>`;
 }
 
-function grammarSectionHtml(entry: GrammarLexiconEntry): string {
+function grammarSectionHtml(
+  entry: GrammarLexiconEntry,
+  slugId: string,
+): string {
   return `<section class="lex-popup__section" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
   <div class="lex-popup__head">
     <span class="lex-popup__kicker">Grammar · ${esc(entry.construction)}</span>
@@ -154,7 +180,9 @@ function grammarSectionHtml(entry: GrammarLexiconEntry): string {
   <p class="lex-popup__term lex-popup__term--guide">${esc(entry.guideword)}</p>
   <p class="lex-popup__def">${esc(entry.canDoStatement)}</p>
   ${entry.exampleText ? `<p class="lex-popup__example">${esc(entry.exampleText)}</p>` : ''}
+  ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
+  ${reportRowHtml({ kind: 'grammar', id: entry.id }, slugId)}
 </section>`;
 }
 
@@ -163,10 +191,11 @@ function grammarSectionHtml(entry: GrammarLexiconEntry): string {
 export function readerPopupHtml(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
+  slugId: string,
 ): string {
   return [
-    lexical ? lexiconSectionHtml(lexical) : '',
-    grammar ? grammarSectionHtml(grammar) : '',
+    lexical ? lexiconSectionHtml(lexical, slugId) : '',
+    grammar ? grammarSectionHtml(grammar, slugId) : '',
   ]
     .filter(Boolean)
     .join('<hr class="lex-popup__divider" />');

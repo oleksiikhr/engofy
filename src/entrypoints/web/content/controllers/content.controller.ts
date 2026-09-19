@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -45,6 +46,7 @@ import {
   PostsListItemDto,
   PostsListResponseDto,
 } from '../dto/posts-list-response.dto.js';
+import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
 
 // Guest-readable content surface (PLAN.md §2, §4): the post feed, a single
 // post with its inline analysis, and the grammar reference. Served under
@@ -144,6 +146,24 @@ export class ContentController {
       throw new NotFoundException('Post not found');
     }
     await this.post.markPostRead(actor.id, shortId);
+  }
+
+  // "Report a mistake" in the reader popup: records that a word/phrase/grammar
+  // label looks wrong, as a structured log event (no table). Open to guests —
+  // the label is public content — with the reporter's id when signed in.
+  @Public()
+  @PostRoute('posts/:slugId/label-reports')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async reportLabel(
+    @Param('slugId') slugId: string,
+    @Body() body: ReportLabelBodyDto,
+    @CurrentUserOrNull() actor: UserActor | null,
+  ): Promise<void> {
+    const shortId = parseSlugId(slugId);
+    if (!shortId) {
+      throw new NotFoundException('Post not found');
+    }
+    await this.post.reportLabel(actor?.id ?? null, shortId, body);
   }
 
   // The `/grammar` reference index: constructions grouped by category / time /
@@ -286,6 +306,19 @@ function toAnnotationsDto(
       charEnd: match.charEnd,
       grammarUsagePointId: match.grammarUsagePointId,
       state: match.state,
+    })),
+    tokens: annotations.tokens.map((token) => ({
+      blockIndex: token.blockIndex,
+      itemIndex: token.itemIndex,
+      charStart: token.charStart,
+      charEnd: token.charEnd,
+      pos: token.pos,
+      tense: token.tense,
+      irregular: token.irregular && {
+        base: token.irregular.base,
+        pastSimple: token.irregular.pastSimple,
+        pastParticiple: token.irregular.pastParticiple,
+      },
     })),
   };
 }

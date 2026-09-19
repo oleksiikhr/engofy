@@ -1,4 +1,4 @@
-import { flattenPostPartUnits } from './flatten.js';
+import { flattenPostPartUnits, type PartUnit } from './flatten.js';
 import type { TokenOffsets, TokenRange } from './grammar-span-tokens.js';
 import type { Block } from './node-tree.types.js';
 
@@ -19,6 +19,22 @@ export interface LocatedGrammarMatch {
   charEnd: number;
 }
 
+// The flattened unit a sentence belongs to, or null when the unit no longer
+// exists or its text at the sentence's offsets differs from `rawText` (the
+// tree was edited after spaCy parsed it).
+export function locateSentenceUnit(
+  block: Block,
+  sentence: LocatedSentence,
+): PartUnit | null {
+  const unit = flattenPostPartUnits(block).find(
+    (candidate) => candidate.unitIndex === sentence.unitIndex,
+  );
+  return unit &&
+    unit.text.slice(sentence.charStart, sentence.charEnd) === sentence.rawText
+    ? unit
+    : null;
+}
+
 // Maps a grammar_matches token range (sentence-relative) onto char offsets in
 // the flattened unit text of its post part. Returns null when the range covers
 // no token, the unit no longer exists, or the unit text at the sentence's
@@ -32,13 +48,8 @@ export function locateGrammarMatch(input: {
 }): LocatedGrammarMatch | null {
   const { block, sentence, tokens, match } = input;
 
-  const unit = flattenPostPartUnits(block).find(
-    (candidate) => candidate.unitIndex === sentence.unitIndex,
-  );
-  if (
-    !unit ||
-    unit.text.slice(sentence.charStart, sentence.charEnd) !== sentence.rawText
-  ) {
+  const unit = locateSentenceUnit(block, sentence);
+  if (!unit) {
     return null;
   }
 

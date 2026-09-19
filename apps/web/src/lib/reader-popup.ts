@@ -85,6 +85,8 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   popup.hidden = true;
   document.body.appendChild(popup);
 
+  const slugId =
+    root.closest<HTMLElement>('[data-slug-id]')?.dataset.slugId ?? '';
   let active: Element | null = null;
   let anchorY: number | null = null;
 
@@ -133,7 +135,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     active = target.anchor;
     anchorY = clientY;
     target.anchor.classList.add('is-active');
-    popup.innerHTML = readerPopupHtml(target.lexical, target.grammar);
+    popup.innerHTML = readerPopupHtml(target.lexical, target.grammar, slugId);
     if (!('speechSynthesis' in window)) {
       popup.querySelector('.lex-popup__speak')?.remove();
     }

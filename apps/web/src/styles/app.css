@@ -435,3 +435,183 @@ button[value="easy"] {
 .lex-state--learned {
   color: var(--color-success);
 }
+
+/* --- Reader toolbar + token layers. `[data-tok]` spans are added client-side
+   by reader-tokens.ts the first time a mode is switched on; each mode is a
+   class on <body> (reader-pos / reader-tense / reader-analyze). --- */
+.theme-reader {
+  --pos-noun: #2f6fdb;
+  --pos-verb: #c8471c;
+  --pos-adj: #2f8a4f;
+  --pos-adv: #8a4fd0;
+  --tense-past: #b8730d;
+  --tense-present: #2f6fdb;
+  --tense-future: #2f8a4f;
+}
+@media (prefers-color-scheme: dark) {
+  .theme-reader {
+    --pos-noun: #7fb0ff;
+    --pos-verb: #ff9a72;
+    --pos-adj: #6fcf8f;
+    --pos-adv: #c39bff;
+    --tense-past: #f0b84e;
+    --tense-present: #7fb0ff;
+    --tense-future: #6fcf8f;
+  }
+}
+
+.reader-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-paper);
+}
+.reader-toolbar__btn {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.reader-toolbar__btn[aria-pressed="true"] {
+  border-color: var(--color-brand);
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+}
+.reader-toolbar__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.reader-toolbar__size {
+  display: flex;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+.reader-legend {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+.reader-legend[hidden] {
+  display: none;
+}
+.reader-legend__item {
+  padding: 0.05rem 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.reader-pos [data-pos-group="noun"],
+.reader-legend [data-pos-group="noun"] {
+  --tok: var(--pos-noun);
+}
+.reader-pos [data-pos-group="verb"],
+.reader-legend [data-pos-group="verb"] {
+  --tok: var(--pos-verb);
+}
+.reader-pos [data-pos-group="adj"],
+.reader-legend [data-pos-group="adj"] {
+  --tok: var(--pos-adj);
+}
+.reader-pos [data-pos-group="adv"],
+.reader-legend [data-pos-group="adv"] {
+  --tok: var(--pos-adv);
+}
+.reader-tense [data-tense="past"],
+.reader-legend [data-tense="past"] {
+  --tok: var(--tense-past);
+}
+.reader-tense [data-tense="present"],
+.reader-legend [data-tense="present"] {
+  --tok: var(--tense-present);
+}
+.reader-tense [data-tense="future"],
+.reader-legend [data-tense="future"] {
+  --tok: var(--tense-future);
+}
+/* Tense wins over POS on a verb when both modes are on. */
+.reader-pos [data-tok][data-pos-group],
+.reader-tense [data-tok][data-tense],
+.reader-legend__item[data-pos-group],
+.reader-legend__item[data-tense] {
+  background: color-mix(in srgb, var(--tok) 20%, transparent);
+  border-radius: 0.3rem;
+  box-shadow: 0 -0.1em 0 0 color-mix(in srgb, var(--tok) 70%, transparent) inset;
+}
+
+/* Analyze: each token becomes a small column — the word, its POS tag, and for
+   an irregular verb its forms. The word stays first so the token's baseline is
+   the word's, and the column widens to the longest row (no overlap). */
+.reader-analyze [data-tok] {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.reader-analyze [data-tok]::after,
+.reader-analyze [data-tok]::before {
+  font-family: var(--font-body);
+  font-size: 0.5em;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.reader-analyze [data-tok]::after {
+  content: attr(data-tag);
+  order: 1;
+  color: var(--color-ink-faint);
+}
+.reader-analyze [data-tok]::before {
+  content: attr(data-irregular);
+  order: 2;
+  text-transform: none;
+  color: var(--color-danger);
+}
+.reader-analyze [data-grammar-usage-point-id] {
+  box-shadow: 0 0.12em 0 0 var(--color-brand);
+}
+.lex-popup__contrast {
+  display: none;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--color-brand-wash);
+  font-size: 0.9rem;
+}
+.reader-analyze .lex-popup__contrast {
+  display: block;
+}
+.lex-report {
+  margin-top: 0.6rem;
+}
+.lex-report form {
+  margin: 0;
+}
+.lex-report__btn {
+  font: inherit;
+  font-size: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink-faint);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.lex-report--done {
+  font-size: 0.75rem;
+  color: var(--color-success);
+}

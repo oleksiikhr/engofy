@@ -27,10 +27,14 @@ const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
 
 const bodyHtml = renderDoc(post.doc, post.annotations);
 // `<` is escaped so the JSON can't close its own <script> element.
-const lexiconJson = JSON.stringify(buildLexiconData(post.annotations)).replace(
-  /</g,
-  '\\u003c',
+const escapeJson = (value: unknown) =>
+  JSON.stringify(value).replace(/</g, '\\u003c');
+const lexiconJson = escapeJson(
+  buildLexiconData(post.annotations, post.exercises),
 );
+// `?? []`: an API still on the previous release omits `tokens`.
+const tokens = post.annotations.tokens ?? [];
+const tokensJson = escapeJson(tokens);
 
 // --- exercise view models (all casts / normalisation live here; the template
 // only maps over plain data) ---
@@ -151,8 +155,45 @@ const drills: DrillView[] = post.exercises
         }
       </header>
 
+      <div class="reader-toolbar" role="toolbar" aria-label="Reader tools">
+        {
+          tokens.length > 0 && (
+            <>
+              <button type="button" class="reader-toolbar__btn" data-mode="pos" aria-pressed="false">
+                Parts of speech
+              </button>
+              <button type="button" class="reader-toolbar__btn" data-mode="tense" aria-pressed="false">
+                Tenses
+              </button>
+              <button type="button" class="reader-toolbar__btn" data-mode="analyze" aria-pressed="false">
+                Analyze
+              </button>
+            </>
+          )
+        }
+        <span class="reader-toolbar__size">
+          <button type="button" class="reader-toolbar__btn" data-size="-1" aria-label="Smaller text">A−</button>
+          <button type="button" class="reader-toolbar__btn" data-size="1" aria-label="Larger text">A+</button>
+        </span>
+        <p class="reader-legend" data-legend="pos" hidden>
+          <span class="reader-legend__item" data-pos-group="noun">noun</span>
+          <span class="reader-legend__item" data-pos-group="verb">verb</span>
+          <span class="reader-legend__item" data-pos-group="adj">adjective</span>
+          <span class="reader-legend__item" data-pos-group="adv">adverb</span>
+        </p>
+        <p class="reader-legend" data-legend="tense" hidden>
+          <span class="reader-legend__item" data-tense="past">past</span>
+          <span class="reader-legend__item" data-tense="present">present</span>
+          <span class="reader-legend__item" data-tense="future">future</span>
+        </p>
+        <p class="reader-legend" data-legend="analyze" hidden>
+          Tap a highlighted construction to see why it fits. Irregular verbs show their forms.
+        </p>
+      </div>
+
       <div class="analysis reading-body" set:html={bodyHtml} />
       <script is:inline type="application/json" id="lexicon-data" set:html={lexiconJson} />
+      <script is:inline type="application/json" id="reader-tokens" set:html={tokensJson} />
     </article>
   </div>
 
@@ -229,11 +270,17 @@ const drills: DrillView[] = post.exercises
 
 <script>
   import { initReaderPopup } from '../../lib/reader-popup';
+  import { initReaderToolbar } from '../../lib/reader-toolbar';
 
   const body = document.querySelector<HTMLElement>('.reading-body');
   const raw = document.getElementById('lexicon-data')?.textContent;
   if (body && raw) {
     initReaderPopup(body, JSON.parse(raw));
+  }
+  const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
+  const tokensRaw = document.getElementById('reader-tokens')?.textContent;
+  if (body && toolbar && tokensRaw) {
+    initReaderToolbar(toolbar, body, JSON.parse(tokensRaw));
   }
 </script>
 

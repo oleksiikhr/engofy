@@ -1,4 +1,8 @@
 import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
+import type {
+  IrregularVerbForms,
+  TokenTense,
+} from '../../domain/analyze-token.js';
 import type { Doc } from '../../domain/node-tree.types.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
@@ -66,6 +70,20 @@ export interface GrammarMatchView {
   state: EffectiveState;
 }
 
+// One spaCy token placed on the doc (same block/unit/char coordinates as a
+// GrammarMatchView). Punctuation and whitespace tokens are left out. `pos` is
+// the raw spaCy UPOS tag; `tense` is set on finite verbs and `will`;
+// `irregular` on a verb in an irregular past form.
+export interface TokenView {
+  blockIndex: number;
+  itemIndex: number | null;
+  charStart: number;
+  charEnd: number;
+  pos: string;
+  tense: TokenTense | null;
+  irregular: IrregularVerbForms | null;
+}
+
 export interface PostExerciseView {
   id: string;
   type: ExerciseType;
@@ -97,6 +115,8 @@ export interface PostDetailView {
     grammar: Record<string, GrammarAnnotationView>;
     // Sorted by position in the doc.
     grammarMatches: GrammarMatchView[];
+    // Sorted by position in the doc.
+    tokens: TokenView[];
   };
   exercises: PostExerciseView[];
 }
