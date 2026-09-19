@@ -34,4 +34,20 @@ test.describe('profile (signed in)', () => {
     await expect(skill).not.toHaveClass(/skill--locked/);
     await expect(skill.locator('.skill__mastery')).toBeVisible();
   });
+
+  test('saves a new content difficulty level', async ({ page }) => {
+    const profile = new ProfilePage(page);
+    await profile.goto();
+    const before = await profile.levelForm
+      .getByRole('radio', { checked: true })
+      .inputValue();
+    const next = before === 'C1' ? 'B2' : 'C1';
+
+    await profile.saveLevel(next);
+    await expect(profile.levelOption(next)).toBeChecked();
+
+    // Restore, so the persisted level doesn't leak into other specs.
+    await profile.saveLevel(before);
+    await expect(profile.levelOption(before)).toBeChecked();
+  });
 });
