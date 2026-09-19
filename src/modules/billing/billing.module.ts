@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { BillingService } from './billing.service.js';
 import { ActivateMockSubscriptionHandler } from './commands/activate-mock-subscription/activate-mock-subscription.handler.js';
+import { CancelSubscriptionHandler } from './commands/cancel-subscription/cancel-subscription.handler.js';
 import { GetSubscriptionHandler } from './queries/get-subscription/get-subscription.handler.js';
 import { SubscriptionService } from './services/subscription.service.js';
 
@@ -14,6 +15,7 @@ import { SubscriptionService } from './services/subscription.service.js';
     BillingService,
     SubscriptionService,
     ActivateMockSubscriptionHandler,
+    CancelSubscriptionHandler,
     GetSubscriptionHandler,
   ],
   exports: [BillingService],

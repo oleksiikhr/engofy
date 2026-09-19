@@ -1,5 +1,6 @@
 export enum QueueName {
   AuthChallengeEmail = 'auth-challenge-email',
+  AuthAccountDeletionEmail = 'auth-account-deletion-email',
   PostAnnotation = 'post-annotation',
   PostSpacyParse = 'post-spacy-parse',
   PostAiComplexity = 'post-ai-complexity',

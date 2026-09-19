@@ -32,17 +32,24 @@ const DETERMINISTIC_RETRY = {
   retryBackoff: true,
 } as const satisfies Omit<Queue, 'name'>;
 
-// Auth's own queue is declared by `AuthQueueBootstrapService`
+// Auth's own queues are declared by `AuthQueueBootstrapService`
 // (`modules/auth`), independent of the post pipeline — login must not depend
 // on `PostModule` being loaded.
 export const AUTH_CHALLENGE_EMAIL_QUEUE: Omit<Queue, 'name'> = {
   ...DETERMINISTIC_RETRY,
 };
 
+export const AUTH_ACCOUNT_DELETION_EMAIL_QUEUE: Omit<Queue, 'name'> = {
+  ...DETERMINISTIC_RETRY,
+};
+
 // Single source of truth for every *post pipeline* queue's `createQueue`
 // options. `PostQueueBootstrapService` is the only place this is consumed (D8).
 export const QUEUE_DEFINITIONS: Record<
-  Exclude<QueueName, QueueName.AuthChallengeEmail>,
+  Exclude<
+    QueueName,
+    QueueName.AuthChallengeEmail | QueueName.AuthAccountDeletionEmail
+  >,
   Omit<Queue, 'name'>
 > = {
   [QueueName.PostSpacyParse]: { ...PIPELINE_BASE, ...DETERMINISTIC_RETRY },

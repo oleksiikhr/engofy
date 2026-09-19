@@ -59,10 +59,10 @@ contribution-графіка. Додається до `/profile/progress`.
 Зміна нічого не мігрує, ефект миттєвий (дефолт "презумпція знання" рахується на
 льоту).
 
-### [ ] 4. Видалення акаунту: запит + скасування
+### [x] 4. Видалення акаунту: запит + скасування
 - Branch: `profile-hub-redesign-04-account-deletion-request`
-- Base: `profile-hub-redesign-03-cefr-edit-ui`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/30
 
 Нова `AccountDeletionRequest` (`userId`, `requestedAt`, `cancelToken`,
 `cancelledAt?`) + міграція. Команда запиту видалення: створює запис, ставить job на
@@ -72,6 +72,13 @@ mail-чергу за наявним патерном `ChallengeMailerService`/pg
 Підписка скасовується одразу як частина запиту на видалення (реальних грошей нема,
 `is_mock_payment = true`). Банер у хабі показується, поки є активний
 незаскасований запит.
+
+Реалізовано інакше, ніж задумано: `cancelToken` зберігається як sha256-хеш
+(`cancelTokenHash`), тож банер скасовує по сесії
+(`POST /profile/account-deletion/cancel`), а лист — по токену
+(`POST /profile/account-deletion/cancel-by-token`, public). `GET /profile` віддає
+`accountDeletion: { requestedAt, scheduledFor } | null`. Лист веде на
+`${PUBLIC_URL}/account-deletion/cancel?token=…` — сторінку робить слайс 6.
 
 ### [ ] 5. Видалення акаунту: cascade cron
 - Branch: `profile-hub-redesign-05-account-deletion-cron`
@@ -92,6 +99,8 @@ NULL`, каскадно видаляє всі пов'язані дані (не �
 редагування рівня, банер видалення, логаут — вже є), `/profile/progress`
 (перейменований поточний вміст + календар), `/profile/subscription` (план/дата
 поновлення з наявного `GetSubscriptionQuery`, "72/100" з `CardLimitService`,
-посилання на `/pricing`). Прибрати слово "mock" з копірайту саме
+посилання на `/pricing`). Плюс сторінка `/account-deletion/cancel?token=…` (кличе
+`POST /profile/account-deletion/cancel-by-token`; без сесії) — на неї веде лист зі
+слайсу 4. Прибрати слово "mock" з копірайту саме
 `/profile/subscription` тут (аналогічний фікс на `pricing.astro:88` — інший план,
 не дублювати тут).

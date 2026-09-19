@@ -11,6 +11,7 @@ export default registerAs('auth', () => ({
     'AUTH_REQUEST_LIMIT_WINDOW_MS',
     60 * 60 * 1000,
   ),
+  accountDeletionGraceDays: envNumber('AUTH_ACCOUNT_DELETION_GRACE_DAYS', 30),
   sessionTtlMs: envNumber('AUTH_SESSION_TTL_MS', 30 * 24 * 60 * 60 * 1000),
   sessionRefreshThresholdMs: envNumber(
     'AUTH_SESSION_REFRESH_THRESHOLD_MS',

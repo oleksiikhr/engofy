@@ -2,10 +2,14 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import type { CefrLevel } from '../post/enums/cefr-level.enum.js';
+import { CancelAccountDeletionCommand } from './commands/cancel-account-deletion/cancel-account-deletion.command.js';
+import { CancelAccountDeletionByTokenCommand } from './commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.command.js';
+import type { CancelAccountDeletionByTokenDto } from './commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.dto.js';
 import { LoginWithGoogleCommand } from './commands/login-with-google/login-with-google.command.js';
 import type { LoginWithGoogleDto } from './commands/login-with-google/login-with-google.dto.js';
 import { LogoutCommand } from './commands/logout/logout.command.js';
 import type { LogoutDto } from './commands/logout/logout.dto.js';
+import { RequestAccountDeletionCommand } from './commands/request-account-deletion/request-account-deletion.command.js';
 import { RequestLoginCodeCommand } from './commands/request-login-code/request-login-code.command.js';
 import type { RequestLoginCodeDto } from './commands/request-login-code/request-login-code.dto.js';
 import {
@@ -17,7 +21,9 @@ import { SetCefrLevelCommand } from './commands/set-cefr-level/set-cefr-level.co
 import { VerifyLoginCodeCommand } from './commands/verify-login-code/verify-login-code.command.js';
 import type { VerifyLoginCodeDto } from './commands/verify-login-code/verify-login-code.dto.js';
 import type { User } from './entities/user.entity.js';
+import { GetAccountDeletionQuery } from './queries/get-account-deletion/get-account-deletion.query.js';
 import { GetUserQuery } from './queries/get-user/get-user.query.js';
+import type { AccountDeletionView } from './types/account-deletion-view.type.js';
 import type { LoginResult } from './types/login-result.type.js';
 
 @Injectable()
@@ -72,6 +78,34 @@ export class AuthService {
     await this.em.flush();
 
     return result;
+  }
+
+  async requestAccountDeletion(userId: string): Promise<AccountDeletionView> {
+    const result = await this.commandBus.execute(
+      new RequestAccountDeletionCommand(userId),
+    );
+
+    await this.em.flush();
+
+    return result;
+  }
+
+  async cancelAccountDeletion(userId: string): Promise<void> {
+    await this.commandBus.execute(new CancelAccountDeletionCommand(userId));
+
+    await this.em.flush();
+  }
+
+  async cancelAccountDeletionByToken(
+    dto: CancelAccountDeletionByTokenDto,
+  ): Promise<void> {
+    await this.commandBus.execute(new CancelAccountDeletionByTokenCommand(dto));
+
+    await this.em.flush();
+  }
+
+  getAccountDeletion(userId: string): Promise<AccountDeletionView | null> {
+    return this.queryBus.execute(new GetAccountDeletionQuery(userId));
   }
 
   async resolveSession(
