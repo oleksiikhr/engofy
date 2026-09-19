@@ -81,7 +81,7 @@ try {
         <legend class="visually-hidden">Level</legend>
         {
           CEFR_LEVELS.map((level) => (
-            <label class="posts-level">
+            <label class="pill">
               <input
                 type="checkbox"
                 name="cefr"
@@ -129,14 +129,6 @@ try {
 </Layout>
 
 <style is:global>
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
   .posts-controls {
     display: grid;
     gap: 0.875rem;
@@ -172,40 +164,6 @@ try {
     margin: 0;
     padding: 0;
     min-width: 0;
-  }
-  .posts-level {
-    position: relative;
-    cursor: pointer;
-  }
-  .posts-level input {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    margin: 0;
-    cursor: pointer;
-  }
-  .posts-level span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 3.25rem;
-    height: 2.5rem;
-    padding: 0 0.875rem;
-    border: 2px solid var(--color-border-strong);
-    border-radius: 999px;
-    background: var(--color-card);
-    color: var(--color-ink-soft);
-    font-size: 0.9rem;
-    font-weight: 800;
-  }
-  .posts-level input:checked + span {
-    background: var(--color-brand-wash);
-    border-color: var(--color-brand);
-    color: var(--color-brand-strong);
-  }
-  .posts-level input:focus-visible + span {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
   }
   .posts-unread {
     display: flex;

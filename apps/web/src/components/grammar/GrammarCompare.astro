@@ -8,7 +8,7 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<aside class="gp-compare" data-testid="grammar-compare">
+<aside class="gp-compare card card--soft" data-testid="grammar-compare">
   <h2>Compare with</h2>
   <ul>
     {
@@ -25,24 +25,30 @@ const { items } = Astro.props;
 <style>
   .gp-compare {
     margin-bottom: 2rem;
-    padding: 1rem 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.6rem;
-    background: var(--color-paper-soft);
   }
   .gp-compare h2 {
-    margin: 0 0 0.5rem;
-    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    font-size: 1.19rem;
+    font-weight: 800;
   }
   .gp-compare ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.4rem;
+    gap: 0.5rem;
+  }
+  .gp-compare li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.125rem 0.75rem;
+  }
+  .gp-compare li a {
+    font-weight: 800;
   }
   .gp-compare li span {
-    margin-left: 0.5rem;
+    font-size: 0.9rem;
     color: var(--color-ink-soft);
   }
 </style>
