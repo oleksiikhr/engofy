@@ -116,16 +116,19 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     !user && (
       <div class="landing">
         <section class="landing-hero">
+          <p class="eyebrow">English through reading</p>
           <h1>Engofy</h1>
-          <p>Learn English through short authentic texts.</p>
-          <a class="btn" href="/login">Get started</a>
+          <p class="landing-hero__lead">
+            Learn English through short authentic texts.
+          </p>
+          <a class="btn btn--lg" href="/login">Get started</a>
         </section>
 
         <section class="landing-section" aria-label="Features">
           <ul class="features">
             {
               FEATURES.map((f) => (
-                <li class="feature">
+                <li class="card feature">
                   <h2>{f.title}</h2>
                   <p>{f.text}</p>
                 </li>
@@ -153,7 +156,9 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
           </div>
         </section>
 
-        <section class="landing-section landing-section--cta">
+        <section class="card card--soft landing-cta">
+          <h2>Ready to read?</h2>
+          <p>Free to start, no password needed.</p>
           <a class="btn" href="/login">Log in</a>
         </section>
       </div>
@@ -164,21 +169,21 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     user && showOnboarding && (
       <section class="card onboarding">
         <h1>Set your English level</h1>
-        <p>
+        <p class="onboarding__lead">
           This picks articles and grammar at the right difficulty for you.
           You can change it later in your profile.
         </p>
-        <form method="post" class="onboarding__form">
+        <form method="post">
           <div class="onboarding__levels">
             {LEVELS.map((lvl) => (
-              <label class="onboarding__level">
+              <label class="pill">
                 <input
                   type="radio"
                   name="cefrLevel"
                   value={lvl}
                   checked={lvl === 'A1'}
                 />
-                {lvl}
+                <span>{lvl}</span>
               </label>
             ))}
           </div>
@@ -203,8 +208,8 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 
   {
     user && !showOnboarding && plan && summary && (
-      <section class="card session-done" data-testid="session-done">
-        <p class="session-done__emoji">✓</p>
+      <section class="card session session-done" data-testid="session-done">
+        <p class="session-done__mark tone-green" aria-hidden="true">✓</p>
         <h1>All done for today</h1>
         <p class="session-done__summary">
           {[
@@ -217,7 +222,7 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
             .join(' · ') || 'Session complete.'}
         </p>
         <p>
-          <a class="btn btn--ghost" href="/posts">Read more articles</a>
+          <a class="btn btn--sec" href="/posts">Read more articles</a>
         </p>
       </section>
     )
@@ -225,13 +230,16 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 
   {
     user && !showOnboarding && plan && !summary && !plan.isRead && (
-      <section class="card session-step" data-testid="session-step-read">
-        <p class="session-step__kicker">Today's session · Step 1 of 3</p>
+      <section class="card session" data-testid="session-step-read">
+        <div class="session__head">
+          <p class="eyebrow">Today's session · Step 1 of 3</p>
+          <span class="bar"><i style="width: 33%"></i></span>
+        </div>
         {plan.postCefrLevel && <span class="badge">{plan.postCefrLevel}</span>}
         <h1>{plan.postTitle ?? 'Today’s reading'}</h1>
         <p>
           <a
-            class="btn"
+            class="btn btn--lg"
             href={`${postUrl({ slug: plan.postSlug, shortId: plan.postShortId })}?from=home`}
           >
             Start reading
@@ -243,8 +251,11 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 
   {
     showPractice && (
-      <section class="card session-step" data-testid="session-step-practice">
-        <p class="session-step__kicker">Today's session · Step 2 of 3</p>
+      <section class="session" data-testid="session-step-practice">
+        <div class="session__head">
+          <p class="eyebrow">Today's session · Step 2 of 3</p>
+          <span class="bar"><i style="width: 66%"></i></span>
+        </div>
         <div id="daily-practice-container" set:html={initialPracticeHtml} />
       </section>
     )
@@ -252,8 +263,11 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 
   {
     showGrammar && plan && (
-      <section class="card session-step" data-testid="session-step-grammar">
-        <p class="session-step__kicker">Today's session · Step 3 of 3</p>
+      <section class="card session" data-testid="session-step-grammar">
+        <div class="session__head">
+          <p class="eyebrow">Today's session · Step 3 of 3</p>
+          <span class="bar"><i style="width: 100%"></i></span>
+        </div>
         {
           plan.grammarGuideword ? (
             <>
@@ -277,7 +291,7 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
           )
         }
         <form method="post" action="/partials/complete-daily-plan">
-          <button class="btn" type="submit">Finish for today</button>
+          <button class="btn btn--lg" type="submit">Finish for today</button>
         </form>
       </section>
     )
@@ -291,23 +305,22 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 <style>
   .landing-hero {
     text-align: center;
-    padding: 3rem 1rem;
+    padding: 3.5rem 1rem 3rem;
   }
   .landing-hero h1 {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: clamp(2.5rem, 7vw, 3.75rem);
+    font-weight: 800;
+    line-height: 1.05;
   }
-  .landing-hero p {
+  .landing-hero__lead {
+    max-width: 30rem;
+    margin: 0 auto 2rem;
+    font-size: 1.15rem;
     color: var(--color-ink-soft);
-    margin-bottom: 1.5rem;
   }
   .landing-section {
-    padding: 2rem 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-  .landing-section--cta {
-    text-align: center;
+    padding: 1.5rem 0;
   }
   .features {
     list-style: none;
@@ -315,16 +328,16 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1.5rem;
+    gap: 1rem;
   }
   .feature h2 {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
     margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+    font-weight: 800;
   }
   .feature p {
-    color: var(--color-ink-soft);
     margin: 0;
+    color: var(--color-ink-soft);
   }
   .shots {
     display: grid;
@@ -335,61 +348,90 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     margin: 0;
   }
   .shot img {
+    display: block;
     width: 100%;
     height: auto;
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-control);
+    border-radius: 1.125rem;
+    box-shadow: var(--shadow-sm);
   }
   .shot figcaption {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     text-align: center;
     color: var(--color-ink-soft);
     font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .landing-cta {
+    margin-top: 1.5rem;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+  }
+  .landing-cta h2 {
+    margin: 0 0 0.25rem;
+    font-weight: 800;
+  }
+  .landing-cta p {
+    margin: 0 0 1.25rem;
+    color: var(--color-ink-soft);
   }
 
-  .session-step,
-  .session-done,
+  .session,
   .onboarding {
-    max-width: 32rem;
+    max-width: 34rem;
     margin: 1rem auto 0;
     text-align: center;
   }
-  .session-step__kicker,
+  .session__head {
+    margin-bottom: 1.25rem;
+  }
+  .session__head .eyebrow {
+    margin: 0 0 0.6rem;
+  }
+  .session h1,
+  .onboarding h1 {
+    margin: 0.5rem 0 1rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
   .session-grammar__kicker {
-    font-size: 0.7rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-brand-strong);
-    margin: 0 0 0.75rem;
   }
   .session-grammar__example {
     font-style: italic;
     color: var(--color-ink-soft);
   }
-  .session-done__emoji {
-    font-size: 2rem;
-    color: var(--color-success);
-    margin: 0;
+  .session-done__mark {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--tone-wash);
+    color: var(--tone-ink);
+    font-size: 1.75rem;
+    font-weight: 800;
   }
   .session-done__summary {
-    font-weight: 600;
+    font-weight: 800;
     color: var(--color-brand-strong);
+  }
+  .onboarding__lead {
+    margin: 0;
+    color: var(--color-ink-soft);
   }
   .onboarding__levels {
     display: flex;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
-    margin: 1.25rem 0;
-  }
-  .onboarding__level {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    padding: 0.4rem 0.7rem;
-    cursor: pointer;
+    margin: 1.5rem 0;
   }
   .onboarding__actions {
     display: flex;

@@ -42,7 +42,11 @@ if (Astro.request.method === 'POST') {
       error = 'Enter a valid email address.';
     }
   } else if (action === 'verify-code') {
-    const code = String(form.get('code') ?? '').trim();
+    // Six one-digit boxes post as repeated `digit` fields.
+    const code = form
+      .getAll('digit')
+      .map((d) => String(d).trim())
+      .join('');
     const res = await apiPostRaw('/auth/login/verify-code', { email, code });
     if (res.ok) {
       const headers = new Headers({ location: '/' });
@@ -76,129 +80,232 @@ if (Astro.request.method === 'POST') {
       the first time you sign in.
     </p>
 
-    {error && <p class="auth__error" role="alert">{error}</p>}
-    {notice && <p class="auth__notice">{notice}</p>}
+    <div class="card auth__card">
+      {
+        error && (
+          <p class="alert tone-danger" role="alert">
+            {error}
+          </p>
+        )
+      }
+      {
+        notice && (
+          <p class="alert tone-green" role="status">
+            {notice}
+          </p>
+        )
+      }
 
-    {
-      step === 'email' ? (
-        <form method="post" class="auth__form">
-          <input type="hidden" name="action" value="request-code" />
-          <label for="email">Email address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autocomplete="email"
-            value={email}
-          />
-          <button class="btn" type="submit">
-            Email me a code
-          </button>
-        </form>
-      ) : (
-        <form method="post" class="auth__form">
-          <input type="hidden" name="action" value="verify-code" />
-          <input type="hidden" name="email" value={email} />
-          <label for="code">6-digit code</label>
-          <input
-            id="code"
-            name="code"
-            inputmode="numeric"
-            pattern="[0-9]{6}"
-            maxlength="6"
-            required
-            autocomplete="one-time-code"
-          />
-          <button class="btn" type="submit">
-            Verify and sign in
-          </button>
-          <button
-            class="btn btn--ghost"
-            type="submit"
-            name="action"
-            value="request-code"
-            formnovalidate
-          >
-            Use a different email
-          </button>
-        </form>
-      )
-    }
-
-    {
-      googleClientId && (
-        <>
-          <div class="auth__or">or</div>
-          <form method="post" id="google-form">
-            <input type="hidden" name="action" value="google" />
-            <input type="hidden" name="credential" id="google-credential" />
+      {
+        step === 'email' ? (
+          <form method="post" class="auth__form">
+            <input type="hidden" name="action" value="request-code" />
+            <div>
+              <label class="label" for="email">
+                Email address
+              </label>
+              <input
+                class="input"
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                value={email}
+              />
+            </div>
+            <button class="btn btn--lg" type="submit">
+              Email me a code
+            </button>
           </form>
-          <div
-            id="g_id_onload"
-            data-client_id={googleClientId}
-            data-callback="onGoogleCredential"
-            data-auto_prompt="false"
-          />
-          <div class="g_id_signin" data-type="standard" data-width="280" />
-          <script is:inline src="https://accounts.google.com/gsi/client" async />
-          <script is:inline>
-            window.onGoogleCredential = function (response) {
-              document.getElementById('google-credential').value =
-                response.credential;
-              document.getElementById('google-form').submit();
-            };
-          </script>
-        </>
-      )
-    }
+        ) : (
+          <form method="post" class="auth__form" data-code-form>
+            <input type="hidden" name="action" value="verify-code" />
+            <input type="hidden" name="email" value={email} />
+            <fieldset class="code">
+              <legend class="label">6-digit code</legend>
+              <div class="code__boxes">
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <input
+                    class="input code__digit num"
+                    name="digit"
+                    aria-label={`Digit ${n}`}
+                    inputmode="numeric"
+                    pattern="[0-9]"
+                    maxlength="1"
+                    required
+                    autocomplete={n === 1 ? 'one-time-code' : 'off'}
+                  />
+                ))}
+              </div>
+            </fieldset>
+            <button class="btn btn--lg" type="submit">
+              Verify and sign in
+            </button>
+            <div class="auth__alt">
+              <button
+                class="btn btn--ghost btn--sm"
+                type="submit"
+                name="action"
+                value="request-code"
+                formnovalidate
+              >
+                Send a new code
+              </button>
+              <a class="btn btn--ghost btn--sm" href="/login">
+                Use a different email
+              </a>
+            </div>
+          </form>
+        )
+      }
+
+      {
+        googleClientId && (
+          <>
+            <div class="auth__or">or</div>
+            <form method="post" id="google-form">
+              <input type="hidden" name="action" value="google" />
+              <input type="hidden" name="credential" id="google-credential" />
+            </form>
+            <div
+              id="g_id_onload"
+              data-client_id={googleClientId}
+              data-callback="onGoogleCredential"
+              data-auto_prompt="false"
+            />
+            <div class="g_id_signin" data-type="standard" data-width="280" />
+            <script is:inline src="https://accounts.google.com/gsi/client" async />
+            <script is:inline>
+              window.onGoogleCredential = function (response) {
+                document.getElementById('google-credential').value =
+                  response.credential;
+                document.getElementById('google-form').submit();
+              };
+            </script>
+          </>
+        )
+      }
+    </div>
   </div>
 </Layout>
 
+<script>
+  // Six one-digit boxes behave as one field: typing advances, Backspace steps
+  // back, and a pasted or autofilled code spreads across the boxes.
+  const form = document.querySelector<HTMLFormElement>('[data-code-form]');
+  if (form) {
+    const boxes = [
+      ...form.querySelectorAll<HTMLInputElement>('.code__digit'),
+    ];
+
+    const fill = (from: number, digits: string) => {
+      digits
+        .slice(0, boxes.length - from)
+        .split('')
+        .forEach((d, i) => {
+          boxes[from + i].value = d;
+        });
+      boxes[Math.min(from + digits.length, boxes.length - 1)].focus();
+    };
+
+    boxes.forEach((box, i) => {
+      box.addEventListener('focus', () => box.select());
+      box.addEventListener('input', () => {
+        const digits = box.value.replace(/\D/g, '');
+        box.value = '';
+        if (digits) fill(i, digits);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && i > 0) {
+          boxes[i - 1].value = '';
+          boxes[i - 1].focus();
+        } else if (e.key === 'ArrowLeft' && i > 0) {
+          boxes[i - 1].focus();
+        } else if (e.key === 'ArrowRight' && i < boxes.length - 1) {
+          boxes[i + 1].focus();
+        }
+      });
+      box.addEventListener('paste', (e) => {
+        const digits = (e.clipboardData?.getData('text') ?? '').replace(
+          /\D/g,
+          '',
+        );
+        if (!digits) return;
+        e.preventDefault();
+        fill(i, digits);
+      });
+    });
+    boxes[0].focus();
+  }
+</script>
+
 <style>
   .auth {
-    max-width: 24rem;
+    max-width: 26rem;
     margin: 1rem auto 0;
   }
   .auth__lead {
     color: var(--color-ink-soft);
     margin-bottom: 1.5rem;
   }
+  .auth__card {
+    padding: 1.75rem;
+  }
+  .auth__card .alert {
+    margin: 0 0 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
   .auth__form {
     display: grid;
-    gap: 0.6rem;
+    gap: 1.25rem;
   }
-  .auth__form label {
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  .auth__form input {
-    font: inherit;
-    padding: 0.5rem 0.65rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    background: var(--color-paper);
-    color: var(--color-ink);
-  }
-  .auth__form .btn {
+  .auth__alt {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 0.4rem;
+    gap: 0.25rem;
   }
-  .auth__error {
-    background: var(--color-highlight-wash);
-    color: var(--color-danger);
-    padding: 0.6rem 0.8rem;
-    border-radius: var(--radius-control);
-    font-size: 0.9rem;
+  .code {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
   }
-  .auth__notice {
-    color: var(--color-ink-soft);
-    font-size: 0.9rem;
+  .code legend {
+    padding: 0;
+  }
+  .code__boxes {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .code__digit {
+    min-height: 3.5rem;
+    padding: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
   }
   .auth__or {
-    text-align: center;
-    color: var(--color-ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin: 1.5rem 0 1rem;
+    color: var(--color-ink-faint);
     font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .auth__or::before,
+  .auth__or::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+  #g_id_onload + .g_id_signin {
+    display: flex;
+    justify-content: center;
   }
 </style>

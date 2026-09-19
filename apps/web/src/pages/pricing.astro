@@ -41,12 +41,21 @@ const renews = sub?.currentPeriodEnd
 
 <Layout title="Pricing — Engofy" user={user} active="pricing">
   <div class="pricing">
-    <h1>Go further with Premium</h1>
+    <header class="pricing__head">
+      <h1>Go further with Premium</h1>
+      <p>Everything you need to read and learn is free. Premium lifts the limit on saved cards.</p>
+    </header>
 
-    {error && <p class="pricing__error" role="alert">{error}</p>}
+    {
+      error && (
+        <p class="alert tone-danger" role="alert">
+          {error}
+        </p>
+      )
+    }
     {
       justUpgraded && (
-        <p class="pricing__ok" role="status">
+        <p class="alert tone-green" role="status">
           You're on Premium{renews ? ` until ${renews}` : ''}. Enjoy unlimited
           cards!
         </p>
@@ -54,20 +63,20 @@ const renews = sub?.currentPeriodEnd
     }
 
     <div class="plans">
-      <section class="plan">
+      <section class="card plan">
         <h2>Free</h2>
-        <p class="plan__price">$0</p>
-        <ul>
+        <p class="plan__price num">$0</p>
+        <ul class="plan__list">
           <li>Every article, tooltip and exercise</li>
           <li>Grammar reference and skills tree</li>
           <li>Up to {FREE_LIMIT} saved cards</li>
         </ul>
       </section>
 
-      <section class:list={['plan', 'plan--featured', { 'plan--current': isPremium }]}>
-        <h2>Premium</h2>
-        <p class="plan__price">$4.99<span>/month</span></p>
-        <ul>
+      <section class:list={['card', 'card--hi', 'plan', { 'plan--current': isPremium }]}>
+        <h2>Premium <span class="badge badge--solid">Best value</span></h2>
+        <p class="plan__price num">$4.99<span>/month</span></p>
+        <ul class="plan__list">
           <li><strong>Unlimited</strong> saved cards</li>
           <li>Everything in Free</li>
           <li>Supports the project</li>
@@ -81,7 +90,7 @@ const renews = sub?.currentPeriodEnd
           ) : user ? (
             <form method="post">
               <input type="hidden" name="action" value="subscribe" />
-              <button class="btn" type="submit">
+              <button class="btn btn--lg" type="submit">
                 Upgrade to Premium
               </button>
               <p class="plan__note">
@@ -89,7 +98,7 @@ const renews = sub?.currentPeriodEnd
               </p>
             </form>
           ) : (
-            <a class="btn" href="/login">
+            <a class="btn btn--lg" href="/login">
               Sign in to upgrade
             </a>
           )
@@ -101,27 +110,25 @@ const renews = sub?.currentPeriodEnd
 
 <style>
   .pricing {
-    max-width: 44rem;
+    max-width: 46rem;
     margin: 0 auto;
   }
-  .pricing__ok {
-    background: var(--color-brand-wash);
-    color: var(--color-brand-strong);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-control);
-    font-weight: 600;
+  .pricing__head {
+    text-align: center;
+    margin-bottom: 2rem;
   }
-  .pricing__error {
-    background: var(--color-highlight-wash);
-    color: var(--color-danger);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-control);
+  .pricing__head p {
+    margin: 0;
+    color: var(--color-ink-soft);
+  }
+  .pricing .alert {
+    margin: 0 0 1.5rem;
+    font-weight: 700;
   }
   .plans {
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
     grid-template-columns: 1fr;
-    margin-top: 1.5rem;
   }
   @media (min-width: 40rem) {
     .plans {
@@ -129,41 +136,66 @@ const renews = sub?.currentPeriodEnd
     }
   }
   .plan {
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem;
   }
-  .plan--featured {
-    border-color: var(--color-brand);
+  .plan h2 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
   }
   .plan--current {
     background: var(--color-brand-wash);
   }
   .plan__price {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.75rem;
-    margin: 0.25rem 0 0.75rem;
+    margin: 0.5rem 0 1rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
   }
   .plan__price span {
-    font-size: 0.9rem;
-    font-weight: 400;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-ink-faint);
+  }
+  .plan__list {
+    flex: 1;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+  }
+  .plan__list li {
+    position: relative;
+    padding-left: 1.5rem;
     color: var(--color-ink-soft);
   }
-  .plan ul {
-    padding-left: 1.1rem;
-    margin: 0 0 1rem;
-    display: grid;
-    gap: 0.35rem;
+  .plan__list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    font-weight: 800;
+    color: var(--color-success-ink);
   }
   .plan__state {
-    font-weight: 600;
-    color: var(--color-brand-strong);
     margin: 0;
+    font-weight: 800;
+    color: var(--color-brand-strong);
+  }
+  .plan form {
+    display: grid;
   }
   .plan__note {
+    margin: 0.6rem 0 0;
+    text-align: center;
     font-size: 0.8rem;
-    color: var(--color-ink-soft);
-    margin: 0.5rem 0 0;
+    color: var(--color-ink-faint);
   }
 </style>
