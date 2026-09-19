@@ -122,10 +122,10 @@ htmx-списків.
 навички), Subscription. Кільце денної цілі біля streak: якщо потрібні нові дані від бекенду, це
 окремий слайс за контрактним правилом.
 
-### [ ] 10. Pricing, Login, Today, account-deletion
+### [x] 10. Pricing, Login, Today, account-deletion
 - Branch: `site-redesign-10-pricing-login-today`
-- Base: `site-redesign-09-profile-progress-subscription`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/71
 
 Pricing (Free / Premium), Login (код з 6 полів, Google), гостьовий лендінг, онбординг і денний план
 на `/`, сторінка скасування видалення акаунта.
