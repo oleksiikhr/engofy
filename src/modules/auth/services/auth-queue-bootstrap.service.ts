@@ -2,10 +2,13 @@ import type { OnApplicationBootstrap } from '@nestjs/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { PgBoss } from 'pg-boss';
 import { PG_BOSS } from '../../../core/queue/queue.tokens.js';
-import { AUTH_CHALLENGE_EMAIL_QUEUE } from '../../../core/queue/queue-config.js';
+import {
+  AUTH_ACCOUNT_DELETION_EMAIL_QUEUE,
+  AUTH_CHALLENGE_EMAIL_QUEUE,
+} from '../../../core/queue/queue-config.js';
 import { QueueName } from '../../../core/queue/queue-names.enum.js';
 
-// Declares the auth challenge-email queue on its own, independent of the post
+// Declares the auth email queues on their own, independent of the post
 // pipeline's `PostQueueBootstrapService` — login is a core flow and must not
 // depend on `PostModule` being loaded for its queue to exist. Runs on
 // bootstrap of any runtime that imports `AuthModule` (web login, and the
@@ -22,6 +25,11 @@ export class AuthQueueBootstrapService implements OnApplicationBootstrap {
       AUTH_CHALLENGE_EMAIL_QUEUE,
     );
 
-    this.logger.log('auth challenge-email queue declared');
+    await this.boss.createQueue(
+      QueueName.AuthAccountDeletionEmail,
+      AUTH_ACCOUNT_DELETION_EMAIL_QUEUE,
+    );
+
+    this.logger.log('auth email queues declared');
   }
 }

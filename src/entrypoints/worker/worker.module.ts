@@ -1,6 +1,8 @@
 import type { DynamicModule, Type } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { QueueName } from '../../core/queue/queue-names.enum.js';
+import { SendAccountDeletionEmailModule } from './auth/send-account-deletion-email.module.js';
+import { SendAccountDeletionEmailProcessor } from './auth/send-account-deletion-email.processor.js';
 import { SendChallengeEmailModule } from './auth/send-challenge-email.module.js';
 import { SendChallengeEmailProcessor } from './auth/send-challenge-email.processor.js';
 import { AnnotatePostModule } from './post/annotate-post.module.js';
@@ -24,6 +26,10 @@ const PROCESSOR_CONFIG: Record<string, { processor: Type; module: Type }> = {
   [QueueName.AuthChallengeEmail]: {
     processor: SendChallengeEmailProcessor,
     module: SendChallengeEmailModule,
+  },
+  [QueueName.AuthAccountDeletionEmail]: {
+    processor: SendAccountDeletionEmailProcessor,
+    module: SendAccountDeletionEmailModule,
   },
   [QueueName.PostAnnotation]: {
     processor: AnnotatePostProcessor,
