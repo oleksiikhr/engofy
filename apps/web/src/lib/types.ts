@@ -273,6 +273,9 @@ export interface PracticeQueueResponse {
   // Always null — the queue is capped at `?limit=` with no offset param.
   // Present for shape parity with the other list endpoints.
   nextOffset: number | null;
+  // How many New-state cards the daily new-card cap held back (0 when
+  // nothing was held back, or the cap was bypassed for this request).
+  heldBackNewCount: number;
 }
 
 // --- profile ---

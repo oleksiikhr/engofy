@@ -26,3 +26,11 @@ export interface PracticeQueueItem {
   due: DateTime;
   target: PracticeCardTarget;
 }
+
+export interface PracticeQueueResult {
+  items: PracticeQueueItem[];
+  // How many New-state cards were dropped by the daily new-card cap
+  // (practice-redesign зріз 2) — 0 when nothing was held back, or when the
+  // caller bypassed the cap. Drives the "N more new cards waiting" UI.
+  heldBackNewCount: number;
+}

@@ -14,10 +14,10 @@ import { WordDefinition } from '../../../post/entities/word-definition.entity.js
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
+import { DAILY_NEW_CARD_LIMIT } from '../../domain/daily-new-card-limit.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
-import { DAILY_NEW_CARD_LIMIT } from './get-due-post-cards.handler.js';
 import { GetDuePostCardsQuery } from './get-due-post-cards.query.js';
 
 function seedPost(em: EntityManager): Post {

@@ -1,4 +1,4 @@
-import type { PracticeItem } from './types';
+import type { PracticeItem, PracticeQueueResponse } from './types';
 
 // Shared renderer for the /practice queue — used both for the initial SSR
 // render and by the /partials/review HTMX response after each grade, so the
@@ -87,6 +87,25 @@ function renderCard(
   </div>`;
 }
 
+// The queue emptied out but the daily new-card cap held some back
+// (practice-redesign зріз 2) — explains why, and offers to lift it for the
+// rest of this session (never touches the free-tier 100-card cap).
+function renderDailyLimitReached(heldBackNewCount: number): string {
+  const plural = heldBackNewCount === 1 ? '' : 's';
+  return `<div class="practice__done" data-testid="practice-done">
+    <p class="practice__done-emoji">✓</p>
+    <h2>Daily new-card limit reached</h2>
+    <p>${heldBackNewCount} more new card${plural} waiting — come back tomorrow, or keep going now.</p>
+    <button
+      type="button"
+      class="btn btn--ghost"
+      hx-get="/partials/practice-more"
+      hx-target="#practice-container"
+      hx-swap="innerHTML"
+    >Show ${heldBackNewCount} more new</button>
+  </div>`;
+}
+
 function renderDone(): string {
   return `<div class="practice__done" data-testid="practice-done">
     <p class="practice__done-emoji">✓</p>
@@ -95,11 +114,13 @@ function renderDone(): string {
   </div>`;
 }
 
-export function renderPracticeQueue(cards: PracticeItem[]): string {
-  if (cards.length === 0) {
-    return renderDone();
+export function renderPracticeQueue(response: PracticeQueueResponse): string {
+  if (response.items.length === 0) {
+    return response.heldBackNewCount > 0
+      ? renderDailyLimitReached(response.heldBackNewCount)
+      : renderDone();
   }
-  return renderCard(cards[0], cards.length);
+  return renderCard(response.items[0], response.items.length);
 }
 
 // Крок 2 of the daily session (daily-session-home plan, зріз 4) — same card
