@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
+import { stripSpans } from '../../domain/strip-spans.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { Post } from '../../entities/post.entity.js';
@@ -21,7 +22,9 @@ import { RetryPostCommand } from './retry-post.command.js';
 // The stage-level idempotency guards (PostPipelineRun row) are not enough:
 // spacy_parse skips a PostPart that already has Sentence rows and annotate
 // skips a PostPart with `annotatedAt` set, so a bad parse / annotation would
-// silently survive. So we drop every downstream artefact, null
+// silently survive. So we drop every downstream artefact, strip the spans
+// annotate / ai_grammar wrote into `PostPart.body` (a second annotate over an
+// already-spanned body puts several inserts in one span and throws), null
 // `PostPart.annotatedAt`, reset any `failed` telegram publication back to
 // `pending` (D15 #30), then re-enqueue the one entry-point job the ingest
 // handler fires — spacy_parse, which fans back out to annotation and the ai_*
@@ -58,6 +61,7 @@ export class RetryPostHandler implements ICommandHandler<RetryPostCommand> {
 
     const parts = await this.em.find(PostPart, { postId });
     for (const part of parts) {
+      part.body = stripSpans(part.body);
       part.annotatedAt = null;
     }
 

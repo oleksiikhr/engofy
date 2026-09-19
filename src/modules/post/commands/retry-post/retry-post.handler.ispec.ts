@@ -137,6 +137,35 @@ describe('RetryPostHandler', () => {
     expect(parts[0].annotatedAt).toBeNull();
   });
 
+  it('strips annotation spans from the post body so re-annotation starts from bare text', async () => {
+    const { postId } = await seedProcessedPost(suite.orm.em);
+    const seeded = await suite.orm.em.findOneOrFail(PostPart, { postId });
+    seeded.body = {
+      type: 'paragraph',
+      children: [
+        {
+          type: 'span',
+          kind: 'word',
+          text: 'Some',
+          wordDefinitionId: 'w1',
+          pos: 'DET',
+          grammarConstruct: 'determiners',
+        },
+        { type: 'text', text: ' text.' },
+      ],
+    };
+    await suite.orm.em.flush();
+
+    await suite.command(new RetryPostCommand(postId));
+
+    suite.orm.em.clear();
+    const part = await suite.orm.em.findOneOrFail(PostPart, { postId });
+    expect(part.body).toEqual({
+      type: 'paragraph',
+      children: [{ type: 'text', text: 'Some text.' }],
+    });
+  });
+
   it('is a no-op-safe reset when the post has no artefacts yet', async () => {
     const source = new PostSource();
     source.format = PostSourceFormat.Text;
