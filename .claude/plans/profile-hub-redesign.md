@@ -49,10 +49,10 @@ self-reported `cefrLevel`) — реалізатор виявив, що окре�
 `dailyStreakFromUtcDays` у лічильник; повний список днів для GitHub-style
 contribution-графіка. Додається до `/profile/progress`.
 
-### [ ] 3. Редагування CEFR-рівня в хабі
+### [x] 3. Редагування CEFR-рівня в хабі
 - Branch: `profile-hub-redesign-03-cefr-edit-ui`
-- Base: `profile-hub-redesign-02-activity-calendar`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/29
 
 Ендпоінт з `learning-foundation` зрізу 1 вже існує — тут лише хабовий контрол
 ("Рівень складності контенту", мітки A1-C2) + виклик `PATCH /profile/cefr-level`.
