@@ -105,41 +105,16 @@ function toDrill(ex: Ex): DrillView | null {
   return null;
 }
 
-interface ComprehensionView {
-  id: string;
-  questions: { question: string; options: string[]; answerIndex: number }[];
-}
-
-function toComprehension(ex: Ex): ComprehensionView {
-  const p = ex.payload as Record<string, unknown>;
-  // The pipeline emits one comprehension question per exercise row, flat on
-  // the payload (`{ question, options, answerIndex }`). Older/aggregate shapes
-  // may still carry a `questions` array — accept both.
-  const raw = p.questions;
-  const questions = Array.isArray(raw)
-    ? (raw as { question: string; options: string[]; answerIndex: number }[])
-    : [
-        {
-          question: String(p.question ?? ''),
-          options: Array.isArray(p.options) ? (p.options as string[]) : [],
-          answerIndex: Number(p.answerIndex ?? -1),
-        },
-      ].filter((q) => q.question !== '' && q.options.length > 0);
-  return { id: ex.id, questions };
-}
-
 const drills: DrillView[] = post.exercises
   .map(toDrill)
   .filter((d): d is DrillView => d !== null);
-const comprehension: ComprehensionView[] = post.exercises
-  .filter((e) => e.type === 'comprehension')
-  .map(toComprehension);
 ---
 
 <Layout
   title={`${post.title ?? 'Reading'} — Engofy`}
   user={user}
   active="feed"
+  bodyClass="theme-reader"
 >
   <div class="reader-layout" data-slug-id={slugId}>
     <article class="reader-article">
@@ -243,31 +218,6 @@ const comprehension: ComprehensionView[] = post.exercises
       </section>
     )
   }
-
-  {
-    comprehension.length > 0 && (
-      <section class="exercises">
-        <h2>Comprehension</h2>
-        {comprehension.map((c) => (
-          <div class="exercise" data-ex-type="comprehension">
-            {c.questions.map((q, qi) => (
-              <fieldset class="exercise__cq" data-answer={String(q.answerIndex)}>
-                <legend>{q.question}</legend>
-                {q.options.map((opt, oi) => (
-                  <label class="exercise__opt">
-                    <input type="radio" name={`cq-${c.id}-${qi}`} value={String(oi)} />
-                    {opt}
-                  </label>
-                ))}
-              </fieldset>
-            ))}
-            <button class="btn btn--ghost exercise__check" type="button">Check answers</button>
-            <span class="exercise__result" role="status" />
-          </div>
-        ))}
-      </section>
-    )
-  }
 </Layout>
 
 <script is:inline>
@@ -336,28 +286,6 @@ const comprehension: ComprehensionView[] = post.exercises
             box,
             sel != null && sel.value === box.getAttribute('data-answer-index'),
           );
-        } else if (type === 'comprehension') {
-          let ok = true;
-          box.querySelectorAll('.exercise__cq').forEach((fs) => {
-            const sel = fs.querySelector('input[type=radio]:checked');
-            if (!sel || sel.value !== fs.getAttribute('data-answer')) ok = false;
-          });
-          setResult(box, ok);
-
-          // Marks the post read for feed dedup (PLAN.md §16/§17 Track B) —
-          // regardless of correctness, and only once per page view.
-          if (!box.dataset.readMarked) {
-            box.dataset.readMarked = '1';
-            const slugId = document
-              .querySelector('.reader-layout')
-              ?.getAttribute('data-slug-id');
-            if (slugId) {
-              fetch('/partials/mark-read', {
-                method: 'POST',
-                body: new URLSearchParams({ slugId }),
-              }).catch(() => {});
-            }
-          }
         }
       });
     }
@@ -381,8 +309,27 @@ const comprehension: ComprehensionView[] = post.exercises
     color: var(--color-ink-soft);
     word-break: break-all;
   }
+  .post-head h1 {
+    font-size: 2.25rem;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
   .reading-body {
-    font-size: 1.075rem;
+    font-size: 1.2rem;
+    line-height: 1.8;
+  }
+  /* Sparse labels (new/learning words + phrases, grammar matches). The
+     spans come from set:html, so the selectors must be :global. */
+  .reading-body :global([data-word-definition-id]),
+  .reading-body :global([data-phrase-id]) {
+    text-decoration: underline dotted var(--color-highlight);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
+  }
+  .reading-body :global([data-grammar-usage-point-id]) {
+    background: var(--color-brand-wash);
+    border-radius: 0.35rem;
+    padding: 0.05em 0.2em;
   }
   .reader-article {
     min-width: 0;
@@ -394,8 +341,9 @@ const comprehension: ComprehensionView[] = post.exercises
   }
   .exercise {
     border: 1px solid var(--color-border);
-    border-radius: 0.6rem;
-    padding: 1rem;
+    border-radius: 1rem;
+    background: var(--color-paper-soft);
+    padding: 1.1rem 1.25rem;
     margin-bottom: 1rem;
   }
   .exercise__hint,
@@ -409,27 +357,16 @@ const comprehension: ComprehensionView[] = post.exercises
   .exercise__blank {
     font: inherit;
     padding: 0.15rem 0.4rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 0.3rem;
+    border: 2px solid var(--color-border-strong);
+    border-radius: 0.5rem;
+    background: var(--color-paper);
+    color: inherit;
     min-width: 6rem;
   }
-  .exercise__options,
-  .exercise__opt {
+  .exercise__options {
     list-style: none;
     padding: 0;
     margin: 0 0 0.6rem;
-  }
-  .exercise__opt {
-    display: block;
-  }
-  .exercise__cq {
-    border: 0;
-    padding: 0;
-    margin: 0 0 1rem;
-  }
-  .exercise__cq legend {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
   }
   .exercise__chips {
     display: flex;
@@ -440,9 +377,10 @@ const comprehension: ComprehensionView[] = post.exercises
   .exercise__chip {
     font: inherit;
     padding: 0.25rem 0.55rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 0.3rem;
-    background: var(--color-paper-soft);
+    border: 2px solid var(--color-border-strong);
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: inherit;
     cursor: pointer;
   }
   .exercise__chip:disabled {

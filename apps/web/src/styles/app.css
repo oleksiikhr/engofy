@@ -34,6 +34,24 @@
   src: url("./fonts/ibmplexmono-600.woff2") format("woff2");
 }
 
+/* Baloo 2 (reader display) and Nunito (reader body), SIL OFL 1.1, vendored the
+   same way. Nunito is one variable file covering every weight. Used only under
+   .theme-reader below. */
+@font-face {
+  font-family: "Baloo 2";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/baloo2-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/nunito-variable.woff2") format("woff2");
+}
+
 /* Design tokens — one brand accent, a separate amber highlight for new-word
    discovery (kept off links/buttons so it doesn't compete), a small neutral
    scale, and semantic accents for the FSRS review grades. Every token is
@@ -86,6 +104,53 @@
 
 :root {
   color-scheme: light dark;
+}
+
+/* Warm/playful reader theme ("Direction C"): cream paper, coral accent,
+   Baloo 2 + Nunito. Opt-in per page via Layout's `bodyClass`; overrides the
+   same tokens the rest of the site reads, so every shared component (header,
+   .btn, .badge, .card) re-skins with no per-component rules. */
+.theme-reader {
+  --color-brand: #c8471c;
+  --color-brand-strong: #9f3512;
+  --color-brand-wash: #fde9dd;
+  --color-highlight: #e59a1f;
+  --color-highlight-wash: #fdf0d2;
+  --color-success: #2f8a4f;
+  --color-warning: #b8730d;
+  --color-danger: #c53a2b;
+
+  --color-ink: #2e2418;
+  --color-ink-soft: #6f6250;
+  --color-ink-faint: #9a8d78;
+  --color-paper: #fbf5e9;
+  --color-paper-soft: #f3e9d4;
+  --color-border: #e9dcc1;
+  --color-border-strong: #d3c19c;
+
+  --font-display: "Baloo 2", ui-rounded, "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius-control: 0.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  .theme-reader {
+    --color-brand: #ff9a72;
+    --color-brand-strong: #ffb897;
+    --color-brand-wash: #3a2418;
+    --color-highlight: #f0b84e;
+    --color-highlight-wash: #33270f;
+    --color-success: #6fcf8f;
+    --color-warning: #e8ac52;
+    --color-danger: #f28576;
+
+    --color-ink: #f3ead9;
+    --color-ink-soft: #c2b59d;
+    --color-ink-faint: #8c806b;
+    --color-paper: #1d1710;
+    --color-paper-soft: #2a2117;
+    --color-border: #3a2f21;
+    --color-border-strong: #54452f;
+  }
 }
 
 * {

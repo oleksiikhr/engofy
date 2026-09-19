@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { apiPost } from '../../lib/api';
 
-// Fire-and-forget target for the reader's comprehension-quiz submit (PLAN.md
+// Fire-and-forget target for the reader's mark-read trigger (PLAN.md
 // §16/§17 Track B): forwards to Nest `POST /content/posts/{slugId}/read`
 // with the visitor's session cookie. No UI reads the result — a guest (401)
 // or repeat submit both no-op silently, same as the mark-read command itself.

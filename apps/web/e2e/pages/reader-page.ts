@@ -5,14 +5,12 @@ export class ReaderPage {
   readonly badge: Locator;
   readonly analysis: Locator;
   readonly fillBlank: Locator;
-  readonly comprehension: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.badge = page.locator('.post-head .badge');
     this.analysis = page.locator('.analysis');
     this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
-    this.comprehension = page.locator('[data-ex-type="comprehension"]');
   }
 
   async goto(slug: string) {
@@ -51,19 +49,5 @@ export class ReaderPage {
       .locator('.exercise__bank-chip', { hasText: option })
       .click();
     await this.fillBlank.getByRole('button', { name: 'Check' }).click();
-  }
-
-  async answerComprehensionQuestion(index: number, optionName: string) {
-    await this.comprehension
-      .locator('.exercise__cq')
-      .nth(index)
-      .getByRole('radio', { name: optionName })
-      .check();
-  }
-
-  async checkComprehension() {
-    await this.comprehension
-      .getByRole('button', { name: 'Check answers' })
-      .click();
   }
 }

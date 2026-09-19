@@ -94,10 +94,10 @@ Entry-point-agnostic запит "due-картки, чия ціль зустрі�
 невеликий lemma-lookup сервіс над `assets/irregular-verbs.json` (зараз лише
 CLI-парсер) для позначки неправильного дієслова в Analyze-режимі.
 
-### [ ] 6. Базовий візуальний зсув — шрифти/палітра, прибрати старий quiz
+### [x] 6. Базовий візуальний зсув — шрифти/палітра, прибрати старий quiz
 - Branch: `post-detail-redesign-06-base-visual-shift`
-- Base: `post-detail-redesign-05-post-due-cards`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/47
 
 `apps/web/src/pages/posts/[slugId].astro` (717 рядків, усе інлайн — немає окремих
 компонентів для видалення): гарнітури Baloo 2 + Nunito, тепла кремова палітра,
