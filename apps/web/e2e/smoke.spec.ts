@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { AUTHED_STATE } from './auth';
 
 // Scaffold smoke check: the Astro server renders the shell and the design
 // tokens load. `/` is the guest landing; the post list itself is `/posts`
@@ -33,6 +34,28 @@ test('the guest landing lists the features and shows the product screenshots', a
       .poll(() => shot.evaluate((img: HTMLImageElement) => img.naturalWidth))
       .toBeGreaterThan(0);
   }
+});
+
+test('the guest header hides Practice and Profile', async ({ page }) => {
+  await page.goto('/');
+
+  const nav = page.getByRole('navigation');
+  await expect(nav.getByRole('link', { name: 'Today' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Posts' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Practice' })).toHaveCount(0);
+  await expect(nav.getByRole('link', { name: 'Profile' })).toHaveCount(0);
+});
+
+test.describe('signed in', () => {
+  test.use({ storageState: AUTHED_STATE });
+
+  test('the header shows Practice and Profile', async ({ page }) => {
+    await page.goto('/posts');
+
+    const nav = page.getByRole('navigation');
+    await expect(nav.getByRole('link', { name: 'Practice' })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Profile' })).toBeVisible();
+  });
 });
 
 test('applies the vendored body font token', async ({ page }) => {

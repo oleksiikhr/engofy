@@ -10,13 +10,13 @@ interface Props {
 const { user = null, active, streak = 0 } = Astro.props;
 
 const links = [
-  { href: '/', label: 'Feed', key: 'feed' },
-  { href: '/posts', label: 'Posts', key: 'posts' },
-  { href: '/practice', label: 'Practice', key: 'practice' },
-  { href: '/grammar', label: 'Grammar', key: 'grammar' },
-  { href: '/dictionary', label: 'Dictionary', key: 'dictionary' },
-  { href: '/profile', label: 'Profile', key: 'profile' },
-];
+  { href: '/', label: 'Today', key: 'today', authOnly: false },
+  { href: '/posts', label: 'Posts', key: 'posts', authOnly: false },
+  { href: '/practice', label: 'Practice', key: 'practice', authOnly: true },
+  { href: '/grammar', label: 'Grammar', key: 'grammar', authOnly: false },
+  { href: '/dictionary', label: 'Dictionary', key: 'dictionary', authOnly: false },
+  { href: '/profile', label: 'Profile', key: 'profile', authOnly: true },
+].filter((link) => user || !link.authOnly);
 ---
 
 <header class="site-header">
