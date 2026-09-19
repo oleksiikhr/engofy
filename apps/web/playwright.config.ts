@@ -10,7 +10,11 @@ export default defineConfig({
   // Seeds the dev DB with deterministic fixtures and writes the authed
   // storageState (see e2e/global-setup.ts).
   globalSetup: './e2e/global-setup.ts',
-  fullyParallel: true,
+  // The specs share one seeded user and mutate it (cards, dispositions), so
+  // they run one at a time; `pristine` goes first for the two that assert
+  // exact counts and must see the untouched seed.
+  fullyParallel: false,
+  workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
@@ -18,5 +22,17 @@ export default defineConfig({
     baseURL: process.env.WEB_BASE_URL ?? 'http://localhost:4321',
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'pristine',
+      testMatch: /(practice|profile-progress)\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'chromium',
+      testIgnore: /(practice|profile-progress)\.spec\.ts/,
+      dependencies: ['pristine'],
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
 });
