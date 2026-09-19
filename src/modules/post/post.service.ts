@@ -25,6 +25,8 @@ import { GetGrammarReferenceQuery } from './queries/get-grammar-reference/get-gr
 import type { GrammarReferenceView } from './queries/get-grammar-reference/grammar-reference-view.js';
 import { GetPostDetailQuery } from './queries/get-post-detail/get-post-detail.query.js';
 import type { PostDetailView } from './queries/get-post-detail/post-detail-view.js';
+import { GetPostSuggestionsQuery } from './queries/get-post-suggestions/get-post-suggestions.query.js';
+import type { PostSuggestionsView } from './queries/get-post-suggestions/post-suggestions-view.js';
 import type { GetPostsListOptions } from './queries/get-posts-list/get-posts-list.query.js';
 import { GetPostsListQuery } from './queries/get-posts-list/get-posts-list.query.js';
 import type { PostsListView } from './queries/get-posts-list/posts-list-view.js';
@@ -54,6 +56,13 @@ export class PostService {
     options: GetPostsListOptions,
   ): Promise<PostsListView> {
     return this.queryBus.execute(new GetPostsListQuery(userId, options));
+  }
+
+  getPostSuggestions(
+    prefix: string,
+    limit: number,
+  ): Promise<PostSuggestionsView> {
+    return this.queryBus.execute(new GetPostSuggestionsQuery(prefix, limit));
   }
 
   getGrammarReference(

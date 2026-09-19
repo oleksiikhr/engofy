@@ -8,6 +8,10 @@ export interface GetPostsListOptions {
   // Excludes posts the user has already read (`post_reads`). Ignored when
   // `userId` is null — a guest has no read state to filter on.
   unreadOnly?: boolean;
+  // Keep only posts that contain this word (any inflected form, matched via
+  // its lemma) or phrase; case-insensitive exact match on `words.lemma` /
+  // `phrases.phrase_text`. Blank = no filter.
+  term?: string;
   cursor?: string;
   limit: number;
 }

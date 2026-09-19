@@ -5,6 +5,7 @@ import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
+const MAX_TERM_LENGTH = 100;
 
 const PostsListQuerySchema = z.object({
   cefr: queryParam(
@@ -29,6 +30,17 @@ const PostsListQuerySchema = z.object({
       .default(false)
       .describe(
         'Only posts the current user has not read yet. Ignored for a guest.',
+      ),
+  ),
+  term: queryParam(
+    z
+      .string()
+      .trim()
+      .min(1)
+      .max(MAX_TERM_LENGTH)
+      .optional()
+      .describe(
+        'Only posts containing this word (any form) or phrase; case-insensitive exact match — use a value from `/content/posts/suggestions`.',
       ),
   ),
   cursor: queryParam(z.string().optional().describe('From `nextCursor`.')),

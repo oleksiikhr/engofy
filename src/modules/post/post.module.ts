@@ -22,6 +22,7 @@ import { GetFeedHandler } from './queries/get-feed/get-feed.handler.js';
 import { GetGrammarConstructionHandler } from './queries/get-grammar-construction/get-grammar-construction.handler.js';
 import { GetGrammarReferenceHandler } from './queries/get-grammar-reference/get-grammar-reference.handler.js';
 import { GetPostDetailHandler } from './queries/get-post-detail/get-post-detail.handler.js';
+import { GetPostSuggestionsHandler } from './queries/get-post-suggestions/get-post-suggestions.handler.js';
 import { GetPostsListHandler } from './queries/get-posts-list/get-posts-list.handler.js';
 
 const commandHandlers = [
@@ -41,6 +42,7 @@ const commandHandlers = [
 const queryHandlers = [
   GetFeedHandler,
   GetPostsListHandler,
+  GetPostSuggestionsHandler,
   GetPostDetailHandler,
   GetGrammarReferenceHandler,
   GetGrammarConstructionHandler,

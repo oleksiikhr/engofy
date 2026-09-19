@@ -28,7 +28,8 @@ interface PostRow {
 // Backs `/posts` (posts-list-page §1): published posts, newest first,
 // keyset-paginated on `(published_at, id)` — the pagination model the TODO
 // in `get-feed` describes but never migrated to (that endpoint is untouched
-// by this plan). CEFR multi-select and "unread only" (LEFT JOIN
+// by this plan). CEFR multi-select, a word/phrase `term` (EXISTS over
+// `sentence_tokens`, posts-list-page §2) and "unread only" (LEFT JOIN
 // `post_reads`, only when `userId` is set — Post has no ORM relation to
 // PostRead) are set-based filters the ORM can't express cheaply, so this is
 // one raw query (DP5) rather than `em.find`.
@@ -64,6 +65,25 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
 
     if (joinUnread) {
       conditions.push('pr.id IS NULL');
+    }
+
+    const term = options.term?.trim().toLowerCase();
+    if (term) {
+      // Word/phrase -> posts: the same `sentence_tokens -> sentences` join
+      // `GetDictionaryHandler.queryUsage` walks, in the other direction. Both
+      // sides resolve through the `lower(...)` unique indexes on `words` /
+      // `phrases`; `word_id` / `phrase_id` / `sentences.post_id` are indexed.
+      conditions.push(
+        `EXISTS (
+           SELECT 1
+             FROM sentences s
+             JOIN sentence_tokens st ON st.sentence_id = s.id
+            WHERE s.post_id = p.id
+              AND (st.word_id IN (SELECT id FROM words WHERE lower(lemma) = ?)
+                OR st.phrase_id IN (SELECT id FROM phrases WHERE lower(phrase_text) = ?))
+         )`,
+      );
+      params.push(term, term);
     }
 
     if (cursor) {
