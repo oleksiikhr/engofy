@@ -1,11 +1,13 @@
 import type { ReaderToken } from './types';
 
-// Client-side token layer for the reader's POS / tense colouring and Analyze
-// mode. Each content token is wrapped in a `<span data-tok>` inside the
-// already-rendered article — inside word/phrase/grammar labels too, since the
-// wrap only splits a text node and never crosses an element boundary. Token
-// offsets are in the coordinates of a block unit's plain text, which the DOM
-// text of `[data-block]` (a paragraph, or one `li[data-item]`) matches.
+// Client-side token layer for the reader's word-type / tense colouring and
+// Analyze mode. Word types are four coloured groups plus `fn` (function
+// words), which CSS shows only while the Function words switch is on. Each
+// content token is wrapped in a `<span data-tok>` inside the already-rendered
+// article — inside word/phrase/grammar labels too, since the wrap only splits
+// a text node and never crosses an element boundary. Token offsets are in the
+// coordinates of a block unit's plain text, which the DOM text of
+// `[data-block]` (a paragraph, or one `li[data-item]`) matches.
 
 const POS_GROUP: Record<string, string> = {
   NOUN: 'noun',
@@ -14,6 +16,13 @@ const POS_GROUP: Record<string, string> = {
   AUX: 'verb',
   ADJ: 'adj',
   ADV: 'adv',
+  PRON: 'fn',
+  DET: 'fn',
+  ADP: 'fn',
+  CCONJ: 'fn',
+  SCONJ: 'fn',
+  PART: 'fn',
+  NUM: 'fn',
 };
 
 // Short label shown under a token in Analyze mode.

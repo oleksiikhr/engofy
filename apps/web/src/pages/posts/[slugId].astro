@@ -200,6 +200,10 @@ const drills: DrillView[] = post.exercises
   <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining}>
     <article class="reader-article">
       <header class="post-head">
+        <a class="post-head__back meta" href="/posts">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+          Posts
+        </a>
         <div class="post-head__meta">
           {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
           <time datetime={post.publishedAt}>{published}</time>
@@ -230,35 +234,40 @@ const drills: DrillView[] = post.exercises
         {
           tokens.length > 0 && (
             <>
-              <button type="button" class="reader-toolbar__btn" data-mode="pos" aria-pressed="false">
-                Parts of speech
+              <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false">
+                <b aria-hidden="true">Aa</b>Word types
               </button>
-              <button type="button" class="reader-toolbar__btn" data-mode="tense" aria-pressed="false">
-                Tenses
+              <button type="button" class="reader-toolbar__btn tone-blue" data-mode="tense" aria-pressed="false">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l2.5 2.5" /></svg>Tenses
               </button>
-              <button type="button" class="reader-toolbar__btn" data-mode="analyze" aria-pressed="false">
-                Analyze
+              <button type="button" class="reader-toolbar__btn tone-pink" data-mode="analyze" aria-pressed="false">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="M20 20l-5.5-5.5" /></svg>Analyze
               </button>
             </>
           )
         }
-        <button type="button" class="reader-toolbar__btn" data-study-toggle aria-pressed="false">
-          Study mode
+        <button type="button" class="reader-toolbar__btn tone-amber" data-study-toggle aria-pressed="false">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l13 8-13 8V4z" /></svg>Study mode
         </button>
         <span class="reader-toolbar__size">
-          <button type="button" class="reader-toolbar__btn" data-size="-1" aria-label="Smaller text">A−</button>
-          <button type="button" class="reader-toolbar__btn" data-size="1" aria-label="Larger text">A+</button>
+          <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="-1" aria-label="Smaller text">A−</button>
+          <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="1" aria-label="Larger text">A+</button>
         </span>
-        <p class="reader-legend" data-legend="pos" hidden>
-          <span class="reader-legend__item" data-pos-group="noun">noun</span>
-          <span class="reader-legend__item" data-pos-group="verb">verb</span>
-          <span class="reader-legend__item" data-pos-group="adj">adjective</span>
-          <span class="reader-legend__item" data-pos-group="adv">adverb</span>
-        </p>
+        <div class="reader-legend" data-legend="pos" hidden>
+          <span class="reader-legend__item tone-blue" data-pos-group="noun">noun</span>
+          <span class="reader-legend__item tone-brand" data-pos-group="verb">verb</span>
+          <span class="reader-legend__item tone-green" data-pos-group="adj">adjective</span>
+          <span class="reader-legend__item tone-pink" data-pos-group="adv">adverb</span>
+          <label class="reader-legend__switch">
+            <span class="reader-legend__sample" data-pos-group="fn">the</span>
+            Function words
+            <input type="checkbox" class="toggle toggle--sm" role="switch" data-function-words />
+          </label>
+        </div>
         <p class="reader-legend" data-legend="tense" hidden>
-          <span class="reader-legend__item" data-tense="past">past</span>
-          <span class="reader-legend__item" data-tense="present">present</span>
-          <span class="reader-legend__item" data-tense="future">future</span>
+          <span class="reader-legend__item tone-amber" data-tense="past">past</span>
+          <span class="reader-legend__item tone-blue" data-tense="present">present</span>
+          <span class="reader-legend__item tone-green" data-tense="future">future</span>
         </p>
         <p class="reader-legend" data-legend="analyze" hidden>
           Tap a highlighted construction to see why it fits. Irregular verbs show their forms.
@@ -505,46 +514,61 @@ const drills: DrillView[] = post.exercises
   .post-head {
     margin-bottom: 1.5rem;
   }
+  .post-head__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+  }
   .post-head__meta {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
-    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-ink-faint);
+    margin-bottom: 0.75rem;
   }
   .post-head__source {
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-ink-faint);
     word-break: break-all;
   }
   .post-head h1 {
-    font-size: 2.25rem;
-    line-height: 1.15;
-    letter-spacing: 0;
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
   }
   .reading-body {
     font-size: var(--reader-font-size);
-    line-height: 1.8;
+    line-height: 1.85;
   }
-  /* Sparse labels (new/learning words + phrases, grammar matches). The
+  /* Labelled words/phrases (amber chip) and grammar matches (blue chip). The
      spans come from set:html, so the selectors must be :global. */
   .reading-body :global([data-word-definition-id]),
-  .reading-body :global([data-phrase-id]) {
-    text-decoration: underline dotted var(--color-highlight);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.25em;
+  .reading-body :global([data-phrase-id]),
+  .reading-body :global([data-grammar-usage-point-id]) {
+    padding: 1px 6px;
+    border-radius: 0.5rem;
+    color: var(--color-ink);
+    font-weight: 700;
     cursor: pointer;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
-  .reading-body :global(.is-active) {
-    background: var(--color-highlight-wash);
-    border-radius: 0.25rem;
+  .reading-body :global([data-word-definition-id]),
+  .reading-body :global([data-phrase-id]) {
+    background: var(--color-word);
   }
   .reading-body :global([data-grammar-usage-point-id]) {
-    background: var(--color-brand-wash);
-    border-radius: 0.35rem;
-    padding: 0.05em 0.2em;
-    cursor: pointer;
+    background: var(--color-gram);
+  }
+  .reading-body :global(.is-active) {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 1px;
   }
   .reader-article {
     min-width: 0;

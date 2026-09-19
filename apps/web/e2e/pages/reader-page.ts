@@ -59,8 +59,13 @@ export class ReaderPage {
     });
   }
 
-  modeToggle(name: 'Parts of speech' | 'Tenses' | 'Analyze'): Locator {
+  modeToggle(name: 'Word types' | 'Tenses' | 'Analyze'): Locator {
     return this.toolbar.getByRole('button', { name, exact: true });
+  }
+
+  // The Function words switch in the Word types legend.
+  get functionWordsSwitch(): Locator {
+    return this.toolbar.getByRole('switch', { name: 'Function words' });
   }
 
   // One section of the popup: 'word' | 'phrase' | 'grammar'.

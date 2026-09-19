@@ -150,7 +150,7 @@ test.describe('reader preferences', () => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
     const pos = reader.toolbar.getByRole('button', {
-      name: /Parts of speech/i,
+      name: /Word types/i,
     });
     await pos.click();
     await expect(pos).toHaveAttribute('aria-pressed', 'true');
