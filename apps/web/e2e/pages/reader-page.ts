@@ -34,6 +34,13 @@ export class ReaderPage {
     return this.analysis.locator('[data-phrase-id]', { hasText: text });
   }
 
+  // Spans the reader marked as grammar usage-point matches, filtered by text.
+  grammarLabel(text: string): Locator {
+    return this.analysis.locator('[data-grammar-usage-point-id]', {
+      hasText: text,
+    });
+  }
+
   async submitFillBlank(answer: string) {
     await this.fillBlank.locator('.exercise__blank').fill(answer);
     await this.fillBlank.getByRole('button', { name: 'Check' }).click();
