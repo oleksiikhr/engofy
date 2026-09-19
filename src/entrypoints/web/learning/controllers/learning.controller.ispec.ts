@@ -11,6 +11,9 @@ import {
 } from '../../../../modules/auth/crypto/token.helper.js';
 import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
 import { User } from '../../../../modules/auth/entities/user.entity.js';
+import { DAILY_NEW_CARD_LIMIT } from '../../../../modules/learning/domain/daily-new-card-limit.js';
+import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
+import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
@@ -79,6 +82,58 @@ describe('LearningController', () => {
       .send({ rating: 'good' })
       .expect(HttpStatus.OK);
     expect(reviewed.body.reps).toBe(1);
+  });
+
+  it('caps New cards at the daily limit and lifts it with bypassNewLimit', async () => {
+    const em = suite.orm.em;
+    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const token = generateToken();
+    em.create(AuthSession, {
+      userId: user.id,
+      tokenHash: hashSecret(token),
+      expiresAt: DateTime.now().plus({ days: 1 }),
+    });
+    await em.flush();
+    const cookie = `${cookieName()}=${token}`;
+
+    for (let i = 0; i < DAILY_NEW_CARD_LIMIT + 2; i += 1) {
+      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+      const definition = em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+      em.create(LearningCard, {
+        userId: user.id,
+        wordDefinitionId: definition.id,
+        due: DateTime.now().minus({ minutes: i + 1 }),
+        stability: 1,
+        difficulty: 5,
+        elapsedDays: 0,
+        scheduledDays: 0,
+        reps: 0,
+        lapses: 0,
+        state: LearningCardState.New,
+      });
+    }
+    await em.flush();
+    em.clear();
+
+    const capped = await suite
+      .request('get', `/learning/practice?limit=${DAILY_NEW_CARD_LIMIT + 2}`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(capped.body.items).toHaveLength(DAILY_NEW_CARD_LIMIT);
+    expect(capped.body.heldBackNewCount).toBe(2);
+
+    const bypassed = await suite
+      .request(
+        'get',
+        `/learning/practice?limit=${DAILY_NEW_CARD_LIMIT + 2}&bypassNewLimit=true`,
+      )
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(bypassed.body.items).toHaveLength(DAILY_NEW_CARD_LIMIT + 2);
+    expect(bypassed.body.heldBackNewCount).toBe(0);
   });
 
   it('rejects an invalid rating', async () => {

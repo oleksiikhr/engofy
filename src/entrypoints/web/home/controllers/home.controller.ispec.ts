@@ -124,7 +124,11 @@ describe('HomeController', () => {
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
-    expect(response.body).toEqual({ items: [], nextOffset: null });
+    expect(response.body).toEqual({
+      items: [],
+      nextOffset: null,
+      heldBackNewCount: 0,
+    });
   });
 
   it('returns a due card whose target occurs in the day post', async () => {

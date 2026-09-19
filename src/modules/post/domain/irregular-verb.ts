@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { z } from 'zod';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 
@@ -34,4 +36,34 @@ const IrregularVerbListSchema = z
 
 export function parseIrregularVerbs(raw: unknown): IrregularVerbEntry[] {
   return IrregularVerbListSchema.parse(raw);
+}
+
+const IRREGULAR_VERBS_ASSET_PATH = join(
+  process.cwd(),
+  'assets',
+  'irregular-verbs.json',
+);
+
+// base_form (lowercased) -> entry, for a runtime lemma lookup (dictionary
+// detail page, PLAN.md dictionary-redesign §2) — distinct from the CLI
+// importer above, which only seeds `words` rows and never looks anything up.
+export function indexIrregularVerbsByLemma(
+  entries: IrregularVerbEntry[],
+): Map<string, IrregularVerbEntry> {
+  return new Map(
+    entries.map((entry) => [entry.base_form.toLowerCase(), entry]),
+  );
+}
+
+let cachedIndex: Promise<Map<string, IrregularVerbEntry>> | null = null;
+
+// Cached for the process lifetime, same rationale as
+// `word-frequency.ts`'s `loadWordFrequencyRanks`.
+export function loadIrregularVerbsByLemma(): Promise<
+  Map<string, IrregularVerbEntry>
+> {
+  cachedIndex ??= readFile(IRREGULAR_VERBS_ASSET_PATH, 'utf-8')
+    .then((raw) => parseIrregularVerbs(JSON.parse(raw)))
+    .then(indexIrregularVerbsByLemma);
+  return cachedIndex;
 }

@@ -45,10 +45,10 @@ staged-rollout контракт-танцю.
 переписується під новий запит (SSR query-параметри + htmx для live-фільтра/пагінації
 без перезавантаження), клієнтський JS-фільтр прибирається.
 
-### [ ] 2. /dictionary/[lemma] — деталі слова
+### [x] 2. /dictionary/[lemma] — деталі слова
 - Branch: `dictionary-redesign-02-word-detail`
-- Base: `dictionary-redesign-01-list`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/26
 
 Новий запит: усі сенси `WordDefinition` для леми + форми неправильного дієслова
 (новий lemma-lookup хелпер над `assets/irregular-verbs.json`, зараз є лише

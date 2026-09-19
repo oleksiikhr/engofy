@@ -207,6 +207,92 @@ describe('ContentController', () => {
     expect(Array.isArray(res.body.items)).toBe(true);
   });
 
+  it('lists a published post in the posts archive with an excerpt', async () => {
+    const { shortId } = await seedPublishedPost(suite.orm.em);
+
+    const res = await suite
+      .request('get', '/content/posts')
+      .expect(HttpStatus.OK);
+
+    const item = res.body.items.find(
+      (entry: { shortId: string }) => entry.shortId === shortId,
+    );
+    expect(item).toMatchObject({
+      title: 'A Short Trip',
+      cefrLevel: 'A2',
+      attributionText: 'Example News, "On travel"',
+      sourceType: 'news_snippet',
+      sourceLink: 'https://example.com/article',
+    });
+    expect(item.excerpt).toContain('travel');
+    expect(res.body.nextCursor).toBeNull();
+  });
+
+  it('filters the posts archive by a CEFR multi-select', async () => {
+    const em = suite.orm.em;
+    await seedPublishedPost(em);
+    const b2Source = new PostSource();
+    b2Source.format = PostSourceFormat.Text;
+    b2Source.rawText = 'A harder read.';
+    const b2Post = new Post();
+    b2Post.source = b2Source;
+    b2Post.title = 'A Harder Read';
+    b2Post.status = PostStatus.Published;
+    b2Post.cefrLevel = CefrLevel.B2;
+    em.persist(b2Post);
+    await em.flush();
+
+    const kept = await suite
+      .request('get', '/content/posts?cefr=A2,B2')
+      .expect(HttpStatus.OK);
+    expect(kept.body.items).toHaveLength(2);
+
+    const filtered = await suite
+      .request('get', '/content/posts?cefr=B2')
+      .expect(HttpStatus.OK);
+    expect(filtered.body.items).toHaveLength(1);
+    expect(filtered.body.items[0].title).toBe('A Harder Read');
+
+    // A blank ?cefr= must fall through to "no filter", not 400.
+    await suite.request('get', '/content/posts?cefr=').expect(HttpStatus.OK);
+  });
+
+  it('excludes an already-read post only when unreadOnly is set for a logged-in user', async () => {
+    const em = suite.orm.em;
+    const { shortId, slug } = await seedPublishedPost(em);
+    const { cookie } = await login(em);
+
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+
+    const guestUnreadOnly = await suite
+      .request('get', '/content/posts?unreadOnly=true')
+      .expect(HttpStatus.OK);
+    expect(
+      guestUnreadOnly.body.items.some(
+        (i: { shortId: string }) => i.shortId === shortId,
+      ),
+    ).toBe(true);
+
+    const loggedInUnreadOnly = await suite
+      .request('get', '/content/posts?unreadOnly=true')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(
+      loggedInUnreadOnly.body.items.some(
+        (i: { shortId: string }) => i.shortId === shortId,
+      ),
+    ).toBe(false);
+  });
+
+  it('rejects a garbage posts-archive cursor with 400', async () => {
+    await suite
+      .request('get', '/content/posts?cursor=not-a-real-cursor')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
   it('normalises a 404 body to { message }', async () => {
     const res = await suite
       .request('get', '/content/posts/Zzz00000')
