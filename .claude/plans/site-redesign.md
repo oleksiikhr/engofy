@@ -35,10 +35,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Tokens, no custom fonts, shared atoms
+### [x] 1. Tokens, no custom fonts, shared atoms
 - Branch: `site-redesign-01-tokens-and-atoms`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/62
 
 Палітра Direction C (світла + темна) замість поточної; системний шрифт замість Manrope, Public Sans,
 Baloo 2, Nunito, IBM Plex Mono (видалити woff2 і `@font-face`); `.theme-reader` і `bodyClass`
