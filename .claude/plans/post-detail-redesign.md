@@ -43,10 +43,10 @@ quiz) на один наскрізний механізм: заякорений 
 спани лишаються звичайним текстом. Видалити `PostSidebar`/`Sidebar*Entry` типи з
 `apps/web/src/lib/types.ts`.
 
-### [ ] 2. Мапінг grammar_matches на дерево вузлів
+### [x] 2. Мапінг grammar_matches на дерево вузлів
 - Branch: `post-detail-redesign-02-grammar-spans`
-- Base: `post-detail-redesign-01-sparse-labels`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/43
 
 Нова, незалежна від word/phrase логіка (окремий модуль поруч з `render-doc.ts`, не
 розширення його): `grammar_matches.tokenStart/tokenEnd` (sentence-relative) →
