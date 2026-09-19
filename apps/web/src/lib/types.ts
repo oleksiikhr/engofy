@@ -17,6 +17,24 @@ export interface FeedResponse {
   items: FeedItem[];
   nextOffset: number | null;
 }
+
+// --- posts archive (/posts) ---
+export interface PostsListItem extends FeedItem {
+  attributionText: string;
+  sourceType: string;
+  isRead: boolean;
+}
+export interface PostsListResponse {
+  items: PostsListItem[];
+  nextCursor: string | null;
+}
+export interface PostSuggestion {
+  type: 'word' | 'phrase';
+  text: string;
+}
+export interface PostSuggestionsResponse {
+  items: PostSuggestion[];
+}
 export interface DueCardCountResponse {
   dueCount: number;
 }
