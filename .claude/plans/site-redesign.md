@@ -56,16 +56,16 @@ sm/lg), `.card`, `.badge`, `.tag`, інпути, тумблер, сегмент,
 для читання/запису значень. Обгортки localStorage в try/catch. E2E: перезавантаження зі збереженою
 темною темою без спалаху світлої. Самі перемикачі з'являться в слайсах 3 і 4.
 
-### [ ] 3. Shell: header, avatar menu, footer
+### [x] 3. Shell: header, avatar menu, footer
 - Branch: `site-redesign-03-shell`
-- Base: `site-redesign-02-theme-prefs-no-flash`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/64
 
 Шапка з макета: логотип, Posts / Practice (бейдж due-count з наявного ендпоінта) / Dictionary /
 Grammar, streak, аватар з першою літерою. Меню аватара: Profile, Progress, Subscription, перемикач
 теми (слайс 2), Log out; відкривається без залежності від JS (`<details>` або popover), закривається
 по Esc, керується з клавіатури. Гостьова шапка: Log in / Get started. Footer з Pricing, Terms,
-Privacy. Today прибрано з навігації, Pricing з шапки.
+Privacy (Terms і Privacy — коли з'являться сторінки). Today прибрано з навігації, Pricing з шапки.
 
 ### [ ] 4. Reader port
 - Branch: `site-redesign-04-reader`
