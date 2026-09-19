@@ -794,6 +794,67 @@ body {
   color: var(--color-ink);
 }
 
+/* Progress bar: <span class="bar"><i style="width: 40%"></i></span>; fill defaults
+   to green, a tone class on the bar recolors it. */
+.bar {
+  display: block;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tone, var(--color-success));
+}
+
+/* Activity heatmap cell; the fill steps l1..l4 mix green into the card color. */
+.hm {
+  border-radius: 0.3125rem;
+  background: var(--color-border);
+}
+.hm.l1 {
+  background: color-mix(in srgb, var(--color-success) 28%, var(--color-card));
+}
+.hm.l2 {
+  background: color-mix(in srgb, var(--color-success) 55%, var(--color-card));
+}
+.hm.l3 {
+  background: color-mix(in srgb, var(--color-success) 80%, var(--color-card));
+}
+.hm.l4 {
+  background: var(--color-success);
+}
+
+/* Number tile: <div class="card stat"><p class="stat__num num">3</p><p class="stat__label">…</p></div> */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat {
+  text-align: center;
+}
+.stat__num {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.stat__den {
+  font-size: 1rem;
+  color: var(--color-ink-faint);
+}
+.stat__label {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-ink-faint);
+}
+
 .skeleton {
   display: block;
   min-height: 1em;

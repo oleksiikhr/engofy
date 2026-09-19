@@ -28,8 +28,10 @@ const totalCount =
   profile?.categories.reduce((n, c) => n + c.constructions.length, 0) ?? 0;
 ---
 
-<Layout title="Profile — Engofy" user={user} active="profile">
-  <p class="back"><a href="/profile">← Profile</a></p>
+<Layout title="Progress — Engofy" user={user} active="profile">
+  <p class="back">
+    <a class="btn btn--ghost btn--sm" href="/profile">← Profile</a>
+  </p>
   <h1>Your progress</h1>
 
   {
@@ -40,11 +42,11 @@ const totalCount =
     ) : profile ? (
       <>
         <section class="stat-row">
-          <div class="stat">
+          <div class="card stat">
             <p class="stat__num num">{profile.streak}</p>
             <p class="stat__label">day streak</p>
           </div>
-          <div class="stat">
+          <div class="card stat">
             <p class="stat__num num">
               {unlockedCount}
               <span class="stat__den">/ {totalCount}</span>
@@ -53,33 +55,35 @@ const totalCount =
           </div>
         </section>
 
-        <section class="activity">
-          <h2>Activity</h2>
-          <div class="calendar" data-testid="activity-calendar">
-            {calendar.map((day) => (
-              <span
-                class:list={['calendar__day', { 'calendar__day--active': day.active }]}
-                data-date={day.date}
-                data-active={day.active ? 'true' : 'false'}
-                title={`${day.date}${day.active ? ' — reviewed' : ''}`}
-              />
-            ))}
+        <section class="card activity">
+          <div class="section-head">
+            <h2>Activity</h2>
+            <span class="meta">Last 12 months</span>
+          </div>
+          <div class="activity__scroll">
+            <div class="calendar" data-testid="activity-calendar">
+              {calendar.map((day) => (
+                <span
+                  class:list={['hm', { l4: day.active }]}
+                  data-date={day.date}
+                  data-active={day.active ? 'true' : 'false'}
+                  title={`${day.date}${day.active ? ' — reviewed' : ''}`}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
-        <section class="cefr">
+        <section class="card cefr">
           <h2>Cards by level</h2>
           <ul class="cefr-bars">
             {LEVELS.map((lvl) => {
               const n = profile.cefr[lvl] ?? 0;
               return (
                 <li class="cefr-bar" data-testid={`cefr-${lvl}`}>
-                  <span class="cefr-bar__label">{lvl}</span>
-                  <span class="cefr-bar__track">
-                    <span
-                      class="cefr-bar__fill"
-                      style={`width: ${Math.round((n / cefrMax) * 100)}%`}
-                    />
+                  <span class="badge badge--solid cefr-bar__label">{lvl}</span>
+                  <span class="bar">
+                    <i style={`width: ${Math.round((n / cefrMax) * 100)}%`} />
                   </span>
                   <span class="cefr-bar__n num">{n}</span>
                 </li>
@@ -91,7 +95,7 @@ const totalCount =
         <section class="skills">
           <h2>Grammar skills</h2>
           {profile.categories.map((cat) => (
-            <details class="skill-cat" open={cat.constructions.some((c) => !c.locked)}>
+            <details class="card skill-cat" open={cat.constructions.some((c) => !c.locked)}>
               <summary>{cat.name}</summary>
               <ul class="skill-list">
                 {cat.constructions.map((con) => (
@@ -104,14 +108,11 @@ const totalCount =
                       {con.name}
                     </a>
                     {con.locked ? (
-                      <span class="skill__locked">locked</span>
+                      <span class="tag tag--muted skill__locked">Locked</span>
                     ) : (
                       <span class="skill__mastery">
-                        <span class="skill__track">
-                          <span
-                            class="skill__fill"
-                            style={`width: ${con.masteryScore}%`}
-                          />
+                        <span class="bar tone-blue">
+                          <i style={`width: ${con.masteryScore}%`} />
                         </span>
                         <span class="num">{con.masteryScore}</span>
                       </span>
@@ -128,110 +129,80 @@ const totalCount =
 </Layout>
 
 <style>
-  .back {
-    margin: 0 0 0.5rem;
-    font-size: 0.9rem;
+  h2 {
+    font-weight: 800;
   }
-  .activity {
-    margin-bottom: 2rem;
+  .back {
+    margin: 0 0 0.5rem -0.9rem;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.875rem;
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+  .activity,
+  .cefr {
+    margin-bottom: 1.5rem;
+  }
+  .activity__scroll {
     overflow-x: auto;
+    padding-bottom: 0.25rem;
   }
   .calendar {
     display: grid;
     grid-auto-flow: column;
-    grid-template-rows: repeat(7, 0.75rem);
-    grid-auto-columns: 0.75rem;
-    gap: 3px;
+    grid-template-rows: repeat(7, 0.875rem);
+    grid-auto-columns: 0.875rem;
+    gap: 4px;
     width: max-content;
   }
-  .calendar__day {
-    border-radius: 2px;
-    background: var(--color-paper-soft);
-    border: 1px solid var(--color-border);
-  }
-  .calendar__day--active {
-    background: var(--color-brand);
-    border-color: var(--color-brand);
-  }
-  .stat-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .stat {
-    flex: 1 1 0;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    text-align: center;
-  }
-  .stat__num {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  .stat__den {
-    font-size: 1rem;
-    color: var(--color-ink-faint);
-  }
-  .stat__label {
-    margin: 0.25rem 0 0;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
-  }
-  .cefr {
-    margin-bottom: 2rem;
+  .cefr h2 {
+    margin-bottom: 0.875rem;
   }
   .cefr-bars {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.4rem;
+    gap: 0.6rem;
   }
   .cefr-bar {
     display: grid;
-    grid-template-columns: 2rem 1fr 2rem;
+    grid-template-columns: 3rem 1fr 2.5rem;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.75rem;
   }
   .cefr-bar__label {
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-  .cefr-bar__track,
-  .skill__track {
-    height: 0.5rem;
-    background: var(--color-paper-soft);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .cefr-bar__fill,
-  .skill__fill {
-    display: block;
-    height: 100%;
-    background: var(--color-brand);
+    text-align: center;
   }
   .cefr-bar__n {
     text-align: right;
-    font-size: 0.85rem;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .skills h2 {
+    margin-bottom: 0.875rem;
   }
   .skill-cat {
-    border-top: 1px solid var(--color-border);
-    padding: 0.5rem 0;
+    margin-bottom: 0.75rem;
+    padding: 1rem 1.25rem;
   }
   .skill-cat summary {
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 800;
     font-family: var(--font-display);
   }
   .skill-list {
     list-style: none;
-    padding: 0.75rem 0 0;
+    padding: 0.875rem 0 0;
     margin: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.625rem;
   }
   .skill {
     display: flex;
@@ -239,11 +210,15 @@ const totalCount =
     gap: 0.75rem;
   }
   .skill__name {
-    text-decoration: none;
-    color: var(--color-ink);
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    color: var(--color-ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .skill__name:hover {
+    color: var(--color-brand-strong);
   }
   .skill--locked .skill__name {
     color: var(--color-ink-faint);
@@ -253,16 +228,14 @@ const totalCount =
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 8rem;
+    width: 9rem;
+    font-weight: 800;
+    font-size: 0.9rem;
   }
-  .skill__track {
+  .skill__mastery .bar {
     flex: 1;
   }
   .skill__locked {
     margin-left: auto;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-ink-faint);
   }
 </style>
