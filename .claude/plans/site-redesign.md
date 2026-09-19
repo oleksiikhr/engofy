@@ -67,10 +67,10 @@ Grammar, streak, аватар з першою літерою. Меню ават�
 по Esc, керується з клавіатури. Гостьова шапка: Log in / Get started. Footer з Pricing, Terms,
 Privacy (Terms і Privacy — коли з'являться сторінки). Today прибрано з навігації, Pricing з шапки.
 
-### [ ] 4. Reader port
+### [x] 4. Reader port
 - Branch: `site-redesign-04-reader`
-- Base: `site-redesign-03-shell`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/65
 
 Рідер на нових токенах: чипи слів і граматики, попапи, тулбар, легенда Word types. Перемикач
 «Function words» (нова група `fn` у `reader-tokens.ts`, пунктирне підкреслення) і контроль розміру
