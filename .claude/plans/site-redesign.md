@@ -77,10 +77,10 @@ Privacy (Terms і Privacy — коли з'являться сторінки). To
 тексту A−/A+. Стан тулбара, службових слів і розміру зберігається (слайс 2). Чекпоінт дизайну:
 скріншоти проти макета, світла й темна теми.
 
-### [ ] 5. Quick check core
+### [x] 5. Quick check core
 - Branch: `site-redesign-05-quick-check-core`
-- Base: `site-redesign-04-reader`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/66
 
 Замість блоку питань під постом (`reader-final`): одна картка, одне питання за раз, прогрес-смужка,
 клавіші 1–3 і Esc, Skip. Екран відповіді з поясненням, підсумок (кільце результату, streak, кількість
