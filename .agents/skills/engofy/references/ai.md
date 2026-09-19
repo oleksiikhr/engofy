@@ -10,7 +10,7 @@ deliberately split:
 | Method | Shape | Use for |
 |---|---|---|
 | `complete({ system, userText, maxTokens })` | free-form text back | whole-text inline-markup passes (annotation, grammar) |
-| `completeStructured<T>({ system, userText, tool: { name, description, schema: ZodType<T> } })` | forced single-tool-use; `input_schema` from `z.toJSONSchema` (strip `$schema`); response validated `tool.schema.parse` | small structured outputs (complexity, comprehension) |
+| `completeStructured<T>({ system, userText, tool: { name, description, schema: ZodType<T> } })` | forced single-tool-use; `input_schema` from `z.toJSONSchema` (strip `$schema`); response validated `tool.schema.parse` | small structured outputs (complexity, grammar_contrastive) |
 
 Adapter `anthropic-client.service.ts` (not `@Injectable` — built by `ai-client.provider.ts`).
 Both methods go through one private `createMessage()` that **streams** every

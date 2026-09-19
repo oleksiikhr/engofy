@@ -3,13 +3,18 @@ import { v7 as uuidv7 } from 'uuid';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
-import type { ComprehensionResult } from '../../domain/comprehension-prompt.js';
+import type { GrammarContrastiveResult } from '../../domain/grammar-contrastive-prompt.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
+import { GrammarCategory } from '../../entities/grammar-category.entity.js';
+import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
+import { GrammarMatch } from '../../entities/grammar-match.entity.js';
+import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
+import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import { ExerciseType } from '../../enums/exercise-type.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
@@ -32,20 +37,91 @@ const TOKENS: [number, number, string, string, string, string, string][] = [
   [36, 37, '.', '.', 'PUNCT', '.', 'punct'],
 ];
 
-const FIXTURE_COMPREHENSION: ComprehensionResult = {
-  questions: [
-    {
-      question: 'What jumped?',
-      options: ['The fox', 'The dog', 'The cat', 'The bird'],
-      answerIndex: 0,
-    },
-    {
-      question: 'How were the dogs described?',
-      options: ['Lazy', 'Clever', 'Fast', 'Loud'],
-      answerIndex: 0,
-    },
+const FIXTURE_CONTRASTIVE: GrammarContrastiveResult = {
+  explanation:
+    'Past simple states a finished action; past continuous would describe it in progress.',
+  question: 'The clever fox ____ over lazy dogs.',
+  options: ['jumped', 'was jumping', 'has jumped'],
+  answerIndex: 0,
+  optionExplanations: [
+    'A completed past action.',
+    'Describes an action in progress.',
+    'Links the past to now.',
   ],
 };
+
+interface SeededGrammar {
+  pastSimplePointId: string;
+  sentenceId: string;
+}
+
+// Two constructions in one category ("past simple" matched on "jumped", plus a
+// sibling "past continuous") and a lone-construction category matched on
+// "lazy dogs" — nothing to contrast with, so it must be skipped.
+async function seedGrammar(
+  em: EntityManager,
+  postId: string,
+): Promise<SeededGrammar> {
+  const sentence = await em.findOneOrFail(Sentence, { postId });
+
+  const past = new GrammarCategory();
+  past.name = 'PAST';
+  past.sortOrder = 0;
+  const lone = new GrammarCategory();
+  lone.name = 'LONE';
+  lone.sortOrder = 1;
+  em.persist([past, lone]);
+
+  const construct = (
+    category: GrammarCategory,
+    name: string,
+    slug: string,
+    sortOrder: number,
+  ) => {
+    const construction = new GrammarConstruction();
+    construction.categoryId = category.id;
+    construction.name = name;
+    construction.slug = slug;
+    construction.sortOrder = sortOrder;
+    em.persist(construction);
+    return construction;
+  };
+  const point = (construction: GrammarConstruction, guideword: string) => {
+    const usagePoint = new GrammarUsagePoint();
+    usagePoint.constructionId = construction.id;
+    usagePoint.cefrLevel = CefrLevel.A2;
+    usagePoint.guideword = guideword;
+    usagePoint.canDoStatement = `can do ${guideword}`;
+    em.persist(usagePoint);
+    return usagePoint;
+  };
+  const pastSimple = point(
+    construct(past, 'past simple', 'past-simple', 0),
+    'USE: FINISHED PAST',
+  );
+  point(
+    construct(past, 'past continuous', 'past-continuous', 1),
+    'USE: ACTION IN PROGRESS',
+  );
+  const loneUsage = point(
+    construct(lone, 'adjectives', 'adjectives', 0),
+    'USE: DESCRIBING',
+  );
+
+  for (const [usagePoint, tokenStart, tokenEnd] of [
+    [pastSimple, 3, 4],
+    [loneUsage, 5, 7],
+  ] as const) {
+    const match = new GrammarMatch();
+    match.sentenceId = sentence.id;
+    match.grammarUsagePointId = usagePoint.id;
+    match.tokenStart = tokenStart;
+    match.tokenEnd = tokenEnd;
+    em.persist(match);
+  }
+  await em.flush();
+  return { pastSimplePointId: pastSimple.id, sentenceId: sentence.id };
+}
 
 async function seedPostWithSentence(em: EntityManager): Promise<string> {
   const source = new PostSource();
@@ -89,7 +165,7 @@ async function seedPostWithSentence(em: EntityManager): Promise<string> {
 
 describe('GenerateExercisesHandler', () => {
   const fakeAi = new FakeAiClient();
-  fakeAi.onCompleteStructured = () => FIXTURE_COMPREHENSION;
+  fakeAi.onCompleteStructured = () => FIXTURE_CONTRASTIVE;
   const suite = createIntegrationSuite(
     { imports: [PostModule] },
     {
@@ -98,20 +174,48 @@ describe('GenerateExercisesHandler', () => {
     },
   );
 
-  it('writes deterministic exercises plus AI comprehension and completes the run', async () => {
+  beforeEach(() => {
+    fakeAi.structuredCallCount = 0;
+  });
+
+  it('writes deterministic exercises plus one grammar_contrastive per contrastable usage point and completes the run', async () => {
     const postId = await seedPostWithSentence(suite.orm.em);
+    const grammar = await seedGrammar(suite.orm.em, postId);
+    const prompts: { system: string; userText: string }[] = [];
+    fakeAi.onCompleteStructured = (params) => {
+      prompts.push(params);
+      return FIXTURE_CONTRASTIVE;
+    };
 
     await suite.command(new GenerateExercisesCommand(postId));
 
     const exercises = await suite.orm.em.find(Exercise, { postId });
-    const bySource = (s: ExerciseSource) =>
-      exercises.filter((e) => e.source === s);
-
-    expect(bySource(ExerciseSource.Spacy).length).toBeGreaterThan(0);
-    expect(bySource(ExerciseSource.Ai)).toHaveLength(2);
+    expect(
+      exercises.filter((e) => e.source === ExerciseSource.Spacy).length,
+    ).toBeGreaterThan(0);
     expect(
       exercises.filter((e) => e.type === ExerciseType.Comprehension),
-    ).toHaveLength(2);
+    ).toHaveLength(0);
+
+    const contrastive = exercises.filter(
+      (e) => e.type === ExerciseType.GrammarContrastive,
+    );
+    expect(contrastive).toHaveLength(1);
+    expect(contrastive[0]?.source).toBe(ExerciseSource.Ai);
+    expect(contrastive[0]?.payload).toEqual({
+      grammarUsagePointId: grammar.pastSimplePointId,
+      sentenceId: grammar.sentenceId,
+      ...FIXTURE_CONTRASTIVE,
+    });
+
+    expect(prompts).toHaveLength(1);
+    expect(prompts[0]?.userText).toContain(
+      'Sentence: The clever fox ⟦jumped⟧ over lazy dogs.',
+    );
+    expect(prompts[0]?.userText).toContain('Construction: past simple');
+    expect(prompts[0]?.userText).toContain(
+      '- past continuous (USE: ACTION IN PROGRESS)',
+    );
 
     const fillBlank = exercises.find((e) => e.type === ExerciseType.FillBlank);
     expect(fillBlank?.payload).toMatchObject({
@@ -126,8 +230,24 @@ describe('GenerateExercisesHandler', () => {
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
   });
 
+  it('makes no AI call when the post has no grammar matches', async () => {
+    const postId = await seedPostWithSentence(suite.orm.em);
+
+    await suite.command(new GenerateExercisesCommand(postId));
+
+    expect(fakeAi.structuredCallCount).toBe(0);
+    expect(
+      await suite.orm.em.count(Exercise, {
+        postId,
+        type: ExerciseType.GrammarContrastive,
+      }),
+    ).toBe(0);
+  });
+
   it('is idempotent — a second run neither calls the AI again nor duplicates rows', async () => {
     const postId = await seedPostWithSentence(suite.orm.em);
+    await seedGrammar(suite.orm.em, postId);
+    fakeAi.onCompleteStructured = () => FIXTURE_CONTRASTIVE;
 
     await suite.command(new GenerateExercisesCommand(postId));
     const callsAfterFirst = fakeAi.structuredCallCount;
