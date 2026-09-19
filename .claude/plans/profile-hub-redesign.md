@@ -80,10 +80,10 @@ mail-чергу за наявним патерном `ChallengeMailerService`/pg
 `accountDeletion: { requestedAt, scheduledFor } | null`. Лист веде на
 `${PUBLIC_URL}/account-deletion/cancel?token=…` — сторінку робить слайс 6.
 
-### [ ] 5. Видалення акаунту: cascade cron
+### [x] 5. Видалення акаунту: cascade cron
 - Branch: `profile-hub-redesign-05-account-deletion-cron`
-- Base: `profile-hub-redesign-04-account-deletion-request`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/31
 
 Свідомо окремий зріз від запиту/скасування (деструктивна, незворотна дія — окреме
 рев'ю). `DeleteExpiredAccountsCron` за наявним патерном `CronJobHost`/`@Cron`

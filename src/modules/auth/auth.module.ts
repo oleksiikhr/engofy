@@ -25,6 +25,7 @@ import { GoogleIdTokenVerifierService } from './services/google-id-token-verifie
 import { SessionService } from './services/session.service.js';
 import { AccountDeletionMailerService } from './services/shared/account-deletion-mailer.service.js';
 import { ChallengeMailerService } from './services/shared/challenge-mailer.service.js';
+import { DeleteExpiredAccountsService } from './services/shared/delete-expired-accounts.service.js';
 
 const commandHandlers = [
   CancelAccountDeletionByTokenHandler,
@@ -57,10 +58,16 @@ const queryHandlers = [GetAccountDeletionHandler, GetUserHandler];
     GoogleIdTokenVerifierService,
     ChallengeMailerService,
     AccountDeletionMailerService,
+    DeleteExpiredAccountsService,
     mailerProvider,
     ...commandHandlers,
     ...queryHandlers,
   ],
-  exports: [AuthService, ChallengeMailerService, AccountDeletionMailerService],
+  exports: [
+    AuthService,
+    ChallengeMailerService,
+    AccountDeletionMailerService,
+    DeleteExpiredAccountsService,
+  ],
 })
 export class AuthModule {}
