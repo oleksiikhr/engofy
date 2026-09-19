@@ -120,6 +120,34 @@ test.describe('grammar construction detail', () => {
     await expect(construction.badge).toHaveText('A2');
     await expect(construction.cheatSheet).toContainText('Form');
     await expect(construction.usageItems).toHaveCount(2);
+    // No handcrafted page for this slug — the generic render.
+    await expect(construction.handcrafted).toHaveCount(0);
+  });
+
+  test('renders a handcrafted page with its compare links', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+    await expect(construction.handcrafted).toBeVisible();
+    await expect(
+      construction.handcrafted.getByRole('heading', { name: 'Form' }),
+    ).toBeVisible();
+    await expect(
+      construction.compare.locator('a[href="/grammar/past-past-simple"]'),
+    ).toBeVisible();
+    // Usage points still come from the API, each with an exercise placeholder.
+    await expect(construction.usageItems.first()).toBeVisible();
+    await expect(construction.exercisePlaceholder()).toBeVisible();
+  });
+
+  test('follows a compare link', async ({ page }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+    await construction.compare
+      .locator('a[href="/grammar/past-past-simple"]')
+      .click();
+    await expect(page).toHaveURL(/\/grammar\/past-past-simple$/);
   });
 
   test('guest gets a sign-in prompt from "+"', async ({ page }) => {
@@ -134,10 +162,22 @@ test.describe('grammar construction detail', () => {
 
     test('adds a usage point to the deck', async ({ page }) => {
       const construction = new GrammarConstructionPage(page);
-      await construction.goto('e2e-present-simple');
+      await construction.goto('e2e-conditionals');
       const item = construction.usageItem();
       await construction.addUsageToDeck();
-      await expect(item).toContainText('✓ Saved');
+      await expect(construction.usageState()).toHaveText('Learning');
+      await expect(item.getByRole('button')).toHaveCount(0);
+    });
+
+    test('marks a usage point as known', async ({ page }) => {
+      const construction = new GrammarConstructionPage(page);
+      await construction.goto('e2e-conditionals');
+      // The second point: the "adds a usage point" test takes the first.
+      await construction.markUsageKnown(1);
+      await expect(construction.usageState(1)).toHaveText('Learned');
+      await expect(construction.usageItem(1).getByRole('button')).toHaveCount(
+        0,
+      );
     });
   });
 });

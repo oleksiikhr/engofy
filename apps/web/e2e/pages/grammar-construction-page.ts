@@ -5,12 +5,16 @@ export class GrammarConstructionPage {
   readonly badge: Locator;
   readonly cheatSheet: Locator;
   readonly usageItems: Locator;
+  readonly handcrafted: Locator;
+  readonly compare: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.badge = page.locator('.con-head .badge');
     this.cheatSheet = page.locator('.cheat');
     this.usageItems = page.locator('.usage-item');
+    this.handcrafted = page.locator('[data-handcrafted="true"]');
+    this.compare = page.getByTestId('grammar-compare');
   }
 
   async goto(slug: string) {
@@ -29,5 +33,19 @@ export class GrammarConstructionPage {
     await this.usageItem(index)
       .getByRole('button', { name: '+ Add to deck' })
       .click();
+  }
+
+  async markUsageKnown(index = 0) {
+    await this.usageItem(index)
+      .getByRole('button', { name: 'I know this' })
+      .click();
+  }
+
+  usageState(index = 0): Locator {
+    return this.usageItem(index).locator('.gup-state');
+  }
+
+  exercisePlaceholder(index = 0): Locator {
+    return this.usageItem(index).getByTestId('usage-exercises');
   }
 }
