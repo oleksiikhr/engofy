@@ -113,10 +113,10 @@ htmx-списків.
 Список тем, `GrammarShell` і компоненти (Formula, Example, Compare, UsagePoints, Section), 4
 статичні сторінки, `grammar/[slug]`.
 
-### [ ] 9. Profile, Progress, Subscription
+### [x] 9. Profile, Progress, Subscription
 - Branch: `site-redesign-09-profile-progress-subscription`
-- Base: `site-redesign-08-grammar`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/70
 
 Профіль (рівень складності, видалення акаунта), Progress (heatmap, картки за рівнями, граматичні
 навички), Subscription. Кільце денної цілі біля streak: якщо потрібні нові дані від бекенду, це
