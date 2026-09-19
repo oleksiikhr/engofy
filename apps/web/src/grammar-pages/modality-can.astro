@@ -14,7 +14,12 @@ interface Props {
 const { con, user } = Astro.props;
 ---
 
-<GrammarShell con={con} user={user} handcrafted>
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to use “can” in English: ability, permission, requests, offers and possibility — one form, many jobs, with the form and examples."
+  handcrafted
+>
   <Fragment slot="lede">
     <p>
       One short verb, many jobs: ability, permission, requests, offers and

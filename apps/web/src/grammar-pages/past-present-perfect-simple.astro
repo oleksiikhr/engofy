@@ -14,7 +14,12 @@ interface Props {
 const { con, user } = Astro.props;
 ---
 
-<GrammarShell con={con} user={user} handcrafted>
+<GrammarShell
+  con={con}
+  user={user}
+  description="Present perfect simple in English: how to form it with have / has + past participle, and when a past event still matters now."
+  handcrafted
+>
   <Fragment slot="lede">
     <p>
       A past event that still matters now. The time it happened is either
