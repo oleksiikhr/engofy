@@ -141,6 +141,26 @@ test.describe('grammar construction detail', () => {
     await expect(construction.exercisePlaceholder()).toBeVisible();
   });
 
+  test('derives a meta description for a generic page', async ({ page }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    const description = page.locator('meta[name="description"]');
+    await expect(description).toHaveAttribute('content', /E2E: Tenses/);
+    await expect(description).not.toHaveAttribute(
+      'content',
+      'Learn English through short authentic texts.',
+    );
+  });
+
+  test('a handcrafted page sets its own meta description', async ({ page }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      /Present perfect simple in English/,
+    );
+  });
+
   test('follows a compare link', async ({ page }) => {
     const construction = new GrammarConstructionPage(page);
     await construction.goto('past-present-perfect-simple');
@@ -179,5 +199,22 @@ test.describe('grammar construction detail', () => {
         0,
       );
     });
+  });
+});
+
+test.describe('sitemap.xml', () => {
+  test('lists the grammar index and every construction', async ({
+    request,
+  }) => {
+    const res = await request.get('/sitemap.xml');
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('application/xml');
+    const body = await res.text();
+    expect(body).toContain('<urlset');
+    expect(body).toMatch(/<loc>[^<]+\/grammar<\/loc>/);
+    expect(body).toMatch(/<loc>[^<]+\/grammar\/e2e-past-perfect<\/loc>/);
+    expect(body).toMatch(
+      /<loc>[^<]+\/grammar\/past-present-perfect-simple<\/loc>/,
+    );
   });
 });

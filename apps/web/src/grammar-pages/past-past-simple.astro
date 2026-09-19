@@ -14,7 +14,12 @@ interface Props {
 const { con, user } = Astro.props;
 ---
 
-<GrammarShell con={con} user={user} handcrafted>
+<GrammarShell
+  con={con}
+  user={user}
+  description="Past simple in English: form (regular and irregular verbs, negatives, questions) and when to use it for finished events in the past."
+  handcrafted
+>
   <Fragment slot="lede">
     <p>
       Something that happened, or was true, at a finished time in the past.

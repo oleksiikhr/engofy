@@ -13,7 +13,12 @@ interface Props {
 const { con, user } = Astro.props;
 ---
 
-<GrammarShell con={con} user={user} handcrafted>
+<GrammarShell
+  con={con}
+  user={user}
+  description="When to use a / an, the or no article in English: how the small word before a noun tells the listener which one you mean, with examples."
+  handcrafted
+>
   <Fragment slot="lede">
     <p>
       <em>A / an</em>, <em>the</em> or nothing at all — the small word before a

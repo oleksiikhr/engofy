@@ -1,20 +1,30 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { grammarMetaDescription } from '../../lib/grammar-seo';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
 import GrammarUsagePoints from './GrammarUsagePoints.astro';
 
 interface Props {
   con: GrammarConstructionDetail;
   user: CurrentUser | null;
+  // Meta description; handcrafted pages set their own, otherwise it is derived
+  // from the construction's data.
+  description?: string;
   // Set by the pages under `src/grammar-pages/`; the generic fallback leaves it off.
   handcrafted?: boolean;
 }
 
-const { con, user, handcrafted = false } = Astro.props;
+const {
+  con,
+  user,
+  description = grammarMetaDescription(con),
+  handcrafted = false,
+} = Astro.props;
 ---
 
 <Layout
   title={`${con.name} — Grammar — Engofy`}
+  description={description}
   user={user}
   active="grammar"
   measure={true}
