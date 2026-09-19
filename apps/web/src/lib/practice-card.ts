@@ -35,22 +35,38 @@ const TYPE_LABEL: Record<string, string> = {
 // sentence from something the learner actually read, PLAN.md
 // practice-redesign зріз 1 — never a fallback to the AI example) gets its own
 // line with a source label.
-function renderAnswerBody(target: PracticeItem['target']): string {
-  const phonetic = target.phonetic
-    ? ` <span class="practice__phonetic">${esc(target.phonetic)}</span>`
-    : '';
-  const speak =
-    target.type !== 'grammar'
-      ? `<button type="button" class="btn btn--ghost practice__speak" data-speak="${esc(target.primary)}" aria-label="Pronounce ${esc(target.primary)}">🔊</button>`
-      : '';
-  const context = target.contextSentence
+function renderContext(target: PracticeItem['target']): string {
+  return target.contextSentence
     ? `<blockquote class="practice__context">
         <p>${esc(target.contextSentence)}</p>
         <cite>from an article you read</cite>
       </blockquote>`
     : '';
+}
 
-  return `<p>${esc(target.secondary ?? '')}${phonetic}${speak}</p>${context}`;
+// Grammar reveal (practice-redesign зріз 3): can-do statement, the EGP
+// example, a real sentence from a recent read when one matched, and a plain
+// link to the construction's page. Recall format only — no contrastive
+// question here.
+function renderGrammarAnswerBody(target: PracticeItem['target']): string {
+  const example = target.exampleText
+    ? `<p class="practice__example">${esc(target.exampleText)}</p>`
+    : '';
+  const more = target.detailSlug
+    ? `<p><a class="practice__more" href="/grammar/${encodeURIComponent(target.detailSlug)}">Детальніше</a></p>`
+    : '';
+  return `<p>${esc(target.secondary ?? '')}</p>${example}${renderContext(target)}${more}`;
+}
+
+function renderAnswerBody(target: PracticeItem['target']): string {
+  if (target.type === 'grammar') {
+    return renderGrammarAnswerBody(target);
+  }
+  const phonetic = target.phonetic
+    ? ` <span class="practice__phonetic">${esc(target.phonetic)}</span>`
+    : '';
+  const speak = `<button type="button" class="btn btn--ghost practice__speak" data-speak="${esc(target.primary)}" aria-label="Pronounce ${esc(target.primary)}">🔊</button>`;
+  return `<p>${esc(target.secondary ?? '')}${phonetic}${speak}</p>${renderContext(target)}`;
 }
 
 function renderCard(
@@ -72,7 +88,7 @@ function renderCard(
 
   return `<div class="practice__card" data-testid="practice-card">
     <p class="practice__count">${remaining} card${remaining === 1 ? '' : 's'} to review</p>
-    <p class="practice__kicker">${esc(TYPE_LABEL[t.type] ?? t.type)}</p>
+    <p class="practice__kicker">${esc(t.type === 'grammar' && t.kicker ? t.kicker : (TYPE_LABEL[t.type] ?? t.type))}</p>
     <p class="practice__front">${esc(t.primary)}</p>
     ${reveal}
     <form
