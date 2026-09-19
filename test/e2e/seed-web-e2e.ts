@@ -31,6 +31,7 @@ import { PostSource } from '../../src/modules/post/embeddables/post-source.embed
 import { Exercise } from '../../src/modules/post/entities/exercise.entity.js';
 import { GrammarCategory } from '../../src/modules/post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../src/modules/post/entities/grammar-construction.entity.js';
+import { GrammarMatch } from '../../src/modules/post/entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../src/modules/post/entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../src/modules/post/entities/phrase.entity.js';
 import { Post } from '../../src/modules/post/entities/post.entity.js';
@@ -104,6 +105,7 @@ const ENTITIES = [
   GrammarCategory,
   GrammarConstruction,
   GrammarUsagePoint,
+  GrammarMatch,
 ];
 
 function sha256(value: string): string {
@@ -140,6 +142,9 @@ async function wipe(orm: MikroORM): Promise<void> {
   });
   const postIds = posts.map((p) => p.id);
   const sentences = await em.find(Sentence, { postId: { $in: postIds } });
+  await em.nativeDelete(GrammarMatch, {
+    sentenceId: { $in: sentences.map((s) => s.id) },
+  });
   await em.nativeDelete(SentenceToken, {
     sentenceId: { $in: sentences.map((s) => s.id) },
   });
@@ -262,7 +267,7 @@ async function seed(orm: MikroORM): Promise<void> {
       'Can show that one past action happened before another past action.',
     exampleText: 'By the time the war ended, she had drawn every coastline.',
   });
-  em.create(GrammarUsagePoint, {
+  const pastPerfectReported = em.create(GrammarUsagePoint, {
     constructionId: pastPerfect.id,
     cefrLevel: CefrLevel.B1,
     guideword: 'USE: REPORTED',
@@ -414,7 +419,7 @@ async function seed(orm: MikroORM): Promise<void> {
     phraseId: phrase.id,
   });
 
-  em.create(PostPart, {
+  const readerPart2 = em.create(PostPart, {
     postId: reader.id,
     blockIndex: 1,
     kind: PostPartKind.Paragraph,
@@ -432,6 +437,63 @@ async function seed(orm: MikroORM): Promise<void> {
       ],
     },
     annotatedAt: now,
+  });
+
+  // spaCy layer for block 1 with two grammar matches: "had drawn" (A2 point,
+  // New for the A1 e2e user -> labelled) and "war ended" (B1 point the e2e
+  // user marks Known below -> labelled for a guest only).
+  const grammarSentenceText =
+    'By the time the war ended, she had drawn every coastline twice.';
+  const grammarSentence = em.create(Sentence, {
+    postId: reader.id,
+    postPartId: readerPart2.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: grammarSentenceText,
+    charStart: 0,
+    charEnd: grammarSentenceText.length,
+  });
+  const grammarTokens: [string, number, number][] = [
+    ['By', 0, 2],
+    ['the', 3, 6],
+    ['time', 7, 11],
+    ['the', 12, 15],
+    ['war', 16, 19],
+    ['ended', 20, 25],
+    [',', 25, 26],
+    ['she', 27, 30],
+    ['had', 31, 34],
+    ['drawn', 35, 40],
+    ['every', 41, 46],
+    ['coastline', 47, 56],
+    ['twice', 57, 62],
+    ['.', 62, 63],
+  ];
+  grammarTokens.forEach(([text, charStart, charEnd], position) => {
+    em.create(SentenceToken, {
+      sentenceId: grammarSentence.id,
+      position,
+      text,
+      charStart,
+      charEnd,
+      lemma: text.toLowerCase(),
+      pos: 'X',
+      tag: 'X',
+      dep: 'dep',
+      morph: {},
+    });
+  });
+  em.create(GrammarMatch, {
+    sentenceId: grammarSentence.id,
+    grammarUsagePointId: pastPerfectUp.id,
+    tokenStart: 8,
+    tokenEnd: 10,
+  });
+  em.create(GrammarMatch, {
+    sentenceId: grammarSentence.id,
+    grammarUsagePointId: pastPerfectReported.id,
+    tokenStart: 4,
+    tokenEnd: 6,
   });
 
   // A phrase the seeded user already marked Known — the reader must mark it
@@ -633,6 +695,11 @@ async function seed(orm: MikroORM): Promise<void> {
     userId: user.id,
     phraseId: skippedPhrase.id,
     disposition: Disposition.Skipped,
+  });
+  em.create(LearningDisposition, {
+    userId: user.id,
+    grammarUsagePointId: pastPerfectReported.id,
+    disposition: Disposition.Known,
   });
 
   // --- grammar skill progress + review streak (profile) ---

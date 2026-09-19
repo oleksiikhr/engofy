@@ -48,18 +48,22 @@ export interface TextNode {
   type: 'text';
   text: string;
   marks?: Mark[];
+  // Set client-side by `applyGrammarMatches`; never present on the wire.
+  grammarUsagePointId?: string;
 }
 export interface LinkNode {
   type: 'link';
   text: string;
   href: string;
   marks?: Mark[];
+  grammarUsagePointId?: string;
 }
 interface BaseSpanNode {
   type: 'span';
   text: string;
   marks?: Mark[];
   grammarConstruct?: string;
+  grammarUsagePointId?: string;
 }
 export interface WordSpanNode extends BaseSpanNode {
   kind: 'word';
@@ -130,6 +134,17 @@ export interface GrammarAnnotation {
   cefrLevel: CefrLevel | null;
   usagePoints: GrammarUsagePointRef[];
 }
+// A grammar usage point placed on the doc: `charStart`/`charEnd` is a
+// half-open range in the plain text of the block unit (`itemIndex` picks the
+// list item, null for a paragraph).
+export interface GrammarMatch {
+  blockIndex: number;
+  itemIndex: number | null;
+  charStart: number;
+  charEnd: number;
+  grammarUsagePointId: string;
+  state: EffectiveState;
+}
 export type ExerciseType =
   | 'fill_blank'
   | 'find_error'
@@ -156,6 +171,7 @@ export interface PostDetail {
     words: Record<string, WordAnnotation>;
     phrases: Record<string, PhraseAnnotation>;
     grammar: Record<string, GrammarAnnotation>;
+    grammarMatches: GrammarMatch[];
   };
   exercises: PostExercise[];
 }

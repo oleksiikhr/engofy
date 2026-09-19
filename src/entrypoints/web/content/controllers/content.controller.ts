@@ -279,6 +279,14 @@ function toAnnotationsDto(
         exampleText: point.exampleText,
       })),
     })),
+    grammarMatches: annotations.grammarMatches.map((match) => ({
+      blockIndex: match.blockIndex,
+      itemIndex: match.itemIndex,
+      charStart: match.charStart,
+      charEnd: match.charEnd,
+      grammarUsagePointId: match.grammarUsagePointId,
+      state: match.state,
+    })),
   };
 }
 

@@ -383,6 +383,7 @@ describe('ContentController', () => {
     // A guest gets every word/phrase state "new"; the sidebar is gone.
     expect(res.body.annotations.words[wordDefinitionId].state).toBe('new');
     expect(res.body.sidebar).toBeUndefined();
+    expect(res.body.annotations.grammarMatches).toEqual([]);
   });
 
   it('marks the post-detail response Cache-Control: private (it varies per session, unlike the other content routes)', async () => {

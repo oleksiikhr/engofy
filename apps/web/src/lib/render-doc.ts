@@ -2,9 +2,12 @@
 // word/phrase span whose effective state for the viewer is `new` or
 // `learning` is marked (`data-word-definition-id` / `data-phrase-id`); every
 // other span — known/skipped targets, grammar-only spans — renders exactly
-// like a text node. Output is injected with `set:html`, so every text value
-// is escaped here.
+// like a text node. Grammar usage points are placed separately
+// (`applyGrammarMatches`) and wrap their nodes in a
+// `data-grammar-usage-point-id` span. Output is injected with `set:html`, so
+// every text value is escaped here.
 
+import { applyGrammarMatches } from './apply-grammar-matches';
 import type {
   Block,
   Doc,
@@ -59,20 +62,27 @@ function spanAttr(node: SpanNode, annotations: Annotations): string | null {
   return null;
 }
 
-function renderInline(node: InlineNode, annotations: Annotations): string {
+function renderNode(node: InlineNode, annotations: Annotations): string {
   if (node.type === 'link') {
-    return wrapMarks(
-      `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${esc(node.text)}</a>`,
-      node.marks,
-    );
+    return `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${esc(node.text)}</a>`;
   }
   if (node.type === 'span') {
     const attr = spanAttr(node, annotations);
     if (attr) {
-      return wrapMarks(`<span ${attr}>${esc(node.text)}</span>`, node.marks);
+      return `<span ${attr}>${esc(node.text)}</span>`;
     }
   }
-  return wrapMarks(esc(node.text), node.marks);
+  return esc(node.text);
+}
+
+function renderInline(node: InlineNode, annotations: Annotations): string {
+  const html = renderNode(node, annotations);
+  return wrapMarks(
+    node.grammarUsagePointId
+      ? `<span data-grammar-usage-point-id="${esc(node.grammarUsagePointId)}">${html}</span>`
+      : html,
+    node.marks,
+  );
 }
 
 function renderChildren(
@@ -103,7 +113,8 @@ function renderBlock(block: Block, annotations: Annotations): string {
 // Renders `Doc.children` to an HTML string. Caller wraps it in a
 // `.analysis` container so the span styles in app.css apply.
 export function renderDoc(doc: Doc, annotations: Annotations): string {
-  return doc.children
-    .map((block) => renderBlock(block, annotations))
+  // `?? []`: an API still on the previous release omits `grammarMatches`.
+  return applyGrammarMatches(doc, annotations.grammarMatches ?? [])
+    .children.map((block) => renderBlock(block, annotations))
     .join('\n');
 }

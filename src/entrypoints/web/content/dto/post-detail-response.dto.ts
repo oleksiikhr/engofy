@@ -84,6 +84,24 @@ export class PostGrammarAnnotationDto {
   readonly usagePoints!: PostGrammarUsagePointDto[];
 }
 
+export class PostGrammarMatchDto {
+  // Index within Doc.children.
+  readonly blockIndex!: number;
+
+  // Index within a ListBlock's items; null for a paragraph.
+  readonly itemIndex!: number | null;
+
+  // Half-open char range within the block unit's plain text.
+  readonly charStart!: number;
+
+  readonly charEnd!: number;
+
+  readonly grammarUsagePointId!: string;
+
+  // The viewer's effective state for the usage point; New for a guest.
+  readonly state!: EffectiveState;
+}
+
 export class PostAnnotationsDto {
   // Keyed by wordDefinitionId (the id on a `word` span).
   readonly words!: Record<string, PostWordAnnotationDto>;
@@ -93,6 +111,9 @@ export class PostAnnotationsDto {
 
   // Keyed by construction slug (a span's `grammarConstruct`).
   readonly grammar!: Record<string, PostGrammarAnnotationDto>;
+
+  // Grammar usage points placed on the doc, sorted by position.
+  readonly grammarMatches!: PostGrammarMatchDto[];
 }
 
 export class PostDetailResponseDto {
