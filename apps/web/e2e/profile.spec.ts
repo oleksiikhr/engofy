@@ -27,6 +27,7 @@ test.describe('profile (signed in)', () => {
     );
     // 3 consecutive seeded review days.
     await expect(profile.streakStat).toContainText('3');
+    await expect(profile.dailyPlanStatus).toContainText(/Done|Not done/);
     // Free or Premium depending on whether the pricing spec already ran.
     await expect(profile.planStatus).toContainText(/Free|Premium/);
     await expect(
