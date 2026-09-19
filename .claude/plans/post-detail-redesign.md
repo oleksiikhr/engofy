@@ -54,10 +54,10 @@ quiz) на один наскрізний механізм: заякорений 
 відповідному текстовому вузлі, лише для конструкцій з ефективним станом
 new/learning.
 
-### [ ] 3. Пайплайн grammar_contrastive замість comprehension
+### [x] 3. Пайплайн grammar_contrastive замість comprehension
 - Branch: `post-detail-redesign-03-grammar-contrastive-pipeline`
-- Base: `post-detail-redesign-02-grammar-spans`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/44
 
 Новий модуль (аналог `src/modules/post/domain/comprehension-prompt.ts`) +
 зміна `GenerateExercisesHandler`: один AI-виклик на унікальний

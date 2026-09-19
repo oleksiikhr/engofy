@@ -3,9 +3,8 @@ import { ExerciseType } from '../enums/exercise-type.enum.js';
 
 // Deterministic exercise generation from the spaCy layer (PLAN.md §5
 // `ai_exercises`, §3.10): the bulk of exercises are built here straight from
-// `sentence_tokens` with no AI call. Comprehension questions — the one type
-// that needs real understanding of the passage — are the AI's job and are
-// added by the handler, not this module.
+// `sentence_tokens` with no AI call. grammar_contrastive exercises — the one
+// type that needs a model — are added by the handler, not this module.
 
 // spaCy UPOS tags that carry lexical meaning worth practising.
 const CONTENT_POS = new Set(['NOUN', 'VERB', 'ADJ', 'ADV']);
@@ -320,7 +319,7 @@ function collect<P>(
 // Runs every deterministic generator over the post's sentences and returns
 // the drafts in a stable order (all fill-blanks, then reorders, then MC, then
 // find-error), each type capped. The handler turns these into Exercise rows
-// and appends AI comprehension exercises separately.
+// and appends AI grammar_contrastive exercises separately.
 export function buildExercises(
   sentences: ExerciseSentenceInput[],
   options: BuildExercisesOptions = {},

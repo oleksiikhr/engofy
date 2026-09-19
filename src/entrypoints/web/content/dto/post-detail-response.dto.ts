@@ -17,7 +17,7 @@ export class PostExerciseDto {
 
   readonly source!: ExerciseSource;
 
-  // Shape depends on `type` (see build-exercises.ts / comprehension-prompt.ts).
+  // Shape depends on `type` (see build-exercises.ts / grammar-contrastive-prompt.ts).
   readonly payload!: Record<string, unknown>;
 }
 

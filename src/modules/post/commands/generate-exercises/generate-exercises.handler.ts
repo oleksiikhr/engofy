@@ -13,11 +13,16 @@ import {
   type ExerciseSentenceInput,
 } from '../../domain/build-exercises.js';
 import {
-  buildComprehensionUserText,
-  COMPREHENSION_SYSTEM_PROMPT,
-  comprehensionToolSchema,
-} from '../../domain/comprehension-prompt.js';
+  buildGrammarContrastiveUserText,
+  GRAMMAR_CONTRASTIVE_SYSTEM_PROMPT,
+  type GrammarContrastiveResult,
+  grammarContrastiveToolSchema,
+  markSentenceSpan,
+} from '../../domain/grammar-contrastive-prompt.js';
 import { Exercise } from '../../entities/exercise.entity.js';
+import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
+import { GrammarMatch } from '../../entities/grammar-match.entity.js';
+import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
@@ -35,7 +40,10 @@ export interface PostAiExercisesJobData {
 
 // ai_exercises stage (PLAN.md §5, §3.10): most exercises are built
 // deterministically from `sentence_tokens` (build-exercises.ts, no AI);
-// comprehension questions come from one structured AI call. Consumes the
+// grammar_contrastive exercises come from one structured AI call per grammar
+// usage point matched in the post (the stage runs per post, not per viewer, so
+// every matched usage point gets one — the reader filters by the viewer's
+// state). Consumes the
 // spaCy `sentences` / `sentence_tokens` from spacy_parse; in the DAG it is
 // the stage after ai_grammar (TagGrammarHandler enqueues it on completion).
 // Idempotent via the stage-level PostPipelineRun row (§12); a partial re-run
@@ -92,8 +100,9 @@ export class GenerateExercisesHandler
     }));
 
     const drafts = buildExercises(inputs);
-    const comprehension = await this.callComprehension(
-      sentences.map((s) => s.rawText),
+    const contrastive = await this.buildContrastive(
+      sentences,
+      tokensBySentence,
     );
 
     await this.em.nativeDelete(Exercise, { postId });
@@ -107,12 +116,16 @@ export class GenerateExercisesHandler
       this.em.persist(exercise);
     }
 
-    for (const question of comprehension.questions) {
+    for (const item of contrastive) {
       const exercise = new Exercise();
       exercise.postId = postId;
-      exercise.type = ExerciseType.Comprehension;
+      exercise.type = ExerciseType.GrammarContrastive;
       exercise.source = ExerciseSource.Ai;
-      exercise.payload = { ...question };
+      exercise.payload = {
+        grammarUsagePointId: item.grammarUsagePointId,
+        sentenceId: item.sentenceId,
+        ...item.result,
+      };
       this.em.persist(exercise);
     }
 
@@ -120,7 +133,7 @@ export class GenerateExercisesHandler
       {
         postId,
         deterministic: drafts.length,
-        comprehension: comprehension.questions.length,
+        grammarContrastive: contrastive.length,
       },
       'ai_exercises generated',
     );
@@ -161,18 +174,125 @@ export class GenerateExercisesHandler
     return bySentence;
   }
 
-  private async callComprehension(
-    sentenceTexts: string[],
-  ): Promise<ReturnType<typeof comprehensionToolSchema.parse>> {
-    return this.ai.completeStructured({
-      system: COMPREHENSION_SYSTEM_PROMPT,
-      userText: buildComprehensionUserText(sentenceTexts),
-      tool: {
-        name: 'report_comprehension',
-        description:
-          'Report the reading-comprehension questions for the passage.',
-        schema: comprehensionToolSchema,
-      },
+  // One exercise per unique usage point matched in the post (calls run in parallel), built around its
+  // first occurrence. A usage point whose category has no other construction
+  // has nothing to contrast with and is skipped.
+  private async buildContrastive(
+    sentences: Sentence[],
+    tokensBySentence: Map<string, SentenceToken[]>,
+  ): Promise<ContrastiveItem[]> {
+    const matches = await this.em.find(GrammarMatch, {
+      sentenceId: { $in: sentences.map((s) => s.id) },
     });
+    if (matches.length === 0) {
+      return [];
+    }
+
+    const sentenceOrder = new Map(sentences.map((s, i) => [s.id, i]));
+    const firstMatchByPoint = new Map<string, GrammarMatch>();
+    for (const match of [...matches].sort(
+      (a, b) =>
+        (sentenceOrder.get(a.sentenceId) ?? 0) -
+          (sentenceOrder.get(b.sentenceId) ?? 0) || a.tokenStart - b.tokenStart,
+    )) {
+      if (!firstMatchByPoint.has(match.grammarUsagePointId)) {
+        firstMatchByPoint.set(match.grammarUsagePointId, match);
+      }
+    }
+
+    const points = await this.em.find(GrammarUsagePoint, {
+      id: { $in: [...firstMatchByPoint.keys()] },
+    });
+    const pointById = new Map(points.map((p) => [p.id, p]));
+    const matchedConstructions = await this.em.find(GrammarConstruction, {
+      id: { $in: points.map((p) => p.constructionId) },
+    });
+    const constructions = await this.em.find(GrammarConstruction, {
+      categoryId: { $in: matchedConstructions.map((c) => c.categoryId) },
+    });
+    const constructionById = new Map(constructions.map((c) => [c.id, c]));
+    const siblingPoints = await this.em.find(GrammarUsagePoint, {
+      constructionId: { $in: constructions.map((c) => c.id) },
+    });
+    const guidewordsByConstruction = new Map<string, string[]>();
+    for (const point of siblingPoints) {
+      const list = guidewordsByConstruction.get(point.constructionId) ?? [];
+      list.push(point.guideword);
+      guidewordsByConstruction.set(point.constructionId, list);
+    }
+    const sentenceById = new Map(sentences.map((s) => [s.id, s]));
+
+    const requests: {
+      grammarUsagePointId: string;
+      sentenceId: string;
+      userText: string;
+    }[] = [];
+    // Map order is first-occurrence order in the post.
+    for (const [pointId, match] of firstMatchByPoint) {
+      const point = pointById.get(pointId);
+      const construction = point && constructionById.get(point.constructionId);
+      const sentence = sentenceById.get(match.sentenceId);
+      if (!point || !construction || !sentence) {
+        continue;
+      }
+      const siblings = constructions
+        .filter(
+          (c) =>
+            c.categoryId === construction.categoryId &&
+            c.id !== construction.id,
+        )
+        .map((c) => ({
+          name: c.name,
+          guidewords: guidewordsByConstruction.get(c.id) ?? [],
+        }));
+      const covered = (tokensBySentence.get(sentence.id) ?? []).filter(
+        (t) => t.position >= match.tokenStart && t.position < match.tokenEnd,
+      );
+      if (siblings.length === 0 || covered.length === 0) {
+        this.logger.warn(
+          { grammarUsagePointId: point.id, sentenceId: sentence.id },
+          'grammar_contrastive skipped: no sibling constructions or covered tokens',
+        );
+        continue;
+      }
+
+      requests.push({
+        grammarUsagePointId: point.id,
+        sentenceId: sentence.id,
+        userText: buildGrammarContrastiveUserText({
+          markedSentence: markSentenceSpan(
+            sentence.rawText,
+            Math.min(...covered.map((t) => t.charStart)),
+            Math.max(...covered.map((t) => t.charEnd)),
+          ),
+          constructionName: construction.name,
+          guideword: point.guideword,
+          canDoStatement: point.canDoStatement,
+          siblings,
+        }),
+      });
+    }
+
+    return Promise.all(
+      requests.map(async ({ userText, ...ids }) => ({
+        ...ids,
+        result: await this.ai.completeStructured({
+          system: GRAMMAR_CONTRASTIVE_SYSTEM_PROMPT,
+          userText,
+          tool: {
+            name: 'report_grammar_contrastive',
+            description:
+              'Report the contrastive explanation and multiple-choice question for the marked construction.',
+            schema: grammarContrastiveToolSchema,
+          },
+        }),
+      })),
+    );
   }
+}
+
+interface ContrastiveItem {
+  grammarUsagePointId: string;
+  sentenceId: string;
+  result: GrammarContrastiveResult;
 }

@@ -33,6 +33,15 @@ flowchart LR
   (`cqrs.md` — 3rd sanctioned exception). No new stage, no fan-out change, no
   migration (`grammar_only` / `grammarConstruct` already in the node-tree
   types + parser).
+- `ai_exercises` writes deterministic exercises (`domain/build-exercises.ts`) plus
+  one `grammar_contrastive` exercise per unique `grammar_matches` usage point
+  (`domain/grammar-contrastive-prompt.ts`, one `completeStructured` call each, run
+  in parallel). Runs per post, not per viewer: every matched usage point gets one,
+  and the reader filters by the viewer's effective state. A usage point whose
+  category has no sibling construction is skipped with a warn. Payload:
+  `{ grammarUsagePointId, sentenceId, explanation, question, options,
+  answerIndex, optionExplanations }`. `ExerciseType.Comprehension` is no longer
+  generated; existing rows are left in place.
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
   `PostPipelineStage` starts at `SpacyParse`; the legacy `'fetch'` literal was
   dropped from `post_pipeline_runs_stage_check` in `Migration20260830120000`.

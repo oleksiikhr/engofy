@@ -150,6 +150,7 @@ export type ExerciseType =
   | 'find_error'
   | 'multiple_choice'
   | 'comprehension'
+  | 'grammar_contrastive'
   | 'reorder';
 export interface PostExercise {
   id: string;

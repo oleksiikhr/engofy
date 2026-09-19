@@ -43,7 +43,7 @@ function supportsAdaptiveThinking(model: string): boolean {
 // silently not cached. Only the grammar stage's system prompt (static preamble
 // + the full seeded construction catalogue) clears that bar in practice, so
 // gate on an approximate char count rather than spend a breakpoint slot on the
-// three small prompts (annotation / complexity / comprehension).
+// three small prompts (annotation / complexity / grammar_contrastive).
 const CACHE_CONTROL_MIN_CHARS = 4000;
 
 // Marks a large, static system prompt as a cache breakpoint so a re-send within
