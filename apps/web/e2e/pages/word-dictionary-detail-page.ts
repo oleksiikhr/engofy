@@ -23,7 +23,7 @@ export class WordDictionaryDetailPage {
 
   senseByPos(pos: string): Locator {
     return this.senses.filter({
-      has: this.page.locator('.badge', { hasText: pos }),
+      has: this.page.locator('.eyebrow', { hasText: pos }),
     });
   }
 }

@@ -1,3 +1,4 @@
+import { STATE_LABEL, STATE_TONE } from './dictionary-state';
 import { postUrl } from './post-url';
 import type {
   EffectiveState,
@@ -22,13 +23,6 @@ const ESCAPE: Record<string, string> = {
 function esc(value: string): string {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPE[c]);
 }
-
-const STATE_LABEL: Record<EffectiveState, string> = {
-  new: 'New',
-  learning: 'Learning',
-  learned: 'Learned',
-  skipped: 'Skipped',
-};
 
 // What an action row acts on: one word sense (`lemma` is the detail page's
 // route param, needed to re-fetch after a removal) or one phrase.
@@ -80,7 +74,7 @@ export function actionsHtml(
 ): string {
   const id = actionsId(target);
   const fields = targetFields(target);
-  const label = `<span class="wd-sense__state wd-sense__state--${esc(current.state)}">${esc(STATE_LABEL[current.state] ?? current.state)}</span>`;
+  const label = `<span class="tag ${STATE_TONE[current.state] ?? ''}">${esc(STATE_LABEL[current.state] ?? current.state)}</span>`;
 
   if (current.cardId) {
     return `<div class="wd-sense__actions" id="${id}">
@@ -88,7 +82,7 @@ export function actionsHtml(
       <form hx-post="/partials/remove-card" hx-target="#${id}" hx-swap="outerHTML" hx-confirm="Remove this from your dictionary?">
         <input type="hidden" name="cardId" value="${esc(current.cardId)}" />
         ${fields}
-        <button type="submit" class="btn btn--ghost">Видалити</button>
+        <button type="submit" class="btn btn--sm btn--danger">Видалити</button>
       </form>
     </div>`;
   }
@@ -97,7 +91,7 @@ export function actionsHtml(
     `<form hx-post="/partials/set-disposition" hx-target="#${id}" hx-swap="outerHTML">
           ${fields}
           <input type="hidden" name="disposition" value="${disposition}" />
-          <button type="submit" class="btn btn--ghost">${text}</button>
+          <button type="submit" class="btn btn--sm btn--sec">${text}</button>
         </form>`;
   const knownBtn =
     current.state !== 'learned'
@@ -122,7 +116,7 @@ export function senseActionsHtml(
 function senseHtml(lemma: string, sense: WordDictionarySense): string {
   return `<li class="wd-sense card" data-testid="wd-sense">
     <div class="wd-sense__head">
-      <span class="badge">${esc(sense.pos)}</span>
+      <span class="eyebrow">${esc(sense.pos)}</span>
       ${sense.cefrLevel ? `<span class="badge">${esc(sense.cefrLevel)}</span>` : ''}
     </div>
     ${sense.phonetic ? `<p class="wd-sense__phonetic">${esc(sense.phonetic)}</p>` : ''}
@@ -190,7 +184,7 @@ export function renderPhraseDetail(view: PhraseDictionaryDetail): string {
     <section class="wd-senses">
       <div class="wd-sense card" data-testid="pd-phrase">
         <div class="wd-sense__head">
-          ${view.type ? `<span class="badge">${esc(view.type)}</span>` : ''}
+          ${view.type ? `<span class="eyebrow">${esc(view.type)}</span>` : ''}
           ${view.cefrLevel ? `<span class="badge">${esc(view.cefrLevel)}</span>` : ''}
         </div>
         ${view.definition ? `<p class="wd-sense__def">${esc(view.definition)}</p>` : ''}

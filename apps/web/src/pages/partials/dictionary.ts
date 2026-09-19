@@ -36,7 +36,7 @@ export const GET: APIRoute = async ({ request, url }) => {
       );
     }
     return html(
-      '<p class="dict-empty">Could not load your dictionary — try again.</p>',
+      '<div class="dict-empty card card--soft"><p>Could not load your dictionary — try again.</p></div>',
     );
   }
 };

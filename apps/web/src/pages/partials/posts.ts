@@ -8,6 +8,7 @@ import {
   renderPostsResults,
   toApiQuery,
 } from '../../lib/posts-list';
+import { getCurrentUser } from '../../lib/session';
 import type { PostsListResponse } from '../../lib/types';
 
 // HTMX target for /posts — the filter form (no `cursor`: replaces the whole
@@ -24,15 +25,16 @@ export const GET: APIRoute = async ({ request, url }) => {
   const query = parsePostsQuery(url.searchParams);
 
   try {
+    const signedIn = (await getCurrentUser(request)) !== null;
     const view = await apiGet<PostsListResponse>(
       `/content/posts?${toApiQuery(query)}`,
       { request },
     );
     if (query.cursor) {
-      return html(renderPostsPage(view, query));
+      return html(renderPostsPage(view, query, signedIn));
     }
     const qs = new URLSearchParams(url.searchParams).toString();
-    return html(renderPostsResults(view, query), {
+    return html(renderPostsResults(view, query, signedIn), {
       // Keeps the address bar / back-button in sync with the real page even
       // though this response only carries a fragment.
       'HX-Push-Url': `/posts${qs ? `?${qs}` : ''}`,

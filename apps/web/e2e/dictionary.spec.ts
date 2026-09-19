@@ -36,6 +36,7 @@ test.describe('dictionary (signed in)', () => {
     ).toBeVisible();
 
     await expect(dictionary.entryByText('at loose ends')).toBeVisible();
+    await expect(word.locator('.tag')).toHaveText('Learning');
   });
 
   test('search narrows the list', async ({ page }) => {

@@ -1,9 +1,6 @@
+import { STATE_LABEL, STATE_TONE } from './dictionary-state';
 import { postUrl } from './post-url';
-import type {
-  DictionaryEntry,
-  DictionaryResponse,
-  EffectiveState,
-} from './types';
+import type { DictionaryEntry, DictionaryResponse } from './types';
 
 // Shared renderer for /dictionary's results — used both for the initial SSR
 // render and by the /partials/dictionary HTMX response after a filter change
@@ -20,13 +17,6 @@ const ESCAPE: Record<string, string> = {
 function esc(value: string): string {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPE[c]);
 }
-
-const STATE_LABEL: Record<EffectiveState, string> = {
-  new: 'New',
-  learning: 'Learning',
-  learned: 'Learned',
-  skipped: 'Skipped',
-};
 
 export interface DictionaryQuery {
   state: string;
@@ -66,13 +56,14 @@ function entryHref(entry: DictionaryEntry): string {
 }
 
 function entryHtml(entry: DictionaryEntry): string {
+  const kind = entry.type === 'word' ? 'Word' : 'Phrase';
   const senseNote =
     entry.type === 'word' && entry.senseCount > 1
-      ? `<span class="dict-entry__senses">${entry.senseCount} senses</span>`
+      ? `<span class="meta">${entry.senseCount} senses</span>`
       : '';
   const posts =
     entry.posts.length > 0
-      ? `<p class="dict-entry__posts">Appears in: ${entry.posts
+      ? `<p class="dict-entry__posts meta">Appears in: ${entry.posts
           .map(
             (post) =>
               `<a href="${esc(postUrl(post))}">${esc(post.title ?? 'Untitled')}</a>`,
@@ -82,13 +73,14 @@ function entryHtml(entry: DictionaryEntry): string {
 
   return `<li class="dict-entry card" data-testid="dict-entry">
     <div class="dict-entry__head">
+      <span class="eyebrow">${kind}${entry.secondary ? ` · ${esc(entry.secondary)}` : ''}</span>
+      <span class="tag ${STATE_TONE[entry.state] ?? ''} dict-entry__state">${esc(STATE_LABEL[entry.state] ?? entry.state)}</span>
+    </div>
+    <div class="dict-entry__title">
       <a class="dict-entry__term" href="${esc(entryHref(entry))}">${esc(entry.primary)}</a>
-      <span class="badge">${esc(entry.type)}</span>
       ${entry.cefrLevel ? `<span class="badge">${esc(entry.cefrLevel)}</span>` : ''}
       ${senseNote}
-      <span class="dict-entry__state dict-entry__state--${esc(entry.state)}">${esc(STATE_LABEL[entry.state] ?? entry.state)}</span>
     </div>
-    ${entry.secondary ? `<p class="dict-entry__pos">${esc(entry.secondary)}</p>` : ''}
     ${entry.definition ? `<p class="dict-entry__def">${esc(entry.definition)}</p>` : ''}
     ${entry.example ? `<p class="dict-entry__eg">“${esc(entry.example)}”</p>` : ''}
     ${posts}
@@ -102,7 +94,7 @@ function renderNext(view: DictionaryResponse, query: DictionaryQuery): string {
   const qs = withQuery(query, { cursor: view.nextCursor });
   return `<p class="dict-more">
     <a
-      class="btn btn--ghost"
+      class="btn btn--sec"
       href="/dictionary?${qs}"
       hx-get="/partials/dictionary?${qs}"
       hx-target="#dict-results"
@@ -121,7 +113,7 @@ export function renderDictionaryResults(
       query.search || query.state
         ? 'No entries match.'
         : 'Nothing saved yet — tap the “+” on a word while reading to add it here.';
-    return `<p class="dict-empty">${esc(message)}</p>`;
+    return `<div class="dict-empty card card--soft"><p>${esc(message)}</p></div>`;
   }
 
   const list = `<ul class="dict-list" id="dict-items">${view.items

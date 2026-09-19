@@ -17,19 +17,25 @@ function esc(value: string): string {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPE[c]);
 }
 
-const GRADES: { rating: string; label: string }[] = [
-  { rating: 'again', label: 'Again' },
-  { rating: 'hard', label: 'Hard' },
-  { rating: 'good', label: 'Good' },
-  { rating: 'easy', label: 'Easy' },
+interface Grade {
+  rating: string;
+  label: string;
+  tone: string;
+}
+
+const GRADES: Grade[] = [
+  { rating: 'again', label: 'Again', tone: 'tone-danger' },
+  { rating: 'hard', label: 'Hard', tone: 'tone-amber' },
+  { rating: 'good', label: 'Good', tone: 'tone-green' },
+  { rating: 'easy', label: 'Easy', tone: 'tone-blue' },
 ];
 
 // A card that has never been reviewed has nothing to rate "hard"/"easy"
 // against, so it gets a plain got-it / again choice; the backend accepts any
 // `ReviewRating` either way.
-const NEW_CARD_GRADES: { rating: string; label: string }[] = [
-  { rating: 'again', label: 'Повтор' },
-  { rating: 'good', label: 'Вивчив' },
+const NEW_CARD_GRADES: Grade[] = [
+  { rating: 'again', label: 'Повтор', tone: 'tone-danger' },
+  { rating: 'good', label: 'Вивчив', tone: 'tone-green' },
 ];
 
 const TYPE_LABEL: Record<string, string> = {
@@ -93,18 +99,20 @@ function renderCard(
   const buttons = grades
     .map(
       (g, i) =>
-        `<button type="submit" name="rating" value="${g.rating}" class="btn practice__grade" aria-keyshortcuts="${i + 1}">${g.label} <kbd class="practice__key" aria-hidden="true">${i + 1}</kbd></button>`,
+        `<button type="submit" name="rating" value="${g.rating}" class="practice__grade ${g.tone}" aria-keyshortcuts="${i + 1}">${g.label}<kbd class="practice__key" aria-hidden="true">${i + 1}</kbd></button>`,
     )
     .join('');
 
   const reveal = t.secondary
-    ? `<button type="button" class="btn btn--ghost practice__reveal" aria-keyshortcuts="Space">Show answer <kbd class="practice__key" aria-hidden="true">␣</kbd></button>
+    ? `<button type="button" class="btn btn--sec practice__reveal" aria-keyshortcuts="Space">Show answer <kbd class="practice__key" aria-hidden="true">␣</kbd></button>
        <div class="practice__answer" hidden>${renderAnswerBody(t)}</div>`
     : `<p class="practice__answer practice__answer--self">Recall its meaning, then grade yourself.</p>`;
 
-  return `<div class="practice__card" data-testid="practice-card">
-    <p class="practice__count">${remaining} card${remaining === 1 ? '' : 's'} to review</p>
-    <p class="practice__kicker">${esc(t.type === 'grammar' && t.kicker ? t.kicker : (TYPE_LABEL[t.type] ?? t.type))}</p>
+  return `<div class="practice__card card" data-testid="practice-card">
+    <div class="practice__top">
+      <p class="practice__kicker eyebrow">${esc(t.type === 'grammar' && t.kicker ? t.kicker : (TYPE_LABEL[t.type] ?? t.type))}</p>
+      <p class="practice__count meta">${remaining} card${remaining === 1 ? '' : 's'} to review</p>
+    </div>
     <p class="practice__front">${esc(t.primary)}</p>
     ${reveal}
     <form
@@ -129,13 +137,13 @@ function renderDailyLimitReached(
 ): string {
   const moreQuery = typesQuery(types);
   const plural = heldBackNewCount === 1 ? '' : 's';
-  return `<div class="practice__done" data-testid="practice-done">
+  return `<div class="practice__done card card--soft" data-testid="practice-done">
     <p class="practice__done-emoji">✓</p>
     <h2>Daily new-card limit reached</h2>
     <p>${heldBackNewCount} more new card${plural} waiting — come back tomorrow, or keep going now.</p>
     <button
       type="button"
-      class="btn btn--ghost"
+      class="btn btn--sec"
       hx-get="/partials/practice-more${moreQuery ? `?${moreQuery}` : ''}"
       hx-target="#practice-container"
       hx-swap="innerHTML"
@@ -145,7 +153,7 @@ function renderDailyLimitReached(
 
 // The user has never added a card (as opposed to having cleared the queue).
 function renderEmpty(): string {
-  return `<div class="practice__done" data-testid="practice-empty">
+  return `<div class="practice__done card card--soft" data-testid="practice-empty">
     <p class="practice__done-emoji">📚</p>
     <h2>No cards yet</h2>
     <p>Save words, phrases and grammar while you read — they show up here for review. <a href="/">Find something to read</a>.</p>
@@ -153,7 +161,7 @@ function renderEmpty(): string {
 }
 
 function renderDone(): string {
-  return `<div class="practice__done" data-testid="practice-done">
+  return `<div class="practice__done card card--soft" data-testid="practice-done">
     <p class="practice__done-emoji">✓</p>
     <h2>All caught up</h2>
     <p>No cards are due right now. Come back later or <a href="/">read something new</a>.</p>
@@ -188,7 +196,7 @@ export function renderPracticeQueue(
 // post) and finishing the queue moves on to крок 3 instead of linking away.
 export function renderDailyPracticeQueue(cards: PracticeItem[]): string {
   if (cards.length === 0) {
-    return `<div class="practice__done" data-testid="practice-done">
+    return `<div class="practice__done card card--soft" data-testid="practice-done">
       <p class="practice__done-emoji">✓</p>
       <h2>All caught up</h2>
       <p><a href="/?step=3">Continue →</a></p>

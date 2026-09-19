@@ -50,15 +50,35 @@ if (user) {
           hx-trigger="input changed delay:400ms, change"
           class="dict-controls"
         >
-          <input
-            id="dict-search"
-            name="search"
-            type="search"
-            value={search}
-            placeholder="Search words, phrases…"
-            aria-label="Search your dictionary"
-          />
-          <select id="dict-state" name="state" aria-label="Filter by status">
+          <div class="dict-search">
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="10" cy="10" r="6" />
+              <path d="M20 20l-5.5-5.5" />
+            </svg>
+            <input
+              id="dict-search"
+              class="input"
+              name="search"
+              type="search"
+              value={search}
+              placeholder="Search words, phrases…"
+              aria-label="Search your dictionary"
+            />
+          </div>
+          <select
+            id="dict-state"
+            class="input"
+            name="state"
+            aria-label="Filter by status"
+          >
             {STATES.map((s) => (
               <option value={s.value} selected={s.value === state}>
                 {s.label}
@@ -67,6 +87,15 @@ if (user) {
           </select>
         </form>
 
+        <div class="dict-skeleton" aria-hidden="true">
+          {[0, 1, 2].map(() => (
+            <div class="card dict-skeleton__card">
+              <span class="skeleton" style="width: 30%; height: 1rem" />
+              <span class="skeleton" style="width: 55%; height: 1.75rem" />
+              <span class="skeleton" style="height: 2.5rem" />
+            </div>
+          ))}
+        </div>
         <div id="dict-results" set:html={resultsHtml} />
       </>
     )
@@ -77,80 +106,123 @@ if (user) {
   .dict-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
-  .dict-controls input,
-  .dict-controls select {
-    font: inherit;
-    padding: 0.4rem 0.6rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    background: var(--color-paper);
-    color: var(--color-ink);
-  }
-  .dict-controls input {
+  .dict-search {
+    position: relative;
     flex: 1 1 16rem;
   }
+  .dict-search .ic {
+    position: absolute;
+    top: 50%;
+    left: 0.875rem;
+    transform: translateY(-50%);
+    color: var(--color-ink-faint);
+    pointer-events: none;
+  }
+  .dict-search .input {
+    padding-left: 2.5rem;
+  }
+  .dict-controls select.input {
+    width: auto;
+    min-width: 11rem;
+  }
   .dict-empty {
-    font-size: 0.9rem;
+    text-align: center;
     color: var(--color-ink-soft);
   }
-  .dict-list {
+  .dict-empty p {
+    margin: 0;
+  }
+  .dict-list,
+  .dict-skeleton {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1.25rem;
+  }
+  .dict-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
   }
   .dict-entry__head {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
+  }
+  .dict-entry__title {
+    display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 0.35rem;
+    gap: 0.25rem 0.625rem;
   }
   .dict-entry__term {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
+    color: var(--color-ink);
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-decoration: none;
+    overflow-wrap: anywhere;
   }
-  .dict-entry__senses {
-    font-size: 0.75rem;
-    color: var(--color-ink-faint);
+  .dict-entry__term:hover {
+    color: var(--color-brand-strong);
   }
-  .dict-entry__state {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    color: var(--color-ink-soft);
-  }
-  .dict-entry__state--learned {
-    color: var(--color-success);
-  }
-  .dict-entry__state--skipped {
-    color: var(--color-warning);
-  }
-  .dict-entry__pos {
-    margin: 0 0 0.3rem;
-    font-size: 0.8rem;
-    color: var(--color-ink-faint);
+  .dict-entry__def,
+  .dict-entry__eg,
+  .dict-entry__posts {
+    margin: 0;
   }
   .dict-entry__def {
-    margin: 0 0 0.3rem;
-  }
-  .dict-entry__eg {
-    margin: 0 0 0.3rem;
-    color: var(--color-ink-soft);
-    font-style: italic;
-  }
-  .dict-entry__posts {
-    margin: 0.4rem 0 0;
     font-size: 0.85rem;
     color: var(--color-ink-soft);
   }
+  .dict-entry__eg {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--color-ink-soft);
+  }
+  .dict-entry__posts {
+    margin-top: auto;
+  }
   .dict-more {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+  .dict-skeleton {
+    display: none;
+  }
+  .dict-skeleton__card {
+    display: grid;
+    gap: 0.75rem;
+  }
+  /* Skeleton cards stand in for the results while a filter request is in
+     flight — delayed, so a fast response never flashes them. */
+  #dict-results {
+    overflow: hidden;
+  }
+  #dict-filters.htmx-request ~ .dict-skeleton {
+    display: grid;
+    opacity: 0;
+    animation: dict-fade-in 0s 0.2s forwards;
+  }
+  #dict-filters.htmx-request ~ #dict-results {
+    animation: dict-fade-out 0s 0.2s forwards;
+  }
+  @keyframes dict-fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes dict-fade-out {
+    to {
+      opacity: 0;
+      max-height: 0;
+    }
   }
 </style>
