@@ -30,4 +30,47 @@ test.describe('practice (signed in)', () => {
     // Card advanced to the next due item and dropped out of the queue.
     await expect(practice.front).toHaveText('at loose ends');
   });
+
+  test('filters the queue by type through the chips', async ({ page }) => {
+    const practice = new PracticePage(page);
+    await practice.goto();
+
+    // All three chips start on.
+    for (const type of ['word', 'phrase', 'grammar'] as const) {
+      await expect(practice.chip(type)).toHaveAttribute('aria-current', 'true');
+    }
+
+    // Deselect words and phrases -> only the grammar card is left.
+    await practice.chip('word').click();
+    await practice.chip('phrase').click();
+    await expect(page).toHaveURL(/types=grammar/);
+    await expect(practice.chip('word')).not.toHaveAttribute('aria-current');
+    await expect(practice.card).toContainText(/1 card to review/);
+    await expect(practice.card.locator('.practice__kicker')).not.toHaveText(
+      /^(Word|Phrase)$/,
+    );
+
+    // Turning the last chip off falls back to "all".
+    await practice.chip('grammar').click();
+    await expect(page).toHaveURL('/practice');
+  });
+
+  // Non-destructive on purpose: the specs share one seeded queue, so this
+  // never completes a grade.
+  test('keyboard: space reveals the answer, digits wait for it', async ({
+    page,
+  }) => {
+    const practice = new PracticePage(page);
+    await practice.goto();
+    const front = await practice.front.textContent();
+
+    // Grading before the answer is revealed is ignored.
+    await page.keyboard.press('3');
+    await expect(practice.front).toHaveText(front ?? '');
+    await expect(page.locator('.practice__answer')).toBeHidden();
+
+    await page.keyboard.press('Space');
+    await expect(page.locator('.practice__answer')).toBeVisible();
+    await expect(practice.revealButton).toBeHidden();
+  });
 });
