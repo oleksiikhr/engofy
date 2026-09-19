@@ -26,7 +26,8 @@ export class LoginPage {
     });
     this.alert = page.getByRole('alert');
     this.logOutButton = page.getByRole('button', { name: 'Log out' });
-    this.logInLink = page.getByRole('link', { name: 'Log in' });
+    // The guest landing also carries a CTA "Log in"; the header one comes first.
+    this.logInLink = page.getByRole('link', { name: 'Log in' }).first();
   }
 
   async goto() {
