@@ -127,22 +127,4 @@ describe('SkillProgressService', () => {
     );
     expect(await suite.orm.em.count(UserSkillProgress, { userId })).toBe(0);
   });
-
-  it('never writes masteryScore (derived at read time — D11)', async () => {
-    const userId = uuidv7();
-    const { usagePointId, constructionId } = await seedUsagePoint(suite.orm.em);
-
-    await service.recordGrammarReview(
-      userId,
-      gradeCard(usagePointId),
-      ReviewRating.Easy,
-    );
-    await suite.orm.em.flush();
-
-    const row = await suite.orm.em.findOneOrFail(UserSkillProgress, {
-      userId,
-      constructionId,
-    });
-    expect(row.masteryScore).toBe(0);
-  });
 });

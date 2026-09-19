@@ -17,7 +17,7 @@
 
 | Where | Was | Now |
 |---|---|---|
-| `sentence.postPartId`, `sentence_token.sentenceId`, `grammar_match.sentenceId`, `learning_cards.userId` | standalone `@Index()` on a column already the **leading** key of a composite `@Unique` — redundant btree, extra write cost | dropped (`Migration20260830120500`). The composite's own btree serves `WHERE <lead> IN (...)`. |
+| `sentence.postPartId`, `sentence_token.sentenceId`, `grammar_match.sentenceId`, `learning_cards.userId` | standalone `@Index()` on a column already the **leading** key of a composite `@Unique` — redundant btree, extra write cost |not indexed. The composite's own btree serves `WHERE <lead> IN (...)`. |
 | `learning_cards` | standalone `@Index()` on `due` — doesn't serve the practice query `WHERE user_id=? AND due<=? ORDER BY due` | replaced with class-level `@Index({ properties: ['userId', 'due'] })`. |
 
 ## Unbounded reads found
@@ -25,5 +25,5 @@
 | Where | Problem | D |
 |---|---|---|
 | ~~`learning/queries/get-profile` `computeStreak`~~ | **fixed (Batch E)** — now a single `SELECT DISTINCT to_char((reviewed_at AT TIME ZONE 'UTC')::date, …)` via `em.getConnection().execute` (`dailyStreakFromUtcDays` consumes the day strings). | — |
-| ~~`learning/queries/get-dictionary`~~ | **fixed (Batch R2)** — the "appears in" list is now a bounded, indexed join: `sentence_tokens` (filtered on the `word_id` / `phrase_id` the annotation stage links) → `sentences` (PK) → `posts` (PK, published only) via the denormalised `sentences.post_id`, one `SELECT DISTINCT … ORDER BY published_at DESC` per term kind through `em.getConnection().execute`. No full-post scan, no `post_parts` load, no node-tree walk. New partial-free btree indexes `sentence_tokens_word_id_index` / `sentence_tokens_phrase_id_index` (`Migration20260901103351`). No `post_word`/`post_phrase` projection table needed — the deterministic `sentence_tokens` link is the projection. | D10/D12 |
+| ~~`learning/queries/get-dictionary`~~ | **fixed (Batch R2)** — the "appears in" list is now a bounded, indexed join: `sentence_tokens` (filtered on the `word_id` / `phrase_id` the annotation stage links) → `sentences` (PK) → `posts` (PK, published only) via the denormalised `sentences.post_id`, one `SELECT DISTINCT … ORDER BY published_at DESC` per term kind through `em.getConnection().execute`. No full-post scan, no `post_parts` load, no node-tree walk. New partial-free btree indexes `sentence_tokens_word_id_index` / `sentence_tokens_phrase_id_index`. No `post_word`/`post_phrase` projection table needed — the deterministic `sentence_tokens` link is the projection. | D10/D12 |
 | `post/queries/get-feed` | offset pagination on `publishedAt desc` — every new publish shifts the window. Batch K took the cheap path: the misleading "stable offset" comment is now replaced with the truth + a `TODO` for keyset on `(publishedAt, id)` (the query already `orderBy`s that exact tuple). Full keyset is a deferred feature, not a bug. | — |

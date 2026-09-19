@@ -85,8 +85,8 @@ None outstanding.
 - `publish-pending`: `run()` re-selects `failed` rows too
   (`retryCount < MAX_ATTEMPTS` + `updatedAt` backoff), `retryCount++` on each
   failed send; `RetryPostHandler` resets `failed` telegram publications for the
-  post back to `pending` (`published` rows left alone). New column
-  `post_publications.retry_count` — `Migration20260830130000`.
+  post back to `pending` (`published` rows left alone). Column:
+  `post_publications.retry_count`.
 - New `PruneTelegramUpdatesCron` (daily 03:00) → 30-day retention `DELETE` on
   `telegram_updates`.
 
@@ -98,8 +98,7 @@ None outstanding.
   logs a `429` distinctly (`rate-limited`, with `retry_after`); the retry itself
   still rides the fixed `RETRY_BACKOFF_MINUTES` window (exact-hint waiting needs
   a per-row next-attempt column — deferred, one low-volume channel).
-- `telegram_updates.updated_at` added (`Migration20260901120000`) — was the last
-  audit table without the `onCreate`/`onUpdate` pair.
+- `telegram_updates.updated_at` carries the `onCreate`/`onUpdate` pair like every other audit table.
 
 ### Done (Batch C)
 

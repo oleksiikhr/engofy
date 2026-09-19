@@ -499,7 +499,7 @@ describe('ContentController', () => {
     const index = await suite
       .request('get', '/content/grammar')
       .expect(HttpStatus.OK);
-    const category = index.body.categories.find(
+    const category = index.body.groups.find(
       (c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
     );
@@ -525,14 +525,14 @@ describe('ContentController', () => {
 
     const kept = await suite.request('get', '/content/grammar?cefr=A1');
     expect(
-      kept.body.categories.some((c: { constructions: { slug: string }[] }) =>
+      kept.body.groups.some((c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
       ),
     ).toBe(true);
 
     const dropped = await suite.request('get', '/content/grammar?cefr=C2');
     expect(
-      dropped.body.categories.some((c: { constructions: { slug: string }[] }) =>
+      dropped.body.groups.some((c: { constructions: { slug: string }[] }) =>
         c.constructions.some((con) => con.slug === slug),
       ),
     ).toBe(false);
@@ -573,10 +573,10 @@ describe('ContentController', () => {
       'other',
     );
 
-    // Default (and a blank value) stays category-grouped, mirrored in the
-    // deprecated `categories` alias.
+    // Default (and a blank value) stays category-grouped.
     const byDefault = await suite.request('get', '/content/grammar?groupBy=');
-    expect(byDefault.body.categories).toEqual(byDefault.body.groups);
+    const byCategory = await suite.request('get', '/content/grammar');
+    expect(byDefault.body.groups).toEqual(byCategory.body.groups);
 
     await suite
       .request('get', '/content/grammar?groupBy=bogus')
@@ -605,7 +605,7 @@ describe('ContentController', () => {
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
     expect(index.headers['cache-control']).toBe('private');
-    const construction = index.body.categories
+    const construction = index.body.groups
       .flatMap((c: { constructions: { slug: string }[] }) => c.constructions)
       .find((c: { slug: string }) => c.slug === slug);
     expect(construction).toMatchObject({ state: 'learning' });

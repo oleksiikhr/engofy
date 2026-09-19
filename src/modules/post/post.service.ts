@@ -3,10 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AnnotatePostCommand } from './commands/annotate-post/annotate-post.command.js';
 import { AssessComplexityCommand } from './commands/assess-complexity/assess-complexity.command.js';
-import {
-  BackfillEnrichmentCommand,
-  type BackfillEnrichmentResult,
-} from './commands/backfill-enrichment/backfill-enrichment.command.js';
 import { EnrichLexiconCommand } from './commands/enrich-lexicon/enrich-lexicon.command.js';
 import { GenerateExercisesCommand } from './commands/generate-exercises/generate-exercises.command.js';
 import { IngestPostCommand } from './commands/ingest-post/ingest-post.command.js';
@@ -121,16 +117,6 @@ export class PostService {
     await this.commandBus.execute(new EnrichLexiconCommand(postId));
 
     await this.em.flush();
-  }
-
-  async backfillEnrichment(): Promise<BackfillEnrichmentResult> {
-    const result: BackfillEnrichmentResult = await this.commandBus.execute(
-      new BackfillEnrichmentCommand(),
-    );
-
-    await this.em.flush();
-
-    return result;
   }
 
   async generateExercises(postId: string): Promise<void> {

@@ -170,7 +170,6 @@ export type ExerciseType =
   | 'fill_blank'
   | 'find_error'
   | 'multiple_choice'
-  | 'comprehension'
   | 'grammar_contrastive'
   | 'reorder';
 export interface PostExercise {

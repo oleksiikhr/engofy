@@ -9,9 +9,9 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 
-// Per-user mastery of one of the ~90 grammar constructions. `masteryScore`
-// (0-100) is aggregated from the user's learning_cards whose grammar usage
-// point belongs to this construction (PLAN.md §3.6).
+// Per-user progress on one of the ~90 grammar constructions: unlock time and
+// display-only review tallies. Mastery (0-100) is not stored — `get-profile`
+// derives it from the user's learning_cards (PLAN.md §3.6).
 @Entity({ tableName: 'user_skill_progress' })
 @Unique({ properties: ['userId', 'constructionId'] })
 export class UserSkillProgress {
@@ -26,9 +26,6 @@ export class UserSkillProgress {
   // FK -> grammar_constructions.id
   @Property({ type: 'uuid' })
   constructionId!: string;
-
-  @Property({ type: 'smallint', default: 0 })
-  masteryScore: Opt<number> = 0;
 
   @Property({ type: 'integer', default: 0 })
   correctStreak: Opt<number> = 0;

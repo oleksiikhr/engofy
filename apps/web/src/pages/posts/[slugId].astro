@@ -84,7 +84,7 @@ function toDrill(ex: Ex): DrillView | null {
       before,
       after,
       answer: String(p.answer ?? ''),
-      // Older exercises predate the word bank and carry no options.
+      // `payload` is untyped; the word bank is empty when there are too few distractors.
       options: Array.isArray(p.options) ? (p.options as string[]) : [],
     };
   }

@@ -193,9 +193,6 @@ describe('GenerateExercisesHandler', () => {
     expect(
       exercises.filter((e) => e.source === ExerciseSource.Spacy).length,
     ).toBeGreaterThan(0);
-    expect(
-      exercises.filter((e) => e.type === ExerciseType.Comprehension),
-    ).toHaveLength(0);
 
     const contrastive = exercises.filter(
       (e) => e.type === ExerciseType.GrammarContrastive,
