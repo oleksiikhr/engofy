@@ -239,23 +239,6 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
       source: exercise.source,
       payload: exercise.payload,
     })),
-    sidebar: {
-      grammar: view.sidebar.grammar.map((entry) => ({
-        slug: entry.slug,
-        name: entry.name,
-        state: entry.state,
-      })),
-      words: view.sidebar.words.map((entry) => ({
-        wordDefinitionId: entry.wordDefinitionId,
-        lemma: entry.lemma,
-        state: entry.state,
-      })),
-      phrases: view.sidebar.phrases.map((entry) => ({
-        phraseId: entry.phraseId,
-        text: entry.text,
-        state: entry.state,
-      })),
-    },
   };
 }
 
@@ -273,6 +256,7 @@ function toAnnotationsDto(
       example: word.example,
       cefrLevel: word.cefrLevel,
       frequencyRank: word.frequencyRank,
+      state: word.state,
     })),
     phrases: mapRecord(annotations.phrases, (phrase) => ({
       phraseId: phrase.phraseId,
@@ -281,6 +265,7 @@ function toAnnotationsDto(
       definition: phrase.definition,
       example: phrase.example,
       cefrLevel: phrase.cefrLevel,
+      state: phrase.state,
     })),
     grammar: mapRecord(annotations.grammar, (entry) => ({
       slug: entry.slug,

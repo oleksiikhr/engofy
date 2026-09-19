@@ -380,10 +380,9 @@ describe('ContentController', () => {
     expect(res.body.attributionText).toBe('Example News, "On travel"');
     expect(res.body.sourceType).toBe('news_snippet');
 
-    // Sidebar (PLAN.md §17 Track B) — a guest gets every entry state "new".
-    expect(res.body.sidebar.words).toEqual([
-      expect.objectContaining({ wordDefinitionId, state: 'new' }),
-    ]);
+    // A guest gets every word/phrase state "new"; the sidebar is gone.
+    expect(res.body.annotations.words[wordDefinitionId].state).toBe('new');
+    expect(res.body.sidebar).toBeUndefined();
   });
 
   it('marks the post-detail response Cache-Control: private (it varies per session, unlike the other content routes)', async () => {

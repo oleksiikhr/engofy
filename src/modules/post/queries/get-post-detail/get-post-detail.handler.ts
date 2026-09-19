@@ -1,10 +1,14 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { User } from '../../../auth/entities/user.entity.js';
+import {
+  EffectiveState,
+  resolveEffectiveState,
+} from '../../../learning/domain/resolve-effective-state.js';
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
-import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
+import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
-import { mostAdvancedState } from '../../domain/learning-card-state-priority.js';
 import { parseDoc } from '../../domain/node-tree.parser.js';
 import type { SpanNode } from '../../domain/node-tree.types.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
@@ -16,6 +20,7 @@ import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { Word } from '../../entities/word.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
+import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { GetPostDetailQuery } from './get-post-detail.query.js';
 import type {
@@ -23,7 +28,6 @@ import type {
   PhraseAnnotationView,
   PostDetailView,
   PostExerciseView,
-  PostSidebarView,
   WordAnnotationView,
 } from './post-detail-view.js';
 
@@ -31,6 +35,11 @@ interface ResolvedAnnotations {
   words: Record<string, WordAnnotationView>;
   phrases: Record<string, PhraseAnnotationView>;
   grammar: Record<string, GrammarAnnotationView>;
+}
+
+interface Viewer {
+  userId: string;
+  userCefrLevel: CefrLevel;
 }
 
 // Backs `/posts/{slug}-{id}` (PLAN.md §4, §6): the reassembled node tree plus
@@ -74,7 +83,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     // that wrote a malformed node surfaces (InvalidNodeTreeError).
     const doc = parseDoc(assembleDocFromParts(parts));
     const spans = collectSpanNodes(doc.children);
-    const annotations = await this.resolveAnnotations(spans);
+    const annotations = await this.resolveAnnotations(spans, userId);
 
     return {
       shortId: post.shortId,
@@ -88,12 +97,12 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       doc,
       annotations,
       exercises: exercises.map(toExerciseView),
-      sidebar: await this.buildSidebar(annotations, userId),
     };
   }
 
   private async resolveAnnotations(
     spans: SpanNode[],
+    userId: string | null,
   ): Promise<ResolvedAnnotations> {
     const wordDefinitionIds = unique(
       spans.map((span) =>
@@ -105,9 +114,22 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     );
     const grammarSlugs = unique(spans.map((span) => span.grammarConstruct));
 
+    // A guest has no CEFR level, cards or dispositions: every word/phrase is
+    // New, no DB join.
+    const userCefrLevel = userId
+      ? (
+          await this.em.findOneOrFail(
+            User,
+            { id: userId },
+            { disableIdentityMap: true },
+          )
+        ).cefrLevel
+      : null;
+    const viewer = userId && userCefrLevel ? { userId, userCefrLevel } : null;
+
     const [words, phrases, grammar] = await Promise.all([
-      this.resolveWords(wordDefinitionIds),
-      this.resolvePhrases(phraseIds),
+      this.resolveWords(wordDefinitionIds, viewer),
+      this.resolvePhrases(phraseIds, viewer),
       this.resolveGrammar(grammarSlugs),
     ]);
 
@@ -116,6 +138,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
 
   private async resolveWords(
     wordDefinitionIds: string[],
+    viewer: Viewer | null,
   ): Promise<Record<string, WordAnnotationView>> {
     if (wordDefinitionIds.length === 0) {
       return {};
@@ -131,6 +154,11 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       { disableIdentityMap: true },
     );
     const wordById = new Map(words.map((word) => [word.id, word]));
+    const states = await this.resolveStates(
+      viewer,
+      'wordDefinitionId',
+      definitions.map((d) => ({ id: d.id, cefrLevel: d.cefrLevel ?? null })),
+    );
 
     const out: Record<string, WordAnnotationView> = {};
     for (const definition of definitions) {
@@ -145,6 +173,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         example: definition.exampleSentence ?? null,
         cefrLevel: definition.cefrLevel ?? null,
         frequencyRank: word?.frequencyRank ?? null,
+        state: states.get(definition.id) ?? EffectiveState.New,
       };
     }
     return out;
@@ -152,6 +181,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
 
   private async resolvePhrases(
     phraseIds: string[],
+    viewer: Viewer | null,
   ): Promise<Record<string, PhraseAnnotationView>> {
     if (phraseIds.length === 0) {
       return {};
@@ -161,6 +191,12 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       { id: { $in: phraseIds } },
       { disableIdentityMap: true },
     );
+    const states = await this.resolveStates(
+      viewer,
+      'phraseId',
+      phrases.map((p) => ({ id: p.id, cefrLevel: p.cefrLevel ?? null })),
+    );
+
     const out: Record<string, PhraseAnnotationView> = {};
     for (const phrase of phrases) {
       out[phrase.id] = {
@@ -170,9 +206,59 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         definition: phrase.definition ?? null,
         example: phrase.exampleSentence ?? null,
         cefrLevel: phrase.cefrLevel ?? null,
+        state: states.get(phrase.id) ?? EffectiveState.New,
       };
     }
     return out;
+  }
+
+  // Effective state per target id for a logged-in viewer (active card ->
+  // disposition -> CEFR default -> New). An empty map means "all New".
+  private async resolveStates(
+    viewer: Viewer | null,
+    targetKey: 'wordDefinitionId' | 'phraseId',
+    targets: { id: string; cefrLevel: CefrLevel | null }[],
+  ): Promise<Map<string, EffectiveState>> {
+    const states = new Map<string, EffectiveState>();
+    if (!viewer || targets.length === 0) {
+      return states;
+    }
+
+    const ids = targets.map((t) => t.id);
+    const [cards, dispositions] = await Promise.all([
+      this.em.find(
+        LearningCard,
+        { userId: viewer.userId, [targetKey]: { $in: ids }, archivedAt: null },
+        { disableIdentityMap: true },
+      ),
+      this.em.find(
+        LearningDisposition,
+        { userId: viewer.userId, [targetKey]: { $in: ids } },
+        { disableIdentityMap: true },
+      ),
+    ]);
+    const cardById = new Map(
+      cards.map((card) => [card[targetKey] as string, card]),
+    );
+    const dispositionById = new Map(
+      dispositions.map((d) => [d[targetKey] as string, d.disposition]),
+    );
+
+    for (const target of targets) {
+      const card = cardById.get(target.id);
+      states.set(
+        target.id,
+        resolveEffectiveState({
+          card: card
+            ? { state: card.state, scheduledDays: card.scheduledDays }
+            : null,
+          disposition: dispositionById.get(target.id) ?? null,
+          targetCefrLevel: target.cefrLevel,
+          userCefrLevel: viewer.userCefrLevel,
+        }),
+      );
+    }
+    return states;
   }
 
   private async resolveGrammar(
@@ -217,105 +303,6 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       };
     }
     return out;
-  }
-
-  // "In this article" sidebar (PLAN.md §16/§17 Track B): one entry per
-  // unique word/phrase/construction already resolved above — never per
-  // occurrence. A guest (userId null) gets every entry New, no DB join.
-  private async buildSidebar(
-    annotations: ResolvedAnnotations,
-    userId: string | null,
-  ): Promise<PostSidebarView> {
-    const wordEntries = Object.values(annotations.words);
-    const phraseEntries = Object.values(annotations.phrases);
-    const grammarEntries = Object.values(annotations.grammar);
-
-    if (!userId) {
-      return {
-        words: wordEntries.map((w) => ({
-          wordDefinitionId: w.wordDefinitionId,
-          lemma: w.lemma,
-          state: LearningCardState.New,
-        })),
-        phrases: phraseEntries.map((p) => ({
-          phraseId: p.phraseId,
-          text: p.text,
-          state: LearningCardState.New,
-        })),
-        grammar: grammarEntries.map((g) => ({
-          slug: g.slug,
-          name: g.name,
-          state: LearningCardState.New,
-        })),
-      };
-    }
-
-    const wordDefinitionIds = unique(
-      wordEntries.map((w) => w.wordDefinitionId),
-    );
-    const phraseIds = unique(phraseEntries.map((p) => p.phraseId));
-    const usagePointIds = grammarEntries.flatMap((g) =>
-      g.usagePoints.map((up) => up.grammarUsagePointId),
-    );
-
-    const conditions = [
-      wordDefinitionIds.length > 0
-        ? { wordDefinitionId: { $in: wordDefinitionIds } }
-        : null,
-      phraseIds.length > 0 ? { phraseId: { $in: phraseIds } } : null,
-      usagePointIds.length > 0
-        ? { grammarUsagePointId: { $in: usagePointIds } }
-        : null,
-    ].filter((c): c is NonNullable<typeof c> => c !== null);
-
-    const cards =
-      conditions.length === 0
-        ? []
-        : await this.em.find(
-            LearningCard,
-            { userId, archivedAt: null, $or: conditions },
-            { disableIdentityMap: true },
-          );
-
-    const stateByWordDefinitionId = new Map(
-      cards
-        .filter((c) => c.wordDefinitionId)
-        .map((c) => [c.wordDefinitionId as string, c.state]),
-    );
-    const stateByPhraseId = new Map(
-      cards
-        .filter((c) => c.phraseId)
-        .map((c) => [c.phraseId as string, c.state]),
-    );
-    const stateByUsagePointId = new Map(
-      cards
-        .filter((c) => c.grammarUsagePointId)
-        .map((c) => [c.grammarUsagePointId as string, c.state]),
-    );
-
-    return {
-      words: wordEntries.map((w) => ({
-        wordDefinitionId: w.wordDefinitionId,
-        lemma: w.lemma,
-        state:
-          stateByWordDefinitionId.get(w.wordDefinitionId) ??
-          LearningCardState.New,
-      })),
-      phrases: phraseEntries.map((p) => ({
-        phraseId: p.phraseId,
-        text: p.text,
-        state: stateByPhraseId.get(p.phraseId) ?? LearningCardState.New,
-      })),
-      grammar: grammarEntries.map((g) => ({
-        slug: g.slug,
-        name: g.name,
-        state: mostAdvancedState(
-          g.usagePoints
-            .map((up) => stateByUsagePointId.get(up.grammarUsagePointId))
-            .filter((s): s is LearningCardState => !!s),
-        ),
-      })),
-    };
   }
 }
 
