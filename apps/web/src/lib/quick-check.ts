@@ -1,11 +1,16 @@
 // Quick check: one card, one question at a time (intro -> questions -> summary).
-// Markup is server-rendered in the post page; this module only drives which
-// screen is visible and grades "choose the form" answers client-side.
+// Markup is server-rendered (QuickCheck.astro); this module drives which screen
+// is visible, grades "choose the form" and "match pairs" client-side, and sends
+// "recall a word" ratings to the review endpoint.
 
 const RING_CIRCUMFERENCE = 302;
 
 // Keys 1..9 pick the matching option.
 const OPTION_KEYS = /^[1-9]$/;
+// Keys 1..4 rate a recalled word: Again, Hard, Good, Easy.
+const RATINGS = ['again', 'hard', 'good', 'easy'];
+// How long a wrong match pair stays marked before it clears.
+const MISMATCH_MS = 700;
 
 function isTextField(target: EventTarget | null): boolean {
   return (
@@ -29,6 +34,30 @@ export function initQuickCheck(card: HTMLElement): void {
   let current: HTMLElement = intro;
   let answered = 0;
   let correct = 0;
+  // Recalled cards rated above Again: they leave today's due count.
+  let cleared = 0;
+
+  const kindOf = (q: HTMLElement) => q.dataset.qcKind;
+  const record = (right: boolean) => {
+    answered += 1;
+    if (right) {
+      correct += 1;
+    }
+  };
+
+  // Shuffle each match screen's meanings so rows don't line up with the words.
+  for (const q of questions.filter((s) => kindOf(s) === 'match')) {
+    const column = q.querySelector<HTMLElement>('[data-match-meanings]');
+    const items = Array.from(column?.children ?? []);
+    if (!column || items.length < 2) {
+      continue;
+    }
+    let shuffled = items;
+    while (shuffled.every((item, i) => item === items[i])) {
+      shuffled = [...items].sort(() => Math.random() - 0.5);
+    }
+    column.replaceChildren(...shuffled);
+  }
 
   const show = (screen: HTMLElement) => {
     current = screen;
@@ -55,6 +84,17 @@ export function initQuickCheck(card: HTMLElement): void {
         .querySelector('svg')
         ?.setAttribute('aria-label', `${correct} of ${answered} correct`);
       ring.hidden = false;
+    }
+    const dueTile = summary.querySelector<HTMLElement>('[data-qc-due]');
+    if (dueTile && cleared > 0) {
+      const left = Math.max(0, Number(dueTile.dataset.qcDue) - cleared);
+      dueTile.textContent = String(left);
+      const practice =
+        summary.querySelector<HTMLAnchorElement>('[data-qc-practice]');
+      if (practice) {
+        practice.textContent = `Practice ${left} card${left === 1 ? '' : 's'} from this text`;
+        practice.hidden = left === 0;
+      }
     }
     if (title) {
       title.textContent =
@@ -104,10 +144,7 @@ export function initQuickCheck(card: HTMLElement): void {
     const answer = Number(q.dataset.answerIndex);
     const right = picked === answer;
     q.dataset.checked = 'true';
-    answered += 1;
-    if (right) {
-      correct += 1;
-    }
+    record(right);
 
     const all = options(q);
     all.forEach((option, i) => {
@@ -150,6 +187,104 @@ export function initQuickCheck(card: HTMLElement): void {
     }
   };
 
+  const reveal = (q: HTMLElement) => {
+    const answer = q.querySelector<HTMLElement>('[data-qc-answer]');
+    if (!answer?.hidden) {
+      return;
+    }
+    answer.hidden = false;
+    q.querySelector<HTMLElement>('[data-qc-reveal]')?.setAttribute(
+      'hidden',
+      '',
+    );
+    const rate = q.querySelector<HTMLElement>('[data-qc-rate]');
+    if (rate) {
+      rate.hidden = false;
+    }
+    // The Show answer button just left the page; keep keys working.
+    q.focus({ preventScroll: true });
+  };
+
+  const rate = (q: HTMLElement, rating: string) => {
+    const answer = q.querySelector<HTMLElement>('[data-qc-answer]');
+    if (q.dataset.checked === 'true' || !answer || answer.hidden) {
+      return;
+    }
+    q.dataset.checked = 'true';
+    const body = new FormData();
+    body.set('cardId', q.dataset.cardId ?? '');
+    body.set('rating', rating);
+    // Best-effort, like mark-read: a failure must not block the quiz.
+    fetch('/partials/card-review', {
+      method: 'POST',
+      body,
+      keepalive: true,
+    }).catch(() => {});
+    record(rating !== 'again');
+    if (rating !== 'again') {
+      cleared += 1;
+    }
+    advance();
+  };
+
+  const pickPair = (q: HTMLElement, button: HTMLButtonElement) => {
+    if (button.disabled) {
+      return;
+    }
+    const side = 'matchTerm' in button.dataset ? 'matchTerm' : 'matchMeaning';
+    const other = side === 'matchTerm' ? 'matchMeaning' : 'matchTerm';
+    const selected = q.querySelector<HTMLButtonElement>('.is-selected');
+
+    if (selected && other in selected.dataset) {
+      const right = selected.dataset[other] === button.dataset[side];
+      const pair = [selected, button];
+      selected.classList.remove('is-selected');
+      selected.setAttribute('aria-pressed', 'false');
+      if (right) {
+        for (const item of pair) {
+          item.disabled = true;
+          item.classList.add('is-right');
+        }
+        const total = Number(
+          q.querySelector<HTMLElement>('[data-qc-match]')?.dataset.qcMatch,
+        );
+        const matched = q.querySelectorAll('.qc__opt.is-right').length / 2;
+        const count = q.querySelector('[data-qc-match-count]');
+        if (count) {
+          count.textContent = `${matched} of ${total}`;
+        }
+        if (matched === total) {
+          q.dataset.checked = 'true';
+          record(q.dataset.mistakes === undefined);
+          const next = q.querySelector<HTMLElement>('[data-qc-next]');
+          if (next) {
+            next.hidden = false;
+            next.focus({ preventScroll: true });
+          }
+        }
+      } else {
+        q.dataset.mistakes = String(Number(q.dataset.mistakes ?? 0) + 1);
+        for (const item of pair) {
+          item.classList.add('is-wrong');
+        }
+        setTimeout(() => {
+          for (const item of pair) {
+            item.classList.remove('is-wrong');
+          }
+        }, MISMATCH_MS);
+      }
+      return;
+    }
+
+    // First pick, or a switch between two on the same side.
+    if (selected) {
+      selected.classList.remove('is-selected');
+      selected.setAttribute('aria-pressed', 'false');
+    }
+    button.classList.add('is-selected');
+    button.setAttribute('aria-pressed', 'true');
+  };
+
   const advance = () => {
     const at = questions.indexOf(current);
     if (at === -1) {
@@ -172,9 +307,19 @@ export function initQuickCheck(card: HTMLElement): void {
       check(current);
     } else if (target.closest('[data-qc-next]')) {
       advance();
+    } else if (target.closest('[data-qc-reveal]')) {
+      reveal(current);
     } else {
+      const rating = target.closest<HTMLElement>('[data-rating]');
+      const pair = target.closest<HTMLButtonElement>(
+        '[data-match-term], [data-match-meaning]',
+      );
       const option = target.closest<HTMLElement>('[data-option]');
-      if (option && questions.includes(current)) {
+      if (rating && questions.includes(current)) {
+        rate(current, rating.dataset.rating ?? '');
+      } else if (pair && questions.includes(current)) {
+        pickPair(current, pair);
+      } else if (option && questions.includes(current)) {
         select(current, Number(option.dataset.option));
       }
     }
@@ -190,6 +335,24 @@ export function initQuickCheck(card: HTMLElement): void {
       event.preventDefault();
       showSummary();
     } else if (!questions.includes(current)) {
+      return;
+    } else if (kindOf(current) === 'recall') {
+      const revealed =
+        current.querySelector<HTMLElement>('[data-qc-answer]')?.hidden ===
+        false;
+      if (!revealed) {
+        // A focused button already handles its own Enter/Space.
+        if (
+          (event.key === ' ' || event.key === 'Enter') &&
+          event.target === current
+        ) {
+          event.preventDefault();
+          reveal(current);
+        }
+      } else if (RATINGS[Number(event.key) - 1]) {
+        rate(current, RATINGS[Number(event.key) - 1]);
+      }
+    } else if (kindOf(current) !== 'choose') {
       return;
     } else if (OPTION_KEYS.test(event.key)) {
       select(current, Number(event.key) - 1);

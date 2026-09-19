@@ -87,10 +87,10 @@ Privacy (Terms і Privacy — коли з'являться сторінки). To
 карток на повторення). Тип «вибери форму» на наявних контрастних питаннях. Mark-read лишається як
 є (перегляд фінального блоку або завершення study mode).
 
-### [ ] 6. Quick check: recall and match
+### [x] 6. Quick check: recall and match
 - Branch: `site-redesign-06-quick-check-recall-match`
-- Base: `site-redesign-05-quick-check-core`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/67
 
 Типи «картка слова» (оцінки Again/Hard/Good/Easy через наявний review) і «пари слово—значення» з
 лексикону поста. Перед початком перевірити, що всі дані вже приходять у відповіді get-post-detail;

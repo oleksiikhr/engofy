@@ -1359,7 +1359,7 @@ button[value="easy"] {
 }
 .qc__kicker {
   margin: 0;
-  color: var(--color-blue-ink);
+  color: var(--tone-ink);
 }
 .qc__prompt {
   margin: 0;
@@ -1414,7 +1414,7 @@ button[value="easy"] {
 .qc__opt.is-faded {
   opacity: 0.55;
 }
-.qc__opt kbd {
+.qc kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1498,4 +1498,97 @@ button[value="easy"] {
 }
 .qc__actions--end {
   gap: 0.4rem;
+}
+.qc__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.qc__fcard {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1.375rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background: var(--color-paper-soft);
+}
+.qc__term {
+  margin: 0;
+  font-size: 2.375rem;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.qc__reveal[hidden] {
+  display: none;
+}
+.qc__definition {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.qc__context {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+.qc__rate[hidden] {
+  display: none;
+}
+.qc__rate .eyebrow {
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+.qc__rates {
+  display: flex;
+  gap: 0.5rem;
+}
+.qc__rating {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 3.5rem;
+  padding: 0.625rem 0.25rem;
+  border: 2px solid var(--tone);
+  border-radius: 0.875rem;
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.qc__match {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  align-content: start;
+}
+.qc__match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.qc__opt--match {
+  flex: 1;
+  min-height: 3.25rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.qc__opt--match.is-right {
+  color: var(--color-success-ink);
+}
+.qc__hint {
+  text-align: center;
 }

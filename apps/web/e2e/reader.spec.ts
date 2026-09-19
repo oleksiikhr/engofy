@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
 import { ReaderPage } from './pages/reader-page';
 
@@ -395,13 +395,15 @@ test.describe('reader page (guest)', () => {
     await reader.goto(READER_SLUG);
 
     const intro = reader.qcScreen('intro');
-    await expect(intro).toContainText('One minute, 1 quick question.');
+    await expect(intro).toContainText('One minute, 2 quick questions.');
+    await expect(intro).toContainText('1×Choose the form');
+    await expect(intro).toContainText('1×Match pairs');
     await expect(reader.qcScreen('question')).toHaveCount(0);
 
     await reader.startQuickCheck();
     const question = reader.qcScreen('question');
     await expect(question).toContainText('By the time the war ended');
-    await expect(question).toContainText('1/1');
+    await expect(question).toContainText('1/2');
     await expect(
       question.getByRole('button', { name: 'Check', exact: true }),
     ).toBeDisabled();
@@ -415,9 +417,56 @@ test.describe('reader page (guest)', () => {
     await expect(question.getByText('Wrong time frame.')).toBeHidden();
     await expect(question.locator('[data-qc-blank]')).toHaveText('had drawn');
 
-    await question.getByRole('button', { name: 'See results' }).click();
+    await question.getByRole('button', { name: 'Continue' }).click();
+    await expect(reader.qcQuestion('match')).toContainText('2/2');
+    await reader
+      .qcQuestion('match')
+      .getByRole('button', { name: 'Skip quick check' })
+      .click();
     await expect(reader.qcScreen('summary')).toContainText('Keep at it.');
     await expect(reader.qcScreen('summary')).toContainText('0/1');
+  });
+
+  test('Quick check match pairs marks right pairs, flags wrong ones and scores a clean run', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await reader.startQuickCheck();
+    // Choose the form first: "had drawn" is option 1.
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+
+    const match = reader.qcQuestion('match');
+    await expect(match).toContainText('Match the pairs');
+    await expect(match).toContainText('0 of 4');
+    const next = match.getByRole('button', { name: 'See results' });
+    await expect(next).toBeHidden();
+
+    // A wrong pair is flagged, then clears; nothing is matched.
+    await match
+      .locator('[data-match-term]', { hasText: 'cartographer' })
+      .click();
+    await match
+      .locator('[data-match-meaning]', { hasText: 'having nothing particular' })
+      .click();
+    await expect(match.locator('.is-wrong')).toHaveCount(2);
+    await expect(match.locator('.is-wrong')).toHaveCount(0);
+    await expect(match).toContainText('0 of 4');
+
+    await reader.pickPair('cartographer', 'a person who draws');
+    await expect(match).toContainText('1 of 4');
+    await expect(match.locator('.is-right')).toHaveCount(2);
+    await reader.pickPair('perambulate', 'to walk through');
+    await expect(next).toBeHidden();
+    await reader.pickPair('at loose ends', 'having nothing particular');
+    await reader.pickPair('a piece of cake', 'something very easy');
+    await expect(match).toContainText('4 of 4');
+    await next.click();
+
+    // The mistake makes the match count as missed: 1 of 2.
+    await expect(reader.qcScreen('summary')).toContainText('1/2');
   });
 
   test('Quick check runs from the keyboard: 1-3 pick, Enter checks, Esc skips', async ({
@@ -434,6 +483,8 @@ test.describe('reader page (guest)', () => {
     await expect(question.locator('[data-qc-verdict]')).toHaveText('Correct');
     await expect(question.getByText('Earlier past action.')).toBeVisible();
     await page.keyboard.press('Enter');
+    await expect(reader.qcQuestion('match')).toBeVisible();
+    await page.keyboard.press('Escape');
     await expect(reader.qcScreen('summary')).toContainText('Nice work.');
     await expect(reader.qcScreen('summary')).toContainText('1/1');
 
@@ -609,6 +660,102 @@ test.describe('reader page (signed in)', () => {
     await expect(reader.qcScreen('summary')).toContainText(
       'You added 1 new word to your deck.',
     );
+  });
+
+  // Stubbed: rating for real would reschedule the seeded cards that other
+  // specs assert on. Returns what was posted.
+  async function stubCardReview(page: Page) {
+    const ratings: { cardId: string; rating: string }[] = [];
+    await page.route('**/partials/card-review', (route) => {
+      // The client posts multipart form data.
+      const body = route.request().postData() ?? '';
+      const field = (name: string) =>
+        body.match(new RegExp(`name="${name}"\\r\\n\\r\\n([^\\r]*)`))?.[1] ??
+        '';
+      ratings.push({ cardId: field('cardId'), rating: field('rating') });
+      return route.fulfill({ status: 204 });
+    });
+    return ratings;
+  }
+
+  test('Quick check recall reveals a due card, sends its rating and lowers the due count', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    const ratings = await stubCardReview(page);
+    await reader.goto(READER_SLUG);
+    const dueBefore = Number(
+      await reader.finalScreen
+        .locator('[data-qc-due]')
+        .getAttribute('data-qc-due'),
+    );
+    const intro = reader.qcScreen('intro');
+    await expect(intro).toContainText('One minute, 3 quick questions.');
+    await expect(intro).toContainText('1×Choose the form');
+    await expect(intro).toContainText('1×Recall a word');
+    await expect(intro).toContainText('1×Match pairs');
+
+    await reader.startQuickCheck();
+    // Choose the form: "had drawn" is option 1.
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+
+    const recall = reader.qcQuestion('recall');
+    await expect(recall).toContainText('2/3');
+    await expect(recall).toContainText('at loose ends');
+    // The answer and the ratings stay hidden until asked for.
+    await expect(recall.locator('[data-qc-answer]')).toBeHidden();
+    await expect(recall.getByRole('button', { name: /Good/ })).toBeHidden();
+    await page.keyboard.press('3');
+    expect(ratings).toHaveLength(0);
+
+    await page.keyboard.press(' ');
+    await expect(recall.locator('[data-qc-answer]')).toContainText(
+      'having nothing particular to do',
+    );
+    await expect(recall.locator('[data-qc-rate]')).toBeVisible();
+    await page.keyboard.press('3');
+    await expect.poll(() => ratings.length).toBe(1);
+    expect(ratings[0].rating).toBe('good');
+    expect(ratings[0].cardId).not.toBe('');
+
+    await expect(reader.qcQuestion('match')).toBeVisible();
+    await page.keyboard.press('Escape');
+    const summary = reader.qcScreen('summary');
+    // Choose (right) + Good: 2 of 2 answered right.
+    await expect(summary).toContainText('2/2');
+    // The Good card leaves today's due count.
+    await expect(summary.locator('[data-qc-due]')).toHaveText(
+      String(dueBefore - 1),
+    );
+  });
+
+  test('Quick check recall rated Again keeps the card due', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    const ratings = await stubCardReview(page);
+    await reader.goto(READER_SLUG);
+    const dueBefore = await reader.finalScreen
+      .locator('[data-qc-due]')
+      .getAttribute('data-qc-due');
+
+    await reader.startQuickCheck();
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+
+    const recall = reader.qcQuestion('recall');
+    await recall.getByRole('button', { name: 'Show answer' }).click();
+    await recall.getByRole('button', { name: /^Again/ }).click();
+    await expect.poll(() => ratings.length).toBe(1);
+    expect(ratings[0].rating).toBe('again');
+
+    await page.keyboard.press('Escape');
+    const summary = reader.qcScreen('summary');
+    await expect(summary).toContainText('1/2');
+    await expect(summary.locator('[data-qc-due]')).toHaveText(dueBefore ?? '');
   });
 
   test('the final screen links to practice only when cards from the post are due', async ({
