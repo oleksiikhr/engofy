@@ -30,6 +30,11 @@ export const LEXICON_ACTION_MESSAGE = {
   failed: 'Could not save, try again.',
 } as const;
 
+const PLUS_ICON =
+  '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+const SPEAK_ICON =
+  '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>';
+
 export type LexiconTarget =
   | { kind: 'word'; id: string }
   | { kind: 'phrase'; id: string }
@@ -115,13 +120,13 @@ export function lexiconActionsHtml(
     `<form hx-post="/partials/lexicon-action" hx-target="#${id}" hx-swap="outerHTML">
       <input type="hidden" name="${field}" value="${esc(target.id)}" />
       <input type="hidden" name="action" value="${action}" />
-      <button type="submit" class="btn ${extra}">${text}</button>
+      <button type="submit" class="btn btn--sm ${extra}">${text}</button>
     </form>`;
 
   return `<div class="lex-actions" id="${id}">
     ${label}
-    ${form('add', '+')}
-    ${form('known', 'I know it', 'btn--ghost')}
+    ${form('add', `${PLUS_ICON}Add to deck`)}
+    ${form('known', 'I know it', 'btn--sec')}
     ${note}
   </div>`;
 }
@@ -148,18 +153,20 @@ export const REPORT_DONE_HTML =
 
 function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
   const term = entryTerm(entry);
-  const sub =
+  const kicker =
     entry.kind === 'word'
-      ? [entry.pos, entry.phonetic].filter(Boolean).join(' · ')
-      : (entry.type ?? '');
+      ? ['Word', entry.pos].filter(Boolean).join(' · ')
+      : ['Phrase', entry.type].filter(Boolean).join(' · ');
+  const sub = entry.kind === 'word' ? (entry.phonetic ?? '') : '';
   const cefr = entry.cefrLevel
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
     : '';
-  return `<section class="lex-popup__section" data-lex-kind="${entry.kind}" data-lex-id="${esc(entry.id)}">
+  return `<section class="lex-popup__section tone-amber" data-lex-kind="${entry.kind}" data-lex-id="${esc(entry.id)}">
+  <p class="lex-popup__kicker">${esc(kicker)}</p>
   <div class="lex-popup__head">
     <span class="lex-popup__term">${esc(term)}</span>
-    <button type="button" class="lex-popup__speak" data-speak="${esc(term)}" aria-label="Pronounce ${esc(term)}">🔊</button>
     ${cefr}
+    <button type="button" class="lex-popup__speak" data-speak="${esc(term)}" aria-label="Pronounce ${esc(term)}">${SPEAK_ICON}</button>
   </div>
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
@@ -173,12 +180,12 @@ function grammarSectionHtml(
   entry: GrammarLexiconEntry,
   slugId: string,
 ): string {
-  return `<section class="lex-popup__section" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
+  return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
+  <p class="lex-popup__kicker">Grammar · ${esc(entry.construction)}</p>
   <div class="lex-popup__head">
-    <span class="lex-popup__kicker">Grammar · ${esc(entry.construction)}</span>
+    <span class="lex-popup__term">${esc(entry.guideword)}</span>
     <span class="badge">${esc(entry.cefrLevel)}</span>
   </div>
-  <p class="lex-popup__term lex-popup__term--guide">${esc(entry.guideword)}</p>
   <p class="lex-popup__def">${esc(entry.canDoStatement)}</p>
   ${entry.exampleText ? `<p class="lex-popup__example">${esc(entry.exampleText)}</p>` : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
