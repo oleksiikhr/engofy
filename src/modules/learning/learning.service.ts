@@ -9,6 +9,7 @@ import type { CardTargetInput } from './domain/card-target.js';
 import type { DispositionTargetInput } from './domain/disposition-target.js';
 import type { Disposition } from './enums/disposition.enum.js';
 import type { ReviewRating } from './enums/review-rating.enum.js';
+import { GetCardUsageQuery } from './queries/get-card-usage/get-card-usage.query.js';
 import type { DictionaryView } from './queries/get-dictionary/dictionary-view.js';
 import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
@@ -20,6 +21,7 @@ import type { ProfileView } from './queries/get-profile/profile-view.js';
 import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
 import { GetWordDictionaryDetailQuery } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.query.js';
 import type { WordDictionaryDetailView } from './queries/get-word-dictionary-detail/word-dictionary-detail-view.js';
+import type { CardUsage } from './services/card-limit.service.js';
 import type { CardView } from './types/card-view.type.js';
 import type { DispositionView } from './types/disposition-view.type.js';
 
@@ -107,6 +109,10 @@ export class LearningService {
 
   getDueCardCount(userId: string): Promise<number> {
     return this.queryBus.execute(new GetDueCardCountQuery(userId));
+  }
+
+  getCardUsage(userId: string): Promise<CardUsage> {
+    return this.queryBus.execute(new GetCardUsageQuery(userId));
   }
 
   getStreak(userId: string): Promise<number> {

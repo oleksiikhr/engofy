@@ -16,11 +16,13 @@ import { CancelAccountDeletionByTokenDto } from '../../../../modules/auth/comman
 import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-level/set-cefr-level.dto.js';
 import type { AccountDeletionView } from '../../../../modules/auth/types/account-deletion-view.type.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
+import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import { AccountDeletionResponseDto } from '../dto/account-deletion-response.dto.js';
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
 import { ProfileHubResponseDto } from '../dto/profile-hub-response.dto.js';
 import { ProfileProgressResponseDto } from '../dto/profile-progress-response.dto.js';
+import { ProfileSubscriptionResponseDto } from '../dto/profile-subscription-response.dto.js';
 
 function toAccountDeletionDto(
   view: AccountDeletionView,
@@ -76,6 +78,27 @@ export class ProfileController {
       activityDays: view.activityDays,
       cefr: view.cefr,
       categories: view.categories,
+    };
+  }
+
+  // Plan, renewal date and card usage for `/profile/subscription`. Composes
+  // `GET /billing/subscription`'s data with the free-tier card count.
+  @Get('subscription')
+  async subscription(
+    @CurrentUser() actor: UserActor,
+  ): Promise<ProfileSubscriptionResponseDto> {
+    const [subscription, usage] = await Promise.all([
+      this.billing.getActiveSubscription(actor.id),
+      this.learning.getCardUsage(actor.id),
+    ]);
+    return {
+      plan: subscription?.plan ?? SubscriptionPlan.Free,
+      active: subscription !== null,
+      currentPeriodEnd: subscription
+        ? (subscription.currentPeriodEnd.toUTC().toISO() ?? '')
+        : null,
+      cardsUsed: usage.used,
+      cardLimit: usage.limit,
     };
   }
 

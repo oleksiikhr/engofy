@@ -8,6 +8,11 @@ import { CardLimitReachedError } from '../errors/card-limit-reached.error.js';
 // the user, no split by target type (PLAN.md §3.5, §12). Premium lifts it.
 export const FREE_CARD_LIMIT = 100;
 
+export interface CardUsage {
+  used: number;
+  limit: number | null;
+}
+
 @Injectable()
 export class CardLimitService {
   constructor(
@@ -20,12 +25,22 @@ export class CardLimitService {
       return;
     }
 
-    const count = await this.em.count(LearningCard, {
-      userId,
-      archivedAt: null,
-    });
+    const count = await this.countCards(userId);
     if (count >= FREE_CARD_LIMIT) {
       throw new CardLimitReachedError(FREE_CARD_LIMIT);
     }
+  }
+
+  // `limit` is null on premium (unlimited).
+  async getUsage(userId: string): Promise<CardUsage> {
+    const [used, isPremium] = await Promise.all([
+      this.countCards(userId),
+      this.billing.isPremium(userId),
+    ]);
+    return { used, limit: isPremium ? null : FREE_CARD_LIMIT };
+  }
+
+  private countCards(userId: string): Promise<number> {
+    return this.em.count(LearningCard, { userId, archivedAt: null });
   }
 }

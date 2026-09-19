@@ -130,6 +130,58 @@ describe('ProfileController', () => {
     });
   });
 
+  describe('GET /profile/subscription', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('get', '/profile/subscription')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('returns the free plan with the card cap and usage', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const res = await suite
+        .request('get', '/profile/subscription')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body).toEqual({
+        plan: 'free',
+        active: false,
+        currentPeriodEnd: null,
+        cardsUsed: 0,
+        cardLimit: 100,
+      });
+    });
+
+    it('returns the premium plan and its renewal date with no cap', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      const periodEnd = DateTime.now().plus({ days: 20 });
+      suite.orm.em.create(Subscription, {
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: periodEnd,
+      });
+      await suite.orm.em.flush();
+
+      const res = await suite
+        .request('get', '/profile/subscription')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body).toMatchObject({
+        plan: 'premium',
+        active: true,
+        cardsUsed: 0,
+        cardLimit: null,
+      });
+      expect(DateTime.fromISO(res.body.currentPeriodEnd).toMillis()).toBe(
+        periodEnd.toMillis(),
+      );
+    });
+  });
+
   describe('PATCH /profile/cefr-level', () => {
     it('rejects an unauthenticated request', async () => {
       await suite

@@ -87,4 +87,46 @@ describe('CardLimitService', () => {
 
     await expect(service.assertCanAddCard(userId)).resolves.toBeUndefined();
   });
+
+  describe('getUsage', () => {
+    it('reports the used count against the free cap, ignoring archived cards', async () => {
+      const userId = uuidv7();
+      fillCards(suite.orm.em, userId, 3);
+      suite.orm.em.create(LearningCard, {
+        userId,
+        wordDefinitionId: uuidv7(),
+        due: DateTime.now(),
+        stability: 1,
+        difficulty: 5,
+        elapsedDays: 0,
+        scheduledDays: 0,
+        reps: 1,
+        lapses: 0,
+        state: LearningCardState.Learning,
+        archivedAt: DateTime.now(),
+      });
+      await suite.orm.em.flush();
+
+      await expect(service.getUsage(userId)).resolves.toEqual({
+        used: 3,
+        limit: FREE_CARD_LIMIT,
+      });
+    });
+
+    it('reports no limit for a premium user', async () => {
+      const userId = uuidv7();
+      fillCards(suite.orm.em, userId, 2);
+      suite.orm.em.create(Subscription, {
+        userId,
+        plan: SubscriptionPlan.Premium,
+        currentPeriodEnd: DateTime.now().plus({ days: 30 }),
+      });
+      await suite.orm.em.flush();
+
+      await expect(service.getUsage(userId)).resolves.toEqual({
+        used: 2,
+        limit: null,
+      });
+    });
+  });
 });
