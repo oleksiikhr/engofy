@@ -11,12 +11,14 @@ import { CurrentUser } from '../../../../core/decorators/current-user.decorator.
 import { toCursorPage } from '../../../../core/http/dto/cursor-page.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { DictionaryEntryView } from '../../../../modules/learning/queries/get-dictionary/dictionary-view.js';
+import type { PhraseDictionaryDetailView } from '../../../../modules/learning/queries/get-phrase-dictionary-detail/phrase-dictionary-detail-view.js';
 import type { WordDictionaryDetailView } from '../../../../modules/learning/queries/get-word-dictionary-detail/word-dictionary-detail-view.js';
 import { DictionaryQueryDto } from '../dto/dictionary-query.dto.js';
 import {
   DictionaryEntryDto,
   DictionaryResponseDto,
 } from '../dto/dictionary-response.dto.js';
+import { PhraseDictionaryDetailResponseDto } from '../dto/phrase-dictionary-detail-response.dto.js';
 import { WordDictionaryDetailResponseDto } from '../dto/word-dictionary-detail-response.dto.js';
 
 // The learner's personal dictionary (dictionary-redesign §1): every saved
@@ -55,6 +57,23 @@ export class DictionaryController {
     }
     return toWordDictionaryDetailDto(view);
   }
+
+  // `/dictionary/phrases/:phrase` (dictionary-redesign §3): the phrase's
+  // definition/example/CEFR, its effective state and the posts it appears in.
+  @Get('phrases/:phrase')
+  async phraseDetail(
+    @CurrentUser() actor: UserActor,
+    @Param('phrase') phrase: string,
+  ): Promise<PhraseDictionaryDetailResponseDto> {
+    const view = await this.learning.getPhraseDictionaryDetail(
+      phrase,
+      actor.id,
+    );
+    if (!view) {
+      throw new NotFoundException('Phrase not found');
+    }
+    return toPhraseDictionaryDetailDto(view);
+  }
 }
 
 function toDictionaryEntryDto(entry: DictionaryEntryView): DictionaryEntryDto {
@@ -83,6 +102,22 @@ function toWordDictionaryDetailDto(
     frequencyRank: view.frequencyRank,
     irregularVerb: view.irregularVerb,
     senses: view.senses,
+    posts: view.posts,
+  };
+}
+
+function toPhraseDictionaryDetailDto(
+  view: PhraseDictionaryDetailView,
+): PhraseDictionaryDetailResponseDto {
+  return {
+    phraseId: view.phraseId,
+    phraseText: view.phraseText,
+    type: view.type,
+    definition: view.definition,
+    example: view.example,
+    cefrLevel: view.cefrLevel,
+    state: view.state,
+    cardId: view.cardId,
     posts: view.posts,
   };
 }

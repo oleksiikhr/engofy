@@ -14,6 +14,8 @@ import type { DictionaryView } from './queries/get-dictionary/dictionary-view.js
 import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
+import { GetPhraseDictionaryDetailQuery } from './queries/get-phrase-dictionary-detail/get-phrase-dictionary-detail.query.js';
+import type { PhraseDictionaryDetailView } from './queries/get-phrase-dictionary-detail/phrase-dictionary-detail-view.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
 import type { PracticeQueueResult } from './queries/get-practice-queue/practice-queue-item.js';
 import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
@@ -104,6 +106,15 @@ export class LearningService {
   ): Promise<WordDictionaryDetailView | null> {
     return this.queryBus.execute(
       new GetWordDictionaryDetailQuery(lemma, userId),
+    );
+  }
+
+  getPhraseDictionaryDetail(
+    phraseText: string,
+    userId: string,
+  ): Promise<PhraseDictionaryDetailView | null> {
+    return this.queryBus.execute(
+      new GetPhraseDictionaryDetailQuery(phraseText, userId),
     );
   }
 
