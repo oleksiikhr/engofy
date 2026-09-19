@@ -17,9 +17,19 @@ export class PracticeCardTargetDto {
   readonly phonetic!: string | null;
 
   // A real sentence from one of the learner's last 3 read posts containing
-  // this word/phrase, or null when none was found there. Not populated for
-  // grammar targets yet.
+  // this word/phrase/grammar usage point, or null when none was found there.
   readonly contextSentence!: string | null;
+
+  // Grammar-only: "<category> · <construction>" label above the guideword;
+  // null for word/phrase.
+  readonly kicker!: string | null;
+
+  // Grammar-only: EGP example sentence; null for word/phrase.
+  readonly exampleText!: string | null;
+
+  // Grammar-only: construction slug for the `/grammar/[slug]` detail link;
+  // null for word/phrase.
+  readonly detailSlug!: string | null;
 }
 
 export class PracticeQueueItemDto {

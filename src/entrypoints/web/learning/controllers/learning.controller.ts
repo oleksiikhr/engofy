@@ -69,6 +69,9 @@ export function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
       secondary: item.target.secondary,
       phonetic: item.target.phonetic,
       contextSentence: item.target.contextSentence,
+      kicker: item.target.kicker,
+      exampleText: item.target.exampleText,
+      detailSlug: item.target.detailSlug,
     },
   };
 }

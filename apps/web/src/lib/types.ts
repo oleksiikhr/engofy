@@ -287,6 +287,10 @@ export interface PracticeItem {
     secondary: string | null;
     phonetic: string | null;
     contextSentence: string | null;
+    // Grammar-only (null for word/phrase).
+    kicker: string | null;
+    exampleText: string | null;
+    detailSlug: string | null;
   };
 }
 export interface PracticeQueueResponse {
