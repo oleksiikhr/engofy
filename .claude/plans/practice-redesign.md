@@ -51,10 +51,10 @@ Review/Relearning показуються завжди без обрізання.
 денний ліміт для поточної сесії (не чіпає загальний free-tier ліміл 100,
 який лишається лише на `AddCardHandler`/`CardLimitService`).
 
-### [ ] 3. Окремий шаблон картки для граматики
+### [x] 3. Окремий шаблон картки для граматики
 - Branch: `practice-redesign-03-grammar-card-template`
-- Base: `practice-redesign-02-daily-new-card-limit`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/34
 
 Окремий reveal-шаблон: кикер = категорія + назва конструкції (join до
 `GrammarConstruction`/категорії з `GrammarUsagePoint`), фронт = guideword, reveal =
