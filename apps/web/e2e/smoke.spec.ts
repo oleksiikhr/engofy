@@ -36,25 +36,26 @@ test('the guest landing lists the features and shows the product screenshots', a
   }
 });
 
-test('the guest header hides Practice and Profile', async ({ page }) => {
+test('the guest header hides Practice and the account menu', async ({
+  page,
+}) => {
   await page.goto('/');
 
-  const nav = page.getByRole('navigation');
-  await expect(nav.getByRole('link', { name: 'Today' })).toBeVisible();
+  const nav = page.getByRole('navigation', { name: 'Main' });
   await expect(nav.getByRole('link', { name: 'Posts' })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Practice' })).toHaveCount(0);
-  await expect(nav.getByRole('link', { name: 'Profile' })).toHaveCount(0);
+  await expect(page.getByLabel('Account menu')).toHaveCount(0);
 });
 
 test.describe('signed in', () => {
   test.use({ storageState: AUTHED_STATE });
 
-  test('the header shows Practice and Profile', async ({ page }) => {
+  test('the header shows Practice and the account menu', async ({ page }) => {
     await page.goto('/posts');
 
-    const nav = page.getByRole('navigation');
+    const nav = page.getByRole('navigation', { name: 'Main' });
     await expect(nav.getByRole('link', { name: 'Practice' })).toBeVisible();
-    await expect(nav.getByRole('link', { name: 'Profile' })).toBeVisible();
+    await expect(page.getByLabel('Account menu')).toBeVisible();
   });
 });
 

@@ -9,6 +9,7 @@ export class LoginPage {
   readonly codeInput: Locator;
   readonly verifyButton: Locator;
   readonly alert: Locator;
+  readonly accountMenuToggle: Locator;
   readonly logOutButton: Locator;
   readonly logInLink: Locator;
 
@@ -25,6 +26,7 @@ export class LoginPage {
       name: 'Verify and sign in',
     });
     this.alert = page.getByRole('alert');
+    this.accountMenuToggle = page.getByLabel('Account menu');
     this.logOutButton = page.getByRole('button', { name: 'Log out' });
     // The guest landing also carries a CTA "Log in"; the header one comes first.
     this.logInLink = page.getByRole('link', { name: 'Log in' }).first();
@@ -50,6 +52,11 @@ export class LoginPage {
   async submitCode(code: string) {
     await this.codeInput.fill(code);
     await this.verifyButton.click();
+  }
+
+  // Log out lives in the header's account menu; open it before logOut().
+  async openAccountMenu() {
+    await this.accountMenuToggle.click();
   }
 
   async logOut() {

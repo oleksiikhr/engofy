@@ -29,6 +29,7 @@ test('signs in with the OTP and then signs out', async ({ page }) => {
   await login.submitCode('424242');
 
   await expect(page).toHaveURL('/');
+  await login.openAccountMenu();
   await expect(login.logOutButton).toBeVisible();
 
   await login.logOut();

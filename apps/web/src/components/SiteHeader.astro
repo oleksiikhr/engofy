@@ -5,60 +5,150 @@ interface Props {
   user?: CurrentUser | null;
   active?: string;
   streak?: number;
+  dueCount?: number;
 }
 
-const { user = null, active, streak = 0 } = Astro.props;
+const { user = null, active, streak = 0, dueCount = 0 } = Astro.props;
 
 const links = [
-  { href: '/', label: 'Today', key: 'today', authOnly: false },
   { href: '/posts', label: 'Posts', key: 'posts', authOnly: false },
   { href: '/practice', label: 'Practice', key: 'practice', authOnly: true },
-  { href: '/grammar', label: 'Grammar', key: 'grammar', authOnly: false },
   { href: '/dictionary', label: 'Dictionary', key: 'dictionary', authOnly: false },
-  { href: '/profile', label: 'Profile', key: 'profile', authOnly: true },
+  { href: '/grammar', label: 'Grammar', key: 'grammar', authOnly: false },
 ].filter((link) => user || !link.authOnly);
+
+const initial = user ? (user.email.trim().charAt(0).toUpperCase() || '?') : '';
+const themes = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+];
 ---
 
 <header class="site-header">
-  <nav>
-    <div class="nav-links">
-      <a href="/" style="font-family: var(--font-display); font-weight: 700;">Engofy</a>
+  <div class="site-header-inner">
+    <a class="logo" href="/"><i aria-hidden="true"></i>Engofy</a>
+    <nav class="site-nav" aria-label="Main">
       {
         links.map((link) => (
           <a href={link.href} aria-current={active === link.key ? 'page' : undefined}>
             {link.label}
+            {link.key === 'practice' && dueCount > 0 && (
+              <span class="due" title={`${dueCount} card${dueCount === 1 ? '' : 's'} due`}>
+                {dueCount}
+              </span>
+            )}
           </a>
         ))
       }
-    </div>
-    <div class="nav-links">
-      {
-        user && streak > 0 && (
-          <span class="streak" title={`${streak}-day review streak`}>
-            🔥 {streak}
-          </span>
-        )
-      }
-      <a href="/pricing" aria-current={active === 'pricing' ? 'page' : undefined}>
-        Pricing
-      </a>
+    </nav>
+    <div class="site-header-right">
       {
         user ? (
-          <form method="post" action="/logout" style="margin: 0;">
-            <button class="btn btn--ghost" type="submit">Log out</button>
-          </form>
+          <>
+            {streak > 0 && (
+              <span class="streak" title={`${streak}-day streak`}>
+                <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1 1 2 2 2 4a5 5 0 0 1-10 0c0-5 4-6 5-13z" />
+                </svg>
+                {streak}
+              </span>
+            )}
+            <details class="account" data-account-menu>
+              <summary class="avatar" aria-label="Account menu">
+                {initial}
+              </summary>
+              <div class="menu">
+                <div class="who">
+                  <span>{user.email}</span>
+                </div>
+                <a href="/profile">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c1-4 4-6 8-6s7 2 8 6" />
+                  </svg>
+                  Profile
+                </a>
+                <a href="/profile/progress">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+                  </svg>
+                  Progress
+                </a>
+                <a href="/profile/subscription">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18v12H3zM3 10h18" />
+                  </svg>
+                  Subscription
+                </a>
+                <div class="sep"></div>
+                <div class="eyebrow">Theme</div>
+                <div class="segment" role="group" aria-label="Theme">
+                  {
+                    themes.map((theme) => (
+                      <button type="button" data-theme-value={theme.value}>
+                        {theme.label}
+                      </button>
+                    ))
+                  }
+                </div>
+                <div class="sep"></div>
+                <form method="post" action="/logout">
+                  <button type="submit">
+                    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9" />
+                    </svg>
+                    Log out
+                  </button>
+                </form>
+              </div>
+            </details>
+          </>
         ) : (
-          <a class="btn btn--ghost" href="/login">Log in</a>
+          <>
+            <a class="btn btn--sm btn--ghost" href="/login">Log in</a>
+            <a class="btn btn--sm" href="/login">Get started</a>
+          </>
         )
       }
     </div>
-  </nav>
+  </div>
 </header>
 
-<style>
-  .streak {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-ink-soft);
+<script>
+  import { readPref, THEMES, type Theme, writePref } from '../lib/prefs';
+
+  const menu = document.querySelector<HTMLDetailsElement>('[data-account-menu]');
+  if (menu) {
+    const themeButtons = menu.querySelectorAll<HTMLButtonElement>('[data-theme-value]');
+    const syncTheme = (theme: Theme) => {
+      for (const button of themeButtons) {
+        button.setAttribute('aria-pressed', String(button.dataset.themeValue === theme));
+      }
+    };
+    syncTheme(readPref('theme'));
+    for (const button of themeButtons) {
+      button.addEventListener('click', () => {
+        const value = button.dataset.themeValue as Theme;
+        if (!THEMES.includes(value)) {
+          return;
+        }
+        writePref('theme', value);
+        syncTheme(value);
+      });
+    }
+
+    const summary = menu.querySelector('summary');
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.open) {
+        menu.open = false;
+        summary?.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) {
+        menu.open = false;
+      }
+    });
   }
-</style>
+</script>
