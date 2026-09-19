@@ -37,10 +37,10 @@ Playwright 83/83; pytest 8/8. Конвеєр: 7 стадій `completed`, $0.05 
 
 Без зміни контрактів. Перевірка: `pnpm test`, `pnpm exec playwright test`, `biome check`.
 
-### [ ] 2. Видалити мертвий ендпоінт `/content/feed` (TODO про keyset)
+### [x] 2. Видалити мертвий ендпоінт `/content/feed` (TODO про keyset)
 - Branch: `pre-deploy-cleanup-02-remove-dead-feed`
-- Base: `pre-deploy-cleanup-01-verification-fixes`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/54
 
 Фронтенд не викликає `/feed` (згадка лише в коментарі `apps/web/src/lib/api.ts`), `/posts` уже
 працює на keyset-пагінації. Замість міграції на keyset прибрати ендпоінт разом з TODO:
