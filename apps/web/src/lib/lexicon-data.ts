@@ -39,6 +39,7 @@ export function buildLexiconData(
         lemma: w.lemma,
         pos: w.pos,
         phonetic: w.phonetic,
+        frequencyRank: w.frequencyRank,
         definition: w.definition,
         example: w.example,
         cefrLevel: w.cefrLevel,

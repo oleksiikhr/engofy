@@ -615,3 +615,97 @@ button[value="easy"] {
   font-size: 0.75rem;
   color: var(--color-success);
 }
+
+/* --- Study mode + final screen (reader-study.ts / reader-final.ts). Study is a
+   class on <body>; the current block stays at full strength, the rest dims. --- */
+.reader-study .reading-body > [data-block] {
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+.reader-study .reading-body > [data-block].is-current {
+  opacity: 1;
+}
+.study-panel {
+  margin: 0.5rem 0 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-paper-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.study-panel p {
+  margin: 0 0 0.4rem;
+}
+.study-panel__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+}
+.study-panel__sub {
+  color: var(--color-ink-soft);
+  font-size: 0.85rem;
+}
+.study-panel__suggest {
+  margin-bottom: 0.7rem;
+}
+.study-panel__checkin {
+  margin-bottom: 0.7rem;
+  font-size: 0.95rem;
+}
+.study-panel__checkin summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.study-panel__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.reader-study .reader-final {
+  display: none;
+}
+.reader-final {
+  margin-top: 2.5rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background: var(--color-paper-soft);
+}
+.final-q {
+  margin-bottom: 1rem;
+}
+.final-q__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.final-q__options .is-right {
+  border-color: var(--color-success);
+}
+.final-q__options .is-wrong {
+  border-color: var(--color-danger);
+}
+.final-q__explanation {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+.final-q__result {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.final-q__result.is-ok {
+  color: var(--color-success);
+}
+.final-q__result.is-bad {
+  color: var(--color-danger);
+}
+.final-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
