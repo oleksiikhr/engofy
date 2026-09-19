@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { apiGet } from '../../lib/api';
+import { formatDate } from '../../lib/format-date';
+import { getCurrentUser } from '../../lib/session';
+import type { ProfileSubscription } from '../../lib/types';
+
+const user = await getCurrentUser(Astro.request);
+
+const sub = user
+  ? await apiGet<ProfileSubscription>('/profile/subscription', {
+      request: Astro.request,
+    })
+  : null;
+
+const isPremium = sub?.plan === 'premium' && sub.active;
+const usedPct =
+  sub?.cardLimit != null
+    ? Math.min(100, Math.round((sub.cardsUsed / sub.cardLimit) * 100))
+    : 0;
+---
+
+<Layout title="Subscription — Engofy" user={user} active="profile">
+  <p class="back"><a href="/profile">← Profile</a></p>
+  <h1>Subscription</h1>
+
+  {
+    !user ? (
+      <p>
+        <a href="/login">Sign in</a> to see your plan.
+      </p>
+    ) : sub ? (
+      <>
+        <section class="card" data-testid="plan-card">
+          <h2>{isPremium ? 'Premium' : 'Free'}</h2>
+          <p class="card__detail">
+            {
+              isPremium
+                ? sub.currentPeriodEnd
+                  ? `Active until ${formatDate(sub.currentPeriodEnd)}.`
+                  : 'Active.'
+                : 'You are on the free plan.'
+            }
+          </p>
+        </section>
+
+        <section class="card" data-testid="card-usage">
+          <h2>Saved cards</h2>
+          {
+            sub.cardLimit == null ? (
+              <p class="card__detail">
+                <span class="num">{sub.cardsUsed}</span> saved — unlimited on
+                Premium.
+              </p>
+            ) : (
+              <>
+                <p class="card__detail">
+                  <span class="num">
+                    {sub.cardsUsed} / {sub.cardLimit}
+                  </span>{' '}
+                  cards used
+                </p>
+                <span class="track">
+                  <span class="fill" style={`width: ${usedPct}%`} />
+                </span>
+              </>
+            )
+          }
+        </section>
+
+        <p>
+          <a class="btn" href="/pricing">
+            {isPremium ? 'View plans' : 'Upgrade to Premium'}
+          </a>
+        </p>
+      </>
+    ) : null
+  }
+</Layout>
+
+<style>
+  .back {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+  .card {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card h2 {
+    margin: 0 0 0.5rem;
+  }
+  .card__detail {
+    margin: 0;
+    color: var(--color-ink-soft);
+  }
+  .track {
+    display: block;
+    height: 0.5rem;
+    margin-top: 0.75rem;
+    background: var(--color-paper-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .fill {
+    display: block;
+    height: 100%;
+    background: var(--color-brand);
+  }
+</style>

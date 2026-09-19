@@ -15,6 +15,7 @@ import { createHash } from 'node:crypto';
 import { MikroORM } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import ormConfig from '../../src/core/database/mikro-orm.setup.js';
+import { AccountDeletionRequest } from '../../src/modules/auth/entities/account-deletion-request.entity.js';
 import { AuthChallenge } from '../../src/modules/auth/entities/auth-challenge.entity.js';
 import { AuthSession } from '../../src/modules/auth/entities/auth-session.entity.js';
 import { User } from '../../src/modules/auth/entities/user.entity.js';
@@ -57,6 +58,12 @@ export const E2E_GRAMMAR_SLUG_2 = 'e2e-present-simple';
 // Fresh address (no user yet) + a pending OTP challenge, for the /login flow.
 export const E2E_LOGIN_EMAIL = 'login-e2e@engofy.test';
 export const E2E_LOGIN_OTP = '424242';
+// Own user + session so the /profile deletion specs can't disturb the shared
+// e2e user (deletion ends premium). Seeded with a pending deletion request
+// whose cancel token the spec uses for the e-mailed-link flow.
+export const E2E_DELETION_USER_EMAIL = 'deletion-e2e@engofy.test';
+export const E2E_DELETION_SESSION_TOKEN = 'e2e-deletion-session-token-0000000';
+export const E2E_DELETION_CANCEL_TOKEN = 'e2e-deletion-cancel-token-000000';
 
 const WORD_LEMMA = 'perambulate';
 const PHRASE_TEXT = 'at loose ends';
@@ -69,6 +76,7 @@ const CATEGORY_NAME = 'E2E: Tenses';
 
 const ENTITIES = [
   User,
+  AccountDeletionRequest,
   AuthSession,
   AuthChallenge,
   Subscription,
@@ -107,6 +115,15 @@ async function wipe(orm: MikroORM): Promise<void> {
     await em.nativeDelete(Subscription, { userId: user.id });
     await em.nativeDelete(AuthSession, { userId: user.id });
     await em.nativeDelete(User, { id: user.id });
+  }
+
+  const deletionUser = await em.findOne(User, {
+    email: E2E_DELETION_USER_EMAIL,
+  });
+  if (deletionUser) {
+    await em.nativeDelete(AccountDeletionRequest, { userId: deletionUser.id });
+    await em.nativeDelete(AuthSession, { userId: deletionUser.id });
+    await em.nativeDelete(User, { id: deletionUser.id });
   }
 
   const posts = await em.find(Post, {
@@ -454,6 +471,17 @@ async function seed(orm: MikroORM): Promise<void> {
     tokenHash: sha256(E2E_SESSION_TOKEN),
     userId: user.id,
     expiresAt: now.plus({ days: 30 }),
+  });
+
+  const deletionUser = em.create(User, { email: E2E_DELETION_USER_EMAIL });
+  em.create(AuthSession, {
+    tokenHash: sha256(E2E_DELETION_SESSION_TOKEN),
+    userId: deletionUser.id,
+    expiresAt: now.plus({ days: 30 }),
+  });
+  em.create(AccountDeletionRequest, {
+    userId: deletionUser.id,
+    cancelTokenHash: sha256(E2E_DELETION_CANCEL_TOKEN),
   });
 
   // Pending OTP challenge for the /login flow (no user for this address yet —

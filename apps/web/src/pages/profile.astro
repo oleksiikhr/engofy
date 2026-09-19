@@ -1,72 +1,127 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { apiGet, apiPatch } from '../lib/api';
+import { apiGet, apiPatch, apiPost } from '../lib/api';
+import { formatDate } from '../lib/format-date';
 import { getCurrentUser } from '../lib/session';
-import type { CefrLevel, Profile, ProfileHub } from '../lib/types';
+import type {
+  CefrLevel,
+  ProfileHub,
+  ProfileSubscription,
+} from '../lib/types';
 
 const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 const user = await getCurrentUser(Astro.request);
 
-// Self-reported content level (`PATCH /profile/cefr-level`). Plain form POST
-// + redirect, same shape as the onboarding prompt on `/`; the change takes
-// effect immediately, nothing to migrate.
+// Plain form POSTs + redirect (no client JS): the level picker
+// (`PATCH /profile/cefr-level`) and the account-deletion request / cancel.
 let levelError = false;
+let deletionError: string | null = null;
 if (user && Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
-  const level = form.get('cefrLevel');
-  if (typeof level === 'string' && (LEVELS as string[]).includes(level)) {
-    try {
-      await apiPatch(
-        '/profile/cefr-level',
-        { cefrLevel: level },
-        { request: Astro.request },
-      );
-      return Astro.redirect('/profile');
-    } catch {
+  const action = form.get('action');
+  const opts = { request: Astro.request };
+  try {
+    if (action === 'set-level') {
+      const level = form.get('cefrLevel');
+      if (typeof level === 'string' && (LEVELS as string[]).includes(level)) {
+        await apiPatch('/profile/cefr-level', { cefrLevel: level }, opts);
+        return Astro.redirect('/profile');
+      }
       levelError = true;
+    } else if (action === 'request-deletion') {
+      await apiPost('/profile/account-deletion', undefined, opts);
+      return Astro.redirect('/profile');
+    } else if (action === 'cancel-deletion') {
+      await apiPost('/profile/account-deletion/cancel', undefined, opts);
+      return Astro.redirect('/profile');
     }
-  } else {
-    levelError = true;
+  } catch {
+    if (action === 'set-level') {
+      levelError = true;
+    } else {
+      deletionError = 'Something went wrong, please try again.';
+    }
   }
 }
 
-const [hub, profile] = user
+const [hub, subscription] = user
   ? await Promise.all([
       apiGet<ProfileHub>('/profile', { request: Astro.request }),
-      apiGet<Profile>('/profile/progress', { request: Astro.request }),
+      apiGet<ProfileSubscription>('/profile/subscription', {
+        request: Astro.request,
+      }),
     ])
   : [null, null];
 
-const cefrMax = profile
-  ? Math.max(1, ...LEVELS.map((l) => profile.cefr[l] ?? 0))
-  : 1;
-
-const unlockedCount =
-  profile?.categories.reduce(
-    (n, c) => n + c.constructions.filter((x) => !x.locked).length,
-    0,
-  ) ?? 0;
-const totalCount =
-  profile?.categories.reduce((n, c) => n + c.constructions.length, 0) ?? 0;
+const isPremium = subscription?.plan === 'premium' && subscription.active;
+const links = [
+  { href: '/profile/progress', label: 'Progress & skills' },
+  { href: '/profile/subscription', label: 'Subscription' },
+  { href: '/practice', label: 'Practice' },
+  { href: '/dictionary', label: 'Dictionary' },
+  { href: '/grammar', label: 'Grammar' },
+];
 ---
 
 <Layout title="Profile — Engofy" user={user} active="profile">
-  <h1>Your progress</h1>
+  <h1>Profile</h1>
 
   {
     !user ? (
       <p>
         <a href="/login">Sign in</a> to track your streak, skills and levels.
       </p>
-    ) : hub && profile ? (
+    ) : hub && subscription ? (
       <>
+        <p class="greeting" data-testid="profile-greeting">
+          Signed in as <strong>{user.email}</strong>
+        </p>
+
+        {hub.accountDeletion && (
+          <section class="deletion-banner" role="status" data-testid="deletion-banner">
+            <p>
+              Your account is scheduled for deletion on{' '}
+              <strong>{formatDate(hub.accountDeletion.scheduledFor)}</strong>.
+              Everything you've saved will be permanently removed.
+            </p>
+            <form method="post">
+              <input type="hidden" name="action" value="cancel-deletion" />
+              <button class="btn" type="submit">
+                Cancel deletion
+              </button>
+            </form>
+          </section>
+        )}
+
+        <section class="stat-row">
+          <div class="stat">
+            <p class="stat__num num">{hub.streak}</p>
+            <p class="stat__label">day streak</p>
+          </div>
+          <div class="stat" data-testid="plan-status">
+            <p class="stat__num">{isPremium ? 'Premium' : 'Free'}</p>
+            <p class="stat__label">
+              {
+                isPremium && subscription.currentPeriodEnd
+                  ? `renews ${formatDate(subscription.currentPeriodEnd)}`
+                  : 'current plan'
+              }
+            </p>
+          </div>
+        </section>
+
+        <nav class="quick-links" aria-label="Quick links">
+          {links.map((link) => <a href={link.href}>{link.label}</a>)}
+        </nav>
+
         <section class="level">
           <h2>Content difficulty level</h2>
           <p class="level__hint">
             Picks articles and grammar at the right difficulty for you.
           </p>
           <form method="post" class="level__form" data-testid="cefr-level-form">
+            <input type="hidden" name="action" value="set-level" />
             <div class="level__options">
               {LEVELS.map((lvl) => (
                 <label class="level__option">
@@ -85,87 +140,90 @@ const totalCount =
             </button>
           </form>
           {levelError && (
-            <p class="level__error" role="alert">
+            <p class="form-error" role="alert">
               Could not save your level, try again.
             </p>
           )}
         </section>
 
-        <section class="stat-row">
-          <div class="stat">
-            <p class="stat__num num">{profile.streak}</p>
-            <p class="stat__label">day streak</p>
-          </div>
-          <div class="stat">
-            <p class="stat__num num">
-              {unlockedCount}
-              <span class="stat__den">/ {totalCount}</span>
-            </p>
-            <p class="stat__label">constructions started</p>
-          </div>
-        </section>
-
-        <section class="cefr">
-          <h2>Cards by level</h2>
-          <ul class="cefr-bars">
-            {LEVELS.map((lvl) => {
-              const n = profile.cefr[lvl] ?? 0;
-              return (
-                <li class="cefr-bar" data-testid={`cefr-${lvl}`}>
-                  <span class="cefr-bar__label">{lvl}</span>
-                  <span class="cefr-bar__track">
-                    <span
-                      class="cefr-bar__fill"
-                      style={`width: ${Math.round((n / cefrMax) * 100)}%`}
-                    />
-                  </span>
-                  <span class="cefr-bar__n num">{n}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <section class="skills">
-          <h2>Grammar skills</h2>
-          {profile.categories.map((cat) => (
-            <details class="skill-cat" open={cat.constructions.some((c) => !c.locked)}>
-              <summary>{cat.name}</summary>
-              <ul class="skill-list">
-                {cat.constructions.map((con) => (
-                  <li
-                    class:list={['skill', { 'skill--locked': con.locked }]}
-                    data-slug={con.slug}
-                  >
-                    <a href={`/grammar/${con.slug}`} class="skill__name">
-                      {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
-                      {con.name}
-                    </a>
-                    {con.locked ? (
-                      <span class="skill__locked">locked</span>
-                    ) : (
-                      <span class="skill__mastery">
-                        <span class="skill__track">
-                          <span
-                            class="skill__fill"
-                            style={`width: ${con.masteryScore}%`}
-                          />
-                        </span>
-                        <span class="num">{con.masteryScore}</span>
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+        {!hub.accountDeletion && (
+          <section class="danger">
+            <details data-testid="delete-account">
+              <summary>Delete account</summary>
+              <p>
+                Your account and all your data (cards, progress, subscription)
+                will be permanently deleted after 30 days. We'll email you a
+                link to cancel, and you can also cancel here at any time before
+                then. Premium ends immediately.
+              </p>
+              <form method="post">
+                <input type="hidden" name="action" value="request-deletion" />
+                <button class="btn btn--danger" type="submit">
+                  Delete my account
+                </button>
+              </form>
             </details>
-          ))}
-        </section>
+          </section>
+        )}
+        {deletionError && (
+          <p class="form-error" role="alert">
+            {deletionError}
+          </p>
+        )}
       </>
     ) : null
   }
 </Layout>
 
 <style>
+  .greeting {
+    margin: 0 0 1.5rem;
+    color: var(--color-ink-soft);
+  }
+  .deletion-banner {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-danger);
+    background: var(--color-highlight-wash);
+    border-radius: var(--radius-control);
+  }
+  .deletion-banner p {
+    margin: 0 0 0.75rem;
+  }
+  .stat-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat {
+    flex: 1 1 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat__num {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .stat__label {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .quick-links a {
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+  }
   .level {
     margin-bottom: 2rem;
   }
@@ -194,121 +252,31 @@ const totalCount =
     padding: 0.4rem 0.7rem;
     cursor: pointer;
   }
-  .level__error {
+  .form-error {
     margin: 0.5rem 0 0;
     color: var(--color-danger);
     font-size: 0.9rem;
   }
-  .stat-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .stat {
-    flex: 1 1 0;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    text-align: center;
-  }
-  .stat__num {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  .stat__den {
-    font-size: 1rem;
-    color: var(--color-ink-faint);
-  }
-  .stat__label {
-    margin: 0.25rem 0 0;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
-  }
-  .cefr {
-    margin-bottom: 2rem;
-  }
-  .cefr-bars {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.4rem;
-  }
-  .cefr-bar {
-    display: grid;
-    grid-template-columns: 2rem 1fr 2rem;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .cefr-bar__label {
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-  .cefr-bar__track,
-  .skill__track {
-    height: 0.5rem;
-    background: var(--color-paper-soft);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .cefr-bar__fill,
-  .skill__fill {
-    display: block;
-    height: 100%;
-    background: var(--color-brand);
-  }
-  .cefr-bar__n {
-    text-align: right;
-    font-size: 0.85rem;
-  }
-  .skill-cat {
+  .danger {
     border-top: 1px solid var(--color-border);
-    padding: 0.5rem 0;
+    padding-top: 1rem;
   }
-  .skill-cat summary {
+  .danger summary {
     cursor: pointer;
+    color: var(--color-danger);
     font-weight: 600;
-    font-family: var(--font-display);
   }
-  .skill-list {
-    list-style: none;
-    padding: 0.75rem 0 0;
-    margin: 0;
-    display: grid;
-    gap: 0.5rem;
+  .danger p {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
   }
-  .skill {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  .btn--danger {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
   }
-  .skill__name {
-    text-decoration: none;
-    color: var(--color-ink);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .skill--locked .skill__name {
-    color: var(--color-ink-faint);
-  }
-  .skill__mastery {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 8rem;
-  }
-  .skill__track {
-    flex: 1;
-  }
-  .skill__locked {
-    margin-left: auto;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-ink-faint);
+  .btn--danger:hover {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+    filter: brightness(0.9);
   }
 </style>

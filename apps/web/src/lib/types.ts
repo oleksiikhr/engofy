@@ -293,6 +293,8 @@ export interface ProfileCategory {
 }
 export interface Profile {
   streak: number;
+  // Every UTC day (`YYYY-MM-DD`, ascending) with at least one review.
+  activityDays: string[];
   cefr: Record<CefrLevel, number>;
   categories: ProfileCategory[];
 }
@@ -301,6 +303,20 @@ export interface Profile {
 export interface ProfileHub {
   streak: number;
   cefrLevel: CefrLevel;
+  accountDeletion: AccountDeletion | null;
+}
+// Pending account-deletion request (ISO-8601 timestamps).
+export interface AccountDeletion {
+  requestedAt: string;
+  scheduledFor: string;
+}
+// `GET /profile/subscription`; `cardLimit` is null on premium (unlimited).
+export interface ProfileSubscription {
+  plan: 'free' | 'premium';
+  active: boolean;
+  currentPeriodEnd: string | null;
+  cardsUsed: number;
+  cardLimit: number | null;
 }
 
 // --- daily session (home) ---
