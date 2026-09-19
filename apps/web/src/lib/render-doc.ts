@@ -92,22 +92,31 @@ function renderChildren(
   return children.map((child) => renderInline(child, annotations)).join('');
 }
 
-function renderBlock(block: Block, annotations: Annotations): string {
+// `data-block` / `data-item` carry the block's index in Doc.children and a
+// list item's index — the coordinates the reader's token analysis is placed by.
+function renderBlock(
+  block: Block,
+  index: number,
+  annotations: Annotations,
+): string {
   if (block.type === 'list') {
     const tag = block.ordered ? 'ol' : 'ul';
     const items = block.items
-      .map((item) => `<li>${renderChildren(item.children, annotations)}</li>`)
+      .map(
+        (item, itemIndex) =>
+          `<li data-item="${itemIndex}">${renderChildren(item.children, annotations)}</li>`,
+      )
       .join('');
-    return `<${tag}>${items}</${tag}>`;
+    return `<${tag} data-block="${index}">${items}</${tag}>`;
   }
   const inner = renderChildren(block.children, annotations);
   if (block.level) {
-    return `<h${block.level}>${inner}</h${block.level}>`;
+    return `<h${block.level} data-block="${index}">${inner}</h${block.level}>`;
   }
   if (block.quote) {
-    return `<blockquote>${inner}</blockquote>`;
+    return `<blockquote data-block="${index}">${inner}</blockquote>`;
   }
-  return `<p>${inner}</p>`;
+  return `<p data-block="${index}">${inner}</p>`;
 }
 
 // Renders `Doc.children` to an HTML string. Caller wraps it in a
@@ -115,6 +124,6 @@ function renderBlock(block: Block, annotations: Annotations): string {
 export function renderDoc(doc: Doc, annotations: Annotations): string {
   // `?? []`: an API still on the previous release omits `grammarMatches`.
   return applyGrammarMatches(doc, annotations.grammarMatches ?? [])
-    .children.map((block) => renderBlock(block, annotations))
+    .children.map((block, index) => renderBlock(block, index, annotations))
     .join('\n');
 }

@@ -2,12 +2,34 @@ import type { LexiconData } from './reader-lexicon';
 import { isMarked } from './render-doc';
 import type { PostDetail } from './types';
 
+// The "why this, not that" explanation the grammar_contrastive exercise
+// generated for each usage point (the first one when a point has several).
+function contrastByUsagePoint(
+  exercises: PostDetail['exercises'],
+): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const exercise of exercises) {
+    const { grammarUsagePointId, explanation } = exercise.payload;
+    if (
+      exercise.type === 'grammar_contrastive' &&
+      typeof grammarUsagePointId === 'string' &&
+      typeof explanation === 'string' &&
+      !out.has(grammarUsagePointId)
+    ) {
+      out.set(grammarUsagePointId, explanation);
+    }
+  }
+  return out;
+}
+
 // The popup data for the spans `renderDoc` marks: only new/learning
 // word/phrase/grammar annotations, so the JSON embedded in the page stays
 // small.
 export function buildLexiconData(
   annotations: PostDetail['annotations'],
+  exercises: PostDetail['exercises'],
 ): LexiconData {
+  const contrast = contrastByUsagePoint(exercises);
   const data: LexiconData = { words: {}, phrases: {}, grammar: {} };
   for (const w of Object.values(annotations.words)) {
     if (isMarked(w.state)) {
@@ -57,6 +79,7 @@ export function buildLexiconData(
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           exampleText: point.exampleText,
+          contrast: contrast.get(point.grammarUsagePointId) ?? null,
           state,
         };
       }

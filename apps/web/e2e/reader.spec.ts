@@ -237,6 +237,121 @@ test.describe('reader page (guest)', () => {
     ).toBeVisible();
   });
 
+  test('colours tokens by part of speech and by tense, each toggle on its own', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await expect(reader.analysis.locator('[data-tok]')).toHaveCount(0);
+
+    await reader.modeToggle('Parts of speech').click();
+    await expect(reader.modeToggle('Parts of speech')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(reader.token('coastline')).toHaveAttribute(
+      'data-pos-group',
+      'noun',
+    );
+    await expect(reader.token('twice')).toHaveAttribute(
+      'data-pos-group',
+      'adv',
+    );
+    // POS mode alone paints no tense colour.
+    const ended = reader.token('ended');
+    await expect(ended).toHaveAttribute('data-tense', 'past');
+    const posOnly = await ended.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+    await reader.modeToggle('Tenses').click();
+    const both = await ended.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+    expect(both).not.toBe(posOnly);
+
+    // The article's own text is untouched by the wrapping.
+    await expect(reader.analysis).toContainText(
+      'By the time the war ended, she had drawn every coastline twice.',
+    );
+
+    await reader.modeToggle('Parts of speech').click();
+    await expect(reader.page.locator('body')).not.toHaveClass(/reader-pos/);
+    await expect(reader.page.locator('body')).toHaveClass(/reader-tense/);
+  });
+
+  test('Analyze tags tokens, flags irregular verbs and explains the construction', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.modeToggle('Analyze').click();
+    const drawn = reader.token('drawn');
+    await expect(drawn).toHaveAttribute(
+      'data-irregular',
+      'draw – drew – drawn',
+    );
+    const tag = await reader
+      .token('coastline')
+      .evaluate((el) => getComputedStyle(el, '::after').content);
+    expect(tag).toBe('"noun"');
+    const flag = await drawn.evaluate(
+      (el) => getComputedStyle(el, '::before').content,
+    );
+    expect(flag).toContain('drew');
+
+    await reader.grammarLabel('had').first().click();
+    await expect(reader.popupSection('grammar')).toBeVisible();
+    await expect(
+      reader.popupSection('grammar').locator('.lex-popup__contrast'),
+    ).toContainText('Past perfect fits because');
+  });
+
+  test('the "why not X" text stays hidden outside Analyze mode', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    await expect(reader.popupSection('grammar')).toBeVisible();
+    await expect(
+      reader.popupSection('grammar').locator('.lex-popup__contrast'),
+    ).toBeHidden();
+  });
+
+  test('A+ / A- resize the article text and the size is remembered', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const size = () =>
+      reader.analysis.evaluate((el) =>
+        Number.parseFloat(getComputedStyle(el).fontSize),
+      );
+
+    const base = await size();
+    await reader.toolbar.getByRole('button', { name: 'Larger text' }).click();
+    expect(await size()).toBeGreaterThan(base);
+
+    await page.reload();
+    expect(await size()).toBeGreaterThan(base);
+
+    await reader.toolbar.getByRole('button', { name: 'Smaller text' }).click();
+    expect(await size()).toBe(base);
+  });
+
+  test('"Report a mistake" in a popup is acknowledged', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    const report = reader.popupSection('word').locator('.lex-report');
+    await report.getByRole('button', { name: 'Report a mistake' }).click();
+    await expect(report).toContainText('Thanks');
+  });
+
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');

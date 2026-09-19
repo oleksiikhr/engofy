@@ -6,6 +6,7 @@ export class ReaderPage {
   readonly analysis: Locator;
   readonly fillBlank: Locator;
   readonly popup: Locator;
+  readonly toolbar: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -13,6 +14,7 @@ export class ReaderPage {
     this.analysis = page.locator('.analysis');
     this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
     this.popup = page.locator('.lex-popup');
+    this.toolbar = page.getByRole('toolbar', { name: 'Reader tools' });
   }
 
   async goto(slug: string) {
@@ -39,6 +41,17 @@ export class ReaderPage {
     return this.analysis.locator('[data-grammar-usage-point-id]', {
       hasText: text,
     });
+  }
+
+  // A token span (added once a toolbar mode is on), filtered by its text.
+  token(text: string): Locator {
+    return this.analysis.locator('[data-tok]', {
+      hasText: new RegExp(`^${text}$`),
+    });
+  }
+
+  modeToggle(name: 'Parts of speech' | 'Tenses' | 'Analyze'): Locator {
+    return this.toolbar.getByRole('button', { name, exact: true });
   }
 
   // One section of the popup: 'word' | 'phrase' | 'grammar'.

@@ -145,6 +145,23 @@ export interface GrammarMatch {
   grammarUsagePointId: string;
   state: EffectiveState;
 }
+export type TokenTense = 'past' | 'present' | 'future';
+// A content token (no punctuation) of the post's spaCy layer, in the same
+// block/unit/char coordinates as a GrammarMatch.
+export interface ReaderToken {
+  blockIndex: number;
+  itemIndex: number | null;
+  charStart: number;
+  charEnd: number;
+  // Raw spaCy UPOS tag.
+  pos: string;
+  tense: TokenTense | null;
+  irregular: {
+    base: string;
+    pastSimple: string[];
+    pastParticiple: string[];
+  } | null;
+}
 export type ExerciseType =
   | 'fill_blank'
   | 'find_error'
@@ -173,6 +190,8 @@ export interface PostDetail {
     phrases: Record<string, PhraseAnnotation>;
     grammar: Record<string, GrammarAnnotation>;
     grammarMatches: GrammarMatch[];
+    // Absent from an API still on the previous release.
+    tokens?: ReaderToken[];
   };
   exercises: PostExercise[];
 }

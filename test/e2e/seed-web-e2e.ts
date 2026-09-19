@@ -453,36 +453,55 @@ async function seed(orm: MikroORM): Promise<void> {
     charStart: 0,
     charEnd: grammarSentenceText.length,
   });
-  const grammarTokens: [string, number, number][] = [
-    ['By', 0, 2],
-    ['the', 3, 6],
-    ['time', 7, 11],
-    ['the', 12, 15],
-    ['war', 16, 19],
-    ['ended', 20, 25],
-    [',', 25, 26],
-    ['she', 27, 30],
-    ['had', 31, 34],
-    ['drawn', 35, 40],
-    ['every', 41, 46],
-    ['coastline', 47, 56],
-    ['twice', 57, 62],
-    ['.', 62, 63],
+  // [text, charStart, charEnd, lemma, pos, tag, morph]
+  const grammarTokens: [
+    string,
+    number,
+    number,
+    string,
+    string,
+    string,
+    object,
+  ][] = [
+    ['By', 0, 2, 'by', 'ADP', 'IN', {}],
+    ['the', 3, 6, 'the', 'DET', 'DT', {}],
+    ['time', 7, 11, 'time', 'NOUN', 'NN', {}],
+    ['the', 12, 15, 'the', 'DET', 'DT', {}],
+    ['war', 16, 19, 'war', 'NOUN', 'NN', {}],
+    ['ended', 20, 25, 'end', 'VERB', 'VBD', { Tense: 'Past', VerbForm: 'Fin' }],
+    [',', 25, 26, ',', 'PUNCT', ',', {}],
+    ['she', 27, 30, 'she', 'PRON', 'PRP', {}],
+    ['had', 31, 34, 'have', 'AUX', 'VBD', { Tense: 'Past', VerbForm: 'Fin' }],
+    [
+      'drawn',
+      35,
+      40,
+      'draw',
+      'VERB',
+      'VBN',
+      { Tense: 'Past', VerbForm: 'Part' },
+    ],
+    ['every', 41, 46, 'every', 'DET', 'DT', {}],
+    ['coastline', 47, 56, 'coastline', 'NOUN', 'NN', {}],
+    ['twice', 57, 62, 'twice', 'ADV', 'RB', {}],
+    ['.', 62, 63, '.', 'PUNCT', '.', {}],
   ];
-  grammarTokens.forEach(([text, charStart, charEnd], position) => {
-    em.create(SentenceToken, {
-      sentenceId: grammarSentence.id,
-      position,
-      text,
-      charStart,
-      charEnd,
-      lemma: text.toLowerCase(),
-      pos: 'X',
-      tag: 'X',
-      dep: 'dep',
-      morph: {},
-    });
-  });
+  grammarTokens.forEach(
+    ([text, charStart, charEnd, lemma, pos, tag, morph], position) => {
+      em.create(SentenceToken, {
+        sentenceId: grammarSentence.id,
+        position,
+        text,
+        charStart,
+        charEnd,
+        lemma,
+        pos,
+        tag,
+        dep: 'dep',
+        morph: morph as Record<string, string>,
+      });
+    },
+  );
   em.create(GrammarMatch, {
     sentenceId: grammarSentence.id,
     grammarUsagePointId: pastPerfectUp.id,
@@ -614,6 +633,25 @@ async function seed(orm: MikroORM): Promise<void> {
       sentenceId: sid,
       scrambled: ['had', 'the', 'returned', 'boats', 'not'],
       answer: [2, 0, 4, 1, 3],
+    },
+  });
+  em.create(Exercise, {
+    postId: reader.id,
+    type: ExerciseType.GrammarContrastive,
+    source: ExerciseSource.Ai,
+    payload: {
+      grammarUsagePointId: pastPerfectUp.id,
+      sentenceId: grammarSentence.id,
+      explanation:
+        'Past perfect fits because drawing the coastlines finished before the war ended; past simple would not show which came first.',
+      question: 'By the time the war ended, she ____ every coastline twice.',
+      options: ['had drawn', 'drew', 'has drawn'],
+      answerIndex: 0,
+      optionExplanations: [
+        'Earlier past action.',
+        'Does not show the order.',
+        'Wrong time frame.',
+      ],
     },
   });
   em.create(Exercise, {
