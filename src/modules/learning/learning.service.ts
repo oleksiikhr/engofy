@@ -1,6 +1,9 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Post } from '../post/entities/post.entity.js';
+import { PostStatus } from '../post/enums/post-status.enum.js';
+import { PostNotFoundError } from '../post/errors/post-not-found.error.js';
 import { AddCardCommand } from './commands/add-card/add-card.command.js';
 import { RemoveCardCommand } from './commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from './commands/review-card/review-card.command.js';
@@ -14,10 +17,14 @@ import type { DictionaryView } from './queries/get-dictionary/dictionary-view.js
 import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
+import { GetDuePostCardsQuery } from './queries/get-due-post-cards/get-due-post-cards.query.js';
 import { GetPhraseDictionaryDetailQuery } from './queries/get-phrase-dictionary-detail/get-phrase-dictionary-detail.query.js';
 import type { PhraseDictionaryDetailView } from './queries/get-phrase-dictionary-detail/phrase-dictionary-detail-view.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
-import type { PracticeQueueResult } from './queries/get-practice-queue/practice-queue-item.js';
+import type {
+  PracticeQueueItem,
+  PracticeQueueResult,
+} from './queries/get-practice-queue/practice-queue-item.js';
 import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
 import type { ProfileView } from './queries/get-profile/profile-view.js';
 import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
@@ -121,6 +128,23 @@ export class LearningService {
 
   getDueCardCount(userId: string): Promise<number> {
     return this.queryBus.execute(new GetDueCardCountQuery(userId));
+  }
+
+  // Due cards whose target occurs in the given published post — resolved by
+  // the public `shortId` (the reader's URL key), not the internal id.
+  async getDuePostCards(
+    userId: string,
+    shortId: string,
+  ): Promise<PracticeQueueItem[]> {
+    const post = await this.em.findOne(
+      Post,
+      { shortId, status: PostStatus.Published },
+      { fields: ['id'] },
+    );
+    if (!post) {
+      throw new PostNotFoundError();
+    }
+    return this.queryBus.execute(new GetDuePostCardsQuery(post.id, userId));
   }
 
   getCardUsage(userId: string): Promise<CardUsage> {

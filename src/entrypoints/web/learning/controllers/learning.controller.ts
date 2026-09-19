@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
@@ -19,6 +20,7 @@ import { LearningService } from '../../../../modules/learning/learning.service.j
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
 import type { DispositionView } from '../../../../modules/learning/types/disposition-view.type.js';
+import { parseSlugId } from '../../../../modules/post/queries/parse-slug-id.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
 import { DispositionResponseDto } from '../dto/disposition-response.dto.js';
 import { DueCardCountResponseDto } from '../dto/due-card-count-response.dto.js';
@@ -119,6 +121,26 @@ export class LearningController {
       ...toOffsetPage(result.items.map(toQueueItemDto), null),
       heldBackNewCount: result.heldBackNewCount,
       hasAnyCards: result.hasAnyCards,
+    };
+  }
+
+  // Due cards whose target occurs in one post — backs the reader's final
+  // screen. Same wire shape as `GET /learning/practice`; `slugId` is the
+  // reader's `/posts/{slug}-{shortId}` key, parsed like the content routes.
+  @Get('posts/:slugId/due-cards')
+  async postDueCards(
+    @Param('slugId') slugId: string,
+    @CurrentUser() actor: UserActor,
+  ): Promise<PracticeQueueResponseDto> {
+    const shortId = parseSlugId(slugId);
+    if (!shortId) {
+      throw new NotFoundException('Post not found');
+    }
+    const items = await this.learning.getDuePostCards(actor.id, shortId);
+    return {
+      ...toOffsetPage(items.map(toQueueItemDto), null),
+      heldBackNewCount: 0,
+      hasAnyCards: true,
     };
   }
 
