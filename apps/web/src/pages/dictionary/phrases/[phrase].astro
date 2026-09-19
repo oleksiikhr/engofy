@@ -2,20 +2,20 @@
 import DictionaryDetailStyles from '../../../components/DictionaryDetailStyles.astro';
 import Layout from '../../../layouts/Layout.astro';
 import { apiGetOrNull } from '../../../lib/api';
-import { renderWordDetail } from '../../../lib/dictionary-detail';
+import { renderPhraseDetail } from '../../../lib/dictionary-detail';
 import { getCurrentUser } from '../../../lib/session';
-import type { WordDictionaryDetail } from '../../../lib/types';
+import type { PhraseDictionaryDetail } from '../../../lib/types';
 
-const { lemma } = Astro.params;
+const { phrase } = Astro.params;
 const user = await getCurrentUser(Astro.request);
 
 if (!user) {
   return Astro.redirect('/login');
 }
 
-const detail = lemma
-  ? await apiGetOrNull<WordDictionaryDetail>(
-      `/dictionary/words/${encodeURIComponent(lemma)}`,
+const detail = phrase
+  ? await apiGetOrNull<PhraseDictionaryDetail>(
+      `/dictionary/phrases/${encodeURIComponent(phrase)}`,
       { request: Astro.request },
     )
   : null;
@@ -24,20 +24,17 @@ if (!detail) {
   return new Response('Not found', { status: 404 });
 }
 
-const detailHtml = renderWordDetail(detail);
+const detailHtml = renderPhraseDetail(detail);
 ---
 
-<Layout title={`${detail.lemma} — Dictionary — Engofy`} user={user} active="dictionary">
+<Layout title={`${detail.phraseText} — Dictionary — Engofy`} user={user} active="dictionary">
   <p class="crumb"><a href="/dictionary">← Your dictionary</a></p>
 
   <header class="wd-head">
-    <h1>{detail.lemma}</h1>
-    {detail.frequencyRank && (
-      <span class="wd-head__rank">Frequency rank #{detail.frequencyRank}</span>
-    )}
+    <h1>{detail.phraseText}</h1>
   </header>
 
-  <div id="wd-detail" set:html={detailHtml} />
+  <div id="pd-detail" set:html={detailHtml} />
 
   <DictionaryDetailStyles />
 </Layout>
