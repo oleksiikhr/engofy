@@ -10,6 +10,7 @@ export class ReaderPage {
   readonly studyToggle: Locator;
   readonly studyPanel: Locator;
   readonly finalScreen: Locator;
+  readonly quickCheck: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,6 +25,7 @@ export class ReaderPage {
     });
     this.studyPanel = page.locator('.study-panel');
     this.finalScreen = page.locator('[data-reader-final]');
+    this.quickCheck = this.finalScreen.locator('[data-qc]');
   }
 
   async goto(slug: string) {
@@ -71,6 +73,15 @@ export class ReaderPage {
   // One section of the popup: 'word' | 'phrase' | 'grammar'.
   popupSection(kind: 'word' | 'phrase' | 'grammar'): Locator {
     return this.popup.locator(`[data-lex-kind="${kind}"]`);
+  }
+
+  // The Quick check screen currently on show: 'intro' | 'question' | 'summary'.
+  qcScreen(kind: 'intro' | 'question' | 'summary'): Locator {
+    return this.quickCheck.locator(`[data-qc-screen="${kind}"]:visible`);
+  }
+
+  async startQuickCheck() {
+    await this.quickCheck.getByRole('button', { name: 'Start' }).click();
   }
 
   async submitFillBlank(answer: string) {

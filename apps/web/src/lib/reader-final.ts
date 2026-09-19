@@ -1,7 +1,8 @@
-// The reader's final screen (contrastive question(s), summary, practice CTA).
+// The reader's final screen (Quick check card, summary, practice CTA).
 // Reaching it is what marks the post as read — by scrolling it into view, or
 // by finishing study mode — so a post with no unfamiliar constructions (and
-// so no question block) still counts.
+// so no questions) still counts.
+import { initQuickCheck } from './quick-check';
 
 export function initReaderFinal(final: HTMLElement, slugId: string): void {
   let reached = false;
@@ -35,32 +36,9 @@ export function initReaderFinal(final: HTMLElement, slugId: string): void {
     reach();
   }
 
-  for (const question of final.querySelectorAll<HTMLElement>(
-    '[data-contrast-q]',
-  )) {
-    const answer = Number(question.dataset.answerIndex);
-    const result = question.querySelector<HTMLElement>('.final-q__result');
-    for (const option of question.querySelectorAll<HTMLButtonElement>(
-      '[data-option]',
-    )) {
-      option.addEventListener('click', () => {
-        const picked = Number(option.dataset.option);
-        const explanation = question.querySelector<HTMLElement>(
-          `[data-explanation="${picked}"]`,
-        );
-        for (const other of question.querySelectorAll<HTMLElement>(
-          '[data-explanation]',
-        )) {
-          other.hidden = other !== explanation;
-        }
-        option.classList.toggle('is-wrong', picked !== answer);
-        option.classList.toggle('is-right', picked === answer);
-        if (result) {
-          result.textContent = picked === answer ? '✓ Correct' : '✗ Not quite';
-          result.className = `final-q__result ${picked === answer ? 'is-ok' : 'is-bad'}`;
-        }
-      });
-    }
+  const card = final.querySelector<HTMLElement>('[data-qc]');
+  if (card) {
+    initQuickCheck(card);
   }
 
   final.addEventListener('reader:finish', ((
