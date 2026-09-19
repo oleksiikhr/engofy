@@ -384,6 +384,7 @@ describe('ContentController', () => {
     expect(res.body.annotations.words[wordDefinitionId].state).toBe('new');
     expect(res.body.sidebar).toBeUndefined();
     expect(res.body.annotations.grammarMatches).toEqual([]);
+    expect(res.body.annotations.tokens).toEqual([]);
   });
 
   it('marks the post-detail response Cache-Control: private (it varies per session, unlike the other content routes)', async () => {
@@ -429,6 +430,36 @@ describe('ContentController', () => {
       .request('post', '/content/posts/Zzz00000/read')
       .set('Cookie', cookie)
       .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('accepts a label report from a guest and 404s an unknown post', async () => {
+    const { shortId, slug, wordDefinitionId } = await seedPublishedPost(
+      suite.orm.em,
+    );
+
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/label-reports`)
+      .send({ kind: 'word', targetId: wordDefinitionId })
+      .expect(HttpStatus.NO_CONTENT);
+    await suite
+      .request('post', '/content/posts/Zzz00000/label-reports')
+      .send({ kind: 'word', targetId: wordDefinitionId })
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('rejects a label report with an unknown kind or a malformed target id', async () => {
+    const { shortId, slug, wordDefinitionId } = await seedPublishedPost(
+      suite.orm.em,
+    );
+
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/label-reports`)
+      .send({ kind: 'sentence', targetId: wordDefinitionId })
+      .expect(HttpStatus.BAD_REQUEST);
+    await suite
+      .request('post', `/content/posts/${slug}-${shortId}/label-reports`)
+      .send({ kind: 'word', targetId: 'nope' })
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('accepts a bare short id and 404s an unknown post', async () => {

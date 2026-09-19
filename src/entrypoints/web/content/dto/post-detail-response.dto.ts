@@ -102,6 +102,36 @@ export class PostGrammarMatchDto {
   readonly state!: EffectiveState;
 }
 
+export class PostIrregularVerbDto {
+  readonly base!: string;
+
+  readonly pastSimple!: string[];
+
+  readonly pastParticiple!: string[];
+}
+
+export class PostTokenDto {
+  // Index within Doc.children.
+  readonly blockIndex!: number;
+
+  // Index within a ListBlock's items; null for a paragraph.
+  readonly itemIndex!: number | null;
+
+  // Half-open char range within the block unit's plain text.
+  readonly charStart!: number;
+
+  readonly charEnd!: number;
+
+  // Raw spaCy UPOS tag.
+  readonly pos!: string;
+
+  // Set on finite verbs and the modal `will`.
+  readonly tense!: 'past' | 'present' | 'future' | null;
+
+  // Set on a verb in an irregular past form.
+  readonly irregular!: PostIrregularVerbDto | null;
+}
+
 export class PostAnnotationsDto {
   // Keyed by wordDefinitionId (the id on a `word` span).
   readonly words!: Record<string, PostWordAnnotationDto>;
@@ -114,6 +144,9 @@ export class PostAnnotationsDto {
 
   // Grammar usage points placed on the doc, sorted by position.
   readonly grammarMatches!: PostGrammarMatchDto[];
+
+  // Content tokens (no punctuation) with their POS/tense, sorted by position.
+  readonly tokens!: PostTokenDto[];
 }
 
 export class PostDetailResponseDto {

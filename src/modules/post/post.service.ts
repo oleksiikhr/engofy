@@ -13,6 +13,10 @@ import { IngestPostCommand } from './commands/ingest-post/ingest-post.command.js
 import type { IngestPostDto } from './commands/ingest-post/ingest-post.dto.js';
 import { MarkPostReadCommand } from './commands/mark-post-read/mark-post-read.command.js';
 import { PublishPostCommand } from './commands/publish-post/publish-post.command.js';
+import {
+  type ReportedLabelKind,
+  ReportLabelCommand,
+} from './commands/report-label/report-label.command.js';
 import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
@@ -151,5 +155,15 @@ export class PostService {
     await this.commandBus.execute(new MarkPostReadCommand(userId, shortId));
 
     await this.em.flush();
+  }
+
+  reportLabel(
+    userId: string | null,
+    shortId: string,
+    label: { kind: ReportedLabelKind; targetId: string },
+  ): Promise<void> {
+    return this.commandBus.execute(
+      new ReportLabelCommand(userId, shortId, label.kind, label.targetId),
+    );
   }
 }
