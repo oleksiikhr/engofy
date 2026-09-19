@@ -50,6 +50,7 @@ export class ProfileController {
     const view = await this.learning.getProfile(actor.id);
     return {
       streak: view.streak,
+      activityDays: view.activityDays,
       cefr: view.cefr,
       categories: view.categories,
     };

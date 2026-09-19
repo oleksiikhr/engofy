@@ -1,4 +1,5 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
@@ -11,7 +12,10 @@ import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { AddCardCommand } from '../../commands/add-card/add-card.command.js';
 import { RemoveCardCommand } from '../../commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from '../../commands/review-card/review-card.command.js';
+import { LearningCard } from '../../entities/learning-card.entity.js';
+import { ReviewLog } from '../../entities/review-log.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
+import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
 import { GetProfileQuery } from './get-profile.query.js';
@@ -74,6 +78,7 @@ describe('GetProfileHandler', () => {
     const profile = await suite.query(new GetProfileQuery(uuidv7()));
 
     expect(profile.streak).toBe(0);
+    expect(profile.activityDays).toEqual([]);
     expect(profile.cefr).toEqual({ A1: 0, A2: 0, B1: 0, B2: 0, C1: 0, C2: 0 });
     expect(profile.categories.map((c) => c.name)).toEqual(['PRESENT', 'PAST']);
     for (const category of profile.categories) {
@@ -116,6 +121,7 @@ describe('GetProfileHandler', () => {
     const profile = await suite.query(new GetProfileQuery(userId));
 
     expect(profile.streak).toBe(1);
+    expect(profile.activityDays).toEqual([DateTime.now().toUTC().toISODate()]);
     expect(profile.cefr.A2).toBe(1); // grammar card, at its usage point level
     expect(profile.cefr.B1).toBe(1); // word card, lowest classified definition
 
@@ -157,7 +163,59 @@ describe('GetProfileHandler', () => {
     const profile = await suite.query(new GetProfileQuery(userId));
 
     expect(profile.streak).toBe(1);
+    expect(profile.activityDays).toEqual([DateTime.now().toUTC().toISODate()]);
     expect(profile.cefr.B1).toBe(0);
+  });
+
+  it('returns every distinct review day across all cards, sorted ascending', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+    const now = DateTime.now();
+
+    const card = em.create(LearningCard, {
+      userId,
+      wordDefinitionId: uuidv7(),
+      due: now,
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+    });
+    // Two logs on the same UTC day collapse into one entry; deliberately
+    // out of order to prove the result comes back sorted.
+    em.create(ReviewLog, {
+      cardId: card.id,
+      rating: ReviewRating.Good,
+      reviewedAt: now,
+      elapsedDays: 0,
+      scheduledDays: 1,
+    });
+    em.create(ReviewLog, {
+      cardId: card.id,
+      rating: ReviewRating.Good,
+      reviewedAt: now,
+      elapsedDays: 0,
+      scheduledDays: 1,
+    });
+    em.create(ReviewLog, {
+      cardId: card.id,
+      rating: ReviewRating.Good,
+      reviewedAt: now.minus({ days: 3 }),
+      elapsedDays: 0,
+      scheduledDays: 1,
+    });
+    await em.flush();
+    em.clear();
+
+    const profile = await suite.query(new GetProfileQuery(userId));
+
+    expect(profile.activityDays).toEqual([
+      now.minus({ days: 3 }).toUTC().toISODate(),
+      now.toUTC().toISODate(),
+    ]);
   });
 
   // D11: mastery is computed from live FSRS card state on every read, so a

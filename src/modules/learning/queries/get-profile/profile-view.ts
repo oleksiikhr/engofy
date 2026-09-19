@@ -24,6 +24,10 @@ export interface ProfileCategoryView {
 export interface ProfileView {
   // Consecutive UTC days with at least one review, ending today or yesterday.
   streak: number;
+  // Every distinct UTC day (`YYYY-MM-DD`, ascending) with at least one
+  // review, across the learner's full history — feeds the GitHub-style
+  // contribution calendar.
+  activityDays: string[];
   // Count of the learner's SRS cards per CEFR level. A card whose target has
   // no known level (unclassified word/phrase) is left out of every bucket.
   cefr: Record<CefrLevel, number>;

@@ -54,13 +54,14 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
     // learning.
     const activeCards = allCards.filter((card) => !card.archivedAt);
 
-    const [streak, cefr] = await Promise.all([
-      this.computeStreak(allCards.map((card) => card.id)),
+    const [activityDays, cefr] = await Promise.all([
+      this.loadActivityDays(allCards.map((card) => card.id)),
       this.computeCefrBreakdown(activeCards, usagePoints),
     ]);
 
     return {
-      streak,
+      streak: dailyStreakFromUtcDays(activityDays, DateTime.now()),
+      activityDays,
       cefr,
       categories: buildSkillTree(
         categories,
@@ -73,10 +74,12 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
   }
 
   // Distinct UTC review days pushed to SQL — avoids loading every `review_logs`
-  // row for the user just to bucket them by day.
-  private async computeStreak(cardIds: string[]): Promise<number> {
+  // row for the user just to bucket them by day. Backs both the streak count
+  // and the full day list for the GitHub-style contribution graph
+  // (profile-hub-redesign slice 2).
+  private async loadActivityDays(cardIds: string[]): Promise<string[]> {
     if (cardIds.length === 0) {
-      return 0;
+      return [];
     }
     const placeholders = cardIds.map(() => '?').join(', ');
     const rows = await this.em.getConnection().execute<{ day: string }[]>(
@@ -87,10 +90,7 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
       'all',
       this.em.getTransactionContext(),
     );
-    return dailyStreakFromUtcDays(
-      rows.map((row) => row.day),
-      DateTime.now(),
-    );
+    return rows.map((row) => row.day).sort();
   }
 
   private async computeCefrBreakdown(
