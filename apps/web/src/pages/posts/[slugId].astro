@@ -4,7 +4,11 @@ import { apiGetOrNull } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
-import type { PostDetail } from '../../lib/types';
+import type {
+  NewCardBudgetResponse,
+  PostDetail,
+  PracticeQueueResponse,
+} from '../../lib/types';
 
 const { slugId } = Astro.params;
 const user = await getCurrentUser(Astro.request);
@@ -29,9 +33,8 @@ const bodyHtml = renderDoc(post.doc, post.annotations);
 // `<` is escaped so the JSON can't close its own <script> element.
 const escapeJson = (value: unknown) =>
   JSON.stringify(value).replace(/</g, '\\u003c');
-const lexiconJson = escapeJson(
-  buildLexiconData(post.annotations, post.exercises),
-);
+const lexicon = buildLexiconData(post.annotations, post.exercises);
+const lexiconJson = escapeJson(lexicon);
 // `?? []`: an API still on the previous release omits `tokens`.
 const tokens = post.annotations.tokens ?? [];
 const tokensJson = escapeJson(tokens);
@@ -115,6 +118,75 @@ function toDrill(ex: Ex): DrillView | null {
   return null;
 }
 
+// --- final screen ---
+interface ContrastView {
+  before: string;
+  after: string;
+  options: string[];
+  answerIndex: number;
+  explanations: string[];
+}
+
+// Only constructions still marked for this viewer (new/learning) get a
+// question; none marked -> no block at all.
+function toContrast(ex: Ex): ContrastView | null {
+  const p = ex.payload as Record<string, unknown>;
+  const pointId = p.grammarUsagePointId;
+  if (
+    ex.type !== 'grammar_contrastive' ||
+    typeof pointId !== 'string' ||
+    !lexicon.grammar[pointId] ||
+    typeof p.question !== 'string' ||
+    !Array.isArray(p.options)
+  ) {
+    return null;
+  }
+  const { before, after } = splitBlank(p.question);
+  return {
+    before,
+    after,
+    options: p.options as string[],
+    answerIndex: Number(p.answerIndex ?? -1),
+    explanations: Array.isArray(p.optionExplanations)
+      ? (p.optionExplanations as string[])
+      : [],
+  };
+}
+
+const MAX_FINAL_QUESTIONS = 2;
+const contrastQuestions = post.exercises
+  .map(toContrast)
+  .filter((q): q is ContrastView => q !== null)
+  .slice(0, MAX_FINAL_QUESTIONS);
+
+const newWordCount = Object.values(lexicon.words).filter(
+  (w) => w.state === 'new',
+).length;
+const grammarCount = Object.keys(lexicon.grammar).length;
+const summaryParts = [
+  newWordCount > 0 && `${newWordCount} new word${newWordCount === 1 ? '' : 's'}`,
+  grammarCount > 0 &&
+    `${grammarCount} grammar pattern${grammarCount === 1 ? '' : 's'}`,
+].filter(Boolean);
+
+// Both are best-effort, signed-in only: an API on the previous release lacks
+// the budget route, and neither may take the page down.
+const [budget, dueCards] = user
+  ? await Promise.all([
+      apiGetOrNull<NewCardBudgetResponse>('/learning/new-card-budget', {
+        request: Astro.request,
+      }).catch(() => null),
+      apiGetOrNull<PracticeQueueResponse>(
+        `/learning/posts/${encodeURIComponent(slugId ?? '')}/due-cards`,
+        { request: Astro.request },
+      ).catch(() => null),
+    ])
+  : [null, null];
+const dueCount = dueCards?.items.length ?? 0;
+// The Home session sends the learner here with ?from=home and its next step
+// (today's practice) lives on Home.
+const fromHome = Astro.url.searchParams.get('from') === 'home';
+
 const drills: DrillView[] = post.exercises
   .map(toDrill)
   .filter((d): d is DrillView => d !== null);
@@ -126,7 +198,7 @@ const drills: DrillView[] = post.exercises
   active="feed"
   bodyClass="theme-reader"
 >
-  <div class="reader-layout" data-slug-id={slugId}>
+  <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining}>
     <article class="reader-article">
       <header class="post-head">
         <div class="post-head__meta">
@@ -171,6 +243,9 @@ const drills: DrillView[] = post.exercises
             </>
           )
         }
+        <button type="button" class="reader-toolbar__btn" data-study-toggle aria-pressed="false">
+          Study mode
+        </button>
         <span class="reader-toolbar__size">
           <button type="button" class="reader-toolbar__btn" data-size="-1" aria-label="Smaller text">A−</button>
           <button type="button" class="reader-toolbar__btn" data-size="1" aria-label="Larger text">A+</button>
@@ -196,6 +271,55 @@ const drills: DrillView[] = post.exercises
       <script is:inline type="application/json" id="reader-tokens" set:html={tokensJson} />
     </article>
   </div>
+
+  <section class="reader-final" data-reader-final aria-label="Finished reading">
+    <h2>Nice work — you finished this text</h2>
+    {
+      contrastQuestions.length > 0 && (
+        <div class="final-questions">
+          <p class="final-questions__lead">Two forms, one right here — which fits?</p>
+          {contrastQuestions.map((q) => (
+            <div class="final-q" data-contrast-q data-answer-index={String(q.answerIndex)}>
+              <p class="final-q__prompt">{q.before}<b>____</b>{q.after}</p>
+              <div class="final-q__options">
+                {q.options.map((opt, i) => (
+                  <button type="button" class="exercise__chip" data-option={String(i)}>
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              {q.explanations.map((text, i) => (
+                <p class="final-q__explanation" data-explanation={String(i)} hidden>{text}</p>
+              ))}
+              <span class="final-q__result" role="status" />
+            </div>
+          ))}
+        </div>
+      )
+    }
+    <p class="final-summary">
+      {
+        summaryParts.length > 0
+          ? `This text had ${summaryParts.join(' and ')} to learn.`
+          : 'This text had nothing new for your level.'
+      }<span data-added></span>
+    </p>
+    <p class="final-cta">
+      {
+        fromHome && user && (
+          <a class="btn" href="/">Continue to today's practice</a>
+        )
+      }
+      {
+        !fromHome && dueCount > 0 && (
+          <a class="btn" href="/practice">
+            Practice {dueCount} card{dueCount === 1 ? '' : 's'} from this text
+          </a>
+        )
+      }
+      <a class="btn btn--ghost" href="/posts">More articles</a>
+    </p>
+  </section>
 
   {
     drills.length > 0 && (
@@ -269,18 +393,40 @@ const drills: DrillView[] = post.exercises
 </Layout>
 
 <script>
+  import type { LexiconData } from '../../lib/reader-lexicon';
+  import { initReaderFinal } from '../../lib/reader-final';
   import { initReaderPopup } from '../../lib/reader-popup';
+  import { initReaderStudy } from '../../lib/reader-study';
   import { initReaderToolbar } from '../../lib/reader-toolbar';
 
   const body = document.querySelector<HTMLElement>('.reading-body');
   const raw = document.getElementById('lexicon-data')?.textContent;
-  if (body && raw) {
-    initReaderPopup(body, JSON.parse(raw));
+  const lexicon: LexiconData | null = raw ? JSON.parse(raw) : null;
+  if (body && lexicon) {
+    initReaderPopup(body, lexicon);
   }
   const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
   const tokensRaw = document.getElementById('reader-tokens')?.textContent;
   if (body && toolbar && tokensRaw) {
     initReaderToolbar(toolbar, body, JSON.parse(tokensRaw));
+  }
+
+  const layout = document.querySelector<HTMLElement>('.reader-layout');
+  const final = document.querySelector<HTMLElement>('[data-reader-final]');
+  if (layout && final) {
+    initReaderFinal(final, layout.dataset.slugId ?? '');
+  }
+  const studyToggle = toolbar?.querySelector<HTMLElement>('[data-study-toggle]');
+  if (body && lexicon && studyToggle && final) {
+    const budget = layout?.dataset.newBudget;
+    initReaderStudy({
+      root: body,
+      toggle: studyToggle,
+      lexicon,
+      budget: budget === undefined ? null : Number(budget),
+      onFinish: (detail) =>
+        final.dispatchEvent(new CustomEvent('reader:finish', { detail })),
+    });
   }
 </script>
 

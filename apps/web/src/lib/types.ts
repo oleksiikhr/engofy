@@ -38,6 +38,10 @@ export interface PostSuggestionsResponse {
 export interface DueCardCountResponse {
   dueCount: number;
 }
+export interface NewCardBudgetResponse {
+  // New cards the learner may still add today.
+  remaining: number;
+}
 export interface StreakResponse {
   streak: number;
 }

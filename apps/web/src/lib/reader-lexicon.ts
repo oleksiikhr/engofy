@@ -47,6 +47,7 @@ export interface WordLexiconEntry extends LexiconEntryBase {
   lemma: string;
   pos: string;
   phonetic: string | null;
+  frequencyRank: number | null;
 }
 export interface PhraseLexiconEntry extends LexiconEntryBase {
   kind: 'phrase';

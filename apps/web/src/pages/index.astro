@@ -171,7 +171,7 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
         <p>
           <a
             class="btn"
-            href={postUrl({ slug: plan.postSlug, shortId: plan.postShortId })}
+            href={`${postUrl({ slug: plan.postSlug, shortId: plan.postShortId })}?from=home`}
           >
             Start reading
           </a>

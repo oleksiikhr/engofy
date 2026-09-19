@@ -352,6 +352,89 @@ test.describe('reader page (guest)', () => {
     await expect(report).toContainText('Thanks');
   });
 
+  test('the final screen asks a contrastive question and explains each option', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const question = reader.finalScreen.locator('[data-contrast-q]');
+    await expect(question).toHaveCount(1);
+    await expect(question).toContainText('By the time the war ended');
+
+    await question.getByRole('button', { name: 'drew', exact: true }).click();
+    await expect(question.locator('.final-q__result')).toHaveText(
+      '✗ Not quite',
+    );
+    await expect(question.getByText('Does not show the order.')).toBeVisible();
+
+    await question
+      .getByRole('button', { name: 'had drawn', exact: true })
+      .click();
+    await expect(question.locator('.final-q__result')).toHaveText('✓ Correct');
+    await expect(question.getByText('Earlier past action.')).toBeVisible();
+    await expect(question.getByText('Does not show the order.')).toBeHidden();
+  });
+
+  test('reaching the final screen marks the post as read', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    // This short fixture already shows the final screen on load, so the
+    // request is armed before navigating.
+    const marked = page.waitForRequest(
+      (request) =>
+        request.url().endsWith('/partials/mark-read') &&
+        request.method() === 'POST',
+    );
+    await reader.goto(READER_SLUG);
+    await marked;
+  });
+
+  test('study mode walks the article block by block and hands over to the final screen', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await expect(reader.finalScreen).toBeVisible();
+
+    await reader.studyToggle.click();
+    await expect(reader.studyToggle).toHaveAttribute('aria-pressed', 'true');
+    await expect(reader.finalScreen).toBeHidden();
+    await expect(reader.analysis.locator('.is-current')).toContainText(
+      'The old cartographer',
+    );
+    // Grammar-free block, guest: no suggestion and no check-in.
+    await expect(reader.studyPanel.locator('[data-study-word]')).toHaveCount(0);
+
+    await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
+    await expect(reader.analysis.locator('.is-current')).toContainText(
+      'By the time the war ended',
+    );
+    await expect(
+      reader.studyPanel.locator('.study-panel__checkin'),
+    ).toContainText('Grammar check-in');
+
+    await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
+    await expect(reader.analysis.locator('.is-current')).toContainText(
+      'Charting the last bay',
+    );
+    await reader.studyPanel.getByRole('button', { name: 'Finish' }).click();
+    await expect(reader.studyToggle).toHaveAttribute('aria-pressed', 'false');
+    await expect(reader.studyPanel).toHaveCount(0);
+    await expect(reader.finalScreen).toBeVisible();
+  });
+
+  test('"Exit study mode" leaves the article as it was', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.studyToggle.click();
+    await reader.studyPanel
+      .getByRole('button', { name: 'Exit study mode' })
+      .click();
+    await expect(reader.analysis.locator('.is-current')).toHaveCount(0);
+    await expect(reader.finalScreen).toBeVisible();
+  });
+
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
@@ -405,5 +488,62 @@ test.describe('reader page (signed in)', () => {
     await expect(reader.popup.getByRole('button', { name: '+' })).toHaveCount(
       0,
     );
+  });
+
+  test('study mode offers the new word of a block and counts it once saved', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.studyToggle.click();
+    const offer = reader.studyPanel.locator('[data-study-word]');
+    // perambulate is already a card; cartographer is the New one.
+    await expect(offer).toContainText('cartographer');
+    await expect(offer).toContainText('a person who draws or makes maps');
+
+    // Stubbed: saving for real would add a due card to the shared e2e user
+    // and skew the specs that count them.
+    const rowId = await offer.locator('.lex-actions').getAttribute('id');
+    await page.route('**/partials/lexicon-action', (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        body: `<div class="lex-actions" id="${rowId}"><span class="lex-state lex-state--learning" data-state="learning">Learning</span></div>`,
+      }),
+    );
+    await offer.getByRole('button', { name: '+' }).click();
+    await expect(offer.locator('.lex-state')).toHaveText('Learning');
+
+    await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
+    await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
+    await reader.studyPanel.getByRole('button', { name: 'Finish' }).click();
+    await expect(reader.finalScreen).toContainText(
+      'You added 1 new word to your deck.',
+    );
+  });
+
+  test('the final screen links to practice only when cards from the post are due', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    // The seeded word card is due and occurs in this post.
+    await expect(
+      reader.finalScreen.getByRole('link', {
+        name: /Practice \d+ cards? from this text/,
+      }),
+    ).toHaveAttribute('href', '/practice');
+  });
+
+  test("from Home, the final screen continues to today's practice", async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await page.goto(`/posts/${READER_SLUG}?from=home`);
+    await expect(
+      reader.finalScreen.getByRole('link', {
+        name: "Continue to today's practice",
+      }),
+    ).toHaveAttribute('href', '/');
   });
 });

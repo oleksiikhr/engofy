@@ -18,6 +18,7 @@ import type { GetDictionaryOptions } from './queries/get-dictionary/get-dictiona
 import { GetDictionaryQuery } from './queries/get-dictionary/get-dictionary.query.js';
 import { GetDueCardCountQuery } from './queries/get-due-card-count/get-due-card-count.query.js';
 import { GetDuePostCardsQuery } from './queries/get-due-post-cards/get-due-post-cards.query.js';
+import { GetNewCardBudgetQuery } from './queries/get-new-card-budget/get-new-card-budget.query.js';
 import { GetPhraseDictionaryDetailQuery } from './queries/get-phrase-dictionary-detail/get-phrase-dictionary-detail.query.js';
 import type { PhraseDictionaryDetailView } from './queries/get-phrase-dictionary-detail/phrase-dictionary-detail-view.js';
 import { GetPracticeQueueQuery } from './queries/get-practice-queue/get-practice-queue.query.js';
@@ -128,6 +129,12 @@ export class LearningService {
 
   getDueCardCount(userId: string): Promise<number> {
     return this.queryBus.execute(new GetDueCardCountQuery(userId));
+  }
+
+  // How many New cards the user may still add today (daily limit minus the
+  // ones already started).
+  getNewCardBudget(userId: string): Promise<number> {
+    return this.queryBus.execute(new GetNewCardBudgetQuery(userId));
   }
 
   // Due cards whose target occurs in the given published post — resolved by

@@ -7,6 +7,9 @@ export class ReaderPage {
   readonly fillBlank: Locator;
   readonly popup: Locator;
   readonly toolbar: Locator;
+  readonly studyToggle: Locator;
+  readonly studyPanel: Locator;
+  readonly finalScreen: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -15,6 +18,12 @@ export class ReaderPage {
     this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
     this.popup = page.locator('.lex-popup');
     this.toolbar = page.getByRole('toolbar', { name: 'Reader tools' });
+    this.studyToggle = this.toolbar.getByRole('button', {
+      name: 'Study mode',
+      exact: true,
+    });
+    this.studyPanel = page.locator('.study-panel');
+    this.finalScreen = page.locator('[data-reader-final]');
   }
 
   async goto(slug: string) {

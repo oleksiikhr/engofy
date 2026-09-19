@@ -10,6 +10,7 @@ import { GetCardUsageHandler } from './queries/get-card-usage/get-card-usage.han
 import { GetDictionaryHandler } from './queries/get-dictionary/get-dictionary.handler.js';
 import { GetDueCardCountHandler } from './queries/get-due-card-count/get-due-card-count.handler.js';
 import { GetDuePostCardsHandler } from './queries/get-due-post-cards/get-due-post-cards.handler.js';
+import { GetNewCardBudgetHandler } from './queries/get-new-card-budget/get-new-card-budget.handler.js';
 import { GetPhraseDictionaryDetailHandler } from './queries/get-phrase-dictionary-detail/get-phrase-dictionary-detail.handler.js';
 import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practice-queue.handler.js';
 import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
@@ -17,6 +18,7 @@ import { GetStreakHandler } from './queries/get-streak/get-streak.handler.js';
 import { GetWordDictionaryDetailHandler } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
 import { FsrsService } from './services/fsrs.service.js';
+import { NewCardBudgetService } from './services/new-card-budget.service.js';
 import { SkillProgressService } from './services/skill-progress.service.js';
 
 // SRS over words / phrases / grammar (PLAN.md §3.5). Wraps ts-fsrs and the
@@ -27,6 +29,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     LearningService,
     FsrsService,
     CardLimitService,
+    NewCardBudgetService,
     SkillProgressService,
     AddCardHandler,
     ReviewCardHandler,
@@ -39,6 +42,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     GetDueCardCountHandler,
     GetDuePostCardsHandler,
     GetStreakHandler,
+    GetNewCardBudgetHandler,
     GetWordDictionaryDetailHandler,
     GetPhraseDictionaryDetailHandler,
   ],
