@@ -1,42 +1,19 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { apiGet, apiPatch } from '../lib/api';
-import { getCurrentUser } from '../lib/session';
-import type { CefrLevel, Profile, ProfileHub } from '../lib/types';
+import Layout from '../../layouts/Layout.astro';
+import { buildActivityCalendar } from '../../lib/activity-calendar';
+import { apiGet } from '../../lib/api';
+import { getCurrentUser } from '../../lib/session';
+import type { CefrLevel, Profile } from '../../lib/types';
 
 const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 const user = await getCurrentUser(Astro.request);
 
-// Self-reported content level (`PATCH /profile/cefr-level`). Plain form POST
-// + redirect, same shape as the onboarding prompt on `/`; the change takes
-// effect immediately, nothing to migrate.
-let levelError = false;
-if (user && Astro.request.method === 'POST') {
-  const form = await Astro.request.formData();
-  const level = form.get('cefrLevel');
-  if (typeof level === 'string' && (LEVELS as string[]).includes(level)) {
-    try {
-      await apiPatch(
-        '/profile/cefr-level',
-        { cefrLevel: level },
-        { request: Astro.request },
-      );
-      return Astro.redirect('/profile');
-    } catch {
-      levelError = true;
-    }
-  } else {
-    levelError = true;
-  }
-}
+const profile = user
+  ? await apiGet<Profile>('/profile/progress', { request: Astro.request })
+  : null;
 
-const [hub, profile] = user
-  ? await Promise.all([
-      apiGet<ProfileHub>('/profile', { request: Astro.request }),
-      apiGet<Profile>('/profile/progress', { request: Astro.request }),
-    ])
-  : [null, null];
+const calendar = profile ? buildActivityCalendar(profile.activityDays) : [];
 
 const cefrMax = profile
   ? Math.max(1, ...LEVELS.map((l) => profile.cefr[l] ?? 0))
@@ -52,6 +29,7 @@ const totalCount =
 ---
 
 <Layout title="Profile — Engofy" user={user} active="profile">
+  <p class="back"><a href="/profile">← Profile</a></p>
   <h1>Your progress</h1>
 
   {
@@ -59,38 +37,8 @@ const totalCount =
       <p>
         <a href="/login">Sign in</a> to track your streak, skills and levels.
       </p>
-    ) : hub && profile ? (
+    ) : profile ? (
       <>
-        <section class="level">
-          <h2>Content difficulty level</h2>
-          <p class="level__hint">
-            Picks articles and grammar at the right difficulty for you.
-          </p>
-          <form method="post" class="level__form" data-testid="cefr-level-form">
-            <div class="level__options">
-              {LEVELS.map((lvl) => (
-                <label class="level__option">
-                  <input
-                    type="radio"
-                    name="cefrLevel"
-                    value={lvl}
-                    checked={lvl === hub.cefrLevel}
-                  />
-                  {lvl}
-                </label>
-              ))}
-            </div>
-            <button class="btn" type="submit">
-              Save
-            </button>
-          </form>
-          {levelError && (
-            <p class="level__error" role="alert">
-              Could not save your level, try again.
-            </p>
-          )}
-        </section>
-
         <section class="stat-row">
           <div class="stat">
             <p class="stat__num num">{profile.streak}</p>
@@ -102,6 +50,20 @@ const totalCount =
               <span class="stat__den">/ {totalCount}</span>
             </p>
             <p class="stat__label">constructions started</p>
+          </div>
+        </section>
+
+        <section class="activity">
+          <h2>Activity</h2>
+          <div class="calendar" data-testid="activity-calendar">
+            {calendar.map((day) => (
+              <span
+                class:list={['calendar__day', { 'calendar__day--active': day.active }]}
+                data-date={day.date}
+                data-active={day.active ? 'true' : 'false'}
+                title={`${day.date}${day.active ? ' — reviewed' : ''}`}
+              />
+            ))}
           </div>
         </section>
 
@@ -166,38 +128,30 @@ const totalCount =
 </Layout>
 
 <style>
-  .level {
+  .back {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+  .activity {
     margin-bottom: 2rem;
+    overflow-x: auto;
   }
-  .level__hint {
-    margin: 0 0 0.75rem;
-    color: var(--color-ink-soft);
-    font-size: 0.9rem;
+  .calendar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 0.75rem);
+    grid-auto-columns: 0.75rem;
+    gap: 3px;
+    width: max-content;
   }
-  .level__form {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+  .calendar__day {
+    border-radius: 2px;
+    background: var(--color-paper-soft);
+    border: 1px solid var(--color-border);
   }
-  .level__options {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-  .level__option {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    padding: 0.4rem 0.7rem;
-    cursor: pointer;
-  }
-  .level__error {
-    margin: 0.5rem 0 0;
-    color: var(--color-danger);
-    font-size: 0.9rem;
+  .calendar__day--active {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
   }
   .stat-row {
     display: flex;

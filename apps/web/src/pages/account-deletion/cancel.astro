@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { apiPost } from '../../lib/api';
+import { getCurrentUser } from '../../lib/session';
+
+// Target of the "cancel deletion" link in the e-mail. The link's GET only
+// shows a confirm button — the cancel itself is a POST, so mail scanners that
+// prefetch links can't cancel a deletion by accident. No session needed: the
+// token is the credential (`POST /profile/account-deletion/cancel-by-token`).
+const user = await getCurrentUser(Astro.request);
+
+let token = Astro.url.searchParams.get('token') ?? '';
+let status: 'ready' | 'done' | 'invalid' = token ? 'ready' : 'invalid';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const posted = form.get('token');
+  token = typeof posted === 'string' ? posted : '';
+  try {
+    await apiPost('/profile/account-deletion/cancel-by-token', { token });
+    status = 'done';
+  } catch {
+    status = 'invalid';
+  }
+}
+---
+
+<Layout title="Cancel account deletion — Engofy" user={user}>
+  <h1>Cancel account deletion</h1>
+
+  {
+    status === 'ready' ? (
+      <>
+        <p>Keep your account? Cancelling stops the scheduled deletion.</p>
+        <form method="post" data-testid="cancel-deletion-form">
+          <input type="hidden" name="token" value={token} />
+          <button class="btn" type="submit">
+            Keep my account
+          </button>
+        </form>
+      </>
+    ) : status === 'done' ? (
+      <p role="status" data-testid="cancel-deletion-done">
+        Deletion cancelled — your account is safe.{' '}
+        <a href={user ? '/profile' : '/login'}>
+          {user ? 'Go to your profile' : 'Sign in'}
+        </a>
+      </p>
+    ) : (
+      <p role="alert" data-testid="cancel-deletion-invalid">
+        This link is invalid or has expired. If your account is still
+        scheduled for deletion, cancel it from your <a href="/profile">profile</a>.
+      </p>
+    )
+  }
+</Layout>

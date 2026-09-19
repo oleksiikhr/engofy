@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { apiGet, apiPatch, apiPost } from '../lib/api';
+import { formatDate } from '../lib/format-date';
+import { getCurrentUser } from '../lib/session';
+import type {
+  CefrLevel,
+  ProfileHub,
+  ProfileSubscription,
+} from '../lib/types';
+
+const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+const user = await getCurrentUser(Astro.request);
+
+// Plain form POSTs + redirect (no client JS): the level picker
+// (`PATCH /profile/cefr-level`) and the account-deletion request / cancel.
+let levelError = false;
+let deletionError: string | null = null;
+if (user && Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = form.get('action');
+  const opts = { request: Astro.request };
+  try {
+    if (action === 'set-level') {
+      const level = form.get('cefrLevel');
+      if (typeof level === 'string' && (LEVELS as string[]).includes(level)) {
+        await apiPatch('/profile/cefr-level', { cefrLevel: level }, opts);
+        return Astro.redirect('/profile');
+      }
+      levelError = true;
+    } else if (action === 'request-deletion') {
+      await apiPost('/profile/account-deletion', undefined, opts);
+      return Astro.redirect('/profile');
+    } else if (action === 'cancel-deletion') {
+      await apiPost('/profile/account-deletion/cancel', undefined, opts);
+      return Astro.redirect('/profile');
+    }
+  } catch {
+    if (action === 'set-level') {
+      levelError = true;
+    } else {
+      deletionError = 'Something went wrong, please try again.';
+    }
+  }
+}
+
+const [hub, subscription] = user
+  ? await Promise.all([
+      apiGet<ProfileHub>('/profile', { request: Astro.request }),
+      apiGet<ProfileSubscription>('/profile/subscription', {
+        request: Astro.request,
+      }),
+    ])
+  : [null, null];
+
+const isPremium = subscription?.plan === 'premium' && subscription.active;
+const links = [
+  { href: '/profile/progress', label: 'Progress & skills' },
+  { href: '/profile/subscription', label: 'Subscription' },
+  { href: '/practice', label: 'Practice' },
+  { href: '/dictionary', label: 'Dictionary' },
+  { href: '/grammar', label: 'Grammar' },
+];
+---
+
+<Layout title="Profile — Engofy" user={user} active="profile">
+  <h1>Profile</h1>
+
+  {
+    !user ? (
+      <p>
+        <a href="/login">Sign in</a> to track your streak, skills and levels.
+      </p>
+    ) : hub && subscription ? (
+      <>
+        <p class="greeting" data-testid="profile-greeting">
+          Signed in as <strong>{user.email}</strong>
+        </p>
+
+        {hub.accountDeletion && (
+          <section class="deletion-banner" role="status" data-testid="deletion-banner">
+            <p>
+              Your account is scheduled for deletion on{' '}
+              <strong>{formatDate(hub.accountDeletion.scheduledFor)}</strong>.
+              Everything you've saved will be permanently removed.
+            </p>
+            <form method="post">
+              <input type="hidden" name="action" value="cancel-deletion" />
+              <button class="btn" type="submit">
+                Cancel deletion
+              </button>
+            </form>
+          </section>
+        )}
+
+        <section class="stat-row">
+          <div class="stat">
+            <p class="stat__num num">{hub.streak}</p>
+            <p class="stat__label">day streak</p>
+          </div>
+          <div class="stat" data-testid="plan-status">
+            <p class="stat__num">{isPremium ? 'Premium' : 'Free'}</p>
+            <p class="stat__label">
+              {
+                isPremium && subscription.currentPeriodEnd
+                  ? `renews ${formatDate(subscription.currentPeriodEnd)}`
+                  : 'current plan'
+              }
+            </p>
+          </div>
+        </section>
+
+        <nav class="quick-links" aria-label="Quick links">
+          {links.map((link) => <a href={link.href}>{link.label}</a>)}
+        </nav>
+
+        <section class="level">
+          <h2>Content difficulty level</h2>
+          <p class="level__hint">
+            Picks articles and grammar at the right difficulty for you.
+          </p>
+          <form method="post" class="level__form" data-testid="cefr-level-form">
+            <input type="hidden" name="action" value="set-level" />
+            <div class="level__options">
+              {LEVELS.map((lvl) => (
+                <label class="level__option">
+                  <input
+                    type="radio"
+                    name="cefrLevel"
+                    value={lvl}
+                    checked={lvl === hub.cefrLevel}
+                  />
+                  {lvl}
+                </label>
+              ))}
+            </div>
+            <button class="btn" type="submit">
+              Save
+            </button>
+          </form>
+          {levelError && (
+            <p class="form-error" role="alert">
+              Could not save your level, try again.
+            </p>
+          )}
+        </section>
+
+        {!hub.accountDeletion && (
+          <section class="danger">
+            <details data-testid="delete-account">
+              <summary>Delete account</summary>
+              <p>
+                Your account and all your data (cards, progress, subscription)
+                will be permanently deleted after 30 days. We'll email you a
+                link to cancel, and you can also cancel here at any time before
+                then. Premium ends immediately.
+              </p>
+              <form method="post">
+                <input type="hidden" name="action" value="request-deletion" />
+                <button class="btn btn--danger" type="submit">
+                  Delete my account
+                </button>
+              </form>
+            </details>
+          </section>
+        )}
+        {deletionError && (
+          <p class="form-error" role="alert">
+            {deletionError}
+          </p>
+        )}
+      </>
+    ) : null
+  }
+</Layout>
+
+<style>
+  .greeting {
+    margin: 0 0 1.5rem;
+    color: var(--color-ink-soft);
+  }
+  .deletion-banner {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-danger);
+    background: var(--color-highlight-wash);
+    border-radius: var(--radius-control);
+  }
+  .deletion-banner p {
+    margin: 0 0 0.75rem;
+  }
+  .stat-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat {
+    flex: 1 1 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat__num {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .stat__label {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .quick-links a {
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+  }
+  .level {
+    margin-bottom: 2rem;
+  }
+  .level__hint {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+  }
+  .level__form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .level__options {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .level__option {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+  }
+  .form-error {
+    margin: 0.5rem 0 0;
+    color: var(--color-danger);
+    font-size: 0.9rem;
+  }
+  .danger {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+  }
+  .danger summary {
+    cursor: pointer;
+    color: var(--color-danger);
+    font-weight: 600;
+  }
+  .danger p {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+  }
+  .btn--danger {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+  }
+  .btn--danger:hover {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+    filter: brightness(0.9);
+  }
+</style>
