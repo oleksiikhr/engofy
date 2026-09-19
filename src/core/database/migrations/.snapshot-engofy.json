@@ -689,6 +689,7 @@
             "find_error",
             "multiple_choice",
             "comprehension",
+            "grammar_contrastive",
             "reorder"
           ],
           "mappedType": "enum"
@@ -742,8 +743,8 @@
         },
         {
           "name": "exercises_type_check",
-          "expression": "\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'reorder')",
-          "definition": "check (\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'reorder'))",
+          "expression": "\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'grammar_contrastive', 'reorder')",
+          "definition": "check (\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'comprehension', 'grammar_contrastive', 'reorder'))",
           "columnName": "type"
         }
       ],
