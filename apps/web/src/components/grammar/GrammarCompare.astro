@@ -1,0 +1,48 @@
+---
+// "Compare with" block: hardcoded links to sibling constructions, written
+// directly in the page that uses it.
+interface Props {
+  items: { slug: string; name: string; note: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<aside class="gp-compare" data-testid="grammar-compare">
+  <h2>Compare with</h2>
+  <ul>
+    {
+      items.map((item) => (
+        <li>
+          <a href={`/grammar/${item.slug}`}>{item.name}</a>
+          <span>{item.note}</span>
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<style>
+  .gp-compare {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    background: var(--color-paper-soft);
+  }
+  .gp-compare h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+  }
+  .gp-compare ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .gp-compare li span {
+    margin-left: 0.5rem;
+    color: var(--color-ink-soft);
+  }
+</style>

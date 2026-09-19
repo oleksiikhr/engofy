@@ -1,0 +1,125 @@
+---
+import { usageActionsHtml } from '../../lib/grammar-usage-actions';
+import type { GrammarConstructionUsagePoint } from '../../lib/types';
+
+interface Props {
+  usagePoints: GrammarConstructionUsagePoint[];
+}
+
+const { usagePoints } = Astro.props;
+---
+
+<section class="usage" data-testid="grammar-usage">
+  <h2>When it's used</h2>
+  {
+    usagePoints.length === 0 && (
+      <p>No usage points recorded for this construction.</p>
+    )
+  }
+  <ul class="usage-list">
+    {
+      usagePoints.map((up) => (
+        <li class="usage-item" data-state={up.state}>
+          <div class="usage-item__head">
+            <span class="badge">{up.cefrLevel}</span>
+            <span class="usage-item__guide">{up.guideword}</span>
+          </div>
+          <p class="usage-item__can">{up.canDoStatement}</p>
+          {up.exampleText && <p class="usage-item__eg">“{up.exampleText}”</p>}
+          <Fragment
+            set:html={usageActionsHtml(up.grammarUsagePointId, up.state)}
+          />
+          <div class="usage-item__exercises" data-testid="usage-exercises">
+            <p>Practice exercises for this use are coming soon.</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .usage-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .usage-item {
+    border: 1px solid var(--color-border);
+    border-left-width: 3px;
+    border-radius: 0.6rem;
+    padding: 1rem;
+  }
+  .usage-item[data-state='learning'] {
+    border-left-color: var(--color-brand);
+  }
+  .usage-item[data-state='learned'] {
+    border-left-color: var(--color-success);
+  }
+  .usage-item[data-state='skipped'] {
+    border-left-color: var(--color-warning);
+  }
+  .usage-item__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .usage-item__guide {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-soft);
+  }
+  .usage-item__can {
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+  }
+  .usage-item__eg {
+    margin: 0 0 0.6rem;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+  .usage-item__exercises {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-faint);
+  }
+  .usage-item__exercises p {
+    margin: 0;
+  }
+</style>
+
+<!-- The action row is injected via set:html (shared with the HTMX partial),
+     so its selectors must be global. -->
+<style is:global>
+  .gup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .gup-actions form {
+    margin: 0;
+  }
+  .gup-state {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+  .gup-state--learning {
+    color: var(--color-brand-strong);
+  }
+  .gup-state--learned {
+    color: var(--color-success);
+  }
+  .gup-state--skipped {
+    color: var(--color-warning);
+  }
+</style>
