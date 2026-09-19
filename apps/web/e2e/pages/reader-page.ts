@@ -5,12 +5,14 @@ export class ReaderPage {
   readonly badge: Locator;
   readonly analysis: Locator;
   readonly fillBlank: Locator;
+  readonly popup: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.badge = page.locator('.post-head .badge');
     this.analysis = page.locator('.analysis');
     this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
+    this.popup = page.locator('.lex-popup');
   }
 
   async goto(slug: string) {
