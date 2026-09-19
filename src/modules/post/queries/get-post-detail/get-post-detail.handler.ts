@@ -9,15 +9,19 @@ import { LearningCard } from '../../../learning/entities/learning-card.entity.js
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
+import { locateGrammarMatch } from '../../domain/locate-grammar-match.js';
 import { parseDoc } from '../../domain/node-tree.parser.js';
 import type { SpanNode } from '../../domain/node-tree.types.js';
 import { assembleDocFromParts } from '../../domain/post-parts.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
+import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
+import { Sentence } from '../../entities/sentence.entity.js';
+import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { Word } from '../../entities/word.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
@@ -25,6 +29,7 @@ import { PostStatus } from '../../enums/post-status.enum.js';
 import { GetPostDetailQuery } from './get-post-detail.query.js';
 import type {
   GrammarAnnotationView,
+  GrammarMatchView,
   PhraseAnnotationView,
   PostDetailView,
   PostExerciseView,
@@ -35,6 +40,7 @@ interface ResolvedAnnotations {
   words: Record<string, WordAnnotationView>;
   phrases: Record<string, PhraseAnnotationView>;
   grammar: Record<string, GrammarAnnotationView>;
+  grammarMatches: GrammarMatchView[];
 }
 
 interface Viewer {
@@ -45,8 +51,9 @@ interface Viewer {
 // Backs `/posts/{slug}-{id}` (PLAN.md §4, §6): the reassembled node tree plus
 // the lexicon/grammar entries the inline spans reference, and the post's
 // exercises. Only published posts are visible (guests included, PLAN.md §2).
-// The inline analysis comes from the node-tree spans, not the parallel spaCy
-// `sentences` / `grammar_matches` layer (PLAN.md §12).
+// Word/phrase analysis comes from the node-tree spans, not the parallel spaCy
+// `sentences` layer (PLAN.md §12); only `grammar_matches` is read from that
+// layer, resolved to char ranges in the node tree's text coordinates.
 @QueryHandler(GetPostDetailQuery)
 export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   constructor(private readonly em: EntityManager) {}
@@ -83,7 +90,12 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     // that wrote a malformed node surfaces (InvalidNodeTreeError).
     const doc = parseDoc(assembleDocFromParts(parts));
     const spans = collectSpanNodes(doc.children);
-    const annotations = await this.resolveAnnotations(spans, userId);
+    const annotations = await this.resolveAnnotations(
+      spans,
+      userId,
+      post.id,
+      parts,
+    );
 
     return {
       shortId: post.shortId,
@@ -103,6 +115,8 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   private async resolveAnnotations(
     spans: SpanNode[],
     userId: string | null,
+    postId: string,
+    parts: PostPart[],
   ): Promise<ResolvedAnnotations> {
     const wordDefinitionIds = unique(
       spans.map((span) =>
@@ -127,13 +141,14 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       : null;
     const viewer = userId && userCefrLevel ? { userId, userCefrLevel } : null;
 
-    const [words, phrases, grammar] = await Promise.all([
+    const [words, phrases, grammar, grammarMatches] = await Promise.all([
       this.resolveWords(wordDefinitionIds, viewer),
       this.resolvePhrases(phraseIds, viewer),
       this.resolveGrammar(grammarSlugs),
+      this.resolveGrammarMatches(postId, parts, viewer),
     ]);
 
-    return { words, phrases, grammar };
+    return { words, phrases, grammar, grammarMatches };
   }
 
   private async resolveWords(
@@ -216,7 +231,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   // disposition -> CEFR default -> New). An empty map means "all New".
   private async resolveStates(
     viewer: Viewer | null,
-    targetKey: 'wordDefinitionId' | 'phraseId',
+    targetKey: 'wordDefinitionId' | 'phraseId' | 'grammarUsagePointId',
     targets: { id: string; cefrLevel: CefrLevel | null }[],
   ): Promise<Map<string, EffectiveState>> {
     const states = new Map<string, EffectiveState>();
@@ -259,6 +274,104 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       );
     }
     return states;
+  }
+
+  // Placed grammar usage points for the reader's spans: each `grammar_matches`
+  // row (sentence-relative token range) is mapped to a char range in its
+  // block's unit text. A row that can't be placed (stale sentence text, no
+  // covered token) is dropped, not painted on the wrong text.
+  private async resolveGrammarMatches(
+    postId: string,
+    parts: PostPart[],
+    viewer: Viewer | null,
+  ): Promise<GrammarMatchView[]> {
+    const sentences = await this.em.find(
+      Sentence,
+      { postId },
+      { disableIdentityMap: true },
+    );
+    if (sentences.length === 0) {
+      return [];
+    }
+    const matches = await this.em.find(
+      GrammarMatch,
+      { sentenceId: { $in: sentences.map((s) => s.id) } },
+      { disableIdentityMap: true },
+    );
+    if (matches.length === 0) {
+      return [];
+    }
+
+    const matchedSentenceIds = unique(matches.map((m) => m.sentenceId));
+    const [tokens, points] = await Promise.all([
+      this.em.find(
+        SentenceToken,
+        { sentenceId: { $in: matchedSentenceIds } },
+        { disableIdentityMap: true },
+      ),
+      this.em.find(
+        GrammarUsagePoint,
+        { id: { $in: unique(matches.map((m) => m.grammarUsagePointId)) } },
+        { disableIdentityMap: true },
+      ),
+    ]);
+    const states = await this.resolveStates(
+      viewer,
+      'grammarUsagePointId',
+      points.map((p) => ({ id: p.id, cefrLevel: p.cefrLevel })),
+    );
+
+    const sentenceById = new Map(sentences.map((s) => [s.id, s]));
+    const tokensBySentence = new Map<string, SentenceToken[]>();
+    for (const token of tokens) {
+      const list = tokensBySentence.get(token.sentenceId) ?? [];
+      list.push(token);
+      tokensBySentence.set(token.sentenceId, list);
+    }
+    // `parts` is sorted by blockIndex — its position is the Doc.children index.
+    const blockIndexByPartId = new Map(parts.map((p, i) => [p.id, i]));
+    const partById = new Map(parts.map((p) => [p.id, p]));
+    const knownPointIds = new Set(points.map((p) => p.id));
+
+    const out: GrammarMatchView[] = [];
+    for (const match of matches) {
+      const sentence = sentenceById.get(match.sentenceId);
+      const part = sentence && partById.get(sentence.postPartId);
+      const blockIndex =
+        sentence && blockIndexByPartId.get(sentence.postPartId);
+      if (
+        !sentence ||
+        !part ||
+        blockIndex === undefined ||
+        !knownPointIds.has(match.grammarUsagePointId)
+      ) {
+        continue;
+      }
+      const located = locateGrammarMatch({
+        block: part.body,
+        sentence,
+        tokens: tokensBySentence.get(sentence.id) ?? [],
+        match,
+      });
+      if (!located) {
+        continue;
+      }
+      out.push({
+        blockIndex,
+        ...located,
+        grammarUsagePointId: match.grammarUsagePointId,
+        state: states.get(match.grammarUsagePointId) ?? EffectiveState.New,
+      });
+    }
+
+    return out.sort(
+      (a, b) =>
+        a.blockIndex - b.blockIndex ||
+        (a.itemIndex ?? 0) - (b.itemIndex ?? 0) ||
+        a.charStart - b.charStart ||
+        a.charEnd - b.charEnd ||
+        a.grammarUsagePointId.localeCompare(b.grammarUsagePointId),
+    );
   }
 
   private async resolveGrammar(

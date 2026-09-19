@@ -50,6 +50,22 @@ export interface GrammarAnnotationView {
   usagePoints: GrammarUsagePointView[];
 }
 
+// One grammar_matches row placed on the doc: a usage point detected in a
+// sentence, resolved to a char range in its block's flattened unit text (the
+// coordinate system of the node tree's text nodes). `state` is the viewer's
+// effective state for the usage point; the reader labels only new/learning.
+export interface GrammarMatchView {
+  // Index within Doc.children.
+  blockIndex: number;
+  // Index within a ListBlock's items; null for a paragraph.
+  itemIndex: number | null;
+  // Half-open char range within the unit's plain text.
+  charStart: number;
+  charEnd: number;
+  grammarUsagePointId: string;
+  state: EffectiveState;
+}
+
 export interface PostExerciseView {
   id: string;
   type: ExerciseType;
@@ -79,6 +95,8 @@ export interface PostDetailView {
     phrases: Record<string, PhraseAnnotationView>;
     // Keyed by construction slug (the value of a span's `grammarConstruct`).
     grammar: Record<string, GrammarAnnotationView>;
+    // Sorted by position in the doc.
+    grammarMatches: GrammarMatchView[];
   };
   exercises: PostExerciseView[];
 }
