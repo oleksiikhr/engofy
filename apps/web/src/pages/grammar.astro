@@ -1,78 +1,109 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
+import {
+  GRAMMAR_CEFR_LEVELS,
+  GRAMMAR_GROUP_BY,
+  GRAMMAR_GROUP_BY_LABEL,
+  GRAMMAR_STATE_LABEL,
+  parseGrammarQuery,
+  toGrammarApiQuery,
+} from '../lib/grammar-list';
 import { getCurrentUser } from '../lib/session';
-import type { CefrLevel, GrammarReference } from '../lib/types';
-
-const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+import type { GrammarReference } from '../lib/types';
 
 const user = await getCurrentUser(Astro.request);
-const cefrParam = Astro.url.searchParams.get('cefr') ?? '';
-const cefr = (LEVELS as string[]).includes(cefrParam)
-  ? (cefrParam as CefrLevel)
-  : null;
+const query = parseGrammarQuery(Astro.url.searchParams);
 
 const ref = await apiGet<GrammarReference>(
-  cefr ? `/content/grammar?cefr=${cefr}` : '/content/grammar',
+  `/content/grammar?${toGrammarApiQuery(query)}`,
   { request: Astro.request },
 );
 
-const categories = ref.categories.filter((c) => c.constructions.length > 0);
-
-// HTMX pulls #grammar-panel (filter chips + list) out of the re-rendered page
-// so the active chip updates too. Plain <a href> is the no-JS fallback.
-const filterAttrs = (href: string) => ({
-  href,
-  'hx-get': href,
-  'hx-target': '#grammar-panel',
-  'hx-select': '#grammar-panel',
-  'hx-swap': 'outerHTML',
-  'hx-push-url': 'true',
-});
+const groups = ref.groups.filter((g) => g.constructions.length > 0);
 ---
 
 <Layout title="Grammar — Engofy" user={user} active="grammar">
   <h1>Grammar reference</h1>
   <p class="grammar-intro">
-    The Cambridge English Grammar Profile — {ref.categories.length} categories, filtered
-    by the level you're working on.
+    The Cambridge English Grammar Profile — filter by the levels you're working
+    on and group the list the way that helps you most.
   </p>
 
-  <div id="grammar-panel">
-    <div class="grammar-filter" role="group" aria-label="Filter by CEFR level">
-      <a
-        class:list={['chip', { 'chip--on': !cefr }]}
-        {...filterAttrs('/grammar')}
-      >
-        All
-      </a>
+  <form
+    id="grammar-filters"
+    method="get"
+    action="/grammar"
+    hx-get="/grammar"
+    hx-target="#grammar-results"
+    hx-select="#grammar-results"
+    hx-swap="outerHTML"
+    hx-push-url="true"
+    hx-trigger="change, submit"
+    class="grammar-controls"
+  >
+    <fieldset class="grammar-chips" data-testid="grammar-levels">
+      <legend>Level</legend>
       {
-        LEVELS.map((lvl) => (
-          <a
-            class:list={['chip', { 'chip--on': cefr === lvl }]}
-            {...filterAttrs(`/grammar?cefr=${lvl}`)}
-          >
-            {lvl}
-          </a>
+        GRAMMAR_CEFR_LEVELS.map((level) => (
+          <label class="grammar-chip">
+            <input
+              type="checkbox"
+              name="cefr"
+              value={level}
+              checked={query.cefr.includes(level)}
+            />
+            <span>{level}</span>
+          </label>
         ))
       }
-    </div>
+    </fieldset>
 
+    <fieldset class="grammar-chips" data-testid="grammar-group-by">
+      <legend>Group by</legend>
+      {
+        GRAMMAR_GROUP_BY.map((axis) => (
+          <label class="grammar-chip">
+            <input
+              type="radio"
+              name="groupBy"
+              value={axis}
+              checked={query.groupBy === axis}
+            />
+            <span>{GRAMMAR_GROUP_BY_LABEL[axis]}</span>
+          </label>
+        ))
+      }
+    </fieldset>
+
+    <noscript><button class="btn" type="submit">Apply</button></noscript>
+  </form>
+
+  <div id="grammar-results">
     {
-      categories.length === 0 && (
+      groups.length === 0 && (
         <p data-testid="grammar-empty">No constructions at this level yet.</p>
       )
     }
     {
-      categories.map((cat) => (
-        <section class="grammar-cat">
-          <h2>{cat.name}</h2>
+      groups.map((group) => (
+        <section class="grammar-cat" data-group={group.key}>
+          <h2>{group.name}</h2>
           <ul class="grammar-cons">
-            {cat.constructions.map((con) => (
+            {group.constructions.map((con) => (
               <li>
-                <a href={`/grammar/${con.slug}`}>
+                <a
+                  href={`/grammar/${con.slug}`}
+                  class={`grammar-con grammar-con--${con.state}`}
+                  data-state={con.state}
+                >
                   {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
                   <span class="grammar-cons__name">{con.name}</span>
+                  {con.state !== 'new' && (
+                    <span class="grammar-cons__state">
+                      {GRAMMAR_STATE_LABEL[con.state]}
+                    </span>
+                  )}
                   <span class="grammar-cons__count">
                     {con.usagePointCount} use{con.usagePointCount === 1 ? '' : 's'}
                   </span>
@@ -91,27 +122,53 @@ const filterAttrs = (href: string) => ({
     color: var(--color-ink-soft);
     margin-bottom: 1rem;
   }
-  .grammar-filter {
+  .grammar-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.75rem 1.5rem;
     margin-bottom: 1.5rem;
   }
-  .chip {
-    display: inline-block;
-    padding: 0.25rem 0.7rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-border-strong);
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--color-ink);
+  .grammar-chips {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .grammar-chips legend {
+    float: left;
+    padding: 0;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+  .grammar-chip {
     cursor: pointer;
   }
-  .chip--on {
-    background: var(--color-brand);
+  .grammar-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .grammar-chip span {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-ink-soft);
+  }
+  .grammar-chip input:checked + span {
+    background: var(--color-brand-wash);
     border-color: var(--color-brand);
-    color: #fff;
+    color: var(--color-brand-strong);
+    font-weight: 600;
+  }
+  .grammar-chip input:focus-visible + span {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
   }
   .grammar-cat {
     margin-bottom: 1.75rem;
@@ -129,6 +186,7 @@ const filterAttrs = (href: string) => ({
     gap: 0.6rem;
     padding: 0.6rem 0.8rem;
     border: 1px solid var(--color-border);
+    border-left-width: 3px;
     border-radius: 0.5rem;
     text-decoration: none;
     color: var(--color-ink);
@@ -136,8 +194,32 @@ const filterAttrs = (href: string) => ({
   .grammar-cons a:hover {
     border-color: var(--color-brand);
   }
+  .grammar-con--learning {
+    border-left-color: var(--color-brand);
+    background: var(--color-brand-wash);
+  }
+  .grammar-con--learned {
+    border-left-color: var(--color-success);
+  }
+  .grammar-con--skipped {
+    border-left-color: var(--color-warning);
+    color: var(--color-ink-soft);
+  }
   .grammar-cons__name {
     font-weight: 600;
+  }
+  .grammar-cons__state {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+  .grammar-con--learned .grammar-cons__state {
+    color: var(--color-success);
+  }
+  .grammar-con--skipped .grammar-cons__state {
+    color: var(--color-warning);
   }
   .grammar-cons__count {
     margin-left: auto;
