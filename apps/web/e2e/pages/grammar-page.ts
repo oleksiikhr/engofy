@@ -3,12 +3,12 @@ import { expect, type Locator, type Page } from '@playwright/test';
 export class GrammarPage {
   readonly page: Page;
   readonly heading: Locator;
-  readonly activeChip: Locator;
+  readonly checkedLevels: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole('heading', { name: 'Grammar reference' });
-    this.activeChip = page.locator('.chip--on');
+    this.checkedLevels = page.locator('input[name="cefr"]:checked');
   }
 
   async goto(query?: string) {
@@ -24,7 +24,29 @@ export class GrammarPage {
     return this.page.locator('.grammar-cat', { hasText: name });
   }
 
-  async filterByCefr(level: string) {
-    await this.page.getByRole('link', { name: level, exact: true }).click();
+  groupByName(name: string): Locator {
+    return this.page.locator('.grammar-cat', {
+      has: this.page.getByRole('heading', { name, exact: true }),
+    });
+  }
+
+  // The chip's checkbox is visually hidden; its <span> is what a user clicks.
+  async toggleCefr(level: string) {
+    await this.page
+      .getByTestId('grammar-levels')
+      .locator('label', { hasText: level })
+      .click();
+  }
+
+  async groupBy(axis: string) {
+    await this.page
+      .getByTestId('grammar-group-by')
+      .locator('label', { hasText: axis })
+      .click();
+  }
+
+  // The dev DB also holds the real EGP data, so name-based lookups collide.
+  constructionLink(slug: string): Locator {
+    return this.page.locator(`a[href="/grammar/${slug}"]`);
   }
 }

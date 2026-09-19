@@ -51,10 +51,10 @@ CEFR multi-select фільтр (той самий формат параметр�
 категорія→часовий блок (Past/Present/Future, хардкод у коді, категорії поза цією
 віссю → "Інше") / по CEFR. Той самий набір даних, інше групування у відповіді.
 
-### [ ] 3. Фронтенд /grammar (список)
+### [x] 3. Фронтенд /grammar (список)
 - Branch: `grammar-page-redesign-03-list-page`
-- Base: `grammar-page-redesign-02-grouping-cefr-filter`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/39
 
 Редизайн `apps/web/src/pages/grammar.astro`: перемикач групування, CEFR-чипси
 (multi-select, узгоджено з патерном на `/posts`/`/practice`), підсвітка стану

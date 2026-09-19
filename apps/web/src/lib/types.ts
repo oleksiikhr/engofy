@@ -193,12 +193,15 @@ export interface GrammarRefConstruction {
   usagePointCount: number;
   state: EffectiveState;
 }
-export interface GrammarRefCategory {
+export interface GrammarRefGroup {
+  // Stable id within the axis: category name, `past`/`present`/`future`/`other`
+  // or a CEFR level.
+  key: string;
   name: string;
   constructions: GrammarRefConstruction[];
 }
 export interface GrammarReference {
-  categories: GrammarRefCategory[];
+  groups: GrammarRefGroup[];
 }
 export interface GrammarConstructionUsagePoint extends GrammarUsagePointRef {
   state: EffectiveState;
