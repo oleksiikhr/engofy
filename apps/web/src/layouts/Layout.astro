@@ -1,8 +1,13 @@
 ---
+import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { apiGetOrNull } from '../lib/api';
 import { bootScript } from '../lib/prefs';
-import type { CurrentUser, StreakResponse } from '../lib/types';
+import type {
+  CurrentUser,
+  DueCardCountResponse,
+  StreakResponse,
+} from '../lib/types';
 import '../styles/app.css';
 
 interface Props {
@@ -21,16 +26,21 @@ const {
   measure = false,
 } = Astro.props;
 
-// Day streak in the header (PLAN.md §16/§17 Track B) — every page, not just
-// the reader, so it stays a stable "you're on a streak" signal rather than
-// something the reader has to re-establish per article.
-const streak = user
-  ? ((
-      await apiGetOrNull<StreakResponse>('/learning/streak', {
+// Day streak and Practice due-count in the header — every page, not just the
+// reader, so they stay stable "you're on a streak / cards are waiting" signals
+// rather than something each page has to re-establish.
+const [streakResponse, dueResponse] = user
+  ? await Promise.all([
+      apiGetOrNull<StreakResponse>('/learning/streak', {
         request: Astro.request,
-      })
-    )?.streak ?? 0)
-  : 0;
+      }),
+      apiGetOrNull<DueCardCountResponse>('/learning/due-count', {
+        request: Astro.request,
+      }),
+    ])
+  : [null, null];
+const streak = streakResponse?.streak ?? 0;
+const dueCount = dueResponse?.dueCount ?? 0;
 ---
 
 <!doctype html>
@@ -45,10 +55,11 @@ const streak = user
     <title>{title}</title>
   </head>
   <body>
-    <SiteHeader user={user} active={active} streak={streak} />
+    <SiteHeader user={user} active={active} streak={streak} dueCount={dueCount} />
     <main class:list={['site-main', { 'reading-measure': measure }]}>
       <slot />
     </main>
+    <SiteFooter active={active} />
     <script>
       // The npm ESM build doesn't self-assign window.htmx (unlike the CDN
       // script build). Pages call window.htmx.process(...) after injecting

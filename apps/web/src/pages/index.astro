@@ -111,7 +111,7 @@ const showGrammar = !!plan && !summary && plan.isRead && !!cards && cards.items.
 const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 ---
 
-<Layout title="Engofy" user={user} active="today">
+<Layout title="Engofy" user={user}>
   {
     !user && (
       <div class="landing">
