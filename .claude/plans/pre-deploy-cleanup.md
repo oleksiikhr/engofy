@@ -94,10 +94,10 @@ TODO в `src/entrypoints/web/profile/dto/profile-hub-response.dto.ts:16` роз�
 
 Перевірка: ispec для `get-profile`/profile-hub, оновити e2e `profile.spec.ts`.
 
-### [ ] 5. Лендинг для гостя (два TODO в `index.astro`)
+### [x] 5. Лендинг для гостя (два TODO в `index.astro`)
 - Branch: `pre-deploy-cleanup-05-guest-landing`
-- Base: `pre-deploy-cleanup-04-profile-daily-plan`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/57
 
 `apps/web/src/pages/index.astro:88,92`: секції «Features» і «Product screenshots» порожні, гість бачить
 заголовок, кнопку та два розділювачі. `prompt.txt`, на який посилається коментар, у репо немає.
