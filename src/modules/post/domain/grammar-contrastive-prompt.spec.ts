@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import {
   buildGrammarContrastiveUserText,
   grammarContrastiveToolSchema,
@@ -77,5 +78,32 @@ describe('grammarContrastiveToolSchema', () => {
         result({ optionExplanations: ['only one'] }),
       ),
     ).toThrow();
+  });
+
+  it('unwraps array fields the model sent as JSON-encoded strings', () => {
+    const parsed = grammarContrastiveToolSchema.parse(
+      result({
+        options: JSON.stringify(['has lived', 'lived', 'was living']),
+        optionExplanations: JSON.stringify(['a', 'b', 'c']),
+      }),
+    );
+    expect(parsed.options).toEqual(['has lived', 'lived', 'was living']);
+    expect(parsed.optionExplanations).toEqual(['a', 'b', 'c']);
+  });
+
+  it('still rejects a string that is not a JSON array', () => {
+    expect(() =>
+      grammarContrastiveToolSchema.parse(
+        result({ options: 'has lived, lived, was living' }),
+      ),
+    ).toThrow();
+  });
+
+  it('advertises the array fields as arrays in the JSON schema', () => {
+    const json = z.toJSONSchema(grammarContrastiveToolSchema) as {
+      properties: Record<string, { type?: string }>;
+    };
+    expect(json.properties.options?.type).toBe('array');
+    expect(json.properties.optionExplanations?.type).toBe('array');
   });
 });

@@ -3,6 +3,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
+import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.error.js';
 import type { GrammarContrastiveResult } from '../../domain/grammar-contrastive-prompt.js';
 import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
@@ -225,6 +226,63 @@ describe('GenerateExercisesHandler', () => {
       stage: PostPipelineStage.AiExercises,
     });
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
+  });
+
+  it('retries a malformed model payload for a usage point and keeps the exercise', async () => {
+    const postId = await seedPostWithSentence(suite.orm.em);
+    await seedGrammar(suite.orm.em, postId);
+    fakeAi.onCompleteStructured = () => {
+      if (fakeAi.structuredCallCount < 3) {
+        throw new AiSchemaMismatchError('report_grammar_contrastive');
+      }
+      return FIXTURE_CONTRASTIVE;
+    };
+
+    await suite.command(new GenerateExercisesCommand(postId));
+
+    expect(fakeAi.structuredCallCount).toBe(3);
+    expect(
+      await suite.orm.em.count(Exercise, {
+        postId,
+        type: ExerciseType.GrammarContrastive,
+      }),
+    ).toBe(1);
+  });
+
+  it('skips a usage point whose payload stays malformed instead of failing the stage', async () => {
+    const postId = await seedPostWithSentence(suite.orm.em);
+    await seedGrammar(suite.orm.em, postId);
+    fakeAi.onCompleteStructured = () => {
+      throw new AiSchemaMismatchError('report_grammar_contrastive');
+    };
+
+    await suite.command(new GenerateExercisesCommand(postId));
+
+    expect(fakeAi.structuredCallCount).toBe(3);
+    expect(
+      await suite.orm.em.count(Exercise, {
+        postId,
+        type: ExerciseType.GrammarContrastive,
+      }),
+    ).toBe(0);
+    const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
+      postId,
+      stage: PostPipelineStage.AiExercises,
+    });
+    expect(run.status).toBe(PostPipelineRunStatus.Completed);
+  });
+
+  it('propagates a non-schema AI error so the stage retries', async () => {
+    const postId = await seedPostWithSentence(suite.orm.em);
+    await seedGrammar(suite.orm.em, postId);
+    fakeAi.onCompleteStructured = () => {
+      throw new Error('overloaded');
+    };
+
+    await expect(
+      suite.command(new GenerateExercisesCommand(postId)),
+    ).rejects.toThrow('overloaded');
+    expect(fakeAi.structuredCallCount).toBe(1);
   });
 
   it('makes no AI call when the post has no grammar matches', async () => {

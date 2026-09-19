@@ -6,6 +6,7 @@ import {
   AI_CLIENT,
   type AiClient,
 } from '../../../../core/ai/ai-client.port.js';
+import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.error.js';
 import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import {
@@ -33,6 +34,9 @@ import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import type { PostPublishJobData } from '../publish-post/publish-post.handler.js';
 import { GenerateExercisesCommand } from './generate-exercises.command.js';
+
+// Model calls per usage point before a malformed payload is skipped.
+const CONTRASTIVE_MAX_ATTEMPTS = 3;
 
 export interface PostAiExercisesJobData {
   postId: string;
@@ -273,10 +277,26 @@ export class GenerateExercisesHandler
       });
     }
 
-    return Promise.all(
-      requests.map(async ({ userText, ...ids }) => ({
-        ...ids,
-        result: await this.ai.completeStructured({
+    const items = await Promise.all(
+      requests.map(async ({ userText, ...ids }) => {
+        const result = await this.completeContrastive(userText, ids);
+        return result ? { ...ids, result } : null;
+      }),
+    );
+    return items.filter((item) => item !== null);
+  }
+
+  // One usage point's model call, retried on a malformed payload. A point
+  // that still fails after the last attempt is skipped: its bad payload must
+  // not fail the stage for every other point (a stage retry re-runs all of them).
+  private async completeContrastive(
+    userText: string,
+    ids: { grammarUsagePointId: string; sentenceId: string },
+  ): Promise<GrammarContrastiveResult | null> {
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        // biome-ignore lint/performance/noAwaitInLoops: each attempt only runs after the previous one failed.
+        return await this.ai.completeStructured({
           system: GRAMMAR_CONTRASTIVE_SYSTEM_PROMPT,
           userText,
           tool: {
@@ -285,9 +305,20 @@ export class GenerateExercisesHandler
               'Report the contrastive explanation and multiple-choice question for the marked construction.',
             schema: grammarContrastiveToolSchema,
           },
-        }),
-      })),
-    );
+        });
+      } catch (err) {
+        if (!(err instanceof AiSchemaMismatchError)) {
+          throw err;
+        }
+        if (attempt >= CONTRASTIVE_MAX_ATTEMPTS) {
+          this.logger.warn(
+            { err, ...ids, attempts: attempt },
+            'grammar_contrastive skipped: model payload failed schema validation',
+          );
+          return null;
+        }
+      }
+    }
   }
 }
 
