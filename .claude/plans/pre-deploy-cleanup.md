@@ -77,7 +77,7 @@ Playwright 83/83; pytest 8/8. Конвеєр: 7 стадій `completed`, $0.05 
 
 ### [ ] 4. Статус щоденного плану в profile hub (TODO)
 - Branch: `pre-deploy-cleanup-04-profile-daily-plan`
-- Base: `main`
+- Base: `pre-deploy-cleanup-03-publish-gate-stop`
 - PR: —
 
 TODO в `src/entrypoints/web/profile/dto/profile-hub-response.dto.ts:16` розблоковано: `daily_plans` і
