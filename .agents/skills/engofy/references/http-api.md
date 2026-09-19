@@ -13,7 +13,7 @@ importing exactly one domain module + one controller. Sub-modules: `internal`,
 | # | Rule | Reference |
 |---|---|---|
 | H1 | Controllers inject **only the domain facade**; no `EntityManager`, `CommandBus`/`QueryBus`, or handler. | `learning.controller.ts:57-58` |
-| H2 | Controller body = call the facade, map the view → response DTO with an **explicit `to<X>Response` mapper** (never a structural passthrough). No logic, no `em`. (`ContentController` still has `parseSlugId` + `NotFoundException` — trim it.) | `content.controller.ts` `toFeedResponse`/`toPostDetailResponse`; `billing.controller.ts:17-29` |
+| H2 | Controller body = call the facade, map the view → response DTO with an **explicit `to<X>Response` mapper** (never a structural passthrough). No logic, no `em`. (`ContentController` still has `parseSlugId` + `NotFoundException` — trim it.) | `content.controller.ts` `toPostsListResponse`/`toPostDetailResponse`; `billing.controller.ts:17-29` |
 | H3 | `SessionAuthGuard` is the global `APP_GUARD` — registered in `web.module.ts` `forRoot` (Batch F), so it applies to every sub-module composition, `ThrottlerGuard`'s `APP_GUARD` runs before it, and `ETagInterceptor`'s `APP_INTERCEPTOR` sits alongside. `@Public()` is the opt-out. | `entrypoints/web/web.module.ts` |
 | H4 | Read the authenticated identity only via `@CurrentUser(): UserActor` (backed by `request.raw.actor`). | `profile.controller.ts:16` |
 | H5 | POST that isn't "created" → `@HttpCode(HttpStatus.OK)`. `POST /learning/cards` has it (Batch F — idempotent re-add). | `learning.controller.ts` `addCard`; `auth.controller.ts:41` |
@@ -28,7 +28,7 @@ importing exactly one domain module + one controller. Sub-modules: `internal`,
 `configureApp` (see below) calls `setGlobalPrefix('api', { exclude: [{ path:
 '_healthz', method: RequestMethod.ALL }] })`; `build-openapi-document.ts` adds
 `.addServer('/api')` and generates the doc with `ignoreGlobalPrefix: true` (so
-paths stay `/content/feed` and the server entry re-adds `/api` — no `/api/api`).
+paths stay `/content/posts` and the server entry re-adds `/api` — no `/api/api`).
 The web ispec helper (`e2e-suite.helper.ts` `request()`) prepends `/api`
 transparently; `apps/web`'s `src/lib/api.ts` `call()` does the same for SSR
 fetches (Batch R5 — the app previously hit bare `/feed` and 404'd).
@@ -36,7 +36,7 @@ fetches (Batch R5 — the app previously hit bare `/feed` and 404'd).
 ## Controller path prefixes
 
 Every web controller declares a path prefix so no route sits at the bare root.
-`ContentController` is `@Controller('content')` (Batch R5) — `content/feed`,
+`ContentController` is `@Controller('content')` (Batch R5) — `content/posts`,
 `content/posts/:slugId`, `content/grammar`, `content/grammar/:slug`, i.e.
 `/api/content/*`. It used to be `@Controller()` (top-level `feed`/`posts`/
 `grammar`), a future-collision risk.
@@ -45,11 +45,10 @@ Every web controller declares a path prefix so no route sits at the bare root.
 
 Shared envelope `OffsetPage<T>` = `{ items: T[]; nextOffset: number | null }`
 lives in `core/http/dto/offset-page.ts` (+ `toOffsetPage` builder). **Every**
-list endpoint now returns it: `FeedResponseDto` (real pagination — `nextOffset`
-points at the next page), plus `PracticeQueueResponseDto` and
-`DictionaryResponseDto` (Batch R5). The latter two are limit-capped single-shot
-reads with no `offset` param, so their `nextOffset` is **always `null`** — the
-field is there for wire consistency, not because they paginate. `practice` was a
+list endpoint now returns it: `PracticeQueueResponseDto` and
+`DictionaryResponseDto` (Batch R5). Both are limit-capped single-shot reads with
+no `offset` param, so their `nextOffset` is **always `null`** — the field is
+there for wire consistency, not because they paginate. `practice` was a
 bare array and `dictionary` was `{ items }` before R5.
 
 ## Response-DTO independence — D14 (partial, Batch F)

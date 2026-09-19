@@ -159,32 +159,11 @@ describe('ContentController', () => {
     return { cookie: `${cookieName()}=${token}`, userId: user.id };
   }
 
-  it('lists a published post in the feed with an excerpt', async () => {
-    const { shortId } = await seedPublishedPost(suite.orm.em);
-
-    const res = await suite
-      .request('get', '/content/feed')
-      .expect(HttpStatus.OK);
-
-    const item = res.body.items.find(
-      (entry: { shortId: string }) => entry.shortId === shortId,
-    );
-    expect(item).toMatchObject({
-      title: 'A Short Trip',
-      cefrLevel: 'A2',
-      attributionText: 'Example News, "On travel"',
-      sourceType: 'news_snippet',
-      sourceLink: 'https://example.com/article',
-    });
-    expect(item.excerpt).toContain('travel');
-    expect(res.body.nextOffset).toBeNull();
-  });
-
   it('sets Cache-Control + ETag on a content GET and 304s a matching revalidation', async () => {
     await seedPublishedPost(suite.orm.em);
 
     const first = await suite
-      .request('get', '/content/feed')
+      .request('get', '/content/posts/suggestions?q=trip')
       .expect(HttpStatus.OK);
     expect(first.headers['cache-control']).toBe('public');
     const etag = first.headers.etag as string;
@@ -194,16 +173,16 @@ describe('ContentController', () => {
     // A matching If-None-Match short-circuits to 304 with no body — proof the
     // ETag the interceptor issued is a real content hash, not a placeholder.
     await suite
-      .request('get', '/content/feed')
+      .request('get', '/content/posts/suggestions?q=trip')
       .set('If-None-Match', etag)
       .expect(HttpStatus.NOT_MODIFIED);
   });
 
-  it('treats a blank ?limit= / ?offset= as the default, not a 400', async () => {
+  it('treats a blank ?limit= as the default, not a 400', async () => {
     await seedPublishedPost(suite.orm.em);
 
     const res = await suite
-      .request('get', '/content/feed?limit=&offset=')
+      .request('get', '/content/posts/suggestions?q=trip&limit=')
       .expect(HttpStatus.OK);
 
     expect(Array.isArray(res.body.items)).toBe(true);
@@ -620,10 +599,15 @@ describe('ContentController', () => {
 
   it('serves under the /api/content prefix and not at the root', async () => {
     const server = suite.app.getHttpServer();
-    await request(server).get('/feed').expect(HttpStatus.NOT_FOUND);
-    await request(server).get('/content/feed').expect(HttpStatus.NOT_FOUND);
-    await request(server).get('/api/feed').expect(HttpStatus.NOT_FOUND);
-    await request(server).get('/api/content/feed').expect(HttpStatus.OK);
+    await request(server)
+      .get('/content/posts/suggestions?q=trip')
+      .expect(HttpStatus.NOT_FOUND);
+    await request(server)
+      .get('/api/posts/suggestions?q=trip')
+      .expect(HttpStatus.NOT_FOUND);
+    await request(server)
+      .get('/api/content/posts/suggestions?q=trip')
+      .expect(HttpStatus.OK);
   });
 
   it('404s an unknown construction slug', async () => {

@@ -18,7 +18,6 @@ import { SpacyParsePostHandler } from './commands/spacy-parse-post/spacy-parse-p
 import { TagGrammarHandler } from './commands/tag-grammar/tag-grammar.handler.js';
 import { PostService } from './post.service.js';
 import { PostQueueBootstrapService } from './post-queue-bootstrap.service.js';
-import { GetFeedHandler } from './queries/get-feed/get-feed.handler.js';
 import { GetGrammarConstructionHandler } from './queries/get-grammar-construction/get-grammar-construction.handler.js';
 import { GetGrammarReferenceHandler } from './queries/get-grammar-reference/get-grammar-reference.handler.js';
 import { GetPostDetailHandler } from './queries/get-post-detail/get-post-detail.handler.js';
@@ -40,7 +39,6 @@ const commandHandlers = [
 ];
 
 const queryHandlers = [
-  GetFeedHandler,
   GetPostsListHandler,
   GetPostSuggestionsHandler,
   GetPostDetailHandler,

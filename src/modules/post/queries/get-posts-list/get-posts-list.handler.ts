@@ -28,9 +28,7 @@ interface PostRow {
 }
 
 // Backs `/posts` (posts-list-page §1): published posts, newest first,
-// keyset-paginated on `(published_at, id)` — the pagination model the TODO
-// in `get-feed` describes but never migrated to (that endpoint is untouched
-// by this plan). CEFR multi-select, a word/phrase `term` (EXISTS over
+// keyset-paginated on `(published_at, id)`. CEFR multi-select, a word/phrase `term` (EXISTS over
 // `sentence_tokens`, posts-list-page §2) and "unread only" (LEFT JOIN
 // `post_reads`, only when `userId` is set — Post has no ORM relation to
 // PostRead; the same join yields each item's `isRead`) are set-based filters the ORM can't express cheaply, so this is

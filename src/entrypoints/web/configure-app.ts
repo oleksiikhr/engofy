@@ -19,7 +19,7 @@ const ZodValidationPipe = createZodValidationPipe({
 // never drift (D17).
 export function configureApp(app: INestApplication): void {
   // The public API is served under `/api`. The edge proxy also strips the
-  // prefix, so `/api/feed` (direct) and `/feed` (proxied) both resolve.
+  // prefix, so `/api/content/posts` (direct) and `/content/posts` (proxied) both resolve.
   // The health probes are hit by the platform at the root and stay unprefixed
   // (`/_healthz` liveness, `/_healthz/ready` readiness).
   app.setGlobalPrefix('api', {

@@ -15,13 +15,8 @@ import { CurrentUser } from '../../../../core/decorators/current-user.decorator.
 import { CurrentUserOrNull } from '../../../../core/decorators/current-user-or-null.decorator.js';
 import { Public } from '../../../../core/decorators/public.decorator.js';
 import { toCursorPage } from '../../../../core/http/dto/cursor-page.js';
-import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor.js';
 import { PostService } from '../../../../modules/post/post.service.js';
-import type {
-  FeedItemView,
-  FeedView,
-} from '../../../../modules/post/queries/get-feed/feed-view.js';
 import type { GrammarConstructionView } from '../../../../modules/post/queries/get-grammar-construction/grammar-construction-view.js';
 import type { GrammarReferenceView } from '../../../../modules/post/queries/get-grammar-reference/grammar-reference-view.js';
 import type { PostDetailView } from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
@@ -30,8 +25,6 @@ import type {
   PostsListView,
 } from '../../../../modules/post/queries/get-posts-list/posts-list-view.js';
 import { parseSlugId } from '../../../../modules/post/queries/parse-slug-id.js';
-import { FeedQueryDto } from '../dto/feed-query.dto.js';
-import { FeedItemDto, FeedResponseDto } from '../dto/feed-response.dto.js';
 import { GrammarConstructionResponseDto } from '../dto/grammar-construction-response.dto.js';
 import { GrammarReferenceQueryDto } from '../dto/grammar-reference-query.dto.js';
 import { GrammarReferenceResponseDto } from '../dto/grammar-reference-response.dto.js';
@@ -48,7 +41,7 @@ import {
 } from '../dto/posts-list-response.dto.js';
 import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
 
-// Guest-readable content surface (PLAN.md §2, §4): the post feed, a single
+// Guest-readable content surface (PLAN.md §2, §4): the posts archive, a single
 // post with its inline analysis, and the grammar reference. Served under
 // `/api/content/*` — the path prefix keeps these routes from colliding with a
 // future top-level resource. Each endpoint maps its module view onto a web DTO
@@ -64,18 +57,8 @@ import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
 export class ContentController {
   constructor(private readonly post: PostService) {}
 
-  // The `/` feed: published posts, newest first, offset-paginated.
-  @Public()
-  @Get('feed')
-  async feed(@Query() query: FeedQueryDto): Promise<FeedResponseDto> {
-    const view = await this.post.getFeed(query.limit, query.offset);
-    return toFeedResponse(view);
-  }
-
   // The `/posts` archive: published posts, newest first, keyset-paginated —
-  // CEFR multi-select + "unread only" (posts-list-page §1). A distinct
-  // endpoint from `feed` above: different filter shape (CEFR multi-select,
-  // unread toggle) and pagination model (cursor, not offset). `isRead` and
+  // CEFR multi-select + "unread only" (posts-list-page §1). `isRead` and
   // `unreadOnly` make the response vary by session, so it overrides the
   // class-level public cache policy like `posts/:slugId` does.
   @Public()
@@ -202,24 +185,6 @@ export class ContentController {
     }
     return toGrammarConstructionResponse(view);
   }
-}
-
-function toFeedItemDto(item: FeedItemView): FeedItemDto {
-  return {
-    shortId: item.shortId,
-    slug: item.slug,
-    title: item.title,
-    cefrLevel: item.cefrLevel,
-    publishedAt: item.publishedAt,
-    excerpt: item.excerpt,
-    attributionText: item.attributionText,
-    sourceType: item.sourceType,
-    sourceLink: item.sourceLink,
-  };
-}
-
-function toFeedResponse(view: FeedView): FeedResponseDto {
-  return toOffsetPage(view.items.map(toFeedItemDto), view.nextOffset);
 }
 
 function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {

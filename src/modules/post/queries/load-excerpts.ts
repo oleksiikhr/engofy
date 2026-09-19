@@ -6,7 +6,7 @@ const EXCERPT_MAX_CHARS = 280;
 
 // Plain-text excerpt built from a post's leading blocks, truncated on a word
 // boundary — shared by every list query that shows a post preview
-// (`get-feed`, `get-posts-list`).
+// (`get-posts-list`).
 export async function loadExcerpts(
   em: EntityManager,
   postIds: string[],

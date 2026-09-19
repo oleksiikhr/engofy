@@ -180,7 +180,7 @@ docker service logs -f engofy_web
 docker service logs -f engofy_cloudflared   # "Registered tunnel connection"
 ```
 
-Then hit `https://engofy.com` and `https://engofy.com/api/content/feed`.
+Then hit `https://engofy.com` and `https://engofy.com/api/content/posts`.
 
 ---
 
