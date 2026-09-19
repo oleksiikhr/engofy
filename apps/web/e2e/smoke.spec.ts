@@ -58,10 +58,15 @@ test.describe('signed in', () => {
   });
 });
 
-test('applies the vendored body font token', async ({ page }) => {
+test('uses the system font stack and requests no webfont', async ({ page }) => {
+  const fontRequests: string[] = [];
+  page.on('request', (req) => {
+    if (req.resourceType() === 'font') fontRequests.push(req.url());
+  });
   await page.goto('/');
   const fontFamily = await page.evaluate(
     () => getComputedStyle(document.body).fontFamily,
   );
-  expect(fontFamily).toContain('Public Sans');
+  expect(fontFamily).toContain('system-ui');
+  expect(fontRequests).toEqual([]);
 });
