@@ -19,7 +19,9 @@ describe('ActivateMockSubscriptionHandler', () => {
 
     expect(subscription.plan).toBe(SubscriptionPlan.Premium);
     expect(subscription.isMockPayment).toBe(true);
-    const monthOut = DateTime.now().plus({ months: 1 });
+    // UTC: `plus({ months })` is wall-clock in the value's zone, so a local-zone
+    // expectation is off by an hour whenever the month spans a DST change.
+    const monthOut = DateTime.utc().plus({ months: 1 });
     expect(
       Math.abs(subscription.currentPeriodEnd.diff(monthOut).as('hours')),
     ).toBeLessThan(1);
@@ -29,7 +31,7 @@ describe('ActivateMockSubscriptionHandler', () => {
 
   it('extends the current period instead of stacking rows', async () => {
     const userId = uuidv7();
-    const existingEnd = DateTime.now().plus({ days: 10 });
+    const existingEnd = DateTime.utc().plus({ days: 10 });
     suite.orm.em.create(Subscription, {
       userId,
       plan: SubscriptionPlan.Premium,
