@@ -388,28 +388,75 @@ test.describe('reader page (guest)', () => {
     await expect(report).toContainText('Thanks');
   });
 
-  test('the final screen asks a contrastive question and explains each option', async ({
+  test("Quick check offers the post's contrastive question one card at a time", async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
 
-    const question = reader.finalScreen.locator('[data-contrast-q]');
-    await expect(question).toHaveCount(1);
+    const intro = reader.qcScreen('intro');
+    await expect(intro).toContainText('One minute, 1 quick question.');
+    await expect(reader.qcScreen('question')).toHaveCount(0);
+
+    await reader.startQuickCheck();
+    const question = reader.qcScreen('question');
     await expect(question).toContainText('By the time the war ended');
+    await expect(question).toContainText('1/1');
+    await expect(
+      question.getByRole('button', { name: 'Check', exact: true }),
+    ).toBeDisabled();
 
-    await question.getByRole('button', { name: 'drew', exact: true }).click();
-    await expect(question.locator('.final-q__result')).toHaveText(
-      '✗ Not quite',
-    );
+    await question.locator('[data-text="drew"]').click();
+    await question.getByRole('button', { name: 'Check', exact: true }).click();
+    await expect(question.locator('[data-qc-verdict]')).toHaveText('Not quite');
     await expect(question.getByText('Does not show the order.')).toBeVisible();
-
-    await question
-      .getByRole('button', { name: 'had drawn', exact: true })
-      .click();
-    await expect(question.locator('.final-q__result')).toHaveText('✓ Correct');
+    // The right answer is explained too, the unpicked option is not.
     await expect(question.getByText('Earlier past action.')).toBeVisible();
-    await expect(question.getByText('Does not show the order.')).toBeHidden();
+    await expect(question.getByText('Wrong time frame.')).toBeHidden();
+    await expect(question.locator('[data-qc-blank]')).toHaveText('had drawn');
+
+    await question.getByRole('button', { name: 'See results' }).click();
+    await expect(reader.qcScreen('summary')).toContainText('Keep at it.');
+    await expect(reader.qcScreen('summary')).toContainText('0/1');
+  });
+
+  test('Quick check runs from the keyboard: 1-3 pick, Enter checks, Esc skips', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.startQuickCheck();
+    const question = reader.qcScreen('question');
+    // "had drawn" is option 1.
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+    await expect(question.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await expect(question.getByText('Earlier past action.')).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(reader.qcScreen('summary')).toContainText('Nice work.');
+    await expect(reader.qcScreen('summary')).toContainText('1/1');
+
+    await page.reload();
+    await reader.startQuickCheck();
+    await page.keyboard.press('Escape');
+    const summary = reader.qcScreen('summary');
+    await expect(summary).toBeVisible();
+    // Nothing was answered, so no score ring.
+    await expect(summary.locator('[data-qc-ring]')).toBeHidden();
+    await expect(summary).toContainText('You finished this text.');
+  });
+
+  test('Quick check can be skipped from the intro', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
+    await expect(reader.qcScreen('summary')).toBeVisible();
+    await expect(reader.qcScreen('intro')).toHaveCount(0);
   });
 
   test('reaching the final screen marks the post as read', async ({ page }) => {
@@ -555,7 +602,11 @@ test.describe('reader page (signed in)', () => {
     await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
     await reader.studyPanel.getByRole('button', { name: 'Continue' }).click();
     await reader.studyPanel.getByRole('button', { name: 'Finish' }).click();
-    await expect(reader.finalScreen).toContainText(
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
+    await expect(reader.qcScreen('summary')).toContainText(
       'You added 1 new word to your deck.',
     );
   });
@@ -565,12 +616,20 @@ test.describe('reader page (signed in)', () => {
   }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
     // The seeded word card is due and occurs in this post.
     await expect(
       reader.finalScreen.getByRole('link', {
         name: /Practice \d+ cards? from this text/,
       }),
     ).toHaveAttribute('href', '/practice');
+    await expect(reader.qcScreen('summary')).toContainText('Day streak');
+    await expect(reader.qcScreen('summary')).toContainText(
+      'Due from this text',
+    );
   });
 
   test("from Home, the final screen continues to today's practice", async ({
@@ -578,6 +637,10 @@ test.describe('reader page (signed in)', () => {
   }) => {
     const reader = new ReaderPage(page);
     await page.goto(`/posts/${READER_SLUG}?from=home`);
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
     await expect(
       reader.finalScreen.getByRole('link', {
         name: "Continue to today's practice",

@@ -8,6 +8,7 @@ import type {
   NewCardBudgetResponse,
   PostDetail,
   PracticeQueueResponse,
+  StreakResponse,
 } from '../../lib/types';
 
 const { slugId } = Astro.params;
@@ -153,7 +154,7 @@ function toContrast(ex: Ex): ContrastView | null {
   };
 }
 
-const MAX_FINAL_QUESTIONS = 2;
+const MAX_FINAL_QUESTIONS = 5;
 const contrastQuestions = post.exercises
   .map(toContrast)
   .filter((q): q is ContrastView => q !== null)
@@ -171,7 +172,7 @@ const summaryParts = [
 
 // Both are best-effort, signed-in only: an API on the previous release lacks
 // the budget route, and neither may take the page down.
-const [budget, dueCards] = user
+const [budget, dueCards, streakResponse] = user
   ? await Promise.all([
       apiGetOrNull<NewCardBudgetResponse>('/learning/new-card-budget', {
         request: Astro.request,
@@ -180,9 +181,13 @@ const [budget, dueCards] = user
         `/learning/posts/${encodeURIComponent(slugId ?? '')}/due-cards`,
         { request: Astro.request },
       ).catch(() => null),
+      apiGetOrNull<StreakResponse>('/learning/streak', {
+        request: Astro.request,
+      }).catch(() => null),
     ])
-  : [null, null];
+  : [null, null, null];
 const dueCount = dueCards?.items.length ?? 0;
+const streak = streakResponse?.streak ?? 0;
 // The Home session sends the learner here with ?from=home and its next step
 // (today's practice) lives on Home.
 const fromHome = Astro.url.searchParams.get('from') === 'home';
@@ -280,53 +285,138 @@ const drills: DrillView[] = post.exercises
     </article>
   </div>
 
-  <section class="reader-final" data-reader-final aria-label="Finished reading">
-    <h2>Nice work — you finished this text</h2>
-    {
-      contrastQuestions.length > 0 && (
-        <div class="final-questions">
-          <p class="final-questions__lead">Two forms, one right here — which fits?</p>
-          {contrastQuestions.map((q) => (
-            <div class="final-q" data-contrast-q data-answer-index={String(q.answerIndex)}>
-              <p class="final-q__prompt">{q.before}<b>____</b>{q.after}</p>
-              <div class="final-q__options">
-                {q.options.map((opt, i) => (
-                  <button type="button" class="exercise__chip" data-option={String(i)}>
-                    {opt}
-                  </button>
+  <section class="reader-final" data-reader-final aria-label="Quick check">
+    <div class="qc" data-qc>
+      {
+        contrastQuestions.length > 0 && (
+          <div class="qc__screen" data-qc-screen="intro" tabindex="-1">
+            <div class="qc__top">
+              <span class="eyebrow">Quick check</span>
+              <button type="button" class="qc__close" data-qc-skip aria-label="Skip quick check">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+              </button>
+            </div>
+            <div class="qc__intro">
+              <h2 class="qc__title">
+                One minute, {contrastQuestions.length} quick question{contrastQuestions.length === 1 ? '' : 's'}.
+              </h2>
+              <p class="qc__note">From “{post.title ?? 'this text'}”. Skip any time.</p>
+            </div>
+            <div class="card qc__kind">
+              <span class="tag tone-blue">{contrastQuestions.length}×</span>
+              <b>Choose the form</b>
+            </div>
+            <div class="qc__actions">
+              <button type="button" class="btn btn--lg" data-qc-start>Start</button>
+              <button type="button" class="btn btn--sm btn--ghost" data-qc-skip>Skip for now</button>
+            </div>
+          </div>
+        )
+      }
+      {
+        contrastQuestions.map((q, qi) => (
+          <div
+            class="qc__screen"
+            data-qc-screen="question"
+            data-contrast-q
+            data-answer-index={String(q.answerIndex)}
+            tabindex="-1"
+            hidden
+          >
+            <div class="qc__top">
+              <button type="button" class="qc__close" data-qc-skip aria-label="Skip quick check">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+              </button>
+              <div class="qc__prog" role="img" aria-label={`Question ${qi + 1} of ${contrastQuestions.length}`}>
+                {contrastQuestions.map((_, i) => (
+                  <i class:list={{ done: i < qi, cur: i === qi }} />
                 ))}
               </div>
-              {q.explanations.map((text, i) => (
-                <p class="final-q__explanation" data-explanation={String(i)} hidden>{text}</p>
-              ))}
-              <span class="final-q__result" role="status" />
+              <span class="meta num">{qi + 1}/{contrastQuestions.length}</span>
             </div>
-          ))}
+            <p class="eyebrow qc__kicker">Choose the form</p>
+            <p class="qc__prompt">{q.before}<span class="qc__blank" data-qc-blank>&nbsp;</span>{q.after}</p>
+            <div class="qc__options" role="group" aria-label="Options">
+              {q.options.map((opt, i) => (
+                <button type="button" class="qc__opt" data-option={String(i)} data-text={opt} aria-pressed="false">
+                  <kbd>{i + 1}</kbd>
+                  <svg class="ic qc__mark qc__mark--ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                  <svg class="ic qc__mark qc__mark--bad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                  {opt}
+                </button>
+              ))}
+            </div>
+            <div class="alert qc__feedback" data-qc-feedback role="status" hidden>
+              <div>
+                <b data-qc-verdict />
+                {q.explanations.map((text, i) => (
+                  <p class="qc__explanation" data-explanation={String(i)} hidden>
+                    <b>{q.options[i]}</b> {text}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div class="qc__actions">
+              <button type="button" class="btn btn--lg" data-qc-check disabled>Check</button>
+              <button type="button" class="btn btn--lg" data-qc-next hidden>
+                {qi === contrastQuestions.length - 1 ? 'See results' : 'Continue'}
+              </button>
+            </div>
+          </div>
+        ))
+      }
+      <div class="qc__screen" data-qc-screen="summary" tabindex="-1" hidden={contrastQuestions.length > 0}>
+        <div class="qc__done">
+          <div class="qc__ring" data-qc-ring hidden>
+          <svg width="112" height="112" viewBox="0 0 112 112" role="img" aria-label="Score">
+            <circle cx="56" cy="56" r="48" fill="none" stroke="var(--color-border)" stroke-width="12" />
+            <circle data-qc-ring-bar cx="56" cy="56" r="48" fill="none" stroke="var(--color-success)" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 302" transform="rotate(-90 56 56)" />
+            <text data-qc-ring-text x="56" y="64" text-anchor="middle" font-size="26" font-weight="800" fill="var(--color-ink)" font-family="inherit"></text>
+          </svg>
+          </div>
+          <h2 class="qc__title" data-qc-title>You finished this text.</h2>
+          <p class="qc__note">
+            {
+              summaryParts.length > 0
+                ? `This text had ${summaryParts.join(' and ')} to learn.`
+                : 'This text had nothing new for your level.'
+            }<span data-added></span>
+          </p>
         </div>
-      )
-    }
-    <p class="final-summary">
-      {
-        summaryParts.length > 0
-          ? `This text had ${summaryParts.join(' and ')} to learn.`
-          : 'This text had nothing new for your level.'
-      }<span data-added></span>
-    </p>
-    <p class="final-cta">
-      {
-        fromHome && user && (
-          <a class="btn" href="/">Continue to today's practice</a>
-        )
-      }
-      {
-        !fromHome && dueCount > 0 && (
-          <a class="btn" href="/practice">
-            Practice {dueCount} card{dueCount === 1 ? '' : 's'} from this text
-          </a>
-        )
-      }
-      <a class="btn btn--ghost" href="/posts">More articles</a>
-    </p>
+        {
+          user && (
+            <div class="qc__tiles">
+              <div class="card card--soft qc__tile tone-amber">
+                <b class="qc__tile-num num">
+                  <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1 1 2 2 2 4a5 5 0 0 1-10 0c0-5 4-6 5-13z" /></svg>
+                  {streak}
+                </b>
+                <span class="meta">Day streak</span>
+              </div>
+              <div class="card card--soft qc__tile tone-brand">
+                <b class="qc__tile-num num">{dueCount}</b>
+                <span class="meta">Due from this text</span>
+              </div>
+            </div>
+          )
+        }
+        <div class="qc__actions qc__actions--end">
+          {
+            fromHome && user && (
+              <a class="btn btn--lg" href="/">Continue to today's practice</a>
+            )
+          }
+          {
+            !fromHome && dueCount > 0 && (
+              <a class="btn btn--lg" href="/practice">
+                Practice {dueCount} card{dueCount === 1 ? '' : 's'} from this text
+              </a>
+            )
+          }
+          <a class="btn btn--sm btn--ghost" href="/posts">Back to posts</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   {
