@@ -82,10 +82,10 @@ posts/[slugId].astro`, що переписується тут же) — приб
 POS у `payload_json.options`, фронтенд рендерить тап-чипси; вільний ввід лишається
 опційним важчим режимом.
 
-### [ ] 5. Due-картки з поста + флаг неправильного дієслова
+### [x] 5. Due-картки з поста + флаг неправильного дієслова
 - Branch: `post-detail-redesign-05-post-due-cards`
-- Base: `post-detail-redesign-04-fill-blank-options`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/46
 
 Entry-point-agnostic запит "due-картки, чия ціль зустрічалась у пості" (приймає
 лише `postId`). **Координація з `daily-session-home`:** перевірити перед

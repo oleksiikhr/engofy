@@ -14,9 +14,15 @@ import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { DAILY_NEW_CARD_LIMIT } from '../../../../modules/learning/domain/daily-new-card-limit.js';
 import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
 import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
+import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
+import { Post } from '../../../../modules/post/entities/post.entity.js';
+import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
+import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
 import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
+import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
+import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { LearningWebModule } from '../learning-web.module.js';
 
@@ -267,5 +273,87 @@ describe('LearningController', () => {
       .set('Cookie', cookie)
       .send({ disposition: 'known' })
       .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  it('lists only the due cards whose target occurs in the given post', async () => {
+    const cookie = await login(suite.orm.em);
+    const em = suite.orm.em;
+    const source = new PostSource();
+    source.format = PostSourceFormat.Text;
+    source.rawText = 'seed';
+    const post = new Post();
+    post.source = source;
+    post.title = 'due cards post';
+    post.status = PostStatus.Published;
+    em.persist(post);
+
+    const inPost = em.create(Word, { lemma: `in-${uuidv7()}` });
+    const inPostDefinition = em.create(WordDefinition, {
+      wordId: inPost.id,
+      pos: PartOfSpeech.Noun,
+    });
+    const elsewhere = em.create(Word, { lemma: `out-${uuidv7()}` });
+    const elsewhereDefinition = em.create(WordDefinition, {
+      wordId: elsewhere.id,
+      pos: PartOfSpeech.Noun,
+    });
+    const sentence = em.create(Sentence, {
+      postId: post.id,
+      postPartId: uuidv7(),
+      unitIndex: 0,
+      position: 0,
+      rawText: 'a term',
+      charStart: 0,
+      charEnd: 6,
+    });
+    em.create(SentenceToken, {
+      sentenceId: sentence.id,
+      position: 0,
+      text: 'term',
+      charStart: 2,
+      charEnd: 6,
+      lemma: inPost.lemma,
+      pos: 'NOUN',
+      tag: 'NN',
+      dep: 'nsubj',
+      morph: {},
+      wordId: inPost.id,
+      phraseId: null,
+    });
+    await em.flush();
+
+    await Promise.all(
+      [inPostDefinition, elsewhereDefinition].map((definition) =>
+        suite
+          .request('post', '/learning/cards')
+          .set('Cookie', cookie)
+          .send({ wordDefinitionId: definition.id })
+          .expect(HttpStatus.OK),
+      ),
+    );
+
+    const res = await suite
+      .request(
+        'get',
+        `/learning/posts/due-cards-post-${post.shortId}/due-cards`,
+      )
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(res.body.items).toHaveLength(1);
+    expect(res.body.items[0].target.id).toBe(inPostDefinition.id);
+  });
+
+  it('returns 404 for the due cards of an unknown post', async () => {
+    const cookie = await login(suite.orm.em);
+    await suite
+      .request('get', '/learning/posts/nope-Zz9Zz9Zz/due-cards')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('rejects an unauthenticated post due-cards request', async () => {
+    await suite
+      .request('get', '/learning/posts/some-post-Zz9Zz9Zz/due-cards')
+      .expect(HttpStatus.UNAUTHORIZED);
   });
 });
