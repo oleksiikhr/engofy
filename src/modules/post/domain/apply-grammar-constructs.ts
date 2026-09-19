@@ -33,7 +33,7 @@ function isSplittable(node: Node): node is TextNode | GrammarOnlySpanNode {
   );
 }
 
-function textPiece(text: string, marks: Mark[] | undefined): TextNode {
+export function textPiece(text: string, marks: Mark[] | undefined): TextNode {
   return marks ? { type: 'text', text, marks } : { type: 'text', text };
 }
 
@@ -193,7 +193,7 @@ function marksEqual(a: Mark[] | undefined, b: Mark[] | undefined): boolean {
   return a.length === b.length && a.every((mark) => b.includes(mark));
 }
 
-function mergeAdjacentText(nodes: Node[]): Node[] {
+export function mergeAdjacentText(nodes: Node[]): Node[] {
   const out: Node[] = [];
   for (const node of nodes) {
     const prev = out[out.length - 1];
