@@ -26,31 +26,68 @@ if (Astro.request.method === 'POST') {
 ---
 
 <Layout title="Cancel account deletion — Engofy" user={user}>
-  <h1>Cancel account deletion</h1>
+  <section class="card cancel">
+    <h1>Cancel account deletion</h1>
 
-  {
-    status === 'ready' ? (
-      <>
-        <p>Keep your account? Cancelling stops the scheduled deletion.</p>
-        <form method="post" data-testid="cancel-deletion-form">
-          <input type="hidden" name="token" value={token} />
-          <button class="btn" type="submit">
-            Keep my account
-          </button>
-        </form>
-      </>
-    ) : status === 'done' ? (
-      <p role="status" data-testid="cancel-deletion-done">
-        Deletion cancelled — your account is safe.{' '}
-        <a href={user ? '/profile' : '/login'}>
-          {user ? 'Go to your profile' : 'Sign in'}
-        </a>
-      </p>
-    ) : (
-      <p role="alert" data-testid="cancel-deletion-invalid">
-        This link is invalid or has expired. If your account is still
-        scheduled for deletion, cancel it from your <a href="/profile">profile</a>.
-      </p>
-    )
-  }
+    {
+      status === 'ready' ? (
+        <>
+          <p>Keep your account? Cancelling stops the scheduled deletion.</p>
+          <form method="post" data-testid="cancel-deletion-form">
+            <input type="hidden" name="token" value={token} />
+            <button class="btn btn--lg" type="submit">
+              Keep my account
+            </button>
+          </form>
+        </>
+      ) : status === 'done' ? (
+        <>
+          <p
+            class="alert tone-green"
+            role="status"
+            data-testid="cancel-deletion-done"
+          >
+            Deletion cancelled — your account is safe.
+          </p>
+          <a class="btn" href={user ? '/profile' : '/login'}>
+            {user ? 'Go to your profile' : 'Sign in'}
+          </a>
+        </>
+      ) : (
+        <p
+          class="alert tone-danger"
+          role="alert"
+          data-testid="cancel-deletion-invalid"
+        >
+          <span>
+            This link is invalid or has expired. If your account is still
+            scheduled for deletion, cancel it from your{' '}
+            <a href="/profile">profile</a>.
+          </span>
+        </p>
+      )
+    }
+  </section>
 </Layout>
+
+<style>
+  .cancel {
+    max-width: 30rem;
+    margin: 1rem auto 0;
+    text-align: center;
+  }
+  .cancel h1 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .cancel p {
+    color: var(--color-ink-soft);
+  }
+  .cancel .alert {
+    margin: 0 0 1.25rem;
+    text-align: left;
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+</style>

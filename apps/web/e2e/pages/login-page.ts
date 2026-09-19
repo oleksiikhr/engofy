@@ -7,6 +7,7 @@ export class LoginPage {
   readonly emailSubmitButton: Locator;
   readonly codeSentText: Locator;
   readonly codeInput: Locator;
+  readonly codeDigits: Locator;
   readonly verifyButton: Locator;
   readonly alert: Locator;
   readonly accountMenuToggle: Locator;
@@ -21,7 +22,8 @@ export class LoginPage {
       name: 'Email me a code',
     });
     this.codeSentText = page.getByText('We sent a 6-digit code');
-    this.codeInput = page.getByLabel('6-digit code');
+    this.codeInput = page.getByRole('group', { name: '6-digit code' });
+    this.codeDigits = page.getByLabel(/^Digit \d$/);
     this.verifyButton = page.getByRole('button', {
       name: 'Verify and sign in',
     });
@@ -50,7 +52,8 @@ export class LoginPage {
   }
 
   async submitCode(code: string) {
-    await this.codeInput.fill(code);
+    // Typing into the first box advances through the six.
+    await this.codeDigits.first().pressSequentially(code);
     await this.verifyButton.click();
   }
 
