@@ -506,8 +506,50 @@ describe('ContentController', () => {
       ),
     ).toBe(false);
 
+    // Multi-select: any listed level keeps the construction.
+    const multi = await suite.request('get', '/content/grammar?cefr=C2,A1');
+    expect(
+      multi.body.groups.some((g: { constructions: { slug: string }[] }) =>
+        g.constructions.some((con) => con.slug === slug),
+      ),
+    ).toBe(true);
+    await suite
+      .request('get', '/content/grammar?cefr=A1,Z9')
+      .expect(HttpStatus.BAD_REQUEST);
+
     // A blank ?cefr= must fall through to "no filter", not 400.
     await suite.request('get', '/content/grammar?cefr=').expect(HttpStatus.OK);
+  });
+
+  it('groups the grammar reference by the requested axis', async () => {
+    const { slug } = await seedGrammar(suite.orm.em);
+    const keysHolding = (body: {
+      groups: { key: string; constructions: { slug: string }[] }[];
+    }) =>
+      body.groups
+        .filter((g) => g.constructions.some((con) => con.slug === slug))
+        .map((g) => g.key);
+
+    const byCefr = await suite
+      .request('get', '/content/grammar?groupBy=cefr')
+      .expect(HttpStatus.OK);
+    expect(keysHolding(byCefr.body)).toEqual(['A1']);
+
+    const byTime = await suite
+      .request('get', '/content/grammar?groupBy=time')
+      .expect(HttpStatus.OK);
+    expect(byTime.body.groups.map((g: { key: string }) => g.key)).toContain(
+      'other',
+    );
+
+    // Default (and a blank value) stays category-grouped, mirrored in the
+    // deprecated `categories` alias.
+    const byDefault = await suite.request('get', '/content/grammar?groupBy=');
+    expect(byDefault.body.categories).toEqual(byDefault.body.groups);
+
+    await suite
+      .request('get', '/content/grammar?groupBy=bogus')
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('personalizes grammar state for a logged-in learner and marks the response private', async () => {

@@ -12,13 +12,18 @@ export interface GrammarReferenceConstructionView {
   state: EffectiveState;
 }
 
-export interface GrammarReferenceCategoryView {
+export interface GrammarReferenceGroupView {
+  // Stable id of the group within its axis (category name, `past`/`present`/
+  // `future`/`other`, or a CEFR level / `other`); `name` is its label.
+  key: string;
   name: string;
   constructions: GrammarReferenceConstructionView[];
 }
 
 export interface GrammarReferenceView {
-  // The 19 EGP categories in sort order, each with its constructions in sort
-  // order (PLAN.md §4 `/grammar`).
-  categories: GrammarReferenceCategoryView[];
+  // The same construction set grouped by the requested axis. `category`: the
+  // 19 EGP categories in sort order (PLAN.md §4 `/grammar`); `time`: Past /
+  // Present / Future / Other; `cefr`: A1 → C2 by each construction's easiest
+  // level. Constructions keep their category-then-sort order inside a group.
+  groups: GrammarReferenceGroupView[];
 }

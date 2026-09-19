@@ -15,12 +15,23 @@ export class GrammarReferenceConstructionDto {
   readonly state!: EffectiveState;
 }
 
-export class GrammarReferenceCategoryDto {
+export class GrammarReferenceGroupDto {
+  // Stable id within the requested axis (category name, `past`/`present`/
+  // `future`/`other`, or a CEFR level / `other`).
+  readonly key!: string;
+
+  // Display label.
   readonly name!: string;
 
   readonly constructions!: GrammarReferenceConstructionDto[];
 }
 
 export class GrammarReferenceResponseDto {
-  readonly categories!: GrammarReferenceCategoryDto[];
+  // The same construction set grouped by the requested `groupBy` axis.
+  readonly groups!: GrammarReferenceGroupDto[];
+
+  // Deprecated: same array as `groups`, kept so a client that predates
+  // `groupBy` (always category-grouped) keeps working; remove once
+  // `apps/web` reads `groups`.
+  readonly categories!: GrammarReferenceGroupDto[];
 }
