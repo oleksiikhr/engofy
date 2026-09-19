@@ -1,6 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { parseIrregularVerbs } from './irregular-verb.js';
+import {
+  indexIrregularVerbsByLemma,
+  parseIrregularVerbs,
+} from './irregular-verb.js';
 
 const validEntry = {
   base_form: 'go',
@@ -52,5 +55,25 @@ describe('parseIrregularVerbs', () => {
     const parsed = parseIrregularVerbs(JSON.parse(raw));
 
     expect(parsed.length).toBeGreaterThan(100);
+  });
+});
+
+describe('indexIrregularVerbsByLemma', () => {
+  it('indexes by lowercased base_form', () => {
+    const parsed = parseIrregularVerbs([
+      validEntry,
+      {
+        base_form: 'Be',
+        past_simple: ['was', 'were'],
+        past_participle: ['been'],
+        cefr_level: 'A1',
+      },
+    ]);
+
+    const index = indexIrregularVerbsByLemma(parsed);
+
+    expect(index.get('go')).toEqual(validEntry);
+    expect(index.get('be')?.past_participle).toEqual(['been']);
+    expect(index.has('GO')).toBe(false);
   });
 });
