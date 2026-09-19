@@ -460,10 +460,25 @@ body {
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
   }
+  .logo {
+    min-height: 2.75rem;
+  }
+  /* One row under the logo row, never wrapped; scrolls on very narrow screens. */
   .site-nav {
     order: 3;
     flex-basis: 100%;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+    margin-inline: -0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .site-nav a {
+    flex: none;
+    gap: 0.35rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.875rem;
   }
   .site-header-right {
     margin-left: auto;
@@ -1867,4 +1882,36 @@ body {
 }
 .qc__hint {
   text-align: center;
+}
+
+/* --- Small screens (kept last so they win over the component rules above) --- */
+@media (max-width: 40rem) {
+  .site-footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  .crumb a,
+  .post-head__back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  /* The tools bar is three to four rows tall here; pinned, it would eat a
+     fifth of the screen while reading. */
+  .reader-toolbar {
+    position: static;
+  }
+  .practice__grades {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Touch screens have no keyboard to press the number hints on. */
+@media (hover: none) and (pointer: coarse) {
+  .practice__key,
+  .qc kbd {
+    display: none;
+  }
 }
