@@ -44,6 +44,5 @@
 
 Every query handler passes `{ disableIdentityMap: true }` on every
 `find`/`findOne`/`findAndCount` — `auth` + `learning` + `billing`'s
-`SubscriptionService` (Batch E), and the `post` query handlers `get-feed` /
-`get-post-detail` / `get-grammar-construction` / `get-grammar-reference`
+`SubscriptionService` (Batch E), and the `post` query handlers `get-post-detail` / `get-grammar-construction` / `get-grammar-reference`
 (Wave 3). New query handlers match this (or project a read DTO).

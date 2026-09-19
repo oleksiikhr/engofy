@@ -18,7 +18,7 @@ Rule of thumb (observed): **every handler and every DB-touching service has an
 `.ispec.ts` sibling**; the only `.spec.ts` files are the ones with zero I/O.
 Worker processors / `MAILER` / `AnthropicClientService` / learning
 `CardLimitService` + `SkillProgressService` got direct specs in Batch I; the
-`post` query handlers (`get-feed` / `get-post-detail` / `get-grammar-*`),
+`post` query handlers (`get-post-detail` / `get-grammar-*`),
 learning `get-dictionary`, and `TelegramClientService` in Batch Q. No known
 handler/service gaps remain.
 
