@@ -1,15 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { apiGet } from '../lib/api';
+import { apiGet, apiPatch } from '../lib/api';
 import { getCurrentUser } from '../lib/session';
-import type { CefrLevel, Profile } from '../lib/types';
-
-const user = await getCurrentUser(Astro.request);
-const profile = user
-  ? await apiGet<Profile>('/profile', { request: Astro.request })
-  : null;
+import type { CefrLevel, Profile, ProfileHub } from '../lib/types';
 
 const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+const user = await getCurrentUser(Astro.request);
+
+// Self-reported content level (`PATCH /profile/cefr-level`). Plain form POST
+// + redirect, same shape as the onboarding prompt on `/`; the change takes
+// effect immediately, nothing to migrate.
+let levelError = false;
+if (user && Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const level = form.get('cefrLevel');
+  if (typeof level === 'string' && (LEVELS as string[]).includes(level)) {
+    try {
+      await apiPatch(
+        '/profile/cefr-level',
+        { cefrLevel: level },
+        { request: Astro.request },
+      );
+      return Astro.redirect('/profile');
+    } catch {
+      levelError = true;
+    }
+  } else {
+    levelError = true;
+  }
+}
+
+const [hub, profile] = user
+  ? await Promise.all([
+      apiGet<ProfileHub>('/profile', { request: Astro.request }),
+      apiGet<Profile>('/profile/progress', { request: Astro.request }),
+    ])
+  : [null, null];
+
 const cefrMax = profile
   ? Math.max(1, ...LEVELS.map((l) => profile.cefr[l] ?? 0))
   : 1;
@@ -31,8 +59,38 @@ const totalCount =
       <p>
         <a href="/login">Sign in</a> to track your streak, skills and levels.
       </p>
-    ) : profile ? (
+    ) : hub && profile ? (
       <>
+        <section class="level">
+          <h2>Content difficulty level</h2>
+          <p class="level__hint">
+            Picks articles and grammar at the right difficulty for you.
+          </p>
+          <form method="post" class="level__form" data-testid="cefr-level-form">
+            <div class="level__options">
+              {LEVELS.map((lvl) => (
+                <label class="level__option">
+                  <input
+                    type="radio"
+                    name="cefrLevel"
+                    value={lvl}
+                    checked={lvl === hub.cefrLevel}
+                  />
+                  {lvl}
+                </label>
+              ))}
+            </div>
+            <button class="btn" type="submit">
+              Save
+            </button>
+          </form>
+          {levelError && (
+            <p class="level__error" role="alert">
+              Could not save your level, try again.
+            </p>
+          )}
+        </section>
+
         <section class="stat-row">
           <div class="stat">
             <p class="stat__num num">{profile.streak}</p>
@@ -108,6 +166,39 @@ const totalCount =
 </Layout>
 
 <style>
+  .level {
+    margin-bottom: 2rem;
+  }
+  .level__hint {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+  }
+  .level__form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .level__options {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .level__option {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+  }
+  .level__error {
+    margin: 0.5rem 0 0;
+    color: var(--color-danger);
+    font-size: 0.9rem;
+  }
   .stat-row {
     display: flex;
     gap: 1rem;
