@@ -21,7 +21,9 @@ const usedPct =
 ---
 
 <Layout title="Subscription — Engofy" user={user} active="profile">
-  <p class="back"><a href="/profile">← Profile</a></p>
+  <p class="back">
+    <a class="btn btn--ghost btn--sm" href="/profile">← Profile</a>
+  </p>
   <h1>Subscription</h1>
 
   {
@@ -31,9 +33,17 @@ const usedPct =
       </p>
     ) : sub ? (
       <>
-        <section class="card" data-testid="plan-card">
-          <h2>{isPremium ? 'Premium' : 'Free'}</h2>
-          <p class="card__detail">
+        <section
+          class:list={['card', 'plan', { 'card--hi': isPremium }]}
+          data-testid="plan-card"
+        >
+          <div class="plan__head">
+            <h2>{isPremium ? 'Premium' : 'Free'}</h2>
+            <span class:list={['tag', isPremium ? 'tone-green' : 'tag--muted']}>
+              {isPremium ? 'Active' : 'Current plan'}
+            </span>
+          </div>
+          <p class="plan__detail">
             {
               isPremium
                 ? sub.currentPeriodEnd
@@ -44,24 +54,24 @@ const usedPct =
           </p>
         </section>
 
-        <section class="card" data-testid="card-usage">
+        <section class="card plan" data-testid="card-usage">
           <h2>Saved cards</h2>
           {
             sub.cardLimit == null ? (
-              <p class="card__detail">
+              <p class="plan__detail">
                 <span class="num">{sub.cardsUsed}</span> saved — unlimited on
                 Premium.
               </p>
             ) : (
               <>
-                <p class="card__detail">
+                <p class="plan__detail">
                   <span class="num">
                     {sub.cardsUsed} / {sub.cardLimit}
                   </span>{' '}
                   cards used
                 </p>
-                <span class="track">
-                  <span class="fill" style={`width: ${usedPct}%`} />
+                <span class="bar plan__bar">
+                  <i style={`width: ${usedPct}%`} />
                 </span>
               </>
             )
@@ -79,35 +89,29 @@ const usedPct =
 </Layout>
 
 <style>
-  .back {
-    margin: 0 0 0.5rem;
-    font-size: 0.9rem;
+  h2 {
+    font-weight: 800;
   }
-  .card {
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
+  .back {
+    margin: 0 0 0.5rem -0.9rem;
+  }
+  .plan {
     margin-bottom: 1rem;
   }
-  .card h2 {
+  .plan h2 {
     margin: 0 0 0.5rem;
   }
-  .card__detail {
+  .plan__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .plan__detail {
     margin: 0;
     color: var(--color-ink-soft);
   }
-  .track {
-    display: block;
-    height: 0.5rem;
+  .plan__bar {
     margin-top: 0.75rem;
-    background: var(--color-paper-soft);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .fill {
-    display: block;
-    height: 100%;
-    background: var(--color-brand);
   }
 </style>

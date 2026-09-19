@@ -79,33 +79,39 @@ const links = [
         </p>
 
         {hub.accountDeletion && (
-          <section class="deletion-banner" role="status" data-testid="deletion-banner">
-            <p>
-              Your account is scheduled for deletion on{' '}
-              <strong>{formatDate(hub.accountDeletion.scheduledFor)}</strong>.
-              Everything you've saved will be permanently removed.
-            </p>
-            <form method="post">
-              <input type="hidden" name="action" value="cancel-deletion" />
-              <button class="btn" type="submit">
-                Cancel deletion
-              </button>
-            </form>
+          <section
+            class="alert tone-amber deletion-banner"
+            role="status"
+            data-testid="deletion-banner"
+          >
+            <div>
+              <p>
+                Your account is scheduled for deletion on{' '}
+                <b>{formatDate(hub.accountDeletion.scheduledFor)}</b>.
+                Everything you've saved will be permanently removed.
+              </p>
+              <form method="post">
+                <input type="hidden" name="action" value="cancel-deletion" />
+                <button class="btn btn--sm" type="submit">
+                  Cancel deletion
+                </button>
+              </form>
+            </div>
           </section>
         )}
 
         <section class="stat-row">
-          <div class="stat">
+          <div class="card stat">
             <p class="stat__num num">{hub.streak}</p>
             <p class="stat__label">day streak</p>
           </div>
-          <div class="stat" data-testid="daily-plan-status">
+          <div class="card stat" data-testid="daily-plan-status">
             <p class="stat__num">
               {hub.dailyPlanCompletedAt ? 'Done' : 'Not done'}
             </p>
             <p class="stat__label">today's session</p>
           </div>
-          <div class="stat" data-testid="plan-status">
+          <div class="card stat" data-testid="plan-status">
             <p class="stat__num">{isPremium ? 'Premium' : 'Free'}</p>
             <p class="stat__label">
               {
@@ -118,10 +124,14 @@ const links = [
         </section>
 
         <nav class="quick-links" aria-label="Quick links">
-          {links.map((link) => <a href={link.href}>{link.label}</a>)}
+          {links.map((link) => (
+            <a class="btn btn--sec btn--sm" href={link.href}>
+              {link.label}
+            </a>
+          ))}
         </nav>
 
-        <section class="level">
+        <section class="card level">
           <h2>Content difficulty level</h2>
           <p class="level__hint">
             Picks articles and grammar at the right difficulty for you.
@@ -130,14 +140,14 @@ const links = [
             <input type="hidden" name="action" value="set-level" />
             <div class="level__options">
               {LEVELS.map((lvl) => (
-                <label class="level__option">
+                <label class="pill">
                   <input
                     type="radio"
                     name="cefrLevel"
                     value={lvl}
                     checked={lvl === hub.cefrLevel}
                   />
-                  {lvl}
+                  <span>{lvl}</span>
                 </label>
               ))}
             </div>
@@ -153,7 +163,7 @@ const links = [
         </section>
 
         {!hub.accountDeletion && (
-          <section class="danger">
+          <section class="card card--soft danger">
             <details data-testid="delete-account">
               <summary>Delete account</summary>
               <p>
@@ -182,59 +192,30 @@ const links = [
 </Layout>
 
 <style>
+  h2 {
+    font-weight: 800;
+  }
   .greeting {
     margin: 0 0 1.5rem;
     color: var(--color-ink-soft);
   }
   .deletion-banner {
     margin-bottom: 1.5rem;
-    padding: 1rem 1.25rem;
-    border: 1px solid var(--color-danger);
-    background: var(--color-highlight-wash);
-    border-radius: var(--radius-control);
   }
   .deletion-banner p {
     margin: 0 0 0.75rem;
-  }
-  .stat-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .stat {
-    flex: 1 1 0;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    text-align: center;
-  }
-  .stat__num {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  .stat__label {
-    margin: 0.25rem 0 0;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
   }
   .quick-links {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin-bottom: 2rem;
-  }
-  .quick-links a {
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    padding: 0.4rem 0.8rem;
-    text-decoration: none;
+    margin-bottom: 1.5rem;
   }
   .level {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   .level__hint {
-    margin: 0 0 0.75rem;
+    margin: 0 0 1rem;
     color: var(--color-ink-soft);
     font-size: 0.9rem;
   }
@@ -242,35 +223,23 @@ const links = [
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 1rem 1.5rem;
   }
   .level__options {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
   }
-  .level__option {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    padding: 0.4rem 0.7rem;
-    cursor: pointer;
-  }
   .form-error {
-    margin: 0.5rem 0 0;
+    margin: 0.75rem 0 0;
     color: var(--color-danger);
     font-size: 0.9rem;
-  }
-  .danger {
-    border-top: 1px solid var(--color-border);
-    padding-top: 1rem;
+    font-weight: 700;
   }
   .danger summary {
     cursor: pointer;
     color: var(--color-danger);
-    font-weight: 600;
+    font-weight: 800;
   }
   .danger p {
     color: var(--color-ink-soft);
