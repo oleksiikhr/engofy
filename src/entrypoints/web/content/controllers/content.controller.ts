@@ -73,8 +73,11 @@ export class ContentController {
   // The `/posts` archive: published posts, newest first, keyset-paginated —
   // CEFR multi-select + "unread only" (posts-list-page §1). A distinct
   // endpoint from `feed` above: different filter shape (CEFR multi-select,
-  // unread toggle) and pagination model (cursor, not offset).
+  // unread toggle) and pagination model (cursor, not offset). `isRead` and
+  // `unreadOnly` make the response vary by session, so it overrides the
+  // class-level public cache policy like `posts/:slugId` does.
   @Public()
+  @CachePolicy('private')
   @Get('posts')
   async postsList(
     @Query() query: PostsListQueryDto,
@@ -209,6 +212,7 @@ function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
     attributionText: item.attributionText,
     sourceType: item.sourceType,
     sourceLink: item.sourceLink,
+    isRead: item.isRead,
   };
 }
 

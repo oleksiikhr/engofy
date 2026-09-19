@@ -23,6 +23,8 @@ interface PostRow {
   source_attribution_text: string;
   source_type: string;
   source_link: string | null;
+  // False for a guest (no `post_reads` join).
+  is_read: boolean;
 }
 
 // Backs `/posts` (posts-list-page §1): published posts, newest first,
@@ -31,7 +33,7 @@ interface PostRow {
 // by this plan). CEFR multi-select, a word/phrase `term` (EXISTS over
 // `sentence_tokens`, posts-list-page §2) and "unread only" (LEFT JOIN
 // `post_reads`, only when `userId` is set — Post has no ORM relation to
-// PostRead) are set-based filters the ORM can't express cheaply, so this is
+// PostRead; the same join yields each item's `isRead`) are set-based filters the ORM can't express cheaply, so this is
 // one raw query (DP5) rather than `em.find`.
 @QueryHandler(GetPostsListQuery)
 export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
@@ -43,11 +45,11 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
   }: GetPostsListQuery): Promise<PostsListView> {
     const cursor = decodePostsListCursor(options.cursor);
     const cefrLevels = options.cefrLevels ?? [];
-    const joinUnread = Boolean(options.unreadOnly && userId);
+    const joinReads = Boolean(userId);
 
     const params: unknown[] = [];
     let joinSql = '';
-    if (joinUnread) {
+    if (joinReads) {
       joinSql =
         'LEFT JOIN post_reads pr ON pr.post_id = p.id AND pr.user_id = ?';
       params.push(userId);
@@ -63,7 +65,7 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
       params.push(...cefrLevels);
     }
 
-    if (joinUnread) {
+    if (joinReads && options.unreadOnly) {
       conditions.push('pr.id IS NULL');
     }
 
@@ -95,7 +97,8 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
 
     const rows = await this.em.getConnection().execute<PostRow[]>(
       `SELECT p.id, p.short_id, p.slug, p.title, p.cefr_level, p.published_at,
-              p.source_attribution_text, p.source_type, p.source_link
+              p.source_attribution_text, p.source_type, p.source_link,
+              ${joinReads ? 'pr.id IS NOT NULL' : 'false'} AS is_read
          FROM posts p
          ${joinSql}
         WHERE ${conditions.join(' AND ')}
@@ -124,6 +127,7 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
       attributionText: row.source_attribution_text,
       sourceType: row.source_type,
       sourceLink: row.source_link,
+      isRead: row.is_read,
     }));
 
     const last = page.at(-1);

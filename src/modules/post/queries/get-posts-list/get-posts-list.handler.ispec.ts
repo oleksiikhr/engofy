@@ -209,6 +209,10 @@ describe('GetPostsListHandler', () => {
       'read-post',
       'unread-post',
     ]);
+    expect(
+      Object.fromEntries(loggedInAll.items.map((i) => [i.title, i.isRead])),
+    ).toEqual({ 'read-post': true, 'unread-post': false });
+    expect(guestView.items.every((i) => !i.isRead)).toBe(true);
 
     const unreadOnly = await suite.query(
       new GetPostsListQuery(userId, { unreadOnly: true, limit: 10 }),

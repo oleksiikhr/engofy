@@ -15,6 +15,8 @@ export interface PostsListItemView {
   sourceType: string;
   // Link back to the original; null when the text is original / has no url.
   sourceLink: string | null;
+  // The current user has read the post; always false for a guest.
+  isRead: boolean;
 }
 
 export interface PostsListView {
