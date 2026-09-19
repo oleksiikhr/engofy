@@ -4,8 +4,6 @@ export class ReaderPage {
   readonly page: Page;
   readonly badge: Locator;
   readonly analysis: Locator;
-  readonly sidebar: Locator;
-  readonly summary: Locator;
   readonly fillBlank: Locator;
   readonly comprehension: Locator;
 
@@ -13,8 +11,6 @@ export class ReaderPage {
     this.page = page;
     this.badge = page.locator('.post-head .badge');
     this.analysis = page.locator('.analysis');
-    this.sidebar = page.locator('.sidebar');
-    this.summary = page.locator('.reader-summary');
     this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
     this.comprehension = page.locator('[data-ex-type="comprehension"]');
   }
@@ -27,12 +23,15 @@ export class ReaderPage {
     await expect(this.page.getByRole('heading', { name: title })).toBeVisible();
   }
 
-  sidebarGroup(name: 'Grammar' | 'Words' | 'Phrases'): Locator {
-    return this.sidebar.locator('.sidebar__group').filter({ hasText: name });
+  // Spans the reader marked as new/learning targets, filtered by their text.
+  wordLabel(text: string): Locator {
+    return this.analysis.locator('[data-word-definition-id]', {
+      hasText: text,
+    });
   }
 
-  async addToDeck(group: Locator) {
-    await group.getByRole('button', { name: '+ Add to deck' }).click();
+  phraseLabel(text: string): Locator {
+    return this.analysis.locator('[data-phrase-id]', { hasText: text });
   }
 
   async submitFillBlank(answer: string) {

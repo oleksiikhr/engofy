@@ -12,10 +12,8 @@ const PRIORITY: Record<EffectiveState, number> = {
 
 // Collapses the per-usage-point effective states of one grammar construction
 // into a single state for a construction-level badge (grammar-page-redesign
-// зріз 1) — the same "most advanced wins" principle as
-// `learning-card-state-priority.ts`'s `mostAdvancedState`, but over the
-// 4-state learner-facing model instead of raw FSRS state. An empty input
-// means no usage points at all, i.e. New.
+// зріз 1) — "most advanced wins". An empty input means no usage points at
+// all, i.e. New.
 export function mostAdvancedEffectiveState(
   states: EffectiveState[],
 ): EffectiveState {

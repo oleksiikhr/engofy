@@ -1,4 +1,4 @@
-import type { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
+import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
 import type { Doc } from '../../domain/node-tree.types.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
@@ -6,7 +6,9 @@ import type { ExerciseType } from '../../enums/exercise-type.enum.js';
 
 // Resolved lexicon entry for a `word` span. `wordDefinitionId` (one POS sense,
 // not the whole word) is the SRS card target for the inline "+" button
-// (PLAN.md §2); `wordId` is only the underlying lexeme, for display.
+// (PLAN.md §2); `wordId` is only the underlying lexeme, for display. `state`
+// is the viewer's effective state for this sense (a guest is always `New`);
+// it decides whether the reader marks the span at all.
 export interface WordAnnotationView {
   wordDefinitionId: string;
   wordId: string;
@@ -17,6 +19,7 @@ export interface WordAnnotationView {
   example: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
+  state: EffectiveState;
 }
 
 export interface PhraseAnnotationView {
@@ -26,6 +29,7 @@ export interface PhraseAnnotationView {
   definition: string | null;
   example: string | null;
   cefrLevel: CefrLevel | null;
+  state: EffectiveState;
 }
 
 export interface GrammarUsagePointView {
@@ -53,37 +57,6 @@ export interface PostExerciseView {
   payload: Record<string, unknown>;
 }
 
-// "In this article" sidebar entries (PLAN.md §16/§17 Track B): one per
-// unique word/phrase/construction the post references, not per occurrence.
-// `state` is `LearningCardState.New` when the user has no card yet — for a
-// guest (no userId passed to the query) every entry is `New`, no DB join.
-export interface SidebarWordEntryView {
-  wordDefinitionId: string;
-  lemma: string;
-  state: LearningCardState;
-}
-
-export interface SidebarPhraseEntryView {
-  phraseId: string;
-  text: string;
-  state: LearningCardState;
-}
-
-// A construction can have several usage points; `state` is the most
-// advanced state across any LearningCard the user has for one of them (see
-// `learning-card-state-priority.ts`), or `New` if they have none.
-export interface SidebarGrammarEntryView {
-  slug: string;
-  name: string;
-  state: LearningCardState;
-}
-
-export interface PostSidebarView {
-  grammar: SidebarGrammarEntryView[];
-  words: SidebarWordEntryView[];
-  phrases: SidebarPhraseEntryView[];
-}
-
 export interface PostDetailView {
   shortId: string;
   slug: string | null;
@@ -108,5 +81,4 @@ export interface PostDetailView {
     grammar: Record<string, GrammarAnnotationView>;
   };
   exercises: PostExerciseView[];
-  sidebar: PostSidebarView;
 }

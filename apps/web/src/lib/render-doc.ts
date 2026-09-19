@@ -1,11 +1,21 @@
-// Server-side node-tree -> HTML for the reader page (PLAN.md §6). Word/
-// phrase/grammar spans carry no visible markup any more (PLAN.md §16 —
-// inline highlighting removed in favour of the "In this article" sidebar,
-// built separately from `PostDetail.sidebar` + `.annotations`); a span node
-// renders exactly like a text node. Output is injected with `set:html`, so
-// every text value is escaped here.
+// Server-side node-tree -> HTML for the reader page (PLAN.md §6). Only a
+// word/phrase span whose effective state for the viewer is `new` or
+// `learning` is marked (`data-word-definition-id` / `data-phrase-id`); every
+// other span — known/skipped targets, grammar-only spans — renders exactly
+// like a text node. Output is injected with `set:html`, so every text value
+// is escaped here.
 
-import type { Block, Doc, InlineNode, Mark } from './types';
+import type {
+  Block,
+  Doc,
+  EffectiveState,
+  InlineNode,
+  Mark,
+  PostDetail,
+  SpanNode,
+} from './types';
+
+type Annotations = PostDetail['annotations'];
 
 const ESCAPE: Record<string, string> = {
   '&': '&amp;',
@@ -31,31 +41,56 @@ function wrapMarks(html: string, marks: Mark[] | undefined): string {
   return out;
 }
 
-function renderInline(node: InlineNode): string {
+function isMarked(state: EffectiveState | undefined): boolean {
+  return state === 'new' || state === 'learning';
+}
+
+function spanAttr(node: SpanNode, annotations: Annotations): string | null {
+  if (node.kind === 'word') {
+    return isMarked(annotations.words[node.wordDefinitionId]?.state)
+      ? `data-word-definition-id="${esc(node.wordDefinitionId)}"`
+      : null;
+  }
+  if (node.kind === 'phrase') {
+    return isMarked(annotations.phrases[node.phraseId]?.state)
+      ? `data-phrase-id="${esc(node.phraseId)}"`
+      : null;
+  }
+  return null;
+}
+
+function renderInline(node: InlineNode, annotations: Annotations): string {
   if (node.type === 'link') {
     return wrapMarks(
       `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${esc(node.text)}</a>`,
       node.marks,
     );
   }
-  // 'text' and 'span' render identically — a span is plain prose now, its
-  // wordDefinitionId/phraseId/grammarConstruct only matter to the sidebar.
+  if (node.type === 'span') {
+    const attr = spanAttr(node, annotations);
+    if (attr) {
+      return wrapMarks(`<span ${attr}>${esc(node.text)}</span>`, node.marks);
+    }
+  }
   return wrapMarks(esc(node.text), node.marks);
 }
 
-function renderChildren(children: InlineNode[]): string {
-  return children.map(renderInline).join('');
+function renderChildren(
+  children: InlineNode[],
+  annotations: Annotations,
+): string {
+  return children.map((child) => renderInline(child, annotations)).join('');
 }
 
-function renderBlock(block: Block): string {
+function renderBlock(block: Block, annotations: Annotations): string {
   if (block.type === 'list') {
     const tag = block.ordered ? 'ol' : 'ul';
     const items = block.items
-      .map((item) => `<li>${renderChildren(item.children)}</li>`)
+      .map((item) => `<li>${renderChildren(item.children, annotations)}</li>`)
       .join('');
     return `<${tag}>${items}</${tag}>`;
   }
-  const inner = renderChildren(block.children);
+  const inner = renderChildren(block.children, annotations);
   if (block.level) {
     return `<h${block.level}>${inner}</h${block.level}>`;
   }
@@ -67,6 +102,8 @@ function renderBlock(block: Block): string {
 
 // Renders `Doc.children` to an HTML string. Caller wraps it in a
 // `.analysis` container so the span styles in app.css apply.
-export function renderDoc(doc: Doc): string {
-  return doc.children.map(renderBlock).join('\n');
+export function renderDoc(doc: Doc, annotations: Annotations): string {
+  return doc.children
+    .map((block) => renderBlock(block, annotations))
+    .join('\n');
 }

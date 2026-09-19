@@ -434,6 +434,28 @@ async function seed(orm: MikroORM): Promise<void> {
     annotatedAt: now,
   });
 
+  // A phrase the seeded user already marked Known — the reader must mark it
+  // for a guest (New) but leave it plain for that user.
+  em.create(PostPart, {
+    postId: reader.id,
+    blockIndex: 2,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [
+        { type: 'text', text: 'Charting the last bay was ' },
+        {
+          type: 'span',
+          kind: 'phrase',
+          text: KNOWN_PHRASE_TEXT,
+          phraseId: knownPhrase.id,
+        },
+        { type: 'text', text: ' by then.' },
+      ],
+    },
+    annotatedAt: now,
+  });
+
   const sid = '00000000-0000-4000-8000-00000000e2e0';
   em.create(Exercise, {
     postId: reader.id,

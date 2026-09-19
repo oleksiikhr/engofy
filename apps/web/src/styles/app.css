@@ -247,9 +247,8 @@ a:hover {
 }
 /* --- Inline "add to deck" fragments (built client-side by an HTMX swap, so
    these selectors must be global — Astro scoped styles never reach
-   innerHTML'd/swapped-in nodes). Used by the reader sidebar and the grammar
-   construction page's usage-point list (PLAN.md §16 — no more inline
-   word/phrase/grammar highlighting in article text). --- */
+   innerHTML'd/swapped-in nodes). Used by the grammar construction page's
+   usage-point list. --- */
 .add-card__form {
   margin: 0.2rem 0 0;
 }

@@ -4,10 +4,9 @@ import { Disposition } from '../enums/disposition.enum.js';
 import { LearningCardState } from '../enums/learning-card-state.enum.js';
 
 // The learner-facing four-state model for one target (learning-foundation
-// §2): richer than `LearningCardState` (which only exists once a card does)
-// and, unlike `post/domain/learning-card-state-priority.ts`'s
-// `mostAdvancedState`, folds in the disposition and CEFR-default layers a
-// target can carry with no card at all.
+// §2): richer than `LearningCardState` (which only exists once a card does);
+// it folds in the disposition and CEFR-default layers a target can carry with
+// no card at all.
 export enum EffectiveState {
   New = 'new',
   Learning = 'learning',

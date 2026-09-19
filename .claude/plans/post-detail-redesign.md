@@ -28,10 +28,10 @@ quiz) на один наскрізний механізм: заякорений 
 
 ## Зрізи
 
-### [ ] 1. Прибрати сайдбар, повернути спарс-мітки слів/фраз
+### [x] 1. Прибрати сайдбар, повернути спарс-мітки слів/фраз
 - Branch: `post-detail-redesign-01-sparse-labels`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/42
 
 Видалити `buildSidebar`/`PostSidebarView` з `GetPostDetailHandler`
 (`src/modules/post/queries/get-post-detail/get-post-detail.handler.ts`) і з
