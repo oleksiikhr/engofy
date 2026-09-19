@@ -3,6 +3,7 @@ import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import { parseDoc } from '../../../post/domain/node-tree.parser.js';
 import { assembleDocFromParts } from '../../../post/domain/post-parts.js';
+import { GrammarMatch } from '../../../post/entities/grammar-match.entity.js';
 import { PostPart } from '../../../post/entities/post-part.entity.js';
 import { PostRead } from '../../../post/entities/post-read.entity.js';
 import { Sentence } from '../../../post/entities/sentence.entity.js';
@@ -121,23 +122,47 @@ export class GetPracticeQueueHandler
     return Math.max(0, DAILY_NEW_CARD_LIMIT - introducedToday);
   }
 
-  // Fills in `contextSentence` (PLAN.md practice-redesign зріз 1) for the
-  // word/phrase targets `resolveCardTargets` left null — mutates `targets`
-  // in place since each is a freshly-built object for this request only.
+  // Fills in `contextSentence` (PLAN.md practice-redesign зріз 1/3) for the
+  // targets `resolveCardTargets` left null — mutates `targets` in place since
+  // each is a freshly-built object for this request only. Word/phrase go
+  // through the node-tree bridge, grammar through `grammar_matches`; both are
+  // bounded to the same last-N distinct read posts.
   private async attachContextSentences(
     userId: string,
     targets: Map<string, PracticeCardTarget>,
   ): Promise<void> {
-    const keys = [...targets.entries()]
-      .filter(
-        ([, target]) => target.type === 'word' || target.type === 'phrase',
-      )
-      .map(([key]) => key);
-    const contextSentenceByKey = await this.loadContextSentences(userId, keys);
-    for (const [key, sentence] of contextSentenceByKey) {
-      const target = targets.get(key);
-      if (target) {
-        target.contextSentence = sentence;
+    const spanKeys: string[] = [];
+    const grammarKeys: string[] = [];
+    for (const [key, target] of targets) {
+      if (target.type === 'grammar') {
+        grammarKeys.push(key);
+      } else {
+        spanKeys.push(key);
+      }
+    }
+    if (spanKeys.length === 0 && grammarKeys.length === 0) {
+      return;
+    }
+
+    const reads = await this.em.find(
+      PostRead,
+      { userId },
+      { orderBy: { readAt: 'desc' }, limit: RECENT_READ_POSTS_LIMIT },
+    );
+    if (reads.length === 0) {
+      return;
+    }
+
+    const [spanSentences, grammarSentences] = await Promise.all([
+      this.loadContextSentences(reads, spanKeys),
+      this.loadGrammarContextSentences(reads, grammarKeys),
+    ]);
+    for (const sentences of [spanSentences, grammarSentences]) {
+      for (const [key, sentence] of sentences) {
+        const target = targets.get(key);
+        if (target) {
+          target.contextSentence = sentence;
+        }
       }
     }
   }
@@ -149,22 +174,13 @@ export class GetPracticeQueueHandler
   // occurrence to its spaCy sentence in one final batched query. No fallback
   // to WordDefinition/Phrase.exampleSentence when nothing is found.
   private async loadContextSentences(
-    userId: string,
+    reads: PostRead[],
     keys: string[],
   ): Promise<Map<string, string>> {
     if (keys.length === 0) {
       return new Map();
     }
     const wanted = new Set(keys);
-
-    const reads = await this.em.find(
-      PostRead,
-      { userId },
-      { orderBy: { readAt: 'desc' }, limit: RECENT_READ_POSTS_LIMIT },
-    );
-    if (reads.length === 0) {
-      return new Map();
-    }
 
     const occurrences = new Map<
       string,
@@ -215,6 +231,67 @@ export class GetPracticeQueueHandler
       if (sentence) {
         result.set(key, sentence.rawText);
       }
+    }
+    return result;
+  }
+
+  // Grammar counterpart of `loadContextSentences` (PLAN.md practice-redesign
+  // зріз 3): `grammar_matches` already point at a `Sentence` directly, so no
+  // node-tree/offset bridge is needed — just the matches of the wanted usage
+  // points that fall in the recent read posts' sentences. Per usage point the
+  // most recently read post wins, then the highest-confidence match. Keys are
+  // `grammar:<usagePointId>`. No fallback to `exampleText`.
+  private async loadGrammarContextSentences(
+    reads: PostRead[],
+    keys: string[],
+  ): Promise<Map<string, string>> {
+    if (keys.length === 0) {
+      return new Map();
+    }
+    const usagePointIds = keys.map((key) => key.slice('grammar:'.length));
+    const postIds = reads.map((read) => read.postId);
+
+    const sentences = await this.em.find(Sentence, {
+      postId: { $in: postIds },
+    });
+    if (sentences.length === 0) {
+      return new Map();
+    }
+    const sentenceById = new Map(sentences.map((s) => [s.id, s]));
+    const matches = await this.em.find(GrammarMatch, {
+      grammarUsagePointId: { $in: usagePointIds },
+      sentenceId: { $in: [...sentenceById.keys()] },
+    });
+
+    const recencyByPostId = new Map(postIds.map((id, i) => [id, i]));
+    const best = new Map<
+      string,
+      { rank: number; confidence: number; text: string }
+    >();
+    for (const match of matches) {
+      const sentence = sentenceById.get(match.sentenceId);
+      if (!sentence) {
+        continue;
+      }
+      const candidate = {
+        rank: recencyByPostId.get(sentence.postId) ?? postIds.length,
+        confidence: match.confidence ?? 0,
+        text: sentence.rawText,
+      };
+      const current = best.get(match.grammarUsagePointId);
+      if (
+        !current ||
+        candidate.rank < current.rank ||
+        (candidate.rank === current.rank &&
+          candidate.confidence > current.confidence)
+      ) {
+        best.set(match.grammarUsagePointId, candidate);
+      }
+    }
+
+    const result = new Map<string, string>();
+    for (const [usagePointId, { text }] of best) {
+      result.set(`grammar:${usagePointId}`, text);
     }
     return result;
   }
