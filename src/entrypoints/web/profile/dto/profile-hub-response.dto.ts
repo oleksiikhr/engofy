@@ -13,7 +13,7 @@ export class ProfileHubResponseDto {
   // Pending account-deletion request, or null. Drives the hub's cancel banner.
   readonly accountDeletion!: AccountDeletionResponseDto | null;
 
-  // TODO(profile-hub-redesign slice 1 follow-up): today's daily-plan
-  // completion status, once `daily_plans.completed_at`
-  // (.claude/plans/daily-session-home.md slice 1) exists on `main`.
+  // When today's daily-plan session was completed (ISO), or null while it's
+  // still open or hasn't been started today.
+  readonly dailyPlanCompletedAt!: string | null;
 }

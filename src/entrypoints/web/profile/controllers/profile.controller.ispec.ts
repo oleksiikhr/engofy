@@ -15,10 +15,15 @@ import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { Subscription } from '../../../../modules/billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../../../modules/billing/enums/subscription-status.enum.js';
+import { DailyPlan } from '../../../../modules/home/entities/daily-plan.entity.js';
+import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { GrammarCategory } from '../../../../modules/post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../../modules/post/entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../../../modules/post/entities/grammar-usage-point.entity.js';
+import { Post } from '../../../../modules/post/entities/post.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
+import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
+import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { BillingWebModule } from '../../billing/billing-web.module.js';
 import { LearningWebModule } from '../../learning/learning-web.module.js';
@@ -72,6 +77,71 @@ describe('ProfileController', () => {
       streak: 0,
       cefrLevel: 'A1',
       accountDeletion: null,
+      dailyPlanCompletedAt: null,
+    });
+  });
+
+  describe('GET /profile daily plan status', () => {
+    async function seedPlan(
+      em: EntityManager,
+      userId: string,
+      completedAt: DateTime | null,
+    ): Promise<void> {
+      const source = new PostSource();
+      source.format = PostSourceFormat.Text;
+      source.rawText = 'Some text.';
+      const post = new Post();
+      post.source = source;
+      post.status = PostStatus.Published;
+      post.title = 'A post';
+      post.cefrLevel = CefrLevel.A1;
+      em.persist(post);
+      em.create(DailyPlan, {
+        userId,
+        planDate: DateTime.now(),
+        postId: post.id,
+        grammarUsagePointId: null,
+        completedAt,
+      });
+      await em.flush();
+    }
+
+    it("stays null while today's plan is open", async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      await seedPlan(suite.orm.em, userId, null);
+
+      const res = await suite
+        .request('get', '/profile')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body.dailyPlanCompletedAt).toBeNull();
+    });
+
+    it("returns the completion time once today's plan is done", async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      const completedAt = DateTime.now();
+      await seedPlan(suite.orm.em, userId, completedAt);
+
+      const res = await suite
+        .request('get', '/profile')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(DateTime.fromISO(res.body.dailyPlanCompletedAt).toMillis()).toBe(
+        completedAt.toMillis(),
+      );
+    });
+
+    it('does not create a plan as a side effect', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+
+      await suite
+        .request('get', '/profile')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(await suite.orm.em.fork().count(DailyPlan, { userId })).toBe(0);
     });
   });
 
