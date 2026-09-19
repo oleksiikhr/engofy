@@ -105,6 +105,8 @@ export interface WordAnnotation {
   example: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
+  // The viewer's effective state for this sense; `new` for a guest.
+  state: EffectiveState;
 }
 export interface PhraseAnnotation {
   phraseId: string;
@@ -113,6 +115,7 @@ export interface PhraseAnnotation {
   definition: string | null;
   example: string | null;
   cefrLevel: CefrLevel | null;
+  state: EffectiveState;
 }
 export interface GrammarUsagePointRef {
   grammarUsagePointId: string;
@@ -139,30 +142,6 @@ export interface PostExercise {
   source: 'spacy' | 'ai';
   payload: Record<string, unknown>;
 }
-// --- reader sidebar ("In this article", PLAN.md §16/§17 Track B) ---
-// `CardState` is declared below (dictionary section) — TS type aliases don't
-// care about declaration order within a module.
-export interface SidebarWordEntry {
-  wordDefinitionId: string;
-  lemma: string;
-  state: CardState;
-}
-export interface SidebarPhraseEntry {
-  phraseId: string;
-  text: string;
-  state: CardState;
-}
-export interface SidebarGrammarEntry {
-  slug: string;
-  name: string;
-  state: CardState;
-}
-export interface PostSidebar {
-  grammar: SidebarGrammarEntry[];
-  words: SidebarWordEntry[];
-  phrases: SidebarPhraseEntry[];
-}
-
 export interface PostDetail {
   shortId: string;
   slug: string | null;
@@ -179,7 +158,6 @@ export interface PostDetail {
     grammar: Record<string, GrammarAnnotation>;
   };
   exercises: PostExercise[];
-  sidebar: PostSidebar;
 }
 
 // --- grammar reference ---
