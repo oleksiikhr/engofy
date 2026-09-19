@@ -149,6 +149,94 @@ test.describe('reader page (guest)', () => {
     await expect(reader.analysis).toContainText('perambulate');
   });
 
+  test('opens a grammar popup with guideword, can-do and example', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const label = reader.grammarLabel('had drawn');
+    await label.click();
+    await expect(reader.popup).toBeVisible();
+    const section = reader.popupSection('grammar');
+    await expect(section.locator('.lex-popup__kicker')).toHaveText(
+      'Grammar · past perfect',
+    );
+    await expect(section.locator('.lex-popup__term')).toHaveText(
+      'USE: EARLIER PAST',
+    );
+    await expect(section.locator('.lex-popup__def')).toContainText(
+      'one past action happened before another',
+    );
+    await expect(section.locator('.lex-popup__example')).toContainText(
+      'she had drawn every coastline',
+    );
+    await expect(reader.popupSection('word')).toHaveCount(0);
+
+    const popupBox = await reader.popup.boundingBox();
+    const labelBox = await label.boundingBox();
+    if (!popupBox || !labelBox) {
+      throw new Error('popup or label has no box');
+    }
+    expect(popupBox.x).toBeLessThan(labelBox.x + labelBox.width);
+    expect(popupBox.x + popupBox.width).toBeGreaterThan(labelBox.x);
+
+    await section.getByRole('button', { name: '+' }).click();
+    await expect(section.getByRole('link', { name: 'Sign in' })).toBeVisible();
+  });
+
+  test('shows lexical and grammar sections when the labels overlap', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.phraseLabel('a piece of cake').click();
+    await expect(reader.popup.locator('section')).toHaveCount(2);
+    await expect(reader.popup.locator('section').first()).toHaveAttribute(
+      'data-lex-kind',
+      'phrase',
+    );
+    await expect(reader.popup.locator('section').last()).toHaveAttribute(
+      'data-lex-kind',
+      'grammar',
+    );
+    await expect(reader.popup.locator('.lex-popup__divider')).toHaveCount(1);
+    await expect(
+      reader.popupSection('phrase').locator('.lex-popup__term'),
+    ).toHaveText('a piece of cake');
+    await expect(
+      reader.popupSection('grammar').locator('.lex-popup__kicker'),
+    ).toHaveText('Grammar · past perfect');
+  });
+
+  test('"I know it" on the grammar section drops only the grammar label', async ({
+    page,
+  }) => {
+    await page.route('**/partials/lexicon-action', (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        body: '<div class="lex-actions" id="x"><span class="lex-state lex-state--learned" data-state="learned">Learned</span></div>',
+      }),
+    );
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.phraseLabel('a piece of cake').click();
+    await reader
+      .popupSection('grammar')
+      .getByRole('button', { name: 'I know it' })
+      .click();
+    await expect(
+      reader.popupSection('grammar').locator('.lex-state'),
+    ).toHaveText('Learned');
+    await expect(reader.grammarLabel('a piece of cake')).toHaveCount(0);
+    await expect(reader.phraseLabel('a piece of cake')).toHaveCount(1);
+    await expect(
+      reader.popupSection('phrase').getByRole('button', { name: 'I know it' }),
+    ).toBeVisible();
+  });
+
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
@@ -177,6 +265,18 @@ test.describe('reader page (signed in)', () => {
     await expect(reader.grammarLabel('had drawn')).toHaveCount(1);
     await expect(reader.analysis).toContainText('war ended');
     await expect(reader.grammarLabel('war ended')).toHaveCount(0);
+  });
+
+  test('grammar popup for a card-backed usage point shows its state without actions', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    const section = reader.popupSection('grammar');
+    await expect(section.locator('.lex-state')).toHaveText('Learning');
+    await expect(section.getByRole('button', { name: '+' })).toHaveCount(0);
   });
 
   test('popup for a card-backed word shows its state without actions', async ({

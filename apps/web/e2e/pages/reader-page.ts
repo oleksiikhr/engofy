@@ -41,6 +41,11 @@ export class ReaderPage {
     });
   }
 
+  // One section of the popup: 'word' | 'phrase' | 'grammar'.
+  popupSection(kind: 'word' | 'phrase' | 'grammar'): Locator {
+    return this.popup.locator(`[data-lex-kind="${kind}"]`);
+  }
+
   async submitFillBlank(answer: string) {
     await this.fillBlank.locator('.exercise__blank').fill(answer);
     await this.fillBlank.getByRole('button', { name: 'Check' }).click();

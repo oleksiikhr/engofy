@@ -477,6 +477,18 @@ describe('GetPostDetailHandler', () => {
     ]);
   });
 
+  it('resolves annotations.grammar for constructions reached only through a grammar match', async () => {
+    const { shortId, pointA } = await seedPostWithGrammarMatches(suite.orm.em);
+
+    const view = await suite.query(new GetPostDetailQuery(shortId));
+
+    const entries = Object.values(view?.annotations.grammar ?? {});
+    expect(entries).toHaveLength(1);
+    expect(
+      entries[0].usagePoints.map((point) => point.grammarUsagePointId),
+    ).toContain(pointA);
+  });
+
   it('gives every grammar match state New for a guest', async () => {
     const { shortId } = await seedPostWithGrammarMatches(suite.orm.em);
 

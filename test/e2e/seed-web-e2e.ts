@@ -498,7 +498,7 @@ async function seed(orm: MikroORM): Promise<void> {
 
   // A phrase the seeded user already marked Known — the reader must mark it
   // for a guest (New) but leave it plain for that user.
-  em.create(PostPart, {
+  const readerPart3 = em.create(PostPart, {
     postId: reader.id,
     blockIndex: 2,
     kind: PostPartKind.Paragraph,
@@ -516,6 +516,55 @@ async function seed(orm: MikroORM): Promise<void> {
       ],
     },
     annotatedAt: now,
+  });
+
+  // A grammar match over that same phrase, so a guest sees a word/phrase
+  // label and a grammar label on one range (the reader's two-section popup).
+  // It reuses the "reported" usage point the e2e user marks Known, so it
+  // paints nothing for them.
+  const overlapText = 'Charting the last bay was a piece of cake by then.';
+  const overlapSentence = em.create(Sentence, {
+    postId: reader.id,
+    postPartId: readerPart3.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: overlapText,
+    charStart: 0,
+    charEnd: overlapText.length,
+  });
+  const overlapTokens: [string, number, number][] = [
+    ['Charting', 0, 8],
+    ['the', 9, 12],
+    ['last', 13, 17],
+    ['bay', 18, 21],
+    ['was', 22, 25],
+    ['a', 26, 27],
+    ['piece', 28, 33],
+    ['of', 34, 36],
+    ['cake', 37, 41],
+    ['by', 42, 44],
+    ['then', 45, 49],
+    ['.', 49, 50],
+  ];
+  overlapTokens.forEach(([text, charStart, charEnd], position) => {
+    em.create(SentenceToken, {
+      sentenceId: overlapSentence.id,
+      position,
+      text,
+      charStart,
+      charEnd,
+      lemma: text.toLowerCase(),
+      pos: 'X',
+      tag: 'X',
+      dep: 'dep',
+      morph: {},
+    });
+  });
+  em.create(GrammarMatch, {
+    sentenceId: overlapSentence.id,
+    grammarUsagePointId: pastPerfectReported.id,
+    tokenStart: 5,
+    tokenEnd: 9,
   });
 
   const sid = '00000000-0000-4000-8000-00000000e2e0';

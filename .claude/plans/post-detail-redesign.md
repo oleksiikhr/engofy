@@ -115,10 +115,10 @@ checkpoint тут** — перший реальний рендер у новом
 контролі "+"/"I know it" (тепер шлють `wordDefinitionId`, поле вже є в
 `WordSpanNode`), 🔊 через Web Speech API.
 
-### [ ] 8. Граматичний попап + перекриття
+### [x] 8. Граматичний попап + перекриття
 - Branch: `post-detail-redesign-08-grammar-popup-overlap`
-- Base: `post-detail-redesign-07-lexicon-popup`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/49
 
 Попап для grammar-спанів (kicker + guideword + can-do + exampleText, ті самі
 "+"/"I know it" на `grammarUsagePointId`), двосекційний попап (лексична секція
