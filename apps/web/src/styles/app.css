@@ -1,156 +1,114 @@
 @import "tailwindcss";
 
-/* Manrope (display), Public Sans (body/UI) and IBM Plex Mono (numeric stats),
-   all SIL OFL 1.1, vendored as static woff2 (Latin subset only) rather than a
-   webfont CDN request so guest pages have no external dependency. Only the
-   weights used below are loaded. Ported from the previous Go site
-   (../engofy-go/frontend/src/styles/app.css). */
-@font-face {
-  font-family: "Manrope";
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/manrope-700.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Public Sans";
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/publicsans-400.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Public Sans";
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/publicsans-600.woff2") format("woff2");
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/ibmplexmono-600.woff2") format("woff2");
-}
-
-/* Baloo 2 (reader display) and Nunito (reader body), SIL OFL 1.1, vendored the
-   same way. Nunito is one variable file covering every weight. Used only under
-   .theme-reader below. */
-@font-face {
-  font-family: "Baloo 2";
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/baloo2-700.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Nunito";
-  font-weight: 200 1000;
-  font-style: normal;
-  font-display: swap;
-  src: url("./fonts/nunito-variable.woff2") format("woff2");
-}
-
-/* Design tokens — one brand accent, a separate amber highlight for new-word
-   discovery (kept off links/buttons so it doesn't compete), a small neutral
-   scale, and semantic accents for the FSRS review grades. Every token is
-   redefined for dark mode below via plain :root reassignment (Tailwind v4
+/* Design tokens — Direction C: warm paper, coral brand, four accent hues
+   (green/blue/pink/amber), each with a solid `--color-X`, a text-safe
+   `--color-X-ink`, a `--color-X-wash` fill and an `--color-on-X` for text on the
+   solid. Old names (brand-strong, highlight, success, warning, ink-soft,
+   ink-faint, border, border-strong, paper-soft) stay as the aliases pages already
+   read. `static` keeps tokens that only scoped page styles reference. Every token
+   is redefined for dark mode below via plain :root reassignment (Tailwind v4
    hoists @theme regardless of nesting, so a nested @theme would leak). */
-@theme {
-  --color-brand: #3b4cf6;
-  --color-brand-strong: #2634c2;
-  --color-brand-wash: #eceeff;
-  --color-highlight: #dd9a2e;
-  --color-highlight-wash: #fbf1de;
-  --color-success: #16915f;
-  --color-warning: #c47a0e;
-  --color-danger: #d1392c;
+@theme static {
+  --color-paper: #fff8ee;
+  --color-card: #ffffff;
+  --color-paper-soft: #f8edd9;
+  --color-border: #ebddc2;
+  --color-border-strong: #a8946e;
 
-  --color-ink: #10131a;
-  --color-ink-soft: #5c6472;
-  --color-ink-faint: #8991a0;
-  --color-paper: #ffffff;
-  --color-paper-soft: #f5f6f9;
-  --color-border: #e3e6ed;
-  --color-border-strong: #c9cedb;
+  --color-ink: #2b2118;
+  --color-ink-soft: #5c4e3d;
+  --color-ink-faint: #75664f;
 
-  --font-display: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Cascadia Code", monospace;
-  --radius-control: 0.375rem;
+  --color-brand: #c8471c;
+  --color-brand-hover: #a93a14;
+  --color-brand-strong: #9f3512;
+  --color-brand-wash: #fde6da;
+  --color-on-brand: #ffffff;
+
+  --color-word: #ffe0a0;
+  --color-gram: #d3e2fc;
+
+  --color-success: #2e7d50;
+  --color-success-ink: #1f6040;
+  --color-success-wash: #ddf1e4;
+  --color-on-success: #ffffff;
+  --color-blue: #2f62c4;
+  --color-blue-ink: #244c9c;
+  --color-blue-wash: #dce7fa;
+  --color-on-blue: #ffffff;
+  --color-pink: #c0416a;
+  --color-pink-ink: #9a2d52;
+  --color-pink-wash: #f9e0e8;
+  --color-on-pink: #ffffff;
+  --color-warning: #a0680a;
+  --color-warning-ink: #7a4e05;
+  --color-warning-wash: #fbebc8;
+  --color-on-warning: #ffffff;
+  --color-danger: #b93226;
+  --color-danger-wash: #fbe1dd;
+  --color-focus: #2f62c4;
+
+  --color-highlight: var(--color-warning);
+  --color-highlight-wash: var(--color-warning-wash);
+
+  --shadow-pop: 0 14px 34px rgb(60 42 10 / 0.16);
+  --shadow-sm: 0 1px 2px rgb(60 42 10 / 0.1);
+
+  --font-display: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --font-body: var(--font-display);
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --radius-control: 0.875rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-brand: #8b96ff;
-    --color-brand-strong: #aab2ff;
-    --color-brand-wash: #1c2040;
-    --color-highlight: #e8b654;
-    --color-highlight-wash: #2c2413;
-    --color-success: #3fcb92;
-    --color-warning: #e2a03f;
-    --color-danger: #ef6b5e;
+    --color-paper: #1b1611;
+    --color-card: #262019;
+    --color-paper-soft: #2e271e;
+    --color-border: #3d3327;
+    --color-border-strong: #7a6849;
 
-    --color-ink: #eceef2;
-    --color-ink-soft: #a7adba;
-    --color-ink-faint: #6b7280;
-    --color-paper: #0b0d12;
-    --color-paper-soft: #14161d;
-    --color-border: #262a35;
-    --color-border-strong: #363c4a;
+    --color-ink: #f6ecdb;
+    --color-ink-soft: #d0c2aa;
+    --color-ink-faint: #a59780;
+
+    --color-brand: #ff9a72;
+    --color-brand-hover: #ffb090;
+    --color-brand-strong: #ffb897;
+    --color-brand-wash: #3b2418;
+    --color-on-brand: #2a1409;
+
+    --color-word: #4b3a12;
+    --color-gram: #22345e;
+
+    --color-success: #6fcf8f;
+    --color-success-ink: #8fdca8;
+    --color-success-wash: #1e3627;
+    --color-on-success: #0f2a18;
+    --color-blue: #8db4ff;
+    --color-blue-ink: #a9c6ff;
+    --color-blue-wash: #1f2f52;
+    --color-on-blue: #0f1e3f;
+    --color-pink: #ff8fb0;
+    --color-pink-ink: #ffa9c4;
+    --color-pink-wash: #43202e;
+    --color-on-pink: #3a0f1f;
+    --color-warning: #f0b84e;
+    --color-warning-ink: #f5c976;
+    --color-warning-wash: #3d2e10;
+    --color-on-warning: #2b1d02;
+    --color-danger: #ff8a7a;
+    --color-danger-wash: #412119;
+    --color-focus: #ffb897;
+
+    --shadow-pop: 0 16px 40px rgb(0 0 0 / 0.5);
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   }
 }
 
 :root {
   color-scheme: light dark;
-}
-
-/* Warm/playful reader theme ("Direction C"): cream paper, coral accent,
-   Baloo 2 + Nunito. Opt-in per page via Layout's `bodyClass`; overrides the
-   same tokens the rest of the site reads, so every shared component (header,
-   .btn, .badge, .card) re-skins with no per-component rules. */
-.theme-reader {
-  --color-brand: #c8471c;
-  --color-brand-strong: #9f3512;
-  --color-brand-wash: #fde9dd;
-  --color-highlight: #e59a1f;
-  --color-highlight-wash: #fdf0d2;
-  --color-success: #2f8a4f;
-  --color-warning: #b8730d;
-  --color-danger: #c53a2b;
-
-  --color-ink: #2e2418;
-  --color-ink-soft: #6f6250;
-  --color-ink-faint: #9a8d78;
-  --color-paper: #fbf5e9;
-  --color-paper-soft: #f3e9d4;
-  --color-border: #e9dcc1;
-  --color-border-strong: #d3c19c;
-
-  --font-display: "Baloo 2", ui-rounded, "Nunito", system-ui, sans-serif;
-  --font-body: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --radius-control: 0.75rem;
-}
-@media (prefers-color-scheme: dark) {
-  .theme-reader {
-    --color-brand: #ff9a72;
-    --color-brand-strong: #ffb897;
-    --color-brand-wash: #3a2418;
-    --color-highlight: #f0b84e;
-    --color-highlight-wash: #33270f;
-    --color-success: #6fcf8f;
-    --color-warning: #e8ac52;
-    --color-danger: #f28576;
-
-    --color-ink: #f3ead9;
-    --color-ink-soft: #c2b59d;
-    --color-ink-faint: #8c806b;
-    --color-paper: #1d1710;
-    --color-paper-soft: #2a2117;
-    --color-border: #3a2f21;
-    --color-border-strong: #54452f;
-  }
 }
 
 * {
@@ -160,7 +118,7 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--color-ink);
   background: var(--color-paper);
 }
@@ -182,20 +140,25 @@ h2 {
 }
 
 a {
-  color: var(--color-brand);
+  color: var(--color-brand-strong);
 }
 a:hover {
-  color: var(--color-brand-strong);
+  color: var(--color-brand-hover);
+}
+
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .num {
-  font-family: var(--font-mono);
-  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
 }
 
 /* --- Layout shell --- */
 .site-header {
   border-bottom: 1px solid var(--color-border);
+  background: var(--color-card);
   padding: 1rem 1.5rem;
 }
 .site-header nav {
@@ -226,12 +189,12 @@ a:hover {
 }
 .site-header a {
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-ink);
 }
 .site-header a[aria-current="page"],
 .site-header a:hover {
-  color: var(--color-brand);
+  color: var(--color-brand-strong);
 }
 .site-main {
   max-width: 72rem;
@@ -244,45 +207,288 @@ a:hover {
 }
 
 /* --- Reusable atoms --- */
+
+/* Accent hue for tag/alert: put a tone class on the element and the atom reads
+   --tone* (default: brand). */
+.tone-green {
+  --tone: var(--color-success);
+  --tone-ink: var(--color-success-ink);
+  --tone-wash: var(--color-success-wash);
+  --on-tone: var(--color-on-success);
+}
+.tone-blue {
+  --tone: var(--color-blue);
+  --tone-ink: var(--color-blue-ink);
+  --tone-wash: var(--color-blue-wash);
+  --on-tone: var(--color-on-blue);
+}
+.tone-pink {
+  --tone: var(--color-pink);
+  --tone-ink: var(--color-pink-ink);
+  --tone-wash: var(--color-pink-wash);
+  --on-tone: var(--color-on-pink);
+}
+.tone-amber {
+  --tone: var(--color-warning);
+  --tone-ink: var(--color-warning-ink);
+  --tone-wash: var(--color-warning-wash);
+  --on-tone: var(--color-on-warning);
+}
+:where(.tag, .alert),
+.tone-brand {
+  --tone: var(--color-brand);
+  --tone-ink: var(--color-brand-strong);
+  --tone-wash: var(--color-brand-wash);
+  --on-tone: var(--color-on-brand);
+}
+
 .card {
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  background: var(--color-paper);
-  padding: 1.25rem;
+  border-radius: 1.125rem;
+  background: var(--color-card);
+  padding: 1.375rem;
 }
+.card--soft {
+  background: var(--color-paper-soft);
+}
+.card--hi {
+  border: 2px solid var(--color-brand);
+}
+
 .badge {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.1rem 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.15rem 0.7rem;
   border-radius: 999px;
   background: var(--color-brand-wash);
   color: var(--color-brand-strong);
 }
+.badge--solid {
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+}
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
   font: inherit;
-  font-weight: 600;
-  padding: 0.5rem 0.9rem;
-  border-radius: var(--radius-control);
-  border: 1px solid var(--color-brand);
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-brand);
   background: var(--color-brand);
-  color: #fff;
+  color: var(--color-on-brand);
+  text-decoration: none;
   cursor: pointer;
 }
 .btn:hover {
-  background: var(--color-brand-strong);
-  border-color: var(--color-brand-strong);
+  background: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
+  color: var(--color-on-brand);
+}
+.btn--sec {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-brand-strong);
+}
+.btn--sec:hover {
+  background: var(--color-brand-wash);
+  border-color: var(--color-border-strong);
+  color: var(--color-brand-strong);
 }
 .btn--ghost {
   background: transparent;
-  color: var(--color-brand);
+  border-color: transparent;
+  color: var(--color-brand-strong);
 }
 .btn--ghost:hover {
   background: var(--color-brand-wash);
+  border-color: transparent;
   color: var(--color-brand-strong);
+}
+.btn--danger {
+  background: transparent;
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.btn--danger:hover {
+  background: var(--color-danger-wash);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.btn--sm {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+}
+.btn--lg {
+  min-height: 3.25rem;
+  padding: 0.8rem 1.75rem;
+  font-size: 1.03rem;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--color-ink-soft);
+}
+.input {
+  display: block;
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0 0.875rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-card);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.input::placeholder {
+  color: var(--color-ink-faint);
+}
+.input:focus-visible {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 4px var(--color-brand-wash);
+  outline: none;
+}
+
+/* <input type="checkbox" class="toggle" role="switch"> */
+.toggle {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 2.875rem;
+  height: 1.75rem;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--color-border-strong);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.toggle:checked {
+  background: var(--color-success);
+}
+.toggle:checked::after {
+  background: var(--color-on-success);
+  transform: translateX(1.125rem);
+}
+.toggle:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Button group; the active button carries aria-pressed="true" (or
+   aria-checked="true" / .is-on). */
+.segment {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  background: var(--color-paper-soft);
+}
+.segment > button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.125rem;
+  padding: 0.4rem 0.25rem;
+  border: 0;
+  border-radius: 0.5625rem;
+  background: transparent;
+  color: var(--color-ink-soft);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.segment > button:where([aria-pressed="true"], [aria-checked="true"], .is-on) {
+  background: var(--color-card);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1.5px solid var(--tone);
+  border-radius: 0.875rem;
+  background: var(--tone-wash);
+  color: var(--color-ink);
+}
+
+.skeleton {
+  display: block;
+  min-height: 1em;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-paper-soft) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .skeleton {
+    animation: none;
+  }
 }
 
 /* --- Inline analysis in the reader (PLAN.md §6) --- */
@@ -333,18 +539,22 @@ a:hover {
 button[value="again"] {
   border-color: var(--color-danger);
   background: var(--color-danger);
+  color: var(--color-paper);
 }
 button[value="hard"] {
   border-color: var(--color-warning);
   background: var(--color-warning);
+  color: var(--color-on-warning);
 }
 button[value="good"] {
   border-color: var(--color-success);
   background: var(--color-success);
+  color: var(--color-on-success);
 }
 button[value="easy"] {
   border-color: var(--color-brand);
   background: var(--color-brand);
+  color: var(--color-on-brand);
 }
 
 /* --- Reader word/phrase popup (built client-side by reader-popup.ts, so
@@ -357,9 +567,9 @@ button[value="easy"] {
   padding: 0.9rem 1rem;
   border: 1px solid var(--color-border-strong);
   border-radius: 1rem;
-  background: var(--color-paper);
+  background: var(--color-card);
   color: var(--color-ink);
-  box-shadow: 0 8px 28px rgb(46 36 24 / 0.18);
+  box-shadow: var(--shadow-pop);
   font-size: 0.95rem;
 }
 .lex-popup[hidden] {
@@ -439,25 +649,14 @@ button[value="easy"] {
 /* --- Reader toolbar + token layers. `[data-tok]` spans are added client-side
    by reader-tokens.ts the first time a mode is switched on; each mode is a
    class on <body> (reader-pos / reader-tense / reader-analyze). --- */
-.theme-reader {
-  --pos-noun: #2f6fdb;
-  --pos-verb: #c8471c;
-  --pos-adj: #2f8a4f;
-  --pos-adv: #8a4fd0;
-  --tense-past: #b8730d;
-  --tense-present: #2f6fdb;
-  --tense-future: #2f8a4f;
-}
-@media (prefers-color-scheme: dark) {
-  .theme-reader {
-    --pos-noun: #7fb0ff;
-    --pos-verb: #ff9a72;
-    --pos-adj: #6fcf8f;
-    --pos-adv: #c39bff;
-    --tense-past: #f0b84e;
-    --tense-present: #7fb0ff;
-    --tense-future: #6fcf8f;
-  }
+:root {
+  --pos-noun: var(--color-blue);
+  --pos-verb: var(--color-brand);
+  --pos-adj: var(--color-success);
+  --pos-adv: var(--color-pink);
+  --tense-past: var(--color-warning);
+  --tense-present: var(--color-blue);
+  --tense-future: var(--color-success);
 }
 
 .reader-toolbar {
@@ -480,7 +679,7 @@ button[value="easy"] {
   padding: 0.3rem 0.8rem;
   border: 2px solid var(--color-border-strong);
   border-radius: 999px;
-  background: var(--color-paper);
+  background: var(--color-card);
   color: var(--color-ink);
   cursor: pointer;
 }
