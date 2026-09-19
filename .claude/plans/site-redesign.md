@@ -46,10 +46,10 @@ Baloo 2, Nunito, IBM Plex Mono (видалити woff2 і `@font-face`); `.theme
 sm/lg), `.card`, `.badge`, `.tag`, інпути, тумблер, сегмент, скелетон, `prefers-reduced-motion`.
 Чекпоінт дизайну: скріншот рідера у світлій і темній темі порівнюється з макетом до слайса 2.
 
-### [ ] 2. Theme and preferences without flash
+### [x] 2. Theme and preferences without flash
 - Branch: `site-redesign-02-theme-prefs-no-flash`
-- Base: `site-redesign-01-tokens-and-atoms`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/63
 
 Інлайн-скрипт у `<head>` Layout читає localStorage (`theme`: auto/light/dark; режим тулбара рідера;
 службові слова; розмір тексту) і ставить атрибути на `<html>` до першого малювання. Спільний helper
