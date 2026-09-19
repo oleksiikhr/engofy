@@ -60,10 +60,10 @@ CEFR multi-select фільтр (той самий формат параметр�
 (multi-select, узгоджено з патерном на `/posts`/`/practice`), підсвітка стану
 конструкції з зрізу 1. Без "приховати вивчене" — усе завжди видно.
 
-### [ ] 4. Каркас /grammar/[slug] + перші хендкрафтові сторінки
+### [x] 4. Каркас /grammar/[slug] + перші хендкрафтові сторінки
 - Branch: `grammar-page-redesign-04-slug-shell`
-- Base: `grammar-page-redesign-03-list-page`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/40
 
 Перевикористовуваний каркас гібридного рендеру: hero/kicker-верстка, патерн
 "Порівняй з" (хардкоджені посилання прямо в розмітці конкретної сторінки, без нової
