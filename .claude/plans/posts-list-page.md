@@ -34,10 +34,10 @@ CEFR multi-select фільтр, "тільки непрочитане" (LEFT JOIN
 виноситься в спільний хелпер, перевикористовується обома запитами. `userId` скрізь
 опційний (працює для гостей).
 
-### [ ] 2. Фільтр і автокомпліт по слову/фразі
+### [x] 2. Фільтр і автокомпліт по слову/фразі
 - Branch: `posts-list-page-02-word-search`
-- Base: `posts-list-page-01-list-query`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/36
 
 Розширення запиту з зрізу 1 текстовим фільтром, що дзеркалить join
 `GetDictionaryQuery.queryUsage` (`sentence_tokens → sentences → posts`), лише в інший
