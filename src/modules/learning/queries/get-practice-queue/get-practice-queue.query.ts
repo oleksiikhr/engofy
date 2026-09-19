@@ -1,4 +1,5 @@
 import { Query } from '@nestjs/cqrs';
+import type { CardTargetType } from '../../domain/card-target.js';
 import type { PracticeQueueResult } from './practice-queue-item.js';
 
 export class GetPracticeQueueQuery extends Query<PracticeQueueResult> {
@@ -10,6 +11,9 @@ export class GetPracticeQueueQuery extends Query<PracticeQueueResult> {
     // touches the free-tier 100-card cap, which lives only in
     // `CardLimitService`.
     readonly bypassNewLimit: boolean = false,
+    // Restricts the queue to these card target types (the /practice filter
+    // chips, practice-redesign зріз 4); undefined = every type.
+    readonly types?: readonly CardTargetType[],
   ) {
     super();
   }

@@ -43,4 +43,8 @@ export interface PracticeQueueResult {
   // (practice-redesign зріз 2) — 0 when nothing was held back, or when the
   // caller bypassed the cap. Drives the "N more new cards waiting" UI.
   heldBackNewCount: number;
+  // Whether the user owns any non-archived card at all, regardless of the
+  // type filter or what's due — separates the "no cards ever" empty state
+  // from "queue cleared" (practice-redesign зріз 4).
+  hasAnyCards: boolean;
 }

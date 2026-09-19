@@ -2,17 +2,37 @@
 import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
 import { renderPracticeQueue } from '../lib/practice-card';
+import {
+  isTypeActive,
+  PRACTICE_TYPE_LABEL,
+  PRACTICE_TYPES,
+  parseTypesParam,
+  toggleType,
+  typesQuery,
+} from '../lib/practice-filter';
 import { getCurrentUser } from '../lib/session';
 import type { PracticeQueueResponse } from '../lib/types';
 
 const user = await getCurrentUser(Astro.request);
+const activeTypes = parseTypesParam(Astro.url.searchParams.get('types'));
+const filterQuery = typesQuery(activeTypes);
 const queue: PracticeQueueResponse = user
-  ? await apiGet<PracticeQueueResponse>('/learning/practice?limit=20', {
-      request: Astro.request,
-    })
-  : { items: [], nextOffset: null, heldBackNewCount: 0 };
+  ? await apiGet<PracticeQueueResponse>(
+      `/learning/practice?limit=20${filterQuery ? `&${filterQuery}` : ''}`,
+      { request: Astro.request },
+    )
+  : { items: [], nextOffset: null, heldBackNewCount: 0, hasAnyCards: false };
 
-const initialHtml = user ? renderPracticeQueue(queue) : '';
+const initialHtml = user ? renderPracticeQueue(queue, activeTypes) : '';
+const chips = PRACTICE_TYPES.map((type) => {
+  const next = typesQuery(toggleType(activeTypes, type));
+  return {
+    type,
+    label: PRACTICE_TYPE_LABEL[type],
+    active: isTypeActive(activeTypes, type),
+    href: next ? `/practice?${next}` : '/practice',
+  };
+});
 ---
 
 <Layout title="Practice — Engofy" user={user} active="practice">
@@ -24,34 +44,32 @@ const initialHtml = user ? renderPracticeQueue(queue) : '';
         <a href="/login">Sign in</a> to build a deck and review it here.
       </p>
     ) : (
-      <div id="practice-container" set:html={initialHtml} />
+      <>
+        {queue.hasAnyCards && (
+          <nav class="practice__filter" aria-label="Тип карток">
+            {chips.map((chip) => (
+              <a
+                href={chip.href}
+                class:list={[
+                  'practice__chip',
+                  { 'practice__chip--on': chip.active },
+                ]}
+                aria-current={chip.active ? 'true' : undefined}
+                data-testid={`practice-chip-${chip.type}`}
+              >
+                {chip.label}
+              </a>
+            ))}
+          </nav>
+        )}
+        <div id="practice-container" set:html={initialHtml} />
+      </>
     )
   }
 </Layout>
 
-<script is:inline>
-  // "Show answer" toggle, delegated so it survives HTMX swaps of the card.
-  document.addEventListener('click', (e) => {
-    const revealBtn = e.target.closest('.practice__reveal');
-    if (revealBtn) {
-      const answer = revealBtn.parentElement?.querySelector('.practice__answer');
-      if (answer) {
-        answer.hidden = false;
-        revealBtn.hidden = true;
-      }
-      return;
-    }
-
-    // 🔊 pronunciation, client-side only (Web Speech API) — no audio asset.
-    const speakBtn = e.target.closest('.practice__speak');
-    if (speakBtn && 'speechSynthesis' in window) {
-      const text = speakBtn.dataset.speak;
-      if (text) {
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-      }
-    }
-  });
+<script>
+  import '../lib/practice-client';
 </script>
 
 <style is:global>
@@ -63,6 +81,40 @@ const initialHtml = user ? renderPracticeQueue(queue) : '';
     text-align: center;
     max-width: 32rem;
     margin: 1rem auto 0;
+  }
+  .practice__filter {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .practice__chip {
+    padding: 0.3rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+    text-decoration: none;
+  }
+  .practice__chip--on {
+    border-color: var(--color-brand-strong);
+    color: var(--color-brand-strong);
+    font-weight: 600;
+  }
+  .practice__key {
+    margin-left: 0.25rem;
+    padding: 0 0.3rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    font-family: inherit;
+    font-size: 0.7rem;
+    color: var(--color-ink-soft);
+  }
+  .practice__grade .practice__key {
+    border-color: currentColor;
+    color: inherit;
+    opacity: 0.85;
   }
   .practice__count {
     margin: 0 0 1.5rem;

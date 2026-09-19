@@ -58,4 +58,10 @@ export class PracticeQueueResponseDto
   // nothing was held back or the cap was bypassed for this request
   // (practice-redesign зріз 2). Drives the "N more new cards waiting" UI.
   readonly heldBackNewCount!: number;
+
+  // Whether the user owns any non-archived card at all, ignoring the type
+  // filter and what's due — tells the "no cards yet" empty state apart from
+  // "queue cleared" (practice-redesign зріз 4). Always `true` on the daily
+  // plan's card list, which has no empty-state UI.
+  readonly hasAnyCards!: boolean;
 }

@@ -420,6 +420,129 @@ describe('GetPracticeQueueHandler', () => {
     expect(heldBackNewCount).toBe(3);
   });
 
+  it('puts in-progress cards ahead of New ones even when the New cards are due earlier', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const definitions = Array.from({ length: 3 }, () => {
+      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+    });
+    await em.flush();
+
+    card(em, userId, DateTime.now().minus({ days: 5 }), {
+      wordDefinitionId: definitions[0].id,
+    });
+    card(
+      em,
+      userId,
+      DateTime.now().minus({ hours: 2 }),
+      { wordDefinitionId: definitions[1].id },
+      LearningCardState.Review,
+    );
+    card(
+      em,
+      userId,
+      DateTime.now().minus({ hours: 1 }),
+      { wordDefinitionId: definitions[2].id },
+      LearningCardState.Relearning,
+    );
+    await em.flush();
+    em.clear();
+
+    const { items } = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    expect(items.map((item) => item.state)).toEqual([
+      LearningCardState.Review,
+      LearningCardState.Relearning,
+      LearningCardState.New,
+    ]);
+
+    // A tight limit fills with the in-progress cards first, not the older New one.
+    const { items: limited } = await suite.query(
+      new GetPracticeQueueQuery(userId, 2),
+    );
+    expect(limited.map((item) => item.state)).toEqual([
+      LearningCardState.Review,
+      LearningCardState.Relearning,
+    ]);
+  });
+
+  it('filters the queue to the requested card types', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const word = em.create(Word, { lemma: 'ephemeral' });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Adjective,
+    });
+    const phrase = em.create(Phrase, { phraseText: 'pick up' });
+    const grammar = em.create(GrammarUsagePoint, {
+      constructionId: uuidv7(),
+      cefrLevel: CefrLevel.B1,
+      guideword: 'past perfect',
+      canDoStatement: 'Can talk about an earlier past.',
+    });
+    await em.flush();
+
+    card(em, userId, DateTime.now().minus({ hours: 3 }), {
+      wordDefinitionId: definition.id,
+    });
+    card(em, userId, DateTime.now().minus({ hours: 2 }), {
+      phraseId: phrase.id,
+    });
+    card(em, userId, DateTime.now().minus({ hours: 1 }), {
+      grammarUsagePointId: grammar.id,
+    });
+    await em.flush();
+    em.clear();
+
+    const both = await suite.query(
+      new GetPracticeQueueQuery(userId, 20, false, ['phrase', 'grammar']),
+    );
+    expect(both.items.map((item) => item.target.type)).toEqual([
+      'phrase',
+      'grammar',
+    ]);
+
+    const wordsOnly = await suite.query(
+      new GetPracticeQueueQuery(userId, 20, false, ['word']),
+    );
+    expect(wordsOnly.items.map((item) => item.target.type)).toEqual(['word']);
+  });
+
+  it('reports hasAnyCards separately from what is due or matches the filter', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const empty = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    expect(empty).toMatchObject({ items: [], hasAnyCards: false });
+
+    const word = em.create(Word, { lemma: 'later' });
+    const definition = em.create(WordDefinition, {
+      wordId: word.id,
+      pos: PartOfSpeech.Adjective,
+    });
+    await em.flush();
+    card(em, userId, DateTime.now().plus({ days: 3 }), {
+      wordDefinitionId: definition.id,
+    });
+    await em.flush();
+    em.clear();
+
+    // Owns a card, but nothing is due: cleared, not empty.
+    const cleared = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    expect(cleared).toMatchObject({ items: [], hasAnyCards: true });
+
+    const filtered = await suite.query(
+      new GetPracticeQueueQuery(userId, 20, false, ['grammar']),
+    );
+    expect(filtered).toMatchObject({ items: [], hasAnyCards: true });
+  });
+
   it('excludes archived cards from the queue', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();

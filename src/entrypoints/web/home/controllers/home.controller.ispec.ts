@@ -128,6 +128,7 @@ describe('HomeController', () => {
       items: [],
       nextOffset: null,
       heldBackNewCount: 0,
+      hasAnyCards: true,
     });
   });
 

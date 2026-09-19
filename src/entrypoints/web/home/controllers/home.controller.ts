@@ -62,6 +62,7 @@ export class HomeController {
     return {
       ...toOffsetPage(items.map(toQueueItemDto), null),
       heldBackNewCount: 0,
+      hasAnyCards: true,
     };
   }
 

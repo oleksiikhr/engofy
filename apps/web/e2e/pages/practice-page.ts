@@ -6,6 +6,7 @@ export class PracticePage {
   readonly signInLink: Locator;
   readonly card: Locator;
   readonly front: Locator;
+  readonly revealButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -13,6 +14,7 @@ export class PracticePage {
     this.signInLink = page.getByRole('link', { name: 'Sign in' });
     this.card = page.getByTestId('practice-card');
     this.front = page.locator('.practice__front');
+    this.revealButton = page.getByRole('button', { name: /Show answer/ });
   }
 
   async goto() {
@@ -22,6 +24,10 @@ export class PracticePage {
   async expectLoaded() {
     await expect(this.page).toHaveURL('/practice');
     await expect(this.heading).toBeVisible();
+  }
+
+  chip(type: 'word' | 'phrase' | 'grammar'): Locator {
+    return this.page.getByTestId(`practice-chip-${type}`);
   }
 
   gradeButton(name: string): Locator {

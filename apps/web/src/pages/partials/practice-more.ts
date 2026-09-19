@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { ApiError, apiGet } from '../../lib/api';
 import { renderPracticeQueue } from '../../lib/practice-card';
+import { parseTypesParam, typesQuery } from '../../lib/practice-filter';
 import type { PracticeQueueResponse } from '../../lib/types';
 
 // HTMX target for the /practice "Show N more new" button — re-fetches the
@@ -14,13 +15,15 @@ function html(body: string): Response {
   });
 }
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request, url }) => {
+  const typeFilter = parseTypesParam(url.searchParams.get('types'));
+  const filterQuery = typesQuery(typeFilter);
   try {
     const next = await apiGet<PracticeQueueResponse>(
-      '/learning/practice?limit=20&bypassNewLimit=true',
+      `/learning/practice?limit=20&bypassNewLimit=true${filterQuery ? `&${filterQuery}` : ''}`,
       { request },
     );
-    return html(renderPracticeQueue(next));
+    return html(renderPracticeQueue(next, typeFilter));
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
       return html('<p><a href="/login">Sign in</a> to keep reviewing.</p>');
