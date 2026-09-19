@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { apiGetOrNull } from '../../lib/api';
+import { buildLexiconData } from '../../lib/lexicon-data';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import type { PostDetail } from '../../lib/types';
@@ -25,6 +26,11 @@ const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
 });
 
 const bodyHtml = renderDoc(post.doc, post.annotations);
+// `<` is escaped so the JSON can't close its own <script> element.
+const lexiconJson = JSON.stringify(buildLexiconData(post.annotations)).replace(
+  /</g,
+  '\\u003c',
+);
 
 // --- exercise view models (all casts / normalisation live here; the template
 // only maps over plain data) ---
@@ -146,6 +152,7 @@ const drills: DrillView[] = post.exercises
       </header>
 
       <div class="analysis reading-body" set:html={bodyHtml} />
+      <script is:inline type="application/json" id="lexicon-data" set:html={lexiconJson} />
     </article>
   </div>
 
@@ -219,6 +226,16 @@ const drills: DrillView[] = post.exercises
     )
   }
 </Layout>
+
+<script>
+  import { initReaderPopup } from '../../lib/reader-popup';
+
+  const body = document.querySelector<HTMLElement>('.reading-body');
+  const raw = document.getElementById('lexicon-data')?.textContent;
+  if (body && raw) {
+    initReaderPopup(body, JSON.parse(raw));
+  }
+</script>
 
 <script is:inline>
   (() => {
@@ -325,6 +342,11 @@ const drills: DrillView[] = post.exercises
     text-decoration: underline dotted var(--color-highlight);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+  .reading-body :global(.is-active) {
+    background: var(--color-highlight-wash);
+    border-radius: 0.25rem;
   }
   .reading-body :global([data-grammar-usage-point-id]) {
     background: var(--color-brand-wash);

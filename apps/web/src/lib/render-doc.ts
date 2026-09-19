@@ -44,7 +44,7 @@ function wrapMarks(html: string, marks: Mark[] | undefined): string {
   return out;
 }
 
-function isMarked(state: EffectiveState | undefined): boolean {
+export function isMarked(state: EffectiveState | undefined): boolean {
   return state === 'new' || state === 'learning';
 }
 
