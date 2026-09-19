@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
       '/learning/practice?limit=20',
       { request },
     );
-    return html(renderPracticeQueue(next.items));
+    return html(renderPracticeQueue(next));
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
       return html('<p><a href="/login">Sign in</a> to keep reviewing.</p>');

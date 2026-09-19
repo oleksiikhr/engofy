@@ -43,4 +43,9 @@ export class PracticeQueueResponseDto
   readonly items!: PracticeQueueItemDto[];
 
   readonly nextOffset!: number | null;
+
+  // How many New-state cards the daily new-card cap held back, 0 when
+  // nothing was held back or the cap was bypassed for this request
+  // (practice-redesign зріз 2). Drives the "N more new cards waiting" UI.
+  readonly heldBackNewCount!: number;
 }

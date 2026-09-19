@@ -15,8 +15,11 @@ import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostPartKind } from '../../../post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
+import { DAILY_NEW_CARD_LIMIT } from '../../domain/daily-new-card-limit.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
+import { ReviewLog } from '../../entities/review-log.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
+import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
 import { GetPracticeQueueQuery } from './get-practice-queue.query.js';
 
@@ -27,6 +30,7 @@ function card(
   target: Partial<
     Pick<LearningCard, 'wordDefinitionId' | 'phraseId' | 'grammarUsagePointId'>
   >,
+  state: LearningCardState = LearningCardState.New,
 ): void {
   em.create(LearningCard, {
     userId,
@@ -38,9 +42,9 @@ function card(
     difficulty: 5,
     elapsedDays: 0,
     scheduledDays: 0,
-    reps: 0,
+    reps: state === LearningCardState.New ? 0 : 1,
     lapses: 0,
-    state: LearningCardState.New,
+    state,
   });
 }
 
@@ -167,7 +171,9 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const queue = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const { items: queue } = await suite.query(
+      new GetPracticeQueueQuery(userId, 20),
+    );
 
     expect(queue.map((item) => item.target.type)).toEqual(['word', 'phrase']);
     expect(queue[0].target.primary).toBe('ephemeral');
@@ -195,8 +201,154 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const queue = await suite.query(new GetPracticeQueueQuery(userId, 3));
+    const { items: queue } = await suite.query(
+      new GetPracticeQueueQuery(userId, 3),
+    );
     expect(queue).toHaveLength(3);
+  });
+
+  it('throttles New cards to the daily limit but never caps due reviews, and reports the holdback', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const newDefinitions = Array.from(
+      { length: DAILY_NEW_CARD_LIMIT + 3 },
+      () => {
+        const word = em.create(Word, { lemma: `new-${uuidv7()}` });
+        return em.create(WordDefinition, {
+          wordId: word.id,
+          pos: PartOfSpeech.Noun,
+        });
+      },
+    );
+    const reviewDefinition = (() => {
+      const word = em.create(Word, { lemma: `review-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+    })();
+    await em.flush();
+
+    newDefinitions.forEach((definition, i) => {
+      card(em, userId, DateTime.now().minus({ minutes: i + 1 }), {
+        wordDefinitionId: definition.id,
+      });
+    });
+    card(
+      em,
+      userId,
+      DateTime.now().minus({ days: 1 }),
+      { wordDefinitionId: reviewDefinition.id },
+      LearningCardState.Review,
+    );
+    await em.flush();
+    em.clear();
+
+    const { items, heldBackNewCount } = await suite.query(
+      new GetPracticeQueueQuery(userId, 50),
+    );
+
+    expect(items.filter((i) => i.state === LearningCardState.New)).toHaveLength(
+      DAILY_NEW_CARD_LIMIT,
+    );
+    expect(
+      items.filter((i) => i.state === LearningCardState.Review),
+    ).toHaveLength(1);
+    expect(heldBackNewCount).toBe(3);
+  });
+
+  it('bypassNewLimit skips the daily cap and reports no holdback', async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    const definitions = Array.from({ length: DAILY_NEW_CARD_LIMIT + 3 }, () => {
+      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+    });
+    await em.flush();
+
+    definitions.forEach((definition, i) => {
+      card(em, userId, DateTime.now().minus({ minutes: i + 1 }), {
+        wordDefinitionId: definition.id,
+      });
+    });
+    await em.flush();
+    em.clear();
+
+    const { items, heldBackNewCount } = await suite.query(
+      new GetPracticeQueueQuery(userId, 50, true),
+    );
+
+    expect(items).toHaveLength(DAILY_NEW_CARD_LIMIT + 3);
+    expect(heldBackNewCount).toBe(0);
+  });
+
+  it("persists today's spent budget across calls instead of resetting per fetch", async () => {
+    const em = suite.orm.em;
+    const userId = uuidv7();
+
+    // Simulate cards that already graduated from New earlier today — their
+    // earliest review_logs row is today, so they count against today's
+    // budget even though they're no longer due (and so never appear in this
+    // response themselves).
+    const alreadyIntroduced = DAILY_NEW_CARD_LIMIT - 2;
+    for (let i = 0; i < alreadyIntroduced; i += 1) {
+      const word = em.create(Word, { lemma: `spent-${uuidv7()}` });
+      const definition = em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+      const graduated = em.create(LearningCard, {
+        userId,
+        wordDefinitionId: definition.id,
+        due: DateTime.now().plus({ days: 1 }),
+        stability: 1,
+        difficulty: 5,
+        elapsedDays: 1,
+        scheduledDays: 1,
+        reps: 1,
+        lapses: 0,
+        state: LearningCardState.Review,
+        lastReview: DateTime.now(),
+      });
+      em.create(ReviewLog, {
+        cardId: graduated.id,
+        rating: ReviewRating.Good,
+        reviewedAt: DateTime.now(),
+        elapsedDays: 0,
+        scheduledDays: 1,
+      });
+    }
+    await em.flush();
+
+    const freshDefinitions = Array.from({ length: 5 }, () => {
+      const word = em.create(Word, { lemma: `fresh-${uuidv7()}` });
+      return em.create(WordDefinition, {
+        wordId: word.id,
+        pos: PartOfSpeech.Noun,
+      });
+    });
+    await em.flush();
+    freshDefinitions.forEach((definition, i) => {
+      card(em, userId, DateTime.now().minus({ minutes: i + 1 }), {
+        wordDefinitionId: definition.id,
+      });
+    });
+    await em.flush();
+    em.clear();
+
+    const { items, heldBackNewCount } = await suite.query(
+      new GetPracticeQueueQuery(userId, 50),
+    );
+
+    expect(items.filter((i) => i.state === LearningCardState.New)).toHaveLength(
+      2,
+    );
+    expect(heldBackNewCount).toBe(3);
   });
 
   it('excludes archived cards from the queue', async () => {
@@ -225,7 +377,9 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const queue = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const { items: queue } = await suite.query(
+      new GetPracticeQueueQuery(userId, 20),
+    );
     expect(queue).toHaveLength(0);
   });
 
@@ -246,7 +400,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.secondary).toBe('lasting a very short time');
     expect(item.target.phonetic).toBe('/ɪˈfemərəl/');
@@ -266,7 +421,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.secondary).toBe('to stop trying');
     expect(item.target.phonetic).toBeNull();
@@ -293,7 +449,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.contextSentence).toBe('The sunset was ephemeral.');
   });
@@ -315,7 +472,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.contextSentence).toBe('Never give up on your goals.');
   });
@@ -349,7 +507,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.contextSentence).toBeNull();
   });
@@ -397,7 +556,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
     em.clear();
 
-    const [item] = await suite.query(new GetPracticeQueueQuery(userId, 20));
+    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
+      .items;
 
     expect(item.target.contextSentence).toBeNull();
   });
