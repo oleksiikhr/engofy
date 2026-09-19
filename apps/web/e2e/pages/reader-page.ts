@@ -80,6 +80,20 @@ export class ReaderPage {
     return this.quickCheck.locator(`[data-qc-screen="${kind}"]:visible`);
   }
 
+  // The question screen currently on show, by kind: 'choose' | 'recall' | 'match'.
+  qcQuestion(kind: 'choose' | 'recall' | 'match'): Locator {
+    return this.quickCheck.locator(
+      `[data-qc-screen="question"][data-qc-kind="${kind}"]:visible`,
+    );
+  }
+
+  // Picks a word, then a meaning, on the match screen.
+  async pickPair(term: string, meaning: string) {
+    const screen = this.qcQuestion('match');
+    await screen.locator('[data-match-term]', { hasText: term }).click();
+    await screen.locator('[data-match-meaning]', { hasText: meaning }).click();
+  }
+
   async startQuickCheck() {
     await this.quickCheck.getByRole('button', { name: 'Start' }).click();
   }
