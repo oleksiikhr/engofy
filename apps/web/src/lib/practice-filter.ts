@@ -11,6 +11,13 @@ export const PRACTICE_TYPE_LABEL: Record<PracticeType, string> = {
   grammar: 'Граматика',
 };
 
+// Tone class per type (app.css `.tone-*`), matching the reader's colours.
+export const PRACTICE_TYPE_TONE: Record<PracticeType, string> = {
+  word: 'tone-amber',
+  phrase: 'tone-pink',
+  grammar: 'tone-blue',
+};
+
 // Unknown values are dropped; a full selection collapses to "all" so the URL
 // and the API query stay canonical.
 export function parseTypesParam(raw: string | null): PracticeType[] {

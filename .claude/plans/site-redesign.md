@@ -96,10 +96,10 @@ Privacy (Terms і Privacy — коли з'являться сторінки). To
 лексикону поста. Перед початком перевірити, що всі дані вже приходять у відповіді get-post-detail;
 якщо ні, це зміна контракту і слайс ділиться за правилом «додати → мігрувати → прибрати».
 
-### [ ] 7. Posts, Practice, Dictionary
+### [x] 7. Posts, Practice, Dictionary
 - Branch: `site-redesign-07-posts-practice-dictionary`
-- Base: `site-redesign-06-quick-check-recall-match`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/68
 
 Список постів (картки в трьох станах, пошук, пілі рівнів A1–C2, Unread only), Practice (типи карток,
 картка з рейтингом, клавіатурні підказки), Dictionary і детальні сторінки слів/фраз. Скелетони для

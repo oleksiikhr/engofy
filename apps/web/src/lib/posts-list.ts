@@ -95,21 +95,38 @@ function safeHref(link: string | null): string | null {
   return link && /^https?:\/\//i.test(link) ? link : null;
 }
 
-function cardHtml(post: PostsListItem): string {
+// A signed-in reader sees each card's read state (Read / New); a guest has
+// none, so their cards carry no state tag.
+function cardHtml(post: PostsListItem, signedIn: boolean): string {
   const sourceHref = safeHref(post.sourceLink);
   const attribution = sourceHref
     ? `<a href="${esc(sourceHref)}" rel="noopener noreferrer" target="_blank">${esc(post.attributionText)}</a>`
     : esc(post.attributionText);
+  const href = esc(postUrl(post));
+
+  let state = '';
+  if (post.isRead) {
+    state =
+      '<span class="tag tone-green post-card__state" data-testid="post-read">✓ Read</span>';
+  } else if (signedIn) {
+    state = '<span class="tag tone-blue post-card__state">New</span>';
+  }
+  const cta = post.isRead
+    ? '<a class="btn btn--sm btn--sec" href="{href}" tabindex="-1" aria-hidden="true">Read again</a>'
+    : '<a class="btn btn--sm" href="{href}" tabindex="-1" aria-hidden="true">Read</a>';
 
   return `<li class="post-card card" data-testid="post-card">
     <div class="post-card__head">
-      ${post.cefrLevel ? `<span class="badge">${esc(post.cefrLevel)}</span>` : ''}
-      ${post.isRead ? '<span class="post-card__read" data-testid="post-read">✓ Read</span>' : ''}
-      <time class="post-card__date" datetime="${esc(post.publishedAt)}">${esc(formatDate(post.publishedAt))}</time>
+      ${post.cefrLevel ? `<span class="badge${post.isRead ? '' : ' badge--solid'}">${esc(post.cefrLevel)}</span>` : ''}
+      ${state}
     </div>
-    <h2 class="post-card__title"><a href="${esc(postUrl(post))}">${esc(post.title ?? 'Untitled')}</a></h2>
+    <h2 class="post-card__title"><a href="${href}">${esc(post.title ?? 'Untitled')}</a></h2>
     ${post.excerpt ? `<p class="post-card__excerpt">${esc(post.excerpt)}</p>` : ''}
     <p class="post-card__source">${attribution}</p>
+    <div class="post-card__foot">
+      <time class="meta" datetime="${esc(post.publishedAt)}">${esc(formatDate(post.publishedAt))}</time>
+      ${cta.replace('{href}', href)}
+    </div>
   </li>`;
 }
 
@@ -134,13 +151,15 @@ function moreHtml(view: PostsListResponse, query: PostsQuery): string {
 export function renderPostsPage(
   view: PostsListResponse,
   query: PostsQuery,
+  signedIn: boolean,
 ): string {
-  return `${view.items.map(cardHtml).join('')}${moreHtml(view, query)}`;
+  return `${view.items.map((post) => cardHtml(post, signedIn)).join('')}${moreHtml(view, query)}`;
 }
 
 export function renderPostsResults(
   view: PostsListResponse,
   query: PostsQuery,
+  signedIn: boolean,
 ): string {
   if (view.items.length === 0) {
     const filtered =
@@ -148,13 +167,13 @@ export function renderPostsResults(
     const message = filtered
       ? 'No posts match. A word or phrase must be picked from the suggestions.'
       : 'No posts yet.';
-    return `<p class="posts-empty" data-testid="posts-empty">${esc(message)}</p>`;
+    return `<div class="posts-empty card card--soft" data-testid="posts-empty"><p>${esc(message)}</p></div>`;
   }
-  return `<ul class="posts-list" id="posts-items">${renderPostsPage(view, query)}</ul>`;
+  return `<ul class="posts-list" id="posts-items">${renderPostsPage(view, query, signedIn)}</ul>`;
 }
 
 export const POSTS_ERROR_HTML =
-  '<p class="posts-empty" data-testid="posts-empty">Could not load posts — try again.</p>';
+  '<div class="posts-empty card card--soft" data-testid="posts-empty"><p>Could not load posts — try again.</p></div>';
 
 export const POSTS_INVALID_HTML =
-  '<p class="posts-empty" data-testid="posts-empty">Those filters are not valid — clear them and try again.</p>';
+  '<div class="posts-empty card card--soft" data-testid="posts-empty"><p>Those filters are not valid — clear them and try again.</p></div>';

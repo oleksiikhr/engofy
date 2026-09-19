@@ -19,8 +19,9 @@ test.describe('posts (guest)', () => {
       card.getByRole('link', { name: 'The Cartographer at Dawn' }),
     ).toHaveAttribute('href', '/posts/the-cartographer-at-dawn-E2Eread1');
 
-    // A guest has no read state to filter on.
+    // A guest has no read state to filter on or to show on the cards.
     await expect(posts.unreadToggle).toHaveCount(0);
+    await expect(card.locator('.post-card__state')).toHaveCount(0);
   });
 
   test('the CEFR chips narrow the list', async ({ page }) => {
@@ -90,5 +91,17 @@ test.describe('posts (signed in)', () => {
     await posts.unreadToggle.check();
     await expect(page).toHaveURL(/unreadOnly=true/);
     await expect(posts.unreadToggle).toBeChecked();
+  });
+
+  test('every card carries a read-state tag', async ({ page }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(posts.cards.first()).toBeVisible();
+
+    for (const card of await posts.cards.all()) {
+      await expect(card.locator('.post-card__state')).toHaveText(
+        /^(✓ Read|New)$/,
+      );
+    }
   });
 });

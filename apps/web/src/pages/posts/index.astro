@@ -22,7 +22,7 @@ try {
     `/content/posts?${toApiQuery(query)}`,
     { request: Astro.request },
   );
-  resultsHtml = renderPostsResults(view, query);
+  resultsHtml = renderPostsResults(view, query, user !== null);
 } catch (error) {
   if (!(error instanceof ApiError)) {
     throw error;
@@ -44,159 +44,222 @@ try {
     hx-trigger="change, submit"
     class="posts-controls"
   >
-    <input
-      id="posts-search"
-      name="term"
-      type="search"
-      value={query.term}
-      list="posts-suggestions"
-      autocomplete="off"
-      placeholder="Search by word or phrase…"
-      aria-label="Search posts by word or phrase"
-      hx-get="/partials/posts-suggestions"
-      hx-trigger="input changed delay:250ms"
-      hx-target="#posts-suggestions"
-      hx-swap="innerHTML"
-      hx-params="term"
-    />
-    <datalist id="posts-suggestions"></datalist>
+    <div class="posts-search">
+      <svg
+        class="ic"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.6"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="10" cy="10" r="6"></circle>
+        <path d="M20 20l-5.5-5.5"></path>
+      </svg>
+      <input
+        id="posts-search"
+        class="input"
+        name="term"
+        type="search"
+        value={query.term}
+        list="posts-suggestions"
+        autocomplete="off"
+        placeholder="Search by word or phrase…"
+        aria-label="Search posts by word or phrase"
+        hx-get="/partials/posts-suggestions"
+        hx-trigger="input changed delay:250ms"
+        hx-target="#posts-suggestions"
+        hx-swap="innerHTML"
+        hx-params="term"
+      />
+      <datalist id="posts-suggestions"></datalist>
+    </div>
 
-    <fieldset class="posts-levels">
-      <legend>Level</legend>
+    <div class="posts-filters-row">
+      <fieldset class="posts-levels">
+        <legend class="visually-hidden">Level</legend>
+        {
+          CEFR_LEVELS.map((level) => (
+            <label class="posts-level">
+              <input
+                type="checkbox"
+                name="cefr"
+                value={level}
+                checked={query.cefr.includes(level)}
+              />
+              <span>{level}</span>
+            </label>
+          ))
+        }
+      </fieldset>
+
       {
-        CEFR_LEVELS.map((level) => (
-          <label class="posts-level">
+        user && (
+          <label class="posts-unread card">
+            <span>Unread only</span>
             <input
+              class="toggle"
               type="checkbox"
-              name="cefr"
-              value={level}
-              checked={query.cefr.includes(level)}
+              role="switch"
+              name="unreadOnly"
+              value="true"
+              checked={query.unreadOnly}
             />
-            <span>{level}</span>
           </label>
-        ))
+        )
       }
-    </fieldset>
-
-    {
-      user && (
-        <label class="posts-unread">
-          <input
-            type="checkbox"
-            name="unreadOnly"
-            value="true"
-            checked={query.unreadOnly}
-          />
-          Unread only
-        </label>
-      )
-    }
+    </div>
 
     <noscript><button class="btn" type="submit">Apply</button></noscript>
   </form>
 
+  <div class="posts-skeleton" aria-hidden="true">
+    {
+      [0, 1, 2].map(() => (
+        <div class="card posts-skeleton__card">
+          <span class="skeleton" style="width: 30%; height: 1.25rem"></span>
+          <span class="skeleton" style="width: 85%; height: 1.5rem"></span>
+          <span class="skeleton" style="height: 3rem"></span>
+        </div>
+      ))
+    }
+  </div>
   <div id="posts-results" set:html={resultsHtml} />
 </Layout>
 
 <style is:global>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   .posts-controls {
+    display: grid;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+  .posts-search {
+    position: relative;
+  }
+  .posts-search .ic {
+    position: absolute;
+    top: 50%;
+    left: 0.875rem;
+    transform: translateY(-50%);
+    color: var(--color-ink-faint);
+    pointer-events: none;
+  }
+  .posts-search .input {
+    padding-left: 2.5rem;
+  }
+  .posts-filters-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem 1rem;
-    margin-bottom: 1rem;
-  }
-  .posts-controls > input[type='search'] {
-    flex: 1 1 16rem;
-    font: inherit;
-    padding: 0.4rem 0.6rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-control);
-    background: var(--color-paper);
-    color: var(--color-ink);
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
   }
   .posts-levels {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.5rem;
     border: 0;
     margin: 0;
     padding: 0;
-  }
-  .posts-levels legend {
-    float: left;
-    padding: 0;
-    margin-right: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
+    min-width: 0;
   }
   .posts-level {
+    position: relative;
     cursor: pointer;
   }
   .posts-level input {
     position: absolute;
+    inset: 0;
     opacity: 0;
-    pointer-events: none;
+    margin: 0;
+    cursor: pointer;
   }
   .posts-level span {
-    display: inline-block;
-    padding: 0.2rem 0.65rem;
-    font-size: 0.85rem;
-    border: 1px solid var(--color-border-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.25rem;
+    height: 2.5rem;
+    padding: 0 0.875rem;
+    border: 2px solid var(--color-border-strong);
     border-radius: 999px;
+    background: var(--color-card);
     color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    font-weight: 800;
   }
   .posts-level input:checked + span {
     background: var(--color-brand-wash);
     border-color: var(--color-brand);
     color: var(--color-brand-strong);
-    font-weight: 600;
   }
   .posts-level input:focus-visible + span {
-    outline: 2px solid var(--color-brand);
+    outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
   .posts-unread {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.9rem;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
   }
   .posts-empty {
-    font-size: 0.9rem;
     color: var(--color-ink-soft);
+    text-align: center;
   }
-  .posts-list {
+  .posts-empty p {
+    margin: 0;
+  }
+  .posts-list,
+  .posts-skeleton {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1.25rem;
+  }
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
   }
   .post-card__head {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.35rem;
   }
-  .post-card__date {
+  .post-card__state {
     margin-left: auto;
-    font-size: 0.8rem;
-    color: var(--color-ink-faint);
-  }
-  .post-card__read {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-success);
   }
   .post-card__title {
-    margin: 0 0 0.4rem;
-    font-family: var(--font-display);
-    font-size: 1.2rem;
+    margin: 0;
+    font-size: 1.19rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .post-card__title a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .post-card__title a:hover {
+    color: var(--color-brand-strong);
   }
   .post-card__excerpt {
-    margin: 0 0 0.5rem;
+    margin: 0;
+    font-size: 0.85rem;
     color: var(--color-ink-soft);
   }
   .post-card__source {
@@ -204,7 +267,47 @@ try {
     font-size: 0.8rem;
     color: var(--color-ink-faint);
   }
+  .post-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.25rem;
+  }
   .posts-more {
+    grid-column: 1 / -1;
     text-align: center;
+  }
+  .posts-skeleton {
+    display: none;
+  }
+  .posts-skeleton__card {
+    display: grid;
+    gap: 0.75rem;
+  }
+  /* While a filter change is in flight, swap the results for skeleton cards —
+     after a short delay, so a fast response never flashes them. */
+  #posts-results {
+    overflow: hidden;
+  }
+  #posts-filters.htmx-request ~ .posts-skeleton {
+    display: grid;
+    opacity: 0;
+    animation: posts-fade-in 0s 0.2s forwards;
+  }
+  #posts-filters.htmx-request ~ #posts-results {
+    animation: posts-fade-out 0s 0.2s forwards;
+  }
+  @keyframes posts-fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes posts-fade-out {
+    to {
+      opacity: 0;
+      max-height: 0;
+    }
   }
 </style>
