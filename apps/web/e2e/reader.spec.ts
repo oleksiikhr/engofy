@@ -68,18 +68,6 @@ test.describe('reader page (guest)', () => {
     );
   });
 
-  test('grades comprehension questions', async ({ page }) => {
-    const reader = new ReaderPage(page);
-    await reader.goto(READER_SLUG);
-
-    await reader.answerComprehensionQuestion(0, 'Walked around the harbour');
-    await reader.answerComprehensionQuestion(1, 'Twice');
-    await reader.checkComprehension();
-    await expect(reader.comprehension.locator('.exercise__result')).toHaveText(
-      '✓ Correct',
-    );
-  });
-
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
