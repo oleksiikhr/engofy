@@ -1,6 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import { apiGetOrNull } from '../lib/api';
+import { bootScript } from '../lib/prefs';
 import type { CurrentUser, StreakResponse } from '../lib/types';
 import '../styles/app.css';
 
@@ -39,6 +40,8 @@ const streak = user
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Stored display prefs (theme, reader size, ...) onto <html> before first paint. -->
+    <script is:inline set:html={bootScript()} />
     <title>{title}</title>
   </head>
   <body>
