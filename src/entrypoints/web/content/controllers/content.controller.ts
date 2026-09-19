@@ -13,6 +13,7 @@ import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { CurrentUserOrNull } from '../../../../core/decorators/current-user-or-null.decorator.js';
 import { Public } from '../../../../core/decorators/public.decorator.js';
+import { toCursorPage } from '../../../../core/http/dto/cursor-page.js';
 import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor.js';
 import { PostService } from '../../../../modules/post/post.service.js';
@@ -23,6 +24,10 @@ import type {
 import type { GrammarConstructionView } from '../../../../modules/post/queries/get-grammar-construction/grammar-construction-view.js';
 import type { GrammarReferenceView } from '../../../../modules/post/queries/get-grammar-reference/grammar-reference-view.js';
 import type { PostDetailView } from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
+import type {
+  PostsListItemView,
+  PostsListView,
+} from '../../../../modules/post/queries/get-posts-list/posts-list-view.js';
 import { parseSlugId } from '../../../../modules/post/queries/parse-slug-id.js';
 import { FeedQueryDto } from '../dto/feed-query.dto.js';
 import { FeedItemDto, FeedResponseDto } from '../dto/feed-response.dto.js';
@@ -33,6 +38,11 @@ import {
   PostAnnotationsDto,
   PostDetailResponseDto,
 } from '../dto/post-detail-response.dto.js';
+import { PostsListQueryDto } from '../dto/posts-list-query.dto.js';
+import {
+  PostsListItemDto,
+  PostsListResponseDto,
+} from '../dto/posts-list-response.dto.js';
 
 // Guest-readable content surface (PLAN.md §2, §4): the post feed, a single
 // post with its inline analysis, and the grammar reference. Served under
@@ -56,6 +66,25 @@ export class ContentController {
   async feed(@Query() query: FeedQueryDto): Promise<FeedResponseDto> {
     const view = await this.post.getFeed(query.limit, query.offset);
     return toFeedResponse(view);
+  }
+
+  // The `/posts` archive: published posts, newest first, keyset-paginated —
+  // CEFR multi-select + "unread only" (posts-list-page §1). A distinct
+  // endpoint from `feed` above: different filter shape (CEFR multi-select,
+  // unread toggle) and pagination model (cursor, not offset).
+  @Public()
+  @Get('posts')
+  async postsList(
+    @Query() query: PostsListQueryDto,
+    @CurrentUserOrNull() actor: UserActor | null,
+  ): Promise<PostsListResponseDto> {
+    const view = await this.post.getPostsList(actor?.id ?? null, {
+      cefrLevels: query.cefr,
+      unreadOnly: query.unreadOnly,
+      cursor: query.cursor,
+      limit: query.limit,
+    });
+    return toPostsListResponse(view);
   }
 
   // One post for `/posts/{slug}-{id}`: node tree + resolved annotations +
@@ -152,6 +181,24 @@ function toFeedItemDto(item: FeedItemView): FeedItemDto {
 
 function toFeedResponse(view: FeedView): FeedResponseDto {
   return toOffsetPage(view.items.map(toFeedItemDto), view.nextOffset);
+}
+
+function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
+  return {
+    shortId: item.shortId,
+    slug: item.slug,
+    title: item.title,
+    cefrLevel: item.cefrLevel,
+    publishedAt: item.publishedAt,
+    excerpt: item.excerpt,
+    attributionText: item.attributionText,
+    sourceType: item.sourceType,
+    sourceLink: item.sourceLink,
+  };
+}
+
+function toPostsListResponse(view: PostsListView): PostsListResponseDto {
+  return toCursorPage(view.items.map(toPostsListItemDto), view.nextCursor);
 }
 
 function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {

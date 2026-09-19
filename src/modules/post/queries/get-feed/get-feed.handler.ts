@@ -1,13 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { flattenPostPartUnits } from '../../domain/flatten.js';
 import { Post } from '../../entities/post.entity.js';
-import { PostPart } from '../../entities/post-part.entity.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { loadExcerpts } from '../load-excerpts.js';
 import type { FeedItemView, FeedView } from './feed-view.js';
 import { GetFeedQuery } from './get-feed.query.js';
-
-const EXCERPT_MAX_CHARS = 280;
 
 // Backs the `/` feed page (PLAN.md §4): published posts newest first, with a
 // plain-text excerpt built from the leading blocks. Pagination is a plain
@@ -16,7 +13,8 @@ const EXCERPT_MAX_CHARS = 280;
 // see an item twice or miss one across the boundary.
 // TODO: switch to keyset pagination on `(publishedAt, id)` — the query already
 // orders by that exact tuple, so the cursor is `WHERE (published_at, id) <
-// (:cursorPublishedAt, :cursorId)`.
+// (:cursorPublishedAt, :cursorId)`. `get-posts-list` already does this; this
+// endpoint hasn't been migrated onto it.
 @QueryHandler(GetFeedQuery)
 export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
   constructor(private readonly em: EntityManager) {}
@@ -33,7 +31,10 @@ export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
       },
     );
 
-    const excerpts = await this.loadExcerpts(posts.map((post) => post.id));
+    const excerpts = await loadExcerpts(
+      this.em,
+      posts.map((post) => post.id),
+    );
 
     const items: FeedItemView[] = posts.map((post) => ({
       shortId: post.shortId,
@@ -52,46 +53,4 @@ export class GetFeedHandler implements IQueryHandler<GetFeedQuery> {
       nextOffset: offset + posts.length < total ? offset + limit : null,
     };
   }
-
-  private async loadExcerpts(postIds: string[]): Promise<Map<string, string>> {
-    if (postIds.length === 0) {
-      return new Map();
-    }
-
-    const parts = await this.em.find(
-      PostPart,
-      { postId: { $in: postIds } },
-      {
-        orderBy: { postId: 'asc', blockIndex: 'asc' },
-        disableIdentityMap: true,
-      },
-    );
-
-    const byPost = new Map<string, string>();
-    for (const part of parts) {
-      const current = byPost.get(part.postId) ?? '';
-      if (current.length >= EXCERPT_MAX_CHARS) {
-        continue;
-      }
-      const blockText = flattenPostPartUnits(part.body)
-        .map((unit) => unit.text)
-        .join(' ')
-        .trim();
-      byPost.set(part.postId, current ? `${current} ${blockText}` : blockText);
-    }
-
-    for (const [postId, text] of byPost) {
-      byPost.set(postId, truncate(text, EXCERPT_MAX_CHARS));
-    }
-    return byPost;
-  }
-}
-
-function truncate(text: string, max: number): string {
-  if (text.length <= max) {
-    return text;
-  }
-  const clipped = text.slice(0, max);
-  const lastSpace = clipped.lastIndexOf(' ');
-  return `${(lastSpace > max * 0.6 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…`;
 }

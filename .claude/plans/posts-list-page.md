@@ -21,10 +21,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Список постів: query + ендпоінт
+### [x] 1. Список постів: query + ендпоінт
 - Branch: `posts-list-page-01-list-query`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/25
 
 Новий `GetPostsListQuery`/handler + `GET /content/posts` (не чіпає `/content/feed`).
 CEFR multi-select фільтр, "тільки непрочитане" (LEFT JOIN `post_reads`, застосовується
