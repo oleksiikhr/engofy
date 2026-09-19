@@ -223,29 +223,8 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
   }
 </Layout>
 
-<script is:inline>
-  // "Show answer" toggle for крок 2's practice card, delegated so it survives
-  // HTMX swaps (same pattern as /practice).
-  document.addEventListener('click', (e) => {
-    const revealBtn = e.target.closest('.practice__reveal');
-    if (revealBtn) {
-      const answer = revealBtn.parentElement?.querySelector('.practice__answer');
-      if (answer) {
-        answer.hidden = false;
-        revealBtn.hidden = true;
-      }
-      return;
-    }
-
-    const speakBtn = e.target.closest('.practice__speak');
-    if (speakBtn && 'speechSynthesis' in window) {
-      const text = speakBtn.dataset.speak;
-      if (text) {
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-      }
-    }
-  });
+<script>
+  import '../lib/practice-client';
 </script>
 
 <style>

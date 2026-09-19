@@ -301,6 +301,9 @@ export interface PracticeQueueResponse {
   // How many New-state cards the daily new-card cap held back (0 when
   // nothing was held back, or the cap was bypassed for this request).
   heldBackNewCount: number;
+  // Whether the user owns any non-archived card at all (ignores the type
+  // filter and what's due) — "no cards yet" vs "queue cleared".
+  hasAnyCards: boolean;
 }
 
 // --- profile ---
