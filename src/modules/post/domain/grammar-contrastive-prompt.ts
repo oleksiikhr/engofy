@@ -25,13 +25,34 @@ Keep everything in simple English suited to the learner. Base the exercise only 
 
 Answer only by calling the "report_grammar_contrastive" tool.`;
 
+// The model occasionally sends an array field as a JSON-encoded string
+// (`"[\"has lived\", \"lived\"]"`); unwrap it before validation. Anything that
+// does not decode to an array is passed through and fails the schema as before.
+function parseJsonArrayString(value: unknown): unknown {
+  if (typeof value !== 'string') {
+    return value;
+  }
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : value;
+  } catch {
+    return value;
+  }
+}
+
 export const grammarContrastiveToolSchema = z
   .object({
     explanation: z.string().min(1),
     question: z.string().min(1),
-    options: z.array(z.string().min(1)).min(MIN_OPTIONS).max(MAX_OPTIONS),
+    options: z.preprocess(
+      parseJsonArrayString,
+      z.array(z.string().min(1)).min(MIN_OPTIONS).max(MAX_OPTIONS),
+    ),
     answerIndex: z.number().int().min(0),
-    optionExplanations: z.array(z.string().min(1)),
+    optionExplanations: z.preprocess(
+      parseJsonArrayString,
+      z.array(z.string().min(1)),
+    ),
   })
   .refine((value) => value.answerIndex < value.options.length, {
     message: 'answerIndex must point at one of the options',
