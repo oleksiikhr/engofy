@@ -141,12 +141,15 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       : null;
     const viewer = userId && userCefrLevel ? { userId, userCefrLevel } : null;
 
-    const [words, phrases, grammar, grammarMatches] = await Promise.all([
+    const [words, phrases, grammarMatches] = await Promise.all([
       this.resolveWords(wordDefinitionIds, viewer),
       this.resolvePhrases(phraseIds, viewer),
-      this.resolveGrammar(grammarSlugs),
       this.resolveGrammarMatches(postId, parts, viewer),
     ]);
+    const grammar = await this.resolveGrammar(
+      grammarSlugs,
+      unique(grammarMatches.map((match) => match.grammarUsagePointId)),
+    );
 
     return { words, phrases, grammar, grammarMatches };
   }
@@ -374,15 +377,32 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     );
   }
 
+  // Constructions named by a span's `grammarConstruct` slug, plus the ones
+  // owning a matched usage point — so every label the reader paints has its
+  // construction entry to show.
   private async resolveGrammar(
     slugs: string[],
+    matchedPointIds: string[],
   ): Promise<Record<string, GrammarAnnotationView>> {
-    if (slugs.length === 0) {
+    if (slugs.length === 0 && matchedPointIds.length === 0) {
       return {};
     }
+    const matchedPoints =
+      matchedPointIds.length > 0
+        ? await this.em.find(
+            GrammarUsagePoint,
+            { id: { $in: matchedPointIds } },
+            { disableIdentityMap: true },
+          )
+        : [];
     const constructions = await this.em.find(
       GrammarConstruction,
-      { slug: { $in: slugs } },
+      {
+        $or: [
+          { slug: { $in: slugs } },
+          { id: { $in: unique(matchedPoints.map((p) => p.constructionId)) } },
+        ],
+      },
       { disableIdentityMap: true },
     );
     const points = await this.em.find(
