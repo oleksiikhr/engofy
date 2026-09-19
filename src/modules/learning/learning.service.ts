@@ -5,7 +5,7 @@ import { AddCardCommand } from './commands/add-card/add-card.command.js';
 import { RemoveCardCommand } from './commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from './commands/review-card/review-card.command.js';
 import { SetDispositionCommand } from './commands/set-disposition/set-disposition.command.js';
-import type { CardTargetInput } from './domain/card-target.js';
+import type { CardTargetInput, CardTargetType } from './domain/card-target.js';
 import type { DispositionTargetInput } from './domain/disposition-target.js';
 import type { Disposition } from './enums/disposition.enum.js';
 import type { ReviewRating } from './enums/review-rating.enum.js';
@@ -83,9 +83,10 @@ export class LearningService {
     userId: string,
     limit: number,
     bypassNewLimit = false,
+    types?: readonly CardTargetType[],
   ): Promise<PracticeQueueResult> {
     return this.queryBus.execute(
-      new GetPracticeQueueQuery(userId, limit, bypassNewLimit),
+      new GetPracticeQueueQuery(userId, limit, bypassNewLimit, types),
     );
   }
 

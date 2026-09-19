@@ -102,7 +102,8 @@ export class LearningController {
   // param, so the `{ items, nextOffset }` envelope always carries a null
   // `nextOffset` (shape parity with the other list endpoints, D14 #36). New
   // cards are additionally throttled to the daily cap unless
-  // `?bypassNewLimit=true` (practice-redesign зріз 2).
+  // `?bypassNewLimit=true` (practice-redesign зріз 2); `?types=word,grammar`
+  // narrows it to those card types (зріз 4).
   @Get('practice')
   async practiceQueue(
     @CurrentUser() actor: UserActor,
@@ -112,10 +113,12 @@ export class LearningController {
       actor.id,
       query.limit,
       query.bypassNewLimit,
+      query.types,
     );
     return {
       ...toOffsetPage(result.items.map(toQueueItemDto), null),
       heldBackNewCount: result.heldBackNewCount,
+      hasAnyCards: result.hasAnyCards,
     };
   }
 

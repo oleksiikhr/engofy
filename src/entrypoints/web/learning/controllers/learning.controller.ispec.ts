@@ -134,6 +134,18 @@ describe('LearningController', () => {
       .expect(HttpStatus.OK);
     expect(bypassed.body.items).toHaveLength(DAILY_NEW_CARD_LIMIT + 2);
     expect(bypassed.body.heldBackNewCount).toBe(0);
+    expect(bypassed.body.hasAnyCards).toBe(true);
+
+    const noPhrases = await suite
+      .request('get', '/learning/practice?types=phrase,grammar')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(noPhrases.body).toMatchObject({ items: [], hasAnyCards: true });
+
+    await suite
+      .request('get', '/learning/practice?types=bogus')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('rejects an invalid rating', async () => {

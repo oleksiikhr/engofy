@@ -1,3 +1,4 @@
+import type { FilterQuery } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
@@ -7,6 +8,7 @@ import { GrammarMatch } from '../../../post/entities/grammar-match.entity.js';
 import { PostPart } from '../../../post/entities/post-part.entity.js';
 import { PostRead } from '../../../post/entities/post-read.entity.js';
 import { Sentence } from '../../../post/entities/sentence.entity.js';
+import type { CardTargetType } from '../../domain/card-target.js';
 import {
   indexBlockSpans,
   type SpanOccurrence,
@@ -25,6 +27,17 @@ import type {
   PracticeQueueResult,
 } from './practice-queue-item.js';
 import { cardTargetKey, resolveCardTargets } from './resolve-card-targets.js';
+
+function typeFilter(type: CardTargetType): FilterQuery<LearningCard> {
+  switch (type) {
+    case 'word':
+      return { wordDefinitionId: { $ne: null } };
+    case 'phrase':
+      return { phraseId: { $ne: null } };
+    case 'grammar':
+      return { grammarUsagePointId: { $ne: null } };
+  }
+}
 
 // How many of the learner's most recent distinct read posts count as "context"
 // for reveal content (PLAN.md practice-redesign зріз 1).
@@ -48,21 +61,13 @@ export class GetPracticeQueueHandler
   constructor(private readonly em: EntityManager) {}
 
   async execute(query: GetPracticeQueueQuery): Promise<PracticeQueueResult> {
-    const cards = await this.em.find(
-      LearningCard,
-      {
-        userId: query.userId,
-        due: { $lte: DateTime.now() },
-        archivedAt: null,
-      },
-      {
-        orderBy: { due: 'asc', createdAt: 'asc' },
-        limit: query.limit,
-        disableIdentityMap: true,
-      },
-    );
+    const cards = await this.findDueCards(query);
     if (cards.length === 0) {
-      return { items: [], heldBackNewCount: 0 };
+      return {
+        items: [],
+        heldBackNewCount: 0,
+        hasAnyCards: await this.userHasAnyCards(query.userId),
+      };
     }
 
     let capped = cards;
@@ -93,7 +98,54 @@ export class GetPracticeQueueHandler
       })
       .filter((item): item is PracticeQueueItem => item !== null);
 
-    return { items, heldBackNewCount: heldBackCount };
+    return {
+      items,
+      heldBackNewCount: heldBackCount,
+      hasAnyCards:
+        items.length > 0 || (await this.userHasAnyCards(query.userId)),
+    };
+  }
+
+  // Due cards, in-progress ones (Learning/Review/Relearning) first and New
+  // ones only in whatever slots remain, each group soonest-due first — so a
+  // long backlog of fresh cards can never crowd out reviews that are already
+  // scheduled.
+  private async findDueCards(
+    query: GetPracticeQueueQuery,
+  ): Promise<LearningCard[]> {
+    const base: FilterQuery<LearningCard> = {
+      userId: query.userId,
+      due: { $lte: DateTime.now() },
+      archivedAt: null,
+      ...(query.types && { $or: query.types.map(typeFilter) }),
+    };
+    const options = {
+      orderBy: { due: 'asc', createdAt: 'asc' },
+      disableIdentityMap: true,
+    } as const;
+
+    const inProgress = await this.em.find(
+      LearningCard,
+      { ...base, state: { $ne: LearningCardState.New } },
+      { ...options, limit: query.limit },
+    );
+    if (inProgress.length >= query.limit) {
+      return inProgress;
+    }
+    const fresh = await this.em.find(
+      LearningCard,
+      { ...base, state: LearningCardState.New },
+      { ...options, limit: query.limit - inProgress.length },
+    );
+    return [...inProgress, ...fresh];
+  }
+
+  private async userHasAnyCards(userId: string): Promise<boolean> {
+    const count = await this.em.count(LearningCard, {
+      userId,
+      archivedAt: null,
+    });
+    return count > 0;
   }
 
   // How many New cards are still allowed into today's queue: the daily limit
