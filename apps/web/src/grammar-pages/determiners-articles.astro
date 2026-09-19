@@ -1,0 +1,108 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell con={con} user={user} handcrafted>
+  <Fragment slot="lede">
+    <p>
+      <em>A / an</em>, <em>the</em> or nothing at all — the small word before a
+      noun tells the listener whether they already know which one you mean.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Which one to choose">
+    <table class="gp-table">
+      <thead>
+        <tr><th>Article</th><th>Use it when…</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>a / an</code></td>
+          <td>
+            you mention one of many, or mention it for the first time. Use
+            <em>an</em> before a vowel sound.
+          </td>
+          <td>I saw a dog. It was an old dog.</td>
+        </tr>
+        <tr>
+          <td><code>the</code></td>
+          <td>
+            both of you know which one — it was mentioned, it is unique, or
+            it is clear from the situation.
+          </td>
+          <td>The dog was barking. Pass me the salt.</td>
+        </tr>
+        <tr>
+          <td><em>no article</em></td>
+          <td>
+            you talk about things in general: plural or uncountable nouns.
+          </td>
+          <td>Dogs are loyal. Water is essential.</td>
+        </tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="First mention, then the">
+    <p>
+      The first time a thing comes up it is new to the listener, so it gets
+      <em>a</em>. After that it is known — <em>the</em>.
+    </p>
+    <GrammarExample>
+      I bought a jacket and a scarf. The jacket was expensive, but the scarf
+      was cheap.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Fixed patterns worth learning">
+    <GrammarExample note="the + comparative … the + comparative: one thing changes with another.">
+      The more you practise, the better you get.
+    </GrammarExample>
+    <GrammarExample note="the other: the second of two.">
+      One of the twins is tall; the other is short.
+    </GrammarExample>
+    <GrammarExample note="another: one more, or a different one.">
+      Would you like another coffee?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake">
+    <GrammarExample note="Wrong: a general statement takes no article.">
+      ✗ The life is short.
+    </GrammarExample>
+    <GrammarExample note="Right: no article for life in general.">
+      ✓ Life is short.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'determiners-demonstratives',
+        name: 'demonstratives',
+        note: 'this / that / these / those point at a specific thing.',
+      },
+      {
+        slug: 'determiners-possessives',
+        name: 'possessives',
+        note: 'my / your / their replace the article.',
+      },
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity',
+        note: 'some / any / much / many say how much.',
+      },
+    ]}
+  />
+</GrammarShell>

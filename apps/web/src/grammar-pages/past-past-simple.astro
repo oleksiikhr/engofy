@@ -1,0 +1,94 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell con={con} user={user} handcrafted>
+  <Fragment slot="lede">
+    <p>
+      Something that happened, or was true, at a finished time in the past.
+      Nothing links it to now.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form">
+    <GrammarFormula label="Regular" parts={['verb', '-ed']} />
+    <GrammarFormula label="Irregular" parts={['second form of the verb']} />
+    <GrammarFormula label="Negative" parts={['did not', 'base verb']} />
+    <GrammarFormula label="Question" parts={['Did', 'subject', 'base verb']} />
+    <GrammarExample note="Regular: walk → walked.">
+      We walked home.
+    </GrammarExample>
+    <GrammarExample note="Irregular: go → went.">
+      She went to Lviv last spring.
+    </GrammarExample>
+    <GrammarExample note="After did, the verb goes back to its base form.">
+      Did you see the match? — I didn't see it.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Time words">
+    <p>
+      The past simple usually comes with a time that is over:
+      <code>yesterday</code>, <code>last week</code>, <code>in 2019</code>,
+      <code>two years ago</code>, <code>when I was a child</code>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Three jobs">
+    <table class="gp-table">
+      <thead>
+        <tr><th>Job</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A single finished event</td>
+          <td>The train left at nine.</td>
+        </tr>
+        <tr>
+          <td>A sequence of events in a story</td>
+          <td>He opened the door, looked in and smiled.</td>
+        </tr>
+        <tr>
+          <td>A past habit or state</td>
+          <td>We lived by the sea when I was small.</td>
+        </tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake">
+    <GrammarExample note="Wrong: the verb after did stays in the past.">
+      ✗ Did you went there?
+    </GrammarExample>
+    <GrammarExample note="Right: did carries the tense.">
+      ✓ Did you go there?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect simple',
+        note: 'the time is unfinished or unimportant, and it matters now.',
+      },
+      {
+        slug: 'past-past-continuous',
+        name: 'past continuous',
+        note: 'an action in progress at a past moment.',
+      },
+    ]}
+  />
+</GrammarShell>
