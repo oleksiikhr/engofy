@@ -139,7 +139,7 @@ observability, без нової таблиці).
 
 ### [ ] 10. Study mode + фінальний екран
 - Branch: `post-detail-redesign-10-study-mode-final-screen`
-- Base: `main`
+- Base: `post-detail-redesign-09-toolbar-analyze`
 - PR: —
 
 Study mode: форсований лінійний прохід абзац-за-абзацом (решта притемнена),
