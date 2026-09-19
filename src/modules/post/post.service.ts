@@ -25,6 +25,9 @@ import { GetGrammarReferenceQuery } from './queries/get-grammar-reference/get-gr
 import type { GrammarReferenceView } from './queries/get-grammar-reference/grammar-reference-view.js';
 import { GetPostDetailQuery } from './queries/get-post-detail/get-post-detail.query.js';
 import type { PostDetailView } from './queries/get-post-detail/post-detail-view.js';
+import type { GetPostsListOptions } from './queries/get-posts-list/get-posts-list.query.js';
+import { GetPostsListQuery } from './queries/get-posts-list/get-posts-list.query.js';
+import type { PostsListView } from './queries/get-posts-list/posts-list-view.js';
 import type { IngestedPostView } from './types/ingested-post-view.type.js';
 
 @Injectable()
@@ -44,6 +47,13 @@ export class PostService {
     userId: string | null = null,
   ): Promise<PostDetailView | null> {
     return this.queryBus.execute(new GetPostDetailQuery(shortId, userId));
+  }
+
+  getPostsList(
+    userId: string | null,
+    options: GetPostsListOptions,
+  ): Promise<PostsListView> {
+    return this.queryBus.execute(new GetPostsListQuery(userId, options));
   }
 
   getGrammarReference(
