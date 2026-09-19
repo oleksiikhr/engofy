@@ -134,6 +134,95 @@ describe('buildExercises — fill_blank', () => {
   });
 });
 
+describe('buildExercises — fill_blank word bank', () => {
+  function adjSentence(id: string, adjective: string): ExerciseSentenceInput {
+    return makeSentence(
+      `The ${adjective} fox ran home.`,
+      [
+        { text: 'The', pos: 'DET', tag: 'DT' },
+        { text: adjective, pos: 'ADJ', tag: 'JJ' },
+        { text: 'fox', pos: 'NOUN', tag: 'NN' },
+        { text: 'ran', lemma: 'run', pos: 'VERB', tag: 'VBD' },
+        { text: 'home', pos: 'ADV', tag: 'RB' },
+        { text: '.', pos: 'PUNCT', tag: '.' },
+      ],
+      id,
+    );
+  }
+
+  function fillBlankOf(sentences: ExerciseSentenceInput[]) {
+    const draft = buildExercises(sentences).find(
+      (d) => d.type === ExerciseType.FillBlank,
+    );
+    if (draft?.type !== ExerciseType.FillBlank) {
+      throw new Error('expected a fill_blank');
+    }
+    return draft.payload;
+  }
+
+  it('adds the answer plus 3 same-POS distractors, shuffled', () => {
+    const payload = fillBlankOf([
+      adjSentence('wb-1', 'clever'),
+      adjSentence('wb-2', 'quiet'),
+      adjSentence('wb-3', 'tired'),
+      adjSentence('wb-4', 'brave'),
+    ]);
+
+    expect(payload.answer).toBe('clever');
+    expect(payload.options).toHaveLength(4);
+    expect(new Set(payload.options).size).toBe(4);
+    expect(payload.options).toContain('clever');
+    expect([...payload.options].sort()).toEqual([
+      'brave',
+      'clever',
+      'quiet',
+      'tired',
+    ]);
+  });
+
+  it('uses 2 distractors when only 2 candidates exist', () => {
+    const payload = fillBlankOf([
+      adjSentence('wb-1', 'clever'),
+      adjSentence('wb-2', 'quiet'),
+      adjSentence('wb-3', 'tired'),
+    ]);
+
+    expect(payload.options).toHaveLength(3);
+    expect(payload.options).toContain('clever');
+  });
+
+  it('leaves options empty when fewer than 2 distractors exist', () => {
+    const payload = fillBlankOf([
+      adjSentence('wb-1', 'clever'),
+      adjSentence('wb-2', 'quiet'),
+    ]);
+
+    expect(payload.options).toEqual([]);
+  });
+
+  it('never repeats the answer as a distractor', () => {
+    const payload = fillBlankOf([
+      adjSentence('wb-1', 'clever'),
+      adjSentence('wb-2', 'clever'),
+      adjSentence('wb-3', 'quiet'),
+      adjSentence('wb-4', 'tired'),
+    ]);
+
+    expect(payload.options.filter((o) => o === 'clever')).toHaveLength(1);
+  });
+
+  it('is deterministic for the same sentence id', () => {
+    const sentences = () => [
+      adjSentence('wb-same', 'clever'),
+      adjSentence('wb-2', 'quiet'),
+      adjSentence('wb-3', 'tired'),
+    ];
+    expect(fillBlankOf(sentences()).options).toEqual(
+      fillBlankOf(sentences()).options,
+    );
+  });
+});
+
 describe('buildExercises — reorder', () => {
   it('scrambles a mid-length sentence and the answer maps back to the original', () => {
     const sentence = fillBlankSentence('ro-1');

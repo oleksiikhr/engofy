@@ -46,6 +46,13 @@ export class ReaderPage {
     await this.fillBlank.getByRole('button', { name: 'Check' }).click();
   }
 
+  async pickFillBlankOption(option: string) {
+    await this.fillBlank
+      .locator('.exercise__bank-chip', { hasText: option })
+      .click();
+    await this.fillBlank.getByRole('button', { name: 'Check' }).click();
+  }
+
   async answerComprehensionQuestion(index: number, optionName: string) {
     await this.comprehension
       .locator('.exercise__cq')

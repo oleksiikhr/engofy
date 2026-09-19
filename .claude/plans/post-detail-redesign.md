@@ -71,10 +71,10 @@ X, не Y" (використовується і в Analyze-панелі зріз
 не має інших споживачів окрім самого рідера (`apps/web/src/pages/
 posts/[slugId].astro`, що переписується тут же) — прибирається без staged rollout.
 
-### [ ] 4. Word bank для fill_blank
+### [x] 4. Word bank для fill_blank
 - Branch: `post-detail-redesign-04-fill-blank-options`
-- Base: `post-detail-redesign-03-grammar-contrastive-pipeline`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/45
 
 `buildFillBlank` (`src/modules/post/domain/build-exercises.ts`) додатково
 консумує вже наявний `buildDistractorPool` (той самий, що вже живить

@@ -51,6 +51,23 @@ test.describe('reader page (guest)', () => {
     );
   });
 
+  test('grades a fill-in-the-blank drill via the word bank', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.pickFillBlankOption('wander');
+    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
+      '✗ Try again',
+    );
+
+    await reader.pickFillBlankOption('perambulate');
+    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
+      '✓ Correct',
+    );
+  });
+
   test('grades comprehension questions', async ({ page }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);

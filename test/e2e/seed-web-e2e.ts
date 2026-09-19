@@ -529,6 +529,7 @@ async function seed(orm: MikroORM): Promise<void> {
       answer: 'perambulate',
       lemma: 'perambulate',
       tokenPosition: 4,
+      options: ['perambulate', 'wander', 'linger'],
     },
   });
   em.create(Exercise, {

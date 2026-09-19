@@ -20,6 +20,9 @@ const REORDER_MIN_TOKENS = 5;
 const REORDER_MAX_TOKENS = 14;
 const MIN_WORD_LENGTH = 3;
 const MC_DISTRACTORS = 3;
+// Word bank for fill_blank: the answer plus 2-3 distractors.
+const FB_MIN_DISTRACTORS = 2;
+const FB_MAX_DISTRACTORS = 3;
 
 export interface ExerciseTokenInput {
   position: number;
@@ -45,6 +48,9 @@ export interface FillBlankPayload {
   answer: string;
   lemma: string;
   tokenPosition: number;
+  // Shuffled word bank (answer + same-POS distractors); empty when the post
+  // has too few distinct candidates, leaving free typing as the only mode.
+  options: string[];
 }
 
 export interface ReorderPayload {
@@ -158,19 +164,61 @@ function spliceSentence(
   );
 }
 
+// Distinct same-POS/tag forms from the post's own words, excluding the answer
+// and its lemma, in pool order.
+function pickDistractors(
+  token: ExerciseTokenInput,
+  distractorPool: Map<string, string[]>,
+  max: number,
+): string[] {
+  const answerLemma = token.lemma.toLowerCase();
+  const candidates = (distractorPool.get(`${token.pos}|${token.tag}`) ?? [])
+    .filter((form) => form.toLowerCase() !== token.text.toLowerCase())
+    .filter((form) => form.toLowerCase() !== answerLemma);
+
+  const distractors: string[] = [];
+  const seen = new Set([token.text.toLowerCase()]);
+  for (const form of candidates) {
+    const key = form.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    distractors.push(form);
+    if (distractors.length === max) {
+      break;
+    }
+  }
+  return distractors;
+}
+
 function buildFillBlank(
   sentence: ExerciseSentenceInput,
+  distractorPool: Map<string, string[]>,
 ): FillBlankPayload | undefined {
   const token = pickTarget(sentence);
   if (!token) {
     return undefined;
   }
+  const distractors = pickDistractors(
+    token,
+    distractorPool,
+    FB_MAX_DISTRACTORS,
+  );
+  const options =
+    distractors.length >= FB_MIN_DISTRACTORS
+      ? seededShuffle(
+          [token.text, ...distractors],
+          hashSeed(`${sentence.id}:fb`),
+        )
+      : [];
   return {
     sentenceId: sentence.id,
     prompt: spliceSentence(sentence, token, BLANK),
     answer: token.text,
     lemma: token.lemma,
     tokenPosition: token.position,
+    options,
   };
 }
 
@@ -206,24 +254,7 @@ function buildMultipleChoice(
     return undefined;
   }
 
-  const answerLemma = token.lemma.toLowerCase();
-  const candidates = (distractorPool.get(`${token.pos}|${token.tag}`) ?? [])
-    .filter((form) => form.toLowerCase() !== token.text.toLowerCase())
-    .filter((form) => form.toLowerCase() !== answerLemma);
-
-  const distractors: string[] = [];
-  const seen = new Set([token.text.toLowerCase()]);
-  for (const form of candidates) {
-    const key = form.toLowerCase();
-    if (seen.has(key)) {
-      continue;
-    }
-    seen.add(key);
-    distractors.push(form);
-    if (distractors.length === MC_DISTRACTORS) {
-      break;
-    }
-  }
+  const distractors = pickDistractors(token, distractorPool, MC_DISTRACTORS);
   if (distractors.length < MC_DISTRACTORS) {
     return undefined;
   }
@@ -328,11 +359,16 @@ export function buildExercises(
   const distractorPool = buildDistractorPool(sentences);
 
   return [
-    ...collect(sentences, maxPerType, buildFillBlank, (payload) => ({
-      type: ExerciseType.FillBlank,
-      source: ExerciseSource.Spacy,
-      payload,
-    })),
+    ...collect(
+      sentences,
+      maxPerType,
+      (sentence) => buildFillBlank(sentence, distractorPool),
+      (payload) => ({
+        type: ExerciseType.FillBlank,
+        source: ExerciseSource.Spacy,
+        payload,
+      }),
+    ),
     ...collect(sentences, maxPerType, buildReorder, (payload) => ({
       type: ExerciseType.Reorder,
       source: ExerciseSource.Spacy,

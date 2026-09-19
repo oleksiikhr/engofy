@@ -65,7 +65,15 @@ function toDrill(ex: Ex): DrillView | null {
   };
   if (ex.type === 'fill_blank') {
     const { before, after } = splitBlank(String(p.prompt ?? ''));
-    return { ...base, type: 'fill_blank', before, after, answer: String(p.answer ?? '') };
+    return {
+      ...base,
+      type: 'fill_blank',
+      before,
+      after,
+      answer: String(p.answer ?? ''),
+      // Older exercises predate the word bank and carry no options.
+      options: Array.isArray(p.options) ? (p.options as string[]) : [],
+    };
   }
   if (ex.type === 'multiple_choice') {
     const { before, after } = splitBlank(String(p.prompt ?? ''));
@@ -173,11 +181,22 @@ const comprehension: ComprehensionView[] = post.exercises
         {drills.map((d) => (
           <div class="exercise" data-ex-type={d.type} data-answer={d.answer} data-answer-index={String(d.answerIndex)} data-order={JSON.stringify(d.order)}>
             {d.type === 'fill_blank' && (
-              <p class="exercise__q">
-                {d.before}
-                <input class="exercise__blank" type="text" aria-label="Missing word" />
-                {d.after}
-              </p>
+              <>
+                <p class="exercise__q">
+                  {d.before}
+                  <input class="exercise__blank" type="text" aria-label="Missing word" />
+                  {d.after}
+                </p>
+                {d.options.length > 0 && (
+                  <div class="exercise__chips exercise__bank">
+                    {d.options.map((opt) => (
+                      <button type="button" class="exercise__chip exercise__bank-chip">
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
             {d.type === 'multiple_choice' && (
               <>
@@ -297,6 +316,13 @@ const comprehension: ComprehensionView[] = post.exercises
         });
         continue;
       }
+
+      box.querySelectorAll('.exercise__bank-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const input = box.querySelector('.exercise__blank');
+          if (input) input.value = chip.textContent.trim();
+        });
+      });
 
       const check = box.querySelector('.exercise__check');
       if (!check) continue;
