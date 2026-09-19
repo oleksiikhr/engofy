@@ -105,10 +105,10 @@ CLI-парсер) для позначки неправильного дієсл�
 checkpoint тут** — перший реальний рендер у новому напрямку; порівняти скріншот з
 мокапом ("Direction C") перед тим, як рухатись до наступних зрізів.
 
-### [ ] 7. Заякорений попап — слово/фраза
+### [x] 7. Заякорений попап — слово/фраза
 - Branch: `post-detail-redesign-07-lexicon-popup`
-- Base: `post-detail-redesign-06-base-visual-shift`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/48
 
 Новий клієнтський компонент/скрипт: клік по `data-word-definition-id`/
 `data-phrase-id` відкриває заякорену картку над/під елементом без зсуву контенту,

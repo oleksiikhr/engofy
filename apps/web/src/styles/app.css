@@ -346,3 +346,75 @@ button[value="easy"] {
   border-color: var(--color-brand);
   background: var(--color-brand);
 }
+
+/* --- Reader word/phrase popup (built client-side by reader-popup.ts, so
+   these selectors must be global). Absolutely positioned in document
+   coordinates: it never takes part in the article's flow. --- */
+.lex-popup {
+  position: absolute;
+  z-index: 50;
+  width: min(22rem, calc(100vw - 1rem));
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 1rem;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  box-shadow: 0 8px 28px rgb(46 36 24 / 0.18);
+  font-size: 0.95rem;
+}
+.lex-popup[hidden] {
+  display: none;
+}
+.lex-popup p {
+  margin: 0.35rem 0 0;
+}
+.lex-popup__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.lex-popup__term {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+.lex-popup__speak {
+  font: inherit;
+  padding: 0.1rem 0.3rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+}
+.lex-popup__speak:hover {
+  background: var(--color-brand-wash);
+}
+.lex-popup__sub {
+  color: var(--color-ink-soft);
+  font-size: 0.85rem;
+}
+.lex-popup__example {
+  color: var(--color-ink-soft);
+  font-style: italic;
+}
+.lex-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.lex-actions .btn {
+  padding: 0.25rem 0.75rem;
+}
+.lex-state {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+}
+.lex-state--learning {
+  color: var(--color-warning);
+}
+.lex-state--learned {
+  color: var(--color-success);
+}

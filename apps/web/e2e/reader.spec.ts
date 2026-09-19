@@ -68,6 +68,87 @@ test.describe('reader page (guest)', () => {
     );
   });
 
+  test('opens an anchored popup on a word without shifting the article', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await expect(reader.popup).toBeHidden();
+    const before = await reader.analysis.boundingBox();
+
+    const word = reader.wordLabel('perambulate');
+    await word.click();
+    await expect(reader.popup).toBeVisible();
+    await expect(reader.popup.locator('.lex-popup__term')).toHaveText(
+      'perambulate',
+    );
+    await expect(reader.popup.locator('.lex-popup__def')).not.toBeEmpty();
+    expect(await reader.analysis.boundingBox()).toEqual(before);
+
+    // Anchored: horizontally overlapping the clicked span, touching its edge.
+    const popupBox = await reader.popup.boundingBox();
+    const wordBox = await word.boundingBox();
+    if (!popupBox || !wordBox) {
+      throw new Error('popup or word has no box');
+    }
+    expect(popupBox.x).toBeLessThan(wordBox.x + wordBox.width);
+    expect(popupBox.x + popupBox.width).toBeGreaterThan(wordBox.x);
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+  });
+
+  test('opens the popup for a phrase and swaps it for another', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.phraseLabel('at loose ends').click();
+    await expect(reader.popup.locator('.lex-popup__term')).toHaveText(
+      'at loose ends',
+    );
+    await expect(reader.popup).toHaveCount(1);
+
+    await page.mouse.click(2, 2);
+    await expect(reader.popup).toBeHidden();
+  });
+
+  test('asks a guest to sign in when saving from the popup', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: '+' }).click();
+    await expect(
+      reader.popup.getByRole('link', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(reader.wordLabel('perambulate')).toHaveCount(1);
+  });
+
+  test('"I know it" settles the target and drops its label', async ({
+    page,
+  }) => {
+    // Stubbed so the seeded user's data stays untouched.
+    await page.route('**/partials/lexicon-action', (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        body: '<div class="lex-actions" id="x"><span class="lex-state lex-state--learned" data-state="learned">Learned</span></div>',
+      }),
+    );
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: 'I know it' }).click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learned');
+    await expect(reader.wordLabel('perambulate')).toHaveCount(0);
+    await expect(reader.analysis).toContainText('perambulate');
+  });
+
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
@@ -96,5 +177,18 @@ test.describe('reader page (signed in)', () => {
     await expect(reader.grammarLabel('had drawn')).toHaveCount(1);
     await expect(reader.analysis).toContainText('war ended');
     await expect(reader.grammarLabel('war ended')).toHaveCount(0);
+  });
+
+  test('popup for a card-backed word shows its state without actions', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(reader.popup.getByRole('button', { name: '+' })).toHaveCount(
+      0,
+    );
   });
 });
