@@ -9,21 +9,21 @@ import { LearningCard } from '../../../learning/entities/learning-card.entity.js
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { mostAdvancedEffectiveState } from '../../domain/effective-state-priority.js';
+import { groupConstructions } from '../../domain/grammar-grouping.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { GetGrammarReferenceQuery } from './get-grammar-reference.query.js';
 import type {
-  GrammarReferenceCategoryView,
   GrammarReferenceConstructionView,
   GrammarReferenceView,
 } from './grammar-reference-view.js';
 
 // Backs the `/grammar` reference index (PLAN.md §4): 19 categories → ~90
 // constructions, each with its easiest CEFR level and usage-point count. The
-// optional `cefr` filter keeps only constructions that teach something at
-// that level.
+// `cefrLevels` filter keeps only constructions that teach something at one of
+// those levels; `groupBy` picks the axis the result is grouped on.
 @QueryHandler(GetGrammarReferenceQuery)
 export class GetGrammarReferenceHandler
   implements IQueryHandler<GetGrammarReferenceQuery>
@@ -31,7 +31,7 @@ export class GetGrammarReferenceHandler
   constructor(private readonly em: EntityManager) {}
 
   async execute({
-    cefr,
+    options,
     userId,
   }: GetGrammarReferenceQuery): Promise<GrammarReferenceView> {
     const [categories, constructions, usagePoints] = await Promise.all([
@@ -68,49 +68,43 @@ export class GetGrammarReferenceHandler
       userId,
     );
 
-    const result = this.buildCategoryViews(
-      categories,
-      constructionsByCategory,
-      pointsByConstruction,
-      stateByConstruction,
-      cefr,
-    );
-
-    return { categories: result };
-  }
-
-  private buildCategoryViews(
-    categories: GrammarCategory[],
-    constructionsByCategory: Map<string, GrammarConstruction[]>,
-    pointsByConstruction: Map<string, GrammarUsagePoint[]>,
-    stateByConstruction: Map<string, EffectiveState>,
-    cefr: CefrLevel | null,
-  ): GrammarReferenceCategoryView[] {
-    const result: GrammarReferenceCategoryView[] = [];
-    for (const category of categories) {
-      const views = this.buildConstructionViews(
+    // Flat, category-then-sort ordered; grouping re-buckets it without
+    // touching the set.
+    const entries = categories.flatMap((category) =>
+      this.buildConstructionViews(
         constructionsByCategory.get(category.id) ?? [],
         pointsByConstruction,
         stateByConstruction,
-        cefr,
-      );
-      if (views.length > 0) {
-        result.push({ name: category.name, constructions: views });
-      }
-    }
-    return result;
+        options.cefrLevels,
+      ).map((construction) => ({
+        categoryName: category.name,
+        cefrLevel: construction.cefrLevel,
+        construction,
+      })),
+    );
+
+    return {
+      groups: groupConstructions(entries, options.groupBy).map((group) => ({
+        key: group.key,
+        name: group.name,
+        constructions: group.items.map((entry) => entry.construction),
+      })),
+    };
   }
 
   private buildConstructionViews(
     constructions: GrammarConstruction[],
     pointsByConstruction: Map<string, GrammarUsagePoint[]>,
     stateByConstruction: Map<string, EffectiveState>,
-    cefr: CefrLevel | null,
+    cefrLevels: CefrLevel[],
   ): GrammarReferenceConstructionView[] {
     const views: GrammarReferenceConstructionView[] = [];
     for (const construction of constructions) {
       const points = pointsByConstruction.get(construction.id) ?? [];
-      if (cefr && !points.some((point) => point.cefrLevel === cefr)) {
+      if (
+        cefrLevels.length > 0 &&
+        !points.some((point) => cefrLevels.includes(point.cefrLevel))
+      ) {
         continue;
       }
       views.push({

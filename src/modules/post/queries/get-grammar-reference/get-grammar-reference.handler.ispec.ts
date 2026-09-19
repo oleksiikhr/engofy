@@ -11,8 +11,11 @@ import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
+import { GrammarGroupBy } from '../../enums/grammar-group-by.enum.js';
 import { PostModule } from '../../post.module.js';
 import { GetGrammarReferenceQuery } from './get-grammar-reference.query.js';
+
+const BY_CATEGORY = { cefrLevels: [], groupBy: GrammarGroupBy.Category };
 
 async function seedUser(
   em: EntityManager,
@@ -61,11 +64,11 @@ describe('GetGrammarReferenceHandler', () => {
     await em.flush();
     em.clear();
 
-    const view = await suite.query(new GetGrammarReferenceQuery(null));
-    const names = view.categories.map((c) => c.name);
+    const view = await suite.query(new GetGrammarReferenceQuery(BY_CATEGORY));
+    const names = view.groups.map((c) => c.name);
     expect(names.indexOf(a)).toBeLessThan(names.indexOf(b));
 
-    const alpha = view.categories.find((c) => c.name === a);
+    const alpha = view.groups.find((c) => c.name === a);
     expect(alpha?.constructions[0]).toMatchObject({
       cefrLevel: CefrLevel.A2,
       usagePointCount: 2,
@@ -81,10 +84,78 @@ describe('GetGrammarReferenceHandler', () => {
     await em.flush();
     em.clear();
 
-    const view = await suite.query(new GetGrammarReferenceQuery(CefrLevel.A2));
-    const names = view.categories.map((c) => c.name);
+    const view = await suite.query(
+      new GetGrammarReferenceQuery({
+        ...BY_CATEGORY,
+        cefrLevels: [CefrLevel.A2],
+      }),
+    );
+    const names = view.groups.map((c) => c.name);
     expect(names).toContain(keep);
     expect(names).not.toContain(drop);
+  });
+
+  it('keeps constructions matching any of several CEFR levels', async () => {
+    const em = suite.orm.em;
+    const a2 = `TWOA-${uuidv7().slice(0, 6)}`;
+    const b1 = `ONEB-${uuidv7().slice(0, 6)}`;
+    const c2 = `TOPC-${uuidv7().slice(0, 6)}`;
+    seedCategory(em, a2, 1, [CefrLevel.A2]);
+    seedCategory(em, b1, 2, [CefrLevel.B1]);
+    seedCategory(em, c2, 3, [CefrLevel.C2]);
+    await em.flush();
+    em.clear();
+
+    const view = await suite.query(
+      new GetGrammarReferenceQuery({
+        ...BY_CATEGORY,
+        cefrLevels: [CefrLevel.A2, CefrLevel.B1],
+      }),
+    );
+    const names = view.groups.map((g) => g.name);
+    expect(names).toEqual(expect.arrayContaining([a2, b1]));
+    expect(names).not.toContain(c2);
+  });
+
+  it('groups the same set by CEFR level and by time block', async () => {
+    const em = suite.orm.em;
+    const other = `MODAL-${uuidv7().slice(0, 6)}`;
+    seedCategory(em, other, 1, [CefrLevel.B2, CefrLevel.C1]);
+    await em.flush();
+    em.clear();
+
+    const slugsIn = (groups: { constructions: { slug: string }[] }[]) =>
+      groups.flatMap((g) => g.constructions.map((c) => c.slug)).sort();
+
+    const byCategory = await suite.query(
+      new GetGrammarReferenceQuery(BY_CATEGORY),
+    );
+    const byCefr = await suite.query(
+      new GetGrammarReferenceQuery({
+        ...BY_CATEGORY,
+        groupBy: GrammarGroupBy.Cefr,
+      }),
+    );
+    const byTime = await suite.query(
+      new GetGrammarReferenceQuery({
+        ...BY_CATEGORY,
+        groupBy: GrammarGroupBy.Time,
+      }),
+    );
+
+    expect(slugsIn(byCefr.groups)).toEqual(slugsIn(byCategory.groups));
+    expect(slugsIn(byTime.groups)).toEqual(slugsIn(byCategory.groups));
+    // Easiest level (B2) wins the bucket; a category off the tense axis is Other.
+    expect(
+      byCefr.groups
+        .find((g) => g.key === CefrLevel.B2)
+        ?.constructions.some((c) => c.slug.startsWith(other.toLowerCase())),
+    ).toBe(true);
+    expect(
+      byTime.groups
+        .find((g) => g.key === 'other')
+        ?.constructions.some((c) => c.slug.startsWith(other.toLowerCase())),
+    ).toBe(true);
   });
 
   describe('per-user state (grammar-page-redesign зріз 1)', () => {
@@ -119,8 +190,8 @@ describe('GetGrammarReferenceHandler', () => {
       slug: string,
     ): Promise<string | undefined> {
       const view = await suite.query(query);
-      return view.categories
-        .flatMap((category) => category.constructions)
+      return view.groups
+        .flatMap((group) => group.constructions)
         .find((construction) => construction.slug === slug)?.state;
     }
 
@@ -128,9 +199,9 @@ describe('GetGrammarReferenceHandler', () => {
       const { slug } = await seedOneConstruction(suite.orm.em, [CefrLevel.A1]);
       suite.orm.em.clear();
 
-      expect(await stateOf(new GetGrammarReferenceQuery(null), slug)).toBe(
-        'new',
-      );
+      expect(
+        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY), slug),
+      ).toBe('new');
     });
 
     it("collapses to the most-advanced state across a construction's usage points", async () => {
@@ -158,7 +229,7 @@ describe('GetGrammarReferenceHandler', () => {
       // One point Learning (active card), the other still New — the
       // construction-level badge shows the most advanced of the two.
       expect(
-        await stateOf(new GetGrammarReferenceQuery(null, user.id), slug),
+        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY, user.id), slug),
       ).toBe('learning');
     });
 
@@ -168,7 +239,7 @@ describe('GetGrammarReferenceHandler', () => {
       suite.orm.em.clear();
 
       expect(
-        await stateOf(new GetGrammarReferenceQuery(null, user.id), slug),
+        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY, user.id), slug),
       ).toBe('learned');
     });
 
@@ -186,7 +257,7 @@ describe('GetGrammarReferenceHandler', () => {
       suite.orm.em.clear();
 
       expect(
-        await stateOf(new GetGrammarReferenceQuery(null, user.id), slug),
+        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY, user.id), slug),
       ).toBe('skipped');
     });
   });

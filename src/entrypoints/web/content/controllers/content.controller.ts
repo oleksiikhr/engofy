@@ -146,9 +146,10 @@ export class ContentController {
     await this.post.markPostRead(actor.id, shortId);
   }
 
-  // The `/grammar` reference index: 19 categories → constructions. Varies by
-  // session once logged in (per-construction state), so it overrides the
-  // class-level public cache policy the same way `postDetail` does.
+  // The `/grammar` reference index: constructions grouped by category / time /
+  // CEFR (`groupBy`). Varies by session once logged in (per-construction
+  // state), so it overrides the class-level public cache policy the same way
+  // `postDetail` does.
   @Public()
   @CachePolicy('private')
   @Get('grammar')
@@ -157,7 +158,7 @@ export class ContentController {
     @CurrentUserOrNull() actor: UserActor | null,
   ): Promise<GrammarReferenceResponseDto> {
     const view = await this.post.getGrammarReference(
-      query.cefr ?? null,
+      { cefrLevels: query.cefr ?? [], groupBy: query.groupBy },
       actor?.id ?? null,
     );
     return toGrammarReferenceResponse(view);
@@ -299,18 +300,18 @@ function toAnnotationsDto(
 function toGrammarReferenceResponse(
   view: GrammarReferenceView,
 ): GrammarReferenceResponseDto {
-  return {
-    categories: view.categories.map((category) => ({
-      name: category.name,
-      constructions: category.constructions.map((construction) => ({
-        slug: construction.slug,
-        name: construction.name,
-        cefrLevel: construction.cefrLevel,
-        usagePointCount: construction.usagePointCount,
-        state: construction.state,
-      })),
+  const groups = view.groups.map((group) => ({
+    key: group.key,
+    name: group.name,
+    constructions: group.constructions.map((construction) => ({
+      slug: construction.slug,
+      name: construction.name,
+      cefrLevel: construction.cefrLevel,
+      usagePointCount: construction.usagePointCount,
+      state: construction.state,
     })),
-  };
+  }));
+  return { groups, categories: groups };
 }
 
 function toGrammarConstructionResponse(
