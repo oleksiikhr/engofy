@@ -486,6 +486,10 @@ describe('ContentController', () => {
     expect(
       category.constructions.find((c: { slug: string }) => c.slug === slug),
     ).toMatchObject({ cefrLevel: 'A1', usagePointCount: 1, state: 'new' });
+    // A guest carries no progress counts.
+    expect(
+      category.constructions.find((c: { slug: string }) => c.slug === slug),
+    ).not.toHaveProperty('learnedCount');
 
     const detail = await suite
       .request('get', `/content/grammar/${slug}`)
@@ -495,7 +499,11 @@ describe('ContentController', () => {
       cefrLevel: 'A1',
     });
     expect(detail.body.usagePoints).toHaveLength(1);
-    expect(detail.body.usagePoints[0]).toMatchObject({ state: 'new' });
+    expect(detail.body.usagePoints[0]).toMatchObject({
+      state: 'new',
+      assumedKnown: false,
+    });
+    expect(detail.body).not.toHaveProperty('levelProgress');
     expect(detail.body.cheatSheetContent).toContain('Form');
   });
 

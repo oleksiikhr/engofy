@@ -7,9 +7,13 @@ export interface GrammarReferenceConstructionView {
   // Easiest CEFR level among the construction's usage points.
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
-  // Most-advanced effective state across the construction's usage points
-  // (grammar-page-redesign зріз 1). EffectiveState.New for a guest.
+  // Collapsed from the learner's own cards/dispositions across the usage
+  // points (no CEFR default): Learned when all are resolved, Learning when
+  // some are, New when none. EffectiveState.New for a guest.
   state: EffectiveState;
+  // Usage points the learner resolved (Learned or Skipped); out of
+  // `usagePointCount`. Absent for a guest.
+  learnedCount?: number;
 }
 
 export interface GrammarReferenceGroupView {

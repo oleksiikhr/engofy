@@ -204,16 +204,28 @@ describe('GetGrammarReferenceHandler', () => {
       ).toBe('new');
     });
 
-    it("collapses to the most-advanced state across a construction's usage points", async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.A1);
-      const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
-        CefrLevel.B1,
-        CefrLevel.B1,
-      ]);
+    async function progressOf(
+      query: GetGrammarReferenceQuery,
+      slug: string,
+    ): Promise<{ state: string; learnedCount?: number } | undefined> {
+      const view = await suite.query(query);
+      return view.groups
+        .flatMap((group) => group.constructions)
+        .find((construction) => construction.slug === slug);
+    }
 
-      suite.orm.em.create(LearningCard, {
-        userId: user.id,
-        grammarUsagePointId: pointIds[0],
+    function seedCard(
+      em: EntityManager,
+      userId: string,
+      pointId: string,
+      overrides: Partial<{
+        state: LearningCardState;
+        scheduledDays: number;
+      }> = {},
+    ): void {
+      em.create(LearningCard, {
+        userId,
+        grammarUsagePointId: pointId,
         due: DateTime.now(),
         stability: 1,
         difficulty: 1,
@@ -222,25 +234,98 @@ describe('GetGrammarReferenceHandler', () => {
         reps: 1,
         lapses: 0,
         state: LearningCardState.Learning,
+        ...overrides,
+      });
+    }
+
+    it('has no learnedCount for a guest', async () => {
+      const { slug } = await seedOneConstruction(suite.orm.em, [CefrLevel.A1]);
+      suite.orm.em.clear();
+
+      expect(
+        (await progressOf(new GetGrammarReferenceQuery(BY_CATEGORY), slug))
+          ?.learnedCount,
+      ).toBeUndefined();
+    });
+
+    it('is Learning with 0 resolved when one point has a fresh card and the other is untouched', async () => {
+      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
+        CefrLevel.B1,
+        CefrLevel.B1,
+      ]);
+      seedCard(suite.orm.em, user.id, pointIds[0]);
+      await suite.orm.em.flush();
+      suite.orm.em.clear();
+
+      expect(
+        await progressOf(
+          new GetGrammarReferenceQuery(BY_CATEGORY, user.id),
+          slug,
+        ),
+      ).toMatchObject({ state: 'learning', learnedCount: 0 });
+    });
+
+    it('is Learning with 1 resolved when only one of two points is Known', async () => {
+      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
+        CefrLevel.B1,
+        CefrLevel.B1,
+      ]);
+      suite.orm.em.create(LearningDisposition, {
+        userId: user.id,
+        grammarUsagePointId: pointIds[0],
+        disposition: Disposition.Known,
       });
       await suite.orm.em.flush();
       suite.orm.em.clear();
 
-      // One point Learning (active card), the other still New — the
-      // construction-level badge shows the most advanced of the two.
       expect(
-        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY, user.id), slug),
-      ).toBe('learning');
+        await progressOf(
+          new GetGrammarReferenceQuery(BY_CATEGORY, user.id),
+          slug,
+        ),
+      ).toMatchObject({ state: 'learning', learnedCount: 1 });
     });
 
-    it('is Learned when a below-level CEFR default applies with no card', async () => {
+    it('is Learned when every point is Known or Skipped', async () => {
+      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
+        CefrLevel.B1,
+        CefrLevel.B1,
+      ]);
+      suite.orm.em.create(LearningDisposition, {
+        userId: user.id,
+        grammarUsagePointId: pointIds[0],
+        disposition: Disposition.Known,
+      });
+      suite.orm.em.create(LearningDisposition, {
+        userId: user.id,
+        grammarUsagePointId: pointIds[1],
+        disposition: Disposition.Skipped,
+      });
+      await suite.orm.em.flush();
+      suite.orm.em.clear();
+
+      expect(
+        await progressOf(
+          new GetGrammarReferenceQuery(BY_CATEGORY, user.id),
+          slug,
+        ),
+      ).toMatchObject({ state: 'learned', learnedCount: 2 });
+    });
+
+    it('ignores the CEFR default: a below-level construction with no activity stays New', async () => {
       const user = await seedUser(suite.orm.em, CefrLevel.B2);
       const { slug } = await seedOneConstruction(suite.orm.em, [CefrLevel.A1]);
       suite.orm.em.clear();
 
       expect(
-        await stateOf(new GetGrammarReferenceQuery(BY_CATEGORY, user.id), slug),
-      ).toBe('learned');
+        await progressOf(
+          new GetGrammarReferenceQuery(BY_CATEGORY, user.id),
+          slug,
+        ),
+      ).toMatchObject({ state: 'new', learnedCount: 0 });
     });
 
     it('is Skipped when the learner dismissed the only usage point', async () => {

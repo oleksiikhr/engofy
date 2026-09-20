@@ -10,9 +10,14 @@ export class GrammarReferenceConstructionDto {
 
   readonly usagePointCount!: number;
 
-  // Most-advanced effective state across the construction's usage points.
-  // EffectiveState.New for a guest or a construction with no cards/dispositions.
+  // Collapsed from the learner's own cards/dispositions across the usage
+  // points (no CEFR default). EffectiveState.New for a guest or a construction
+  // with no cards/dispositions.
   readonly state!: EffectiveState;
+
+  // Usage points the learner resolved (Learned or Skipped), out of
+  // `usagePointCount`. Absent for a guest.
+  readonly learnedCount?: number;
 }
 
 export class GrammarReferenceGroupDto {

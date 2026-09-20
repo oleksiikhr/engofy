@@ -23,8 +23,10 @@ export interface EffectiveStateInput {
   // An active (non-archived) card for the target, if one exists.
   card?: EffectiveStateCard | null;
   disposition?: Disposition | null;
+  // Both levels are needed for the CEFR default; leave either off to skip
+  // that tier (a target the learner has not acted on then reads "New").
   targetCefrLevel?: CefrLevel | null;
-  userCefrLevel: CefrLevel;
+  userCefrLevel?: CefrLevel | null;
 }
 
 // Priority: an active card always wins (any FSRS state reads as "Learning";
@@ -50,7 +52,11 @@ export function resolveEffectiveState(
     return EffectiveState.Skipped;
   }
 
-  if (targetCefrLevel && cefrRank(targetCefrLevel) <= cefrRank(userCefrLevel)) {
+  if (
+    targetCefrLevel &&
+    userCefrLevel &&
+    cefrRank(targetCefrLevel) <= cefrRank(userCefrLevel)
+  ) {
     return EffectiveState.Learned;
   }
 

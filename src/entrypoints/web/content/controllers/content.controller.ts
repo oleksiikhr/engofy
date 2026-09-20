@@ -300,6 +300,7 @@ function toGrammarReferenceResponse(
       cefrLevel: construction.cefrLevel,
       usagePointCount: construction.usagePointCount,
       state: construction.state,
+      learnedCount: construction.learnedCount,
     })),
   }));
   return { groups };
@@ -321,7 +322,9 @@ function toGrammarConstructionResponse(
       canDoStatement: point.canDoStatement,
       exampleText: point.exampleText,
       state: point.state,
+      assumedKnown: point.assumedKnown,
     })),
+    levelProgress: view.levelProgress,
   };
 }
 

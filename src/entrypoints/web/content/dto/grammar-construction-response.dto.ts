@@ -13,8 +13,22 @@ export class ConstructionUsagePointDto {
   readonly exampleText!: string | null;
 
   // Per-point effective state — gates this point's own "+ Add to deck"
-  // button. EffectiveState.New for a guest or a point with no card yet.
+  // button. From the learner's own cards/dispositions only (no CEFR default);
+  // EffectiveState.New for a guest or a point with no card yet.
   readonly state!: EffectiveState;
+
+  // State is New, but the point's level is at or below the learner's own.
+  // Always false for a guest.
+  readonly assumedKnown!: boolean;
+}
+
+export class ConstructionLevelProgressDto {
+  readonly cefrLevel!: CefrLevel;
+
+  // Usage points at this level the learner resolved (Learned or Skipped).
+  readonly learnedCount!: number;
+
+  readonly totalCount!: number;
 }
 
 export class GrammarConstructionResponseDto {
@@ -30,4 +44,7 @@ export class GrammarConstructionResponseDto {
   readonly cefrLevel!: CefrLevel | null;
 
   readonly usagePoints!: ConstructionUsagePointDto[];
+
+  // Resolved / total usage points per level, easiest first. Absent for a guest.
+  readonly levelProgress?: ConstructionLevelProgressDto[];
 }
