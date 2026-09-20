@@ -155,6 +155,37 @@ test.describe('reader page (guest)', () => {
     await expect(reader.popup).toBeHidden();
   });
 
+  test('switches popup definitions to Ukrainian and remembers the choice', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    const translation = reader.popup.locator('.lex-popup__translation');
+    await expect(translation).toHaveCount(0);
+
+    await reader.popup.getByRole('button', { name: 'УКР' }).click();
+    await expect(reader.popup).toBeVisible();
+    await expect(translation).toHaveText('прогулюватися, прогулюватись');
+    await expect(reader.popup.locator('.lex-popup__def')).not.toBeEmpty();
+
+    // The choice carries to a phrase, a grammar label and a reloaded page.
+    await reader.phraseLabel('at loose ends').click();
+    await expect(translation).toHaveText('не знати, чим зайнятися');
+    await reader.grammarLabel('had drawn').click();
+    await expect(reader.popupSection('grammar')).toContainText(
+      'яка з двох минулих дій сталася раніше',
+    );
+
+    await page.reload();
+    await reader.wordLabel('perambulate').click();
+    await expect(translation).toHaveText('прогулюватися, прогулюватись');
+
+    await reader.popup.getByRole('button', { name: 'EN' }).click();
+    await expect(translation).toHaveCount(0);
+  });
+
   test('asks a guest to sign in when saving from the popup', async ({
     page,
   }) => {

@@ -103,6 +103,8 @@ export interface WordAnnotation {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
+  // Short Ukrainian equivalent(s); null until the backend enrichment ran.
+  translationUk: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
   // The viewer's effective state for this sense; `new` for a guest.
@@ -114,6 +116,7 @@ export interface PhraseAnnotation {
   type: string | null;
   definition: string | null;
   example: string | null;
+  translationUk: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -125,6 +128,8 @@ export interface GrammarUsagePointRef {
   // Learner-facing explanation and clean example sentences; null / empty
   // until the backend's grammar enrichment has covered this point.
   explanation: string | null;
+  // Ukrainian translation of `explanation`.
+  explanationUk: string | null;
   examples: string[];
 }
 export interface GrammarAnnotation {

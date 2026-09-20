@@ -41,6 +41,7 @@ export function buildLexiconData(
       frequencyRank: w.frequencyRank,
       definition: w.definition,
       example: w.example,
+      translationUk: w.translationUk,
       cefrLevel: w.cefrLevel,
       state: w.state,
     };
@@ -53,6 +54,7 @@ export function buildLexiconData(
       type: p.type,
       definition: p.definition,
       example: p.example,
+      translationUk: p.translationUk,
       cefrLevel: p.cefrLevel,
       state: p.state,
     };
@@ -76,6 +78,7 @@ export function buildLexiconData(
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           explanation: point.explanation,
+          explanationUk: point.explanationUk,
           examples: point.examples,
           contrast: contrast.get(point.grammarUsagePointId) ?? null,
           state,

@@ -1,3 +1,4 @@
+import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 import {
   type GrammarLexiconEntry,
   type LexiconData,
@@ -98,7 +99,9 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   const slugId =
     root.closest<HTMLElement>('[data-slug-id]')?.dataset.slugId ?? '';
   let active: Element | null = null;
+  let current: Target | null = null;
   let anchorY: number | null = null;
+  let lang: PopupLang = readPref('popupLang');
 
   // A grammar label cut across several nodes is one wrapper per node; only
   // the first of each is a tab stop.
@@ -146,20 +149,30 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     popup.hidden = true;
   }
 
-  function open(target: Target, clientY: number | null) {
-    active?.classList.remove('is-active');
-    active = target.anchor;
-    anchorY = clientY;
-    target.anchor.classList.add('is-active');
+  function render(target: Target): void {
     popup.classList.toggle('tone-amber', target.lexical !== null);
     popup.classList.toggle('tone-blue', target.lexical === null);
-    popup.innerHTML = readerPopupHtml(target.lexical, target.grammar, slugId);
+    popup.innerHTML = readerPopupHtml(
+      target.lexical,
+      target.grammar,
+      slugId,
+      lang,
+    );
     if (!('speechSynthesis' in window)) {
       popup.querySelector('.lex-popup__speak')?.remove();
     }
     popup.hidden = false;
     window.htmx?.process(popup);
     position();
+  }
+
+  function open(target: Target, clientY: number | null) {
+    active?.classList.remove('is-active');
+    active = target.anchor;
+    current = target;
+    anchorY = clientY;
+    target.anchor.classList.add('is-active');
+    render(target);
   }
 
   root.addEventListener('click', (event) => {
@@ -202,6 +215,20 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   window.addEventListener('resize', position);
 
   popup.addEventListener('click', (event) => {
+    const langButton = (event.target as Element).closest('[data-popup-lang]');
+    const next = langButton?.getAttribute('data-popup-lang');
+    if (
+      current &&
+      (POPUP_LANGS as readonly (string | null | undefined)[]).includes(next)
+    ) {
+      lang = next as PopupLang;
+      writePref('popupLang', lang);
+      render(current);
+      // The clicked button is gone after the re-render; without this the
+      // outside-click handler would see a detached target and close the popup.
+      event.stopPropagation();
+      return;
+    }
     const speak = (event.target as Element).closest('[data-speak]');
     if (speak && 'speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(

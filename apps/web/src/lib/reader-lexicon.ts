@@ -5,6 +5,7 @@ import {
   posLabel,
   shortExample,
 } from './popup-labels';
+import type { PopupLang } from './prefs';
 import type { CefrLevel, EffectiveState } from './types';
 
 // Popup content for the reader's word, phrase and grammar labels — shared by
@@ -51,6 +52,7 @@ interface LexiconEntryBase {
   id: string;
   definition: string | null;
   example: string | null;
+  translationUk: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -76,6 +78,7 @@ export interface GrammarLexiconEntry {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
+  explanationUk: string | null;
   examples: string[];
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
@@ -159,7 +162,24 @@ export function reportRowHtml(target: LexiconTarget, slugId: string): string {
 export const REPORT_DONE_HTML =
   '<span class="lex-report lex-report--done" role="status">Thanks — reported.</span>';
 
-function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
+// The EN / УКР switch for the popup's definitions. Only offered when some
+// section on screen has Ukrainian text to show.
+function langToggleHtml(lang: PopupLang): string {
+  const button = (value: PopupLang, label: string) =>
+    `<button type="button" class="lex-popup__lang-btn" data-popup-lang="${value}" aria-pressed="${lang === value}">${label}</button>`;
+  return `<div class="lex-popup__lang" role="group" aria-label="Definition language">${button('en', 'EN')}${button('uk', 'УКР')}</div>`;
+}
+
+function topRowHtml(kicker: string, toggle: string): string {
+  return `<div class="lex-popup__top"><p class="lex-popup__kicker">${esc(kicker)}</p>${toggle}</div>`;
+}
+
+function lexiconSectionHtml(
+  entry: LexiconEntry,
+  slugId: string,
+  lang: PopupLang,
+  toggle: string,
+): string {
   const term = entryTerm(entry);
   const kicker =
     entry.kind === 'word'
@@ -170,13 +190,14 @@ function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
     : '';
   return `<section class="lex-popup__section tone-amber" data-lex-kind="${entry.kind}" data-lex-id="${esc(entry.id)}">
-  <p class="lex-popup__kicker">${esc(kicker)}</p>
+  ${topRowHtml(kicker, toggle)}
   <div class="lex-popup__head">
     <span class="lex-popup__term">${esc(term)}</span>
     ${cefr}
     <button type="button" class="lex-popup__speak" data-speak="${esc(term)}" aria-label="Pronounce ${esc(term)}">${SPEAK_ICON}</button>
   </div>
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
+  ${lang === 'uk' && entry.translationUk ? `<p class="lex-popup__translation" lang="uk">${esc(entry.translationUk)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
   ${entry.example ? `<p class="lex-popup__example">${esc(shortExample(entry.example))}</p>` : ''}
   ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
@@ -187,16 +208,22 @@ function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
 function grammarSectionHtml(
   entry: GrammarLexiconEntry,
   slugId: string,
+  lang: PopupLang,
+  toggle: string,
 ): string {
   const guideword = guidewordLabel(entry.guideword);
+  const useUk = lang === 'uk' && entry.explanationUk;
+  const explanation = useUk
+    ? `<p class="lex-popup__def" lang="uk">${esc(entry.explanationUk ?? '')}</p>`
+    : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
-  <p class="lex-popup__kicker">Grammar</p>
+  ${topRowHtml('Grammar', toggle)}
   <div class="lex-popup__head">
     <span class="lex-popup__term">${esc(constructionLabel(entry.construction))}</span>
     <span class="badge">${esc(entry.cefrLevel)}</span>
   </div>
   ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
-  <p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>
+  ${explanation}
   ${entry.examples[0] ? `<p class="lex-popup__example">${esc(shortExample(entry.examples[0]))}</p>` : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
@@ -205,15 +232,21 @@ function grammarSectionHtml(
 }
 
 // The popup body: the lexical section on top, the grammar section below it
-// (a thin divider between them) when a label carries both.
+// (a thin divider between them) when a label carries both. The language
+// switch sits in the first section's top row.
 export function readerPopupHtml(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
   slugId: string,
+  lang: PopupLang,
 ): string {
+  const hasUk = !!(lexical?.translationUk || grammar?.explanationUk);
+  const toggle = hasUk ? langToggleHtml(lang) : '';
   return [
-    lexical ? lexiconSectionHtml(lexical, slugId) : '',
-    grammar ? grammarSectionHtml(grammar, slugId) : '',
+    lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle) : '',
+    grammar
+      ? grammarSectionHtml(grammar, slugId, lang, lexical ? '' : toggle)
+      : '',
   ]
     .filter(Boolean)
     .join('<hr class="lex-popup__divider" />');
