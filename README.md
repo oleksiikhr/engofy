@@ -120,8 +120,7 @@ engofy/
 ├── test/           Backend integration/e2e tests
 ├── apps/web/       Astro frontend
 ├── nlp-service/    FastAPI + spaCy NLP microservice (Python)
-├── infra/          Docker Swarm stack, Cloudflare Tunnel config, deploy/backup scripts
-└── docs/           Deploy runbook and other project docs
+└── docs/           Project docs
 ```
 
 ## Claude Code — Skills
@@ -135,5 +134,5 @@ See `CLAUDE.md` for the full list of skills and what each one does.
 
 ## Sub-project Docs
 
-- [Production deploy runbook](docs/deploy.md)
+- [Hosting direction (DigitalOcean, managed-first)](docs/hosting-direction.md)
 - [NLP service](nlp-service/README.md)

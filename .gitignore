@@ -12,4 +12,3 @@ draft/results/*
 
 # Production env (real values); only .env.production.example is committed
 .env.production
-infra/.env.production
