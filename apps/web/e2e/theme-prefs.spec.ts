@@ -117,14 +117,11 @@ test.describe('theme preference', () => {
     await expect(page.getByRole('link', { name: 'Engofy' })).toBeVisible();
   });
 
-  test('stored function-words and reader-mode prefs land on <html>', async ({
-    page,
-  }) => {
-    await seed(page, { 'function-words': 'on', 'reader-modes': 'pos analyze' });
+  test('stored reader-mode prefs land on <html>', async ({ page }) => {
+    await seed(page, { 'reader-modes': 'pos analyze' });
     await page.goto('/');
 
     const html = page.locator('html');
-    await expect(html).toHaveAttribute('data-function-words', 'on');
     await expect(html).toHaveAttribute('data-reader-modes', 'pos analyze');
   });
 });
@@ -157,7 +154,10 @@ test.describe('reader preferences', () => {
 
     await page.reload();
     await expect(pos).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('body')).toHaveClass(/reader-pos/);
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-reader-modes',
+      'pos',
+    );
 
     await pos.click();
     await page.reload();

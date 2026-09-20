@@ -60,7 +60,7 @@ export class ReaderPage {
     });
   }
 
-  // A token span (added once a toolbar mode is on), filtered by its text.
+  // A token span (rendered by the server), filtered by its text.
   token(text: string): Locator {
     return this.analysis.locator('[data-tok]', {
       hasText: new RegExp(`^${text}$`),
@@ -69,11 +69,6 @@ export class ReaderPage {
 
   modeToggle(name: 'Word types' | 'Tenses' | 'Analyze'): Locator {
     return this.toolbar.getByRole('button', { name, exact: true });
-  }
-
-  // The Function words switch in the Word types legend.
-  get functionWordsSwitch(): Locator {
-    return this.toolbar.getByRole('switch', { name: 'Function words' });
   }
 
   // One section of the popup: 'word' | 'phrase' | 'grammar'.
