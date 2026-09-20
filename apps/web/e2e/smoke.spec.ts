@@ -20,9 +20,7 @@ test('renders the site shell with the guest landing', async ({ page }) => {
   ).toBeVisible();
 });
 
-test('the guest landing lists the features and shows the product screenshots', async ({
-  page,
-}) => {
+test('the guest landing lists the features', async ({ page }) => {
   await page.goto('/');
 
   const features = page.getByRole('region', { name: 'Features' });
@@ -30,17 +28,55 @@ test('the guest landing lists the features and shows the product screenshots', a
   await expect(
     features.getByRole('heading', { name: 'Tap any word' }),
   ).toBeVisible();
+});
 
-  const shots = page
-    .getByRole('region', { name: 'Product screenshots' })
-    .getByRole('img');
-  await expect(shots).toHaveCount(3);
-  for (const shot of await shots.all()) {
-    await shot.scrollIntoViewIfNeeded();
-    await expect
-      .poll(() => shot.evaluate((img: HTMLImageElement) => img.naturalWidth))
-      .toBeGreaterThan(0);
-  }
+test('the guest landing has one intro heading and no screenshots', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  await expect(page.locator('.landing-hero')).not.toContainText(
+    'authentic texts',
+  );
+  await expect(
+    page.getByRole('region', { name: 'Product screenshots' }),
+  ).toHaveCount(0);
+});
+
+test('a word in the landing reader opens its card without API calls', async ({
+  page,
+}) => {
+  const apiCalls: string[] = [];
+  page.on('request', (request) => {
+    const { pathname } = new URL(request.url());
+    if (pathname.startsWith('/partials') || pathname.startsWith('/api')) {
+      apiCalls.push(pathname);
+    }
+  });
+  await page.goto('/');
+
+  const demo = page.getByRole('region', { name: 'Try the reader' });
+  await demo.getByRole('button', { name: 'commutes' }).click();
+  const popup = page.getByRole('dialog');
+  await expect(popup).toContainText('commute');
+  await expect(popup).toContainText(
+    'to travel regularly between home and work',
+  );
+  await expect(popup.getByRole('link', { name: 'Log in' })).toBeVisible();
+  await expect(popup.getByRole('button', { name: 'Add to deck' })).toHaveCount(
+    0,
+  );
+
+  await demo.getByRole('button', { name: 'catch up on' }).click();
+  await expect(popup).toContainText('phrasal verb');
+  await page.keyboard.press('Escape');
+  await demo.getByRole('button', { name: 'She used to drive' }).click();
+  await expect(popup).toContainText('Grammar');
+
+  expect(apiCalls).toEqual([]);
+  expect(
+    await page.evaluate(() => localStorage.getItem('guest-deck')),
+  ).toBeNull();
 });
 
 test('the guest header hides Practice and the account menu', async ({
