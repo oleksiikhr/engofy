@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fff8ee" />
+  <rect x="0" y="600" width="1200" height="30" fill="#c8471c" />
+  <g transform="translate(90 110) scale(5)">
+    <rect width="32" height="32" rx="7" fill="#c8471c" />
+    <path d="M10 8h13v3.2h-9.6v3.3H21v3H13.4v3.3H23V24H10z" fill="#fff" />
+  </g>
+  <text x="90" y="425" font-family="Liberation Sans, Arial, sans-serif" font-size="120" font-weight="700" fill="#2b2118">Engofy</text>
+  <text x="90" y="495" font-family="Liberation Sans, Arial, sans-serif" font-size="44" fill="#5c4e3d">Learn English through short authentic texts</text>
+</svg>
