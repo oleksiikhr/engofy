@@ -86,10 +86,10 @@ status: in-progress
 мови, вибір зберігається в `localStorage`. Локалізація решти інтерфейсу сайту не входить у зріз.
 Міграція + збагачення + `apps/web`.
 
-### [ ] 7. Квіз без входу і збереження слів гостем
+### [x] 7. Квіз без входу і збереження слів гостем
 - Branch: `guest-reader-ux-overhaul-07-guest-quiz-and-saves`
-- Base: `guest-reader-ux-overhaul-06-ukrainian-translations`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/113
 
 Виправити порожню діру в картці квізу. «Start» не веде на логін: гість проходить один раунд зі словами
 цього тексту, після раунду показується CTA для реєстрації. «Add to deck» для гостя зберігається
