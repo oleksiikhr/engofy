@@ -17,10 +17,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Layout polish: меню, скролбар, англійські тексти
+### [x] 1. Layout polish: меню, скролбар, англійські тексти
 - Branch: `reader-ux-fixes-01-layout-polish`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/80
 
 Правки №1, №10, №11. `.menu` (аватар) вище за `.reader-toolbar` (stacking context на `.site-header`,
 z-index < `.lex-popup`). `scrollbar-gutter: stable` на `:root`. Переклад усіх видимих кириличних
