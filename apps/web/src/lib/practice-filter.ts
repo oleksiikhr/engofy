@@ -6,9 +6,9 @@ export const PRACTICE_TYPES = ['word', 'phrase', 'grammar'] as const;
 export type PracticeType = (typeof PRACTICE_TYPES)[number];
 
 export const PRACTICE_TYPE_LABEL: Record<PracticeType, string> = {
-  word: 'Слова',
-  phrase: 'Фрази',
-  grammar: 'Граматика',
+  word: 'Words',
+  phrase: 'Phrases',
+  grammar: 'Grammar',
 };
 
 // Tone class per type (app.css `.tone-*`), matching the reader's colours.

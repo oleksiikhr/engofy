@@ -263,7 +263,7 @@ export interface WordDictionarySense {
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this sense — needed by
-  // the "Видалити" action (`DELETE /learning/cards/:cardId`).
+  // the "Remove" action (`DELETE /learning/cards/:cardId`).
   cardId: string | null;
 }
 export interface WordDictionaryPost {
@@ -300,7 +300,7 @@ export interface PhraseDictionaryDetail {
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this phrase — needed by
-  // the "Видалити" action (`DELETE /learning/cards/:cardId`).
+  // the "Remove" action (`DELETE /learning/cards/:cardId`).
   cardId: string | null;
   posts: PhraseDictionaryPost[];
 }

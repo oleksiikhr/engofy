@@ -65,7 +65,7 @@ function targetFields(target: ActionTarget): string {
 }
 
 // A card always wins the effective state (see `resolveEffectiveState`), so a
-// target with an active card only offers "Видалити"; one with no card offers
+// target with an active card only offers "Remove"; one with no card offers
 // the known/skip toggle, each hidden once it would be a no-op re-post of the
 // state already showing.
 export function actionsHtml(
@@ -82,7 +82,7 @@ export function actionsHtml(
       <form hx-post="/partials/remove-card" hx-target="#${id}" hx-swap="outerHTML" hx-confirm="Remove this from your dictionary?">
         <input type="hidden" name="cardId" value="${esc(current.cardId)}" />
         ${fields}
-        <button type="submit" class="btn btn--sm btn--danger">Видалити</button>
+        <button type="submit" class="btn btn--sm btn--danger">Remove</button>
       </form>
     </div>`;
   }
@@ -95,10 +95,10 @@ export function actionsHtml(
         </form>`;
   const knownBtn =
     current.state !== 'learned'
-      ? dispositionForm('known', 'Позначити вивченим')
+      ? dispositionForm('known', 'Mark as learned')
       : '';
   const skipBtn =
-    current.state !== 'skipped' ? dispositionForm('skipped', 'Пропустити') : '';
+    current.state !== 'skipped' ? dispositionForm('skipped', 'Skip') : '';
 
   return `<div class="wd-sense__actions" id="${id}">${label}${knownBtn}${skipBtn}</div>`;
 }

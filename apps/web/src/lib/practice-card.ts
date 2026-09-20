@@ -34,8 +34,8 @@ const GRADES: Grade[] = [
 // against, so it gets a plain got-it / again choice; the backend accepts any
 // `ReviewRating` either way.
 const NEW_CARD_GRADES: Grade[] = [
-  { rating: 'again', label: 'Повтор', tone: 'tone-danger' },
-  { rating: 'good', label: 'Вивчив', tone: 'tone-green' },
+  { rating: 'again', label: 'Again', tone: 'tone-danger' },
+  { rating: 'good', label: 'Got it', tone: 'tone-green' },
 ];
 
 const TYPE_LABEL: Record<string, string> = {
@@ -72,7 +72,7 @@ function renderGrammarAnswerBody(target: PracticeItem['target']): string {
     ? `<p class="practice__example">${esc(target.exampleText)}</p>`
     : '';
   const more = target.detailSlug
-    ? `<p><a class="practice__more" href="/grammar/${encodeURIComponent(target.detailSlug)}">Детальніше</a></p>`
+    ? `<p><a class="practice__more" href="/grammar/${encodeURIComponent(target.detailSlug)}">Learn more</a></p>`
     : '';
   return `<p>${esc(target.secondary ?? '')}</p>${example}${renderContext(target)}${more}`;
 }
