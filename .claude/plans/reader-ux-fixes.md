@@ -28,10 +28,10 @@ z-index < `.lex-popup`). `scrollbar-gutter: stable` на `:root`. Перекла
 оновлення e2e (`dictionary.spec.ts`, `practice.spec.ts`). e2e: меню зверху над toolbar, ширина
 viewport не змінюється між коротким і довгим контентом.
 
-### [ ] 2. Tooltip зберігає стан "в колоді"
+### [x] 2. Tooltip зберігає стан "в колоді"
 - Branch: `reader-ux-fixes-02-popup-deck-state`
-- Base: `reader-ux-fixes-01-layout-polish`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/81
 
 Правка №2. У `reader-popup.ts` `afterSwap` записувати новий `state` назад у
 `data.words/phrases/grammar[id]`. e2e без стабу `lexicon-action`: Add to deck → закрити → відкрити
