@@ -1687,6 +1687,19 @@ body {
   opacity: 0.4;
   cursor: default;
 }
+.reader-toolbar__btn[hidden] {
+  display: none;
+}
+/* Listen needs speech synthesis, known only to script: its slot is reserved
+   and invisible until then. */
+.reader-toolbar__listen {
+  display: inline-flex;
+  gap: 0.3rem;
+  visibility: hidden;
+}
+.reader-toolbar__listen[data-ready] {
+  visibility: visible;
+}
 .reader-toolbar__size {
   display: flex;
   gap: 0.3rem;

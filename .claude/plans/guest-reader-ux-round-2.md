@@ -63,10 +63,10 @@ expand-contract не потрібні. Жоден зріз не змінює к�
 «Start here» для гостя бере рівень із cookie `reader-level` замість фіксованого A1. Прибрати плейсхолдер
 «Practice exercises for this use are coming soon» з `GrammarUsagePoints.astro`.
 
-### [ ] 5. Слухання всього тексту
+### [x] 5. Слухання всього тексту
 - Branch: `guest-reader-ux-round-2-05-listen-whole-text`
-- Base: `guest-reader-ux-round-2-04-grammar-navigation`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/124
 
 Кнопка «Listen» у тулбарі рідера: безперервне озвучення блок за блоком (Web Speech API), підсвітка
 поточного блоку, пауза й стоп; озвучення зупиняється при виході зі сторінки. Спирається на наявні
