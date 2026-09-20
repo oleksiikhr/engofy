@@ -4,7 +4,8 @@ import QuickCheck from '../../components/QuickCheck.astro';
 import QuickCheckScreen from '../../components/QuickCheckScreen.astro';
 import { apiGetOrNull } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
-import { escapeJson, postDescription, postJsonLd } from '../../lib/post-seo';
+import { postDescription, postJsonLd } from '../../lib/post-seo';
+import { escapeJson } from '../../lib/seo';
 import {
   buildQuickCheckSteps,
   buildStudySteps,

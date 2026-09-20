@@ -9,6 +9,8 @@ import {
   parseGrammarQuery,
   toGrammarApiQuery,
 } from '../lib/grammar-list';
+import { publicOrigin } from '../lib/site';
+import { breadcrumbList, jsonLdGraph } from '../lib/seo';
 import { getCurrentUser } from '../lib/session';
 import type { EffectiveState, GrammarReference } from '../lib/types';
 
@@ -27,10 +29,25 @@ const STATE_TONE: Record<Exclude<EffectiveState, 'new'>, string> = {
   skipped: 'tone-amber',
 };
 
+const jsonLd = jsonLdGraph([
+  breadcrumbList(publicOrigin(Astro.url), [
+    { name: 'Home', path: '/' },
+    { name: 'Grammar', path: '/grammar' },
+  ]),
+]);
+
 const groups = ref.groups.filter((g) => g.constructions.length > 0);
 ---
 
-<Layout title="Grammar — Engofy" user={user} active="grammar">
+<Layout
+  title="Grammar — Engofy"
+  description="The Cambridge English Grammar Profile: every grammar construction by level, with can-do statements and examples."
+  user={user}
+  active="grammar"
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
+  </Fragment>
   <h1>Grammar reference</h1>
   <p class="grammar-intro">
     The Cambridge English Grammar Profile — filter by the levels you're working
