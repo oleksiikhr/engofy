@@ -276,6 +276,66 @@ test.describe('reader page (guest)', () => {
     ).toHaveAttribute('href', '/login');
   });
 
+  test('the header shows the reading time and the badge explains the level', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await expect(page.locator('[data-reading-time]')).toHaveText(
+      /^\d+ min read$/,
+    );
+    const note = page.locator('[data-level-note]');
+    await expect(note).toBeHidden();
+    await reader.badge.click();
+    await expect(note).toContainText('Intermediate');
+    await expect(reader.badge).toHaveAttribute('aria-expanded', 'true');
+    await reader.badge.click();
+    await expect(note).toBeHidden();
+  });
+
+  test('the progress bar follows the scroll through the article', async ({
+    page,
+  }) => {
+    // A viewport shorter than the article, so there is something to scroll.
+    await page.setViewportSize({ width: 390, height: 300 });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const bar = page.locator('[data-reader-progress]');
+    const start = Number(await bar.getAttribute('aria-valuenow'));
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect
+      .poll(async () => Number(await bar.getAttribute('aria-valuenow')))
+      .toBeGreaterThan(start);
+    await expect
+      .poll(async () => Number(await bar.getAttribute('aria-valuenow')))
+      .toBe(100);
+  });
+
+  test('the summary recaps the words and grammar and offers the next text', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
+    const summary = reader.qcScreen('summary');
+    const seen = summary.locator('[data-qc-seen]');
+    await expect(seen).toContainText('Words and phrases');
+    await expect(seen).toContainText('perambulate');
+    await expect(seen).toContainText('Grammar you saw');
+    await expect(seen).toContainText('Past perfect');
+
+    const next = summary.locator('[data-qc-next]');
+    await expect(next).toContainText('Next text · B1');
+    await expect(next).not.toContainText('The Cartographer at Dawn');
+    await expect(next).toHaveAttribute('href', /^\/posts\/.+/);
+  });
+
   test('"I know it" settles the target and drops its label', async ({
     page,
   }) => {
