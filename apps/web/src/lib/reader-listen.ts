@@ -1,10 +1,18 @@
 import { sentenceAt } from './sentences';
-import { speak, speechSupported, stopSpeaking } from './speech';
+import {
+  pauseSpeaking,
+  resumeSpeaking,
+  speak,
+  speakAll,
+  speechSupported,
+  stopSpeaking,
+} from './speech';
 
 // Read-aloud for the reader: a play button at the end of every paragraph,
-// heading and list item speaks that unit; `speakSentenceAt` speaks the sentence
-// a label sits in (the popup's "Read the sentence"). Browsers without speech
-// synthesis get no buttons.
+// heading and list item speaks that unit; the toolbar's Listen reads every
+// visible unit in order, with pause and stop; `speakSentenceAt` speaks the
+// sentence a label sits in (the popup's "Read the sentence"). Browsers without
+// speech synthesis get no buttons.
 
 const UNIT_SELECTOR = '[data-block]:not(ul):not(ol), li[data-item]';
 const PLAY_ICON =
@@ -35,10 +43,17 @@ export function speakSentenceAt(anchor: Element): void {
   }
 }
 
-export function initReaderListen(root: HTMLElement): void {
+// `controls` holds the toolbar's Listen / Pause / Stop buttons, server-rendered
+// with their space reserved but invisible; they are revealed only when speech
+// synthesis exists, so the toolbar never shifts.
+export function initReaderListen(
+  root: HTMLElement,
+  controls: HTMLElement | null,
+): void {
   if (!speechSupported()) {
     return;
   }
+  const setPlayingBy = new Map<Element, (playing: boolean) => void>();
   for (const unit of root.querySelectorAll<HTMLElement>(UNIT_SELECTOR)) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -55,6 +70,7 @@ export function initReaderListen(root: HTMLElement): void {
       unit.classList.toggle('is-reading', playing);
     };
     setPlaying(false);
+    setPlayingBy.set(unit, setPlaying);
 
     button.addEventListener('click', () => {
       if (button.getAttribute('aria-pressed') === 'true') {
@@ -65,5 +81,78 @@ export function initReaderListen(root: HTMLElement): void {
       speak(unitText(unit), () => setPlaying(false));
     });
   }
+  if (controls) {
+    initListenAll(controls, setPlayingBy);
+  }
   window.addEventListener('pagehide', stopSpeaking);
+}
+
+function initListenAll(
+  controls: HTMLElement,
+  setPlayingBy: Map<Element, (playing: boolean) => void>,
+): void {
+  const start = controls.querySelector<HTMLButtonElement>(
+    '[data-listen="start"]',
+  );
+  const pause = controls.querySelector<HTMLButtonElement>(
+    '[data-listen="pause"]',
+  );
+  const stop = controls.querySelector<HTMLButtonElement>(
+    '[data-listen="stop"]',
+  );
+  const pauseLabel = pause?.querySelector('[data-label]');
+  if (!start || !pause || !stop || !pauseLabel) {
+    return;
+  }
+
+  let current: Element | null = null;
+  let paused = false;
+  const showRunning = (running: boolean) => {
+    start.hidden = running;
+    pause.hidden = !running;
+    stop.hidden = !running;
+  };
+  const showPaused = (value: boolean) => {
+    paused = value;
+    pauseLabel.textContent = value ? 'Resume' : 'Pause';
+  };
+
+  start.addEventListener('click', () => {
+    // Study mode hides all but one paragraph; only what is on screen is read.
+    const units = [
+      ...document.querySelectorAll<HTMLElement>(UNIT_SELECTOR),
+    ].filter((unit) => setPlayingBy.has(unit) && unit.getClientRects().length);
+    if (units.length === 0) {
+      return;
+    }
+    showPaused(false);
+    showRunning(true);
+    speakAll(units.map(unitText), {
+      onItem: (index) => {
+        if (current) {
+          setPlayingBy.get(current)?.(false);
+        }
+        current = units[index];
+        setPlayingBy.get(current)?.(true);
+        current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      },
+      onDone: () => {
+        if (current) {
+          setPlayingBy.get(current)?.(false);
+        }
+        current = null;
+        showRunning(false);
+      },
+    });
+  });
+  pause.addEventListener('click', () => {
+    if (paused) {
+      resumeSpeaking();
+    } else {
+      pauseSpeaking();
+    }
+    showPaused(!paused);
+  });
+  stop.addEventListener('click', stopSpeaking);
+  controls.dataset.ready = '';
 }

@@ -261,6 +261,17 @@ const isRead = post.isRead ?? false;
         <button type="button" class="reader-toolbar__btn tone-amber" data-study-toggle aria-pressed="false" title="Read one paragraph at a time with a short quiz after each">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l13 8-13 8V4z" /></svg>Study mode
         </button>
+        <span class="reader-toolbar__listen" data-listen-all>
+          <button type="button" class="reader-toolbar__btn tone-brand" data-listen="start" title="Read the whole text aloud, paragraph by paragraph">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16.5 8.5a5 5 0 0 1 0 7" /></svg>Listen
+          </button>
+          <button type="button" class="reader-toolbar__btn tone-brand" data-listen="pause" hidden>
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg><span data-label>Pause</span>
+          </button>
+          <button type="button" class="reader-toolbar__btn tone-brand" data-listen="stop" hidden>
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>Stop
+          </button>
+        </span>
         <span class="reader-toolbar__size">
           <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="-1" aria-label="Smaller text">A−</button>
           <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="1" aria-label="Larger text">A+</button>
@@ -385,7 +396,10 @@ const isRead = post.isRead ?? false;
     initReaderPopup(body, lexicon);
   }
   if (body) {
-    initReaderListen(body);
+    initReaderListen(
+      body,
+      document.querySelector<HTMLElement>('[data-listen-all]'),
+    );
   }
   const progress = document.querySelector<HTMLElement>('[data-reader-progress]');
   if (body && progress) {
