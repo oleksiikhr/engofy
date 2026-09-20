@@ -33,10 +33,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Виправити рендер і токенізацію тексту
+### [x] 1. Виправити рендер і токенізацію тексту
 - Branch: `guest-reader-ux-overhaul-01-reader-render-bugs`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/107
 
 Апостроф не відривається від слова («farmers ' market»). Прибрати порожні сині плашки після «wakes» і
 «stall». «It's» не розбивається на окремі плашки. Прибрати пробіл після відкриваючих лапок
