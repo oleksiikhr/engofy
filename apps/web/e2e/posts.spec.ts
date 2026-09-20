@@ -68,6 +68,62 @@ test.describe('posts (guest)', () => {
     await expect(page).toHaveURL(/term=perambulate/);
   });
 
+  test('a chip click and Enter in search each fire one /partials/posts request', async ({
+    page,
+  }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(posts.cards.first()).toBeVisible();
+
+    const requests: string[] = [];
+    page.on('request', (request) => {
+      const url = new URL(request.url());
+      if (url.pathname === '/partials/posts') {
+        requests.push(url.search);
+      }
+    });
+
+    await posts.level('B1').click();
+    await expect(page).toHaveURL(/cefr=B1/);
+    await page.waitForLoadState('networkidle');
+    expect(requests).toHaveLength(1);
+
+    requests.length = 0;
+    await posts.searchInput.fill('perambulate');
+    await posts.searchInput.press('Enter');
+    await expect(page).toHaveURL(/term=perambulate/);
+    await page.waitForLoadState('networkidle');
+    expect(requests).toHaveLength(1);
+  });
+
+  test('results keep their height while a filter request is in flight', async ({
+    page,
+  }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(posts.cards.first()).toBeVisible();
+
+    const results = page.locator('#posts-results');
+    const before = (await results.boundingBox())?.height ?? 0;
+    expect(before).toBeGreaterThan(100);
+
+    await page.route('**/partials/posts?*', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await route.continue();
+    });
+    await posts.level('B1').click();
+
+    // Sample past the old 0.2s collapse delay while the request is pending.
+    await page.waitForTimeout(600);
+    await expect(page.locator('#posts-filters')).toHaveClass(/htmx-request/);
+    await expect(posts.cards.first()).toBeVisible();
+    await expect(results).toHaveCSS('opacity', '0.5');
+    const during = (await results.boundingBox())?.height ?? 0;
+    expect(during).toBeGreaterThanOrEqual(before - 1);
+
+    await expect(page).toHaveURL(/cefr=B1/);
+  });
+
   test('"Show more" appends the next page', async ({ page }) => {
     const posts = new PostsPage(page);
     await posts.goto('?limit=2');

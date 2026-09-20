@@ -37,10 +37,10 @@ viewport не змінюється між коротким і довгим ко�
 `data.words/phrases/grammar[id]`. e2e без стабу `lexicon-action`: Add to deck → закрити → відкрити
 знову → "Learning" без кнопки Add; те саме для фрази; стан зберігається після reload.
 
-### [ ] 3. Стрибки на /posts при фільтрації
+### [x] 3. Стрибки на /posts при фільтрації
 - Branch: `reader-ux-fixes-03-posts-filter-jump`
-- Base: `reader-ux-fixes-02-popup-deck-state`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/82
 
 Правка №12. Прибрати відкладене згортання `#posts-results` (`max-height:0`) та skeleton; старі
 результати лишаються видимими (dim через `.htmx-request`), `min-height`. Подвійний запит:
