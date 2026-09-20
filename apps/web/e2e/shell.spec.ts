@@ -17,15 +17,12 @@ test.describe('guest shell', () => {
     await expect(shell.accountToggle).toHaveCount(0);
   });
 
-  test('the main nav has Posts, Dictionary and Grammar only', async ({
-    page,
-  }) => {
+  test('the main nav has Posts and Grammar only', async ({ page }) => {
     const shell = new ShellPage(page);
     await page.goto('/');
 
     await expect(shell.mainNav.getByRole('link')).toHaveText([
       'Posts',
-      'Dictionary',
       'Grammar',
     ]);
   });
