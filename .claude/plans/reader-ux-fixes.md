@@ -47,10 +47,10 @@ viewport не змінюється між коротким і довгим ко�
 `hx-sync="this:replace"` на формі, search-інпут без `change` у trigger. e2e: один запит
 `/partials/posts` на клік по чипу і на Enter; висота `#posts-results` не падає до ~0.
 
-### [ ] 4. Статус граматики на /grammar
+### [x] 4. Статус граматики на /grammar
 - Branch: `reader-ux-fixes-04-grammar-status`
-- Base: `reader-ux-fixes-03-posts-filter-jump`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/83
 
 Правка №9. `get-grammar-reference.handler.ts`: агрегація без CEFR-default — Learned лише коли всі
 usage points Learned/Skipped через картку/disposition, Learning — є картка або частково, інакше New;

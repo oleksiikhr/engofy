@@ -1,24 +1,34 @@
 import { EffectiveState } from '../../learning/domain/resolve-effective-state.js';
 
-// New < Skipped < Learning < Learned: an explicit dismissal is more resolved
-// than an untouched target, but active engagement with the SRS (Learning) or
-// having it graduate/count as known (Learned) outranks a skip.
-const PRIORITY: Record<EffectiveState, number> = {
-  [EffectiveState.New]: 0,
-  [EffectiveState.Skipped]: 1,
-  [EffectiveState.Learning]: 2,
-  [EffectiveState.Learned]: 3,
-};
+// A usage point counts as resolved once the learner has settled it: it
+// graduated (Learned, a card or a Known disposition) or was dismissed
+// (Skipped). Untouched (New) and in-progress (Learning) points are open.
+function isResolved(state: EffectiveState): boolean {
+  return state === EffectiveState.Learned || state === EffectiveState.Skipped;
+}
+
+export function countResolved(states: EffectiveState[]): number {
+  return states.filter(isResolved).length;
+}
 
 // Collapses the per-usage-point effective states of one grammar construction
-// into a single state for a construction-level badge (grammar-page-redesign
-// зріз 1) — "most advanced wins". An empty input means no usage points at
-// all, i.e. New.
-export function mostAdvancedEffectiveState(
+// into a single state for a construction-level badge. The inputs carry no
+// CEFR default — only what the learner did (cards, dispositions):
+//   - Learned: every point resolved, at least one truly Learned;
+//   - Skipped: every point Skipped;
+//   - New: no point touched (also no points at all);
+//   - Learning: anything in between — a card, or only some points resolved.
+export function collapseConstructionState(
   states: EffectiveState[],
 ): EffectiveState {
-  return states.reduce(
-    (best, state) => (PRIORITY[state] > PRIORITY[best] ? state : best),
-    EffectiveState.New,
-  );
+  if (states.every((state) => state === EffectiveState.New)) {
+    return EffectiveState.New;
+  }
+  if (states.every((state) => state === EffectiveState.Skipped)) {
+    return EffectiveState.Skipped;
+  }
+  if (states.every(isResolved)) {
+    return EffectiveState.Learned;
+  }
+  return EffectiveState.Learning;
 }

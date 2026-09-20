@@ -201,6 +201,8 @@ export interface GrammarRefConstruction {
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
   state: EffectiveState;
+  // Usage points the learner resolved (learned or skipped); absent for a guest.
+  learnedCount?: number;
 }
 export interface GrammarRefGroup {
   // Stable id within the axis: category name, `past`/`present`/`future`/`other`
@@ -214,6 +216,13 @@ export interface GrammarReference {
 }
 export interface GrammarConstructionUsagePoint extends GrammarUsagePointRef {
   state: EffectiveState;
+  // Untouched but at or below the learner's own level.
+  assumedKnown: boolean;
+}
+export interface GrammarLevelProgress {
+  cefrLevel: CefrLevel;
+  learnedCount: number;
+  totalCount: number;
 }
 export interface GrammarConstructionDetail {
   slug: string;
@@ -222,6 +231,8 @@ export interface GrammarConstructionDetail {
   cheatSheetContent: string | null;
   cefrLevel: CefrLevel | null;
   usagePoints: GrammarConstructionUsagePoint[];
+  // Easiest level first; absent for a guest.
+  levelProgress?: GrammarLevelProgress[];
 }
 
 // --- dictionary ---

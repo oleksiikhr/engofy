@@ -8,11 +8,14 @@ import {
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
+import { countResolved } from '../../domain/effective-state-priority.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
+import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { GetGrammarConstructionQuery } from './get-grammar-construction.query.js';
 import type {
+  ConstructionLevelProgressView,
   ConstructionUsagePointView,
   GrammarConstructionView,
 } from './grammar-construction-view.js';
@@ -55,16 +58,28 @@ export class GetGrammarConstructionHandler
       (a, b) => cefrRank(a.cefrLevel) - cefrRank(b.cefrLevel),
     );
 
-    const stateByPoint = await this.resolvePointStates(sorted, userId);
+    const { stateByPoint, userCefrLevel } = await this.resolvePointStates(
+      sorted,
+      userId,
+    );
 
-    const usagePoints: ConstructionUsagePointView[] = sorted.map((point) => ({
-      grammarUsagePointId: point.id,
-      cefrLevel: point.cefrLevel,
-      guideword: point.guideword,
-      canDoStatement: point.canDoStatement,
-      exampleText: point.exampleText ?? null,
-      state: stateByPoint.get(point.id) ?? EffectiveState.New,
-    }));
+    const usagePoints: ConstructionUsagePointView[] = sorted.map((point) => {
+      const state = stateByPoint.get(point.id) ?? EffectiveState.New;
+      return {
+        grammarUsagePointId: point.id,
+        cefrLevel: point.cefrLevel,
+        guideword: point.guideword,
+        canDoStatement: point.canDoStatement,
+        exampleText: point.exampleText ?? null,
+        state,
+        // Untouched but at or below the learner's own level — shown as
+        // "Assumed known", never counted as learned.
+        assumedKnown:
+          state === EffectiveState.New &&
+          userCefrLevel !== null &&
+          cefrRank(point.cefrLevel) <= cefrRank(userCefrLevel),
+      };
+    });
 
     return {
       slug: construction.slug,
@@ -73,19 +88,27 @@ export class GetGrammarConstructionHandler
       cheatSheetContent: construction.cheatSheetContent ?? null,
       cefrLevel: sorted[0]?.cefrLevel ?? null,
       usagePoints,
+      levelProgress: userId
+        ? buildLevelProgress(sorted, stateByPoint)
+        : undefined,
     };
   }
 
   // Per usage point, not collapsed to one construction-level value (unlike
   // the reference list) — each point's own "+ Add to deck" button gates on
-  // its own state. A guest (userId null) gets every point New, no DB join.
+  // its own state. From the learner's own cards/dispositions only (no CEFR
+  // default; the caller derives "assumed known" from `userCefrLevel`). A guest
+  // (userId null) gets every point New, no DB join.
   private async resolvePointStates(
     points: GrammarUsagePoint[],
     userId: string | null,
-  ): Promise<Map<string, EffectiveState>> {
-    const result = new Map<string, EffectiveState>();
+  ): Promise<{
+    stateByPoint: Map<string, EffectiveState>;
+    userCefrLevel: CefrLevel | null;
+  }> {
+    const stateByPoint = new Map<string, EffectiveState>();
     if (!userId || points.length === 0) {
-      return result;
+      return { stateByPoint, userCefrLevel: null };
     }
 
     const pointIds = points.map((point) => point.id);
@@ -119,19 +142,36 @@ export class GetGrammarConstructionHandler
 
     for (const point of points) {
       const card = cardByPoint.get(point.id);
-      result.set(
+      stateByPoint.set(
         point.id,
         resolveEffectiveState({
           card: card
             ? { state: card.state, scheduledDays: card.scheduledDays }
             : null,
           disposition: dispositionByPoint.get(point.id) ?? null,
-          targetCefrLevel: point.cefrLevel,
-          userCefrLevel: user.cefrLevel,
         }),
       );
     }
 
-    return result;
+    return { stateByPoint, userCefrLevel: user.cefrLevel };
   }
+}
+
+// Resolved / total usage points per CEFR level, easiest first (`points` is
+// already sorted by level).
+function buildLevelProgress(
+  points: GrammarUsagePoint[],
+  stateByPoint: Map<string, EffectiveState>,
+): ConstructionLevelProgressView[] {
+  const byLevel = new Map<CefrLevel, EffectiveState[]>();
+  for (const point of points) {
+    const states = byLevel.get(point.cefrLevel) ?? [];
+    states.push(stateByPoint.get(point.id) ?? EffectiveState.New);
+    byLevel.set(point.cefrLevel, states);
+  }
+  return [...byLevel].map(([cefrLevel, states]) => ({
+    cefrLevel,
+    learnedCount: countResolved(states),
+    totalCount: states.length,
+  }));
 }

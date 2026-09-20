@@ -1,16 +1,34 @@
 ---
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
-import type { GrammarConstructionUsagePoint } from '../../lib/types';
+import type {
+  GrammarConstructionUsagePoint,
+  GrammarLevelProgress,
+} from '../../lib/types';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
+  levelProgress?: GrammarLevelProgress[];
 }
 
-const { usagePoints } = Astro.props;
+const { usagePoints, levelProgress } = Astro.props;
 ---
 
 <section class="usage" data-testid="grammar-usage">
   <h2>When it's used</h2>
+  {
+    levelProgress && levelProgress.length > 0 && (
+      <ul class="usage-progress" data-testid="grammar-level-progress">
+        {levelProgress.map((level) => (
+          <li data-level={level.cefrLevel}>
+            <span class="badge">{level.cefrLevel}</span>
+            <span>
+              {level.learnedCount}/{level.totalCount} learned
+            </span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
   {
     usagePoints.length === 0 && (
       <p>No usage points recorded for this construction.</p>
@@ -27,7 +45,12 @@ const { usagePoints } = Astro.props;
           <p class="usage-item__can">{up.canDoStatement}</p>
           {up.exampleText && <p class="usage-item__eg">“{up.exampleText}”</p>}
           <Fragment
-            set:html={usageActionsHtml(up.grammarUsagePointId, up.state)}
+            set:html={usageActionsHtml(
+              up.grammarUsagePointId,
+              up.state,
+              undefined,
+              up.assumedKnown,
+            )}
           />
           <div class="usage-item__exercises" data-testid="usage-exercises">
             <p>Practice exercises for this use are coming soon.</p>
@@ -43,6 +66,22 @@ const { usagePoints } = Astro.props;
     margin: 0 0 0.75rem;
     font-size: 1.19rem;
     font-weight: 800;
+  }
+  .usage-progress {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+  }
+  .usage-progress li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
   .usage-list {
     list-style: none;
@@ -125,6 +164,10 @@ const { usagePoints } = Astro.props;
   .gup-state--learned {
     background: var(--color-success-wash);
     color: var(--color-success-ink);
+  }
+  .gup-state--assumed {
+    background: var(--color-paper-soft);
+    color: var(--color-ink-faint);
   }
   .gup-state--skipped {
     background: var(--color-warning-wash);

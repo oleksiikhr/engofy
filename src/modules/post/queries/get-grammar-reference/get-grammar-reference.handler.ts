@@ -1,6 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { User } from '../../../auth/entities/user.entity.js';
 import {
   EffectiveState,
   resolveEffectiveState,
@@ -8,7 +7,10 @@ import {
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
-import { mostAdvancedEffectiveState } from '../../domain/effective-state-priority.js';
+import {
+  collapseConstructionState,
+  countResolved,
+} from '../../domain/effective-state-priority.js';
 import { groupConstructions } from '../../domain/grammar-grouping.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
@@ -62,7 +64,7 @@ export class GetGrammarReferenceHandler
       constructionsByCategory.set(construction.categoryId, list);
     }
 
-    const stateByConstruction = await this.resolveConstructionStates(
+    const progressByConstruction = await this.resolveConstructionProgress(
       usagePoints,
       pointsByConstruction,
       userId,
@@ -74,7 +76,7 @@ export class GetGrammarReferenceHandler
       this.buildConstructionViews(
         constructionsByCategory.get(category.id) ?? [],
         pointsByConstruction,
-        stateByConstruction,
+        progressByConstruction,
         options.cefrLevels,
       ).map((construction) => ({
         categoryName: category.name,
@@ -95,7 +97,7 @@ export class GetGrammarReferenceHandler
   private buildConstructionViews(
     constructions: GrammarConstruction[],
     pointsByConstruction: Map<string, GrammarUsagePoint[]>,
-    stateByConstruction: Map<string, EffectiveState>,
+    progressByConstruction: Map<string, ConstructionProgress>,
     cefrLevels: CefrLevel[],
   ): GrammarReferenceConstructionView[] {
     const views: GrammarReferenceConstructionView[] = [];
@@ -107,33 +109,35 @@ export class GetGrammarReferenceHandler
       ) {
         continue;
       }
+      const progress = progressByConstruction.get(construction.id);
       views.push({
         slug: construction.slug,
         name: construction.name,
         cefrLevel: easiestLevel(points),
         usagePointCount: points.length,
-        state: stateByConstruction.get(construction.id) ?? EffectiveState.New,
+        state: progress?.state ?? EffectiveState.New,
+        learnedCount: progress?.learnedCount,
       });
     }
     return views;
   }
 
-  // One collapsed effective state per construction (learning-foundation's
-  // 4-state model), "most advanced wins" over its usage points — a guest
-  // (userId null) gets every construction New, no DB join.
-  private async resolveConstructionStates(
+  // One collapsed state and resolved-point count per construction, from the
+  // learner's own cards and dispositions only — the CEFR default is not
+  // applied, so a below-level point stays New until they act on it. A guest
+  // (userId null) gets an empty map: every construction New, no DB join.
+  private async resolveConstructionProgress(
     usagePoints: GrammarUsagePoint[],
     pointsByConstruction: Map<string, GrammarUsagePoint[]>,
     userId: string | null,
-  ): Promise<Map<string, EffectiveState>> {
-    const result = new Map<string, EffectiveState>();
+  ): Promise<Map<string, ConstructionProgress>> {
+    const result = new Map<string, ConstructionProgress>();
     if (!userId || usagePoints.length === 0) {
       return result;
     }
 
     const usagePointIds = usagePoints.map((point) => point.id);
-    const [user, cards, dispositions] = await Promise.all([
-      this.em.findOneOrFail(User, { id: userId }, { disableIdentityMap: true }),
+    const [cards, dispositions] = await Promise.all([
       this.em.find(
         LearningCard,
         {
@@ -172,15 +176,21 @@ export class GetGrammarReferenceHandler
             ? { state: card.state, scheduledDays: card.scheduledDays }
             : null,
           disposition: dispositionByPoint.get(point.id) ?? null,
-          targetCefrLevel: point.cefrLevel,
-          userCefrLevel: user.cefrLevel,
         });
       });
-      result.set(constructionId, mostAdvancedEffectiveState(states));
+      result.set(constructionId, {
+        state: collapseConstructionState(states),
+        learnedCount: countResolved(states),
+      });
     }
 
     return result;
   }
+}
+
+interface ConstructionProgress {
+  state: EffectiveState;
+  learnedCount: number;
 }
 
 function easiestLevel(points: GrammarUsagePoint[]) {
