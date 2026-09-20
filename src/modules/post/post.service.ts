@@ -25,6 +25,8 @@ import {
 import type { GrammarReferenceView } from './queries/get-grammar-reference/grammar-reference-view.js';
 import { GetPostDetailQuery } from './queries/get-post-detail/get-post-detail.query.js';
 import type { PostDetailView } from './queries/get-post-detail/post-detail-view.js';
+import { GetPostPipelineStatusQuery } from './queries/get-post-pipeline-status/get-post-pipeline-status.query.js';
+import type { PostPipelineStatusListView } from './queries/get-post-pipeline-status/post-pipeline-status-view.js';
 import { GetPostSuggestionsQuery } from './queries/get-post-suggestions/get-post-suggestions.query.js';
 import type { PostSuggestionsView } from './queries/get-post-suggestions/post-suggestions-view.js';
 import type { GetPostsListOptions } from './queries/get-posts-list/get-posts-list.query.js';
@@ -59,6 +61,13 @@ export class PostService {
     limit: number,
   ): Promise<PostSuggestionsView> {
     return this.queryBus.execute(new GetPostSuggestionsQuery(prefix, limit));
+  }
+
+  getPostPipelineStatus(
+    postId: string | null,
+    limit: number,
+  ): Promise<PostPipelineStatusListView> {
+    return this.queryBus.execute(new GetPostPipelineStatusQuery(postId, limit));
   }
 
   getGrammarReference(

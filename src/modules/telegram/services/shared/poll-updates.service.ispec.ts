@@ -1,6 +1,12 @@
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
+import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
+import { PostPipelineRun } from '../../../post/entities/post-pipeline-run.entity.js';
+import { PostPipelineRunStatus } from '../../../post/enums/post-pipeline-run-status.enum.js';
+import { PostPipelineStage } from '../../../post/enums/post-pipeline-stage.enum.js';
+import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
+import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import TelegramConfig from '../../config/telegram.config.js';
 import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
 import { TelegramModule } from '../../telegram.module.js';
@@ -75,6 +81,44 @@ describe('PollUpdatesService', () => {
     expect(posts).toHaveLength(1);
     expect(posts[0].source.rawText).toBe('A short tale about a fox.');
     expect(fakeClient.sent[0].text).toContain('Queued');
+    expect(fakeClient.sent[0].text).toContain(`/retry ${posts[0].id}`);
+    expect(fakeClient.sent[0].text).toContain(`/status ${posts[0].id}`);
+  });
+
+  it('replies to /status with stage progress for a post and for the recent list', async () => {
+    const em = suite.orm.em;
+    const source = new PostSource();
+    source.format = PostSourceFormat.Text;
+    source.rawText = 'seed';
+    const post = new Post();
+    post.source = source;
+    post.title = 'Stuck tale';
+    post.status = PostStatus.Failed;
+    em.persist(post);
+    em.create(PostPipelineRun, {
+      postId: post.id,
+      stage: PostPipelineStage.AiExercises,
+      status: PostPipelineRunStatus.Failed,
+      errorMessage: 'invalid payload',
+    });
+    await em.flush();
+    em.clear();
+
+    fakeClient.queued = [
+      adminMessage(700, `/status ${post.id}`),
+      adminMessage(701, '/status'),
+      adminMessage(702, '/status 01920000-0000-7000-8000-000000000000'),
+    ];
+    await service.run();
+
+    expect(fakeClient.sent[0].text).toContain(`id: ${post.id}`);
+    expect(fakeClient.sent[0].text).toContain(
+      '✗ ai_exercises: invalid payload',
+    );
+    expect(fakeClient.sent[1].text).toContain(`id: ${post.id}`);
+    expect(fakeClient.sent[2].text).toBe(
+      'Post 01920000-0000-7000-8000-000000000000 not found.',
+    );
   });
 
   it('derives the next getUpdates offset from the highest stored update id', async () => {

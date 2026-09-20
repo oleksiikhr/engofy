@@ -38,6 +38,33 @@ describe('parseTelegramCommand', () => {
     expect(parseTelegramCommand('/retry 12345')).toEqual({ kind: 'unknown' });
   });
 
+  it('parses /status with and without a post id', () => {
+    expect(parseTelegramCommand('/status')).toEqual({
+      kind: 'status',
+      postId: null,
+    });
+    expect(parseTelegramCommand('/status@engofy_bot  ')).toEqual({
+      kind: 'status',
+      postId: null,
+    });
+    expect(
+      parseTelegramCommand('/status 01920000-0000-7000-8000-000000000000'),
+    ).toEqual({
+      kind: 'status',
+      postId: '01920000-0000-7000-8000-000000000000',
+    });
+  });
+
+  it('treats /status with a non-uuid id or extra words as unknown', () => {
+    expect(parseTelegramCommand('/status abc123')).toEqual({ kind: 'unknown' });
+    expect(parseTelegramCommand('/statusx')).toEqual({ kind: 'unknown' });
+    expect(
+      parseTelegramCommand(
+        '/status 01920000-0000-7000-8000-000000000000 extra',
+      ),
+    ).toEqual({ kind: 'unknown' });
+  });
+
   it('treats a plain message as unknown', () => {
     expect(parseTelegramCommand('hey there')).toEqual({ kind: 'unknown' });
   });
