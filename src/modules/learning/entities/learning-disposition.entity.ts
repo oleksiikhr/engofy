@@ -12,6 +12,9 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { User } from '../../auth/entities/user.entity.js';
+import { GrammarUsagePoint } from '../../post/entities/grammar-usage-point.entity.js';
+import { Phrase } from '../../post/entities/phrase.entity.js';
+import { WordDefinition } from '../../post/entities/word-definition.entity.js';
 import { Disposition } from '../enums/disposition.enum.js';
 
 // The learner's known/skipped call on a word sense, phrase, or grammar usage
@@ -42,15 +45,30 @@ export class LearningDisposition {
   userId!: string;
 
   // FK -> word_definitions.id
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => WordDefinition, {
+    mapToPk: true,
+    fieldName: 'word_definition_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   wordDefinitionId?: string | null;
 
   // FK -> phrases.id
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => Phrase, {
+    mapToPk: true,
+    fieldName: 'phrase_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   phraseId?: string | null;
 
   // FK -> grammar_usage_points.id
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => GrammarUsagePoint, {
+    mapToPk: true,
+    fieldName: 'grammar_usage_point_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   grammarUsagePointId?: string | null;
 
   @Enum({ items: () => Disposition })

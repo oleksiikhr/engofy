@@ -10,7 +10,9 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { Phrase } from './phrase.entity.js';
 import { Sentence } from './sentence.entity.js';
+import { Word } from './word.entity.js';
 
 // One row per spaCy token of a Sentence. This is the deterministic NLP layer;
 // its POS/tag/dep fields are raw spaCy output, deliberately not the curated
@@ -73,7 +75,12 @@ export class SentenceToken {
   // Set by the deterministic phrasal-verb grouping in spacy_parse: every
   // fragment of one discontinuous phrasal verb ('picked' ... 'up') shares the
   // same Phrase id here. FK -> phrases.id.
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => Phrase, {
+    mapToPk: true,
+    fieldName: 'phrasal_verb_group_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   phrasalVerbGroupId?: string | null;
 
   @Property({ type: 'boolean', default: false })
@@ -85,12 +92,22 @@ export class SentenceToken {
   // Linked by the annotation stage (Slice 3 rework). FK -> words.id.
   // Indexed: `/dictionary` derives each card term's "appears in" post list by
   // joining sentence_tokens -> sentences -> posts on this column.
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => Word, {
+    mapToPk: true,
+    fieldName: 'word_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   @Index()
   wordId?: string | null;
 
   // FK -> phrases.id. Indexed for the same `/dictionary` join as wordId.
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => Phrase, {
+    mapToPk: true,
+    fieldName: 'phrase_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   @Index()
   phraseId?: string | null;
 

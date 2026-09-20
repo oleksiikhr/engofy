@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
+import { Word } from './word.entity.js';
 
 @Entity({ tableName: 'word_definitions' })
 @Unique({ properties: ['wordId', 'pos'] })
@@ -18,7 +20,11 @@ export class WordDefinition {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Word, {
+    mapToPk: true,
+    fieldName: 'word_id',
+    deleteRule: 'restrict',
+  })
   wordId!: string;
 
   @Enum({ items: () => PartOfSpeech })

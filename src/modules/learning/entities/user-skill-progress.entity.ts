@@ -10,6 +10,7 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { User } from '../../auth/entities/user.entity.js';
+import { GrammarConstruction } from '../../post/entities/grammar-construction.entity.js';
 
 // Per-user progress on one of the ~90 grammar constructions: unlock time and
 // display-only review tallies. Mastery (0-100) is not stored — `get-profile`
@@ -30,7 +31,11 @@ export class UserSkillProgress {
   userId!: string;
 
   // FK -> grammar_constructions.id
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => GrammarConstruction, {
+    mapToPk: true,
+    fieldName: 'construction_id',
+    deleteRule: 'restrict',
+  })
   constructionId!: string;
 
   @Property({ type: 'integer', default: 0 })

@@ -589,6 +589,18 @@
       "checks": [],
       "triggers": [],
       "foreignKeys": {
+        "daily_plans_grammar_usage_point_id_foreign": {
+          "columnNames": [
+            "grammar_usage_point_id"
+          ],
+          "constraintName": "daily_plans_grammar_usage_point_id_foreign",
+          "localTableName": "public.daily_plans",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_usage_points",
+          "deleteRule": "restrict"
+        },
         "daily_plans_post_id_foreign": {
           "columnNames": [
             "post_id"
@@ -1094,7 +1106,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "grammar_constructions_category_id_foreign": {
+          "columnNames": [
+            "category_id"
+          ],
+          "constraintName": "grammar_constructions_category_id_foreign",
+          "localTableName": "public.grammar_constructions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_categories",
+          "deleteRule": "restrict"
+        }
+      },
       "comment": null
     },
     {
@@ -1276,6 +1301,18 @@
       "checks": [],
       "triggers": [],
       "foreignKeys": {
+        "grammar_matches_grammar_usage_point_id_foreign": {
+          "columnNames": [
+            "grammar_usage_point_id"
+          ],
+          "constraintName": "grammar_matches_grammar_usage_point_id_foreign",
+          "localTableName": "public.grammar_matches",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_usage_points",
+          "deleteRule": "restrict"
+        },
         "grammar_matches_sentence_id_foreign": {
           "columnNames": [
             "sentence_id"
@@ -1497,7 +1534,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "grammar_usage_points_construction_id_foreign": {
+          "columnNames": [
+            "construction_id"
+          ],
+          "constraintName": "grammar_usage_points_construction_id_foreign",
+          "localTableName": "public.grammar_usage_points",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_constructions",
+          "deleteRule": "restrict"
+        }
+      },
       "comment": null
     },
     {
@@ -1870,6 +1920,30 @@
       ],
       "triggers": [],
       "foreignKeys": {
+        "learning_cards_grammar_usage_point_id_foreign": {
+          "columnNames": [
+            "grammar_usage_point_id"
+          ],
+          "constraintName": "learning_cards_grammar_usage_point_id_foreign",
+          "localTableName": "public.learning_cards",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_usage_points",
+          "deleteRule": "restrict"
+        },
+        "learning_cards_phrase_id_foreign": {
+          "columnNames": [
+            "phrase_id"
+          ],
+          "constraintName": "learning_cards_phrase_id_foreign",
+          "localTableName": "public.learning_cards",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.phrases",
+          "deleteRule": "restrict"
+        },
         "learning_cards_user_id_foreign": {
           "columnNames": [
             "user_id"
@@ -1881,6 +1955,18 @@
           ],
           "referencedTableName": "public.users",
           "deleteRule": "cascade"
+        },
+        "learning_cards_word_definition_id_foreign": {
+          "columnNames": [
+            "word_definition_id"
+          ],
+          "constraintName": "learning_cards_word_definition_id_foreign",
+          "localTableName": "public.learning_cards",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.word_definitions",
+          "deleteRule": "restrict"
         }
       },
       "comment": null
@@ -2089,6 +2175,30 @@
       ],
       "triggers": [],
       "foreignKeys": {
+        "learning_dispositions_grammar_usage_point_id_foreign": {
+          "columnNames": [
+            "grammar_usage_point_id"
+          ],
+          "constraintName": "learning_dispositions_grammar_usage_point_id_foreign",
+          "localTableName": "public.learning_dispositions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_usage_points",
+          "deleteRule": "restrict"
+        },
+        "learning_dispositions_phrase_id_foreign": {
+          "columnNames": [
+            "phrase_id"
+          ],
+          "constraintName": "learning_dispositions_phrase_id_foreign",
+          "localTableName": "public.learning_dispositions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.phrases",
+          "deleteRule": "restrict"
+        },
         "learning_dispositions_user_id_foreign": {
           "columnNames": [
             "user_id"
@@ -2100,6 +2210,18 @@
           ],
           "referencedTableName": "public.users",
           "deleteRule": "cascade"
+        },
+        "learning_dispositions_word_definition_id_foreign": {
+          "columnNames": [
+            "word_definition_id"
+          ],
+          "constraintName": "learning_dispositions_word_definition_id_foreign",
+          "localTableName": "public.learning_dispositions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.word_definitions",
+          "deleteRule": "restrict"
         }
       },
       "comment": null
@@ -4035,6 +4157,30 @@
       "checks": [],
       "triggers": [],
       "foreignKeys": {
+        "sentence_tokens_phrasal_verb_group_id_foreign": {
+          "columnNames": [
+            "phrasal_verb_group_id"
+          ],
+          "constraintName": "sentence_tokens_phrasal_verb_group_id_foreign",
+          "localTableName": "public.sentence_tokens",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.phrases",
+          "deleteRule": "restrict"
+        },
+        "sentence_tokens_phrase_id_foreign": {
+          "columnNames": [
+            "phrase_id"
+          ],
+          "constraintName": "sentence_tokens_phrase_id_foreign",
+          "localTableName": "public.sentence_tokens",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.phrases",
+          "deleteRule": "restrict"
+        },
         "sentence_tokens_sentence_id_foreign": {
           "columnNames": [
             "sentence_id"
@@ -4046,6 +4192,18 @@
           ],
           "referencedTableName": "public.sentences",
           "deleteRule": "cascade"
+        },
+        "sentence_tokens_word_id_foreign": {
+          "columnNames": [
+            "word_id"
+          ],
+          "constraintName": "sentence_tokens_word_id_foreign",
+          "localTableName": "public.sentence_tokens",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.words",
+          "deleteRule": "restrict"
         }
       },
       "comment": null
@@ -4854,6 +5012,18 @@
       "checks": [],
       "triggers": [],
       "foreignKeys": {
+        "user_skill_progress_construction_id_foreign": {
+          "columnNames": [
+            "construction_id"
+          ],
+          "constraintName": "user_skill_progress_construction_id_foreign",
+          "localTableName": "public.user_skill_progress",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_constructions",
+          "deleteRule": "restrict"
+        },
         "user_skill_progress_user_id_foreign": {
           "columnNames": [
             "user_id"
@@ -5245,7 +5415,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "word_definitions_word_id_foreign": {
+          "columnNames": [
+            "word_id"
+          ],
+          "constraintName": "word_definitions_word_id_foreign",
+          "localTableName": "public.word_definitions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.words",
+          "deleteRule": "restrict"
+        }
+      },
       "comment": null
     },
     {
