@@ -40,6 +40,11 @@ import {
   PostsListItemDto,
   PostsListResponseDto,
 } from '../dto/posts-list-response.dto.js';
+import { PostsSitemapPageParamDto } from '../dto/posts-sitemap-page-param.dto.js';
+import {
+  PostsSitemapIndexResponseDto,
+  PostsSitemapPageResponseDto,
+} from '../dto/posts-sitemap-response.dto.js';
 import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
 
 // Guest-readable content surface (PLAN.md §2, §4): the posts archive, a single
@@ -89,6 +94,39 @@ export class ContentController {
   ): Promise<PostSuggestionsResponseDto> {
     const view = await this.post.getPostSuggestions(query.q, query.limit);
     return { items: view.items.map(({ type, text }) => ({ type, text })) };
+  }
+
+  // Sitemap index for published posts: one entry per fixed-size page, each
+  // with the newest content change on it. `apps/web` renders
+  // `/sitemap/posts.xml` from this.
+  @Public()
+  @Get('sitemap/posts')
+  async postsSitemapIndex(): Promise<PostsSitemapIndexResponseDto> {
+    const view = await this.post.getPostsSitemapIndex();
+    return {
+      pages: view.pages.map(({ page, lastmod }) => ({ page, lastmod })),
+    };
+  }
+
+  // One sitemap page (`/sitemap/posts-{page}.xml`): `slug` + `shortId` build
+  // the url, `lastmod` is the content-change time. A page past the last one
+  // is a 404.
+  @Public()
+  @Get('sitemap/posts/:page')
+  async postsSitemapPage(
+    @Param() params: PostsSitemapPageParamDto,
+  ): Promise<PostsSitemapPageResponseDto> {
+    const view = await this.post.getPostsSitemapPage(params.page);
+    if (view.items.length === 0) {
+      throw new NotFoundException('Sitemap page not found');
+    }
+    return {
+      items: view.items.map(({ slug, shortId, lastmod }) => ({
+        slug,
+        shortId,
+        lastmod,
+      })),
+    };
   }
 
   // One post for `/posts/{slug}-{id}`: node tree + resolved annotations +

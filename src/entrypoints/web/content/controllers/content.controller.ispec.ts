@@ -666,6 +666,40 @@ describe('ContentController', () => {
       .expect(HttpStatus.OK);
   });
 
+  it('serves the posts sitemap index and pages, cached publicly', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+
+    const index = await suite
+      .request('get', '/content/sitemap/posts')
+      .expect(HttpStatus.OK);
+    expect(index.headers['cache-control']).toBe('public');
+    expect(index.body.pages).toEqual([
+      { page: 1, lastmod: expect.any(String) },
+    ]);
+
+    const page = await suite
+      .request('get', '/content/sitemap/posts/1')
+      .expect(HttpStatus.OK);
+    expect(page.headers['cache-control']).toBe('public');
+    expect(page.body.items).toEqual([
+      { slug, shortId, lastmod: expect.any(String) },
+    ]);
+  });
+
+  it('404s a sitemap page past the last and 400s a malformed page', async () => {
+    await seedPublishedPost(suite.orm.em);
+
+    await suite
+      .request('get', '/content/sitemap/posts/2')
+      .expect(HttpStatus.NOT_FOUND);
+    await suite
+      .request('get', '/content/sitemap/posts/0')
+      .expect(HttpStatus.BAD_REQUEST);
+    await suite
+      .request('get', '/content/sitemap/posts/abc')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
   it('404s an unknown construction slug', async () => {
     await suite
       .request('get', '/content/grammar/no-such-slug')
