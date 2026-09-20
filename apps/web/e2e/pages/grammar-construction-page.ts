@@ -45,6 +45,12 @@ export class GrammarConstructionPage {
     return this.usageItem(index).locator('.gup-state');
   }
 
+  levelProgress(level: string): Locator {
+    return this.page.locator(
+      `[data-testid="grammar-level-progress"] [data-level="${level}"]`,
+    );
+  }
+
   exercisePlaceholder(index = 0): Locator {
     return this.usageItem(index).getByTestId('usage-exercises');
   }

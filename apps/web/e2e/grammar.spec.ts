@@ -90,19 +90,21 @@ test.describe('grammar reference', () => {
   test.describe('signed in', () => {
     test.use({ storageState: AUTHED_STATE });
 
-    // The seeded user is B1: past perfect has a card (Learning) on one usage
-    // point and a Known disposition on another, and the construction badge is
-    // "most advanced wins" — so it reads learned. Present simple is A1, below
-    // their level, so it reads as already known.
-    test('shows the per-construction learning state', async ({ page }) => {
+    // The seeded user is B1. Past perfect has a card (Learning, not yet
+    // graduated) on one usage point and a Known disposition on the other, so
+    // it reads learning with 1/2 resolved. Present simple is A1, below their
+    // level, but the CEFR default is not applied: with no activity it stays new.
+    test('shows the per-construction learning state and progress', async ({
+      page,
+    }) => {
       const grammar = new GrammarPage(page);
       await grammar.goto();
-      await expect(
-        grammar.constructionLink('e2e-past-perfect'),
-      ).toHaveAttribute('data-state', 'learned');
-      await expect(
-        grammar.constructionLink('e2e-present-simple'),
-      ).toHaveAttribute('data-state', 'learned');
+      const pastPerfect = grammar.constructionLink('e2e-past-perfect');
+      await expect(pastPerfect).toHaveAttribute('data-state', 'learning');
+      await expect(pastPerfect).toContainText('1/2 learned');
+      const presentSimple = grammar.constructionLink('e2e-present-simple');
+      await expect(presentSimple).toHaveAttribute('data-state', 'new');
+      await expect(presentSimple).toContainText('0/1 learned');
     });
   });
 
@@ -181,6 +183,29 @@ test.describe('grammar construction detail', () => {
 
   test.describe('signed in', () => {
     test.use({ storageState: AUTHED_STATE });
+
+    test('shows per-level progress and labels an untouched below-level point as assumed known', async ({
+      page,
+    }) => {
+      const construction = new GrammarConstructionPage(page);
+      await construction.goto('e2e-present-simple');
+      await expect(construction.levelProgress('A1')).toContainText(
+        '0/1 learned',
+      );
+      await expect(construction.usageState()).toHaveText('Assumed known');
+      // Still actionable: assumed known is not a settled state.
+      await expect(
+        construction.usageItem().getByRole('button', { name: 'I know this' }),
+      ).toBeVisible();
+
+      await construction.goto('e2e-past-perfect');
+      await expect(construction.levelProgress('A2')).toContainText(
+        '0/1 learned',
+      );
+      await expect(construction.levelProgress('B1')).toContainText(
+        '1/1 learned',
+      );
+    });
 
     test('adds a usage point to the deck', async ({ page }) => {
       const construction = new GrammarConstructionPage(page);
