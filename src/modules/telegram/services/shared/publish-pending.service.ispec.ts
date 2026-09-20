@@ -1,11 +1,11 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
-import { Post } from '../../../post/entities/post.entity.js';
 import { PostPublication } from '../../../post/entities/post-publication.entity.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
+import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import { PublicationPlatform } from '../../../post/enums/publication-platform.enum.js';
 import { PublicationStatus } from '../../../post/enums/publication-status.enum.js';
 import TelegramConfig from '../../config/telegram.config.js';
@@ -47,20 +47,19 @@ async function seedPublication(
     updatedMinutesAgo = 0,
   } = opts;
 
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'body';
-  const post = new Post();
-  post.source = source;
-  post.title = title;
-  post.slug = 'a-slug';
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: 'body' };
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+    title,
+    slug: 'a-slug',
+  });
 
-  const publication = new PostPublication();
-  publication.postId = post.id;
-  publication.platform = PublicationPlatform.Telegram;
-  publication.status = PublicationStatus.Pending;
-  em.persist(publication);
+  const publication = factories(em).postPublication.makeOne({
+    postId: post.id,
+    platform: PublicationPlatform.Telegram,
+    status: PublicationStatus.Pending,
+  });
   await em.flush();
 
   await em

@@ -1,9 +1,9 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import AppConfig from '../../../../core/config/app.config.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
@@ -27,16 +27,14 @@ async function seedPost(
     publishNotifiedAt?: DateTime | null;
   },
 ): Promise<Post> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'body';
-  const post = new Post();
-  post.source = source;
-  post.title = opts.title;
-  post.slug = 'a-slug';
-  post.status = opts.status;
-  post.publishNotifiedAt = opts.publishNotifiedAt ?? null;
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: 'body' };
+  const post = factories(em).post.makeOne({
+    source,
+    title: opts.title,
+    slug: 'a-slug',
+    status: opts.status,
+    publishNotifiedAt: opts.publishNotifiedAt ?? null,
+  });
   await em.flush();
   return post;
 }

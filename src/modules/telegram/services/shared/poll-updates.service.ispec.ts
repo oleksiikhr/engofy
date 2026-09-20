@@ -1,8 +1,7 @@
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostPipelineRun } from '../../../post/entities/post-pipeline-run.entity.js';
 import { PostPipelineRunStatus } from '../../../post/enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../../post/enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
@@ -87,15 +86,13 @@ describe('PollUpdatesService', () => {
 
   it('replies to /status with stage progress for a post and for the recent list', async () => {
     const em = suite.orm.em;
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'seed';
-    const post = new Post();
-    post.source = source;
-    post.title = 'Stuck tale';
-    post.status = PostStatus.Failed;
-    em.persist(post);
-    em.create(PostPipelineRun, {
+    const source = { format: PostSourceFormat.Text, rawText: 'seed' };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'Stuck tale',
+      status: PostStatus.Failed,
+    });
+    factories(em).postPipelineRun.makeOne({
       postId: post.id,
       stage: PostPipelineStage.AiExercises,
       status: PostPipelineRunStatus.Failed,
