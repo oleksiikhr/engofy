@@ -30,6 +30,7 @@ socket timeout, which would fail the paid stage and force a full re-run.
 | AI4 | Every call logs a structured usage line (`input`/`output`/`cache` tokens + `cost_usd`) from the streamed final message's `usage`. | `anthropic-client.service.ts` `logUsage` |
 | AI5 | Prompt strings + zod tool schemas live in pure `<module>/domain/*-prompt.ts`. | `post/domain/complexity-prompt.ts` |
 | AI6 | A `completeStructured` schema mismatch throws `AiSchemaMismatchError` carrying `rawInput` (JSON, cut to 2 KB) and logs it at `warn`; the worker attaches it to Sentry as `extra.rawInput`. | `ai-schema-mismatch.error.ts` |
+| AI7 | `completeStructured` tool schemas use flat scalar fields, not arrays of strings/objects — the model intermittently sends an array field as a mangled non-JSON string. Build any list in code from the flat fields. | `post/domain/grammar-contrastive-prompt.ts` |
 
 ## Inline-markup round-trip
 
