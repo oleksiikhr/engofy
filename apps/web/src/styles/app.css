@@ -1331,6 +1331,49 @@ body {
   border-left: 0;
   border-radius: 0 0 3px 0;
 }
+/* Only the phone bottom sheet has a close bar. */
+.lex-popup__close {
+  display: none;
+}
+/* Phone: a bottom sheet fixed to the screen, so it never covers the sentence
+   being read (reader-popup.ts scrolls the span above it). Keep the width in
+   step with SHEET_QUERY there. */
+@media (max-width: 480px) {
+  .lex-popup {
+    position: fixed;
+    inset: auto 0 0;
+    width: auto;
+    max-height: 55vh;
+    max-height: 55dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(1.125rem + env(safe-area-inset-bottom));
+    border-width: 2px 0 0;
+    border-radius: 1.125rem 1.125rem 0 0;
+  }
+  .lex-popup::before {
+    display: none;
+  }
+  .lex-popup__close {
+    display: block;
+    width: 100%;
+    height: 1.5rem;
+    margin: -0.75rem 0 0.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .lex-popup__close::after {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 0.3rem;
+    margin: 0 auto;
+    border-radius: 999px;
+    background: var(--color-border-strong);
+  }
+}
 .lex-popup p {
   margin: 0.35rem 0 0;
 }
@@ -1816,70 +1859,78 @@ body {
 :root[data-reader-density="off"] .reading-body :is([data-word-definition-id], [data-phrase-id], [data-grammar-usage-point-id]):hover {
   background: var(--color-paper-soft);
 }
-.reader-hint {
-  display: grid;
-  grid-template-rows: 1fr;
-  margin: 0 0 1rem;
-  transition:
-    grid-template-rows 0.25s ease,
-    margin-bottom 0.25s ease,
-    opacity 0.2s ease;
-}
-/* Dismissing collapses the hint to nothing over a quarter second instead of
-   yanking the article up in one frame (see lib/reader-help.ts). */
-.reader-hint.is-closing {
-  grid-template-rows: 0fr;
-  margin-bottom: 0;
-  opacity: 0;
-}
-.reader-hint__clip {
-  min-height: 0;
-  overflow: hidden;
-}
-.reader-hint__body {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0.6rem 0.9rem;
-  border-radius: 0.75rem;
-  background: var(--color-word);
-  color: var(--color-ink);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-:root[data-reader-hint="seen"] .reader-hint {
-  display: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .reader-hint {
-    transition: none;
-  }
-}
-.reader-hint__close {
-  margin-left: auto;
-  flex: none;
-  padding: 0.3rem 0.75rem;
-  border: 2px solid var(--color-border-strong);
-  border-radius: 999px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-.reader-guest {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.25rem 0.75rem;
-  margin: 0 0 1rem;
-  padding: 0.5rem 0.9rem;
+/* One collapsible row above the text: level (guests), hint, explored count.
+   Its height is fixed to one line, so the hint giving way to "Highlights" and
+   the count arriving change nothing below it. `data-reader-hint="seen"` and
+   `data-guest-explored` are set before first paint (lib/prefs.ts,
+   lib/guest-boot.ts). Opening the panel is the reader's own click. */
+.reader-info {
+  margin: 0 0 1.25rem;
   border-radius: 0.75rem;
   background: var(--color-paper-soft);
   font-size: 0.9rem;
   font-weight: 700;
+}
+.reader-info__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.9rem;
+  list-style: none;
+  cursor: pointer;
+}
+.reader-info__bar::-webkit-details-marker {
+  display: none;
+}
+.reader-info__level {
+  flex: none;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.reader-info__text {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-ink-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:root[data-reader-hint="seen"] .reader-info__hint,
+:root:not([data-reader-hint="seen"]) .reader-info__legend {
+  display: none;
+}
+/* Its slot is reserved from the first frame; the text appears once the script
+   has filled the number. */
+.reader-info__count {
+  display: none;
+  flex: none;
+  color: var(--color-brand-strong);
+  white-space: nowrap;
+}
+:root[data-guest-explored] .reader-info__count {
+  display: block;
+  visibility: hidden;
+}
+:root[data-guest-explored] .reader-info__count.is-ready {
+  visibility: visible;
+}
+.reader-info__chevron {
+  flex: none;
+  color: var(--color-ink-soft);
+}
+.reader-info[open] .reader-info__chevron {
+  transform: rotate(180deg);
+}
+.reader-info__panel {
+  padding: 0.25rem 0.9rem 0.75rem;
+}
+.reader-info__panel > * + * {
+  margin-top: 0.6rem;
 }
 .reader-guest__row {
   display: flex;
@@ -1941,7 +1992,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem 1.125rem;
-  margin: 0 0 1.25rem;
+  margin: 0;
   color: var(--color-ink-soft);
   font-size: 0.85rem;
   font-weight: 700;
@@ -2566,15 +2617,18 @@ body {
   .reader-toolbar__size {
     margin-left: 0;
   }
-  .reader-hint {
-    margin-bottom: 0.5rem;
+  .reader-info {
+    margin-bottom: 0.75rem;
   }
-  .reader-hint__body {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.85rem;
+  .reader-info__bar {
+    gap: 0.5rem;
+    padding-inline: 0.75rem;
+  }
+  /* "3 explored": the noun makes the row too wide for the hint. */
+  .reader-info__count [data-explored-noun] {
+    display: none;
   }
   .reader-key {
-    margin-bottom: 0.75rem;
     row-gap: 0.25rem;
   }
   .reader-key__density {

@@ -282,47 +282,56 @@ const isRead = post.isRead ?? false;
         </p>
       </div>
 
-      {
-        !user && (
-          <div class="reader-guest" data-reader-guest>
-            <p class="reader-guest__row" data-level-set hidden={!levelChoice}>
-              <span>Your level: <b>{pickedLevel ?? 'not set'}</b></span>
-              <button type="button" class="reader-guest__link" data-level-change>{pickedLevel ? 'Change' : 'Set'}</button>
-            </p>
-            <div class="reader-guest__row" data-level-pick hidden={Boolean(levelChoice)} role="group" aria-label="Your English level">
-              <span>What is your level?</span>
-              <span class="reader-guest__chips">
-                {CEFR_LEVELS.map((level) => (
-                  <button type="button" class="reader-guest__chip" data-level={level}>{level}</button>
-                ))}
-              </span>
-              <button type="button" class="reader-guest__link" data-level-skip>Skip</button>
-            </div>
-            <p class="reader-guest__count" data-explored>
-              You've explored <b>0</b> <span data-explored-noun>words</span>
-            </p>
+      <details class="reader-info" data-reader-info data-reader-guest={user ? undefined : ''}>
+        <summary class="reader-info__bar">
+          {
+            !user && (
+              <span class="reader-info__level">{pickedLevel ? `Level ${pickedLevel}` : 'Set level'}</span>
+            )
+          }
+          <span class="reader-info__text">
+            <span class="reader-info__hint">Tap a highlight</span>
+            <span class="reader-info__legend">Highlights</span>
+          </span>
+          {
+            !user && (
+              <span class="reader-info__count" data-explored><b>0</b> <span data-explored-noun>words</span> explored</span>
+            )
+          }
+          <svg class="ic reader-info__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+        </summary>
+        <div class="reader-info__panel">
+          {
+            !user && (
+              <>
+                <p class="reader-guest__row" data-level-set hidden={!levelChoice}>
+                  <span>Your level: <b>{pickedLevel ?? 'not set'}</b></span>
+                  <button type="button" class="reader-guest__link" data-level-change>{pickedLevel ? 'Change' : 'Set'}</button>
+                </p>
+                <div class="reader-guest__row" data-level-pick hidden={Boolean(levelChoice)} role="group" aria-label="Your English level">
+                  <span>What is your level?</span>
+                  <span class="reader-guest__chips">
+                    {CEFR_LEVELS.map((level) => (
+                      <button type="button" class="reader-guest__chip" data-level={level}>{level}</button>
+                    ))}
+                  </span>
+                  <button type="button" class="reader-guest__link" data-level-skip>Skip</button>
+                </div>
+              </>
+            )
+          }
+          <div class="reader-key" aria-label="Highlights">
+            <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--word"></i>Word or phrase</span>
+            <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--gram"></i>Grammar</span>
+            <span class="reader-key__density" role="group" aria-label="Highlight density">
+              <span class="reader-key__label">Show</span>
+              <button type="button" class="reader-key__opt" data-density="focus" aria-pressed="false" title="Only words and patterns above your level">New for me</button>
+              <button type="button" class="reader-key__opt" data-density="all" aria-pressed="false" title="Every word and pattern you have not learned yet">All</button>
+              <button type="button" class="reader-key__opt" data-density="off" aria-pressed="false" title="Plain text; tap any word to look it up">None</button>
+            </span>
           </div>
-        )
-      }
-
-      <div class="reader-hint">
-        <div class="reader-hint__clip">
-          <p class="reader-hint__body">
-            <span>Tap a highlighted word or phrase to see what it means.</span>
-            <button type="button" class="reader-hint__close" data-reader-hint-close aria-label="Dismiss hint">Got it</button>
-          </p>
         </div>
-      </div>
-      <div class="reader-key" aria-label="Highlights">
-        <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--word"></i>Word or phrase</span>
-        <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--gram"></i>Grammar</span>
-        <span class="reader-key__density" role="group" aria-label="Highlight density">
-          <span class="reader-key__label">Show</span>
-          <button type="button" class="reader-key__opt" data-density="focus" aria-pressed="false" title="Only words and patterns above your level">New for me</button>
-          <button type="button" class="reader-key__opt" data-density="all" aria-pressed="false" title="Every word and pattern you have not learned yet">All</button>
-          <button type="button" class="reader-key__opt" data-density="off" aria-pressed="false" title="Plain text; tap any word to look it up">None</button>
-        </span>
-      </div>
+      </details>
 
       <div class="analysis reading-body" set:html={bodyHtml} />
       <script is:inline type="application/json" id="lexicon-data" set:html={lexiconJson} />
@@ -392,9 +401,9 @@ const isRead = post.isRead ?? false;
     initReaderToolbar(toolbar);
   }
 
-  const guestStrip = document.querySelector<HTMLElement>('[data-reader-guest]');
-  if (guestStrip) {
-    initReaderGuest(guestStrip);
+  const guestInfo = document.querySelector<HTMLElement>('[data-reader-guest]');
+  if (guestInfo) {
+    initReaderGuest(guestInfo);
   }
 
   const article = document.querySelector<HTMLElement>('.reader-article');

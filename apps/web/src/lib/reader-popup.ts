@@ -25,8 +25,10 @@ import type { EffectiveState } from './types';
 // Client controller for the reader's anchored popup. One popup element,
 // absolutely positioned in document coordinates next to the clicked span
 // (above when it fits, else below) — it never takes part in the article's
-// flow, so opening it doesn't shift the text. A word/phrase span can sit
-// inside a grammar span; clicking it then shows both sections in one popup.
+// flow, so opening it doesn't shift the text. On a phone (SHEET_QUERY) it is a
+// bottom sheet fixed to the screen instead, and the page scrolls so the
+// clicked span stays above it. A word/phrase span can sit inside a grammar
+// span; clicking it then shows both sections in one popup.
 
 const LEXICAL_SELECTOR = '[data-word-definition-id],[data-phrase-id]';
 const GRAMMAR_SELECTOR = '[data-grammar-usage-point-id]';
@@ -39,6 +41,8 @@ const LABEL_ATTR: Record<string, string> = {
 const GAP = 8;
 const EDGE = 8;
 const ARROW_INSET = 28;
+// Keep in step with the bottom-sheet rule for `.lex-popup` in app.css.
+const SHEET_QUERY = '(max-width: 480px)';
 
 interface Target {
   // The span the popup anchors to and marks active.
@@ -169,6 +173,23 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     const rect = anchorRect(active, anchorY);
     const width = popup.offsetWidth;
     const height = popup.offsetHeight;
+    if (window.matchMedia(SHEET_QUERY).matches) {
+      popup.style.top = '';
+      popup.style.left = '';
+      popup.dataset.placement = 'sheet';
+      // The sheet covers the bottom of the screen: bring the clicked span
+      // above it (or back into view when it sits over the top edge).
+      const limit = window.innerHeight - height - GAP;
+      const delta =
+        rect.bottom > limit ? rect.bottom - limit : Math.min(rect.top - GAP, 0);
+      if (delta !== 0) {
+        window.scrollBy({ top: delta });
+        if (anchorY !== null) {
+          anchorY -= delta;
+        }
+      }
+      return;
+    }
     const above = rect.top - height - GAP >= 0;
     const top = above ? rect.top - height - GAP : rect.bottom + GAP;
     const left = Math.min(
@@ -213,6 +234,10 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
         button.remove();
       }
     }
+    popup.insertAdjacentHTML(
+      'afterbegin',
+      '<button type="button" class="lex-popup__close" data-popup-close aria-label="Close"></button>',
+    );
     popup.hidden = false;
     window.htmx?.process(popup);
     position();
@@ -307,6 +332,12 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   );
 
   popup.addEventListener('click', (event) => {
+    if ((event.target as Element).closest('[data-popup-close]')) {
+      const anchor = active;
+      close();
+      (anchor as HTMLElement | null)?.focus();
+      return;
+    }
     const langButton = (event.target as Element).closest('[data-popup-lang]');
     const next = langButton?.getAttribute('data-popup-lang');
     if (
