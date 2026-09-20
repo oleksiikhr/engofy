@@ -57,7 +57,11 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # ------------------------------------------------------------------------------
 FROM node:${NODE_IMAGE} AS runtime
 
-RUN apk add --no-cache 'tini=~0.19.0'
+# libcrypto3/libssl3 are upgraded past the base image's openssl (CVE-2026-14456,
+# fixed in 3.5.8-r0). Drop once the node base image ships >= 3.5.8-r0.
+# hadolint ignore=DL3017
+RUN apk upgrade --no-cache libcrypto3 libssl3 \
+    && apk add --no-cache 'tini=~0.19.0'
 
 WORKDIR /app
 
