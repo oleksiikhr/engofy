@@ -17,6 +17,8 @@ const user = await getCurrentUser(Astro.request);
 const query = parsePostsQuery(Astro.url.searchParams);
 
 let resultsHtml: string;
+// An error or invalid-query state must not be indexed as the page.
+let noindex = false;
 try {
   const view = await apiGet<PostsListResponse>(
     `/content/posts?${toApiQuery(query)}`,
@@ -28,10 +30,11 @@ try {
     throw error;
   }
   resultsHtml = isBadRequest(error) ? POSTS_INVALID_HTML : POSTS_ERROR_HTML;
+  noindex = true;
 }
 ---
 
-<Layout title="Posts — Engofy" user={user} active="posts">
+<Layout title="Posts — Engofy" user={user} active="posts" noindex={noindex}>
   <h1>Posts</h1>
 
   <form
