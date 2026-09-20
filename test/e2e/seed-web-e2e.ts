@@ -60,6 +60,8 @@ export const E2E_GRAMMAR_SLUG_2 = 'e2e-present-simple';
 // Both usage points sit above the seeded user's B1 level, so they stay New and
 // the detail-page specs can mutate them without shifting any other page's state.
 export const E2E_GRAMMAR_SLUG_MUTABLE = 'e2e-conditionals';
+// A construction with no usage points; the reference page hides it.
+export const E2E_GRAMMAR_SLUG_EMPTY = 'e2e-empty-construction';
 // A real EGP slug with a handcrafted page in apps/web/src/grammar-pages.
 export const E2E_GRAMMAR_HANDCRAFTED_SLUG = 'past-present-perfect-simple';
 // Own user + session with no cards or dispositions, so specs can really save
@@ -365,6 +367,15 @@ async function seed(orm: MikroORM): Promise<void> {
     guideword: 'USE: UNREAL PAST',
     canDoStatement: 'Can talk about imagined situations in the past.',
     exampleText: 'If she had known, she would have called.',
+  });
+
+  // No usage points: /grammar must not list it.
+  factories(em).grammarConstruction.makeOne({
+    categoryId: category.id,
+    name: 'empty construction',
+    slug: E2E_GRAMMAR_SLUG_EMPTY,
+    cheatSheetContent: null,
+    sortOrder: 5,
   });
 
   // The handcrafted page's construction: a dev DB that already imported the

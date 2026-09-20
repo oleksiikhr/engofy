@@ -61,9 +61,6 @@ const { usagePoints, levelProgress } = Astro.props;
               up.assumedKnown,
             )}
           />
-          <div class="usage-item__exercises" data-testid="usage-exercises">
-            <p>Practice exercises for this use are coming soon.</p>
-          </div>
         </li>
       ))
     }
@@ -138,17 +135,6 @@ const { usagePoints, levelProgress } = Astro.props;
     padding-left: 1.25rem;
     color: var(--color-ink-soft);
     font-style: italic;
-  }
-  .usage-item__exercises {
-    margin-top: 0.875rem;
-    padding: 0.625rem 0.875rem;
-    border: 1.5px dashed var(--color-border-strong);
-    border-radius: 0.875rem;
-    font-size: 0.85rem;
-    color: var(--color-ink-faint);
-  }
-  .usage-item__exercises p {
-    margin: 0;
   }
 </style>
 

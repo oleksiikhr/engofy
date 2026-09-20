@@ -97,6 +97,73 @@ test.describe('grammar reference', () => {
     ).toBeVisible();
   });
 
+  test('a guest with a reader level cookie gets Start here at that level', async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      { name: 'reader-level', value: 'A2', url: 'http://localhost:4321' },
+    ]);
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    const startHere = page.getByTestId('grammar-start-here');
+    await expect(startHere).toContainText('A2');
+    await expect(
+      startHere.locator('a[data-slug="e2e-past-perfect"]'),
+    ).toBeVisible();
+    await expect(
+      startHere.locator('a[data-slug="e2e-present-simple"]'),
+    ).toHaveCount(0);
+  });
+
+  test('hides a construction without usage points', async ({ page }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await expect(grammar.constructionLink('e2e-past-perfect')).toBeVisible();
+    await expect(
+      grammar.constructionLink('e2e-empty-construction'),
+    ).toHaveCount(0);
+  });
+
+  test('searches constructions by name and by summary', async ({ page }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await grammar.search('perfect');
+    await expect(grammar.constructionLink('e2e-past-perfect')).toBeVisible();
+    await expect(grammar.constructionLink('e2e-present-simple')).toBeHidden();
+    // Only the summary carries these words.
+    await grammar.search('which of two past');
+    await expect(grammar.constructionLink('e2e-past-perfect')).toBeVisible();
+    await expect(grammar.constructionLink('e2e-conditionals')).toBeHidden();
+  });
+
+  test('search hides Start here, shows an empty note, and clears', async ({
+    page,
+  }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await grammar.search('zzzzqqq');
+    await expect(page.getByTestId('grammar-search-empty')).toBeVisible();
+    await expect(page.getByTestId('grammar-start-here')).toBeHidden();
+    await grammar.search('');
+    await expect(page.getByTestId('grammar-search-empty')).toBeHidden();
+    await expect(page.getByTestId('grammar-start-here')).toBeVisible();
+    await expect(grammar.constructionLink('e2e-past-perfect')).toBeVisible();
+  });
+
+  test('search survives a level filter swap', async ({ page }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await grammar.search('present');
+    await grammar.toggleCefr('A1');
+    await expect(page).toHaveURL(/\/grammar\?cefr=A1/);
+    await expect(grammar.constructionLink('e2e-present-simple')).toBeVisible();
+    await expect(
+      grammar.constructionLink('past-present-perfect-simple'),
+    ).toBeHidden();
+    await expect(page.locator('#grammar-search')).toHaveValue('present');
+  });
+
   test('a construction card shows its summary', async ({ page }) => {
     const grammar = new GrammarPage(page);
     await grammar.goto();
@@ -170,6 +237,7 @@ test.describe('grammar construction detail', () => {
       'I had eaten when they called.',
     ]);
     await expect(enriched).not.toContainText('every coastline');
+    await expect(enriched).not.toContainText('coming soon');
 
     const bare = construction.usageItem(1);
     await expect(bare).toContainText(
@@ -190,9 +258,8 @@ test.describe('grammar construction detail', () => {
     await expect(
       construction.compare.locator('a[href="/grammar/past-past-simple"]'),
     ).toBeVisible();
-    // Usage points still come from the API, each with an exercise placeholder.
+    // Usage points still come from the API.
     await expect(construction.usageItems.first()).toBeVisible();
-    await expect(construction.exercisePlaceholder()).toBeVisible();
   });
 
   test('derives a meta description for a generic page', async ({ page }) => {

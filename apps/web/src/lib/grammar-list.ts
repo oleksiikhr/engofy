@@ -51,6 +51,7 @@ export function startHereConstructions(
       if (
         con.cefrLevel !== level ||
         con.state !== 'new' ||
+        con.usagePointCount === 0 ||
         seen.has(con.slug)
       ) {
         return false;
@@ -62,6 +63,19 @@ export function startHereConstructions(
     ...candidates.filter((con) => con.summary),
     ...candidates.filter((con) => !con.summary),
   ].slice(0, limit);
+}
+
+// The groups worth listing: a construction with no usage points has nothing to
+// open, and a group left without constructions is dropped.
+export function listedGroups(groups: GrammarRefGroup[]): GrammarRefGroup[] {
+  return groups
+    .map((group) => ({
+      ...group,
+      constructions: group.constructions.filter(
+        (con) => con.usagePointCount > 0,
+      ),
+    }))
+    .filter((group) => group.constructions.length > 0);
 }
 
 export interface GrammarListQuery {
