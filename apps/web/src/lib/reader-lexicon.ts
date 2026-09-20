@@ -1,3 +1,10 @@
+import {
+  constructionLabel,
+  guidewordLabel,
+  phraseTypeLabel,
+  posLabel,
+  shortExample,
+} from './popup-labels';
 import type { CefrLevel, EffectiveState } from './types';
 
 // Popup content for the reader's word, phrase and grammar labels — shared by
@@ -155,8 +162,8 @@ function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
   const term = entryTerm(entry);
   const kicker =
     entry.kind === 'word'
-      ? ['Word', entry.pos].filter(Boolean).join(' · ')
-      : ['Phrase', entry.type].filter(Boolean).join(' · ');
+      ? ['Word', posLabel(entry.pos)].filter(Boolean).join(' · ')
+      : ['Phrase', phraseTypeLabel(entry.type)].filter(Boolean).join(' · ');
   const sub = entry.kind === 'word' ? (entry.phonetic ?? '') : '';
   const cefr = entry.cefrLevel
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
@@ -170,7 +177,7 @@ function lexiconSectionHtml(entry: LexiconEntry, slugId: string): string {
   </div>
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
-  ${entry.example ? `<p class="lex-popup__example">${esc(entry.example)}</p>` : ''}
+  ${entry.example ? `<p class="lex-popup__example">${esc(shortExample(entry.example))}</p>` : ''}
   ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
   ${reportRowHtml({ kind: entry.kind, id: entry.id }, slugId)}
 </section>`;
@@ -180,14 +187,16 @@ function grammarSectionHtml(
   entry: GrammarLexiconEntry,
   slugId: string,
 ): string {
+  const guideword = guidewordLabel(entry.guideword);
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
-  <p class="lex-popup__kicker">Grammar · ${esc(entry.construction)}</p>
+  <p class="lex-popup__kicker">Grammar</p>
   <div class="lex-popup__head">
-    <span class="lex-popup__term">${esc(entry.guideword)}</span>
+    <span class="lex-popup__term">${esc(constructionLabel(entry.construction))}</span>
     <span class="badge">${esc(entry.cefrLevel)}</span>
   </div>
+  ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
   <p class="lex-popup__def">${esc(entry.canDoStatement)}</p>
-  ${entry.exampleText ? `<p class="lex-popup__example">${esc(entry.exampleText)}</p>` : ''}
+  ${entry.exampleText ? `<p class="lex-popup__example">${esc(shortExample(entry.exampleText))}</p>` : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
   ${reportRowHtml({ kind: 'grammar', id: entry.id }, slugId)}
