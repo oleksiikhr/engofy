@@ -15,8 +15,9 @@ describe('GetDailyPlanHandler', () => {
 
   it('hydrates the selected post and grammar usage point', async () => {
     const post = await suite.factories.post.createOne();
+    const category = suite.factories.grammarCategory.makeOne();
     const construction = suite.factories.grammarConstruction.makeOne({
-      categoryId: uuidv7(),
+      categoryId: category.id,
       name: 'present simple',
       slug: 'present-simple',
       sortOrder: 1,

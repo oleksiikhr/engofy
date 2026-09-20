@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { User } from '../../../auth/entities/user.entity.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
@@ -169,14 +170,12 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A2);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.B1);
 
-      const belowLevel = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const belowLevel = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.A1,
         guideword: 'below level',
         canDoStatement: 'x',
       });
-      const aboveLevel = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const aboveLevel = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.B1,
         guideword: 'above level',
         canDoStatement: 'y',
@@ -207,8 +206,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.B2);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.B1);
 
-      const belowLevel = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const belowLevel = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.A2,
         guideword: 'below level',
         canDoStatement: 'x',
@@ -233,14 +231,12 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A1);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.C1);
 
-      const withCard = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const withCard = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.C1,
         guideword: 'has a card',
         canDoStatement: 'x',
       });
-      const withoutCard = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const withoutCard = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.C1,
         guideword: 'no card',
         canDoStatement: 'y',
@@ -285,8 +281,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A1);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.C1);
 
-      const skipped = suite.factories.grammarUsagePoint.makeOne({
-        constructionId: uuidv7(),
+      const skipped = makeGrammarUsagePoint(suite.factories, {
         cefrLevel: CefrLevel.C1,
         guideword: 'skipped',
         canDoStatement: 'x',

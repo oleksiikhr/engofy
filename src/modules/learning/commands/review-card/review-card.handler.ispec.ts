@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
@@ -31,10 +32,8 @@ describe('ReviewCardHandler', () => {
 
   async function seedGrammarCard(
     userId: string,
-    constructionId: string,
-  ): Promise<string> {
-    const point = suite.factories.grammarUsagePoint.makeOne({
-      constructionId,
+  ): Promise<{ cardId: string; constructionId: string }> {
+    const point = makeGrammarUsagePoint(suite.factories, {
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: past perfect',
       canDoStatement: 'Can talk about an earlier past.',
@@ -43,7 +42,7 @@ describe('ReviewCardHandler', () => {
     const card = await suite.command(
       new AddCardCommand(userId, { grammarUsagePointId: point.id }),
     );
-    return card.id;
+    return { cardId: card.id, constructionId: point.constructionId };
   }
 
   it('reschedules the card and appends a review log', async () => {
@@ -77,8 +76,7 @@ describe('ReviewCardHandler', () => {
 
   it('updates skill progress when a grammar card is reviewed', async () => {
     const userId = (await suite.factories.user.createOne()).id;
-    const constructionId = uuidv7();
-    const cardId = await seedGrammarCard(userId, constructionId);
+    const { cardId, constructionId } = await seedGrammarCard(userId);
 
     await suite.command(
       new ReviewCardCommand(userId, cardId, ReviewRating.Good),
@@ -95,8 +93,7 @@ describe('ReviewCardHandler', () => {
 
   it('resets the correct streak on an "Again" grade', async () => {
     const userId = (await suite.factories.user.createOne()).id;
-    const constructionId = uuidv7();
-    const cardId = await seedGrammarCard(userId, constructionId);
+    const { cardId, constructionId } = await seedGrammarCard(userId);
 
     await suite.command(
       new ReviewCardCommand(userId, cardId, ReviewRating.Good),

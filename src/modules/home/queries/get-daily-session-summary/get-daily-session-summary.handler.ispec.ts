@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
 import { ReviewRating } from '../../../learning/enums/review-rating.enum.js';
@@ -15,7 +16,7 @@ function seedCard(
 ): LearningCard {
   return factories(em).learningCard.makeOne({
     userId,
-    grammarUsagePointId: uuidv7(),
+    grammarUsagePointId: makeGrammarUsagePoint(factories(em)).id,
     due: DateTime.now(),
     stability: 1,
     difficulty: 1,

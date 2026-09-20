@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeWordDefinition } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
@@ -20,7 +21,7 @@ describe('GetStreakHandler', () => {
 
     const card = factories(em).learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,

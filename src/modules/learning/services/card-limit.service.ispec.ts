@@ -1,7 +1,7 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../test/factories/factories.js';
+import { makeWordDefinition } from '../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
 import { SubscriptionPlan } from '../../billing/enums/subscription-plan.enum.js';
 import { LearningCardState } from '../enums/learning-card-state.enum.js';
@@ -22,7 +22,7 @@ describe('CardLimitService', () => {
     for (let i = 0; i < count; i += 1) {
       factories(em).learningCard.makeOne({
         userId,
-        wordDefinitionId: uuidv7(),
+        wordDefinitionId: makeWordDefinition(factories(em)).id,
         due: DateTime.now(),
         stability: 1,
         difficulty: 5,
@@ -58,7 +58,7 @@ describe('CardLimitService', () => {
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     suite.factories.learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(suite.factories).id,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -93,7 +93,7 @@ describe('CardLimitService', () => {
       fillCards(suite.orm.em, userId, 3);
       suite.factories.learningCard.makeOne({
         userId,
-        wordDefinitionId: uuidv7(),
+        wordDefinitionId: makeWordDefinition(suite.factories).id,
         due: DateTime.now(),
         stability: 1,
         difficulty: 5,

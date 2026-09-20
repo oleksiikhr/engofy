@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
@@ -202,8 +203,7 @@ describe('GetPracticeQueueHandler', () => {
       pos: PartOfSpeech.Adjective,
     });
     const phrase = factories(em).phrase.makeOne({ phraseText: 'pick up' });
-    const grammar = factories(em).grammarUsagePoint.makeOne({
-      constructionId: uuidv7(),
+    const grammar = makeGrammarUsagePoint(factories(em), {
       cefrLevel: CefrLevel.B1,
       guideword: 'past perfect',
       canDoStatement: 'Can talk about an earlier past.',
@@ -462,8 +462,7 @@ describe('GetPracticeQueueHandler', () => {
       pos: PartOfSpeech.Adjective,
     });
     const phrase = factories(em).phrase.makeOne({ phraseText: 'pick up' });
-    const grammar = factories(em).grammarUsagePoint.makeOne({
-      constructionId: uuidv7(),
+    const grammar = makeGrammarUsagePoint(factories(em), {
       cefrLevel: CefrLevel.B1,
       guideword: 'past perfect',
       canDoStatement: 'Can talk about an earlier past.',
@@ -765,29 +764,6 @@ describe('GetPracticeQueueHandler', () => {
       detailSlug: slug,
       contextSentence: null,
     });
-  });
-
-  it('leaves grammar kicker and slug null when the construction row is missing', async () => {
-    const em = suite.orm.em;
-    const userId = (await suite.factories.user.createOne()).id;
-    const point = factories(em).grammarUsagePoint.makeOne({
-      constructionId: uuidv7(),
-      cefrLevel: CefrLevel.B1,
-      guideword: 'past perfect',
-      canDoStatement: 'Can talk about an earlier past.',
-    });
-    card(em, userId, DateTime.now().minus({ hours: 1 }), {
-      grammarUsagePointId: point.id,
-    });
-    await em.flush();
-    em.clear();
-
-    const [item] = (await suite.query(new GetPracticeQueueQuery(userId, 20)))
-      .items;
-
-    expect(item.target.kicker).toBeNull();
-    expect(item.target.detailSlug).toBeNull();
-    expect(item.target.exampleText).toBeNull();
   });
 
   it('finds a real context sentence for grammar via grammar_matches, most recent read first', async () => {

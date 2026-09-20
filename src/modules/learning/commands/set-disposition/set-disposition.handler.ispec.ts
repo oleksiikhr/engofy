@@ -1,4 +1,5 @@
 import { v7 as uuidv7 } from 'uuid';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
@@ -81,8 +82,7 @@ describe('SetDispositionHandler', () => {
   });
 
   it('rejects a target with more than one id set', async () => {
-    const point = suite.factories.grammarUsagePoint.makeOne({
-      constructionId: uuidv7(),
+    const point = makeGrammarUsagePoint(suite.factories, {
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: past perfect',
       canDoStatement: 'Can talk about an earlier past.',

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeWordDefinition } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -16,7 +17,7 @@ describe('GetDueCardCountHandler', () => {
 
     factories(em).learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,
@@ -28,7 +29,7 @@ describe('GetDueCardCountHandler', () => {
     });
     factories(em).learningCard.makeOne({
       userId,
-      phraseId: uuidv7(),
+      phraseId: factories(em).phrase.makeOne().id,
       due: DateTime.now().plus({ days: 3 }),
       stability: 1,
       difficulty: 5,
@@ -40,7 +41,7 @@ describe('GetDueCardCountHandler', () => {
     });
     factories(em).learningCard.makeOne({
       userId: otherUserId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,
@@ -60,7 +61,7 @@ describe('GetDueCardCountHandler', () => {
     const userId = (await suite.factories.user.createOne()).id;
     suite.factories.learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(suite.factories).id,
       due: DateTime.now().minus({ days: 1 }),
       stability: 1,
       difficulty: 5,
