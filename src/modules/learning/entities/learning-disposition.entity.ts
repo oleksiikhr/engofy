@@ -3,6 +3,7 @@ import {
   Check,
   Entity,
   Enum,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -10,6 +11,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { User } from '../../auth/entities/user.entity.js';
 import { Disposition } from '../enums/disposition.enum.js';
 
 // The learner's known/skipped call on a word sense, phrase, or grammar usage
@@ -32,7 +34,11 @@ export class LearningDisposition {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => User, {
+    mapToPk: true,
+    fieldName: 'user_id',
+    deleteRule: 'cascade',
+  })
   userId!: string;
 
   // FK -> word_definitions.id
