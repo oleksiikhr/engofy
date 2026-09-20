@@ -219,6 +219,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         definition: definition.definition ?? null,
         phonetic: definition.phonetic ?? null,
         example: definition.exampleSentence ?? null,
+        translationUk: definition.translationUk ?? null,
         cefrLevel: definition.cefrLevel ?? null,
         frequencyRank: word?.frequencyRank ?? null,
         state: states.get(definition.id) ?? EffectiveState.New,
@@ -253,6 +254,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         type: phrase.type ?? null,
         definition: phrase.definition ?? null,
         example: phrase.exampleSentence ?? null,
+        translationUk: phrase.translationUk ?? null,
         cefrLevel: phrase.cefrLevel ?? null,
         state: states.get(phrase.id) ?? EffectiveState.New,
       };
@@ -507,6 +509,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           explanation: point.learnerExplanation ?? null,
+          explanationUk: point.learnerExplanationUk ?? null,
           examples: point.learnerExamples ?? [],
         })),
       };

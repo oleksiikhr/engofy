@@ -33,12 +33,14 @@ function fixtureEnrichment(userText: string): EnrichmentResult {
       phonetic: `/p${index}/`,
       example: `example-${index}`,
       cefrLevel: CefrLevel.A2,
+      translationUk: `переклад-${index}`,
     })),
     phrases: indexesOf(phrasesBlock ?? '').map((index) => ({
       index,
       definition: `phrase-definition-${index}`,
       example: `phrase-example-${index}`,
       cefrLevel: CefrLevel.B1,
+      translationUk: `фраза-${index}`,
     })),
   };
 }
@@ -135,11 +137,13 @@ describe('EnrichLexiconHandler', () => {
     expect(definition.phonetic).toBe('/p0/');
     expect(definition.exampleSentence).toBe('example-0');
     expect(definition.cefrLevel).toBe(CefrLevel.A2);
+    expect(definition.translationUk).toBe('переклад-0');
 
     const phrase = await suite.orm.em.findOneOrFail(Phrase, phraseId);
     expect(phrase.definition).toBe('phrase-definition-0');
     expect(phrase.exampleSentence).toBe('phrase-example-0');
     expect(phrase.cefrLevel).toBe(CefrLevel.B1);
+    expect(phrase.translationUk).toBe('фраза-0');
 
     const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
       postId,
@@ -169,6 +173,7 @@ describe('EnrichLexiconHandler', () => {
       definition: 'already enriched',
       exampleSentence: 'Already an example.',
       cefrLevel: CefrLevel.A1,
+      translationUk: 'уже є',
     });
 
     const source = { format: PostSourceFormat.Text, rawText: 'A word.' };
@@ -206,5 +211,24 @@ describe('EnrichLexiconHandler', () => {
       stage: PostPipelineStage.Enrichment,
     });
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
+  });
+
+  it('re-enriches a row that has a definition but no Ukrainian translation', async () => {
+    const { postId, wordDefinitionId } = await seedPost(suite.orm.em);
+    const definition = await suite.orm.em.findOneOrFail(
+      WordDefinition,
+      wordDefinitionId,
+    );
+    definition.definition = 'an old English-only definition';
+    await suite.orm.em.flush();
+    suite.orm.em.clear();
+
+    await suite.command(new EnrichLexiconCommand(postId));
+
+    const filled = await suite.orm.em.findOneOrFail(
+      WordDefinition,
+      wordDefinitionId,
+    );
+    expect(filled.translationUk).toBe('переклад-0');
   });
 });

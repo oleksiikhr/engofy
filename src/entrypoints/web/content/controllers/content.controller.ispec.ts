@@ -40,6 +40,7 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
     wordId: word.id,
     pos: PartOfSpeech.Verb,
     definition: 'to go from one place to another',
+    translationUk: 'подорожувати',
     cefrLevel: CefrLevel.A2,
   });
 
@@ -131,6 +132,7 @@ async function seedGrammar(em: EntityManager): Promise<SeededGrammar> {
     guideword: 'USE: HABITS AND GENERAL FACTS',
     canDoStatement: 'Can describe routines.',
     learnerExplanation: 'We use the present simple for routines.',
+    learnerExplanationUk: 'Present simple вживаємо для рутини.',
     learnerExamples: ['I get up at seven.'],
   });
   await em.flush();
@@ -358,6 +360,7 @@ describe('ContentController', () => {
     expect(res.body.annotations.words[wordDefinitionId]).toMatchObject({
       pos: 'verb',
       definition: 'to go from one place to another',
+      translationUk: 'подорожувати',
       cefrLevel: 'A2',
     });
     expect(res.body.exercises).toHaveLength(1);

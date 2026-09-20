@@ -51,12 +51,18 @@ flowchart LR
   `ai_exercises`; `TagGrammarHandler` enqueues both). It gap-fills
   `grammar_usage_points.learner_explanation` / `learner_examples` for the usage
   points the post matched (`grammar_matches` via the post's sentences) that still
-  have `learner_explanation IS NULL` — one `completeStructured` call per point,
+  have `learner_explanation_uk IS NULL` — one `completeStructured` call per point,
   flat fields (AI7), one retry on `AiSchemaMismatchError`, then the point is
-  skipped (left null). An empty pending set completes with zero AI calls.
+  skipped (left null). An empty pending set completes with zero AI calls. Each call
+  also writes `learner_explanation_uk` (Ukrainian translation of the explanation).
   `publish` gates on it together with `annotation` and `enrichment`
   (`GATE_STAGES`). Learner surfaces read `learnerExplanation` / `learnerExamples`;
   `exampleText` (raw EGP snippet) is import data and is not exposed.
+- `enrichment` gap-fills `word_definitions` / `phrases` rows with
+  `translation_uk IS NULL` (definition, phonetic, example, CEFR level and the
+  Ukrainian translation `translation_uk`, one call per post). `get-post-detail`
+  exposes `translationUk` on words and phrases and `explanationUk` on grammar usage
+  points for the reader popup's language switch.
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
   `PostPipelineStage` starts at `SpacyParse`; `'fetch'` is not in
   `post_pipeline_runs_stage_check`.

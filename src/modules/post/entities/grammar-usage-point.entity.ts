@@ -59,6 +59,11 @@ export class GrammarUsagePoint {
   @Property({ type: 'json', nullable: true })
   learnerExamples?: string[] | null;
 
+  // Ukrainian translation of `learnerExplanation`, written by the same stage.
+  // null = not yet enriched (the stage's pending marker).
+  @Property({ type: 'text', nullable: true })
+  learnerExplanationUk?: string | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

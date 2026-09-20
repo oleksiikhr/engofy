@@ -233,6 +233,7 @@ async function seed(orm: MikroORM): Promise<void> {
     phonetic: '/pəˈrambjʊleɪt/',
     cefrLevel: CefrLevel.B1,
     exampleSentence: 'They perambulated the gardens after lunch.',
+    translationUk: 'прогулюватися, прогулюватись',
   });
   const studyWord = factories(em).word.makeOne({
     lemma: STUDY_WORD_LEMMA,
@@ -261,6 +262,7 @@ async function seed(orm: MikroORM): Promise<void> {
     type: PhraseType.Idiom,
     definition: 'having nothing particular to do; unoccupied',
     exampleSentence: 'With the shop closed, she was at loose ends all week.',
+    translationUk: 'не знати, чим зайнятися',
     cefrLevel: CefrLevel.B2,
   });
   const knownPhrase = factories(em).phrase.makeOne({
@@ -306,6 +308,8 @@ async function seed(orm: MikroORM): Promise<void> {
     exampleText: 'By the time the war ended, she had drawn every coastline.',
     learnerExplanation:
       'We use the past perfect to show which of two past actions happened first. It is formed with had + past participle.',
+    learnerExplanationUk:
+      'Past perfect показує, яка з двох минулих дій сталася раніше. Утворюється за схемою had + past participle.',
     learnerExamples: [
       'She had drawn the map before he arrived.',
       'I had eaten when they called.',

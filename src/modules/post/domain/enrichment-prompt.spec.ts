@@ -39,12 +39,14 @@ describe('indexEnrichmentResult', () => {
     phonetic: null,
     example: 'e',
     cefrLevel: CefrLevel.A1,
+    translationUk: 'у',
   });
   const phrase = (index: number) => ({
     index,
     definition: 'd',
     example: 'e',
     cefrLevel: CefrLevel.A1,
+    translationUk: 'у',
   });
 
   it('returns entries positionally when every index is covered', () => {

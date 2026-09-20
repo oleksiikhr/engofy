@@ -43,6 +43,11 @@ export class WordDefinition {
   @Property({ type: 'text', nullable: true })
   exampleSentence?: string | null;
 
+  // Short Ukrainian equivalent(s) of the word in this sense, written by the
+  // enrichment stage. null = not yet enriched (the stage's pending marker).
+  @Property({ type: 'text', nullable: true })
+  translationUk?: string | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

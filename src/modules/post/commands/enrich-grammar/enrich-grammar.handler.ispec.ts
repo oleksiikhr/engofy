@@ -16,6 +16,7 @@ import { EnrichGrammarCommand } from './enrich-grammar.command.js';
 
 const RESULT = {
   explanation: 'We use it to talk about routines.',
+  explanationUk: 'Ми вживаємо це, щоб говорити про рутину.',
   example1: 'I get up at seven.',
   example2: 'She works in a shop.',
 };
@@ -95,6 +96,7 @@ describe('EnrichGrammarHandler', () => {
       matchedPointId,
     );
     expect(matched.learnerExplanation).toBe(RESULT.explanation);
+    expect(matched.learnerExplanationUk).toBe(RESULT.explanationUk);
     expect(matched.learnerExamples).toEqual([RESULT.example1, RESULT.example2]);
 
     const other = await suite.orm.em.findOneOrFail(
@@ -142,6 +144,7 @@ describe('EnrichGrammarHandler', () => {
   it('skips the AI call when the matched point is already enriched', async () => {
     const { postId } = await seedPost(suite.orm.em, {
       learnerExplanation: 'Already written.',
+      learnerExplanationUk: 'Уже написано.',
       learnerExamples: ['Already an example.'],
     });
 

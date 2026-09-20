@@ -42,6 +42,11 @@ export class Phrase {
   @Property({ type: 'text', nullable: true })
   exampleSentence?: string | null;
 
+  // Short Ukrainian equivalent of the phrase, written by the enrichment stage.
+  // null = not yet enriched (the stage's pending marker).
+  @Property({ type: 'text', nullable: true })
+  translationUk?: string | null;
+
   @Enum({ items: () => CefrLevel, nullable: true })
   cefrLevel?: CefrLevel | null;
 

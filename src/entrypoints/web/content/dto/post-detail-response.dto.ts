@@ -40,6 +40,8 @@ export class PostWordAnnotationDto {
 
   readonly example!: string | null;
 
+  readonly translationUk!: string | null;
+
   readonly cefrLevel!: CefrLevel | null;
 
   readonly frequencyRank!: number | null;
@@ -59,6 +61,8 @@ export class PostPhraseAnnotationDto {
 
   readonly example!: string | null;
 
+  readonly translationUk!: string | null;
+
   readonly cefrLevel!: CefrLevel | null;
 
   // The viewer's effective state for this phrase; New for a guest.
@@ -75,6 +79,8 @@ export class PostGrammarUsagePointDto {
   readonly canDoStatement!: string;
 
   readonly explanation!: string | null;
+
+  readonly explanationUk!: string | null;
 
   readonly examples!: string[];
 }

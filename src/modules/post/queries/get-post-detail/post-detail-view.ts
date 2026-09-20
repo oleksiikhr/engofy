@@ -21,6 +21,7 @@ export interface WordAnnotationView {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
+  translationUk: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
   state: EffectiveState;
@@ -32,6 +33,7 @@ export interface PhraseAnnotationView {
   type: string | null;
   definition: string | null;
   example: string | null;
+  translationUk: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -42,6 +44,7 @@ export interface GrammarUsagePointView {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
+  explanationUk: string | null;
   examples: string[];
 }
 

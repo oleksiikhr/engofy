@@ -40,13 +40,13 @@ interface PendingLexicon {
 
 // enrichment stage (PLAN.md §17 Track A): fills the WordDefinition/Phrase
 // stubs `annotate-post` find-or-creates for this post — definition,
-// phonetic (words only), example, cefrLevel. Runs as a third branch off the
+// phonetic (words only), example, cefrLevel, translationUk. Runs as a third branch off the
 // annotation stage's completion (alongside ai_complexity), because it needs
 // the wordDefinitionId/phraseId links annotation already resolved onto the
 // node-tree spans (same source get-post-detail reads).
 //
 // Idempotency is row-level gap-fill (P6-style, not P6a full-recompute): only
-// rows still `definition IS NULL` are sent to the model, and an empty
+// rows still `translationUk IS NULL` are sent to the model, and an empty
 // pending set completes the stage with zero AI calls — a word/phrase
 // enriched by an earlier post is never re-billed. `publish` gates on this
 // stage the same way it gates on `annotation` (D6) and `ai_grammar`'s paint
@@ -89,7 +89,7 @@ export class EnrichLexiconHandler
         tool: {
           name: 'report_enrichment',
           description:
-            'Report a learner-dictionary definition, example sentence, CEFR level (and phonetic for words) for every word and phrase listed.',
+            'Report a learner-dictionary definition, example sentence, CEFR level, Ukrainian translation (and phonetic for words) for every word and phrase listed.',
           schema: enrichmentToolSchema,
         },
       });
@@ -106,6 +106,7 @@ export class EnrichLexiconHandler
         definition.phonetic = entry.phonetic;
         definition.exampleSentence = entry.example;
         definition.cefrLevel = entry.cefrLevel;
+        definition.translationUk = entry.translationUk;
       });
 
       indexed.phrases.forEach((entry, i) => {
@@ -113,6 +114,7 @@ export class EnrichLexiconHandler
         phrase.definition = entry.definition;
         phrase.exampleSentence = entry.example;
         phrase.cefrLevel = entry.cefrLevel;
+        phrase.translationUk = entry.translationUk;
       });
 
       this.logger.log(
@@ -168,7 +170,7 @@ export class EnrichLexiconHandler
         ? []
         : await this.em.find(WordDefinition, {
             id: { $in: wordDefinitionIds },
-            definition: null,
+            translationUk: null,
           });
 
     const words =
@@ -190,7 +192,7 @@ export class EnrichLexiconHandler
         ? []
         : await this.em.find(Phrase, {
             id: { $in: phraseIds },
-            definition: null,
+            translationUk: null,
           });
 
     const pendingPhrases: PendingPhrase[] = phrases.map((phrase) => ({

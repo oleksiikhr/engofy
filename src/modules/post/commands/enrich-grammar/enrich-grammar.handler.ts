@@ -37,7 +37,7 @@ const ENRICHMENT_MAX_ATTEMPTS = 2;
 // ai_exercises; `publish` gates on it like it does on `enrichment`.
 //
 // Idempotency is row-level gap-fill (same stance as the lexicon enrichment):
-// only points still `learnerExplanation IS NULL` are sent to the model, and an
+// only points still `learnerExplanationUk IS NULL` are sent to the model, and an
 // empty pending set completes the stage with zero AI calls — a point enriched
 // by an earlier post is never re-billed.
 @CommandHandler(EnrichGrammarCommand)
@@ -74,6 +74,7 @@ export class EnrichGrammarHandler
         const content = contents[i];
         if (content) {
           point.learnerExplanation = content.explanation;
+          point.learnerExplanationUk = content.explanationUk;
           point.learnerExamples = content.examples;
           filled += 1;
         }
@@ -114,7 +115,7 @@ export class EnrichGrammarHandler
 
     const points = await this.em.find(
       GrammarUsagePoint,
-      { id: { $in: pointIds }, learnerExplanation: null },
+      { id: { $in: pointIds }, learnerExplanationUk: null },
       { orderBy: { egpIndex: 'asc' } },
     );
     if (points.length === 0) {

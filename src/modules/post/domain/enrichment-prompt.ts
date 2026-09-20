@@ -12,8 +12,9 @@ For EVERY word, in the given part of speech, provide:
 - "phonetic": the IPA transcription in that part of speech (e.g. "/rʌn/"), or null if you are not confident of it.
 - "example": one natural sentence that uses the word in exactly this part of speech and sense.
 - "cefrLevel": the CEFR level (A1-C2) at which a learner would typically already know this word in this sense.
+- "translationUk": the Ukrainian equivalent(s) of the word in exactly this sense and part of speech — one to three common Ukrainian words or short expressions, comma-separated, in dictionary form (e.g. "ринок, базар"). No explanations, no English.
 
-For EVERY phrase, provide "definition", "example", and "cefrLevel" the same way (no "phonetic" — multi-word phrases don't get one).
+For EVERY phrase, provide "definition", "example", "cefrLevel" and "translationUk" the same way (no "phonetic" — multi-word phrases don't get one). A phrase's "translationUk" is its natural Ukrainian equivalent, not a word-by-word rendering.
 
 Answer only by calling the "report_enrichment" tool, with "words" and "phrases" covering every index exactly once from the corresponding input list.`;
 
@@ -35,6 +36,7 @@ const wordEntrySchema = z.object({
   phonetic: z.string().min(1).nullable(),
   example: z.string().min(1),
   cefrLevel: z.enum(CefrLevel),
+  translationUk: z.string().min(1),
 });
 
 const phraseEntrySchema = z.object({
@@ -42,6 +44,7 @@ const phraseEntrySchema = z.object({
   definition: z.string().min(1),
   example: z.string().min(1),
   cefrLevel: z.enum(CefrLevel),
+  translationUk: z.string().min(1),
 });
 
 export const enrichmentToolSchema = z.object({
