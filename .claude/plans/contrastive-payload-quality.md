@@ -20,10 +20,10 @@ payload не логується, тож точну форму збою зара�
 
 ## Зрізи
 
-### [ ] 1. Логувати сирий payload при збої схеми
+### [x] 1. Логувати сирий payload при збої схеми
 - Branch: `contrastive-payload-quality-01-capture-raw-payload`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/78
 
 `AnthropicClientService.completeStructured` при `safeParse` не пройдено кладе в `AiSchemaMismatchError`
 лише `ZodError`, без `toolUse.input`. Додати обрізаний (напр. до 2 KB) сирий `input` у `cause`/лог, без

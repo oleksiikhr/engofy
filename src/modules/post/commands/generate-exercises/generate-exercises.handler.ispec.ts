@@ -1,4 +1,5 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { Logger } from '@nestjs/common';
 import { v7 as uuidv7 } from 'uuid';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
@@ -179,6 +180,10 @@ describe('GenerateExercisesHandler', () => {
     fakeAi.structuredCallCount = 0;
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('writes deterministic exercises plus one grammar_contrastive per contrastable usage point and completes the run', async () => {
     const postId = await seedPostWithSentence(suite.orm.em);
     const grammar = await seedGrammar(suite.orm.em, postId);
@@ -255,6 +260,7 @@ describe('GenerateExercisesHandler', () => {
     fakeAi.onCompleteStructured = () => {
       throw new AiSchemaMismatchError('report_grammar_contrastive');
     };
+    const logSpy = vi.spyOn(Logger.prototype, 'log');
 
     await suite.command(new GenerateExercisesCommand(postId));
 
@@ -265,6 +271,14 @@ describe('GenerateExercisesHandler', () => {
         type: ExerciseType.GrammarContrastive,
       }),
     ).toBe(0);
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        grammarContrastive: 0,
+        grammarContrastiveRequested: 1,
+        grammarContrastiveSkipped: 1,
+      }),
+      'ai_exercises generated',
+    );
     const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
       postId,
       stage: PostPipelineStage.AiExercises,

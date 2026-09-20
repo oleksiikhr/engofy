@@ -1,6 +1,9 @@
 import { Logger } from '@nestjs/common';
 import { z } from 'zod';
-import { AiSchemaMismatchError } from './ai-schema-mismatch.error.js';
+import {
+  AiSchemaMismatchError,
+  RAW_INPUT_MAX_CHARS,
+} from './ai-schema-mismatch.error.js';
 import { AnthropicClientService } from './anthropic-client.service.js';
 
 // The service streams every call (`messages.stream(...).finalMessage()`), so the
@@ -181,6 +184,43 @@ describe('AnthropicClientService', () => {
       await expect(
         client.completeStructured({ system: 's', userText: 'u', tool: TOOL }),
       ).rejects.toBeInstanceOf(AiSchemaMismatchError);
+    });
+
+    it('carries the raw payload on AiSchemaMismatchError and logs it', async () => {
+      const warnSpy = vi
+        .spyOn(Logger.prototype, 'warn')
+        .mockImplementation(() => {});
+      finalMessage.mockResolvedValue(toolResponse({ level: 42 }));
+      const client = new AnthropicClientService('key', 'claude-sonnet-5');
+
+      const err = await client
+        .completeStructured({ system: 's', userText: 'u', tool: TOOL })
+        .catch((e: unknown) => e);
+
+      expect(err).toBeInstanceOf(AiSchemaMismatchError);
+      expect((err as AiSchemaMismatchError).rawInput).toBe('{"level":42}');
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ tool: 'assess', rawInput: '{"level":42}' }),
+        expect.any(String),
+      );
+    });
+
+    it('truncates an oversized raw payload', async () => {
+      vi.spyOn(Logger.prototype, 'warn').mockImplementation(() => {});
+      // `level` must be a string; a 5000-char array violates it.
+      finalMessage.mockResolvedValue(
+        toolResponse({ level: ['x'.repeat(5000)] }),
+      );
+      const client = new AnthropicClientService('key', 'claude-sonnet-5');
+
+      const err = (await client
+        .completeStructured({ system: 's', userText: 'u', tool: TOOL })
+        .catch((e: unknown) => e)) as AiSchemaMismatchError;
+
+      expect(err).toBeInstanceOf(AiSchemaMismatchError);
+      expect(err.rawInput?.startsWith('{"level":["xxx')).toBe(true);
+      expect(err.rawInput).toContain('…[truncated ');
+      expect(err.rawInput?.length).toBeLessThan(RAW_INPUT_MAX_CHARS + 50);
     });
   });
 
