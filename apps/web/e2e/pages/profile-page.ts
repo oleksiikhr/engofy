@@ -9,6 +9,7 @@ export class ProfilePage {
   readonly dailyPlanStatus: Locator;
   readonly planStatus: Locator;
   readonly levelForm: Locator;
+  readonly goalForm: Locator;
   readonly deletionBanner: Locator;
   readonly deleteAccount: Locator;
 
@@ -20,6 +21,7 @@ export class ProfilePage {
     this.dailyPlanStatus = page.getByTestId('daily-plan-status');
     this.planStatus = page.getByTestId('plan-status');
     this.levelForm = page.getByTestId('cefr-level-form');
+    this.goalForm = page.getByTestId('daily-goal-form');
     this.deletionBanner = page.getByTestId('deletion-banner');
     this.deleteAccount = page.getByTestId('delete-account');
   }
@@ -40,5 +42,10 @@ export class ProfilePage {
   async saveLevel(level: string) {
     await this.levelOption(level).check();
     await this.levelForm.getByRole('button', { name: 'Save' }).click();
+  }
+
+  async saveGoal(goal: number) {
+    await this.goalForm.getByLabel('Cards per day').fill(String(goal));
+    await this.goalForm.getByRole('button', { name: 'Save' }).click();
   }
 }
