@@ -180,6 +180,69 @@ test.describe('posts (guest)', () => {
   });
 });
 
+test.describe('posts (guest with a picked level)', () => {
+  test.beforeEach(async ({ context, baseURL }) => {
+    await context.addCookies([
+      {
+        name: 'reader-level',
+        value: 'A1',
+        url: baseURL ?? 'http://localhost:4321',
+      },
+    ]);
+  });
+
+  test('narrows the list to the level ±1 and says so', async ({ page }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+
+    await expect(page.getByTestId('level-hint')).toContainText('A1–A2');
+    await expect(posts.card('Feed Story 2')).toBeVisible();
+    await expect(posts.card('The Cartographer at Dawn')).toHaveCount(0);
+    await expect(posts.level('A1').locator('input')).toBeChecked();
+    await expect(posts.level('A2').locator('input')).toBeChecked();
+    await expect(posts.level('B1').locator('input')).not.toBeChecked();
+  });
+
+  test('"Show all" lists every level again', async ({ page }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await page.getByRole('link', { name: 'Show all' }).click();
+
+    await expect(page).toHaveURL(/all=1/);
+    await expect(page.getByTestId('level-hint')).toHaveCount(0);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+    await expect(posts.level('A1').locator('input')).not.toBeChecked();
+  });
+
+  test('explicit level chips in the URL win over the cookie', async ({
+    page,
+  }) => {
+    const posts = new PostsPage(page);
+    await posts.goto('?cefr=B1');
+
+    await expect(page.getByTestId('level-hint')).toHaveCount(0);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+  });
+
+  test('changing a chip drops the hint, and clearing every chip stays on all levels after a reload', async ({
+    page,
+  }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(page.getByTestId('level-hint')).toBeVisible();
+
+    await posts.level('A1').click();
+    await posts.level('A2').click();
+    await expect(page).toHaveURL(/all=1/);
+    await expect(page.getByTestId('level-hint')).toHaveCount(0);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByTestId('level-hint')).toHaveCount(0);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+  });
+});
+
 test.describe('posts (signed in)', () => {
   test.use({ storageState: AUTHED_STATE });
 

@@ -8,6 +8,7 @@ import {
   renderPostsResults,
   toApiQuery,
 } from '../../lib/posts-list';
+import { LEVEL_COOKIE, pickedLevel } from '../../lib/reader-level';
 import { getCurrentUser } from '../../lib/session';
 import type { PostsListResponse } from '../../lib/types';
 
@@ -21,7 +22,7 @@ function html(body: string, headers: Record<string, string> = {}): Response {
   });
 }
 
-export const GET: APIRoute = async ({ request, url }) => {
+export const GET: APIRoute = async ({ request, url, cookies }) => {
   const query = parsePostsQuery(url.searchParams);
 
   try {
@@ -33,7 +34,16 @@ export const GET: APIRoute = async ({ request, url }) => {
     if (query.cursor) {
       return html(renderPostsPage(view, query, signedIn));
     }
-    const qs = new URLSearchParams(url.searchParams).toString();
+    const params = new URLSearchParams(url.searchParams);
+    // No level chip left checked means "all levels" — recorded in the address
+    // so a reload doesn't bring the guest's level default back.
+    if (
+      query.cefr.length === 0 &&
+      pickedLevel(cookies.get(LEVEL_COOKIE)?.value)
+    ) {
+      params.set('all', '1');
+    }
+    const qs = params.toString();
     return html(renderPostsResults(view, query, signedIn), {
       // Keeps the address bar / back-button in sync with the real page even
       // though this response only carries a fragment.

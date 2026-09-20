@@ -211,6 +211,20 @@ export function renderPostsResults(
   return `<ul class="posts-list" id="posts-items">${renderPostsPage(view, query, signedIn)}</ul>`;
 }
 
+// Shown above the results while the guest's level is narrowing the list, so the
+// narrowing is never silent. `showAllHref` re-opens the page without it.
+export function levelHintHtml(range: CefrLevel[], showAllHref: string): string {
+  const label =
+    range.length > 1
+      ? `${range[0]}–${range[range.length - 1]}`
+      : (range[0] ?? '');
+  return `<p class="level-hint" data-testid="level-hint">
+    <span class="tag tone-blue">For your level</span>
+    <span class="level-hint__range">${esc(label)}</span>
+    <a class="btn btn--sm btn--ghost" href="${esc(showAllHref)}">Show all</a>
+  </p>`;
+}
+
 export const POSTS_ERROR_HTML =
   '<div class="posts-empty card card--soft" data-testid="posts-empty"><p>Could not load posts — try again.</p></div>';
 

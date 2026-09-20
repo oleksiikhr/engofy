@@ -43,6 +43,32 @@ test('the guest landing has one intro heading and no screenshots', async ({
   ).toHaveCount(0);
 });
 
+test('the landing lists texts for the picked level until "Show all"', async ({
+  page,
+  context,
+  baseURL,
+}) => {
+  await context.addCookies([
+    {
+      name: 'reader-level',
+      value: 'A1',
+      url: baseURL ?? 'http://localhost:4321',
+    },
+  ]);
+  await page.goto('/');
+
+  const latest = page.getByRole('region', { name: 'Latest posts' });
+  await expect(latest.getByTestId('level-hint')).toContainText('A1–A2');
+  await expect(latest.locator('.latest__item .badge').first()).toHaveText(
+    /A1|A2/,
+  );
+  await expect(latest.getByText('B1', { exact: true })).toHaveCount(0);
+
+  await latest.getByRole('link', { name: 'Show all' }).click();
+  await expect(page).toHaveURL(/all=1/);
+  await expect(page.getByTestId('level-hint')).toHaveCount(0);
+});
+
 test('a word in the landing reader opens its card without API calls', async ({
   page,
 }) => {

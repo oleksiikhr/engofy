@@ -6,6 +6,7 @@ import { DEMO_LEXICON, DEMO_TEXT, demoAttrs } from '../lib/landing-demo';
 import { renderDailyPracticeQueue } from '../lib/practice-card';
 import { postUrl } from '../lib/post-url';
 import { escapeJson, jsonLdGraph } from '../lib/seo';
+import { LEVEL_COOKIE, levelRange, pickedLevel } from '../lib/reader-level';
 import { getCurrentUser } from '../lib/session';
 import { publicOrigin } from '../lib/site';
 import type {
@@ -85,14 +86,33 @@ if (user && Astro.request.method === 'POST') {
 // Guest landing only: fresh internal links for crawlers and visitors. Each
 // block is optional, so an API failure never takes the landing page down.
 let latestPosts: PostsListResponse['items'] = [];
+// Set while the guest's picked level (±1) narrows "Latest texts".
+let latestRange: CefrLevel[] = [];
 let featuredGrammar: { slug: string; name: string }[] = [];
 if (!user) {
+  const range =
+    Astro.url.searchParams.get('all') === '1'
+      ? []
+      : levelRange(pickedLevel(Astro.cookies.get(LEVEL_COOKIE)?.value));
+  const latestQuery = new URLSearchParams({ limit: String(LATEST_POSTS) });
+  if (range.length > 0) {
+    latestQuery.set('cefr', range.join(','));
+  }
   const [postsResult, grammarResult] = await Promise.allSettled([
-    apiGet<PostsListResponse>(`/content/posts?limit=${LATEST_POSTS}`),
+    apiGet<PostsListResponse>(`/content/posts?${latestQuery}`),
     apiGet<GrammarReference>('/content/grammar'),
   ]);
   if (postsResult.status === 'fulfilled') {
     latestPosts = postsResult.value.items;
+    // A level with no texts yet falls back to the plain latest list.
+    if (range.length > 0 && latestPosts.length > 0) {
+      latestRange = range;
+    } else if (range.length > 0) {
+      const all = await apiGet<PostsListResponse>(
+        `/content/posts?limit=${LATEST_POSTS}`,
+      ).catch(() => null);
+      latestPosts = all?.items ?? [];
+    }
   }
   if (grammarResult.status === 'fulfilled') {
     const constructions = grammarResult.value.groups.flatMap(
@@ -219,6 +239,19 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
         {latestPosts.length > 0 && (
           <section class="landing-section" aria-label="Latest posts">
             <h2 class="landing-heading">Latest texts</h2>
+            {latestRange.length > 0 && (
+              <p class="level-hint" data-testid="level-hint">
+                <span class="tag tone-blue">For your level</span>
+                <span class="level-hint__range">
+                  {latestRange.length > 1
+                    ? `${latestRange[0]}–${latestRange[latestRange.length - 1]}`
+                    : latestRange[0]}
+                </span>
+                <a class="btn btn--sm btn--ghost" href="/?all=1">
+                  Show all
+                </a>
+              </p>
+            )}
             <ul class="latest">
               {latestPosts.map((post) => (
                 <li class="card latest__item">
@@ -482,6 +515,17 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
   .latest__item p {
     margin: 0;
     font-size: 0.85rem;
+    color: var(--color-ink-soft);
+  }
+  .level-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    margin: 0 0 1rem;
+    font-weight: 700;
+  }
+  .level-hint__range {
     color: var(--color-ink-soft);
   }
   .landing-more {
