@@ -36,33 +36,22 @@ e2e-тести, що падають проти prod-збірки. Ціль — �
 `node dist/server/entry.mjs`); повний Playwright-набір зелений в обох режимах. Робиться перед
 апгрейдом Nest, щоб e2e надійно валідував наступні зрізи.
 
-### [ ] 3. Upgrade NestJS to 12
-- Branch: `fix-predeploy-blockers-03-nestjs-12`
+### [ ] 3. Patch vulnerable transitive dependencies via overrides
+- Branch: `fix-predeploy-blockers-03-audit-overrides`
 - Base: `fix-predeploy-blockers-02-theme-prefs-e2e`
 - PR: —
 
-Підняти `@nestjs/{core,common,platform-fastify,testing,cli,schematics}` до 12.x разом із
-пакетами, що мають декларовану підтримку 12: `@nestjs/{config,cqrs,swagger,schedule,terminus,throttler}`,
-`@mikro-orm/nestjs`, `nestjs-pino` (5.x), `nestjs-otel`, `nest-commander`. Override `fastify` у
-`pnpm-workspace.yaml` привести до версії, яку вимагає `@nestjs/platform-fastify` 12 (5.12.4),
-оновити коментар над ним. Перед bump звірити вік релізів з `minimumReleaseAge` (7 днів) і, за
-потреби, зафіксувати старішу версію. Пройти breaking changes 12.x у місцях використання;
-перегенерувати `src/metadata.ts`.
+Nest лишається на 11.x. У `pnpm-workspace.yaml` підняти override `fastify` з `5.10.0` до `5.12.4`
+і додати overrides (з діапазонами по мажорах): `find-my-way` → `>=9.7.0` (`@nestjs/platform-fastify`
+11.1.28 закріплює 9.6.0), `fast-uri` → `3.1.6+` / `4.1.3+`, `js-yaml` → `4.3.2+` / `5.2.2+`
+(включно зі шляхом через `astro` у `apps/web`). Усі ці версії старші за `minimumReleaseAge`
+(7 днів); `fastify` 5.12.5 і `fast-uri` 4.1.5/3.1.8 під нього ще не підпадають — не брати.
+Коментар над override `fastify` переписати: `@nestjs/platform-fastify` 11 закріплює 5.10.0, а
+override свідомо його випереджає заради security-виправлень (дві moderate-знахідки в fastify).
 
-Ризик: `nestjs-zod` (5.5.0), `@nest-lab/throttler-storage-redis` (1.2.0) і `@sentry/nestjs`
-(10.75.0) — останні версії, але їхні peer-діапазони не включають Nest 12. Перевірити на
-рантаймі: інтеграційні тести, `pnpm build`, запуск API, Playwright e2e. Якщо якийсь із них
-несумісний — зупинитися й повернутися до розробника, не обходити мовчки (запасний варіант:
-`overrides` на Nest 11, тоді зрізи 3–4 переписуються). Перевірка: повний gate
-(`type`/`lint:check`/`test:cov`/`migration:check`/`build`, metadata без diff) + Playwright.
-
-### [ ] 4. Clear remaining audit advisories
-- Branch: `fix-predeploy-blockers-04-audit-advisories`
-- Base: `fix-predeploy-blockers-03-nestjs-12`
-- PR: —
-
-Після апгрейду прогнати `pnpm audit --prod` у корені та `apps/web` і закрити залишок через
-оновлення або `overrides` у `pnpm-workspace.yaml`: `find-my-way` (>=9.7.0), `fast-uri`
-(>=3.1.6 / >=4.1.3), `js-yaml` (>=4.3.2 / >=5.2.2, зокрема шлях через `astro` у `apps/web`).
-Усі потрібні версії старші за `minimumReleaseAge`. Перевірка: `pnpm audit --prod` без знахідок,
-CI `Security Audit` зелений, повний gate і e2e не зламані.
+Ризик: `@nestjs/platform-fastify` 11.1.28 тестувався лише з fastify 5.10.0, тому вирішальні
+перевірки — інтеграційні тести, `pnpm build`, запуск API та повний Playwright. Якщо Nest 11.x
+випустить патч із fastify ≥5.12.1, override `fastify` можна буде прибрати.
+Перевірка: `pnpm audit --prod` без знахідок у корені й `apps/web`, повний gate
+(`type`/`lint:check`/`test:cov`/`migration:check`/`build`, metadata без diff) і Playwright e2e
+зелені, CI `Security Audit` зелений.
