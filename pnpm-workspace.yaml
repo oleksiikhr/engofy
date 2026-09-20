@@ -29,10 +29,17 @@ minimumReleaseAgeExclude:
 pmOnFail: error
 
 overrides:
-  # Must match the Fastify version required by @nestjs/platform-fastify.
-  # This override should follow the version pulled by that package.
+  # @nestjs/platform-fastify 11 pins fastify 5.10.0; this override deliberately
+  # runs ahead of it for the security fixes in >=5.12.1 (schema-validation bypass,
+  # trustProxy spoofing). Drop it once a Nest 11.x patch requires fastify >=5.12.1.
   # Verify with: pnpm why fastify
-  fastify: 5.10.0
+  fastify: 5.12.4
+  # Transitive security floors; each is one range per major that is in use.
+  find-my-way: '>=9.7.0'
+  'fast-uri@3': '>=3.1.6 <4'
+  'fast-uri@4': '>=4.1.3 <5'
+  'js-yaml@4': '>=4.3.2 <5'
+  'js-yaml@5': '>=5.2.2 <6'
 
 allowBuilds:
   '@nestjs/core': true
