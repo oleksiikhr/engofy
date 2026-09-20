@@ -5,6 +5,7 @@ import { PostModule } from '../post/post.module.js';
 import TelegramConfig from './config/telegram.config.js';
 import { NotifyFailedPostsService } from './services/shared/notify-failed-posts.service.js';
 import { NotifyPublishedPostsService } from './services/shared/notify-published-posts.service.js';
+import { NotifyStuckPostsService } from './services/shared/notify-stuck-posts.service.js';
 import { PollUpdatesService } from './services/shared/poll-updates.service.js';
 import { PruneTelegramUpdatesService } from './services/shared/prune-telegram-updates.service.js';
 import { PublishPendingService } from './services/shared/publish-pending.service.js';
@@ -25,12 +26,14 @@ import { TelegramClientService } from './services/telegram-client.service.js';
     PublishPendingService,
     NotifyFailedPostsService,
     NotifyPublishedPostsService,
+    NotifyStuckPostsService,
     PruneTelegramUpdatesService,
   ],
   exports: [
     PollUpdatesService,
     NotifyFailedPostsService,
     NotifyPublishedPostsService,
+    NotifyStuckPostsService,
     PublishPendingService,
     PruneTelegramUpdatesService,
   ],

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TelegramModule } from '../../../modules/telegram/telegram.module.js';
 import { NotifyFailedPostsCron } from './notify-failed-posts.cron.js';
 import { NotifyPublishedPostsCron } from './notify-published-posts.cron.js';
+import { NotifyStuckPostsCron } from './notify-stuck-posts.cron.js';
 import { PollUpdatesCron } from './poll-updates.cron.js';
 import { PruneTelegramUpdatesCron } from './prune-telegram-updates.cron.js';
 import { PublishPendingCron } from './publish-pending.cron.js';
@@ -13,6 +14,7 @@ import { PublishPendingCron } from './publish-pending.cron.js';
     PublishPendingCron,
     NotifyFailedPostsCron,
     NotifyPublishedPostsCron,
+    NotifyStuckPostsCron,
     PruneTelegramUpdatesCron,
   ],
 })
