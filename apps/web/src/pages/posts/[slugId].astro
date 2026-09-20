@@ -42,8 +42,7 @@ const escapeJson = (value: unknown) =>
 const lexicon = buildLexiconData(post.annotations, post.exercises);
 const lexiconJson = escapeJson(lexicon);
 // `?? []`: an API still on the previous release omits `tokens`.
-const tokens = post.annotations.tokens ?? [];
-const tokensJson = escapeJson(tokens);
+const hasTokens = (post.annotations.tokens ?? []).length > 0;
 
 // --- exercise view models (all casts / normalisation live here; the template
 // only maps over plain data) ---
@@ -215,7 +214,7 @@ const drills: DrillView[] = post.exercises
 
       <div class="reader-toolbar" role="toolbar" aria-label="Reader tools">
         {
-          tokens.length > 0 && (
+          hasTokens && (
             <>
               <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false">
                 <b aria-hidden="true">Aa</b>Word types
@@ -236,30 +235,24 @@ const drills: DrillView[] = post.exercises
           <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="-1" aria-label="Smaller text">A−</button>
           <button type="button" class="reader-toolbar__btn reader-toolbar__step" data-size="1" aria-label="Larger text">A+</button>
         </span>
-        <div class="reader-legend" data-legend="pos" hidden>
+        <div class="reader-legend" data-legend="pos">
           <span class="reader-legend__item tone-blue" data-pos-group="noun">noun</span>
           <span class="reader-legend__item tone-brand" data-pos-group="verb">verb</span>
           <span class="reader-legend__item tone-green" data-pos-group="adj">adjective</span>
           <span class="reader-legend__item tone-pink" data-pos-group="adv">adverb</span>
-          <label class="reader-legend__switch">
-            <span class="reader-legend__sample" data-pos-group="fn">the</span>
-            Function words
-            <input type="checkbox" class="toggle toggle--sm" role="switch" data-function-words />
-          </label>
         </div>
-        <p class="reader-legend" data-legend="tense" hidden>
+        <p class="reader-legend" data-legend="tense">
           <span class="reader-legend__item tone-amber" data-tense="past">past</span>
           <span class="reader-legend__item tone-blue" data-tense="present">present</span>
           <span class="reader-legend__item tone-green" data-tense="future">future</span>
         </p>
-        <p class="reader-legend" data-legend="analyze" hidden>
+        <p class="reader-legend" data-legend="analyze">
           Tap a highlighted construction to see why it fits. Irregular verbs show their forms.
         </p>
       </div>
 
       <div class="analysis reading-body" set:html={bodyHtml} />
       <script is:inline type="application/json" id="lexicon-data" set:html={lexiconJson} />
-      <script is:inline type="application/json" id="reader-tokens" set:html={tokensJson} />
     </article>
   </div>
 
@@ -361,9 +354,8 @@ const drills: DrillView[] = post.exercises
     initReaderPopup(body, lexicon);
   }
   const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
-  const tokensRaw = document.getElementById('reader-tokens')?.textContent;
-  if (body && toolbar && tokensRaw) {
-    initReaderToolbar(toolbar, body, JSON.parse(tokensRaw));
+  if (toolbar) {
+    initReaderToolbar(toolbar);
   }
 
   const layout = document.querySelector<HTMLElement>('.reader-layout');

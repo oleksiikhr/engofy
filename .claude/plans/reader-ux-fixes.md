@@ -68,10 +68,10 @@ default показується як "Assumed known". Оновити ispec/spec/e
 "✓ Read / Mark as unread" на сторінці поста, авто-mark лише після реального скролу до кінця (не на
 першому пейнті), Finish у study mode теж позначає. Тести: ispec хендлера й контролера, e2e.
 
-### [ ] 6. Рідер без стрибків + прибрати Function words
+### [x] 6. Рідер без стрибків + прибрати Function words
 - Branch: `reader-ux-fixes-06-reader-no-shift`
-- Base: `reader-ux-fixes-05-read-state`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/85
 
 Правки №3, №6. Видалити перемикач Function words (UI, pref `function-words`, CSS, boot-атрибут).
 Обгортання токенів `[data-tok]` переїжджає на сервер (`render-doc.ts`), клієнтський `wrapTokens`

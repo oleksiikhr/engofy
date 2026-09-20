@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Page, type Route, test } from '@playwright/test';
 import { AUTHED_STATE, DECK_STATE } from './auth';
 import { ReaderPage } from './pages/reader-page';
 
@@ -244,7 +244,12 @@ test.describe('reader page (guest)', () => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
 
-    await expect(reader.analysis.locator('[data-tok]')).toHaveCount(0);
+    // Tokens are in the server HTML, but paint nothing until a mode is on.
+    await expect(reader.token('coastline')).toHaveCount(1);
+    await expect(reader.token('coastline')).toHaveCSS(
+      'border-bottom-width',
+      '0px',
+    );
 
     await reader.modeToggle('Word types').click();
     await expect(reader.modeToggle('Word types')).toHaveAttribute(
@@ -277,44 +282,78 @@ test.describe('reader page (guest)', () => {
     );
 
     await reader.modeToggle('Word types').click();
-    await expect(reader.page.locator('body')).not.toHaveClass(/reader-pos/);
-    await expect(reader.page.locator('body')).toHaveClass(/reader-tense/);
+    await expect(reader.page.locator('html')).toHaveAttribute(
+      'data-reader-modes',
+      'tense',
+    );
   });
 
-  test('function words stay plain until the Function words switch is on, and it is remembered', async ({
+  test('function words are never coloured and there is no Function words switch', async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
-    const the = reader.token('the').first();
-    const underline = () =>
-      the.evaluate((el) => getComputedStyle(el).borderBottom);
-
-    // The switch belongs to the Word types legend.
-    await expect(reader.functionWordsSwitch).toBeHidden();
     await reader.modeToggle('Word types').click();
-    await expect(the).toHaveAttribute('data-pos-group', 'fn');
-    await expect(reader.functionWordsSwitch).not.toBeChecked();
-    expect(await underline()).toMatch(/^0px/);
 
-    await reader.functionWordsSwitch.check();
-    expect(await underline()).toMatch(/^2px dotted/);
-    await expect(page.locator('html')).toHaveAttribute(
-      'data-function-words',
-      'on',
+    const the = reader.token('the').first();
+    await expect(the).not.toHaveAttribute('data-pos-group', /.*/);
+    await expect(the).toHaveCSS('border-bottom-width', '0px');
+    await expect(
+      reader.toolbar.getByRole('switch', { name: 'Function words' }),
+    ).toHaveCount(0);
+  });
+
+  test('a stored mode is in place before hydration and hydrating moves nothing', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await page.addInitScript(() =>
+      localStorage.setItem('reader-modes', 'pos tense analyze'),
     );
+    const measure = () =>
+      page.evaluate(() => {
+        const rect = (selector: string) => {
+          const r = document.querySelector(selector)?.getBoundingClientRect();
+          return r && { x: r.x, y: r.y, width: r.width, height: r.height };
+        };
+        const paragraph = (index: number) =>
+          rect(`.reading-body [data-block="${index}"]`);
+        return {
+          toolbar: rect('.reader-toolbar'),
+          body: rect('.reading-body'),
+          first: paragraph(0),
+          second: paragraph(1),
+        };
+      });
 
+    // Page scripts blocked: only the inline <head> boot script has run.
+    const blockScripts = (route: Route) =>
+      route.request().resourceType() === 'script'
+        ? route.abort()
+        : route.continue();
+    await page.route('**/*', blockScripts);
+    await reader.goto(READER_SLUG);
+    await reader.expectLoaded('The Cartographer at Dawn');
+    await expect(reader.modeToggle('Analyze')).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    await expect(reader.modeToggle('Analyze')).toHaveCSS(
+      'background-color',
+      /^(?!rgba\(0, 0, 0, 0\))/,
+    );
+    await expect(
+      reader.toolbar.locator('[data-legend="analyze"]'),
+    ).toBeVisible();
+    const before = await measure();
+
+    await page.unroute('**/*', blockScripts);
     await page.reload();
-    await expect(reader.functionWordsSwitch).toBeChecked();
-    expect(
-      await reader
-        .token('the')
-        .first()
-        .evaluate((el) => getComputedStyle(el).borderBottom),
-    ).toMatch(/^2px dotted/);
-
-    await reader.functionWordsSwitch.uncheck();
-    expect(await underline()).toMatch(/^0px/);
+    await expect(reader.modeToggle('Analyze')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(await measure()).toEqual(before);
   });
 
   test('Analyze tags tokens, flags irregular verbs and explains the construction', async ({
@@ -866,11 +905,13 @@ test.describe('reader read state (signed in)', () => {
   // Marks and unmarks the post, so it runs as its own seeded user.
   test.use({ storageState: DECK_STATE });
 
+  // The response, not the request: a reload straight after the request goes
+  // out can render the page before the mark is committed.
   const marksRead = (page: Page) =>
-    page.waitForRequest(
-      (request) =>
-        request.url().endsWith('/partials/mark-read') &&
-        request.method() === 'POST',
+    page.waitForResponse(
+      (response) =>
+        response.url().endsWith('/partials/mark-read') &&
+        response.request().method() === 'POST',
     );
 
   // Astro's CSRF check wants an Origin on a form POST, which the browser adds

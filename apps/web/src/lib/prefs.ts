@@ -18,7 +18,6 @@ export const DEFAULT_READER_SIZE = 2;
 interface PrefTypes {
   theme: Theme;
   readerModes: ReaderMode[];
-  functionWords: boolean;
   readerSize: number;
 }
 export type PrefName = keyof PrefTypes;
@@ -29,7 +28,6 @@ export type PrefName = keyof PrefTypes;
 const SPEC = {
   theme: { key: 'theme', attr: 'theme' },
   readerModes: { key: 'reader-modes', attr: 'readerModes' },
-  functionWords: { key: 'function-words', attr: 'functionWords' },
   readerSize: { key: 'reader-size', attr: 'readerSize' },
 } as const satisfies Record<PrefName, { key: string; attr: string }>;
 
@@ -52,8 +50,6 @@ function parse(name: PrefName, raw: string | null): PrefTypes[PrefName] | null {
         ? (modes as ReaderMode[])
         : null;
     }
-    case 'functionWords':
-      return raw === 'on' ? true : raw === 'off' ? false : null;
     case 'readerSize': {
       const size = Number(raw);
       return Number.isInteger(size) && size >= 0 && size < READER_SIZE_STEPS
@@ -67,8 +63,6 @@ function serialize(name: PrefName, value: PrefTypes[PrefName]): string {
   switch (name) {
     case 'readerModes':
       return (value as ReaderMode[]).join(' ');
-    case 'functionWords':
-      return value ? 'on' : 'off';
     default:
       return String(value);
   }
@@ -77,7 +71,6 @@ function serialize(name: PrefName, value: PrefTypes[PrefName]): string {
 const DEFAULTS: PrefTypes = {
   theme: 'auto',
   readerModes: [],
-  functionWords: false,
   readerSize: DEFAULT_READER_SIZE,
 };
 
@@ -97,9 +90,7 @@ export function readPref<N extends PrefName>(name: N): PrefTypes[N] {
 function reflect(name: PrefName, value: PrefTypes[PrefName]): void {
   const attr = SPEC[name].attr;
   const off =
-    value === DEFAULTS[name] ||
-    (Array.isArray(value) && value.length === 0) ||
-    value === false;
+    value === DEFAULTS[name] || (Array.isArray(value) && value.length === 0);
   if (off) {
     delete document.documentElement.dataset[attr];
   } else {
@@ -126,7 +117,6 @@ export function bootScript(): string {
   const spec = {
     theme: { ...SPEC.theme, values: THEMES, off: DEFAULTS.theme },
     readerModes: { ...SPEC.readerModes, values: READER_MODES },
-    functionWords: { ...SPEC.functionWords },
     readerSize: {
       ...SPEC.readerSize,
       steps: READER_SIZE_STEPS,
@@ -136,6 +126,5 @@ export function bootScript(): string {
   return `try{var d=document.documentElement.dataset,s=${JSON.stringify(spec)},g=function(k){return localStorage.getItem(k)};
 var t=g(s.theme.key);if(t&&t!==s.theme.off&&s.theme.values.indexOf(t)>-1)d[s.theme.attr]=t;
 var m=g(s.readerModes.key);if(m){var l=m.split(" ").filter(Boolean);if(l.length&&l.every(function(x){return s.readerModes.values.indexOf(x)>-1}))d[s.readerModes.attr]=l.join(" ")}
-if(g(s.functionWords.key)==="on")d[s.functionWords.attr]="on";
 var z=g(s.readerSize.key);if(z&&z!==s.readerSize.off&&/^[0-9]+$/.test(z)&&+z<s.readerSize.steps)d[s.readerSize.attr]=z}catch(e){}`;
 }
