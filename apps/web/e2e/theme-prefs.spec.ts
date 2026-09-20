@@ -16,7 +16,8 @@ function seed(page: Page, entries: Record<string, string>) {
 }
 
 // Records what <html> looked like the moment <body> was inserted — i.e. before
-// anything could have painted — and the page's colors at that point.
+// anything could have painted. Colors are asserted after load instead: a prod
+// build links external stylesheets that are not applied yet at that moment.
 function recordFirstPaintState(page: Page) {
   return page.addInitScript(() => {
     const observer = new MutationObserver(() => {
@@ -28,7 +29,6 @@ function recordFirstPaintState(page: Page) {
       (window as unknown as Record<string, unknown>).__firstPaint = {
         theme: html.dataset.theme ?? null,
         size: html.dataset.readerSize ?? null,
-        background: getComputedStyle(document.body).backgroundColor,
       };
     });
     observer.observe(document, { childList: true, subtree: true });
@@ -43,7 +43,6 @@ const firstPaint = (page: Page) =>
           __firstPaint: {
             theme: string | null;
             size: string | null;
-            background: string;
           };
         }
       ).__firstPaint,
@@ -63,7 +62,6 @@ test.describe('theme preference', () => {
 
     const first = await firstPaint(page);
     expect(first.theme).toBe('dark');
-    expect(first.background).toBe('rgb(27, 22, 17)');
     expect(await background(page)).toBe('rgb(27, 22, 17)');
   });
 
@@ -75,7 +73,7 @@ test.describe('theme preference', () => {
 
     const first = await firstPaint(page);
     expect(first.theme).toBe('light');
-    expect(first.background).toBe('rgb(255, 248, 238)');
+    expect(await background(page)).toBe('rgb(255, 248, 238)');
   });
 
   test('auto (or nothing stored) follows the OS', async ({ page }) => {
