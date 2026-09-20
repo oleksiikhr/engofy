@@ -24,10 +24,10 @@ e2e-тести, що падають проти prod-збірки. Ціль — �
 `3.5.7-r0`, а CVE-2026-14456 (HIGH) виправлений у `3.5.8-r0`. Trivy-крок у `docker.yaml` не
 змінюється. Перевірка: CI-джоб `Docker` зелений. Залежностей від інших зрізів немає.
 
-### [ ] 2. Make theme-prefs e2e independent of build mode
+### [x] 2. Make theme-prefs e2e independent of build mode
 - Branch: `fix-predeploy-blockers-02-theme-prefs-e2e`
-- Base: `fix-predeploy-blockers-01-openssl-runtime-images`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/90
 
 `apps/web/e2e/theme-prefs.spec.ts:56` і `:70` вимірюють фон `<body>` у момент його вставки, до
 застосування зовнішнього CSS у prod-збірці (`<link rel=stylesheet>`; у dev Vite інлайнить стилі).
