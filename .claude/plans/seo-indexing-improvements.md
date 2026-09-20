@@ -38,10 +38,10 @@ OG/Twitter, JSON-LD; усі пости мають однакову meta descript
 
 ## Зрізи
 
-### [ ] 1. Layout: canonical, robots, OG/Twitter, слот для JSON-LD
+### [x] 1. Layout: canonical, robots, OG/Twitter, слот для JSON-LD
 - Branch: `seo-indexing-improvements-01-layout-meta`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/99
 
 `Layout.astro` отримує пропси `canonical`, `noindex`, `ogType`, `ogImage` і слот для JSON-LD; додається
 хелпер публічної origin (`PUBLIC_URL`). Виводяться `og:title/description/url/type/site_name`,
