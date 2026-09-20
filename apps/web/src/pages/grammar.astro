@@ -118,7 +118,9 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
                   </span>
                   <span class="grammar-con__name">{con.name}</span>
                   <span class="grammar-con__count meta">
-                    {con.usagePointCount} use{con.usagePointCount === 1 ? '' : 's'}
+                    {con.learnedCount !== undefined
+                      ? `${con.learnedCount}/${con.usagePointCount} learned`
+                      : `${con.usagePointCount} use${con.usagePointCount === 1 ? '' : 's'}`}
                   </span>
                 </a>
               </li>

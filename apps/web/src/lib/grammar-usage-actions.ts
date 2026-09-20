@@ -35,15 +35,20 @@ export function usageActionsId(usagePointId: string): string {
 }
 
 // A point that is still New offers both actions; any other state is settled
-// (a card, a known or a skip disposition) and shows just its label. `message`
-// is trusted HTML from `USAGE_ACTIONS_MESSAGE` — never user input.
+// (a card, a known or a skip disposition) and shows just its label. A New
+// point below the learner's level (`assumedKnown`) keeps both actions and is
+// labelled "Assumed known". `message` is trusted HTML from
+// `USAGE_ACTIONS_MESSAGE` — never user input.
 export function usageActionsHtml(
   usagePointId: string,
   state: EffectiveState,
   message?: string,
+  assumedKnown = false,
 ): string {
   const id = usageActionsId(usagePointId);
-  const label = `<span class="gup-state gup-state--${esc(state)}" data-state="${esc(state)}">${esc(STATE_LABEL[state] ?? state)}</span>`;
+  const assumed = state === 'new' && assumedKnown;
+  const text = assumed ? 'Assumed known' : (STATE_LABEL[state] ?? state);
+  const label = `<span class="gup-state gup-state--${assumed ? 'assumed' : esc(state)}" data-state="${assumed ? 'assumed' : esc(state)}">${esc(text)}</span>`;
   const note = message
     ? `<span class="add-card__msg" role="status">${message}</span>`
     : '';

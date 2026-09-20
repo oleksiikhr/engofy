@@ -44,7 +44,10 @@ const {
     <slot />
   </div>
 
-  <GrammarUsagePoints usagePoints={con.usagePoints} />
+  <GrammarUsagePoints
+    usagePoints={con.usagePoints}
+    levelProgress={con.levelProgress}
+  />
 </Layout>
 
 <style>
