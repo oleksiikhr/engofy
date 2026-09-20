@@ -33,6 +33,10 @@ import type { PostSuggestionsView } from './queries/get-post-suggestions/post-su
 import type { GetPostsListOptions } from './queries/get-posts-list/get-posts-list.query.js';
 import { GetPostsListQuery } from './queries/get-posts-list/get-posts-list.query.js';
 import type { PostsListView } from './queries/get-posts-list/posts-list-view.js';
+import { GetPostsSitemapIndexQuery } from './queries/get-posts-sitemap-index/get-posts-sitemap-index.query.js';
+import type { PostsSitemapIndexView } from './queries/get-posts-sitemap-index/posts-sitemap-index-view.js';
+import { GetPostsSitemapPageQuery } from './queries/get-posts-sitemap-page/get-posts-sitemap-page.query.js';
+import type { PostsSitemapPageView } from './queries/get-posts-sitemap-page/posts-sitemap-page-view.js';
 import type { IngestedPostView } from './types/ingested-post-view.type.js';
 
 @Injectable()
@@ -62,6 +66,14 @@ export class PostService {
     limit: number,
   ): Promise<PostSuggestionsView> {
     return this.queryBus.execute(new GetPostSuggestionsQuery(prefix, limit));
+  }
+
+  getPostsSitemapIndex(): Promise<PostsSitemapIndexView> {
+    return this.queryBus.execute(new GetPostsSitemapIndexQuery());
+  }
+
+  getPostsSitemapPage(page: number): Promise<PostsSitemapPageView> {
+    return this.queryBus.execute(new GetPostsSitemapPageQuery(page));
   }
 
   getPostPipelineStatus(

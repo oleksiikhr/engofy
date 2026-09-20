@@ -59,14 +59,16 @@ OG/Twitter, JSON-LD; усі пости мають однакову meta descript
 - Чи додавати `noindex` також на сторінки з невалідними/порожніми результатами (`/posts` з помилкою)?
 - Дефолтний `og:image` тут (заглушка) чи лише в зрізі 7?
 
-### [ ] 2. API: список постів для sitemap
+### [x] 2. API: список постів для sitemap
 - Branch: `seo-indexing-improvements-02-sitemap-api`
-- Base: `seo-indexing-improvements-01-layout-meta`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/100
 
-Новий публічний ендпоінт у Nest (`content`), що повертає `slug`, `shortId`, `publishedAt`, `updatedAt`
-усіх опублікованих постів для sitemap. Зміна лише додавальна: існуючі контракти не змінюються, тому
-окремих слайсів на міграцію/видалення не потрібно.
+Публічні ендпоінти Nest (`content`) з пагінацією по 50 000: `GET /content/sitemap/posts` (індекс:
+`{ pages: [{ page, lastmod }] }`) і `GET /content/sitemap/posts/:page` (`{ items: [{ slug, shortId,
+lastmod }] }`, порядок `published_at ASC, id ASC`). Нова колонка `posts.content_updated_at` (ставиться
+при публікації) дає `lastmod`. Зміна лише додавальна. Web у зрізі 3 віддає `/sitemap/posts.xml`
+(індекс) і `/sitemap/posts-{index}.xml`.
 
 Питання перед кодом:
 - Пагінація чи один відповідь: скільки постів очікується (ліміт sitemap — 50 000 URL / 50 МБ)?
