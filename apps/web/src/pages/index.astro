@@ -1,13 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { apiGet, apiPatch, apiPost } from '../lib/api';
+import { grammarSlugs } from '../lib/grammar-seo';
 import { renderDailyPracticeQueue } from '../lib/practice-card';
 import { postUrl } from '../lib/post-url';
+import { jsonLdGraph } from '../lib/seo';
 import { getCurrentUser } from '../lib/session';
+import { publicOrigin } from '../lib/site';
 import type {
   CefrLevel,
   CompleteDailyPlanResponse,
   DailyPlan,
+  GrammarReference,
+  PostsListResponse,
   PracticeQueueResponse,
 } from '../lib/types';
 
@@ -31,6 +36,21 @@ const FEATURES = [
     text: 'A short daily session brings back your saved words with spaced repetition and keeps your streak going.',
   },
 ];
+
+const HOME_TITLE = 'Engofy — Learn English by Reading Short Texts (A1–C2)';
+const HOME_DESCRIPTION =
+  'Read short authentic English texts sorted by level (A1–C2). Tap any word for its meaning, learn grammar in context and remember words with daily spaced repetition.';
+
+const LATEST_POSTS = 6;
+const FEATURED_GRAMMAR = 4;
+
+// Constructions with a handcrafted page come first, so the links lead to the
+// best pages; the rest of the reference fills any remaining slots.
+const handcrafted = new Set(
+  Object.keys(
+    import.meta.glob('../grammar-pages/*.astro'),
+  ).map((path) => path.replace('../grammar-pages/', '').replace('.astro', '')),
+);
 
 const SHOTS = [
   {
@@ -79,6 +99,52 @@ if (user && Astro.request.method === 'POST') {
   }
 }
 
+// Guest landing only: fresh internal links for crawlers and visitors. Each
+// block is optional, so an API failure never takes the landing page down.
+let latestPosts: PostsListResponse['items'] = [];
+let featuredGrammar: { slug: string; name: string }[] = [];
+if (!user) {
+  const [postsResult, grammarResult] = await Promise.allSettled([
+    apiGet<PostsListResponse>(`/content/posts?limit=${LATEST_POSTS}`),
+    apiGet<GrammarReference>('/content/grammar'),
+  ]);
+  if (postsResult.status === 'fulfilled') {
+    latestPosts = postsResult.value.items;
+  }
+  if (grammarResult.status === 'fulfilled') {
+    const constructions = grammarResult.value.groups.flatMap(
+      (group) => group.constructions,
+    );
+    const known = new Set(grammarSlugs(grammarResult.value));
+    const ordered = [
+      ...[...handcrafted].filter((slug) => known.has(slug)),
+      ...[...known].filter((slug) => !handcrafted.has(slug)),
+    ].slice(0, FEATURED_GRAMMAR);
+    featuredGrammar = ordered.flatMap((slug) => {
+      const con = constructions.find((c) => c.slug === slug);
+      return con ? [{ slug, name: con.name }] : [];
+    });
+  }
+}
+
+const origin = publicOrigin(Astro.url);
+const jsonLd = jsonLdGraph([
+  {
+    '@type': 'WebSite',
+    '@id': `${origin}/#website`,
+    url: `${origin}/`,
+    name: 'Engofy',
+    inLanguage: 'en',
+    publisher: { '@id': `${origin}/#organization` },
+  },
+  {
+    '@type': 'Organization',
+    '@id': `${origin}/#organization`,
+    name: 'Engofy',
+    url: `${origin}/`,
+  },
+]);
+
 const showOnboarding =
   !!user && Astro.cookies.get('onboarding')?.value === '1';
 
@@ -111,13 +177,24 @@ const showGrammar = !!plan && !summary && plan.isRead && !!cards && cards.items.
 const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 ---
 
-<Layout title="Engofy" user={user}>
+<Layout
+  title={user ? 'Engofy' : HOME_TITLE}
+  description={user ? undefined : HOME_DESCRIPTION}
+  user={user}
+>
+  {
+    !user && (
+      <Fragment slot="head">
+        <script is:inline type="application/ld+json" set:html={jsonLd} />
+      </Fragment>
+    )
+  }
   {
     !user && (
       <div class="landing">
         <section class="landing-hero">
-          <p class="eyebrow">English through reading</p>
-          <h1>Engofy</h1>
+          <p class="eyebrow">Engofy</p>
+          <h1>Learn English by reading short texts</h1>
           <p class="landing-hero__lead">
             Learn English through short authentic texts.
           </p>
@@ -154,6 +231,48 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
               ))
             }
           </div>
+        </section>
+
+        {latestPosts.length > 0 && (
+          <section class="landing-section" aria-label="Latest posts">
+            <h2 class="landing-heading">Latest texts</h2>
+            <ul class="latest">
+              {latestPosts.map((post) => (
+                <li class="card latest__item">
+                  {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
+                  <h3>
+                    <a href={postUrl(post)}>{post.title ?? 'Untitled'}</a>
+                  </h3>
+                  <p>{post.excerpt}</p>
+                </li>
+              ))}
+            </ul>
+            <p class="landing-more">
+              <a href="/posts">See all posts →</a>
+            </p>
+          </section>
+        )}
+
+        <section class="landing-section" aria-label="Grammar">
+          <h2 class="landing-heading">Grammar, level by level</h2>
+          <p class="landing-more">
+            Every construction from the Cambridge English Grammar Profile,
+            with examples.
+          </p>
+          {featuredGrammar.length > 0 && (
+            <ul class="grammar-links">
+              {featuredGrammar.map((con) => (
+                <li>
+                  <a href={`/grammar/${encodeURIComponent(con.slug)}`}>
+                    {con.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p class="landing-more">
+            <a href="/grammar">Browse the grammar reference →</a>
+          </p>
         </section>
 
         <section class="card card--soft landing-cta">
@@ -360,6 +479,53 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     text-align: center;
     color: var(--color-ink-soft);
     font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .landing-heading {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+  .latest {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: 1rem;
+  }
+  .latest__item h3 {
+    margin: 0.5rem 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .latest__item h3 a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .latest__item h3 a:hover {
+    color: var(--color-brand-strong);
+  }
+  .latest__item p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+  }
+  .landing-more {
+    margin: 1rem 0 0;
+    text-align: center;
+    color: var(--color-ink-soft);
+  }
+  .grammar-links {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
     font-weight: 700;
   }
   .landing-cta {
