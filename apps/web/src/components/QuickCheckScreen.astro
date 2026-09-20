@@ -25,7 +25,7 @@ const RATINGS = [
   data-qc-screen="question"
   data-qc-kind={step.kind}
   data-answer-index={step.kind === 'choose' ? String(step.answerIndex) : undefined}
-  data-card-id={step.kind === 'recall' ? step.cardId : undefined}
+  data-card-id={step.kind === 'recall' ? (step.cardId ?? undefined) : undefined}
   data-answer={step.kind === 'type' ? step.answer : step.kind === 'order' ? step.answerText : undefined}
   data-order={step.kind === 'order' ? JSON.stringify(step.order) : undefined}
   tabindex="-1"

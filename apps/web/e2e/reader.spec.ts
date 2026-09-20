@@ -186,18 +186,94 @@ test.describe('reader page (guest)', () => {
     await expect(translation).toHaveCount(0);
   });
 
-  test('asks a guest to sign in when saving from the popup', async ({
+  test("keeps a guest's saved card in the browser and shows it as Learning", async ({
     page,
   }) => {
+    let serverAdds = 0;
+    await page.route('**/partials/lexicon-action', (route) => {
+      serverAdds += 1;
+      return route.abort();
+    });
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
 
     await reader.wordLabel('perambulate').click();
     await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    await expect(reader.popup.locator('.lex-state--learning')).toBeVisible();
+    await expect(
+      reader.popup.getByRole('link', { name: 'Sign in' }),
+    ).toHaveCount(0);
+    const id = await reader
+      .wordLabel('perambulate')
+      .getAttribute('data-word-definition-id');
+    const stored = await page.evaluate(() =>
+      localStorage.getItem('guest-deck'),
+    );
+    expect(JSON.parse(stored ?? '[]')).toEqual([{ kind: 'word', id }]);
+
+    // The label stays highlighted, and reopening it after a reload still
+    // shows the saved state.
+    await page.reload();
+    await reader.wordLabel('perambulate').click();
+    await expect(reader.popup.locator('.lex-state--learning')).toBeVisible();
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+    expect(serverAdds).toBe(0);
+  });
+
+  test('still asks a guest to sign in for "I know it"', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: 'I know it' }).click();
     await expect(
       reader.popup.getByRole('link', { name: 'Sign in' }),
     ).toBeVisible();
-    await expect(reader.wordLabel('perambulate')).toHaveCount(1);
+  });
+
+  test('the Quick check intro is only as tall as its content', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const intro = await reader.qcScreen('intro').boundingBox();
+    await reader.startQuickCheck();
+    const question = await reader.qcScreen('question').boundingBox();
+    if (!intro || !question) {
+      throw new Error('quick check screens have no box');
+    }
+    expect(intro.height).toBeLessThan(question.height);
+  });
+
+  test('the Quick check summary invites a guest to sign up', async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        'guest-deck',
+        JSON.stringify([{ kind: 'word', id: 'x' }]),
+      ),
+    );
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader
+      .qcScreen('intro')
+      .getByRole('button', { name: 'Skip for now' })
+      .click();
+    const summary = reader.qcScreen('summary');
+    await expect(summary.locator('[data-qc-signup]')).toContainText(
+      'Keep what you learned',
+    );
+    await expect(summary.locator('[data-guest-saved]')).toHaveText(
+      'You saved 1 card here.',
+    );
+    await expect(
+      summary.getByRole('link', { name: 'Sign up free' }),
+    ).toHaveAttribute('href', '/login');
   });
 
   test('"I know it" settles the target and drops its label', async ({
@@ -252,7 +328,7 @@ test.describe('reader page (guest)', () => {
     expect(popupBox.x + popupBox.width).toBeGreaterThan(labelBox.x);
 
     await section.getByRole('button', { name: 'Add to deck' }).click();
-    await expect(section.getByRole('link', { name: 'Sign in' })).toBeVisible();
+    await expect(section.locator('.lex-state--learning')).toBeVisible();
   });
 
   test('shows lexical and grammar sections when the labels overlap', async ({
@@ -1260,6 +1336,40 @@ test.describe('reader popup deck state (signed in, empty deck)', () => {
     await expect(
       reader.popup.getByRole('button', { name: 'Add to deck' }),
     ).toHaveCount(0);
+  });
+});
+
+test.describe('guest deck import (signed in)', () => {
+  test.use({ storageState: DECK_STATE });
+
+  test('moves the cards saved as a guest into the account', async ({
+    page,
+  }) => {
+    // Stubbed so the deck user's data stays untouched.
+    const imported = page.waitForRequest('**/partials/import-guest-deck');
+    await page.route('**/partials/import-guest-deck', (route) =>
+      route.fulfill({
+        contentType: 'application/json',
+        body: '{"imported":1}',
+      }),
+    );
+    const entry = {
+      kind: 'word',
+      id: '11111111-1111-4111-8111-111111111111',
+    };
+    await page.addInitScript((value) => {
+      if (!sessionStorage.getItem('seeded')) {
+        sessionStorage.setItem('seeded', '1');
+        localStorage.setItem('guest-deck', JSON.stringify([value]));
+      }
+    }, entry);
+    await new ReaderPage(page).goto(READER_SLUG);
+
+    const request = await imported;
+    expect(request.postDataJSON()).toEqual([entry]);
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem('guest-deck')))
+      .toBeNull();
   });
 });
 

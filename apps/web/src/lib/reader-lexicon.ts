@@ -41,6 +41,7 @@ export const LEXICON_ACTION_MESSAGE = {
   signIn: '<a href="/login">Sign in</a> to save this.',
   deckFull:
     'Free deck is full — <a href="/pricing">go Premium</a> for unlimited cards.',
+  guestDeckFull: 'Deck is full — <a href="/login">sign in</a> to keep saving.',
   failed: 'Could not save, try again.',
 } as const;
 

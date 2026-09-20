@@ -1,7 +1,7 @@
 // View models for the reader's Quick check card: one step per screen, built
 // from data the post page already has (exercises, lexicon, this post's due
 // cards). Nothing here needs an extra API call.
-import type { LexiconData } from './reader-lexicon';
+import { entryTerm, type LexiconData } from './reader-lexicon';
 import type { Block, Doc, PostDetail, PracticeItem } from './types';
 
 export interface ChooseStep {
@@ -15,7 +15,8 @@ export interface ChooseStep {
 
 export interface RecallStep {
   kind: 'recall';
-  cardId: string;
+  // null for a guest's word, which has no card to grade.
+  cardId: string | null;
   type: 'word' | 'phrase';
   term: string;
   phonetic: string | null;
@@ -196,6 +197,38 @@ function toRecall(item: PracticeItem): RecallStep | null {
   };
 }
 
+// A guest has no due cards: the text's own unsettled words and phrases (those
+// the match question doesn't already use) become self-graded recall questions.
+function toGuestRecalls(
+  lexicon: LexiconData,
+  skipIds: Set<string>,
+): RecallStep[] {
+  const steps: RecallStep[] = [];
+  for (const entry of [
+    ...Object.values(lexicon.words),
+    ...Object.values(lexicon.phrases),
+  ]) {
+    if (
+      steps.length === MAX_RECALL ||
+      !entry.definition ||
+      entry.state !== 'new' ||
+      skipIds.has(`${entry.kind}:${entry.id}`)
+    ) {
+      continue;
+    }
+    steps.push({
+      kind: 'recall',
+      cardId: null,
+      type: entry.kind,
+      term: entryTerm(entry),
+      phonetic: entry.kind === 'word' ? entry.phonetic : null,
+      definition: entry.definition,
+      context: entry.example,
+    });
+  }
+  return steps;
+}
+
 // Words and phrases the post marks for the viewer, each with a definition.
 // Terms and meanings are unique so a pair has exactly one right answer.
 function toMatch(lexicon: LexiconData): MatchStep | null {
@@ -236,16 +269,19 @@ export function buildQuickCheckSteps(
   exercises: PostDetail['exercises'],
   lexicon: LexiconData,
   dueCards: PracticeItem[],
+  guest = false,
 ): QuickCheckStep[] {
+  const match = toMatch(lexicon);
   const choose = exercises
     .map((ex) => toChoose(ex, lexicon))
     .filter((s): s is ChooseStep => s !== null)
     .slice(0, MAX_CHOOSE);
-  const recall = dueCards
-    .map(toRecall)
-    .filter((s): s is RecallStep => s !== null)
-    .slice(0, MAX_RECALL);
-  const match = toMatch(lexicon);
+  const recall = guest
+    ? toGuestRecalls(lexicon, new Set(match?.pairs.map((p) => p.id)))
+    : dueCards
+        .map(toRecall)
+        .filter((s): s is RecallStep => s !== null)
+        .slice(0, MAX_RECALL);
   const drills = exercises
     .map(toDrill)
     .filter((s): s is QuickCheckStep => s !== null)

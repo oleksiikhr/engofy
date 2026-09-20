@@ -1769,13 +1769,17 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 34rem;
-  min-height: 35rem;
   margin-inline: auto;
   border: 1px solid var(--color-border);
   border-radius: 1.5rem;
   background: var(--color-card);
   box-shadow: var(--shadow-pop);
   padding: 1.5rem;
+}
+/* Only the questions hold a fixed height, so the card doesn't jump between
+   them; the intro and summary are as tall as their content. */
+.qc:not(.qc--inline) .qc__screen[data-qc-screen='question'] {
+  min-height: 32rem;
 }
 .qc__screen {
   display: flex;
@@ -2000,6 +2004,14 @@ body {
 .qc__tile-num .ic {
   width: 1.25rem;
   height: 1.25rem;
+}
+.qc__signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
 }
 .qc__actions--end {
   gap: 0.4rem;

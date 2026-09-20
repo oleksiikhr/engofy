@@ -89,7 +89,7 @@ const dueCount = dueResponse?.dueCount ?? 0;
     <title>{title}</title>
     <slot name="head" />
   </head>
-  <body>
+  <body data-signed-in={user ? 'true' : undefined}>
     <SiteHeader user={user} active={active} streak={streak} dueCount={dueCount} />
     <main class:list={['site-main', { 'reading-measure': measure }]}>
       <slot />
@@ -101,6 +101,15 @@ const dueCount = dueResponse?.dueCount ?? 0;
       // markup client-side (reader tooltip, etc.).
       import htmx from 'htmx.org';
       window.htmx = htmx;
+    </script>
+    <script>
+      // Cards saved as a guest move into the account on the first signed-in
+      // page load.
+      import { importGuestDeck } from '../lib/guest-deck';
+
+      if (document.body.dataset.signedIn === 'true') {
+        importGuestDeck();
+      }
     </script>
   </body>
 </html>
