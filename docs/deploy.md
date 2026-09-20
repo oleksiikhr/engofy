@@ -85,8 +85,6 @@ printf %s 'SUPER-SECRET-DB-PASSWORD'      | docker secret create engofy_db_passw
 printf %s 'sk-ant-...'                    | docker secret create engofy_anthropic_api_key -
 printf %s 're_...'                        | docker secret create engofy_resend_api_key -
 printf %s '123456:ABC-telegram-bot-token' | docker secret create engofy_telegram_bot_token -
-printf %s '<R2_ACCESS_KEY_ID>'            | docker secret create engofy_s3_access_key -
-printf %s '<R2_SECRET_ACCESS_KEY>'        | docker secret create engofy_s3_secret_key -
 printf %s 'https://<key>@<org>.ingest.sentry.io/<project>' | docker secret create engofy_sentry_dsn -
 ```
 
@@ -101,8 +99,6 @@ cp .env.production.example /opt/engofy/infra/.env.production
 # then edit /opt/engofy/infra/.env.production:
 #   PUBLIC_URL=https://engofy.com
 #   IMAGE_TAG=<first release tag>          # deploy.sh overrides this per run
-#   S3_ENDPOINT=https://<R2_ACCOUNT_ID>.r2.cloudflarestorage.com
-#   S3_BUCKET=engofy   S3_REGION=auto
 #   TELEGRAM_ADMIN_USER_ID=...  TELEGRAM_CHANNEL_ID=@engofy
 #   GOOGLE_CLIENT_ID=...  PUBLIC_GOOGLE_CLIENT_ID=...   (blank = Google login off)
 #   SENTRY_RELEASE=<tag>
@@ -287,16 +283,6 @@ docker exec -i "$cid" pg_restore --clean --if-exists --no-owner \
 Restore into a fresh DB first if you can, and point `web`/`worker`/`cron` at it
 before switching for real.
 
-### R2 / S3 note
-
-App uploads and backups both use R2. The app's `S3Service` uses only
-`PutObject` / `GetObject`, both fully supported. Config: `S3_ENDPOINT` = the R2
-`https://<account>.r2.cloudflarestorage.com`, `S3_REGION=auto`, path-style (the
-client sets `forcePathStyle` automatically when an endpoint is set). If an
-upload ever fails with a checksum 501, set
-`requestChecksumCalculation: 'when_required'` on the `S3Client` in
-`src/core/s3/s3.module.ts`.
-
 ---
 
 ## 8. Secret rotation
@@ -314,7 +300,7 @@ upload ever fails with a checksum 501, set
 4. `./deploy.sh` (redeploys with the new secret).
 5. `docker secret rm engofy_db_password`.
 
-API keys (Anthropic, Resend, Telegram, R2, Sentry) are simpler — steps 1, 2, 4,
+API keys (Anthropic, Resend, Telegram, Sentry) are simpler — steps 1, 2, 4,
 5 only.
 
 ---
