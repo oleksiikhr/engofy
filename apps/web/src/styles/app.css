@@ -488,6 +488,26 @@ body {
   .site-header-right {
     margin-left: auto;
   }
+  /* A guest has two links and one button: everything fits beside the logo, so
+     the header stays a single row. Log in and Get started both open /login. */
+  .site-header--guest .site-nav {
+    order: 0;
+    flex: 1;
+    flex-basis: 0;
+    justify-content: flex-start;
+    margin-inline: 0;
+  }
+  .site-header--guest .site-header-inner {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+  .site-header--guest .site-header-right .btn:not(.btn--ghost) {
+    display: none;
+  }
+  .site-header--guest .site-header-right .btn--ghost {
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+  }
   .menu {
     max-width: calc(100vw - 3rem);
   }
@@ -1315,6 +1335,13 @@ body {
 }
 /* A toggle pill: tone wash at rest, solid tone (with a check, so the state
    isn't colour alone) while pressed. */
+.reader-toolbar__tools {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
 .reader-toolbar__btn {
   display: inline-flex;
   align-items: center;
@@ -2102,10 +2129,45 @@ body {
     align-items: center;
     min-height: 2.75rem;
   }
-  /* The tools bar is three to four rows tall here; pinned, it would eat a
-     fifth of the screen while reading. */
+  /* The tools are one swipeable row that runs to the screen edge, so the next
+     button peeks out as the cue to scroll. Pinned or wrapped over four rows it
+     would eat half the first screen. */
   .reader-toolbar {
     position: static;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+  }
+  .reader-toolbar__tools {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .reader-toolbar__tools::-webkit-scrollbar {
+    display: none;
+  }
+  .reader-toolbar__tools > *,
+  .reader-toolbar__btn {
+    flex: none;
+  }
+  .reader-toolbar__size {
+    margin-left: 0;
+  }
+  .reader-hint {
+    margin-bottom: 0.5rem;
+  }
+  .reader-hint__body {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .reader-key {
+    margin-bottom: 0.75rem;
+    row-gap: 0.25rem;
+  }
+  .reader-key__density {
+    margin-left: 0;
   }
   .practice__grades {
     display: grid;

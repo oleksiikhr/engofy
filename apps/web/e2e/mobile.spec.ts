@@ -101,6 +101,22 @@ test.describe('phone width, reader and practice', () => {
     await expect(reader.toolbar).toHaveCSS('position', 'static');
   });
 
+  test('the reader tools are one swipeable row', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const tops = await reader.toolbar
+      .locator('.reader-toolbar__tools > button, .reader-toolbar__step')
+      .evaluateAll((buttons) =>
+        buttons.map((button) => Math.round(button.getBoundingClientRect().top)),
+      );
+    expect(tops.length).toBeGreaterThan(3);
+    expect(new Set(tops).size).toBe(1);
+    const tools = reader.toolbar.locator('.reader-toolbar__tools');
+    expect(await tools.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
+      true,
+    );
+  });
+
   test('keyboard hints are hidden on a touch screen', async ({ page }) => {
     await page.goto('/practice');
     await expect(page.locator('.practice__key').first()).toBeHidden();
@@ -116,5 +132,29 @@ test.describe('phone width, reader and practice', () => {
       );
     expect(tops).toHaveLength(4);
     expect(new Set(tops).size).toBe(2);
+  });
+});
+
+test.describe('phone width, guest reader', () => {
+  test.use({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+
+  test('the header is one row', async ({ page }) => {
+    await page.goto(`/posts/${READER_SLUG}`);
+    const header = await page.locator('.site-header').boundingBox();
+    // Logo row only: a second nav row would push this past ~100px.
+    expect(header?.height).toBeLessThan(90);
+    await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible();
+  });
+
+  test('the first paragraph starts in the upper part of the first screen', async ({
+    page,
+  }) => {
+    await page.goto(`/posts/${READER_SLUG}`);
+    const box = await page.locator('.reading-body > *').first().boundingBox();
+    expect(box?.y).toBeLessThan(844 * 0.6);
   });
 });
