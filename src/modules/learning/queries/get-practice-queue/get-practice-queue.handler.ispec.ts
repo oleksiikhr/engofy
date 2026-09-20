@@ -194,7 +194,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('returns only due cards, soonest first, with resolved display text', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const word = factories(em).word.makeOne({ lemma: 'ephemeral' });
     const definition = factories(em).wordDefinition.makeOne({
@@ -233,7 +233,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('caps the queue at the requested limit', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const definitions = Array.from({ length: 5 }, () => {
       const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
@@ -260,7 +260,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('throttles New cards to the daily limit but never caps due reviews, and reports the holdback', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const newDefinitions = Array.from(
       { length: DAILY_NEW_CARD_LIMIT + 3 },
@@ -311,7 +311,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('bypassNewLimit skips the daily cap and reports no holdback', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const definitions = Array.from({ length: DAILY_NEW_CARD_LIMIT + 3 }, () => {
       const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
@@ -340,7 +340,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it("persists today's spent budget across calls instead of resetting per fetch", async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     // Simulate cards that already graduated from New earlier today — their
     // earliest review_logs row is today, so they count against today's
@@ -404,7 +404,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('puts in-progress cards ahead of New ones even when the New cards are due earlier', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const definitions = Array.from({ length: 3 }, () => {
       const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
@@ -454,7 +454,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('filters the queue to the requested card types', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const word = factories(em).word.makeOne({ lemma: 'ephemeral' });
     const definition = factories(em).wordDefinition.makeOne({
@@ -498,7 +498,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('reports hasAnyCards separately from what is due or matches the filter', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const empty = await suite.query(new GetPracticeQueueQuery(userId, 20));
     expect(empty).toMatchObject({ items: [], hasAnyCards: false });
@@ -527,7 +527,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('excludes archived cards from the queue', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -559,7 +559,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('resolves a word target from WordDefinition instead of hardcoded null', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -583,7 +583,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('resolves a phrase target definition, with no phonetic', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const phrase = factories(em).phrase.makeOne({
       phraseText: 'give up',
       definition: 'to stop trying',
@@ -604,7 +604,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('finds a real context sentence for a word from a recently read post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -631,7 +631,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('finds a real context sentence for a phrase from a recently read post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const phrase = factories(em).phrase.makeOne({ phraseText: 'give up' });
     await em.flush();
     const postId = await seedPostWithPhraseSpan(
@@ -654,7 +654,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('leaves contextSentence null with no fallback when nothing is found', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -691,7 +691,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('only searches the last 3 distinct read posts, most recent first', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -742,7 +742,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('resolves a grammar target with kicker, example and detail slug', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { point, slug } = await seedGrammarPoint(em);
     const category = await em.findOneOrFail(GrammarCategory, {
       id: (await em.findOneOrFail(GrammarConstruction, { slug })).categoryId,
@@ -769,7 +769,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('leaves grammar kicker and slug null when the construction row is missing', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const point = factories(em).grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.B1,
@@ -792,7 +792,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('finds a real context sentence for grammar via grammar_matches, most recent read first', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { point } = await seedGrammarPoint(em);
 
     const olderPostId = await seedPostWithGrammarMatch(
@@ -823,7 +823,7 @@ describe('GetPracticeQueueHandler', () => {
 
   it('leaves grammar contextSentence null with no fallback when no match is in the last 3 reads', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { point } = await seedGrammarPoint(em);
     const { point: otherPoint } = await seedGrammarPoint(em);
 

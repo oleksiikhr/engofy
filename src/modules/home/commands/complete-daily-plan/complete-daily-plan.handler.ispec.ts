@@ -16,7 +16,7 @@ describe('CompleteDailyPlanHandler', () => {
   });
 
   it('sets completedAt on the first call', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = await suite.factories.post.createOne();
     suite.factories.dailyPlan.makeOne({
       userId,
@@ -36,7 +36,7 @@ describe('CompleteDailyPlanHandler', () => {
   });
 
   it('is idempotent — a second call keeps the first completion time', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = await suite.factories.post.createOne();
     suite.factories.dailyPlan.makeOne({
       userId,

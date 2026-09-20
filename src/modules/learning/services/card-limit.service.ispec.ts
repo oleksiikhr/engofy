@@ -36,7 +36,7 @@ describe('CardLimitService', () => {
   }
 
   it('allows a free user below the cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     await suite.orm.em.flush();
 
@@ -44,7 +44,7 @@ describe('CardLimitService', () => {
   });
 
   it('rejects a free user at the cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT);
     await suite.orm.em.flush();
 
@@ -54,7 +54,7 @@ describe('CardLimitService', () => {
   });
 
   it('does not count archived cards against the cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     suite.factories.learningCard.makeOne({
       userId,
@@ -75,7 +75,7 @@ describe('CardLimitService', () => {
   });
 
   it('lets a premium user past the cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillCards(suite.orm.em, userId, FREE_CARD_LIMIT + 5);
     suite.factories.subscription.makeOne({
       userId,
@@ -89,7 +89,7 @@ describe('CardLimitService', () => {
 
   describe('getUsage', () => {
     it('reports the used count against the free cap, ignoring archived cards', async () => {
-      const userId = uuidv7();
+      const userId = (await suite.factories.user.createOne()).id;
       fillCards(suite.orm.em, userId, 3);
       suite.factories.learningCard.makeOne({
         userId,
@@ -113,7 +113,7 @@ describe('CardLimitService', () => {
     });
 
     it('reports no limit for a premium user', async () => {
-      const userId = uuidv7();
+      const userId = (await suite.factories.user.createOne()).id;
       fillCards(suite.orm.em, userId, 2);
       suite.factories.subscription.makeOne({
         userId,

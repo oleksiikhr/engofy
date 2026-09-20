@@ -30,7 +30,7 @@ describe('RemoveCardHandler', () => {
   }
 
   it('physically deletes a never-reviewed card', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
@@ -47,7 +47,7 @@ describe('RemoveCardHandler', () => {
   });
 
   it('archives a reviewed phrase card and records a Known disposition', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const phrase = suite.factories.phrase.makeOne({
       phraseText: `p-${uuidv7()}`,
     });
@@ -74,7 +74,7 @@ describe('RemoveCardHandler', () => {
   });
 
   it('archives a reviewed word card and records a Known disposition on that sense', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
     const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
@@ -103,7 +103,7 @@ describe('RemoveCardHandler', () => {
   });
 
   it('overwrites an existing disposition rather than duplicating it', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const phrase = suite.factories.phrase.makeOne({
       phraseText: `p-${uuidv7()}`,
     });
@@ -137,7 +137,7 @@ describe('RemoveCardHandler', () => {
       pos: PartOfSpeech.Noun,
     });
     const card = makeCard({
-      userId: uuidv7(),
+      userId: (await suite.factories.user.createOne()).id,
       wordDefinitionId: definition.id,
     });
     await suite.orm.em.flush();

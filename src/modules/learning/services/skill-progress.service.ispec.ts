@@ -47,7 +47,7 @@ describe('SkillProgressService', () => {
     ({ grammarUsagePointId }) as LearningCard;
 
   it('unlockConstruction creates one progress row and stamps unlockedAt', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { usagePointId, constructionId } = await seedUsagePoint(suite.orm.em);
 
     await service.unlockConstruction(userId, usagePointId);
@@ -63,13 +63,13 @@ describe('SkillProgressService', () => {
   });
 
   it('unlockConstruction is a no-op for an unknown usage point', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     await service.unlockConstruction(userId, uuidv7());
     expect(await suite.orm.em.count(UserSkillProgress, { userId })).toBe(0);
   });
 
   it('recordGrammarReview bumps totals and streak on a correct grade', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { usagePointId, constructionId } = await seedUsagePoint(suite.orm.em);
 
     await service.recordGrammarReview(
@@ -89,7 +89,7 @@ describe('SkillProgressService', () => {
   });
 
   it('recordGrammarReview resets the streak on "again"', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const { usagePointId, constructionId } = await seedUsagePoint(suite.orm.em);
 
     // Each review is its own unit of work in production (the facade flushes
@@ -117,7 +117,7 @@ describe('SkillProgressService', () => {
   });
 
   it('recordGrammarReview is a no-op for a card with no grammar usage point', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     await service.recordGrammarReview(
       userId,
       gradeCard(null),

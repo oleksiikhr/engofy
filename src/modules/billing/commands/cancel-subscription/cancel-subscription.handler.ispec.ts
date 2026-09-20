@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { BillingModule } from '../../billing.module.js';
 import { Subscription } from '../../entities/subscription.entity.js';
@@ -12,7 +11,7 @@ describe('CancelSubscriptionHandler', () => {
   const suite = createIntegrationSuite({ imports: [BillingModule] });
 
   it('ends an active premium subscription immediately', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
@@ -27,7 +26,7 @@ describe('CancelSubscriptionHandler', () => {
   });
 
   it('is a no-op for a user without an active subscription', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     await expect(
       suite.command(new CancelSubscriptionCommand(userId)),
@@ -36,7 +35,7 @@ describe('CancelSubscriptionHandler', () => {
   });
 
   it('leaves an already-lapsed period untouched', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const lapsedEnd = DateTime.now().minus({ days: 3 });
     suite.factories.subscription.makeOne({
       userId,

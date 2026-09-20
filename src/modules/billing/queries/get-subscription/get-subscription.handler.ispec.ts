@@ -26,7 +26,7 @@ describe('GetSubscriptionHandler', () => {
   });
 
   it('returns a plain view for a running premium period', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const end = DateTime.now().plus({ days: 20 });
     seedSubscription(userId, end);
     await suite.orm.em.flush();
@@ -45,7 +45,7 @@ describe('GetSubscriptionHandler', () => {
   });
 
   it('treats a lapsed period as free tier', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     seedSubscription(userId, DateTime.now().minus({ days: 1 }));
     await suite.orm.em.flush();
     suite.orm.em.clear();

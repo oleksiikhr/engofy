@@ -23,7 +23,7 @@ describe('SetDispositionHandler', () => {
   }
 
   it('creates a disposition row for a word definition target', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const wordDefinitionId = await seedWordDefinition();
 
     const view = await suite.command(
@@ -43,7 +43,7 @@ describe('SetDispositionHandler', () => {
   });
 
   it('overwrites the stored value on a second call for the same target', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const phrase = suite.factories.phrase.makeOne({
       phraseText: `p-${uuidv7()}`,
     });

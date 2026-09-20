@@ -10,8 +10,8 @@ describe('GetDueCardCountHandler', () => {
   const suite = createIntegrationSuite({ imports: [LearningModule] });
 
   it('counts only the cards due now or in the past, scoped to the user', async () => {
-    const userId = uuidv7();
-    const otherUserId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
+    const otherUserId = (await suite.factories.user.createOne()).id;
     const em = suite.orm.em;
 
     factories(em).learningCard.makeOne({
@@ -57,7 +57,7 @@ describe('GetDueCardCountHandler', () => {
   });
 
   it('excludes archived cards', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),

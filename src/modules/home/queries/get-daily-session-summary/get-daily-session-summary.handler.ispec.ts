@@ -52,7 +52,7 @@ describe('GetDailySessionSummaryHandler', () => {
   });
 
   it('counts only cards created today and reviews logged today', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const today = DateTime.now();
     const yesterday = today.minus({ days: 1 });
 
@@ -70,8 +70,8 @@ describe('GetDailySessionSummaryHandler', () => {
   });
 
   it("never counts another user's cards or reviews", async () => {
-    const userId = uuidv7();
-    const otherUserId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
+    const otherUserId = (await suite.factories.user.createOne()).id;
     const today = DateTime.now();
 
     const otherCard = seedCard(suite.orm.em, otherUserId, today);
