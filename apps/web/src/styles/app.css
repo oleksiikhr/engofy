@@ -331,6 +331,7 @@ body {
 /* Daily-goal ring: the arc is a percentage via pathLength="100". */
 .goal {
   display: inline-flex;
+  border-radius: 999px;
   width: 1.9rem;
   height: 1.9rem;
   color: var(--color-brand);
@@ -363,6 +364,37 @@ body {
 }
 .goal--done .goal__check {
   display: block;
+}
+/* Reward: the ring pulses and the check pops when the daily goal is reached
+   (lib/guest-header.ts adds the class). */
+.goal--reached {
+  animation: reward-pulse 0.9s ease-out;
+}
+.goal--reached .goal__check {
+  animation: reward-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s backwards;
+}
+@keyframes reward-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-brand) 45%, transparent);
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0.75rem transparent;
+    transform: scale(1);
+  }
+}
+@keyframes reward-pop {
+  from {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(90deg) scale(1);
+  }
 }
 .guest-progress {
   display: flex;
@@ -1410,6 +1442,42 @@ body {
 .lex-state--learned {
   color: var(--color-success-ink);
 }
+/* Reward: the label of a card the visitor just saved pops in with a check. */
+.lex-actions--fresh .lex-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  animation: reward-badge 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lex-actions--fresh .lex-state::before {
+  content: '';
+  width: 0.7rem;
+  height: 0.4rem;
+  margin: -0.15rem 0.1rem 0 0;
+  border-bottom: 2.5px solid currentColor;
+  border-left: 2.5px solid currentColor;
+  transform: rotate(-45deg);
+  animation: reward-tick 0.4s ease-out 0.15s backwards;
+}
+@keyframes reward-badge {
+  0% {
+    background-color: color-mix(in srgb, var(--color-warning) 35%, transparent);
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+@keyframes reward-tick {
+  from {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0);
+  }
+}
 
 /* --- Reader toolbar + token layers. `[data-tok]` spans are rendered on the
    server (lib/render-tokens.ts); each mode is a value in html[data-reader-modes]
@@ -2153,6 +2221,28 @@ body {
 .qc__ring[hidden] {
   display: none;
 }
+/* Reward: the score ring draws itself in and the title pops when the summary
+   appears. The arc's own dasharray is the end state. */
+.qc__screen[data-qc-screen='summary']:not([hidden]) [data-qc-ring-bar] {
+  animation: reward-ring-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}
+.qc__screen[data-qc-screen='summary']:not([hidden]) .qc__ring {
+  animation: reward-badge 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.qc__screen[data-qc-screen='summary']:not([hidden]) .qc__title {
+  animation: reward-rise 0.5s ease-out 0.35s backwards;
+}
+@keyframes reward-ring-draw {
+  from {
+    stroke-dasharray: 0 302;
+  }
+}
+@keyframes reward-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
 .qc__tiles {
   display: flex;
   gap: 0.625rem;
@@ -2435,5 +2525,18 @@ body {
   .practice__key,
   .qc kbd {
     display: none;
+  }
+}
+
+/* Reward animations are skipped entirely, not just shortened. */
+@media (prefers-reduced-motion: reduce) {
+  .goal--reached,
+  .goal--reached .goal__check,
+  .lex-actions--fresh .lex-state,
+  .lex-actions--fresh .lex-state::before,
+  .qc__screen[data-qc-screen='summary'] [data-qc-ring-bar],
+  .qc__screen[data-qc-screen='summary'] .qc__ring,
+  .qc__screen[data-qc-screen='summary'] .qc__title {
+    animation: none !important;
   }
 }

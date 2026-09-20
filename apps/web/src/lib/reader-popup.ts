@@ -284,7 +284,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       const row = popup.querySelector(`#${lexiconActionsId(target)}`);
       if (row) {
         row.outerHTML = saved
-          ? lexiconActionsHtml(target, 'learning')
+          ? lexiconActionsHtml(target, 'learning', undefined, true)
           : lexiconActionsHtml(
               target,
               'new',
