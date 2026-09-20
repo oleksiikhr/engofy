@@ -12,6 +12,12 @@ import {
 } from '../../lib/quick-check-steps';
 import { postSlugId } from '../../lib/post-url';
 import { CEFR_LEVELS } from '../../lib/posts-list';
+import {
+  CEFR_DESCRIPTIONS,
+  pickNextPost,
+  readingMinutes,
+  seenSummary,
+} from '../../lib/reader-summary';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import { publicOrigin } from '../../lib/site';
@@ -19,6 +25,7 @@ import type {
   CefrLevel,
   NewCardBudgetResponse,
   PostDetail,
+  PostsListResponse,
   PracticeQueueResponse,
   ProfileHub,
   StreakResponse,
@@ -81,6 +88,27 @@ const summaryText =
   summaryParts.length > 0
     ? `This text had ${summaryParts.join(' and ')} to learn.`
     : 'This text had nothing new for your level.';
+const seen = seenSummary(lexicon);
+const minutes = readingMinutes(post.doc);
+
+// The next text at this level: an unread one for a signed-in reader, any
+// other one otherwise. Best-effort — the final screen renders without it.
+const nextPosts = async (unreadOnly: boolean) => {
+  if (!post.cefrLevel) {
+    return null;
+  }
+  const query = new URLSearchParams({ cefr: post.cefrLevel, limit: '3' });
+  if (unreadOnly) {
+    query.set('unreadOnly', 'true');
+  }
+  const list = await apiGetOrNull<PostsListResponse>(
+    `/content/posts?${query}`,
+    { request: Astro.request },
+  ).catch(() => null);
+  return list ? pickNextPost(list.items, post.shortId) : null;
+};
+const nextPost =
+  (user ? await nextPosts(true) : null) ?? (await nextPosts(false));
 
 // Both are best-effort, signed-in only: an API on the previous release lacks
 // the budget route, and neither may take the page down.
@@ -142,6 +170,7 @@ const isRead = post.isRead ?? false;
     {post.cefrLevel && <meta property="article:tag" content={post.cefrLevel} />}
     <script is:inline type="application/ld+json" set:html={jsonLd} />
   </Fragment>
+  <div class="reader-progress" data-reader-progress role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
   <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining} data-guest={user ? undefined : ''}>
     <article class="reader-article">
       <header class="post-head">
@@ -150,8 +179,13 @@ const isRead = post.isRead ?? false;
           Posts
         </a>
         <div class="post-head__meta">
-          {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
+          {
+            post.cefrLevel && (
+              <button type="button" class="badge post-head__level" data-level-badge aria-expanded="false" aria-controls="level-note" title="What does this level mean?">{post.cefrLevel}</button>
+            )
+          }
           <time datetime={post.publishedAt}>{published}</time>
+          <span class="post-head__time" data-reading-time>{minutes} min read</span>
           {
             user && (
               <span class="post-head__read" data-read-state data-read={String(isRead)}>
@@ -163,6 +197,13 @@ const isRead = post.isRead ?? false;
             )
           }
         </div>
+        {
+          post.cefrLevel && (
+            <p class="post-head__level-note" id="level-note" data-level-note hidden>
+              <b>{post.cefrLevel}</b> — {CEFR_DESCRIPTIONS[post.cefrLevel]} A1 is the easiest level, C2 the hardest.
+            </p>
+          )
+        }
         <h1>{title}</h1>
         {
           (post.sourceType !== 'original' || post.sourceLink) && (
@@ -266,6 +307,8 @@ const isRead = post.isRead ?? false;
       steps={steps}
       postTitle={post.title}
       summaryText={summaryText}
+      seen={seen}
+      nextPost={nextPost}
       signedIn={Boolean(user)}
       streak={streak}
       dueCount={dueCount}
@@ -280,7 +323,9 @@ const isRead = post.isRead ?? false;
   import { initReaderFinal } from '../../lib/reader-final';
   import { initReadState } from '../../lib/reader-read';
   import { initReaderHelp } from '../../lib/reader-help';
+  import { initLevelNote } from '../../lib/reader-level-note';
   import { initReaderPopup } from '../../lib/reader-popup';
+  import { initReaderProgress } from '../../lib/reader-progress';
   import { initReaderStudy } from '../../lib/reader-study';
   import { initReaderToolbar } from '../../lib/reader-toolbar';
 
@@ -289,6 +334,15 @@ const isRead = post.isRead ?? false;
   const lexicon: LexiconData | null = raw ? JSON.parse(raw) : null;
   if (body && lexicon) {
     initReaderPopup(body, lexicon);
+  }
+  const progress = document.querySelector<HTMLElement>('[data-reader-progress]');
+  if (body && progress) {
+    initReaderProgress(progress, body);
+  }
+  const levelBadge = document.querySelector<HTMLElement>('[data-level-badge]');
+  const levelNote = document.querySelector<HTMLElement>('[data-level-note]');
+  if (levelBadge && levelNote) {
+    initLevelNote(levelBadge, levelNote);
   }
   const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
   if (toolbar) {
@@ -348,6 +402,26 @@ const isRead = post.isRead ?? false;
     font-weight: 700;
     color: var(--color-ink-faint);
     margin-bottom: 0.75rem;
+  }
+  .post-head__time {
+    font-weight: 600;
+  }
+  .post-head__level {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .post-head__level-note {
+    margin-bottom: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .post-head__level-note[hidden] {
+    display: none;
   }
   .post-head__read {
     display: inline-flex;
