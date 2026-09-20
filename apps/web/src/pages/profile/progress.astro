@@ -28,7 +28,7 @@ const totalCount =
   profile?.categories.reduce((n, c) => n + c.constructions.length, 0) ?? 0;
 ---
 
-<Layout title="Progress — Engofy" user={user} active="profile">
+<Layout title="Progress — Engofy" user={user} active="profile" noindex>
   <p class="back">
     <a class="btn btn--ghost btn--sm" href="/profile">← Profile</a>
   </p>

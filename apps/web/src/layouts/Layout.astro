@@ -3,6 +3,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { apiGetOrNull } from '../lib/api';
 import { bootScript } from '../lib/prefs';
+import { publicOrigin } from '../lib/site';
 import type {
   CurrentUser,
   DueCardCountResponse,
@@ -16,6 +17,11 @@ interface Props {
   user?: CurrentUser | null;
   active?: string;
   measure?: boolean;
+  // Keeps the page out of the index (private or transient pages).
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  // Absolute or root-relative URL of the share image; no tag when omitted.
+  ogImage?: string;
 }
 
 const {
@@ -24,7 +30,15 @@ const {
   user = null,
   active,
   measure = false,
+  noindex = false,
+  ogType = 'website',
+  ogImage,
 } = Astro.props;
+
+const origin = publicOrigin(Astro.url);
+// Query strings (`?from=home`, filters, cursors) never make a distinct page.
+const canonical = `${origin}${Astro.url.pathname}`;
+const ogImageUrl = ogImage ? new URL(ogImage, `${origin}/`).href : undefined;
 
 // Day streak and Practice due-count in the header — every page, not just the
 // reader, so they stay stable "you're on a streak / cards are waiting" signals
@@ -49,10 +63,23 @@ const dueCount = dueResponse?.dueCount ?? 0;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:site_name" content="Engofy" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Stored display prefs (theme, reader size, ...) onto <html> before first paint. -->
     <script is:inline set:html={bootScript()} />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <SiteHeader user={user} active={active} streak={streak} dueCount={dueCount} />
