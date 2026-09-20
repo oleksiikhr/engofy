@@ -4,6 +4,10 @@ import type { ConfigType } from '@nestjs/config';
 import { IngestPostDto } from '../../../post/commands/ingest-post/ingest-post.dto.js';
 import { PostService } from '../../../post/post.service.js';
 import TelegramConfig from '../../config/telegram.config.js';
+import {
+  formatPostStatuses,
+  formatQueuedReply,
+} from '../../domain/format-post-status.js';
 import { parseTelegramCommand } from '../../domain/parse-command.js';
 import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
 import {
@@ -12,11 +16,15 @@ import {
 } from '../telegram-client.service.js';
 
 const UNKNOWN_COMMAND_REPLY =
-  'Unknown command. Use "/add <text>" to ingest a post or "/retry <post_id>" to re-run its pipeline.';
+  'Unknown command. Use "/add <text>" to ingest a post, "/status [post_id]" to see pipeline progress or "/retry <post_id>" to re-run a post\'s pipeline.';
+
+// `/status` without an id lists this many of the latest processing/failed posts.
+const STATUS_LIST_LIMIT = 10;
 
 // Polls Telegram getUpdates (PLAN.md §3.9), stores every new update on
 // telegram_updates for audit, and acts on the ones sent by the configured
-// admin: `/add <text>` -> ingest, `/retry <post_id>` -> full pipeline re-run.
+// admin: `/add <text>` -> ingest, `/retry <post_id>` -> full pipeline re-run,
+// `/status [post_id]` -> stage progress.
 // The next poll offset is derived from max(update_id) already stored, so no
 // separate cursor is needed and a re-poll of a stored update is a no-op.
 //
@@ -112,10 +120,21 @@ export class PollUpdatesService {
         const post = await this.postService.ingest(
           IngestPostDto.create({ rawText: command.text }),
         );
-        reply = `Queued. Post ${post.shortId} is processing.`;
+        reply = formatQueuedReply(post);
       } else if (command.kind === 'retry') {
         await this.postService.retry(command.postId);
         reply = `Re-running the pipeline for post ${command.postId}.`;
+      } else if (command.kind === 'status') {
+        const { items } = await this.postService.getPostPipelineStatus(
+          command.postId,
+          command.postId === null ? STATUS_LIST_LIMIT : 1,
+        );
+        reply = formatPostStatuses(
+          items,
+          command.postId === null
+            ? 'No posts are processing or failed.'
+            : `Post ${command.postId} not found.`,
+        );
       } else {
         reply = UNKNOWN_COMMAND_REPLY;
       }
