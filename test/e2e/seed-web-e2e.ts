@@ -47,6 +47,7 @@ import { PhraseType } from '../../src/modules/post/enums/phrase-type.enum.js';
 import { PostPartKind } from '../../src/modules/post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../src/modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../src/modules/post/enums/post-status.enum.js';
+import { PostTopic } from '../../src/modules/post/enums/post-topic.enum.js';
 import { factories } from '../factories/factories.js';
 
 // --- fixed identifiers the specs rely on ---
@@ -404,6 +405,7 @@ async function seed(orm: MikroORM): Promise<void> {
     shortId: E2E_READER_SHORT_ID,
     status: PostStatus.Published,
     cefrLevel: CefrLevel.B1,
+    topic: PostTopic.Culture,
     publishedAt: now.minus({ days: 1 }),
   });
 
@@ -735,6 +737,7 @@ async function seed(orm: MikroORM): Promise<void> {
       shortId,
       status: PostStatus.Published,
       cefrLevel: [CefrLevel.A2, CefrLevel.B1, CefrLevel.B2][i] ?? CefrLevel.B1,
+      topic: i === 0 ? PostTopic.Food : null,
       publishedAt: now.minus({ days: i + 2 }),
     });
     factories(em).postPart.makeOne({

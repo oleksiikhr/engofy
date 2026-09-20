@@ -9,6 +9,7 @@ import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostSourceType } from '../../enums/post-source-type.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { PostTopic } from '../../enums/post-topic.enum.js';
 import { InvalidPostsListCursorError } from '../../errors/invalid-posts-list-cursor.error.js';
 import { PostModule } from '../../post.module.js';
 import { GetPostsListQuery } from './get-posts-list.query.js';
@@ -19,6 +20,7 @@ function seedPost(
     title: string;
     status?: PostStatus;
     cefrLevel?: CefrLevel;
+    topic?: PostTopic;
     publishedAt?: DateTime;
   },
 ): Post {
@@ -32,6 +34,7 @@ function seedPost(
     title: opts.title,
     status: opts.status ?? PostStatus.Published,
     cefrLevel: opts.cefrLevel,
+    topic: opts.topic,
     publishedAt: opts.publishedAt,
   });
 
@@ -125,6 +128,49 @@ describe('GetPostsListHandler', () => {
       'a1-post',
       'b1-post',
     ]);
+  });
+
+  it("filters by a topic multi-select and reports each post's topic", async () => {
+    const em = suite.orm.em;
+    seedPost(em, { title: 'food-post', topic: PostTopic.Food });
+    seedPost(em, { title: 'travel-post', topic: PostTopic.Travel });
+    seedPost(em, { title: 'work-post', topic: PostTopic.Work });
+    seedPost(em, { title: 'untopiced-post' });
+    await em.flush();
+    em.clear();
+
+    const view = await suite.query(
+      new GetPostsListQuery(null, {
+        topics: [PostTopic.Food, PostTopic.Travel],
+        limit: 10,
+      }),
+    );
+
+    expect(view.items.map((i) => [i.title, i.topic]).sort()).toEqual([
+      ['food-post', PostTopic.Food],
+      ['travel-post', PostTopic.Travel],
+    ]);
+  });
+
+  it('matches a term against the title, case-insensitively and literally', async () => {
+    const em = suite.orm.em;
+    seedPost(em, { title: 'A Saturday Morning at the Market' });
+    seedPost(em, { title: 'The Lighthouse Keeper' });
+    seedPost(em, { title: '100% Sure' });
+    await em.flush();
+    em.clear();
+
+    const byTitle = await suite.query(
+      new GetPostsListQuery(null, { term: 'MORNING at', limit: 10 }),
+    );
+    expect(byTitle.items.map((i) => i.title)).toEqual([
+      'A Saturday Morning at the Market',
+    ]);
+
+    const wildcard = await suite.query(
+      new GetPostsListQuery(null, { term: '%', limit: 10 }),
+    );
+    expect(wildcard.items.map((i) => i.title)).toEqual(['100% Sure']);
   });
 
   it('paginates by cursor with no gaps or duplicates across pages', async () => {

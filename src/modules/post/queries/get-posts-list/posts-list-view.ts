@@ -1,10 +1,12 @@
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
+import type { PostTopic } from '../../enums/post-topic.enum.js';
 
 export interface PostsListItemView {
   shortId: string;
   slug: string | null;
   title: string | null;
   cefrLevel: CefrLevel | null;
+  topic: PostTopic | null;
   // ISO-8601.
   publishedAt: string;
   // Plain-text opening of the post, trimmed to ~280 chars.
