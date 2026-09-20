@@ -19,10 +19,10 @@ UUID, тож адмін не мав чим перезапустити пост. 
 
 ## Зрізи
 
-### [ ] 1. Повний ID поста та команда `/status` у боті
+### [x] 1. Повний ID поста та команда `/status` у боті
 - Branch: `pipeline-observability-01-post-status-command`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/73
 
 Відповідь на `/add` містить повний UUID і готовий рядок `/retry <id>`. Нова команда `/status [id]`
 показує стадії поста; без id — останні пости в `processing` і `failed`. Парсинг у
