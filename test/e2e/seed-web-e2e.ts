@@ -27,7 +27,6 @@ import { UserSkillProgress } from '../../src/modules/learning/entities/user-skil
 import { Disposition } from '../../src/modules/learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../src/modules/learning/enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../src/modules/learning/enums/review-rating.enum.js';
-import { PostSource } from '../../src/modules/post/embeddables/post-source.embeddable.js';
 import { Exercise } from '../../src/modules/post/entities/exercise.entity.js';
 import { GrammarCategory } from '../../src/modules/post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../src/modules/post/entities/grammar-construction.entity.js';
@@ -48,6 +47,7 @@ import { PhraseType } from '../../src/modules/post/enums/phrase-type.enum.js';
 import { PostPartKind } from '../../src/modules/post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../src/modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../src/modules/post/enums/post-status.enum.js';
+import { factories } from '../factories/factories.js';
 
 // --- fixed identifiers the specs rely on ---
 export const E2E_USER_EMAIL = 'e2e@engofy.test';
@@ -222,8 +222,11 @@ async function seed(orm: MikroORM): Promise<void> {
   const now = DateTime.now();
 
   // --- lexicon ---
-  const word = em.create(Word, { lemma: WORD_LEMMA, frequencyRank: 48210 });
-  const wordDef = em.create(WordDefinition, {
+  const word = factories(em).word.makeOne({
+    lemma: WORD_LEMMA,
+    frequencyRank: 48210,
+  });
+  const wordDef = factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Verb,
     definition: 'to walk through or around a place, especially for pleasure',
@@ -231,11 +234,11 @@ async function seed(orm: MikroORM): Promise<void> {
     cefrLevel: CefrLevel.B1,
     exampleSentence: 'They perambulated the gardens after lunch.',
   });
-  const studyWord = em.create(Word, {
+  const studyWord = factories(em).word.makeOne({
     lemma: STUDY_WORD_LEMMA,
     frequencyRank: 9000,
   });
-  const studyWordDef = em.create(WordDefinition, {
+  const studyWordDef = factories(em).wordDefinition.makeOne({
     wordId: studyWord.id,
     pos: PartOfSpeech.Noun,
     definition: 'a person who draws or makes maps',
@@ -247,33 +250,33 @@ async function seed(orm: MikroORM): Promise<void> {
   // no card or disposition, so /dictionary/words/perambulate has a target for
   // the "Позначити вивченим"/"Пропустити" toggle that's safe to click without
   // disturbing `wordDef`'s card, which other specs assert stays "learning".
-  em.create(WordDefinition, {
+  factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Noun,
     definition: 'a leisurely walk',
     cefrLevel: CefrLevel.C1,
   });
-  const phrase = em.create(Phrase, {
+  const phrase = factories(em).phrase.makeOne({
     phraseText: PHRASE_TEXT,
     type: PhraseType.Idiom,
     definition: 'having nothing particular to do; unoccupied',
     exampleSentence: 'With the shop closed, she was at loose ends all week.',
     cefrLevel: CefrLevel.B2,
   });
-  const knownPhrase = em.create(Phrase, {
+  const knownPhrase = factories(em).phrase.makeOne({
     phraseText: KNOWN_PHRASE_TEXT,
     type: PhraseType.Idiom,
     definition: 'something very easy to do',
     cefrLevel: CefrLevel.A2,
   });
-  const skippedPhrase = em.create(Phrase, {
+  const skippedPhrase = factories(em).phrase.makeOne({
     phraseText: SKIPPED_PHRASE_TEXT,
     type: PhraseType.Idiom,
     definition: 'a way of wishing someone good luck',
     cefrLevel: CefrLevel.A2,
   });
 
-  em.create(Phrase, {
+  factories(em).phrase.makeOne({
     phraseText: UNSAVED_PHRASE_TEXT,
     type: PhraseType.Idiom,
     definition: 'feeling slightly ill',
@@ -282,11 +285,11 @@ async function seed(orm: MikroORM): Promise<void> {
   });
 
   // --- grammar reference ---
-  const category = em.create(GrammarCategory, {
+  const category = factories(em).grammarCategory.makeOne({
     name: CATEGORY_NAME,
     sortOrder: 900,
   });
-  const pastPerfect = em.create(GrammarConstruction, {
+  const pastPerfect = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'past perfect',
     slug: E2E_GRAMMAR_SLUG,
@@ -294,7 +297,7 @@ async function seed(orm: MikroORM): Promise<void> {
       '## Form\n\n`had` + past participle.\n\n- Affirmative: She **had drawn** the map.\n- Negative: She **had not drawn** the map.',
     sortOrder: 1,
   });
-  const pastPerfectUp = em.create(GrammarUsagePoint, {
+  const pastPerfectUp = factories(em).grammarUsagePoint.makeOne({
     constructionId: pastPerfect.id,
     cefrLevel: CefrLevel.A2,
     guideword: 'USE: EARLIER PAST',
@@ -302,21 +305,21 @@ async function seed(orm: MikroORM): Promise<void> {
       'Can show that one past action happened before another past action.',
     exampleText: 'By the time the war ended, she had drawn every coastline.',
   });
-  const pastPerfectReported = em.create(GrammarUsagePoint, {
+  const pastPerfectReported = factories(em).grammarUsagePoint.makeOne({
     constructionId: pastPerfect.id,
     cefrLevel: CefrLevel.B1,
     guideword: 'USE: REPORTED',
     canDoStatement: 'Can use the past perfect in reported speech.',
     exampleText: 'He said he had finished the chart.',
   });
-  const presentSimple = em.create(GrammarConstruction, {
+  const presentSimple = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'present simple',
     slug: E2E_GRAMMAR_SLUG_2,
     cheatSheetContent: '## Form\n\nSubject + base verb (+ *-s* for he/she/it).',
     sortOrder: 2,
   });
-  em.create(GrammarUsagePoint, {
+  factories(em).grammarUsagePoint.makeOne({
     constructionId: presentSimple.id,
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
@@ -324,21 +327,21 @@ async function seed(orm: MikroORM): Promise<void> {
     exampleText: 'The tide comes in twice a day.',
   });
 
-  const conditionals = em.create(GrammarConstruction, {
+  const conditionals = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'conditionals',
     slug: E2E_GRAMMAR_SLUG_MUTABLE,
     cheatSheetContent: '## Form\n\nIf + past simple, would + base verb.',
     sortOrder: 4,
   });
-  em.create(GrammarUsagePoint, {
+  factories(em).grammarUsagePoint.makeOne({
     constructionId: conditionals.id,
     cefrLevel: CefrLevel.B2,
     guideword: 'USE: UNREAL PRESENT',
     canDoStatement: 'Can talk about imagined situations in the present.',
     exampleText: 'If I had more time, I would learn the piano.',
   });
-  em.create(GrammarUsagePoint, {
+  factories(em).grammarUsagePoint.makeOne({
     constructionId: conditionals.id,
     cefrLevel: CefrLevel.C1,
     guideword: 'USE: UNREAL PAST',
@@ -352,14 +355,14 @@ async function seed(orm: MikroORM): Promise<void> {
     slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
   });
   if (!handcrafted) {
-    const seeded = em.create(GrammarConstruction, {
+    const seeded = factories(em).grammarConstruction.makeOne({
       categoryId: category.id,
       name: 'present perfect simple',
       slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
       cheatSheetContent: null,
       sortOrder: 3,
     });
-    em.create(GrammarUsagePoint, {
+    factories(em).grammarUsagePoint.makeOne({
       constructionId: seeded.id,
       cefrLevel: CefrLevel.A2,
       guideword: 'USE: EXPERIENCES',
@@ -370,23 +373,24 @@ async function seed(orm: MikroORM): Promise<void> {
   }
 
   // --- reader post: node tree with word / phrase / grammar spans ---
-  const readerSource = new PostSource();
-  readerSource.format = PostSourceFormat.Text;
-  readerSource.rawText =
-    'The old cartographer would perambulate the harbour at dawn, at loose ends until the boats returned. By the time the war ended, she had drawn every coastline twice.';
-  readerSource.link = 'https://example.com/the-cartographer';
+  const readerSource = {
+    format: PostSourceFormat.Text,
+    rawText:
+      'The old cartographer would perambulate the harbour at dawn, at loose ends until the boats returned. By the time the war ended, she had drawn every coastline twice.',
+    link: 'https://example.com/the-cartographer',
+  };
 
-  const reader = new Post();
-  reader.source = readerSource;
-  reader.title = 'The Cartographer at Dawn';
-  reader.slug = 'the-cartographer-at-dawn';
-  reader.shortId = E2E_READER_SHORT_ID;
-  reader.status = PostStatus.Published;
-  reader.cefrLevel = CefrLevel.B1;
-  reader.publishedAt = now.minus({ days: 1 });
-  em.persist(reader);
+  const reader = factories(em).post.makeOne({
+    source: readerSource,
+    title: 'The Cartographer at Dawn',
+    slug: 'the-cartographer-at-dawn',
+    shortId: E2E_READER_SHORT_ID,
+    status: PostStatus.Published,
+    cefrLevel: CefrLevel.B1,
+    publishedAt: now.minus({ days: 1 }),
+  });
 
-  const readerPart1 = em.create(PostPart, {
+  const readerPart1 = factories(em).postPart.makeOne({
     postId: reader.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -426,7 +430,7 @@ async function seed(orm: MikroORM): Promise<void> {
   // слайд 1 — the "Appears in" join on /dictionary reads `sentence_tokens`,
   // not the `PostPart` span annotations above; without this, perambulate /
   // at loose ends would never show a post reference).
-  const readerSentence = em.create(Sentence, {
+  const readerSentence = factories(em).sentence.makeOne({
     postId: reader.id,
     postPartId: readerPart1.id,
     unitIndex: 0,
@@ -435,7 +439,7 @@ async function seed(orm: MikroORM): Promise<void> {
     charStart: 0,
     charEnd: readerSource.rawText.length,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: readerSentence.id,
     position: 0,
     text: 'perambulate',
@@ -448,7 +452,7 @@ async function seed(orm: MikroORM): Promise<void> {
     morph: {},
     wordId: word.id,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: readerSentence.id,
     position: 1,
     text: 'at loose ends',
@@ -462,7 +466,7 @@ async function seed(orm: MikroORM): Promise<void> {
     phraseId: phrase.id,
   });
 
-  const readerPart2 = em.create(PostPart, {
+  const readerPart2 = factories(em).postPart.makeOne({
     postId: reader.id,
     blockIndex: 1,
     kind: PostPartKind.Paragraph,
@@ -487,7 +491,7 @@ async function seed(orm: MikroORM): Promise<void> {
   // user marks Known below -> labelled for a guest only).
   const grammarSentenceText =
     'By the time the war ended, she had drawn every coastline twice.';
-  const grammarSentence = em.create(Sentence, {
+  const grammarSentence = factories(em).sentence.makeOne({
     postId: reader.id,
     postPartId: readerPart2.id,
     unitIndex: 0,
@@ -531,7 +535,7 @@ async function seed(orm: MikroORM): Promise<void> {
   ];
   grammarTokens.forEach(
     ([text, charStart, charEnd, lemma, pos, tag, morph], position) => {
-      em.create(SentenceToken, {
+      factories(em).sentenceToken.makeOne({
         sentenceId: grammarSentence.id,
         position,
         text,
@@ -545,13 +549,13 @@ async function seed(orm: MikroORM): Promise<void> {
       });
     },
   );
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: grammarSentence.id,
     grammarUsagePointId: pastPerfectUp.id,
     tokenStart: 8,
     tokenEnd: 10,
   });
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: grammarSentence.id,
     grammarUsagePointId: pastPerfectReported.id,
     tokenStart: 4,
@@ -560,7 +564,7 @@ async function seed(orm: MikroORM): Promise<void> {
 
   // A phrase the seeded user already marked Known — the reader must mark it
   // for a guest (New) but leave it plain for that user.
-  const readerPart3 = em.create(PostPart, {
+  const readerPart3 = factories(em).postPart.makeOne({
     postId: reader.id,
     blockIndex: 2,
     kind: PostPartKind.Paragraph,
@@ -585,7 +589,7 @@ async function seed(orm: MikroORM): Promise<void> {
   // It reuses the "reported" usage point the e2e user marks Known, so it
   // paints nothing for them.
   const overlapText = 'Charting the last bay was a piece of cake by then.';
-  const overlapSentence = em.create(Sentence, {
+  const overlapSentence = factories(em).sentence.makeOne({
     postId: reader.id,
     postPartId: readerPart3.id,
     unitIndex: 0,
@@ -609,7 +613,7 @@ async function seed(orm: MikroORM): Promise<void> {
     ['.', 49, 50],
   ];
   overlapTokens.forEach(([text, charStart, charEnd], position) => {
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: overlapSentence.id,
       position,
       text,
@@ -622,7 +626,7 @@ async function seed(orm: MikroORM): Promise<void> {
       morph: {},
     });
   });
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: overlapSentence.id,
     grammarUsagePointId: pastPerfectReported.id,
     tokenStart: 5,
@@ -632,7 +636,7 @@ async function seed(orm: MikroORM): Promise<void> {
   // Each drill sits on a real sentence, so the reader places it in that
   // sentence's block (fill_blank in block 0, the next three in block 1,
   // reorder in block 2).
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: reader.id,
     type: ExerciseType.FillBlank,
     source: ExerciseSource.Spacy,
@@ -645,7 +649,7 @@ async function seed(orm: MikroORM): Promise<void> {
       options: ['perambulate', 'wander', 'linger'],
     },
   });
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: reader.id,
     type: ExerciseType.MultipleChoice,
     source: ExerciseSource.Spacy,
@@ -657,7 +661,7 @@ async function seed(orm: MikroORM): Promise<void> {
       tokenPosition: 8,
     },
   });
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: reader.id,
     type: ExerciseType.FindError,
     source: ExerciseSource.Spacy,
@@ -669,7 +673,7 @@ async function seed(orm: MikroORM): Promise<void> {
       correction: 'drawn',
     },
   });
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: reader.id,
     type: ExerciseType.Reorder,
     source: ExerciseSource.Spacy,
@@ -680,7 +684,7 @@ async function seed(orm: MikroORM): Promise<void> {
       answer: [2, 0, 4, 1, 3],
     },
   });
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: reader.id,
     type: ExerciseType.GrammarContrastive,
     source: ExerciseSource.Ai,
@@ -702,20 +706,21 @@ async function seed(orm: MikroORM): Promise<void> {
 
   // --- extra published posts for the feed / alternation ---
   E2E_FEED_SHORT_IDS.forEach((shortId, i) => {
-    const src = new PostSource();
-    src.format = PostSourceFormat.Text;
-    src.rawText = `Filler reading number ${i + 2} for the feed. It has a couple of sentences so the excerpt is not empty.`;
-    src.link = `https://example.com/feed-${i + 2}`;
-    const p = new Post();
-    p.source = src;
-    p.title = `Feed Story ${i + 2}`;
-    p.slug = `feed-story-${i + 2}`;
-    p.shortId = shortId;
-    p.status = PostStatus.Published;
-    p.cefrLevel = [CefrLevel.A2, CefrLevel.B1, CefrLevel.B2][i] ?? CefrLevel.B1;
-    p.publishedAt = now.minus({ days: i + 2 });
-    em.persist(p);
-    em.create(PostPart, {
+    const src = {
+      format: PostSourceFormat.Text,
+      rawText: `Filler reading number ${i + 2} for the feed. It has a couple of sentences so the excerpt is not empty.`,
+      link: `https://example.com/feed-${i + 2}`,
+    };
+    const p = factories(em).post.makeOne({
+      source: src,
+      title: `Feed Story ${i + 2}`,
+      slug: `feed-story-${i + 2}`,
+      shortId,
+      status: PostStatus.Published,
+      cefrLevel: [CefrLevel.A2, CefrLevel.B1, CefrLevel.B2][i] ?? CefrLevel.B1,
+      publishedAt: now.minus({ days: i + 2 }),
+    });
+    factories(em).postPart.makeOne({
       postId: p.id,
       blockIndex: 0,
       kind: PostPartKind.Paragraph,
@@ -728,34 +733,36 @@ async function seed(orm: MikroORM): Promise<void> {
   });
 
   // --- e2e user + session ---
-  const user = em.create(User, { email: E2E_USER_EMAIL });
-  em.create(AuthSession, {
+  const user = factories(em).user.makeOne({ email: E2E_USER_EMAIL });
+  factories(em).authSession.makeOne({
     tokenHash: sha256(E2E_SESSION_TOKEN),
     userId: user.id,
     expiresAt: now.plus({ days: 30 }),
   });
 
-  const deckUser = em.create(User, { email: E2E_DECK_USER_EMAIL });
-  em.create(AuthSession, {
+  const deckUser = factories(em).user.makeOne({ email: E2E_DECK_USER_EMAIL });
+  factories(em).authSession.makeOne({
     tokenHash: sha256(E2E_DECK_SESSION_TOKEN),
     userId: deckUser.id,
     expiresAt: now.plus({ days: 30 }),
   });
 
-  const deletionUser = em.create(User, { email: E2E_DELETION_USER_EMAIL });
-  em.create(AuthSession, {
+  const deletionUser = factories(em).user.makeOne({
+    email: E2E_DELETION_USER_EMAIL,
+  });
+  factories(em).authSession.makeOne({
     tokenHash: sha256(E2E_DELETION_SESSION_TOKEN),
     userId: deletionUser.id,
     expiresAt: now.plus({ days: 30 }),
   });
-  em.create(AccountDeletionRequest, {
+  factories(em).accountDeletionRequest.makeOne({
     userId: deletionUser.id,
     cancelTokenHash: sha256(E2E_DELETION_CANCEL_TOKEN),
   });
 
   // Pending OTP challenge for the /login flow (no user for this address yet —
   // verify-code creates one).
-  em.create(AuthChallenge, {
+  factories(em).authChallenge.makeOne({
     email: E2E_LOGIN_EMAIL,
     otpHash: sha256(E2E_LOGIN_OTP),
     attempts: 0,
@@ -763,7 +770,7 @@ async function seed(orm: MikroORM): Promise<void> {
   });
 
   // --- SRS cards (dictionary + practice) ---
-  const wordCard = em.create(LearningCard, {
+  const wordCard = factories(em).learningCard.makeOne({
     userId: user.id,
     wordDefinitionId: wordDef.id,
     due: now.minus({ days: 1 }),
@@ -776,7 +783,7 @@ async function seed(orm: MikroORM): Promise<void> {
     state: LearningCardState.Review,
     lastReview: now.minus({ days: 3 }),
   });
-  em.create(LearningCard, {
+  factories(em).learningCard.makeOne({
     userId: user.id,
     phraseId: phrase.id,
     due: now.minus({ hours: 2 }),
@@ -789,7 +796,7 @@ async function seed(orm: MikroORM): Promise<void> {
     state: LearningCardState.Learning,
     lastReview: now.minus({ days: 1 }),
   });
-  const grammarCard = em.create(LearningCard, {
+  const grammarCard = factories(em).learningCard.makeOne({
     userId: user.id,
     grammarUsagePointId: pastPerfectUp.id,
     due: now.minus({ hours: 1 }),
@@ -802,24 +809,24 @@ async function seed(orm: MikroORM): Promise<void> {
     state: LearningCardState.Review,
     lastReview: now.minus({ days: 1 }),
   });
-  em.create(LearningDisposition, {
+  factories(em).learningDisposition.makeOne({
     userId: user.id,
     phraseId: knownPhrase.id,
     disposition: Disposition.Known,
   });
-  em.create(LearningDisposition, {
+  factories(em).learningDisposition.makeOne({
     userId: user.id,
     phraseId: skippedPhrase.id,
     disposition: Disposition.Skipped,
   });
-  em.create(LearningDisposition, {
+  factories(em).learningDisposition.makeOne({
     userId: user.id,
     grammarUsagePointId: pastPerfectReported.id,
     disposition: Disposition.Known,
   });
 
   // --- grammar skill progress + review streak (profile) ---
-  em.create(UserSkillProgress, {
+  factories(em).userSkillProgress.makeOne({
     userId: user.id,
     constructionId: pastPerfect.id,
     correctStreak: 2,
@@ -828,7 +835,7 @@ async function seed(orm: MikroORM): Promise<void> {
     unlockedAt: now.minus({ days: 3 }),
   });
   for (let d = 0; d < 3; d += 1) {
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: grammarCard.id,
       rating: ReviewRating.Good,
       reviewedAt: now.minus({ days: d }),
@@ -836,7 +843,7 @@ async function seed(orm: MikroORM): Promise<void> {
       scheduledDays: 8,
     });
   }
-  em.create(ReviewLog, {
+  factories(em).reviewLog.makeOne({
     cardId: wordCard.id,
     rating: ReviewRating.Good,
     reviewedAt: now.minus({ days: 1 }),
