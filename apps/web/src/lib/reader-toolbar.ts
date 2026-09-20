@@ -4,71 +4,30 @@ import {
   readPref,
   writePref,
 } from './prefs';
-import { wrapTokens } from './reader-tokens';
-import type { ReaderToken } from './types';
 
 // The reader's toolbar: word types (`pos` mode), tenses and Analyze are three
-// independent toggles (each a class on <body>, styled in app.css). The
-// Function words switch in the word-types legend adds the `fn` group to the
-// colouring; A- / A+ steps the article's text size. Enabled modes, the switch
-// and the text size are persisted through lib/prefs.ts and applied by CSS from
-// <html> attributes set before first paint.
+// independent toggles; A- / A+ steps the article's text size. The `data-tok`
+// spans are rendered on the server. Enabled modes and the text size are
+// persisted through lib/prefs.ts, which mirrors them onto <html> attributes
+// set before first paint — app.css styles the modes, their pressed buttons and
+// legends from those attributes, so hydration only syncs `aria-pressed` and
+// never moves layout.
 
-export function initReaderToolbar(
-  toolbar: HTMLElement,
-  root: HTMLElement,
-  tokens: ReaderToken[],
-): void {
-  let wrapped = false;
-  const ensureTokens = () => {
-    if (!wrapped) {
-      wrapped = true;
-      wrapTokens(root, tokens);
-    }
-  };
-
-  const setMode = (mode: Mode, on: boolean) => {
-    if (on) {
-      ensureTokens();
-    }
-    document.body.classList.toggle(`reader-${mode}`, on);
-    toolbar
-      .querySelector(`[data-mode="${mode}"]`)
-      ?.setAttribute('aria-pressed', String(on));
-    const legend = toolbar.querySelector<HTMLElement>(
-      `[data-legend="${mode}"]`,
-    );
-    if (legend) {
-      legend.hidden = !on;
-    }
-  };
-
+export function initReaderToolbar(toolbar: HTMLElement): void {
   const enabled = new Set<Mode>(readPref('readerModes'));
   for (const button of toolbar.querySelectorAll<HTMLElement>('[data-mode]')) {
     const mode = button.dataset.mode as Mode;
-    if (enabled.has(mode)) {
-      setMode(mode, true);
-    }
+    button.setAttribute('aria-pressed', String(enabled.has(mode)));
     button.addEventListener('click', () => {
-      const on = button.getAttribute('aria-pressed') !== 'true';
-      setMode(mode, on);
+      const on = !enabled.has(mode);
       if (on) {
         enabled.add(mode);
       } else {
         enabled.delete(mode);
       }
+      button.setAttribute('aria-pressed', String(on));
       writePref('readerModes', [...enabled]);
     });
-  }
-
-  const functionWords = toolbar.querySelector<HTMLInputElement>(
-    '[data-function-words]',
-  );
-  if (functionWords) {
-    functionWords.checked = readPref('functionWords');
-    functionWords.addEventListener('change', () =>
-      writePref('functionWords', functionWords.checked),
-    );
   }
 
   let size = readPref('readerSize');

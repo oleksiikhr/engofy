@@ -5,9 +5,17 @@
 // like a text node. Grammar usage points are placed separately
 // (`applyGrammarMatches`) and wrap their nodes in a
 // `data-grammar-usage-point-id` span. Output is injected with `set:html`, so
-// every text value is escaped here.
+// every text value is escaped here. Content tokens of the spaCy layer are
+// wrapped in `data-tok` spans as the text renders (lib/render-tokens.ts).
 
 import { applyGrammarMatches } from './apply-grammar-matches';
+import {
+  groupTokens,
+  renderTokenText,
+  type UnitTokens,
+  unitKey,
+  unitTokens,
+} from './render-tokens';
 import type {
   Block,
   Doc,
@@ -15,6 +23,7 @@ import type {
   InlineNode,
   Mark,
   PostDetail,
+  ReaderToken,
   SpanNode,
 } from './types';
 
@@ -62,21 +71,30 @@ function spanAttr(node: SpanNode, annotations: Annotations): string | null {
   return null;
 }
 
-function renderNode(node: InlineNode, annotations: Annotations): string {
+function renderNode(
+  node: InlineNode,
+  annotations: Annotations,
+  unit: UnitTokens,
+): string {
+  const text = renderTokenText(node.text, unit, esc);
   if (node.type === 'link') {
-    return `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${esc(node.text)}</a>`;
+    return `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
   if (node.type === 'span') {
     const attr = spanAttr(node, annotations);
     if (attr) {
-      return `<span ${attr}>${esc(node.text)}</span>`;
+      return `<span ${attr}>${text}</span>`;
     }
   }
-  return esc(node.text);
+  return text;
 }
 
-function renderInline(node: InlineNode, annotations: Annotations): string {
-  const html = renderNode(node, annotations);
+function renderInline(
+  node: InlineNode,
+  annotations: Annotations,
+  unit: UnitTokens,
+): string {
+  const html = renderNode(node, annotations, unit);
   return wrapMarks(
     node.grammarUsagePointId
       ? `<span data-grammar-usage-point-id="${esc(node.grammarUsagePointId)}">${html}</span>`
@@ -88,8 +106,12 @@ function renderInline(node: InlineNode, annotations: Annotations): string {
 function renderChildren(
   children: InlineNode[],
   annotations: Annotations,
+  tokens: ReaderToken[] | undefined,
 ): string {
-  return children.map((child) => renderInline(child, annotations)).join('');
+  const unit = unitTokens(tokens);
+  return children
+    .map((child) => renderInline(child, annotations, unit))
+    .join('');
 }
 
 // `data-block` / `data-item` carry the block's index in Doc.children and a
@@ -98,18 +120,23 @@ function renderBlock(
   block: Block,
   index: number,
   annotations: Annotations,
+  tokens: Map<string, ReaderToken[]>,
 ): string {
   if (block.type === 'list') {
     const tag = block.ordered ? 'ol' : 'ul';
     const items = block.items
       .map(
         (item, itemIndex) =>
-          `<li data-item="${itemIndex}">${renderChildren(item.children, annotations)}</li>`,
+          `<li data-item="${itemIndex}">${renderChildren(item.children, annotations, tokens.get(unitKey(index, itemIndex)))}</li>`,
       )
       .join('');
     return `<${tag} data-block="${index}">${items}</${tag}>`;
   }
-  const inner = renderChildren(block.children, annotations);
+  const inner = renderChildren(
+    block.children,
+    annotations,
+    tokens.get(unitKey(index, null)),
+  );
   if (block.level) {
     return `<h${block.level} data-block="${index}">${inner}</h${block.level}>`;
   }
@@ -122,8 +149,12 @@ function renderBlock(
 // Renders `Doc.children` to an HTML string. Caller wraps it in a
 // `.analysis` container so the span styles in app.css apply.
 export function renderDoc(doc: Doc, annotations: Annotations): string {
-  // `?? []`: an API still on the previous release omits `grammarMatches`.
+  // `?? []`: an API still on the previous release omits `tokens` /
+  // `grammarMatches`.
+  const tokens = groupTokens(annotations.tokens ?? []);
   return applyGrammarMatches(doc, annotations.grammarMatches ?? [])
-    .children.map((block, index) => renderBlock(block, index, annotations))
+    .children.map((block, index) =>
+      renderBlock(block, index, annotations, tokens),
+    )
     .join('\n');
 }

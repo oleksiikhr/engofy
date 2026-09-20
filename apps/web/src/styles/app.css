@@ -713,17 +713,6 @@ body {
   opacity: 0.45;
   cursor: default;
 }
-.toggle--sm {
-  width: 2.375rem;
-  height: 1.375rem;
-}
-.toggle--sm::after {
-  width: 1rem;
-  height: 1rem;
-}
-.toggle--sm:checked::after {
-  transform: translateX(1rem);
-}
 
 /* Button group; the active button carries aria-pressed="true" (or
    aria-checked="true" / .is-on). */
@@ -1268,11 +1257,12 @@ body {
   color: var(--color-success-ink);
 }
 
-/* --- Reader toolbar + token layers. `[data-tok]` spans are added client-side
-   by reader-tokens.ts the first time a mode is switched on; each mode is a
-   class on <body> (reader-pos / reader-tense / reader-analyze). Word types are
-   a coloured underline (function words: dotted, only with the Function words
-   switch on — html[data-function-words]); tense is a wash, so the two stack. --- */
+/* --- Reader toolbar + token layers. `[data-tok]` spans are rendered on the
+   server (lib/render-tokens.ts); each mode is a value in html[data-reader-modes]
+   (pos / tense / analyze), set before first paint by the boot script
+   (lib/prefs.ts), so the modes, their pressed buttons and legends never wait
+   for hydration. Word types are a coloured underline; tense is a wash, so the
+   two stack. --- */
 :root {
   --pos-noun: var(--color-blue);
   --pos-noun-ink: var(--color-blue-ink);
@@ -1338,11 +1328,18 @@ body {
   font-weight: 800;
   cursor: pointer;
 }
-.reader-toolbar__btn[aria-pressed="true"] {
+.reader-toolbar__btn[aria-pressed="true"],
+:root[data-reader-modes~="pos"] .reader-toolbar__btn[data-mode="pos"],
+:root[data-reader-modes~="tense"] .reader-toolbar__btn[data-mode="tense"],
+:root[data-reader-modes~="analyze"] .reader-toolbar__btn[data-mode="analyze"] {
   background: var(--tone);
   color: var(--on-tone);
 }
-.reader-toolbar__btn[aria-pressed="true"]::before {
+.reader-toolbar__btn[aria-pressed="true"]::before,
+:root[data-reader-modes~="pos"] .reader-toolbar__btn[data-mode="pos"]::before,
+:root[data-reader-modes~="tense"] .reader-toolbar__btn[data-mode="tense"]::before,
+:root[data-reader-modes~="analyze"]
+  .reader-toolbar__btn[data-mode="analyze"]::before {
   content: "✓";
   content: "✓" / "";
 }
@@ -1374,8 +1371,14 @@ body {
   font-size: 0.85rem;
   font-weight: 700;
 }
-.reader-legend[hidden] {
+/* A mode's legend shows while its mode is on. */
+.reader-legend[data-legend] {
   display: none;
+}
+:root[data-reader-modes~="pos"] .reader-legend[data-legend="pos"],
+:root[data-reader-modes~="tense"] .reader-legend[data-legend="tense"],
+:root[data-reader-modes~="analyze"] .reader-legend[data-legend="analyze"] {
+  display: flex;
 }
 .reader-legend__item {
   display: inline-flex;
@@ -1394,59 +1397,46 @@ body {
   border: 1px solid var(--color-border-strong);
   background: var(--tone-wash);
 }
-.reader-legend__switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-left: auto;
-  cursor: pointer;
-}
-.reader-legend__sample {
-  border-bottom: 2px dotted var(--color-ink-faint);
-}
 
-.reader-pos [data-tok][data-pos-group="noun"] {
+:root[data-reader-modes~="pos"] [data-tok][data-pos-group="noun"] {
   color: var(--pos-noun-ink);
   border-bottom: 2px solid var(--pos-noun);
 }
-.reader-pos [data-tok][data-pos-group="verb"] {
+:root[data-reader-modes~="pos"] [data-tok][data-pos-group="verb"] {
   color: var(--pos-verb-ink);
   border-bottom: 2px solid var(--pos-verb);
 }
-.reader-pos [data-tok][data-pos-group="adj"] {
+:root[data-reader-modes~="pos"] [data-tok][data-pos-group="adj"] {
   color: var(--pos-adj-ink);
   border-bottom: 2px solid var(--pos-adj);
 }
-.reader-pos [data-tok][data-pos-group="adv"] {
+:root[data-reader-modes~="pos"] [data-tok][data-pos-group="adv"] {
   color: var(--pos-adv-ink);
   border-bottom: 2px solid var(--pos-adv);
 }
-:root[data-function-words="on"] .reader-pos [data-tok][data-pos-group="fn"] {
-  border-bottom: 2px dotted var(--color-ink-faint);
-}
-.reader-tense [data-tok][data-tense="past"] {
+:root[data-reader-modes~="tense"] [data-tok][data-tense="past"] {
   background: var(--tense-past);
 }
-.reader-tense [data-tok][data-tense="present"] {
+:root[data-reader-modes~="tense"] [data-tok][data-tense="present"] {
   background: var(--tense-present);
 }
-.reader-tense [data-tok][data-tense="future"] {
+:root[data-reader-modes~="tense"] [data-tok][data-tense="future"] {
   background: var(--tense-future);
 }
-.reader-tense [data-tok][data-tense] {
+:root[data-reader-modes~="tense"] [data-tok][data-tense] {
   border-radius: 0.3rem;
 }
 
 /* Analyze: each token becomes a small column — the word, its POS tag, and for
    an irregular verb its forms. The word stays first so the token's baseline is
    the word's, and the column widens to the longest row (no overlap). */
-.reader-analyze [data-tok] {
+:root[data-reader-modes~="analyze"] [data-tok] {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
 }
-.reader-analyze [data-tok]::after,
-.reader-analyze [data-tok]::before {
+:root[data-reader-modes~="analyze"] [data-tok]::after,
+:root[data-reader-modes~="analyze"] [data-tok]::before {
   font-family: var(--font-body);
   font-size: 0.5em;
   font-weight: 700;
@@ -1455,18 +1445,18 @@ body {
   text-transform: uppercase;
   white-space: nowrap;
 }
-.reader-analyze [data-tok]::after {
+:root[data-reader-modes~="analyze"] [data-tok]::after {
   content: attr(data-tag);
   order: 1;
   color: var(--color-ink-faint);
 }
-.reader-analyze [data-tok]::before {
+:root[data-reader-modes~="analyze"] [data-tok]::before {
   content: attr(data-irregular);
   order: 2;
   text-transform: none;
   color: var(--color-danger);
 }
-.reader-analyze [data-grammar-usage-point-id] {
+:root[data-reader-modes~="analyze"] [data-grammar-usage-point-id] {
   box-shadow: inset 0 -0.14em 0 0 var(--color-blue);
 }
 .lex-popup__contrast {
@@ -1476,7 +1466,7 @@ body {
   background: var(--tone-wash);
   font-size: 0.9rem;
 }
-.reader-analyze .lex-popup__contrast {
+:root[data-reader-modes~="analyze"] .lex-popup__contrast {
   display: block;
 }
 .lex-report {
