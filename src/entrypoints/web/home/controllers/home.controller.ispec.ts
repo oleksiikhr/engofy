@@ -3,27 +3,18 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
-import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
 import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
 import { LearningModule } from '../../../../modules/learning/learning.module.js';
-import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../../modules/post/entities/post.entity.js';
-import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
-import { Word } from '../../../../modules/post/entities/word.entity.js';
-import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
-import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
-import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { HomeWebModule } from '../home-web.module.js';
 
@@ -41,32 +32,18 @@ describe('HomeController', () => {
     em: EntityManager,
     cefrLevel: CefrLevel = CefrLevel.A1,
   ): Promise<string> {
-    const user = em.create(User, {
+    const user = factories(em).user.makeOne({
       email: `u-${uuidv7()}@example.com`,
       cefrLevel,
     });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
     });
     await em.flush();
     return `${cookieName()}=${token}`;
-  }
-
-  async function seedPost(em: EntityManager): Promise<Post> {
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'Some text.';
-    const post = new Post();
-    post.source = source;
-    post.status = PostStatus.Published;
-    post.title = 'A post';
-    post.cefrLevel = CefrLevel.A1;
-    em.persist(post);
-    await em.flush();
-    return post;
   }
 
   it('rejects an unauthenticated request', async () => {
@@ -77,7 +54,9 @@ describe('HomeController', () => {
 
   it('selects and then keeps returning the same daily plan', async () => {
     const cookie = await login(suite.orm.em);
-    const post = await seedPost(suite.orm.em);
+    const post = await suite.factories.post.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
 
     const first = await suite
       .request('get', '/home/daily-plan')
@@ -98,14 +77,18 @@ describe('HomeController', () => {
 
   it("re-selects today's plan when its post was deleted", async () => {
     const cookie = await login(suite.orm.em);
-    const deleted = await seedPost(suite.orm.em);
+    const deleted = await suite.factories.post.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
     await suite
       .request('get', '/home/daily-plan')
       .set('Cookie', cookie)
       .expect(HttpStatus.OK);
 
     await suite.orm.em.nativeDelete(Post, { id: deleted.id });
-    const replacement = await seedPost(suite.orm.em);
+    const replacement = await suite.factories.post.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
 
     const res = await suite
       .request('get', '/home/daily-plan')
@@ -131,7 +114,7 @@ describe('HomeController', () => {
 
   it('returns an empty due-cards page for a post with no matching cards', async () => {
     const cookie = await login(suite.orm.em);
-    await seedPost(suite.orm.em);
+    await suite.factories.post.createOne({ cefrLevel: CefrLevel.A1 });
     await suite
       .request('get', '/home/daily-plan')
       .set('Cookie', cookie)
@@ -152,27 +135,32 @@ describe('HomeController', () => {
 
   it('returns a due card whose target occurs in the day post', async () => {
     const em = suite.orm.em;
-    const user = em.create(User, {
+    const user = factories(em).user.makeOne({
       email: `u-${uuidv7()}@example.com`,
       cefrLevel: CefrLevel.A1,
     });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
     });
     const cookie = `${cookieName()}=${token}`;
-    const post = await seedPost(em);
+    const post = await factories(em).post.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
 
-    const word = em.create(Word, { lemma: 'perambulate', frequencyRank: 1 });
-    const wordDef = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: 'perambulate',
+      frequencyRank: 1,
+    });
+    const wordDef = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Verb,
       definition: 'to walk around',
       cefrLevel: CefrLevel.A1,
     });
-    const sentence = em.create(Sentence, {
+    const sentence = factories(em).sentence.makeOne({
       postId: post.id,
       postPartId: uuidv7(),
       unitIndex: 0,
@@ -181,7 +169,7 @@ describe('HomeController', () => {
       charStart: 0,
       charEnd: 35,
     });
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: sentence.id,
       position: 0,
       text: 'perambulate',
@@ -195,7 +183,7 @@ describe('HomeController', () => {
       wordId: word.id,
       phraseId: null,
     });
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId: user.id,
       wordDefinitionId: wordDef.id,
       due: DateTime.now().minus({ hours: 1 }),
@@ -233,7 +221,7 @@ describe('HomeController', () => {
 
   it('completes the session and reports the day-zero summary', async () => {
     const cookie = await login(suite.orm.em);
-    await seedPost(suite.orm.em);
+    await suite.factories.post.createOne({ cefrLevel: CefrLevel.A1 });
     await suite
       .request('get', '/home/daily-plan')
       .set('Cookie', cookie)

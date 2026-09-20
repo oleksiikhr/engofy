@@ -6,12 +6,15 @@ import { TestingModuleBuilder } from '@nestjs/testing';
 import type { Redis } from 'ioredis';
 import request, { type Test } from 'supertest';
 import { REDIS_CLIENT } from '../../../../src/core/redis/redis.tokens.js';
+import { type Factories, factories } from '../../../factories/factories.js';
 import { useOrmSuiteLifecycle } from '../../../setup/orm-suite-lifecycle.helper.js';
 import { createWebApp, type WebApp } from './create-app.helper.js';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export interface WebE2ESuite extends WebApp {
+  // Entity factories bound to the suite's global `orm.em`.
+  readonly factories: Factories;
   request(method: HttpMethod, path: string): Test;
 }
 
@@ -45,6 +48,9 @@ export function createWebE2ESuite(
     },
     get orm() {
       return orm;
+    },
+    get factories() {
+      return factories(orm.em);
     },
     request(method: HttpMethod, path: string) {
       const server = request(app.getHttpServer());

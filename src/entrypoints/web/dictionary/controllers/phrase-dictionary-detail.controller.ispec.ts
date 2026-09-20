@@ -3,15 +3,13 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
-import { Phrase } from '../../../../modules/post/entities/phrase.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { LearningWebModule } from '../../learning/learning-web.module.js';
@@ -28,9 +26,11 @@ describe('DictionaryController phrases/:phrase', () => {
     }).sessionCookieName;
 
   async function login(em: EntityManager): Promise<string> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -60,7 +60,7 @@ describe('DictionaryController phrases/:phrase', () => {
   it('returns the phrase with its state for a known phrase', async () => {
     const em = suite.orm.em;
     const cookie = await login(em);
-    const phrase = em.create(Phrase, {
+    const phrase = factories(em).phrase.makeOne({
       phraseText: `at loose ends ${uuidv7().slice(0, 6)}`,
       definition: 'having nothing particular to do',
       cefrLevel: CefrLevel.C1,
@@ -88,7 +88,7 @@ describe('DictionaryController phrases/:phrase', () => {
   it('surfaces the active card id for a saved phrase', async () => {
     const em = suite.orm.em;
     const cookie = await login(em);
-    const phrase = em.create(Phrase, {
+    const phrase = factories(em).phrase.makeOne({
       phraseText: `break a leg ${uuidv7().slice(0, 6)}`,
       cefrLevel: CefrLevel.C1,
     });

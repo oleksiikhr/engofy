@@ -3,23 +3,14 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
-import { LearningDisposition } from '../../../../modules/learning/entities/learning-disposition.entity.js';
 import { Disposition } from '../../../../modules/learning/enums/disposition.enum.js';
-import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
-import { Phrase } from '../../../../modules/post/entities/phrase.entity.js';
-import { Post } from '../../../../modules/post/entities/post.entity.js';
-import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
-import { Word } from '../../../../modules/post/entities/word.entity.js';
-import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
@@ -40,9 +31,11 @@ describe('DictionaryController', () => {
   async function login(
     em: EntityManager,
   ): Promise<{ cookie: string; userId: string }> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -59,22 +52,25 @@ describe('DictionaryController', () => {
     const em = suite.orm.em;
     const { cookie } = await login(em);
 
-    const word = em.create(Word, { lemma: `harbour-${uuidv7().slice(0, 8)}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `harbour-${uuidv7().slice(0, 8)}`,
+    });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a sheltered stretch of water',
     });
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'The harbour was calm.';
-    const post = new Post();
-    post.source = source;
-    post.title = 'Down by the Water';
-    post.slug = 'down-by-the-water';
-    post.status = PostStatus.Published;
-    em.persist(post);
-    const sentence = em.create(Sentence, {
+    const source = {
+      format: PostSourceFormat.Text,
+      rawText: 'The harbour was calm.',
+    };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'Down by the Water',
+      slug: 'down-by-the-water',
+      status: PostStatus.Published,
+    });
+    const sentence = factories(em).sentence.makeOne({
       postId: post.id,
       postPartId: uuidv7(),
       unitIndex: 0,
@@ -83,7 +79,7 @@ describe('DictionaryController', () => {
       charStart: 0,
       charEnd: 21,
     });
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: sentence.id,
       position: 1,
       text: 'harbour',
@@ -132,15 +128,15 @@ describe('DictionaryController', () => {
     const em = suite.orm.em;
     const { cookie, userId } = await login(em);
 
-    const phrase = em.create(Phrase, {
+    const phrase = factories(em).phrase.makeOne({
       phraseText: `pick up-${uuidv7().slice(0, 8)}`,
       definition: 'to collect someone',
     });
-    const knownPhrase = em.create(Phrase, {
+    const knownPhrase = factories(em).phrase.makeOne({
       phraseText: `break a leg-${uuidv7().slice(0, 8)}`,
     });
     await em.flush();
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       phraseId: knownPhrase.id,
       disposition: Disposition.Known,
@@ -180,14 +176,14 @@ describe('DictionaryController', () => {
     const em = suite.orm.em;
     const { cookie, userId } = await login(em);
 
-    const word = em.create(Word, {
+    const word = factories(em).word.makeOne({
       lemma: `perambulate-${uuidv7().slice(0, 8)}`,
     });
-    const definition = em.create(WordDefinition, {
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Verb,
     });
-    const skippedPhrase = em.create(Phrase, {
+    const skippedPhrase = factories(em).phrase.makeOne({
       phraseText: `at loose ends-${uuidv7().slice(0, 8)}`,
     });
     await em.flush();
@@ -197,7 +193,7 @@ describe('DictionaryController', () => {
       .set('Cookie', cookie)
       .send({ wordDefinitionId: definition.id })
       .expect(HttpStatus.OK);
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       phraseId: skippedPhrase.id,
       disposition: Disposition.Skipped,
