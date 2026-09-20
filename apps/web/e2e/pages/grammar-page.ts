@@ -38,6 +38,10 @@ export class GrammarPage {
       .click();
   }
 
+  async search(text: string) {
+    await this.page.locator('#grammar-search').fill(text);
+  }
+
   async groupBy(axis: string) {
     await this.page
       .getByTestId('grammar-group-by')

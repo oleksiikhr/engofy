@@ -50,8 +50,4 @@ export class GrammarConstructionPage {
       `[data-testid="grammar-level-progress"] [data-level="${level}"]`,
     );
   }
-
-  exercisePlaceholder(index = 0): Locator {
-    return this.usageItem(index).getByTestId('usage-exercises');
-  }
 }

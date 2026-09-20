@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
 import {
   GRAMMAR_CEFR_LEVELS,
+  listedGroups,
   GRAMMAR_GROUP_BY,
   GRAMMAR_GROUP_BY_LABEL,
   GRAMMAR_STATE_LABEL,
@@ -12,6 +13,7 @@ import {
 } from '../lib/grammar-list';
 import { publicOrigin } from '../lib/site';
 import { breadcrumbList, jsonLdGraph } from '../lib/seo';
+import { LEVEL_COOKIE, parseLevelChoice } from '../lib/reader-level';
 import { getCurrentUser } from '../lib/session';
 import type {
   CefrLevel,
@@ -24,11 +26,14 @@ const user = await getCurrentUser(Astro.request);
 const query = parseGrammarQuery(Astro.url.searchParams);
 
 // "Start here" is independent of the filters below: it always lists the
-// learner's own level (A1 for a guest or a user without one).
+// learner's own level — the account's, else the level a guest picked in the
+// reader (cookie), else A1.
 const hub = user
   ? await apiGet<ProfileHub>('/profile', { request: Astro.request })
   : null;
-const startLevel: CefrLevel = hub?.cefrLevel ?? 'A1';
+const levelChoice = parseLevelChoice(Astro.cookies.get(LEVEL_COOKIE)?.value);
+const pickedLevel = levelChoice === 'skip' ? null : levelChoice;
+const startLevel: CefrLevel = hub?.cefrLevel ?? pickedLevel ?? 'A1';
 const [ref, startRef] = await Promise.all([
   apiGet<GrammarReference>(`/content/grammar?${toGrammarApiQuery(query)}`, {
     request: Astro.request,
@@ -54,7 +59,7 @@ const jsonLd = jsonLdGraph([
   ]),
 ]);
 
-const groups = ref.groups.filter((g) => g.constructions.length > 0);
+const groups = listedGroups(ref.groups);
 ---
 
 <Layout
@@ -72,9 +77,36 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
     on and group the list the way that helps you most.
   </p>
 
+  <div class="grammar-search">
+    <svg
+      class="ic"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.6"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="6" />
+      <path d="M20 20l-5.5-5.5" />
+    </svg>
+    <input
+      id="grammar-search"
+      class="input"
+      type="search"
+      autocomplete="off"
+      placeholder="Search constructions…"
+      aria-label="Search grammar constructions"
+    />
+  </div>
+
   {
     startHere.length > 0 && (
-      <section class="start-here" data-testid="grammar-start-here">
+      <section
+        class="start-here"
+        id="grammar-start-here"
+        data-testid="grammar-start-here"
+      >
         <h2>Start here <span class="badge">{startLevel}</span></h2>
         <ul class="grammar-cons">
           {startHere.map((con) => (
@@ -145,6 +177,15 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
     <noscript><button class="btn" type="submit">Apply</button></noscript>
   </form>
 
+  <div
+    id="grammar-search-empty"
+    class="card card--soft grammar-empty"
+    data-testid="grammar-search-empty"
+    hidden
+  >
+    <p>No constructions match your search.</p>
+  </div>
+
   <div id="grammar-results">
     {
       groups.length === 0 && (
@@ -194,6 +235,15 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
   </div>
 </Layout>
 
+<script>
+  import { initGrammarSearch } from '../lib/grammar-search';
+
+  const input = document.getElementById('grammar-search');
+  if (input instanceof HTMLInputElement) {
+    initGrammarSearch(input, document.getElementById('grammar-start-here'));
+  }
+</script>
+
 <style>
   .grammar-intro {
     color: var(--color-ink-soft);
@@ -219,6 +269,22 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
     line-height: 1.45;
     color: var(--color-ink-soft);
   }
+  .grammar-search {
+    position: relative;
+    max-width: 28rem;
+    margin-bottom: 1.25rem;
+  }
+  .grammar-search .ic {
+    position: absolute;
+    top: 50%;
+    left: 0.875rem;
+    transform: translateY(-50%);
+    color: var(--color-ink-faint);
+    pointer-events: none;
+  }
+  .grammar-search .input {
+    padding-left: 2.5rem;
+  }
   .grammar-controls {
     display: flex;
     flex-wrap: wrap;
@@ -243,6 +309,9 @@ const groups = ref.groups.filter((g) => g.constructions.length > 0);
   .grammar-empty {
     color: var(--color-ink-soft);
     text-align: center;
+  }
+  .grammar-empty[hidden] {
+    display: none;
   }
   .grammar-empty p {
     margin: 0;
