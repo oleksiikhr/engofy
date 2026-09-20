@@ -169,6 +169,9 @@ export interface PostExercise {
   type: ExerciseType;
   source: 'spacy' | 'ai';
   payload: Record<string, unknown>;
+  // Index in `doc.children` of the block the exercise is about. Absent on an
+  // API still on the previous release.
+  blockIndex?: number;
 }
 export interface PostDetail {
   shortId: string;
