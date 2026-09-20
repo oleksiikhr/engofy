@@ -4,7 +4,6 @@ export class ReaderPage {
   readonly page: Page;
   readonly badge: Locator;
   readonly analysis: Locator;
-  readonly fillBlank: Locator;
   readonly popup: Locator;
   readonly toolbar: Locator;
   readonly studyToggle: Locator;
@@ -19,7 +18,6 @@ export class ReaderPage {
     this.page = page;
     this.badge = page.locator('.post-head .badge');
     this.analysis = page.locator('.analysis');
-    this.fillBlank = page.locator('[data-ex-type="fill_blank"]');
     this.popup = page.locator('.lex-popup');
     this.toolbar = page.getByRole('toolbar', { name: 'Reader tools' });
     this.studyToggle = this.toolbar.getByRole('button', {
@@ -95,8 +93,8 @@ export class ReaderPage {
     return this.quickCheck.locator(`[data-qc-screen="${kind}"]:visible`);
   }
 
-  // The question screen currently on show, by kind: 'choose' | 'recall' | 'match'.
-  qcQuestion(kind: 'choose' | 'recall' | 'match'): Locator {
+  // The question screen currently on show, by kind.
+  qcQuestion(kind: 'choose' | 'recall' | 'match' | 'type' | 'order'): Locator {
     return this.quickCheck.locator(
       `[data-qc-screen="question"][data-qc-kind="${kind}"]:visible`,
     );
@@ -113,15 +111,8 @@ export class ReaderPage {
     await this.quickCheck.getByRole('button', { name: 'Start' }).click();
   }
 
-  async submitFillBlank(answer: string) {
-    await this.fillBlank.locator('.exercise__blank').fill(answer);
-    await this.fillBlank.getByRole('button', { name: 'Check' }).click();
-  }
-
-  async pickFillBlankOption(option: string) {
-    await this.fillBlank
-      .locator('.exercise__bank-chip', { hasText: option })
-      .click();
-    await this.fillBlank.getByRole('button', { name: 'Check' }).click();
+  // Clicks Check, then reads the verdict of the question on show.
+  async check(question: Locator) {
+    await question.getByRole('button', { name: 'Check', exact: true }).click();
   }
 }

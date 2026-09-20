@@ -3,10 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import QuickCheck from '../../components/QuickCheck.astro';
 import { apiGetOrNull } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
-import {
-  buildQuickCheckSteps,
-  splitBlank,
-} from '../../lib/quick-check-steps';
+import { buildQuickCheckSteps } from '../../lib/quick-check-steps';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import type {
@@ -43,78 +40,6 @@ const lexicon = buildLexiconData(post.annotations, post.exercises);
 const lexiconJson = escapeJson(lexicon);
 // `?? []`: an API still on the previous release omits `tokens`.
 const hasTokens = (post.annotations.tokens ?? []).length > 0;
-
-// --- exercise view models (all casts / normalisation live here; the template
-// only maps over plain data) ---
-type Ex = PostDetail['exercises'][number];
-
-interface DrillView {
-  id: string;
-  type: 'fill_blank' | 'multiple_choice' | 'find_error' | 'reorder';
-  before: string;
-  after: string;
-  prompt: string;
-  answer: string;
-  answerIndex: number;
-  options: string[];
-  scrambled: string[];
-  order: number[];
-}
-
-function toDrill(ex: Ex): DrillView | null {
-  const p = ex.payload as Record<string, unknown>;
-  const base = {
-    id: ex.id,
-    before: '',
-    after: '',
-    prompt: '',
-    answer: '',
-    answerIndex: -1,
-    options: [] as string[],
-    scrambled: [] as string[],
-    order: [] as number[],
-  };
-  if (ex.type === 'fill_blank') {
-    const { before, after } = splitBlank(String(p.prompt ?? ''));
-    return {
-      ...base,
-      type: 'fill_blank',
-      before,
-      after,
-      answer: String(p.answer ?? ''),
-      // `payload` is untyped; the word bank is empty when there are too few distractors.
-      options: Array.isArray(p.options) ? (p.options as string[]) : [],
-    };
-  }
-  if (ex.type === 'multiple_choice') {
-    const { before, after } = splitBlank(String(p.prompt ?? ''));
-    return {
-      ...base,
-      type: 'multiple_choice',
-      before,
-      after,
-      options: Array.isArray(p.options) ? (p.options as string[]) : [],
-      answerIndex: Number(p.answerIndex ?? -1),
-    };
-  }
-  if (ex.type === 'find_error') {
-    return {
-      ...base,
-      type: 'find_error',
-      prompt: String(p.prompt ?? ''),
-      answer: String(p.correction ?? ''),
-    };
-  }
-  if (ex.type === 'reorder') {
-    return {
-      ...base,
-      type: 'reorder',
-      scrambled: Array.isArray(p.scrambled) ? (p.scrambled as string[]) : [],
-      order: Array.isArray(p.answer) ? (p.answer as number[]) : [],
-    };
-  }
-  return null;
-}
 
 // --- final screen ---
 const newWordCount = Object.values(lexicon.words).filter(
@@ -158,10 +83,6 @@ const streak = streakResponse?.streak ?? 0;
 // (today's practice) lives on Home.
 const fromHome = Astro.url.searchParams.get('from') === 'home';
 const isRead = post.isRead ?? false;
-
-const drills: DrillView[] = post.exercises
-  .map(toDrill)
-  .filter((d): d is DrillView => d !== null);
 ---
 
 <Layout
@@ -268,75 +189,6 @@ const drills: DrillView[] = post.exercises
     />
   </section>
 
-  {
-    drills.length > 0 && (
-      <section class="exercises">
-        <h2>Practice</h2>
-        {drills.map((d) => (
-          <div class="exercise" data-ex-type={d.type} data-answer={d.answer} data-answer-index={String(d.answerIndex)} data-order={JSON.stringify(d.order)}>
-            {d.type === 'fill_blank' && (
-              <>
-                <p class="exercise__q">
-                  {d.before}
-                  <input class="exercise__blank" type="text" aria-label="Missing word" />
-                  {d.after}
-                </p>
-                {d.options.length > 0 && (
-                  <div class="exercise__chips exercise__bank">
-                    {d.options.map((opt) => (
-                      <button type="button" class="exercise__chip exercise__bank-chip">
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-            {d.type === 'multiple_choice' && (
-              <>
-                <p class="exercise__q">{d.before}<b>____</b>{d.after}</p>
-                <ul class="exercise__options">
-                  {d.options.map((opt, i) => (
-                    <li>
-                      <label>
-                        <input type="radio" name={`mc-${d.id}`} value={String(i)} />
-                        {opt}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {d.type === 'find_error' && (
-              <>
-                <p class="exercise__hint">One word is in the wrong form. Type the correct form.</p>
-                <p class="exercise__q">{d.prompt}</p>
-                <input class="exercise__blank" type="text" aria-label="Correct form" />
-              </>
-            )}
-            {d.type === 'reorder' && (
-              <>
-                <p class="exercise__hint">Put the words in order.</p>
-                <div class="exercise__chips">
-                  {d.scrambled.map((tok, slot) => (
-                    <button type="button" class="exercise__chip" data-slot={String(slot)}>
-                      {tok}
-                    </button>
-                  ))}
-                </div>
-                <p class="exercise__build" aria-live="polite" />
-                <button class="btn btn--ghost exercise__reset" type="button">Reset</button>
-              </>
-            )}
-            {d.type !== 'reorder' && (
-              <button class="btn btn--ghost exercise__check" type="button">Check</button>
-            )}
-            <span class="exercise__result" role="status" />
-          </div>
-        ))}
-      </section>
-    )
-  }
 </Layout>
 
 <script>
@@ -385,78 +237,6 @@ const drills: DrillView[] = post.exercises
         final.dispatchEvent(new CustomEvent('reader:finish', { detail })),
     });
   }
-</script>
-
-<script is:inline>
-  (() => {
-    const norm = (s) => String(s ?? '').trim().toLowerCase();
-    function setResult(box, ok) {
-      const r = box.querySelector('.exercise__result');
-      if (!r) return;
-      r.textContent = ok ? '✓ Correct' : '✗ Try again';
-      r.className = `exercise__result ${ok ? 'is-ok' : 'is-bad'}`;
-    }
-
-    for (const box of document.querySelectorAll('.exercise')) {
-      const type = box.getAttribute('data-ex-type');
-
-      if (type === 'reorder') {
-        const order = JSON.parse(box.getAttribute('data-order') || '[]');
-        const build = box.querySelector('.exercise__build');
-        const picks = [];
-        box.querySelectorAll('.exercise__chip').forEach((chip) => {
-          chip.addEventListener('click', () => {
-            if (chip.disabled) return;
-            chip.disabled = true;
-            picks.push({
-              slot: Number(chip.getAttribute('data-slot')),
-              tok: chip.textContent.trim(),
-            });
-            build.textContent = picks.map((p) => p.tok).join(' ');
-            const seq = picks.map((p) => order[p.slot]);
-            if (seq.length === order.length) {
-              setResult(box, seq.every((v, i) => v === i));
-            }
-          });
-        });
-        box.querySelector('.exercise__reset')?.addEventListener('click', () => {
-          picks.length = 0;
-          build.textContent = '';
-          box
-            .querySelectorAll('.exercise__chip')
-            .forEach((c) => (c.disabled = false));
-          const r = box.querySelector('.exercise__result');
-          if (r) {
-            r.textContent = '';
-            r.className = 'exercise__result';
-          }
-        });
-        continue;
-      }
-
-      box.querySelectorAll('.exercise__bank-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          const input = box.querySelector('.exercise__blank');
-          if (input) input.value = chip.textContent.trim();
-        });
-      });
-
-      const check = box.querySelector('.exercise__check');
-      if (!check) continue;
-      check.addEventListener('click', () => {
-        if (type === 'fill_blank' || type === 'find_error') {
-          const input = box.querySelector('.exercise__blank');
-          setResult(box, norm(input?.value) === norm(box.getAttribute('data-answer')));
-        } else if (type === 'multiple_choice') {
-          const sel = box.querySelector('input[type=radio]:checked');
-          setResult(
-            box,
-            sel != null && sel.value === box.getAttribute('data-answer-index'),
-          );
-        }
-      });
-    }
-  })();
 </script>
 
 <style>
@@ -536,74 +316,5 @@ const drills: DrillView[] = post.exercises
   }
   .reader-article {
     min-width: 0;
-  }
-  .exercises {
-    margin-top: 2.5rem;
-    border-top: 1px solid var(--color-border);
-    padding-top: 1.5rem;
-  }
-  .exercise {
-    border: 1px solid var(--color-border);
-    border-radius: 1rem;
-    background: var(--color-paper-soft);
-    padding: 1.1rem 1.25rem;
-    margin-bottom: 1rem;
-  }
-  .exercise__hint,
-  .exercise__q {
-    margin: 0 0 0.6rem;
-  }
-  .exercise__hint {
-    font-size: 0.8rem;
-    color: var(--color-ink-soft);
-  }
-  .exercise__blank {
-    font: inherit;
-    padding: 0.15rem 0.4rem;
-    border: 2px solid var(--color-border-strong);
-    border-radius: 0.5rem;
-    background: var(--color-paper);
-    color: inherit;
-    min-width: 6rem;
-  }
-  .exercise__options {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 0.6rem;
-  }
-  .exercise__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 0.6rem;
-  }
-  .exercise__chip {
-    font: inherit;
-    padding: 0.25rem 0.55rem;
-    border: 2px solid var(--color-border-strong);
-    border-radius: 999px;
-    background: var(--color-paper);
-    color: inherit;
-    cursor: pointer;
-  }
-  .exercise__chip:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-  .exercise__build {
-    min-height: 1.4rem;
-    font-weight: 600;
-    margin: 0 0 0.6rem;
-  }
-  .exercise__result {
-    margin-left: 0.6rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  .exercise__result.is-ok {
-    color: var(--color-success);
-  }
-  .exercise__result.is-bad {
-    color: var(--color-danger);
   }
 </style>

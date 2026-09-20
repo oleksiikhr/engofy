@@ -1,7 +1,8 @@
 // Quick check: one card, one question at a time (intro -> questions -> summary).
 // Markup is server-rendered (QuickCheck.astro); this module drives which screen
-// is visible, grades "choose the form" and "match pairs" client-side, and sends
-// "recall a word" ratings to the review endpoint.
+// is visible, grades "choose the form", "match pairs", "type the answer" and
+// "put in order" client-side, and sends "recall a word" ratings to the review
+// endpoint.
 
 const RING_CIRCUMFERENCE = 302;
 
@@ -11,6 +12,9 @@ const OPTION_KEYS = /^[1-9]$/;
 const RATINGS = ['again', 'hard', 'good', 'easy'];
 // How long a wrong match pair stays marked before it clears.
 const MISMATCH_MS = 700;
+
+const normalize = (value: string | null | undefined) =>
+  (value ?? '').trim().toLowerCase();
 
 function isTextField(target: EventTarget | null): boolean {
   return (
@@ -64,7 +68,9 @@ export function initQuickCheck(card: HTMLElement): void {
     for (const s of screens) {
       s.hidden = s !== screen;
     }
-    screen.focus({ preventScroll: true });
+    const input = screen.querySelector<HTMLInputElement>('[data-qc-input]');
+    const typing = input && !screen.querySelector('[data-qc-bank]');
+    (typing ? input : screen).focus({ preventScroll: true });
   };
 
   const showSummary = () => {
@@ -110,6 +116,38 @@ export function initQuickCheck(card: HTMLElement): void {
   const options = (q: HTMLElement) =>
     Array.from(q.querySelectorAll<HTMLButtonElement>('[data-option]'));
   const isChecked = (q: HTMLElement) => q.dataset.checked === 'true';
+
+  // The verdict and the Continue button, shared by every graded kind.
+  const showFeedback = (q: HTMLElement, right: boolean) => {
+    const feedback = q.querySelector<HTMLElement>('[data-qc-feedback]');
+    if (feedback) {
+      feedback.classList.toggle('tone-green', right);
+      feedback.classList.toggle('tone-danger', !right);
+      const verdict = feedback.querySelector<HTMLElement>('[data-qc-verdict]');
+      if (verdict) {
+        verdict.textContent = right ? 'Correct' : 'Not quite';
+      }
+      feedback.hidden = false;
+    }
+    const checkButton = q.querySelector<HTMLElement>('[data-qc-check]');
+    const next = q.querySelector<HTMLElement>('[data-qc-next]');
+    if (checkButton) {
+      checkButton.hidden = true;
+    }
+    if (next) {
+      next.hidden = false;
+      next.focus({ preventScroll: true });
+    }
+  };
+
+  // After a wrong typed or ordered answer, say what it should have been.
+  const showAnswer = (q: HTMLElement, right: boolean) => {
+    const note = q.querySelector<HTMLElement>('[data-qc-note]');
+    if (note && !right) {
+      note.textContent = `Answer: ${q.dataset.answer ?? ''}`;
+      note.hidden = false;
+    }
+  };
 
   const select = (q: HTMLElement, index: number) => {
     if (isChecked(q)) {
@@ -159,32 +197,91 @@ export function initQuickCheck(card: HTMLElement): void {
       blank.textContent = all[answer]?.dataset.text ?? '';
     }
 
-    const feedback = q.querySelector<HTMLElement>('[data-qc-feedback]');
-    if (feedback) {
-      feedback.classList.toggle('tone-green', right);
-      feedback.classList.toggle('tone-danger', !right);
-      const verdict = feedback.querySelector<HTMLElement>('[data-qc-verdict]');
-      if (verdict) {
-        verdict.textContent = right ? 'Correct' : 'Not quite';
-      }
-      for (const note of feedback.querySelectorAll<HTMLElement>(
-        '[data-explanation]',
-      )) {
-        const at = Number(note.dataset.explanation);
-        note.hidden = !(at === picked || at === answer);
-      }
-      feedback.hidden = false;
+    for (const note of q.querySelectorAll<HTMLElement>('[data-explanation]')) {
+      const at = Number(note.dataset.explanation);
+      note.hidden = !(at === picked || at === answer);
     }
+    showFeedback(q, right);
+  };
 
-    const checkButton = q.querySelector<HTMLElement>('[data-qc-check]');
-    const next = q.querySelector<HTMLElement>('[data-qc-next]');
+  const typedInput = (q: HTMLElement) =>
+    q.querySelector<HTMLInputElement>('[data-qc-input]');
+
+  const checkTyped = (q: HTMLElement) => {
+    const input = typedInput(q);
+    if (!input || isChecked(q) || !normalize(input.value)) {
+      return;
+    }
+    const right = normalize(input.value) === normalize(q.dataset.answer);
+    q.dataset.checked = 'true';
+    record(right);
+    input.readOnly = true;
+    input.classList.add(right ? 'is-right' : 'is-wrong');
+    for (const chip of q.querySelectorAll<HTMLButtonElement>(
+      '[data-qc-bank]',
+    )) {
+      chip.disabled = true;
+    }
+    showAnswer(q, right);
+    showFeedback(q, right);
+  };
+
+  const fillFromBank = (q: HTMLElement, chip: HTMLElement) => {
+    const input = typedInput(q);
+    const checkButton = q.querySelector<HTMLButtonElement>('[data-qc-check]');
+    if (!input || isChecked(q)) {
+      return;
+    }
+    input.value = chip.textContent?.trim() ?? '';
     if (checkButton) {
-      checkButton.hidden = true;
+      checkButton.disabled = false;
     }
-    if (next) {
-      next.hidden = false;
-      next.focus({ preventScroll: true });
+  };
+
+  // Chips already tapped on each order screen, in tap order.
+  const picks = new Map<HTMLElement, HTMLButtonElement[]>();
+
+  const renderBuild = (q: HTMLElement) => {
+    const build = q.querySelector<HTMLElement>('[data-qc-build]');
+    const words = (picks.get(q) ?? []).map((c) => c.textContent?.trim());
+    if (build) {
+      build.textContent = words.length > 0 ? words.join(' ') : '\u00a0';
     }
+  };
+
+  const pickChip = (q: HTMLElement, chip: HTMLButtonElement) => {
+    if (isChecked(q) || chip.disabled) {
+      return;
+    }
+    const chosen = [...(picks.get(q) ?? []), chip];
+    picks.set(q, chosen);
+    chip.disabled = true;
+    renderBuild(q);
+    const order: number[] = JSON.parse(q.dataset.order ?? '[]');
+    if (chosen.length < order.length) {
+      return;
+    }
+    const right = chosen.every(
+      (c, i) => order[Number(c.dataset.orderChip)] === i,
+    );
+    q.dataset.checked = 'true';
+    record(right);
+    q.querySelector<HTMLElement>('[data-qc-reset]')?.setAttribute('hidden', '');
+    showAnswer(q, right);
+    showFeedback(q, right);
+  };
+
+  const resetOrder = (q: HTMLElement) => {
+    if (isChecked(q)) {
+      return;
+    }
+    picks.delete(q);
+    for (const chip of q.querySelectorAll<HTMLButtonElement>(
+      '[data-order-chip]',
+    )) {
+      chip.disabled = false;
+    }
+    renderBuild(q);
   };
 
   const reveal = (q: HTMLElement) => {
@@ -304,7 +401,13 @@ export function initQuickCheck(card: HTMLElement): void {
     } else if (target.closest('[data-qc-skip]')) {
       showSummary();
     } else if (target.closest('[data-qc-check]')) {
-      check(current);
+      if (kindOf(current) === 'type') {
+        checkTyped(current);
+      } else {
+        check(current);
+      }
+    } else if (target.closest('[data-qc-reset]')) {
+      resetOrder(current);
     } else if (target.closest('[data-qc-next]')) {
       advance();
     } else if (target.closest('[data-qc-reveal]')) {
@@ -315,7 +418,13 @@ export function initQuickCheck(card: HTMLElement): void {
         '[data-match-term], [data-match-meaning]',
       );
       const option = target.closest<HTMLElement>('[data-option]');
-      if (rating && questions.includes(current)) {
+      const bank = target.closest<HTMLElement>('[data-qc-bank]');
+      const chip = target.closest<HTMLButtonElement>('[data-order-chip]');
+      if (bank && questions.includes(current)) {
+        fillFromBank(current, bank);
+      } else if (chip && questions.includes(current)) {
+        pickChip(current, chip);
+      } else if (rating && questions.includes(current)) {
         rate(current, rating.dataset.rating ?? '');
       } else if (pair && questions.includes(current)) {
         pickPair(current, pair);
@@ -325,10 +434,34 @@ export function initQuickCheck(card: HTMLElement): void {
     }
   });
 
+  card.addEventListener('input', (event) => {
+    const input = event.target as HTMLElement;
+    const checkButton =
+      current.querySelector<HTMLButtonElement>('[data-qc-check]');
+    if (
+      input instanceof HTMLInputElement &&
+      checkButton &&
+      !isChecked(current)
+    ) {
+      checkButton.disabled = !normalize(input.value);
+    }
+  });
+
   // Bound to the card, not the document: keys only act while focus is inside
   // it (each screen change moves focus there).
   card.addEventListener('keydown', (event) => {
-    if (current === summary || isTextField(event.target)) {
+    if (current === summary) {
+      return;
+    }
+    if (isTextField(event.target)) {
+      if (event.key === 'Enter' && kindOf(current) === 'type') {
+        event.preventDefault();
+        if (isChecked(current)) {
+          advance();
+        } else {
+          checkTyped(current);
+        }
+      }
       return;
     }
     if (event.key === 'Escape') {

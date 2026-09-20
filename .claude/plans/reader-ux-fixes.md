@@ -89,10 +89,10 @@ default показується як "Assumed known". Оновити ispec/spec/e
 Спершу перевірити, що `get-post-detail` віддає `state` для всіх збігів (якщо ні — адитивно додати).
 e2e: клік на відоме слово відкриває попап зі станом; працює Enter.
 
-### [ ] 8. Practice всередині Quick Check
+### [x] 8. Practice всередині Quick Check
 - Branch: `reader-ux-fixes-08-practice-in-quick-check`
-- Base: `reader-ux-fixes-07-click-any-word`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/87
 
 Правка №7. Вправи `fill_blank`, `multiple_choice`, `find_error`, `reorder` стають кроками
 `quick-check-steps.ts` / `quick-check.ts` / `QuickCheck.astro` (та сама картка, прогрес, підсумок).
