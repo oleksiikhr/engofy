@@ -16,6 +16,7 @@ import type { DateTime } from 'luxon';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
+import { AuthService } from '../../../../modules/auth/auth.service.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
@@ -83,7 +84,10 @@ export function toQueueItemDto(item: PracticeQueueItem): PracticeQueueItemDto {
 @ApiCookieAuth()
 @Controller('learning')
 export class LearningController {
-  constructor(private readonly learning: LearningService) {}
+  constructor(
+    private readonly learning: LearningService,
+    private readonly auth: AuthService,
+  ) {}
 
   // Add a word / phrase / grammar point to the SRS queue. Idempotent — a
   // re-add returns the existing card, so this is `200`, not `201`.
@@ -165,12 +169,17 @@ export class LearningController {
     return { remaining };
   }
 
-  // Daily review streak — for the header's day-streak display (PLAN.md
-  // §16/§17 Track B), cheaper than the full `/profile` aggregate.
+  // Daily review streak and daily-goal progress — for the header's day-streak
+  // and goal ring (PLAN.md §16/§17 Track B), cheaper than the full `/profile`
+  // aggregate.
   @Get('streak')
   async streak(@CurrentUser() actor: UserActor): Promise<StreakResponseDto> {
-    const streak = await this.learning.getStreak(actor.id);
-    return { streak };
+    const [streak, reviewedToday, user] = await Promise.all([
+      this.learning.getStreak(actor.id),
+      this.learning.getReviewsToday(actor.id),
+      this.auth.getUser(actor.id),
+    ]);
+    return { streak, dailyGoal: user.dailyGoal, reviewedToday };
   }
 
   // Grade a card and reschedule it.

@@ -30,6 +30,11 @@ export class User {
   @Enum({ items: () => CefrLevel })
   cefrLevel: Opt<CefrLevel> = CefrLevel.A1;
 
+  // Cards the learner aims to review per UTC day; drives the header's
+  // progress ring (`PATCH /profile/daily-goal`).
+  @Property({ type: 'integer' })
+  dailyGoal: Opt<number> = 10;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 

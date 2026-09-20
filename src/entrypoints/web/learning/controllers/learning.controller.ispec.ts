@@ -214,6 +214,42 @@ describe('LearningController', () => {
     expect(res.body).toEqual({ remaining: DAILY_NEW_CARD_LIMIT });
   });
 
+  it('reports the streak and daily-goal progress, and rejects a guest', async () => {
+    await suite
+      .request('get', '/learning/streak')
+      .expect(HttpStatus.UNAUTHORIZED);
+
+    const cookie = await login(suite.orm.em);
+    const empty = await suite
+      .request('get', '/learning/streak')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(empty.body).toEqual({ streak: 0, dailyGoal: 10, reviewedToday: 0 });
+
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    await suite.orm.em.flush();
+    const added = await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ wordDefinitionId: definition.id })
+      .expect(HttpStatus.OK);
+    await suite
+      .request('post', `/learning/cards/${added.body.id}/review`)
+      .set('Cookie', cookie)
+      .send({ rating: 'good' })
+      .expect(HttpStatus.OK);
+
+    const after = await suite
+      .request('get', '/learning/streak')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(after.body).toEqual({ streak: 1, dailyGoal: 10, reviewedToday: 1 });
+  });
+
   it('deletes an unreviewed card and archives a reviewed one', async () => {
     const cookie = await login(suite.orm.em);
     const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });

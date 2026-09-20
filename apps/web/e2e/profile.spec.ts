@@ -54,6 +54,27 @@ test.describe('profile (signed in)', () => {
     await profile.saveLevel(before);
     await expect(profile.levelOption(before)).toBeChecked();
   });
+
+  test('saves a new daily goal and the header ring reflects it', async ({
+    page,
+  }) => {
+    const profile = new ProfilePage(page);
+    await profile.goto();
+    const input = profile.goalForm.getByLabel('Cards per day');
+    const before = Number(await input.inputValue());
+    const next = before === 25 ? 30 : 25;
+
+    await profile.saveGoal(next);
+    await expect(input).toHaveValue(String(next));
+    await expect(page.getByTestId('goal-ring')).toHaveAttribute(
+      'data-goal-target',
+      String(next),
+    );
+
+    // Restore, so the persisted goal doesn't leak into other specs.
+    await profile.saveGoal(before);
+    await expect(input).toHaveValue(String(before));
+  });
 });
 
 // Must match E2E_DELETION_CANCEL_TOKEN in test/e2e/seed-web-e2e.ts.

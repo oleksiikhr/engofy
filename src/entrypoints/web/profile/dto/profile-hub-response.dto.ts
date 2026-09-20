@@ -10,6 +10,10 @@ export class ProfileHubResponseDto {
   // (profile-hub-redesign slice 3); `/profile/progress` doesn't repeat it.
   readonly cefrLevel!: CefrLevel;
 
+  // Cards per UTC day the learner aims to review (`users.daily_goal`),
+  // changeable via `PATCH /profile/daily-goal`.
+  readonly dailyGoal!: number;
+
   // Pending account-deletion request, or null. Drives the hub's cancel banner.
   readonly accountDeletion!: AccountDeletionResponseDto | null;
 

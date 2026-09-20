@@ -49,6 +49,10 @@ export interface NewCardBudgetResponse {
 }
 export interface StreakResponse {
   streak: number;
+  // Cards per day the learner aims to review, and how many they've graded
+  // since the start of the current UTC day.
+  dailyGoal: number;
+  reviewedToday: number;
 }
 
 // --- post detail (node tree + annotations) ---
@@ -409,6 +413,7 @@ export interface Profile {
 export interface ProfileHub {
   streak: number;
   cefrLevel: CefrLevel;
+  dailyGoal: number;
   accountDeletion: AccountDeletion | null;
   // ISO timestamp once today's daily session is done, else null.
   dailyPlanCompletedAt: string | null;
