@@ -1,3 +1,4 @@
+import { NUDGE_DISMISSED_KEY, nudgeVariant } from './guest-boot';
 import { DECK_EVENT, guestDeckCount } from './guest-deck';
 import {
   dayKey,
@@ -9,11 +10,6 @@ import {
 // Guest header: the day streak and daily-goal ring, both derived from the
 // words the guest explored (lib/guest-progress.ts), and the saved-cards count.
 // Hidden until the guest has explored or saved something.
-
-const NUDGE_DISMISSED_KEY = 'guest-nudge-dismissed';
-// Saved cards or explored words at which the sign-up nudge appears.
-export const NUDGE_SAVED_AT = 3;
-export const NUDGE_EXPLORED_AT = 10;
 
 const REACHED_CLASS = 'goal--reached';
 const CELEBRATED_KEY = 'goal-celebrated';
@@ -111,40 +107,39 @@ function nudgeDismissed(): boolean {
   }
 }
 
-// What the nudge says for the guest's progress, or null while it isn't due:
-// three saved cards, or ten explored words.
-export function nudgeMessage(saved: number, explored: number): string | null {
-  if (saved >= NUDGE_SAVED_AT) {
-    return `You've saved ${saved} ${saved === 1 ? 'card' : 'cards'}. Log in so they don't get lost.`;
-  }
-  if (explored >= NUDGE_EXPLORED_AT) {
-    return `You've explored ${explored} words. Log in to keep your cards and progress.`;
-  }
-  return null;
-}
-
 // One-time banner nudging a guest to log in once they have something to lose.
-// Closing it is remembered, so it never shows again.
+// The head boot script (lib/guest-boot.ts) sets `data-guest-nudge` on <html>
+// before first paint, so the banner is in place from the first frame; this
+// keeps the attribute and the counts in step afterwards. Closing it is
+// remembered, so it never shows again.
 export function initGuestNudge(nudge: HTMLElement): void {
   if (nudgeDismissed()) {
     return;
   }
-  const text = nudge.querySelector<HTMLElement>('[data-guest-nudge-text]');
+  const root = document.documentElement;
+  const counts = nudge.querySelectorAll<HTMLElement>('[data-nudge-count]');
   let dismissed = false;
   const render = () => {
-    const message = nudgeMessage(guestDeckCount(), exploredCount());
-    if (dismissed || !text || message === null) {
+    const saved = guestDeckCount();
+    const explored = exploredCount();
+    const variant = dismissed ? null : nudgeVariant(saved, explored);
+    if (variant === null) {
+      delete root.dataset.guestNudge;
       return;
     }
-    text.textContent = message;
-    nudge.hidden = false;
+    for (const count of counts) {
+      count.textContent = String(
+        count.dataset.nudgeCount === 'saved' ? saved : explored,
+      );
+    }
+    root.dataset.guestNudge = variant;
   };
 
   nudge
     .querySelector('[data-guest-nudge-close]')
     ?.addEventListener('click', () => {
       dismissed = true;
-      nudge.hidden = true;
+      render();
       try {
         localStorage.setItem(NUDGE_DISMISSED_KEY, '1');
       } catch {

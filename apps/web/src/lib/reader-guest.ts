@@ -41,7 +41,8 @@ export function initReaderGuest(strip: HTMLElement): void {
       if (noun) {
         noun.textContent = value === 1 ? 'word' : 'words';
       }
-      count.hidden = false;
+      document.documentElement.dataset.guestExplored = '';
+      count.classList.add('is-ready');
     }
   };
   show(exploredCount());

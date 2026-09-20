@@ -415,8 +415,18 @@ body {
   background: var(--color-brand-wash);
   color: var(--color-ink);
 }
-.guest-nudge[hidden] {
+/* Shown from the first frame: the head boot script (lib/guest-boot.ts) sets
+   data-guest-nudge on <html>, so the page never shifts when scripts run. */
+.guest-nudge,
+.guest-nudge [data-nudge-variant] {
   display: none;
+}
+:root[data-guest-nudge] .guest-nudge {
+  display: block;
+}
+:root[data-guest-nudge="saved"] .guest-nudge [data-nudge-variant="saved"],
+:root[data-guest-nudge="explored"] .guest-nudge [data-nudge-variant="explored"] {
+  display: inline;
 }
 .guest-nudge__inner {
   display: flex;
@@ -1878,13 +1888,23 @@ body {
   gap: 0.4rem 0.6rem;
   margin: 0;
 }
-.reader-guest__row[hidden],
-.reader-guest__count[hidden] {
+.reader-guest__row[hidden] {
   display: none;
 }
+/* Its slot is reserved from the first frame (data-guest-explored comes from the
+   head boot script, lib/guest-boot.ts); the text appears once the script has
+   filled the number. */
 .reader-guest__count {
+  display: none;
   margin: 0 0 0 auto;
   color: var(--color-brand-strong);
+}
+:root[data-guest-explored] .reader-guest__count {
+  display: block;
+  visibility: hidden;
+}
+:root[data-guest-explored] .reader-guest__count.is-ready {
+  visibility: visible;
 }
 .reader-guest__chips {
   display: inline-flex;

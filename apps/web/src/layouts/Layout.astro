@@ -2,6 +2,7 @@
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { apiGetOrNull } from '../lib/api';
+import { guestBootScript } from '../lib/guest-boot';
 import { bootScript } from '../lib/prefs';
 import { publicOrigin } from '../lib/site';
 import type {
@@ -89,6 +90,8 @@ const goal = streakResponse
     <meta name="theme-color" content="#1b1611" media="(prefers-color-scheme: dark)" />
     <!-- Stored display prefs (theme, reader size, ...) onto <html> before first paint. -->
     <script is:inline set:html={bootScript()} />
+    {/* Guest localStorage state that changes the layout, likewise before first paint. */}
+    {!user && <script is:inline set:html={guestBootScript()} />}
     <title>{title}</title>
     <slot name="head" />
   </head>

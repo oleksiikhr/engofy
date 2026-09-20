@@ -3,7 +3,7 @@
 // validated on read, so a stale or hand-edited value never reaches the DOM or
 // the API.
 
-const KEY = 'guest-deck';
+export const DECK_KEY = 'guest-deck';
 // The free-tier deck size; a guest can't queue more than an account could keep.
 const MAX_ENTRIES = 100;
 const KINDS = ['word', 'phrase', 'grammar'] as const;
@@ -30,7 +30,7 @@ function isEntry(value: unknown): value is GuestDeckEntry {
 
 export function readGuestDeck(): GuestDeckEntry[] {
   try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+    const parsed: unknown = JSON.parse(localStorage.getItem(DECK_KEY) ?? '[]');
     return Array.isArray(parsed) ? parsed.filter(isEntry) : [];
   } catch {
     return [];
@@ -43,7 +43,7 @@ export function guestDeckCount(): number {
 
 function write(entries: GuestDeckEntry[]): void {
   try {
-    localStorage.setItem(KEY, JSON.stringify(entries));
+    localStorage.setItem(DECK_KEY, JSON.stringify(entries));
   } catch {
     // Private mode / blocked storage — the save holds for this page only.
   }
@@ -64,7 +64,7 @@ export function addToGuestDeck(entry: GuestDeckEntry): boolean {
 
 export function clearGuestDeck(): void {
   try {
-    localStorage.removeItem(KEY);
+    localStorage.removeItem(DECK_KEY);
   } catch {
     // Nothing stored that we could remove.
   }

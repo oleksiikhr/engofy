@@ -136,9 +136,16 @@ const themes = [
 
 {
   !user && (
-    <div class="guest-nudge" data-guest-nudge role="status" hidden>
+    <div class="guest-nudge" data-nudge role="status">
       <div class="guest-nudge__inner">
-        <p data-guest-nudge-text />
+        <p>
+          <span data-nudge-variant="saved">
+            You've saved <b data-nudge-count="saved">3</b> cards. Log in so they don't get lost.
+          </span>
+          <span data-nudge-variant="explored">
+            You've explored <b data-nudge-count="explored">10</b> words. Log in to keep your cards and progress.
+          </span>
+        </p>
         <a class="btn btn--sm" href="/login">Log in</a>
         <button type="button" class="guest-nudge__close" data-guest-nudge-close aria-label="Dismiss">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
@@ -158,7 +165,7 @@ const themes = [
   if (guestProgress) {
     initGuestHeader(guestProgress);
   }
-  const guestNudge = document.querySelector<HTMLElement>('[data-guest-nudge]');
+  const guestNudge = document.querySelector<HTMLElement>('[data-nudge]');
   if (guestNudge) {
     initGuestNudge(guestNudge);
   }
