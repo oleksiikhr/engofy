@@ -8,6 +8,7 @@ export class ReaderPage {
   readonly toolbar: Locator;
   readonly studyToggle: Locator;
   readonly studyPanel: Locator;
+  readonly studyNav: Locator;
   readonly finalScreen: Locator;
   readonly quickCheck: Locator;
   readonly readState: Locator;
@@ -25,6 +26,7 @@ export class ReaderPage {
       exact: true,
     });
     this.studyPanel = page.locator('.study-panel');
+    this.studyNav = this.studyPanel.locator('.study-panel__nav');
     this.finalScreen = page.locator('[data-reader-final]');
     this.quickCheck = this.finalScreen.locator('[data-qc]');
     this.readState = page.locator('[data-read-state]');
@@ -96,6 +98,13 @@ export class ReaderPage {
   // The question screen currently on show, by kind.
   qcQuestion(kind: 'choose' | 'recall' | 'match' | 'type' | 'order'): Locator {
     return this.quickCheck.locator(
+      `[data-qc-screen="question"][data-qc-kind="${kind}"]:visible`,
+    );
+  }
+
+  // The study panel's question on show, by kind.
+  studyQuestion(kind: 'choose' | 'recall' | 'type' | 'order'): Locator {
+    return this.studyPanel.locator(
       `[data-qc-screen="question"][data-qc-kind="${kind}"]:visible`,
     );
   }

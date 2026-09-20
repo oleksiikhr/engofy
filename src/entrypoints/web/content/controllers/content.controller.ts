@@ -241,6 +241,7 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
       type: exercise.type,
       source: exercise.source,
       payload: exercise.payload,
+      blockIndex: exercise.blockIndex,
     })),
   };
 }

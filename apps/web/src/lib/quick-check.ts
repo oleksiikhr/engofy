@@ -2,7 +2,9 @@
 // Markup is server-rendered (QuickCheck.astro); this module drives which screen
 // is visible, grades "choose the form", "match pairs", "type the answer" and
 // "put in order" client-side, and sends "recall a word" ratings to the review
-// endpoint.
+// endpoint. With `onComplete` the card is inline (study mode): it has no
+// intro or summary, `start()` opens the first question and the end of the
+// questions reports the tally instead of showing a summary.
 
 const RING_CIRCUMFERENCE = 302;
 
@@ -24,18 +26,45 @@ function isTextField(target: EventTarget | null): boolean {
   );
 }
 
-export function initQuickCheck(card: HTMLElement): void {
+export interface QuickCheckTally {
+  answered: number;
+  correct: number;
+  // Recalled cards rated above Again.
+  cleared: number;
+}
+
+export interface QuickCheckOptions {
+  onComplete?: (tally: QuickCheckTally) => void;
+}
+
+export interface QuickCheckHandle {
+  start(): void;
+  tally(): QuickCheckTally;
+  // Shows the summary as if these questions had been answered on this card.
+  finishWith(tally: QuickCheckTally): void;
+}
+
+export function initQuickCheck(
+  card: HTMLElement,
+  config: QuickCheckOptions = {},
+): QuickCheckHandle {
+  const inline = config.onComplete !== undefined;
   const screens = Array.from(
     card.querySelectorAll<HTMLElement>('[data-qc-screen]'),
   );
   const questions = screens.filter((s) => s.dataset.qcScreen === 'question');
   const summary = screens.find((s) => s.dataset.qcScreen === 'summary');
   const intro = screens.find((s) => s.dataset.qcScreen === 'intro');
-  if (!summary || !intro || questions.length === 0) {
-    return;
+  const idle: QuickCheckHandle = {
+    start() {},
+    tally: () => ({ answered: 0, correct: 0, cleared: 0 }),
+    finishWith() {},
+  };
+  if (questions.length === 0 || (!inline && (!summary || !intro))) {
+    return idle;
   }
 
-  let current: HTMLElement = intro;
+  let current = intro ?? questions[0];
   let answered = 0;
   let correct = 0;
   // Recalled cards rated above Again: they leave today's due count.
@@ -74,6 +103,9 @@ export function initQuickCheck(card: HTMLElement): void {
   };
 
   const showSummary = () => {
+    if (!summary) {
+      return;
+    }
     const ring = summary.querySelector<HTMLElement>('[data-qc-ring]');
     const title = summary.querySelector<HTMLElement>('[data-qc-title]');
     if (answered > 0 && ring) {
@@ -111,6 +143,15 @@ export function initQuickCheck(card: HTMLElement): void {
             : 'Keep at it.';
     }
     show(summary);
+  };
+
+  // The end of the questions: the summary, or the tally for an inline card.
+  const finish = () => {
+    if (config.onComplete) {
+      config.onComplete({ answered, correct, cleared });
+    } else {
+      showSummary();
+    }
   };
 
   const options = (q: HTMLElement) =>
@@ -390,7 +431,7 @@ export function initQuickCheck(card: HTMLElement): void {
     if (at + 1 < questions.length) {
       show(questions[at + 1]);
     } else {
-      showSummary();
+      finish();
     }
   };
 
@@ -399,7 +440,7 @@ export function initQuickCheck(card: HTMLElement): void {
     if (target.closest('[data-qc-start]')) {
       show(questions[0]);
     } else if (target.closest('[data-qc-skip]')) {
-      showSummary();
+      finish();
     } else if (target.closest('[data-qc-check]')) {
       if (kindOf(current) === 'type') {
         checkTyped(current);
@@ -450,7 +491,7 @@ export function initQuickCheck(card: HTMLElement): void {
   // Bound to the card, not the document: keys only act while focus is inside
   // it (each screen change moves focus there).
   card.addEventListener('keydown', (event) => {
-    if (current === summary) {
+    if (summary && current === summary) {
       return;
     }
     if (isTextField(event.target)) {
@@ -466,7 +507,7 @@ export function initQuickCheck(card: HTMLElement): void {
     }
     if (event.key === 'Escape') {
       event.preventDefault();
-      showSummary();
+      finish();
     } else if (!questions.includes(current)) {
       return;
     } else if (kindOf(current) === 'recall') {
@@ -503,4 +544,15 @@ export function initQuickCheck(card: HTMLElement): void {
       }
     }
   });
+
+  return {
+    start: () => show(questions[0]),
+    tally: () => ({ answered, correct, cleared }),
+    finishWith: (tally) => {
+      answered += tally.answered;
+      correct += tally.correct;
+      cleared += tally.cleared;
+      showSummary();
+    },
+  };
 }

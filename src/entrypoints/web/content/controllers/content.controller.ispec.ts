@@ -67,7 +67,7 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
   post.cefrLevel = CefrLevel.A2;
   em.persist(post);
 
-  em.create(PostPart, {
+  const part = em.create(PostPart, {
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -87,12 +87,21 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
     },
   });
 
+  const sentence = em.create(Sentence, {
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: 'She loves to travel widely.',
+    charStart: 0,
+    charEnd: 27,
+  });
   em.create(Exercise, {
     postId: post.id,
     type: ExerciseType.FillBlank,
     source: ExerciseSource.Spacy,
     payload: {
-      sentenceId: uuidv7(),
+      sentenceId: sentence.id,
       prompt: 'She loves to ____ widely.',
       answer: 'travel',
     },
@@ -355,6 +364,7 @@ describe('ContentController', () => {
       cefrLevel: 'A2',
     });
     expect(res.body.exercises).toHaveLength(1);
+    expect(res.body.exercises[0].blockIndex).toBe(0);
     expect(res.body.sourceLink).toBe('https://example.com/article');
     expect(res.body.attributionText).toBe('Example News, "On travel"');
     expect(res.body.sourceType).toBe('news_snippet');

@@ -629,13 +629,15 @@ async function seed(orm: MikroORM): Promise<void> {
     tokenEnd: 9,
   });
 
-  const sid = '00000000-0000-4000-8000-00000000e2e0';
+  // Each drill sits on a real sentence, so the reader places it in that
+  // sentence's block (fill_blank in block 0, the next three in block 1,
+  // reorder in block 2).
   em.create(Exercise, {
     postId: reader.id,
     type: ExerciseType.FillBlank,
     source: ExerciseSource.Spacy,
     payload: {
-      sentenceId: sid,
+      sentenceId: readerSentence.id,
       prompt: 'The old cartographer would ____ the harbour at dawn.',
       answer: 'perambulate',
       lemma: 'perambulate',
@@ -648,7 +650,7 @@ async function seed(orm: MikroORM): Promise<void> {
     type: ExerciseType.MultipleChoice,
     source: ExerciseSource.Spacy,
     payload: {
-      sentenceId: sid,
+      sentenceId: grammarSentence.id,
       prompt: 'By the time the war ended, she had ____ every coastline twice.',
       options: ['drawn', 'draw', 'drew', 'drawing'],
       answerIndex: 0,
@@ -660,7 +662,7 @@ async function seed(orm: MikroORM): Promise<void> {
     type: ExerciseType.FindError,
     source: ExerciseSource.Spacy,
     payload: {
-      sentenceId: sid,
+      sentenceId: grammarSentence.id,
       prompt: 'By the time the war ended, she had draw every coastline twice.',
       tokenPosition: 8,
       incorrectForm: 'draw',
@@ -673,7 +675,7 @@ async function seed(orm: MikroORM): Promise<void> {
     source: ExerciseSource.Spacy,
     // original order: the / boats / had / not / returned
     payload: {
-      sentenceId: sid,
+      sentenceId: overlapSentence.id,
       scrambled: ['had', 'the', 'returned', 'boats', 'not'],
       answer: [2, 0, 4, 1, 3],
     },

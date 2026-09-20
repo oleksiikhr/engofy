@@ -19,6 +19,9 @@ export class PostExerciseDto {
 
   // Shape depends on `type` (see build-exercises.ts / grammar-contrastive-prompt.ts).
   readonly payload!: Record<string, unknown>;
+
+  // Index in `doc.children` of the block the exercise is about.
+  readonly blockIndex?: number;
 }
 
 export class PostWordAnnotationDto {

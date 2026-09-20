@@ -253,6 +253,41 @@ describe('GetPostDetailHandler', () => {
     expect(view?.exercises[0].type).toBe(ExerciseType.FillBlank);
   });
 
+  it("gives an exercise the block index of its sentence's part, and none when the sentence is unknown", async () => {
+    const { shortId } = await seedPublishedPost(suite.orm.em);
+    const post = await suite.orm.em.findOneOrFail(Post, { shortId });
+    const part = await suite.orm.em.findOneOrFail(PostPart, {
+      postId: post.id,
+    });
+    part.blockIndex = 3;
+    const sentence = suite.orm.em.create(Sentence, {
+      postId: post.id,
+      postPartId: part.id,
+      unitIndex: 0,
+      position: 0,
+      rawText: 'She loves to travel widely.',
+      charStart: 0,
+      charEnd: 27,
+    });
+    suite.orm.em.create(Exercise, {
+      postId: post.id,
+      type: ExerciseType.Reorder,
+      source: ExerciseSource.Spacy,
+      payload: {
+        sentenceId: sentence.id,
+        scrambled: ['a', 'b'],
+        answer: [1, 0],
+      },
+    });
+    await suite.orm.em.flush();
+
+    const view = await suite.query(new GetPostDetailQuery(shortId));
+
+    const byType = new Map(view?.exercises.map((e) => [e.type, e]));
+    expect(byType.get(ExerciseType.Reorder)?.blockIndex).toBe(3);
+    expect(byType.get(ExerciseType.FillBlank)?.blockIndex).toBeUndefined();
+  });
+
   it('gives every word and phrase state New for a guest (no userId)', async () => {
     const { shortId, wordDefinitionId } = await seedPublishedPost(suite.orm.em);
 

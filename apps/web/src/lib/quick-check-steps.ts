@@ -2,7 +2,7 @@
 // from data the post page already has (exercises, lexicon, this post's due
 // cards). Nothing here needs an extra API call.
 import type { LexiconData } from './reader-lexicon';
-import type { PostDetail, PracticeItem } from './types';
+import type { Block, Doc, PostDetail, PracticeItem } from './types';
 
 export interface ChooseStep {
   kind: 'choose';
@@ -251,4 +251,87 @@ export function buildQuickCheckSteps(
     .filter((s): s is QuickCheckStep => s !== null)
     .slice(0, MAX_DRILLS);
   return [...choose, ...recall, ...(match ? [match] : []), ...drills];
+}
+
+const STUDY_RECALL_PER_BLOCK = 2;
+const STUDY_EXERCISES_PER_BLOCK = 3;
+
+// The word-definition and phrase ids the spans of each block reference,
+// keyed by the block's index in Doc.children.
+function termIdsByBlock(doc: Doc): Map<number, Set<string>> {
+  const idsOf = (block: Block): Set<string> => {
+    const nodes =
+      block.type === 'list'
+        ? block.items.flatMap((item) => item.children)
+        : block.children;
+    const ids = new Set<string>();
+    for (const node of nodes) {
+      if (node.type !== 'span') {
+        continue;
+      }
+      if (node.kind === 'word') {
+        ids.add(node.wordDefinitionId);
+      } else if (node.kind === 'phrase') {
+        ids.add(node.phraseId);
+      }
+    }
+    return ids;
+  };
+  return new Map(doc.children.map((block, i) => [i, idsOf(block)]));
+}
+
+// Study mode's per-paragraph questions: recall of the due cards whose word or
+// phrase sits in the block, then the block's own exercises. A block with
+// nothing to ask has no entry.
+export function buildStudySteps(
+  doc: Doc,
+  exercises: PostDetail['exercises'],
+  lexicon: LexiconData,
+  dueCards: PracticeItem[],
+): Map<number, QuickCheckStep[]> {
+  const terms = termIdsByBlock(doc);
+  const steps = new Map<number, QuickCheckStep[]>();
+  const push = (block: number, step: QuickCheckStep) => {
+    steps.set(block, [...(steps.get(block) ?? []), step]);
+  };
+
+  const used = new Set<string>();
+  for (const [block, ids] of terms) {
+    let recalls = 0;
+    for (const item of dueCards) {
+      if (
+        recalls === STUDY_RECALL_PER_BLOCK ||
+        used.has(item.cardId) ||
+        !ids.has(item.target.id)
+      ) {
+        continue;
+      }
+      const step = toRecall(item);
+      if (step) {
+        used.add(item.cardId);
+        recalls += 1;
+        push(block, step);
+      }
+    }
+  }
+
+  const counts = new Map<number, number>();
+  for (const exercise of exercises) {
+    const block = exercise.blockIndex;
+    if (block === undefined || !terms.has(block)) {
+      continue;
+    }
+    if ((counts.get(block) ?? 0) === STUDY_EXERCISES_PER_BLOCK) {
+      continue;
+    }
+    const step =
+      exercise.type === 'grammar_contrastive'
+        ? toChoose(exercise, lexicon)
+        : toDrill(exercise);
+    if (step) {
+      counts.set(block, (counts.get(block) ?? 0) + 1);
+      push(block, step);
+    }
+  }
+  return steps;
 }

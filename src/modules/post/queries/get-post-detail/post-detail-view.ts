@@ -89,6 +89,9 @@ export interface PostExerciseView {
   type: ExerciseType;
   source: ExerciseSource;
   payload: Record<string, unknown>;
+  // Position in Doc.children of the block the exercise's sentence sits in;
+  // absent when the sentence is gone.
+  blockIndex?: number;
 }
 
 export interface PostDetailView {
