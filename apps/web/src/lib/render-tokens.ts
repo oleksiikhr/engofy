@@ -65,6 +65,10 @@ export function unitTokens(tokens: ReaderToken[] = []): UnitTokens {
   return { tokens, next: 0, offset: 0 };
 }
 
+// spaCy splits "It's", "don't" and a possessive "farmers'" into a head token
+// plus a clitic; the clitic is part of the same written word.
+const CLITIC = /^(?:['’](?:s|re|ve|ll|d|m|t)?|n['’]t)$/i;
+
 export function renderTokenText(
   text: string,
   unit: UnitTokens,
@@ -74,24 +78,48 @@ export function renderTokenText(
   const end = start + text.length;
   unit.offset = end;
 
-  let out = '';
+  // A clitic that directly follows its head token is rendered inside the
+  // head's span when both sit in this node, and as plain text otherwise, so a
+  // word is never split into two token spans.
+  const spans: { from: number; to: number; token: ReaderToken }[] = [];
   let cursor = 0;
   while (unit.next < unit.tokens.length) {
     const token = unit.tokens[unit.next];
     if (token.charStart >= end) {
       break;
     }
+    const previous = unit.tokens[unit.next - 1];
     unit.next++;
+    const from = token.charStart - start;
+    const to = token.charEnd - start;
     if (
-      token.charStart - start < cursor ||
+      from < cursor ||
       token.charEnd > end ||
       token.charEnd <= token.charStart
     ) {
       continue;
     }
-    out += esc(text.slice(cursor, token.charStart - start));
-    out += `${openTag(token, esc)}${esc(text.slice(token.charStart - start, token.charEnd - start))}</span>`;
-    cursor = token.charEnd - start;
+    if (
+      previous?.charEnd === token.charStart &&
+      CLITIC.test(text.slice(from, to))
+    ) {
+      const head = spans.at(-1);
+      if (head && head.to === from) {
+        head.to = to;
+        cursor = to;
+      }
+      continue;
+    }
+    spans.push({ from, to, token });
+    cursor = to;
+  }
+
+  let out = '';
+  cursor = 0;
+  for (const { from, to, token } of spans) {
+    out += esc(text.slice(cursor, from));
+    out += `${openTag(token, esc)}${esc(text.slice(from, to))}</span>`;
+    cursor = to;
   }
   return out + esc(text.slice(cursor));
 }

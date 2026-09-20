@@ -343,7 +343,10 @@ const isRead = post.isRead ?? false;
   .reading-body :global([data-word-definition-id]:not([data-known])),
   .reading-body :global([data-phrase-id]:not([data-known])),
   .reading-body :global([data-grammar-usage-point-id]:not([data-known])) {
-    padding: 1px 6px;
+    /* The negative margin cancels the padding, so a chip never pushes a
+       neighbouring apostrophe or quote away from its word. */
+    padding: 1px 0.08em;
+    margin-inline: -0.08em;
     color: var(--color-ink);
     font-weight: 700;
   }
