@@ -1,5 +1,8 @@
 ---
 import type { QuickCheckStep } from '../lib/quick-check-steps';
+import { postUrl } from '../lib/post-url';
+import type { SeenSummary } from '../lib/reader-summary';
+import type { PostsListItem } from '../lib/types';
 import QuickCheckScreen from './QuickCheckScreen.astro';
 
 // The reader's Quick check card, server-rendered: intro, one screen per step
@@ -9,14 +12,25 @@ interface Props {
   steps: QuickCheckStep[];
   postTitle: string | null;
   summaryText: string;
+  seen: SeenSummary;
+  nextPost: PostsListItem | null;
   signedIn: boolean;
   streak: number;
   dueCount: number;
   fromHome: boolean;
 }
 
-const { steps, postTitle, summaryText, signedIn, streak, dueCount, fromHome } =
-  Astro.props;
+const {
+  steps,
+  postTitle,
+  summaryText,
+  seen,
+  nextPost,
+  signedIn,
+  streak,
+  dueCount,
+  fromHome,
+} = Astro.props;
 
 const total = steps.length;
 const countOf = (kind: QuickCheckStep['kind']) =>
@@ -77,6 +91,30 @@ const kinds = [
       <p class="qc__note">{summaryText}<span data-added></span></p>
     </div>
     {
+      (seen.words.length > 0 || seen.grammar.length > 0) && (
+        <div class="card card--soft qc__seen" data-qc-seen>
+          {seen.words.length > 0 && (
+            <div class="qc__seen-row">
+              <span class="eyebrow">Words and phrases</span>
+              <ul class="qc__chips">
+                {seen.words.map((word) => <li class="tag tone-blue">{word}</li>)}
+                {seen.wordsMore > 0 && <li class="tag tag--muted">+{seen.wordsMore} more</li>}
+              </ul>
+            </div>
+          )}
+          {seen.grammar.length > 0 && (
+            <div class="qc__seen-row">
+              <span class="eyebrow">Grammar you saw</span>
+              <ul class="qc__chips">
+                {seen.grammar.map((name) => <li class="tag tone-pink">{name}</li>)}
+                {seen.grammarMore > 0 && <li class="tag tag--muted">+{seen.grammarMore} more</li>}
+              </ul>
+            </div>
+          )}
+        </div>
+      )
+    }
+    {
       signedIn && (
         <div class="qc__tiles">
           <div class="card card--soft qc__tile tone-amber">
@@ -103,6 +141,17 @@ const kinds = [
           </p>
           <a class="btn" href="/login">Sign up free</a>
         </div>
+      )
+    }
+    {
+      nextPost && !fromHome && (
+        <a class="card qc__next" href={postUrl(nextPost)} data-qc-next>
+          <span class="eyebrow">
+            Next text{nextPost.cefrLevel ? ` · ${nextPost.cefrLevel}` : ''}
+          </span>
+          <b class="qc__next-title">{nextPost.title ?? 'Untitled'}</b>
+          {nextPost.excerpt && <span class="qc__next-excerpt">{nextPost.excerpt}</span>}
+        </a>
       )
     }
     <div class="qc__actions qc__actions--end">
