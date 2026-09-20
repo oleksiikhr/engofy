@@ -129,10 +129,10 @@ status: in-progress
 акаунт — через `PATCH /profile/cefr-level`. Логіка «вище рівня читача» в щільності підсвічування читає цей
 рівень.
 
-### [ ] 12. Серія днів і денна ціль
+### [x] 12. Серія днів і денна ціль
 - Branch: `guest-reader-ux-overhaul-12-streak-daily-goal`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/118
 
 Денна ціль = N карток за день (за замовчуванням 10, змінюється в профілі), кільце прогресу в хедері.
 Бекенд: колонка `dailyGoal` у `User` (міграція), прогрес цілі в `GET /learning/streak`, ціль у PATCH
