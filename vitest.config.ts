@@ -51,7 +51,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'integration',
-          include: ['src/**/*.ispec.ts'],
+          include: ['src/**/*.ispec.ts', 'test/**/*.ispec.ts'],
           isolate: false,
           maxWorkers: 1,
           fileParallelism: false,
