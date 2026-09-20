@@ -133,10 +133,10 @@ sitemap; `<lastmod>` лише для постів.
 - Регістр і кодування: як обробляти `/posts/Slug-ABC123` і незвичні символи?
 - Чи не зламає редірект Playwright-тести й `partials` (`hx-get`, `?from=home`)?
 
-### [ ] 6. Публічні сторінки: title, description, canonical для фільтрів
+### [x] 6. Публічні сторінки: title, description, canonical для фільтрів
 - Branch: `seo-indexing-improvements-06-public-pages-meta`
-- Base: `seo-indexing-improvements-05-post-url-redirect`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/104
 
 Головна отримує змістовний title і description, `WebSite`/`Organization` JSON-LD і для анонімів
 внутрішні посилання на свіжі пости й граматику. `/posts` і `/grammar` отримують свої title і
