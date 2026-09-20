@@ -165,10 +165,10 @@ a human to do something at or after that tag push:
 
 | Change | What to write |
 |---|---|
-| New/changed environment variable | Table: `Змінна \| Призначення/тип значення \| Де` (which env — staging/prod — and which service, per `infra/stack.prod.yaml`/`.env.production.example`). **Never the actual secret value** — describe what it is or its format, not the value itself |
-| Gitops/infra change (`infra/`, `Dockerfile`, `docker-entrypoint.sh`) | What changed and why, one line per file |
+| New/changed environment variable | Table: `Змінна \| Призначення/тип значення \| Де` (which env — staging/prod — and which service, per `.env.production.example`). **Never the actual secret value** — describe what it is or its format, not the value itself |
+| Gitops/infra change (`Dockerfile`, `docker-entrypoint.sh`, `.github/workflows/`) | What changed and why, one line per file |
 | Required post-deploy command | The exact command and when to run it, e.g. a migration or a one-off CLI command — before or after the tag push |
-| A DB migration is included | Note that `pnpm migration:up` runs as part of `infra/deploy.sh`'s rollout — flag anything that needs manual attention beyond that (a data backfill, a step that can't be idempotent) |
+| A DB migration is included | Note that migrations run as part of the deploy — flag anything that needs manual attention beyond that (a data backfill, a step that can't be idempotent) |
 
 ### Language
 
