@@ -199,12 +199,11 @@ test.describe('reader page (guest)', () => {
     await label.click();
     await expect(reader.popup).toBeVisible();
     const section = reader.popupSection('grammar');
-    await expect(section.locator('.lex-popup__kicker')).toHaveText(
-      'Grammar · past perfect',
-    );
+    await expect(section.locator('.lex-popup__kicker')).toHaveText('Grammar');
     await expect(section.locator('.lex-popup__term')).toHaveText(
-      'USE: EARLIER PAST',
+      'Past perfect',
     );
+    await expect(section.locator('.lex-popup__sub')).toHaveText('Earlier past');
     await expect(section.locator('.lex-popup__def')).toContainText(
       'one past action happened before another',
     );
@@ -246,8 +245,8 @@ test.describe('reader page (guest)', () => {
       reader.popupSection('phrase').locator('.lex-popup__term'),
     ).toHaveText('a piece of cake');
     await expect(
-      reader.popupSection('grammar').locator('.lex-popup__kicker'),
-    ).toHaveText('Grammar · past perfect');
+      reader.popupSection('grammar').locator('.lex-popup__term'),
+    ).toHaveText('Past perfect');
   });
 
   test('"I know it" on the grammar section drops only the grammar label', async ({
