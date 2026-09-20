@@ -1,6 +1,7 @@
 import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -9,6 +10,7 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonDateType } from '../../../core/database/types/luxon-date.type.js';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { Post } from '../../post/entities/post.entity.js';
 
 // One row per (user, UTC calendar day): the post and grammar highlight
 // selected for that day's "Today's session" (PLAN.md daily-session-home
@@ -27,8 +29,11 @@ export class DailyPlan {
   @Property({ type: LuxonDateType })
   planDate!: DateTime;
 
-  // FK -> posts.id
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   postId!: string;
 
   // FK -> grammar_usage_points.id — null when the chosen post has no
