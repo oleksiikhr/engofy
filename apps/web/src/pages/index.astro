@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import { apiGet, apiPatch, apiPost } from '../lib/api';
 import { grammarSlugs } from '../lib/grammar-seo';
+import { DEMO_LEXICON, DEMO_TEXT, demoAttrs } from '../lib/landing-demo';
 import { renderDailyPracticeQueue } from '../lib/practice-card';
 import { postUrl } from '../lib/post-url';
-import { jsonLdGraph } from '../lib/seo';
+import { escapeJson, jsonLdGraph } from '../lib/seo';
 import { getCurrentUser } from '../lib/session';
 import { publicOrigin } from '../lib/site';
 import type {
@@ -51,24 +52,6 @@ const handcrafted = new Set(
     import.meta.glob('../grammar-pages/*.astro'),
   ).map((path) => path.replace('../grammar-pages/', '').replace('.astro', '')),
 );
-
-const SHOTS = [
-  {
-    src: '/landing/reader.png',
-    alt: 'The reader with a word definition open next to the text',
-    caption: 'Read and tap any word',
-  },
-  {
-    src: '/landing/grammar.png',
-    alt: 'A grammar construction page with level and examples',
-    caption: 'Grammar linked to what you read',
-  },
-  {
-    src: '/landing/dictionary.png',
-    alt: 'A personal dictionary listing saved words and phrases with their status',
-    caption: 'Every word you save, in one place',
-  },
-];
 
 const user = await getCurrentUser(Astro.request);
 
@@ -195,10 +178,29 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
         <section class="landing-hero">
           <p class="eyebrow">Engofy</p>
           <h1>Learn English by reading short texts</h1>
-          <p class="landing-hero__lead">
-            Learn English through short authentic texts.
-          </p>
           <a class="btn btn--lg" href="/login">Get started</a>
+        </section>
+
+        <section class="landing-section" aria-label="Try the reader">
+          <h2 class="landing-heading">Try it: tap a highlighted word</h2>
+          <div class="card demo">
+            <div class="analysis reading-body demo__text" data-demo>
+              {
+                DEMO_TEXT.map((parts, block) => (
+                  <p data-block={block}>
+                    {parts.map((part) =>
+                      typeof part === 'string' ? (
+                        part
+                      ) : (
+                        <span {...demoAttrs(part)}>{part.text}</span>
+                      ),
+                    )}
+                  </p>
+                ))
+              }
+            </div>
+            <script is:inline type="application/json" id="demo-lexicon" set:html={escapeJson(DEMO_LEXICON)} />
+          </div>
         </section>
 
         <section class="landing-section" aria-label="Features">
@@ -212,25 +214,6 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
               ))
             }
           </ul>
-        </section>
-
-        <section class="landing-section" aria-label="Product screenshots">
-          <div class="shots">
-            {
-              SHOTS.map((s) => (
-                <figure class="shot">
-                  <img
-                    src={s.src}
-                    alt={s.alt}
-                    width="900"
-                    height="540"
-                    loading="lazy"
-                  />
-                  <figcaption>{s.caption}</figcaption>
-                </figure>
-              ))
-            }
-          </div>
         </section>
 
         {latestPosts.length > 0 && (
@@ -419,6 +402,14 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
 
 <script>
   import '../lib/practice-client';
+  import type { LexiconData } from '../lib/reader-lexicon';
+  import { initReaderPopup } from '../lib/reader-popup';
+
+  const demo = document.querySelector<HTMLElement>('[data-demo]');
+  const raw = document.getElementById('demo-lexicon')?.textContent;
+  if (demo && raw) {
+    initReaderPopup(demo, JSON.parse(raw) as LexiconData);
+  }
 </script>
 
 <style>
@@ -427,16 +418,10 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     padding: 3.5rem 1rem 3rem;
   }
   .landing-hero h1 {
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 2rem;
     font-size: clamp(2.5rem, 7vw, 3.75rem);
     font-weight: 800;
     line-height: 1.05;
-  }
-  .landing-hero__lead {
-    max-width: 30rem;
-    margin: 0 auto 2rem;
-    font-size: 1.15rem;
-    color: var(--color-ink-soft);
   }
   .landing-section {
     padding: 1.5rem 0;
@@ -458,28 +443,14 @@ const initialPracticeHtml = cards ? renderDailyPracticeQueue(cards.items) : '';
     margin: 0;
     color: var(--color-ink-soft);
   }
-  .shots {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: 1.5rem;
+  .demo {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 0.5rem;
   }
-  .shot {
-    margin: 0;
-  }
-  .shot img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 1px solid var(--color-border);
-    border-radius: 1.125rem;
-    box-shadow: var(--shadow-sm);
-  }
-  .shot figcaption {
-    margin-top: 0.75rem;
-    text-align: center;
-    color: var(--color-ink-soft);
-    font-size: 0.9rem;
-    font-weight: 700;
+  .demo__text {
+    font-size: 1.15rem;
+    line-height: 1.7;
   }
   .landing-heading {
     margin: 0 0 1rem;

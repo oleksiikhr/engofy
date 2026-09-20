@@ -140,6 +140,8 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   const slugId =
     root.closest<HTMLElement>('[data-slug-id]')?.dataset.slugId ?? '';
   const isGuest = root.closest('[data-guest]') !== null;
+  // The landing page's sample text: no save or report actions.
+  const demo = root.hasAttribute('data-demo');
   let active: Element | null = null;
   let current: Target | null = null;
   let anchorY: number | null = null;
@@ -221,6 +223,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       target.grammar,
       slugId,
       lang,
+      demo,
     );
     if (speechSupported()) {
       popup

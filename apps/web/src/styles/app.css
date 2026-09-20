@@ -1818,6 +1818,11 @@ body {
   text-decoration: underline;
   cursor: pointer;
 }
+.lex-popup__demo {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
 .lex-report--done {
   font-size: 0.75rem;
   color: var(--color-success);

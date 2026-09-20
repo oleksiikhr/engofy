@@ -202,11 +202,28 @@ function exampleHtml(example: string): string {
   return `<p class="lex-popup__example"><span>${esc(text)}</span><button type="button" class="lex-popup__speak lex-popup__speak--sm" data-speak="${esc(text)}" aria-label="Read the example aloud">${SPEAK_ICON}</button></p>`;
 }
 
+// The landing page's demo popup has nothing to save or report; it points at
+// signing in instead.
+const DEMO_FOOTER_HTML =
+  '<p class="lex-popup__demo"><a href="/login">Log in</a> to save words and review them later.</p>';
+
+function footerHtml(
+  target: LexiconTarget,
+  state: EffectiveState,
+  slugId: string,
+  demo: boolean,
+): string {
+  return demo
+    ? DEMO_FOOTER_HTML
+    : `${lexiconActionsHtml(target, state)}\n  ${reportRowHtml(target, slugId)}`;
+}
+
 function lexiconSectionHtml(
   entry: LexiconEntry,
   slugId: string,
   lang: PopupLang,
   toggle: string,
+  demo: boolean,
 ): string {
   const term = entryTerm(entry);
   const kicker =
@@ -230,8 +247,7 @@ function lexiconSectionHtml(
   ${translation ? `<p class="lex-popup__translation" lang="${esc(lang)}">${esc(translation)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
   ${entry.example ? exampleHtml(entry.example) : ''}
-  ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
-  ${reportRowHtml({ kind: entry.kind, id: entry.id }, slugId)}
+  ${footerHtml({ kind: entry.kind, id: entry.id }, entry.state, slugId, demo)}
 </section>`;
 }
 
@@ -240,6 +256,7 @@ function grammarSectionHtml(
   slugId: string,
   lang: PopupLang,
   toggle: string,
+  demo: boolean,
 ): string {
   const guideword = guidewordLabel(entry.guideword);
   const translated =
@@ -257,26 +274,27 @@ function grammarSectionHtml(
   ${explanation}
   ${entry.examples[0] ? exampleHtml(entry.examples[0]) : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
-  ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
-  ${reportRowHtml({ kind: 'grammar', id: entry.id }, slugId)}
+  ${footerHtml({ kind: 'grammar', id: entry.id }, entry.state, slugId, demo)}
 </section>`;
 }
 
 // The popup body: the lexical section on top, the grammar section below it
 // (a thin divider between them) when a label carries both. The language
-// switch sits in the first section's top row.
+// switch sits in the first section's top row. `demo` swaps the save and
+// report rows for a sign-in note.
 export function readerPopupHtml(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
   slugId: string,
   lang: PopupLang,
+  demo = false,
 ): string {
   const langs = availableLangs(lexical, grammar);
   const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
   return [
-    lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle) : '',
+    lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle, demo) : '',
     grammar
-      ? grammarSectionHtml(grammar, slugId, lang, lexical ? '' : toggle)
+      ? grammarSectionHtml(grammar, slugId, lang, lexical ? '' : toggle, demo)
       : '',
   ]
     .filter(Boolean)
