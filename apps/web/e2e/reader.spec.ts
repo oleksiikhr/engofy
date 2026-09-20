@@ -722,6 +722,25 @@ test.describe('reader page (guest)', () => {
     await expect(reader.finalScreen).toBeVisible();
   });
 
+  test('study mode lists the other new words of a block and opens their popup', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.studyToggle.click();
+    const terms = reader.studyPanel.locator('.study-panel__terms');
+    await expect(terms).toContainText('cartographer');
+    await expect(terms).toContainText('perambulate');
+    await expect(terms).toContainText('at loose ends');
+
+    await terms.getByRole('button', { name: 'perambulate' }).click();
+    await expect(reader.popup.locator('.lex-popup__term')).toHaveText(
+      'perambulate',
+    );
+    await expect(reader.popup).toBeVisible();
+  });
+
   test('404s an unknown post', async ({ page }) => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
@@ -949,6 +968,103 @@ test.describe('reader page (signed in)', () => {
     const summary = reader.qcScreen('summary');
     await expect(summary).toContainText('1/2');
     await expect(summary.locator('[data-qc-due]')).toHaveText(dueBefore ?? '');
+  });
+
+  test("study mode asks each block's questions and hands the score to the summary", async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    const ratings = await stubCardReview(page);
+    await reader.goto(READER_SLUG);
+    const dueBefore = Number(
+      await reader.finalScreen
+        .locator('[data-qc-due]')
+        .getAttribute('data-qc-due'),
+    );
+    await reader.studyToggle.click();
+    await expect(reader.studyPanel).toContainText('Paragraph 1 / 3');
+
+    // Block 1: recall of the due phrase, then the fill-in-the-blank.
+    const recall = reader.studyQuestion('recall');
+    await expect(recall).toContainText('at loose ends');
+    await expect(recall).toContainText('1/2');
+    await recall.getByRole('button', { name: 'Show answer' }).click();
+    await recall.getByRole('button', { name: /^Good/ }).click();
+    await expect.poll(() => ratings.length).toBe(1);
+    expect(ratings[0].rating).toBe('good');
+
+    const fill = reader.studyQuestion('type');
+    await expect(fill).toContainText('2/2');
+    await fill.locator('[data-qc-input]').fill('perambulate');
+    await page.keyboard.press('Enter');
+    await expect(fill.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await fill.getByRole('button', { name: 'Done' }).click();
+    await expect(reader.studyPanel.locator('.study-panel__done')).toHaveText(
+      'Questions done: 2/2 correct.',
+    );
+    await reader.studyNav.getByRole('button', { name: 'Continue' }).click();
+
+    // Block 2: its multiple choice, find-the-error and contrastive question.
+    await expect(reader.studyPanel).toContainText(
+      'Paragraph 2 / 3 · 2/2 correct',
+    );
+    const mc = reader.studyQuestion('choose');
+    await expect(mc).toContainText('she had');
+    await mc.locator('[data-text="drawn"]').click();
+    await reader.check(mc);
+    await mc.getByRole('button', { name: 'Continue' }).click();
+
+    const error = reader.studyQuestion('type');
+    await error.locator('[data-qc-input]').fill('drawn');
+    await reader.check(error);
+    await error.getByRole('button', { name: 'Continue' }).click();
+
+    const contrast = reader.studyQuestion('choose');
+    await expect(contrast).toContainText('3/3');
+    await contrast.locator('[data-text="drew"]').click();
+    await reader.check(contrast);
+    await expect(contrast.locator('[data-qc-verdict]')).toHaveText('Not quite');
+    await contrast.getByRole('button', { name: 'Done' }).click();
+    await expect(reader.studyPanel.locator('.study-panel__done')).toHaveText(
+      'Questions done: 2/3 correct.',
+    );
+    await reader.studyNav.getByRole('button', { name: 'Continue' }).click();
+
+    // Block 3: put in order.
+    const order = reader.studyQuestion('order');
+    for (const word of ['the', 'boats', 'had', 'not', 'returned']) {
+      await order.locator('[data-order-chip]', { hasText: word }).click();
+    }
+    await order.getByRole('button', { name: 'Done' }).click();
+    await reader.studyNav.getByRole('button', { name: 'Finish' }).click();
+
+    // The score carries over; the Quick check card skips to its summary.
+    const summary = reader.qcScreen('summary');
+    await expect(summary).toContainText('Nice work.');
+    await expect(summary).toContainText('5/6');
+    await expect(summary.locator('[data-qc-due]')).toHaveText(
+      String(dueBefore - 1),
+    );
+    await expect(reader.qcScreen('intro')).toHaveCount(0);
+  });
+
+  test('study mode counts only the questions that were answered', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await stubCardReview(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.studyToggle.click();
+    const recall = reader.studyQuestion('recall');
+    await recall.getByRole('button', { name: 'Show answer' }).click();
+    await recall.getByRole('button', { name: /^Again/ }).click();
+    // Leave the fill-in-the-blank unanswered.
+    await reader.studyNav.getByRole('button', { name: 'Continue' }).click();
+    await reader.studyNav.getByRole('button', { name: 'Continue' }).click();
+    await reader.studyNav.getByRole('button', { name: 'Finish' }).click();
+
+    await expect(reader.qcScreen('summary')).toContainText('0/1');
   });
 
   test('the final screen links to practice only when cards from the post are due', async ({

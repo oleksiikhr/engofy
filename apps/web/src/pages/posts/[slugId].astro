@@ -1,9 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import QuickCheck from '../../components/QuickCheck.astro';
+import QuickCheckScreen from '../../components/QuickCheckScreen.astro';
 import { apiGetOrNull } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
-import { buildQuickCheckSteps } from '../../lib/quick-check-steps';
+import {
+  buildQuickCheckSteps,
+  buildStudySteps,
+} from '../../lib/quick-check-steps';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import type {
@@ -74,6 +78,12 @@ const [budget, dueCards, streakResponse] = user
   : [null, null, null];
 const dueCount = dueCards?.items.length ?? 0;
 const steps = buildQuickCheckSteps(
+  post.exercises,
+  lexicon,
+  dueCards?.items ?? [],
+);
+const studySteps = buildStudySteps(
+  post.doc,
   post.exercises,
   lexicon,
   dueCards?.items ?? [],
@@ -174,6 +184,17 @@ const isRead = post.isRead ?? false;
 
       <div class="analysis reading-body" set:html={bodyHtml} />
       <script is:inline type="application/json" id="lexicon-data" set:html={lexiconJson} />
+      {
+        [...studySteps].map(([block, steps]) => (
+          <template data-study-steps={String(block)}>
+            <div class="qc qc--inline" data-qc>
+              {steps.map((step, si) => (
+                <QuickCheckScreen step={step} si={si} total={steps.length} lastLabel="Done" />
+              ))}
+            </div>
+          </template>
+        ))
+      }
     </article>
   </div>
 

@@ -1533,10 +1533,36 @@ body {
   cursor: pointer;
   font-weight: 600;
 }
+.study-panel__terms {
+  margin-bottom: 0.7rem;
+}
+.study-panel__term-chip {
+  cursor: pointer;
+  border: 0;
+}
+.study-panel__quiz:not(:empty) {
+  margin-bottom: 0.9rem;
+}
+.study-panel .qc--inline {
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: none;
+}
+.study-panel__done {
+  font-weight: 700;
+  color: var(--color-ink-soft);
+}
 .study-panel__nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
+}
+.study-panel__progress {
+  margin-left: auto;
 }
 .reader-study .reader-final {
   display: none;
