@@ -19,6 +19,12 @@ type JobSpanAttributes = NonNullable<
 // A processor that runs one content-pipeline stage returns this from
 // `pipelineStage()` so `JobWorkerHost` can maintain the `post_pipeline_runs`
 // row around the job (D4).
+export interface FailureHint {
+  tags: Record<string, string>;
+  fingerprint?: string[];
+  extra?: Record<string, unknown>;
+}
+
 export interface PipelineStageRef {
   stage: PostPipelineStage;
   postId: string;
@@ -140,7 +146,7 @@ export abstract class JobWorkerHost<T = unknown> {
       tags.exhausted = String(job.retryCount >= job.retryLimit);
     }
 
-    Sentry.captureException(err, {
+    this.reportFailure(err, {
       tags,
       ...(err instanceof AiSchemaMismatchError && {
         fingerprint: [
@@ -151,6 +157,13 @@ export abstract class JobWorkerHost<T = unknown> {
         extra: { rawInput: err.rawInput },
       }),
     });
+  }
+
+  // Seam over `Sentry.captureException`: the integration suite shares one
+  // module cache (`isolate: false`), so mocking `@sentry/nestjs` is ignored
+  // once an earlier file has loaded this module. Tests override this instead.
+  protected reportFailure(err: unknown, hint: FailureHint): void {
+    Sentry.captureException(err, hint);
   }
 
   // Write the run row `Pending` + `startedAt` on stage entry. `Running` is a
