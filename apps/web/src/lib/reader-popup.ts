@@ -1,9 +1,15 @@
+import { addToGuestDeck, readGuestDeck } from './guest-deck';
 import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 import {
   type GrammarLexiconEntry,
+  LEXICON_ACTION_MESSAGE,
   type LexiconData,
   type LexiconEntry,
+  type LexiconTarget,
+  lexiconActionsHtml,
+  lexiconActionsId,
   readerPopupHtml,
+  TARGET_FIELD,
 } from './reader-lexicon';
 import type { EffectiveState } from './types';
 
@@ -63,6 +69,28 @@ function entriesOf(
   return kind === 'grammar' ? data.grammar : null;
 }
 
+// A guest's locally saved cards count as Learning, as they will once the
+// deck moves into an account.
+function applyGuestDeck(data: LexiconData): void {
+  for (const { kind, id } of readGuestDeck()) {
+    const entry = entriesOf(data, kind)?.[id];
+    if (entry?.state === 'new') {
+      entry.state = 'learning';
+    }
+  }
+}
+
+function formTarget(form: HTMLFormElement): LexiconTarget | null {
+  const fields = new FormData(form);
+  for (const kind of Object.keys(TARGET_FIELD) as LexiconTarget['kind'][]) {
+    const id = fields.get(TARGET_FIELD[kind]);
+    if (typeof id === 'string' && id) {
+      return { kind, id };
+    }
+  }
+  return null;
+}
+
 function targetFor(el: Element, data: LexiconData): Target | null {
   if (el.closest('a')) {
     return null;
@@ -102,6 +130,11 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   let current: Target | null = null;
   let anchorY: number | null = null;
   let lang: PopupLang = readPref('popupLang');
+  // A guest's "Add to deck" is kept in the browser until they sign in.
+  const guest = root.closest('[data-guest]') !== null;
+  if (guest) {
+    applyGuestDeck(data);
+  }
 
   // A grammar label cut across several nodes is one wrapper per node; only
   // the first of each is a tab stop.
@@ -214,6 +247,33 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
 
   window.addEventListener('resize', position);
 
+  popup.addEventListener(
+    'submit',
+    (event) => {
+      const form = event.target as HTMLFormElement;
+      const target = guest ? formTarget(form) : null;
+      if (!target || new FormData(form).get('action') !== 'add') {
+        return;
+      }
+      // Stops htmx from sending the guest's add to the server.
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const saved = addToGuestDeck(target);
+      const row = popup.querySelector(`#${lexiconActionsId(target)}`);
+      if (row) {
+        row.outerHTML = saved
+          ? lexiconActionsHtml(target, 'learning')
+          : lexiconActionsHtml(
+              target,
+              'new',
+              LEXICON_ACTION_MESSAGE.guestDeckFull,
+            );
+      }
+      syncStates();
+    },
+    true,
+  );
+
   popup.addEventListener('click', (event) => {
     const langButton = (event.target as Element).closest('[data-popup-lang]');
     const next = langButton?.getAttribute('data-popup-lang');
@@ -245,7 +305,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   // label shows it instead of the state the page loaded with. Once a target is
   // settled as known/skipped its spans lose the highlight (`data-known`) but
   // stay clickable.
-  popup.addEventListener('htmx:afterSwap', () => {
+  function syncStates(): void {
     for (const section of popup.querySelectorAll('[data-lex-kind]')) {
       const state = section
         .querySelector('.lex-state')
@@ -267,5 +327,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       }
     }
     position();
-  });
+  }
+
+  popup.addEventListener('htmx:afterSwap', syncStates);
 }

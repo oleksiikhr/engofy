@@ -6,6 +6,8 @@
 // intro or summary, `start()` opens the first question and the end of the
 // questions reports the tally instead of showing a summary.
 
+import { readGuestDeck } from './guest-deck';
+
 const RING_CIRCUMFERENCE = 302;
 
 // Keys 1..9 pick the matching option.
@@ -133,6 +135,12 @@ export function initQuickCheck(
         practice.textContent = `Practice ${left} card${left === 1 ? '' : 's'} from this text`;
         practice.hidden = left === 0;
       }
+    }
+    const saved = summary.querySelector<HTMLElement>('[data-guest-saved]');
+    const savedCount = readGuestDeck().length;
+    if (saved && savedCount > 0) {
+      saved.textContent = `You saved ${savedCount} card${savedCount === 1 ? '' : 's'} here. `;
+      saved.hidden = false;
     }
     if (title) {
       title.textContent =
@@ -349,15 +357,18 @@ export function initQuickCheck(
       return;
     }
     q.dataset.checked = 'true';
-    const body = new FormData();
-    body.set('cardId', q.dataset.cardId ?? '');
-    body.set('rating', rating);
-    // Best-effort, like mark-read: a failure must not block the quiz.
-    fetch('/partials/card-review', {
-      method: 'POST',
-      body,
-      keepalive: true,
-    }).catch(() => {});
+    // A guest's word has no card: the rating only counts toward the score.
+    if (q.dataset.cardId) {
+      const body = new FormData();
+      body.set('cardId', q.dataset.cardId);
+      body.set('rating', rating);
+      // Best-effort, like mark-read: a failure must not block the quiz.
+      fetch('/partials/card-review', {
+        method: 'POST',
+        body,
+        keepalive: true,
+      }).catch(() => {});
+    }
     record(rating !== 'again');
     if (rating !== 'again') {
       cleared += 1;

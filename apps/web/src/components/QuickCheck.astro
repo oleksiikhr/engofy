@@ -93,6 +93,18 @@ const kinds = [
         </div>
       )
     }
+    {
+      !signedIn && (
+        <div class="card card--soft qc__signup" data-qc-signup>
+          <b>Keep what you learned</b>
+          <p class="qc__note">
+            <span data-guest-saved hidden />
+            Create a free account to save words, get them back for review and build a day streak.
+          </p>
+          <a class="btn" href="/login">Sign up free</a>
+        </div>
+      )
+    }
     <div class="qc__actions qc__actions--end">
       {
         fromHome && signedIn && (

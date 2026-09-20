@@ -115,6 +115,7 @@ const steps = buildQuickCheckSteps(
   post.exercises,
   lexicon,
   dueCards?.items ?? [],
+  !user,
 );
 const studySteps = buildStudySteps(
   post.doc,
@@ -141,7 +142,7 @@ const isRead = post.isRead ?? false;
     {post.cefrLevel && <meta property="article:tag" content={post.cefrLevel} />}
     <script is:inline type="application/ld+json" set:html={jsonLd} />
   </Fragment>
-  <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining}>
+  <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining} data-guest={user ? undefined : ''}>
     <article class="reader-article">
       <header class="post-head">
         <a class="post-head__back meta" href="/posts">
