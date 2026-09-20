@@ -21,6 +21,12 @@ export type ReaderDensity = (typeof READER_DENSITIES)[number];
 export const READER_HINTS = ['new', 'seen'] as const;
 export type ReaderHint = (typeof READER_HINTS)[number];
 
+// Language of the reader popup's definitions: English only, or a translation
+// alongside. Read when the popup opens, so it is not in the boot script.
+export const TRANSLATION_LANGS = ['uk'] as const;
+export const POPUP_LANGS = ['en', ...TRANSLATION_LANGS] as const;
+export type PopupLang = (typeof POPUP_LANGS)[number];
+
 export const READER_SIZE_STEPS = 6;
 export const DEFAULT_READER_SIZE = 2;
 
@@ -30,6 +36,7 @@ interface PrefTypes {
   readerSize: number;
   readerDensity: ReaderDensity;
   readerHint: ReaderHint;
+  popupLang: PopupLang;
 }
 export type PrefName = keyof PrefTypes;
 
@@ -42,6 +49,7 @@ const SPEC = {
   readerSize: { key: 'reader-size', attr: 'readerSize' },
   readerDensity: { key: 'reader-density', attr: 'readerDensity' },
   readerHint: { key: 'reader-hint', attr: 'readerHint' },
+  popupLang: { key: 'popup-lang', attr: 'popupLang' },
 } as const satisfies Record<PrefName, { key: string; attr: string }>;
 
 function parse<N extends PrefName>(
@@ -71,6 +79,10 @@ function parse(name: PrefName, raw: string | null): PrefTypes[PrefName] | null {
       return (READER_HINTS as readonly string[]).includes(raw)
         ? (raw as ReaderHint)
         : null;
+    case 'popupLang':
+      return (POPUP_LANGS as readonly string[]).includes(raw)
+        ? (raw as PopupLang)
+        : null;
     case 'readerSize': {
       const size = Number(raw);
       return Number.isInteger(size) && size >= 0 && size < READER_SIZE_STEPS
@@ -95,6 +107,7 @@ const DEFAULTS: PrefTypes = {
   readerSize: DEFAULT_READER_SIZE,
   readerDensity: 'focus',
   readerHint: 'new',
+  popupLang: 'en',
 };
 
 function stored(name: PrefName): string | null {

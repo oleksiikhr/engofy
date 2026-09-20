@@ -10,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import type { LexiconTranslations } from '../domain/content-translations.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
 import { Word } from './word.entity.js';
@@ -42,6 +43,11 @@ export class WordDefinition {
 
   @Property({ type: 'text', nullable: true })
   exampleSentence?: string | null;
+
+  // Translations by language (`{ uk: { translation } }`), written by the
+  // enrichment stage; a missing key = not yet translated into that language.
+  @Property({ type: 'json', nullable: true })
+  translations?: LexiconTranslations | null;
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();

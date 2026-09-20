@@ -47,12 +47,14 @@ describe('toGrammarEnrichmentContent', () => {
     expect(
       toGrammarEnrichmentContent({
         explanation: ' We use it for routines. ',
+        translatedExplanation: ' Ми вживаємо це для рутини. ',
         example1: 'I get up at seven.',
         example2: 'She works here.',
         example3: 'They eat lunch at noon.',
       }),
     ).toEqual({
       explanation: 'We use it for routines.',
+      translatedExplanation: 'Ми вживаємо це для рутини.',
       examples: [
         'I get up at seven.',
         'She works here.',
@@ -65,6 +67,7 @@ describe('toGrammarEnrichmentContent', () => {
     expect(
       toGrammarEnrichmentContent({
         explanation: 'Explanation.',
+        translatedExplanation: 'Пояснення.',
         example1: 'One.',
         example2: 'Two.',
       }).examples,
@@ -77,6 +80,17 @@ describe('grammarEnrichmentToolSchema', () => {
     expect(
       grammarEnrichmentToolSchema.safeParse({
         explanation: '',
+        translatedExplanation: 'Пояснення.',
+        example1: 'One.',
+        example2: 'Two.',
+      }).success,
+    ).toBe(false);
+  });
+
+  it('rejects a missing Ukrainian explanation', () => {
+    expect(
+      grammarEnrichmentToolSchema.safeParse({
+        explanation: 'Explanation.',
         example1: 'One.',
         example2: 'Two.',
       }).success,

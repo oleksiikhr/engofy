@@ -1197,11 +1197,44 @@ body {
 .lex-popup p {
   margin: 0.35rem 0 0;
 }
-.lex-popup__kicker {
-  margin: 0 0 0.35rem;
+.lex-popup__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.lex-popup .lex-popup__kicker {
+  margin: 0;
   color: var(--tone-ink);
   font-size: 0.8rem;
   font-weight: 800;
+}
+.lex-popup__lang {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--color-paper-soft);
+}
+.lex-popup__lang-btn {
+  min-width: 2.25rem;
+  padding: 0.2rem 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.lex-popup__lang-btn[aria-pressed="true"] {
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+}
+.lex-popup .lex-popup__translation {
+  color: var(--color-ink);
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 .lex-popup__head {
   display: flex;

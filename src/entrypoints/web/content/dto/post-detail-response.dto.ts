@@ -7,8 +7,24 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { Doc } from '../../../../modules/post/domain/node-tree.types.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
+import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
 import type { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../../../modules/post/enums/exercise-type.enum.js';
+
+export class PostLexiconTranslationDto {
+  readonly translation!: string;
+}
+
+export class PostGrammarTranslationDto {
+  readonly explanation!: string;
+}
+
+type PostLexiconTranslations = Partial<
+  Record<ContentLanguage, PostLexiconTranslationDto>
+>;
+type PostGrammarTranslations = Partial<
+  Record<ContentLanguage, PostGrammarTranslationDto>
+>;
 
 export class PostExerciseDto {
   readonly id!: string;
@@ -40,6 +56,9 @@ export class PostWordAnnotationDto {
 
   readonly example!: string | null;
 
+  // By language code; a language with no entry is not translated yet.
+  readonly translations!: PostLexiconTranslations;
+
   readonly cefrLevel!: CefrLevel | null;
 
   readonly frequencyRank!: number | null;
@@ -59,6 +78,9 @@ export class PostPhraseAnnotationDto {
 
   readonly example!: string | null;
 
+  // By language code; a language with no entry is not translated yet.
+  readonly translations!: PostLexiconTranslations;
+
   readonly cefrLevel!: CefrLevel | null;
 
   // The viewer's effective state for this phrase; New for a guest.
@@ -75,6 +97,8 @@ export class PostGrammarUsagePointDto {
   readonly canDoStatement!: string;
 
   readonly explanation!: string | null;
+
+  readonly translations!: PostGrammarTranslations;
 
   readonly examples!: string[];
 }

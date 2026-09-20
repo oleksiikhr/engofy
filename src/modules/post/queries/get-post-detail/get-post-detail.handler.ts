@@ -9,6 +9,10 @@ import { LearningCard } from '../../../learning/entities/learning-card.entity.js
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
+import {
+  readGrammarTranslations,
+  readLexiconTranslations,
+} from '../../domain/content-translations.js';
 import { loadIrregularVerbsByLemma } from '../../domain/irregular-verb.js';
 import { locateGrammarMatch } from '../../domain/locate-grammar-match.js';
 import { locateSentenceTokens } from '../../domain/locate-sentence-tokens.js';
@@ -219,6 +223,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         definition: definition.definition ?? null,
         phonetic: definition.phonetic ?? null,
         example: definition.exampleSentence ?? null,
+        translations: readLexiconTranslations(definition.translations),
         cefrLevel: definition.cefrLevel ?? null,
         frequencyRank: word?.frequencyRank ?? null,
         state: states.get(definition.id) ?? EffectiveState.New,
@@ -253,6 +258,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         type: phrase.type ?? null,
         definition: phrase.definition ?? null,
         example: phrase.exampleSentence ?? null,
+        translations: readLexiconTranslations(phrase.translations),
         cefrLevel: phrase.cefrLevel ?? null,
         state: states.get(phrase.id) ?? EffectiveState.New,
       };
@@ -507,6 +513,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           explanation: point.learnerExplanation ?? null,
+          translations: readGrammarTranslations(point.translations),
           examples: point.learnerExamples ?? [],
         })),
       };
