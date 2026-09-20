@@ -1,5 +1,8 @@
+import * as Sentry from '@sentry/nestjs';
 import { v7 as uuidv7 } from 'uuid';
+import { injectOrm } from '../../../../test/helpers/orm.helper.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
+import { AiSchemaMismatchError } from '../../../core/ai/ai-schema-mismatch.error.js';
 import { PostSource } from '../../../modules/post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../modules/post/entities/post.entity.js';
 import { PostPipelineRun } from '../../../modules/post/entities/post-pipeline-run.entity.js';
@@ -7,8 +10,28 @@ import { PostPipelineRunStatus } from '../../../modules/post/enums/post-pipeline
 import { PostPipelineStage } from '../../../modules/post/enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../modules/post/enums/post-status.enum.js';
+import { JobWorkerHost, type PipelineStageRef } from '../job-worker-host.js';
 import { TagGrammarModule } from './tag-grammar.module.js';
 import { TagGrammarProcessor } from './tag-grammar.processor.js';
+
+vi.mock('@sentry/nestjs', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@sentry/nestjs')>()),
+  captureException: vi.fn(),
+}));
+
+class ThrowingProcessor extends JobWorkerHost<{ postId: string }> {
+  constructor(private readonly error: Error) {
+    super();
+  }
+
+  protected pipelineStage(job: { data: { postId: string } }): PipelineStageRef {
+    return { stage: PostPipelineStage.AiExercises, postId: job.data.postId };
+  }
+
+  protected async processJob(): Promise<void> {
+    throw this.error;
+  }
+}
 
 // `JobWorkerHost` maintains the `post_pipeline_runs` row around a pipeline job
 // on its own transaction, so a failed stage always leaves a trace even though
@@ -121,5 +144,86 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
 
     const run = await readRun(postId);
     expect(run?.retryCount).toBe(4);
+  });
+
+  describe('Sentry capture', () => {
+    beforeEach(() => {
+      vi.mocked(Sentry.captureException).mockClear();
+    });
+
+    function throwingProcessor(error: Error) {
+      return injectOrm(new ThrowingProcessor(error), suite.orm);
+    }
+
+    it('tags the failure with postId and stage, flagging the last attempt', async () => {
+      const postId = await seedPost();
+      const error = new Error('boom');
+
+      await expect(
+        throwingProcessor(error).work([
+          fakeJob(postId, { retryCount: 3, retryLimit: 3 }),
+        ]),
+      ).rejects.toThrow('boom');
+
+      expect(Sentry.captureException).toHaveBeenCalledExactlyOnceWith(error, {
+        tags: {
+          postId,
+          stage: PostPipelineStage.AiExercises,
+          exhausted: 'true',
+        },
+      });
+    });
+
+    it('flags an attempt with retries left as not exhausted', async () => {
+      const postId = await seedPost();
+
+      await expect(
+        throwingProcessor(new Error('boom')).work([
+          fakeJob(postId, { retryCount: 0, retryLimit: 3 }),
+        ]),
+      ).rejects.toThrow();
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(
+        expect.any(Error),
+        expect.objectContaining({
+          tags: expect.objectContaining({ exhausted: 'false' }),
+        }),
+      );
+    });
+
+    it('groups an AI schema mismatch under its own fingerprint per tool and stage', async () => {
+      const postId = await seedPost();
+      const error = new AiSchemaMismatchError('report_grammar_contrastive');
+
+      await expect(
+        throwingProcessor(error).work([
+          fakeJob(postId, { retryCount: 3, retryLimit: 3 }),
+        ]),
+      ).rejects.toThrow(AiSchemaMismatchError);
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(
+        error,
+        expect.objectContaining({
+          fingerprint: [
+            'ai-schema-mismatch',
+            'report_grammar_contrastive',
+            PostPipelineStage.AiExercises,
+          ],
+        }),
+      );
+    });
+
+    it('leaves other errors on the default fingerprint', async () => {
+      const postId = await seedPost();
+
+      await expect(
+        throwingProcessor(new Error('boom')).work([
+          fakeJob(postId, { retryCount: 0, retryLimit: 3 }),
+        ]),
+      ).rejects.toThrow();
+
+      const [, context] = vi.mocked(Sentry.captureException).mock.calls[0];
+      expect(context).not.toHaveProperty('fingerprint');
+    });
   });
 });

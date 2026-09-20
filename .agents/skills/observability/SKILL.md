@@ -27,6 +27,11 @@ Only the NestJS backend emits Sentry events at all (`@sentry/nestjs`, initialize
 split across separate Sentry projects — there is exactly one project to search once it's configured.
 `apps/web` and `nlp-service` have no error-tracking SDK at all right now.
 
+Pipeline-stage job failures (worker, `JobWorkerHost`) are captured on every attempt with tags
+`postId`, `stage` and `exhausted` (`true` on the last pg-boss attempt — search `exhausted:true` for
+stages that gave up). `AiSchemaMismatchError` has a fingerprint of `ai-schema-mismatch` + tool name +
+stage, so each tool/stage pair is its own issue.
+
 **Axiom is not connected to this project at all** — there is no workspace, no dataset, no dashboard,
 no monitor. The `health` and `sync-dashboard` skills still document the Axiom-shaped steps they'd
 perform if that ever changes; until then, treat any Axiom step in either skill as a no-op and say so
