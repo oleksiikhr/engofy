@@ -82,6 +82,7 @@ export class RetryPostHandler implements ICommandHandler<RetryPostCommand> {
 
     post.status = PostStatus.Pending;
     post.failureNotifiedAt = null;
+    post.publishNotifiedAt = null;
 
     this.outbox.send<PostSpacyParseJobData>(
       this.em,
