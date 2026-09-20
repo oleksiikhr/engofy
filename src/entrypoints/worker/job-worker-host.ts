@@ -3,6 +3,7 @@ import { Inject, Logger } from '@nestjs/common';
 import * as Sentry from '@sentry/nestjs';
 import { DateTime } from 'luxon';
 import type { Job, JobWithMetadata } from 'pg-boss';
+import { AiSchemaMismatchError } from '../../core/ai/ai-schema-mismatch.error.js';
 import { withRequestContext } from '../../core/database/helpers/request-context.helper.js';
 import type { SentryTraceFields } from '../../core/queue/sentry-trace.js';
 import { Post } from '../../modules/post/entities/post.entity.js';
@@ -105,7 +106,7 @@ export abstract class JobWorkerHost<T = unknown> {
                 await this.recordStageFailure(stageRef, job, err);
               }
 
-              Sentry.captureException(err);
+              this.captureFailure(err, job, stageRef);
 
               this.logger.error(
                 {
@@ -121,6 +122,34 @@ export abstract class JobWorkerHost<T = unknown> {
           },
         ),
     );
+  }
+
+  // Tag a pipeline-stage failure with `postId` + `stage` (and whether this was
+  // the last pg-boss attempt) so an exhausted stage is findable in Sentry. A
+  // model payload that fails its tool schema gets its own fingerprint per
+  // tool + stage, instead of grouping with whatever else throws in that stack.
+  private captureFailure(
+    err: unknown,
+    job: JobWithMetadata<T>,
+    stageRef: PipelineStageRef | null,
+  ): void {
+    const tags: Record<string, string> = {};
+    if (stageRef) {
+      tags.postId = stageRef.postId;
+      tags.stage = stageRef.stage;
+      tags.exhausted = String(job.retryCount >= job.retryLimit);
+    }
+
+    Sentry.captureException(err, {
+      tags,
+      ...(err instanceof AiSchemaMismatchError && {
+        fingerprint: [
+          'ai-schema-mismatch',
+          err.tool,
+          stageRef?.stage ?? job.name,
+        ],
+      }),
+    });
   }
 
   // Write the run row `Pending` + `startedAt` on stage entry. `Running` is a

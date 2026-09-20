@@ -37,7 +37,7 @@ export class AssessComplexityProcessor extends JobWorkerHost<AssessComplexityJob
 ```
 
 - One stage = one `QueueName` + one processor + one per-stage `@Module` importing the domain module.
-- A **throw** in `processJob` → caught by `JobWorkerHost.handleOne` → (pipeline stages: `PostPipelineRun` set `Failed` on a forked em) → Sentry + log → **rethrown** so pg-boss retries.
+- A **throw** in `processJob` → caught by `JobWorkerHost.handleOne` → (pipeline stages: `PostPipelineRun` set `Failed` on a forked em) → Sentry (tags `postId`/`stage`/`exhausted`; `AiSchemaMismatchError` fingerprinted per tool + stage) + log → **rethrown** so pg-boss retries.
 - Job runs inside `withRequestContext(this.orm.em, …)` — its own forked `em`.
 - A pipeline processor overrides `pipelineStage(job): PipelineStageRef` (stage + postId). `JobWorkerHost` then writes the run row `Pending`+`startedAt` before the job and `Failed`+`errorMessage`+`retryCount++` in the catch — on `this.orm.em.fork()` (a separate transaction) so the trace survives the job's rollback. `PostStatus.Failed` is set once `job.retryCount >= job.retryLimit`. Non-pipeline processors (auth e-mail) leave `pipelineStage()` returning `null`.
 - `JobWorkerHost.work` settles each job with `Promise.allSettled`, then re-throws (single reason, or `AggregateError`) so pg-boss still retries the failed job(s). Safe as a batch only because `batchSize` defaults to 1 — a real batch wants pg-boss `perJobResults`.
