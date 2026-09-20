@@ -24,6 +24,8 @@ const kinds = [
   { kind: 'choose', label: 'Choose the form', tone: 'tone-blue' },
   { kind: 'recall', label: 'Recall a word', tone: 'tone-amber' },
   { kind: 'match', label: 'Match pairs', tone: 'tone-green' },
+  { kind: 'type', label: 'Type the answer', tone: 'tone-pink' },
+  { kind: 'order', label: 'Put in order', tone: 'tone-brand' },
 ] as const;
 const RATINGS = [
   { rating: 'again', label: 'Again', tone: 'tone-danger' },
@@ -72,6 +74,8 @@ const RATINGS = [
         data-qc-kind={step.kind}
         data-answer-index={step.kind === 'choose' ? String(step.answerIndex) : undefined}
         data-card-id={step.kind === 'recall' ? step.cardId : undefined}
+        data-answer={step.kind === 'type' ? step.answer : step.kind === 'order' ? step.answerText : undefined}
+        data-order={step.kind === 'order' ? JSON.stringify(step.order) : undefined}
         tabindex="-1"
         hidden
       >
@@ -170,6 +174,65 @@ const RATINGS = [
             </div>
             <p class="qc__note qc__hint">Pick a word, then its meaning.</p>
             <div class="qc__actions">
+              <button type="button" class="btn btn--lg" data-qc-next hidden>
+                {si === total - 1 ? 'See results' : 'Continue'}
+              </button>
+            </div>
+          </>
+        )}
+
+        {step.kind === 'type' && (
+          <>
+            <p class="eyebrow qc__kicker tone-pink">Type the answer</p>
+            {step.hint && <p class="qc__note">{step.hint}</p>}
+            {step.variant === 'fill_blank' ? (
+              <p class="qc__prompt">{step.before}<input class="qc__input qc__input--inline" data-qc-input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Missing word" />{step.after}</p>
+            ) : (
+              <>
+                <p class="qc__prompt">{step.before}</p>
+                <input class="qc__input" data-qc-input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Correct form" />
+              </>
+            )}
+            {step.bank.length > 0 && (
+              <div class="qc__bank" role="group" aria-label="Word bank">
+                {step.bank.map((opt) => (
+                  <button type="button" class="qc__opt qc__opt--chip" data-qc-bank>{opt}</button>
+                ))}
+              </div>
+            )}
+            <div class="alert qc__feedback" data-qc-feedback role="status" hidden>
+              <div>
+                <b data-qc-verdict />
+                <p class="qc__explanation" data-qc-note hidden />
+              </div>
+            </div>
+            <div class="qc__actions">
+              <button type="button" class="btn btn--lg" data-qc-check disabled>Check</button>
+              <button type="button" class="btn btn--lg" data-qc-next hidden>
+                {si === total - 1 ? 'See results' : 'Continue'}
+              </button>
+            </div>
+          </>
+        )}
+
+        {step.kind === 'order' && (
+          <>
+            <p class="eyebrow qc__kicker tone-brand">Put in order</p>
+            <p class="qc__note">Tap the words in the order of the sentence.</p>
+            <div class="qc__bank" role="group" aria-label="Words">
+              {step.tokens.map((token, slot) => (
+                <button type="button" class="qc__opt qc__opt--chip" data-order-chip={String(slot)}>{token}</button>
+              ))}
+            </div>
+            <p class="qc__prompt qc__build" data-qc-build aria-live="polite">&nbsp;</p>
+            <div class="alert qc__feedback" data-qc-feedback role="status" hidden>
+              <div>
+                <b data-qc-verdict />
+                <p class="qc__explanation" data-qc-note hidden />
+              </div>
+            </div>
+            <div class="qc__actions">
+              <button type="button" class="btn btn--sm btn--ghost" data-qc-reset>Reset</button>
               <button type="button" class="btn btn--lg" data-qc-next hidden>
                 {si === total - 1 ? 'See results' : 'Continue'}
               </button>

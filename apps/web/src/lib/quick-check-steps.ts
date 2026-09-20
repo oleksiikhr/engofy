@@ -34,14 +34,39 @@ export interface MatchStep {
   pairs: MatchPair[];
 }
 
-export type QuickCheckStep = ChooseStep | RecallStep | MatchStep;
+// Fill the blank (typed, optionally with a word bank) and find the error.
+export interface TypeStep {
+  kind: 'type';
+  variant: 'fill_blank' | 'find_error';
+  hint: string | null;
+  before: string;
+  after: string;
+  answer: string;
+  bank: string[];
+}
+
+export interface OrderStep {
+  kind: 'order';
+  tokens: string[];
+  // order[slot] is the position the token at `slot` takes in the sentence.
+  order: number[];
+  answerText: string;
+}
+
+export type QuickCheckStep =
+  | ChooseStep
+  | RecallStep
+  | MatchStep
+  | TypeStep
+  | OrderStep;
 
 const MAX_CHOOSE = 5;
+const MAX_DRILLS = 6;
 const MAX_RECALL = 3;
 const MIN_PAIRS = 3;
 const MAX_PAIRS = 4;
 
-export function splitBlank(prompt: string): { before: string; after: string } {
+function splitBlank(prompt: string): { before: string; after: string } {
   const i = prompt.indexOf('____');
   return i === -1
     ? { before: prompt, after: '' }
@@ -74,6 +99,80 @@ function toChoose(
       ? (p.optionExplanations as string[])
       : [],
   };
+}
+
+const isStrings = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((v) => typeof v === 'string');
+
+// A spaCy drill (multiple_choice, fill_blank, find_error, reorder) as a step.
+function toDrill(
+  exercise: PostDetail['exercises'][number],
+): QuickCheckStep | null {
+  const p = exercise.payload;
+  if (exercise.type === 'multiple_choice') {
+    const answerIndex = Number(p.answerIndex ?? -1);
+    if (
+      typeof p.prompt !== 'string' ||
+      !isStrings(p.options) ||
+      !p.options[answerIndex]
+    ) {
+      return null;
+    }
+    return {
+      kind: 'choose',
+      ...splitBlank(p.prompt),
+      options: p.options,
+      answerIndex,
+      explanations: [],
+    };
+  }
+  if (exercise.type === 'fill_blank') {
+    if (typeof p.prompt !== 'string' || typeof p.answer !== 'string') {
+      return null;
+    }
+    return {
+      kind: 'type',
+      variant: 'fill_blank',
+      hint: null,
+      ...splitBlank(p.prompt),
+      answer: p.answer,
+      // Empty when the sentence had too few distractors.
+      bank: isStrings(p.options) ? p.options : [],
+    };
+  }
+  if (exercise.type === 'find_error') {
+    if (typeof p.prompt !== 'string' || typeof p.correction !== 'string') {
+      return null;
+    }
+    return {
+      kind: 'type',
+      variant: 'find_error',
+      hint: 'One word is in the wrong form. Type the correct form.',
+      before: p.prompt,
+      after: '',
+      answer: p.correction,
+      bank: [],
+    };
+  }
+  if (exercise.type === 'reorder') {
+    const tokens = p.scrambled;
+    const order = p.answer;
+    if (
+      !isStrings(tokens) ||
+      !Array.isArray(order) ||
+      order.length !== tokens.length ||
+      tokens.length < 2
+    ) {
+      return null;
+    }
+    const answerText = tokens
+      .map((token, slot) => ({ token, at: Number(order[slot]) }))
+      .sort((a, b) => a.at - b.at)
+      .map((t) => t.token)
+      .join(' ');
+    return { kind: 'order', tokens, order: order.map(Number), answerText };
+  }
+  return null;
 }
 
 // A due word/phrase card with something to reveal. Grammar cards already have
@@ -147,5 +246,9 @@ export function buildQuickCheckSteps(
     .filter((s): s is RecallStep => s !== null)
     .slice(0, MAX_RECALL);
   const match = toMatch(lexicon);
-  return [...choose, ...recall, ...(match ? [match] : [])];
+  const drills = exercises
+    .map(toDrill)
+    .filter((s): s is QuickCheckStep => s !== null)
+    .slice(0, MAX_DRILLS);
+  return [...choose, ...recall, ...(match ? [match] : []), ...drills];
 }

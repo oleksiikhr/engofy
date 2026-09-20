@@ -38,38 +38,6 @@ test.describe('reader page (guest)', () => {
     await expect(page.locator('.sidebar')).toHaveCount(0);
   });
 
-  test('grades a fill-in-the-blank drill', async ({ page }) => {
-    const reader = new ReaderPage(page);
-    await reader.goto(READER_SLUG);
-
-    await reader.submitFillBlank('nope');
-    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
-      '✗ Try again',
-    );
-
-    await reader.submitFillBlank('perambulate');
-    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
-      '✓ Correct',
-    );
-  });
-
-  test('grades a fill-in-the-blank drill via the word bank', async ({
-    page,
-  }) => {
-    const reader = new ReaderPage(page);
-    await reader.goto(READER_SLUG);
-
-    await reader.pickFillBlankOption('wander');
-    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
-      '✗ Try again',
-    );
-
-    await reader.pickFillBlankOption('perambulate');
-    await expect(reader.fillBlank.locator('.exercise__result')).toHaveText(
-      '✓ Correct',
-    );
-  });
-
   test('opens an anchored popup on a word without shifting the article', async ({
     page,
   }) => {
@@ -439,15 +407,17 @@ test.describe('reader page (guest)', () => {
     await reader.goto(READER_SLUG);
 
     const intro = reader.qcScreen('intro');
-    await expect(intro).toContainText('One minute, 2 quick questions.');
-    await expect(intro).toContainText('1×Choose the form');
+    await expect(intro).toContainText('One minute, 6 quick questions.');
+    await expect(intro).toContainText('2×Choose the form');
     await expect(intro).toContainText('1×Match pairs');
+    await expect(intro).toContainText('2×Type the answer');
+    await expect(intro).toContainText('1×Put in order');
     await expect(reader.qcScreen('question')).toHaveCount(0);
 
     await reader.startQuickCheck();
     const question = reader.qcScreen('question');
     await expect(question).toContainText('By the time the war ended');
-    await expect(question).toContainText('1/2');
+    await expect(question).toContainText('1/6');
     await expect(
       question.getByRole('button', { name: 'Check', exact: true }),
     ).toBeDisabled();
@@ -462,7 +432,7 @@ test.describe('reader page (guest)', () => {
     await expect(question.locator('[data-qc-blank]')).toHaveText('had drawn');
 
     await question.getByRole('button', { name: 'Continue' }).click();
-    await expect(reader.qcQuestion('match')).toContainText('2/2');
+    await expect(reader.qcQuestion('match')).toContainText('2/6');
     await reader
       .qcQuestion('match')
       .getByRole('button', { name: 'Skip quick check' })
@@ -485,7 +455,7 @@ test.describe('reader page (guest)', () => {
     const match = reader.qcQuestion('match');
     await expect(match).toContainText('Match the pairs');
     await expect(match).toContainText('0 of 4');
-    const next = match.getByRole('button', { name: 'See results' });
+    const next = match.getByRole('button', { name: 'Continue' });
     await expect(next).toBeHidden();
 
     // A wrong pair is flagged, then clears; nothing is matched.
@@ -508,9 +478,142 @@ test.describe('reader page (guest)', () => {
     await reader.pickPair('a piece of cake', 'something very easy');
     await expect(match).toContainText('4 of 4');
     await next.click();
+    await page.keyboard.press('Escape');
 
     // The mistake makes the match count as missed: 1 of 2.
     await expect(reader.qcScreen('summary')).toContainText('1/2');
+  });
+
+  test('there is no separate Practice section under the article', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await expect(reader.quickCheck).toBeVisible();
+    await expect(page.locator('.exercises, .exercise')).toHaveCount(0);
+    await expect(
+      page.getByRole('heading', { name: 'Practice', exact: true }),
+    ).toHaveCount(0);
+  });
+
+  // Choose the form and match pairs, both clean, ending on the first drill.
+  async function passChooseAndMatch(page: Page, reader: ReaderPage) {
+    await reader.startQuickCheck();
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+    await reader.pickPair('cartographer', 'a person who draws');
+    await reader.pickPair('perambulate', 'to walk through');
+    await reader.pickPair('at loose ends', 'having nothing particular');
+    await reader.pickPair('a piece of cake', 'something very easy');
+    await reader
+      .qcQuestion('match')
+      .getByRole('button', { name: 'Continue' })
+      .click();
+  }
+
+  test('Quick check walks every drill type and counts them in the summary', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await passChooseAndMatch(page, reader);
+
+    // Fill the blank, typed: Check stays disabled until something is typed,
+    // Enter checks and Enter again continues.
+    const fill = reader.qcQuestion('type');
+    await expect(fill).toContainText('3/6');
+    await expect(fill).toContainText('The old cartographer would');
+    await expect(
+      fill.getByRole('button', { name: 'Check', exact: true }),
+    ).toBeDisabled();
+    await fill.locator('[data-qc-input]').fill('perambulate');
+    await page.keyboard.press('Enter');
+    await expect(fill.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await expect(fill.locator('[data-qc-note]')).toBeHidden();
+    await page.keyboard.press('Enter');
+
+    // Multiple choice reuses the choose-the-form card.
+    const choose = reader.qcQuestion('choose');
+    await expect(choose).toContainText('4/6');
+    await expect(choose).toContainText('By the time the war ended, she had');
+    await choose.locator('[data-text="drawn"]').click();
+    await reader.check(choose);
+    await expect(choose.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await choose.getByRole('button', { name: 'Continue' }).click();
+
+    // Find the error.
+    const error = reader.qcQuestion('type');
+    await expect(error).toContainText('5/6');
+    await expect(error).toContainText('One word is in the wrong form.');
+    await error.locator('[data-qc-input]').fill('Drawn');
+    await reader.check(error);
+    await expect(error.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await error.getByRole('button', { name: 'Continue' }).click();
+
+    // Put in order: the last question finishes on tap, no Check button.
+    const order = reader.qcQuestion('order');
+    await expect(order).toContainText('6/6');
+    for (const word of ['the', 'boats', 'had', 'not', 'returned']) {
+      await order.locator('[data-order-chip]', { hasText: word }).click();
+    }
+    await expect(order.locator('[data-qc-build]')).toHaveText(
+      'the boats had not returned',
+    );
+    await expect(order.locator('[data-qc-verdict]')).toHaveText('Correct');
+    await order.getByRole('button', { name: 'See results' }).click();
+
+    const summary = reader.qcScreen('summary');
+    await expect(summary).toContainText('Nice work.');
+    await expect(summary).toContainText('6/6');
+  });
+
+  test('Quick check shows the right answer for a wrong drill and counts it missed', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await passChooseAndMatch(page, reader);
+
+    // A word-bank pick fills the blank; a wrong one is flagged.
+    const fill = reader.qcQuestion('type');
+    await fill.locator('[data-qc-bank]', { hasText: 'wander' }).click();
+    await expect(fill.locator('[data-qc-input]')).toHaveValue('wander');
+    await reader.check(fill);
+    await expect(fill.locator('[data-qc-verdict]')).toHaveText('Not quite');
+    await expect(fill.locator('[data-qc-note]')).toHaveText(
+      'Answer: perambulate',
+    );
+    await expect(fill.locator('[data-qc-input]')).toHaveClass(/is-wrong/);
+    await fill.getByRole('button', { name: 'Continue' }).click();
+
+    const choose = reader.qcQuestion('choose');
+    await page.keyboard.press('2');
+    await page.keyboard.press('Enter');
+    await expect(choose.locator('[data-qc-verdict]')).toHaveText('Not quite');
+    await page.keyboard.press('Enter');
+    await reader.qcQuestion('type').locator('[data-qc-input]').fill('x');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+
+    // Reset clears the taps until the sentence is complete.
+    const order = reader.qcQuestion('order');
+    await order.locator('[data-order-chip]', { hasText: 'had' }).click();
+    await expect(order.locator('[data-qc-build]')).toHaveText('had');
+    await order.getByRole('button', { name: 'Reset' }).click();
+    await expect(order.locator('[data-order-chip]:disabled')).toHaveCount(0);
+    for (const word of ['had', 'the', 'returned', 'boats', 'not']) {
+      await order.locator('[data-order-chip]', { hasText: word }).click();
+    }
+    await expect(order.locator('[data-qc-verdict]')).toHaveText('Not quite');
+    await expect(order.locator('[data-qc-note]')).toHaveText(
+      'Answer: the boats had not returned',
+    );
+    await order.getByRole('button', { name: 'See results' }).click();
+
+    // Only choose-the-form and match were right: 2 of 6.
+    await expect(reader.qcScreen('summary')).toContainText('2/6');
+    await expect(reader.qcScreen('summary')).toContainText('Keep at it.');
   });
 
   test('Quick check runs from the keyboard: 1-3 pick, Enter checks, Esc skips', async ({
@@ -780,8 +883,8 @@ test.describe('reader page (signed in)', () => {
         .getAttribute('data-qc-due'),
     );
     const intro = reader.qcScreen('intro');
-    await expect(intro).toContainText('One minute, 3 quick questions.');
-    await expect(intro).toContainText('1×Choose the form');
+    await expect(intro).toContainText('One minute, 7 quick questions.');
+    await expect(intro).toContainText('2×Choose the form');
     await expect(intro).toContainText('1×Recall a word');
     await expect(intro).toContainText('1×Match pairs');
 
@@ -792,7 +895,7 @@ test.describe('reader page (signed in)', () => {
     await page.keyboard.press('Enter');
 
     const recall = reader.qcQuestion('recall');
-    await expect(recall).toContainText('2/3');
+    await expect(recall).toContainText('2/7');
     await expect(recall).toContainText('at loose ends');
     // The answer and the ratings stay hidden until asked for.
     await expect(recall.locator('[data-qc-answer]')).toBeHidden();
