@@ -27,7 +27,7 @@ export interface PostAiComplexityJobData {
 }
 
 // ai_complexity stage (PLAN.md §5): one AI call scores the whole post and
-// every sentence on the CEFR scale. Reads the spaCy `sentences` rows, so it
+// every sentence on the CEFR scale and picks the post's topic. Reads the spaCy `sentences` rows, so it
 // runs after spacy_parse (enqueued by SpacyParsePostHandler on completion).
 // Idempotent via the stage-level PostPipelineRun row (§12).
 @CommandHandler(AssessComplexityCommand)
@@ -72,7 +72,7 @@ export class AssessComplexityHandler
       tool: {
         name: 'report_complexity',
         description:
-          'Report the overall and per-sentence CEFR level of the passage plus the new-vocabulary ratio.',
+          'Report the overall and per-sentence CEFR level of the passage, its topic and the new-vocabulary ratio.',
         schema: complexityToolSchema,
       },
     });
@@ -82,11 +82,13 @@ export class AssessComplexityHandler
       sentence.cefrLevel = levels[i];
     });
     post.cefrLevel = assessment.overall;
+    post.topic = assessment.topic;
 
     this.logger.log(
       {
         postId,
         overall: assessment.overall,
+        topic: assessment.topic,
         newVocabRatio: assessment.newVocabRatio,
         sentences: sentences.length,
       },

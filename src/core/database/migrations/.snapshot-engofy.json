@@ -3599,6 +3599,34 @@
           "enumItems": [],
           "mappedType": "text"
         },
+        "topic": {
+          "name": "topic",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "daily_life",
+            "food",
+            "travel",
+            "work",
+            "technology",
+            "health",
+            "nature",
+            "culture",
+            "society",
+            "science"
+          ],
+          "mappedType": "enum"
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -3698,6 +3726,12 @@
           "expression": "\"status\" in ('pending', 'processing', 'published', 'failed')",
           "definition": "check (\"status\" in ('pending', 'processing', 'published', 'failed'))",
           "columnName": "status"
+        },
+        {
+          "name": "posts_topic_check",
+          "expression": "\"topic\" in ('daily_life', 'food', 'travel', 'work', 'technology', 'health', 'nature', 'culture', 'society', 'science')",
+          "definition": "check (\"topic\" in ('daily_life', 'food', 'travel', 'work', 'technology', 'health', 'nature', 'culture', 'society', 'science'))",
+          "columnName": "topic"
         },
         {
           "name": "posts_type_check",
