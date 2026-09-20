@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -9,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { GrammarCategory } from './grammar-category.entity.js';
 
 // One of the ~90 grammar constructions (present simple, going to, ...). The
 // closed list the ai_grammar stage classifies against. `cheatSheetContent` is
@@ -19,7 +21,11 @@ export class GrammarConstruction {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => GrammarCategory, {
+    mapToPk: true,
+    fieldName: 'category_id',
+    deleteRule: 'restrict',
+  })
   @Index()
   categoryId!: string;
 

@@ -1,6 +1,7 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
@@ -72,7 +73,7 @@ async function seedProcessedPost(em: EntityManager): Promise<SeededPost> {
 
   const _match = factories(em).grammarMatch.makeOne({
     sentenceId: sentence.id,
-    grammarUsagePointId: post.id, // any uuid — no FK
+    grammarUsagePointId: makeGrammarUsagePoint(factories(em)).id,
     tokenStart: 0,
     tokenEnd: 1,
   });

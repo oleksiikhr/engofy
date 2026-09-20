@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { DailyPlan } from '../../entities/daily-plan.entity.js';
 import { HomeModule } from '../../home.module.js';
@@ -11,7 +11,8 @@ describe('CreateDailyPlanHandler', () => {
   it('creates a daily_plans row for today', async () => {
     const userId = (await suite.factories.user.createOne()).id;
     const postId = (await suite.factories.post.createOne()).id;
-    const grammarUsagePointId = uuidv7();
+    const grammarUsagePointId = makeGrammarUsagePoint(suite.factories).id;
+    await suite.orm.em.flush();
 
     await suite.command(
       new CreateDailyPlanCommand(userId, postId, grammarUsagePointId),

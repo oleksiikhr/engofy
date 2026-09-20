@@ -3,6 +3,7 @@ import {
   Entity,
   Enum,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,7 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
+import { GrammarConstruction } from './grammar-construction.entity.js';
 
 // One EGP USE / FORM+USE record (~574 of 1239) — the SRS-trackable unit of
 // grammar. Pure FORM: records don't land here; they feed the parent
@@ -20,7 +22,11 @@ export class GrammarUsagePoint {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => GrammarConstruction, {
+    mapToPk: true,
+    fieldName: 'construction_id',
+    deleteRule: 'restrict',
+  })
   @Index()
   constructionId!: string;
 

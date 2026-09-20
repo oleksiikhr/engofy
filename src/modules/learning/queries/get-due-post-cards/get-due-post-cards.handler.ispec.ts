@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeGrammarUsagePoint } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Post } from '../../../post/entities/post.entity.js';
 import { Sentence } from '../../../post/entities/sentence.entity.js';
@@ -200,8 +201,7 @@ describe('GetDuePostCardsHandler', () => {
     await em.flush();
     const sentence = seedSentence(em, post.id);
     await em.flush();
-    const usagePoint = factories(em).grammarUsagePoint.makeOne({
-      constructionId: uuidv7(),
+    const usagePoint = makeGrammarUsagePoint(factories(em), {
       cefrLevel: CefrLevel.A1,
       guideword: 'present perfect',
       canDoStatement: 'x',

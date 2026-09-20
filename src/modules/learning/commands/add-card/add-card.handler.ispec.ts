@@ -2,6 +2,10 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import {
+  makeGrammarUsagePoint,
+  makeWordDefinition,
+} from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../../billing/enums/subscription-status.enum.js';
@@ -24,7 +28,7 @@ function fillLearningCards(
   for (let i = 0; i < count; i += 1) {
     factories(em).learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -195,9 +199,7 @@ describe('AddCardHandler', () => {
 
   it('unlocks the construction when a grammar card is added', async () => {
     const userId = (await suite.factories.user.createOne()).id;
-    const constructionId = uuidv7();
-    const point = suite.factories.grammarUsagePoint.makeOne({
-      constructionId,
+    const point = makeGrammarUsagePoint(suite.factories, {
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: past perfect',
       canDoStatement: 'Can talk about an earlier past.',
@@ -210,7 +212,7 @@ describe('AddCardHandler', () => {
 
     const progress = await suite.orm.em.findOne(UserSkillProgress, {
       userId,
-      constructionId,
+      constructionId: point.constructionId,
     });
     expect(progress).not.toBeNull();
     expect(progress?.unlockedAt).not.toBeNull();

@@ -13,6 +13,9 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { User } from '../../auth/entities/user.entity.js';
+import { GrammarUsagePoint } from '../../post/entities/grammar-usage-point.entity.js';
+import { Phrase } from '../../post/entities/phrase.entity.js';
+import { WordDefinition } from '../../post/entities/word-definition.entity.js';
 import { LearningCardState } from '../enums/learning-card-state.enum.js';
 
 // One unified SRS card for a word, phrase, or grammar usage point — not three
@@ -49,15 +52,30 @@ export class LearningCard {
 
   // FK -> word_definitions.id (one word sense, not the whole word — a word
   // can have several POS senses, each its own SRS target).
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => WordDefinition, {
+    mapToPk: true,
+    fieldName: 'word_definition_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   wordDefinitionId?: string | null;
 
   // FK -> phrases.id
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => Phrase, {
+    mapToPk: true,
+    fieldName: 'phrase_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   phraseId?: string | null;
 
   // FK -> grammar_usage_points.id
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => GrammarUsagePoint, {
+    mapToPk: true,
+    fieldName: 'grammar_usage_point_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   grammarUsagePointId?: string | null;
 
   // --- FSRS scheduling state (ts-fsrs Card) ---

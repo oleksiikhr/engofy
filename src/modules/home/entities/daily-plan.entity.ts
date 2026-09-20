@@ -11,6 +11,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonDateType } from '../../../core/database/types/luxon-date.type.js';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { User } from '../../auth/entities/user.entity.js';
+import { GrammarUsagePoint } from '../../post/entities/grammar-usage-point.entity.js';
 import { Post } from '../../post/entities/post.entity.js';
 
 // One row per (user, UTC calendar day): the post and grammar highlight
@@ -43,7 +44,12 @@ export class DailyPlan {
 
   // FK -> grammar_usage_points.id — null when the chosen post has no
   // still-unlearned grammar usage point to highlight.
-  @Property({ type: 'uuid', nullable: true })
+  @ManyToOne(() => GrammarUsagePoint, {
+    mapToPk: true,
+    fieldName: 'grammar_usage_point_id',
+    deleteRule: 'restrict',
+    nullable: true,
+  })
   grammarUsagePointId?: string | null;
 
   // Set by the зріз-3 "complete" endpoint once the linear session finishes.

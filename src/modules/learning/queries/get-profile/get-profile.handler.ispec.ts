@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
+import { makeWordDefinition } from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
@@ -170,7 +171,7 @@ describe('GetProfileHandler', () => {
 
     const card = factories(em).learningCard.makeOne({
       userId,
-      wordDefinitionId: uuidv7(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: now,
       stability: 1,
       difficulty: 5,

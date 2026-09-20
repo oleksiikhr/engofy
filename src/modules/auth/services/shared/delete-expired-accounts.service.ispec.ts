@@ -1,6 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { DateTime } from 'luxon';
 import { factories } from '../../../../../test/factories/factories.js';
+import {
+  makeGrammarUsagePoint,
+  makeWordDefinition,
+} from '../../../../../test/helpers/reference-data.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Subscription } from '../../../billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.js';
@@ -43,7 +47,7 @@ describe('DeleteExpiredAccountsService', () => {
     const post = await suite.factories.post.createOne();
     const card = factories(em).learningCard.makeOne({
       userId,
-      wordDefinitionId: randomUUID(),
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
       due: DateTime.now(),
       stability: 1,
       difficulty: 1,
@@ -61,12 +65,12 @@ describe('DeleteExpiredAccountsService', () => {
     });
     factories(em).learningDisposition.makeOne({
       userId,
-      phraseId: randomUUID(),
+      phraseId: factories(em).phrase.makeOne().id,
       disposition: Disposition.Known,
     });
     factories(em).userSkillProgress.makeOne({
       userId,
-      constructionId: randomUUID(),
+      constructionId: makeGrammarUsagePoint(factories(em)).constructionId,
     });
     factories(em).postRead.makeOne({
       userId,

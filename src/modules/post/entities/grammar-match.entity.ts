@@ -10,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { GrammarUsagePoint } from './grammar-usage-point.entity.js';
 import { Sentence } from './sentence.entity.js';
 
 // A grammar usage point detected in one sentence by the ai_grammar stage.
@@ -36,7 +37,11 @@ export class GrammarMatch {
   })
   sentenceId!: string;
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => GrammarUsagePoint, {
+    mapToPk: true,
+    fieldName: 'grammar_usage_point_id',
+    deleteRule: 'restrict',
+  })
   @Index()
   grammarUsagePointId!: string;
 
