@@ -28,9 +28,69 @@ test('a public page has canonical, Open Graph and Twitter tags in the HTML', asy
   expect(html).toMatch(
     /<meta property="og:url" content="https?:\/\/[^"?]+\/pricing"/,
   );
-  expect(html).toContain('<meta name="twitter:card" content="summary"');
-  expect(html).not.toContain('og:image');
+  expect(html).toContain(
+    '<meta name="twitter:card" content="summary_large_image"',
+  );
+  expect(html).toMatch(
+    /<meta property="og:image" content="https?:\/\/[^"]+\/og-default\.png"/,
+  );
+  expect(html).toMatch(
+    /<meta name="twitter:image" content="https?:\/\/[^"]+\/og-default\.png"/,
+  );
   expect(html).not.toContain('name="robots"');
+});
+
+test('every page links icons, the manifest and per-scheme theme-color', async ({
+  request,
+}) => {
+  const html = await head(request, '/pricing');
+
+  expect(html).toContain('<link rel="icon" href="/favicon.ico"');
+  expect(html).toContain('<link rel="icon" href="/favicon-48.png"');
+  expect(html).toContain('<link rel="icon" href="/favicon.svg"');
+  expect(html).toContain(
+    '<link rel="apple-touch-icon" href="/apple-touch-icon.png"',
+  );
+  expect(html).toContain('<link rel="manifest" href="/manifest.webmanifest"');
+  expect(html).toContain(
+    '<meta name="theme-color" content="#fff8ee" media="(prefers-color-scheme: light)"',
+  );
+  expect(html).toContain(
+    '<meta name="theme-color" content="#1b1611" media="(prefers-color-scheme: dark)"',
+  );
+});
+
+test('linked icon, manifest and share-image assets are served', async ({
+  request,
+}) => {
+  const assets: Array<[string, string]> = [
+    ['/favicon.ico', 'image/'],
+    ['/favicon-48.png', 'image/png'],
+    ['/favicon.svg', 'image/svg+xml'],
+    ['/apple-touch-icon.png', 'image/png'],
+    ['/icon-192.png', 'image/png'],
+    ['/icon-512.png', 'image/png'],
+    ['/icon-maskable-512.png', 'image/png'],
+    ['/og-default.png', 'image/png'],
+  ];
+  for (const [path, type] of assets) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(response.headers()['content-type'], path).toContain(type);
+  }
+
+  const manifestResponse = await request.get('/manifest.webmanifest');
+  expect(manifestResponse.status()).toBe(200);
+  const manifest = await manifestResponse.json();
+  expect(manifest.name).toBe('Engofy');
+  expect(manifest.display).toBe('browser');
+  const sources = (manifest.icons as Array<{ src: string }>).map((i) => i.src);
+  for (const src of sources) {
+    expect((await request.get(src)).status(), src).toBe(200);
+  }
+  expect(
+    manifest.icons.some((i: { purpose?: string }) => i.purpose === 'maskable'),
+  ).toBe(true);
 });
 
 test.describe('post page', () => {

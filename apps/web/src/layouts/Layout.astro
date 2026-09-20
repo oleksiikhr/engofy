@@ -20,7 +20,7 @@ interface Props {
   // Keeps the page out of the index (private or transient pages).
   noindex?: boolean;
   ogType?: 'website' | 'article';
-  // Absolute or root-relative URL of the share image; no tag when omitted.
+  // Absolute or root-relative URL of the share image; the site default when omitted.
   ogImage?: string;
 }
 
@@ -32,13 +32,13 @@ const {
   measure = false,
   noindex = false,
   ogType = 'website',
-  ogImage,
+  ogImage = '/og-default.png',
 } = Astro.props;
 
 const origin = publicOrigin(Astro.url);
 // Query strings (`?from=home`, filters, cursors) never make a distinct page.
 const canonical = `${origin}${Astro.url.pathname}`;
-const ogImageUrl = ogImage ? new URL(ogImage, `${origin}/`).href : undefined;
+const ogImageUrl = new URL(ogImage, `${origin}/`).href;
 
 // Day streak and Practice due-count in the header — every page, not just the
 // reader, so they stay stable "you're on a streak / cards are waiting" signals
@@ -70,12 +70,20 @@ const dueCount = dueResponse?.dueCount ?? 0;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
-    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32 48x48" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#fff8ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1611" media="(prefers-color-scheme: dark)" />
     <!-- Stored display prefs (theme, reader size, ...) onto <html> before first paint. -->
     <script is:inline set:html={bootScript()} />
     <title>{title}</title>
