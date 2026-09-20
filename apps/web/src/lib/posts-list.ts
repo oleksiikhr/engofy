@@ -1,12 +1,32 @@
 import { formatDate } from './format-date';
 import { postUrl } from './post-url';
-import type { CefrLevel, PostsListItem, PostsListResponse } from './types';
+import type {
+  CefrLevel,
+  PostsListItem,
+  PostsListResponse,
+  PostTopic,
+} from './types';
 
 // Shared by /posts (initial SSR render) and /partials/posts (HTMX filter
 // changes and "Show more"), so the two never drift. Output is injected with
 // set:html; interpolated values are escaped here.
 
 export const CEFR_LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+export const POST_TOPICS: { value: PostTopic; label: string }[] = [
+  { value: 'daily_life', label: 'Daily life' },
+  { value: 'food', label: 'Food' },
+  { value: 'travel', label: 'Travel' },
+  { value: 'work', label: 'Work' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'health', label: 'Health' },
+  { value: 'nature', label: 'Nature' },
+  { value: 'culture', label: 'Culture' },
+  { value: 'society', label: 'Society' },
+  { value: 'science', label: 'Science' },
+];
+
+const TOPIC_LABELS = new Map(POST_TOPICS.map((t) => [t.value, t.label]));
 
 const MAX_LIMIT = 50;
 
@@ -23,14 +43,16 @@ function esc(value: string): string {
 
 export interface PostsQuery {
   cefr: CefrLevel[];
+  topic: PostTopic[];
   term: string;
   unreadOnly: boolean;
   cursor: string;
   limit: number | null;
 }
 
-// The form submits one `cefr` param per checked chip (`?cefr=A1&cefr=B1`);
-// a comma-separated `cefr=A1,B1` (the API's own shape) is read the same way.
+// The form submits one `cefr` / `topic` param per checked chip
+// (`?cefr=A1&cefr=B1`); a comma-separated `cefr=A1,B1` (the API's own shape) is
+// read the same way.
 export function parsePostsQuery(params: URLSearchParams): PostsQuery {
   const cefr = params
     .getAll('cefr')
@@ -39,9 +61,16 @@ export function parsePostsQuery(params: URLSearchParams): PostsQuery {
     .filter((value): value is CefrLevel =>
       (CEFR_LEVELS as string[]).includes(value),
     );
+  const topic = params
+    .getAll('topic')
+    .flatMap((value) => value.split(','))
+    .map((value) => value.trim());
   const limit = Number.parseInt(params.get('limit') ?? '', 10);
   return {
     cefr: CEFR_LEVELS.filter((level) => cefr.includes(level)),
+    topic: POST_TOPICS.map((t) => t.value).filter((value) =>
+      topic.includes(value),
+    ),
     term: (params.get('term') ?? '').trim(),
     unreadOnly: ['true', 'on', '1'].includes(params.get('unreadOnly') ?? ''),
     cursor: params.get('cursor') ?? '',
@@ -54,6 +83,9 @@ export function toApiQuery(query: PostsQuery): string {
   const params = new URLSearchParams();
   if (query.cefr.length > 0) {
     params.set('cefr', query.cefr.join(','));
+  }
+  if (query.topic.length > 0) {
+    params.set('topic', query.topic.join(','));
   }
   if (query.term) {
     params.set('term', query.term);
@@ -77,6 +109,9 @@ function toBrowserQuery(query: PostsQuery, cursor: string): string {
   const params = new URLSearchParams();
   for (const level of query.cefr) {
     params.append('cefr', level);
+  }
+  for (const topic of query.topic) {
+    params.append('topic', topic);
   }
   if (query.term) {
     params.set('term', query.term);
@@ -118,6 +153,7 @@ function cardHtml(post: PostsListItem, signedIn: boolean): string {
   return `<li class="post-card card" data-testid="post-card">
     <div class="post-card__head">
       ${post.cefrLevel ? `<span class="badge${post.isRead ? '' : ' badge--solid'}">${esc(post.cefrLevel)}</span>` : ''}
+      ${post.topic ? `<span class="tag tag--muted post-card__topic" data-testid="post-topic">${esc(TOPIC_LABELS.get(post.topic) ?? post.topic)}</span>` : ''}
       ${state}
     </div>
     <h2 class="post-card__title"><a href="${href}">${esc(post.title ?? 'Untitled')}</a></h2>
@@ -163,9 +199,12 @@ export function renderPostsResults(
 ): string {
   if (view.items.length === 0) {
     const filtered =
-      query.cefr.length > 0 || query.term !== '' || query.unreadOnly;
+      query.cefr.length > 0 ||
+      query.topic.length > 0 ||
+      query.term !== '' ||
+      query.unreadOnly;
     const message = filtered
-      ? 'No posts match. A word or phrase must be picked from the suggestions.'
+      ? 'No posts match. Try a different title, or a word or phrase from the suggestions.'
       : 'No posts yet.';
     return `<div class="posts-empty card card--soft" data-testid="posts-empty"><p>${esc(message)}</p></div>`;
   }

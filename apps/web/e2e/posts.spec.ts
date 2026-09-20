@@ -39,6 +39,51 @@ test.describe('posts (guest)', () => {
     await expect(posts.cards.first().locator('.badge')).toHaveText('B1');
   });
 
+  test('the topic chips narrow the list and cards show their topic', async ({
+    page,
+  }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+    await expect(
+      posts.card('The Cartographer at Dawn').getByTestId('post-topic'),
+    ).toHaveText('Culture');
+
+    await posts.topic('Food').click();
+    await expect(page).toHaveURL(/topic=food/);
+    await expect(posts.cards).toHaveCount(1);
+    await expect(posts.card('Feed Story 2')).toBeVisible();
+
+    await posts.topic('Culture').click();
+    await expect(page).toHaveURL(/topic=food&topic=culture/);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+    await expect(posts.card('Feed Story 2')).toBeVisible();
+
+    await posts.topic('Food').click();
+    await posts.topic('Culture').click();
+    await posts.topic('Science').click();
+    await expect(posts.empty).toBeVisible();
+  });
+
+  test('a topic in the URL is applied on a fresh load', async ({ page }) => {
+    const posts = new PostsPage(page);
+    await posts.goto('?topic=culture');
+    await expect(posts.cards).toHaveCount(1);
+    await expect(posts.topic('Culture').locator('input')).toBeChecked();
+  });
+
+  test('search matches a post by its title', async ({ page }) => {
+    const posts = new PostsPage(page);
+    await posts.goto();
+    await expect(posts.cards.nth(1)).toBeVisible();
+
+    await posts.searchInput.fill('cartographer at');
+    await posts.searchInput.press('Enter');
+    await expect(posts.cards).toHaveCount(1);
+    await expect(posts.card('The Cartographer at Dawn')).toBeVisible();
+    await expect(page).toHaveURL(/term=cartographer(\+|%20)at/);
+  });
+
   test('a filter in the URL is applied on a fresh load', async ({ page }) => {
     const posts = new PostsPage(page);
     await posts.goto('?cefr=C2');

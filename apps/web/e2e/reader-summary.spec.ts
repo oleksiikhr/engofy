@@ -25,6 +25,7 @@ function item(shortId: string): PostsListItem {
     slug: null,
     title: shortId,
     cefrLevel: 'B1',
+    topic: null,
     publishedAt: '2026-09-20T00:00:00Z',
     excerpt: '',
     sourceLink: null,

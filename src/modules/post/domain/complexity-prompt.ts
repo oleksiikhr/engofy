@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
+import { PostTopic } from '../enums/post-topic.enum.js';
 
 export const COMPLEXITY_SYSTEM_PROMPT = `You assess the CEFR difficulty of short English passages for a reading app.
 
@@ -9,6 +10,7 @@ You are given the passage as a numbered list of sentences, one per line, in the 
 
 Assess:
 - "overall": the CEFR level (A1, A2, B1, B2, C1, C2) of the passage taken as a whole — the level a learner needs to comfortably read it.
+- "topic": the single subject that best describes what the passage is about, one of: ${Object.values(PostTopic).join(', ')}.
 - "sentences": the CEFR level of EACH sentence on its own. Every index in the input must appear exactly once.
 - "newVocabRatio": your estimate, between 0 and 1, of the fraction of running words in the passage that a learner AT THE "overall" LEVEL would not already know.
 
@@ -16,6 +18,7 @@ Judge on vocabulary frequency, grammatical structures, sentence length and idiom
 
 export const complexityToolSchema = z.object({
   overall: z.enum(CefrLevel),
+  topic: z.enum(PostTopic),
   newVocabRatio: z.number().min(0).max(1),
   sentences: z.array(
     z.object({

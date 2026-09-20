@@ -103,10 +103,10 @@ status: in-progress
 Екран «Прочитано»: слова й граматика, які ви побачили. Наступна стаття того самого рівня. Час читання,
 пояснення бейджа «B1», індикатор прогресу читання.
 
-### [ ] 9. Пошук і теми у Posts, чистка дублів
+### [x] 9. Пошук і теми у Posts, чистка дублів
 - Branch: `guest-reader-ux-overhaul-09-posts-discovery`
-- Base: `guest-reader-ux-overhaul-08-reader-completion-next`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/115
 
 З'ясувати, чи дублі «A Saturday Morning at the Market» і пост «Untitled» це dev-дані, чи баг інжесту
 (заголовок повторено в тілі), і виправити причину. Додати пошук і теми до списку Posts.

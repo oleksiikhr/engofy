@@ -3,6 +3,8 @@ import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import type { PostTopic } from '../../enums/post-topic.enum.js';
+import { escapeLike } from '../escape-like.js';
 import { loadExcerpts } from '../load-excerpts.js';
 import { GetPostsListQuery } from './get-posts-list.query.js';
 import {
@@ -17,6 +19,7 @@ interface PostRow {
   slug: string | null;
   title: string | null;
   cefr_level: CefrLevel | null;
+  topic: PostTopic | null;
   // Raw driver output for a `timestamp with time zone` column is text, not a
   // JS `Date` — `LuxonTimestampType.convertToJSValue` handles the same shape.
   published_at: string;
@@ -28,8 +31,9 @@ interface PostRow {
 }
 
 // Backs `/posts` (posts-list-page §1): published posts, newest first,
-// keyset-paginated on `(published_at, id)`. CEFR multi-select, a word/phrase `term` (EXISTS over
-// `sentence_tokens`, posts-list-page §2) and "unread only" (LEFT JOIN
+// keyset-paginated on `(published_at, id)`. CEFR and topic multi-selects, a `term`
+// matching the title or a word/phrase (EXISTS over `sentence_tokens`,
+// posts-list-page §2) and "unread only" (LEFT JOIN
 // `post_reads`, only when `userId` is set — Post has no ORM relation to
 // PostRead; the same join yields each item's `isRead`) are set-based filters the ORM can't express cheaply, so this is
 // one raw query (DP5) rather than `em.find`.
@@ -43,6 +47,7 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
   }: GetPostsListQuery): Promise<PostsListView> {
     const cursor = decodePostsListCursor(options.cursor);
     const cefrLevels = options.cefrLevels ?? [];
+    const topics = options.topics ?? [];
     const joinReads = Boolean(userId);
 
     const params: unknown[] = [];
@@ -63,6 +68,11 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
       params.push(...cefrLevels);
     }
 
+    if (topics.length > 0) {
+      conditions.push(`p.topic IN (${topics.map(() => '?').join(', ')})`);
+      params.push(...topics);
+    }
+
     if (joinReads && options.unreadOnly) {
       conditions.push('pr.id IS NULL');
     }
@@ -74,16 +84,16 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
       // sides resolve through the `lower(...)` unique indexes on `words` /
       // `phrases`; `word_id` / `phrase_id` / `sentences.post_id` are indexed.
       conditions.push(
-        `EXISTS (
+        `(lower(p.title) LIKE ? OR EXISTS (
            SELECT 1
              FROM sentences s
              JOIN sentence_tokens st ON st.sentence_id = s.id
             WHERE s.post_id = p.id
               AND (st.word_id IN (SELECT id FROM words WHERE lower(lemma) = ?)
                 OR st.phrase_id IN (SELECT id FROM phrases WHERE lower(phrase_text) = ?))
-         )`,
+         ))`,
       );
-      params.push(term, term);
+      params.push(`%${escapeLike(term)}%`, term, term);
     }
 
     if (cursor) {
@@ -94,7 +104,7 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
     params.push(options.limit + 1);
 
     const rows = await this.em.getConnection().execute<PostRow[]>(
-      `SELECT p.id, p.short_id, p.slug, p.title, p.cefr_level, p.published_at,
+      `SELECT p.id, p.short_id, p.slug, p.title, p.cefr_level, p.topic, p.published_at,
               p.source_attribution_text, p.source_type, p.source_link,
               ${joinReads ? 'pr.id IS NOT NULL' : 'false'} AS is_read
          FROM posts p
@@ -120,6 +130,7 @@ export class GetPostsListHandler implements IQueryHandler<GetPostsListQuery> {
       slug: row.slug,
       title: row.title,
       cefrLevel: row.cefr_level,
+      topic: row.topic,
       publishedAt: toIso(row.published_at),
       excerpt: excerpts.get(row.id) ?? '',
       attributionText: row.source_attribution_text,

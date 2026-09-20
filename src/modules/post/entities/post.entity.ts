@@ -15,6 +15,7 @@ import { generateShortId } from '../domain/generate-short-id.js';
 import { PostSource } from '../embeddables/post-source.embeddable.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PostStatus } from '../enums/post-status.enum.js';
+import { PostTopic } from '../enums/post-topic.enum.js';
 import { PostType } from '../enums/post-type.enum.js';
 
 // Serves `/content/posts` (posts-list-page §1):
@@ -56,6 +57,11 @@ export class Post {
   // runs (PLAN.md §5). Per-sentence levels live on `sentences.cefr_level`.
   @Enum({ items: () => CefrLevel, nullable: true })
   cefrLevel?: CefrLevel | null;
+
+  // Main subject of the text, one of the fixed PostTopic set; null until the
+  // ai_complexity stage runs. Drives the `/posts` topic filter.
+  @Enum({ items: () => PostTopic, nullable: true })
+  topic?: PostTopic | null;
 
   // Mirrors createdAt for now — there's no draft/publish workflow yet, so
   // "published" and "ingested" are the same moment. Kept as its own field

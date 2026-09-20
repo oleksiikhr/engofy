@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { escapeLike } from '../escape-like.js';
 import { GetPostSuggestionsQuery } from './get-post-suggestions.query.js';
 import type {
   PostSuggestionsView,
@@ -66,10 +67,4 @@ function publishedUsageSql(tokenMatch: string): string {
             JOIN posts p ON p.id = s.post_id
            WHERE ${tokenMatch}
              AND p.status = ?`;
-}
-
-// `%` / `_` / `\` typed by the learner must match literally, not as LIKE
-// wildcards.
-function escapeLike(value: string): string {
-  return value.replace(/[\\%_]/g, (char) => `\\${char}`);
 }

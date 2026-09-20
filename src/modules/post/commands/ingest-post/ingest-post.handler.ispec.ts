@@ -59,6 +59,38 @@ describe('IngestPostHandler', () => {
     expect(view.format).toBe(PostSourceFormat.Markdown);
   });
 
+  it('takes an omitted title and slug from a leading H1 and drops that heading from the body', async () => {
+    const view = await suite.command(
+      new IngestPostCommand(
+        IngestPostDto.create({
+          rawText: '# A Saturday Market\n\nMaria buys **fresh** bread.',
+        }),
+      ),
+    );
+
+    const post = await reload(view.id);
+    expect(post.title).toBe('A Saturday Market');
+    expect(post.slug).toBe('a-saturday-market');
+    const parts = await suite.orm.em.find(PostPart, { postId: view.id });
+    expect(parts).toHaveLength(1);
+  });
+
+  it('keeps an explicit title over the leading H1', async () => {
+    const view = await suite.command(
+      new IngestPostCommand(
+        IngestPostDto.create({
+          rawText: '# Heading\n\nSome text.',
+          title: 'Explicit title',
+        }),
+      ),
+    );
+
+    const post = await reload(view.id);
+    expect(post.title).toBe('Explicit title');
+    const parts = await suite.orm.em.find(PostPart, { postId: view.id });
+    expect(parts).toHaveLength(2);
+  });
+
   it('auto-detects html from post shape, no format passed in', async () => {
     const view = await suite.command(
       new IngestPostCommand(

@@ -4,11 +4,24 @@
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 // --- posts archive (/posts) ---
+export type PostTopic =
+  | 'daily_life'
+  | 'food'
+  | 'travel'
+  | 'work'
+  | 'technology'
+  | 'health'
+  | 'nature'
+  | 'culture'
+  | 'society'
+  | 'science';
+
 export interface PostsListItem {
   shortId: string;
   slug: string | null;
   title: string | null;
   cefrLevel: CefrLevel | null;
+  topic: PostTopic | null;
   publishedAt: string;
   excerpt: string;
   sourceLink: string | null;

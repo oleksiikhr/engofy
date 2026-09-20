@@ -13,7 +13,7 @@ export class PostsPage {
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole('heading', { name: 'Posts', exact: true });
-    this.searchInput = page.getByLabel('Search posts by word or phrase');
+    this.searchInput = page.getByLabel('Search posts by title, word or phrase');
     this.suggestions = page.locator('#posts-suggestions option');
     this.unreadToggle = page.getByLabel('Unread only');
     this.cards = page.getByTestId('post-card');
@@ -35,5 +35,9 @@ export class PostsPage {
 
   level(level: string): Locator {
     return this.page.locator('.posts-levels .pill', { hasText: level });
+  }
+
+  topic(label: string): Locator {
+    return this.page.locator('.posts-topics .pill', { hasText: label });
   }
 }

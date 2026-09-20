@@ -12,6 +12,7 @@ import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
+import { PostTopic } from '../../enums/post-topic.enum.js';
 import { PostModule } from '../../post.module.js';
 import { AssessComplexityCommand } from './assess-complexity.command.js';
 
@@ -25,6 +26,7 @@ function fixtureAssessment(userText: string): ComplexityAssessment {
   );
   return {
     overall: CefrLevel.B2,
+    topic: PostTopic.Food,
     newVocabRatio: 0.15,
     sentences: indexes.map((index) => ({
       index,
@@ -82,6 +84,7 @@ describe('AssessComplexityHandler', () => {
 
     const post = await suite.orm.em.findOneOrFail(Post, postId);
     expect(post.cefrLevel).toBe(CefrLevel.B2);
+    expect(post.topic).toBe(PostTopic.Food);
 
     const sentences = await suite.orm.em.find(
       Sentence,

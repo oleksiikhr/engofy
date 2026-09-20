@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { ApiError, apiGet, isBadRequest } from '../../lib/api';
 import {
   CEFR_LEVELS,
+  POST_TOPICS,
   POSTS_ERROR_HTML,
   POSTS_INVALID_HTML,
   parsePostsQuery,
@@ -77,8 +78,8 @@ try {
         value={query.term}
         list="posts-suggestions"
         autocomplete="off"
-        placeholder="Search by word or phrase…"
-        aria-label="Search posts by word or phrase"
+        placeholder="Search by title, word or phrase…"
+        aria-label="Search posts by title, word or phrase"
         hx-get="/partials/posts-suggestions"
         hx-trigger="input changed delay:250ms"
         hx-target="#posts-suggestions"
@@ -123,6 +124,23 @@ try {
       }
     </div>
 
+    <fieldset class="posts-topics">
+      <legend class="visually-hidden">Topic</legend>
+      {
+        POST_TOPICS.map((topic) => (
+          <label class="pill">
+            <input
+              type="checkbox"
+              name="topic"
+              value={topic.value}
+              checked={query.topic.includes(topic.value)}
+            />
+            <span>{topic.label}</span>
+          </label>
+        ))
+      }
+    </fieldset>
+
     <noscript><button class="btn" type="submit">Apply</button></noscript>
   </form>
 
@@ -156,7 +174,8 @@ try {
     justify-content: space-between;
     gap: 0.75rem 1.5rem;
   }
-  .posts-levels {
+  .posts-levels,
+  .posts-topics {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -165,6 +184,11 @@ try {
     margin: 0;
     padding: 0;
     min-width: 0;
+  }
+  .posts-topics .pill span {
+    height: 2.125rem;
+    font-size: 0.8rem;
+    font-weight: 700;
   }
   .posts-unread {
     display: flex;

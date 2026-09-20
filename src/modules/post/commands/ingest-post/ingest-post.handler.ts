@@ -4,6 +4,7 @@ import { OutboxSenderService } from '../../../../core/queue/outbox-sender.servic
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { convertToDoc } from '../../converters/to-doc.converter.js';
 import { deriveAttributionText } from '../../domain/derive-attribution-text.js';
+import { deriveTitleFromHeading } from '../../domain/derive-title-from-heading.js';
 import { detectPostSourceFormat } from '../../domain/detect-post-source-format.js';
 import { generateSlug } from '../../domain/generate-slug.js';
 import { splitDocIntoParts } from '../../domain/post-parts.js';
@@ -33,9 +34,10 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
   ) {}
 
   async execute(command: IngestPostCommand): Promise<IngestedPostView> {
-    const { rawText, title, link, type, sourceType, attributionText } =
-      command.dto;
+    const { rawText, link, type, sourceType, attributionText } = command.dto;
     const format = detectPostSourceFormat(rawText);
+    const rawDoc = convertToDoc(format, rawText);
+    const title = command.dto.title ?? deriveTitleFromHeading(rawDoc);
 
     const source = new PostSource();
     source.format = format;
@@ -56,10 +58,7 @@ export class IngestPostHandler implements ICommandHandler<IngestPostCommand> {
 
     this.em.persist(post);
 
-    const doc = stripRedundantTitleHeading(
-      convertToDoc(format, rawText),
-      post.title,
-    );
+    const doc = stripRedundantTitleHeading(rawDoc, post.title);
     for (const spec of splitDocIntoParts(doc)) {
       const part = new PostPart();
       part.postId = post.id;
