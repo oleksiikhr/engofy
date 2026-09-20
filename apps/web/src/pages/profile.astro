@@ -10,12 +10,15 @@ import type {
 } from '../lib/types';
 
 const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const MAX_DAILY_GOAL = 200;
 
 const user = await getCurrentUser(Astro.request);
 
 // Plain form POSTs + redirect (no client JS): the level picker
-// (`PATCH /profile/cefr-level`) and the account-deletion request / cancel.
+// (`PATCH /profile/cefr-level`), the daily goal (`PATCH /profile/daily-goal`)
+// and the account-deletion request / cancel.
 let levelError = false;
+let goalError = false;
 let deletionError: string | null = null;
 if (user && Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
@@ -29,6 +32,13 @@ if (user && Astro.request.method === 'POST') {
         return Astro.redirect('/profile');
       }
       levelError = true;
+    } else if (action === 'set-goal') {
+      const goal = Number(form.get('dailyGoal'));
+      if (Number.isInteger(goal) && goal >= 1 && goal <= MAX_DAILY_GOAL) {
+        await apiPatch('/profile/daily-goal', { dailyGoal: goal }, opts);
+        return Astro.redirect('/profile');
+      }
+      goalError = true;
     } else if (action === 'request-deletion') {
       await apiPost('/profile/account-deletion', undefined, opts);
       return Astro.redirect('/profile');
@@ -39,6 +49,8 @@ if (user && Astro.request.method === 'POST') {
   } catch {
     if (action === 'set-level') {
       levelError = true;
+    } else if (action === 'set-goal') {
+      goalError = true;
     } else {
       deletionError = 'Something went wrong, please try again.';
     }
@@ -162,6 +174,37 @@ const links = [
           )}
         </section>
 
+        <section class="card level">
+          <h2>Daily goal</h2>
+          <p class="level__hint">
+            Cards to review each day. The ring in the header fills as you go.
+          </p>
+          <form method="post" class="level__form" data-testid="daily-goal-form">
+            <input type="hidden" name="action" value="set-goal" />
+            <label class="goal-input">
+              <span class="goal-input__label">Cards per day</span>
+              <input
+                class="input"
+                type="number"
+                name="dailyGoal"
+                min="1"
+                max={MAX_DAILY_GOAL}
+                step="1"
+                required
+                value={hub.dailyGoal}
+              />
+            </label>
+            <button class="btn" type="submit">
+              Save
+            </button>
+          </form>
+          {goalError && (
+            <p class="form-error" role="alert">
+              Enter a whole number from 1 to {MAX_DAILY_GOAL}.
+            </p>
+          )}
+        </section>
+
         {!hub.accountDeletion && (
           <section class="card card--soft danger">
             <details data-testid="delete-account">
@@ -229,6 +272,15 @@ const links = [
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+  }
+  .goal-input {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+  }
+  .goal-input input {
+    width: 5.5rem;
   }
   .form-error {
     margin: 0.75rem 0 0;

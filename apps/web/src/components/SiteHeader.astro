@@ -1,14 +1,16 @@
 ---
 import type { CurrentUser } from '../lib/types';
+import GoalRing from './GoalRing.astro';
 
 interface Props {
   user?: CurrentUser | null;
   active?: string;
   streak?: number;
   dueCount?: number;
+  goal?: { done: number; target: number } | null;
 }
 
-const { user = null, active, streak = 0, dueCount = 0 } = Astro.props;
+const { user = null, active, streak = 0, dueCount = 0, goal = null } = Astro.props;
 
 const links = [
   { href: '/posts', label: 'Posts', key: 'posts', authOnly: false },
@@ -54,6 +56,7 @@ const themes = [
                 {streak}
               </span>
             )}
+            {goal && <GoalRing done={goal.done} goal={goal.target} />}
             <details class="account" data-account-menu>
               <summary class="avatar" aria-label="Account menu">
                 {initial}
@@ -106,6 +109,15 @@ const themes = [
           </>
         ) : (
           <>
+            <span class="guest-progress" data-guest-progress hidden>
+              <span class="streak" data-guest-streak hidden>
+                <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1 1 2 2 2 4a5 5 0 0 1-10 0c0-5 4-6 5-13z" />
+                </svg>
+                <b>0</b>
+              </span>
+              <GoalRing guest />
+            </span>
             <a class="btn btn--sm btn--ghost" href="/login">Log in</a>
             <a class="btn btn--sm" href="/login">Get started</a>
           </>
@@ -116,7 +128,13 @@ const themes = [
 </header>
 
 <script>
+  import { initGuestHeader } from '../lib/guest-header';
   import { readPref, THEMES, type Theme, writePref } from '../lib/prefs';
+
+  const guestProgress = document.querySelector<HTMLElement>('[data-guest-progress]');
+  if (guestProgress) {
+    initGuestHeader(guestProgress);
+  }
 
   const menu = document.querySelector<HTMLDetailsElement>('[data-account-menu]');
   if (menu) {

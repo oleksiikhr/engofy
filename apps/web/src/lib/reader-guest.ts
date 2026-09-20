@@ -1,10 +1,9 @@
-import { exploredCount } from './guest-progress';
+import { EXPLORED_EVENT, exploredCount } from './guest-progress';
 import {
   LEVEL_SKIPPED,
   type LevelChoice,
   writeLevelChoice,
 } from './reader-level';
-import { EXPLORED_EVENT } from './reader-popup';
 
 // The guest strip above the article: the level question and the explored-words
 // count. The level is stored in a cookie (see lib/reader-level.ts) and the page

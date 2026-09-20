@@ -1,5 +1,5 @@
 import { addToGuestDeck, readGuestDeck } from './guest-deck';
-import { recordExplored } from './guest-progress';
+import { EXPLORED_EVENT, recordExplored } from './guest-progress';
 import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 import {
   type GrammarLexiconEntry,
@@ -31,8 +31,6 @@ const LABEL_ATTR: Record<string, string> = {
   phrase: 'data-phrase-id',
   grammar: 'data-grammar-usage-point-id',
 };
-// Fired on `document` with the guest's new explored-words count as `detail`.
-export const EXPLORED_EVENT = 'reader:explored';
 const GAP = 8;
 const EDGE = 8;
 const ARROW_INSET = 28;

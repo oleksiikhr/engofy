@@ -55,6 +55,9 @@ const [streakResponse, dueResponse] = user
   : [null, null];
 const streak = streakResponse?.streak ?? 0;
 const dueCount = dueResponse?.dueCount ?? 0;
+const goal = streakResponse
+  ? { done: streakResponse.reviewedToday, target: streakResponse.dailyGoal }
+  : null;
 ---
 
 <!doctype html>
@@ -90,7 +93,7 @@ const dueCount = dueResponse?.dueCount ?? 0;
     <slot name="head" />
   </head>
   <body data-signed-in={user ? 'true' : undefined}>
-    <SiteHeader user={user} active={active} streak={streak} dueCount={dueCount} />
+    <SiteHeader user={user} active={active} streak={streak} dueCount={dueCount} goal={goal} />
     <main class:list={['site-main', { 'reading-measure': measure }]}>
       <slot />
     </main>
