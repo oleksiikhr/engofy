@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -12,6 +13,7 @@ import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp
 import type { Block } from '../domain/node-tree.types.js';
 import { PostPartBodyType } from '../domain/post-part-body.type.js';
 import { PostPartKind } from '../enums/post-part-kind.enum.js';
+import { Post } from './post.entity.js';
 
 // One row per top-level element of Doc.children — a Paragraph or a whole
 // ListBlock (all its items, not exploded across rows). This is the
@@ -34,7 +36,11 @@ export class PostPart {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   postId!: string;
 
   // Position in Doc.children.

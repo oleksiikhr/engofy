@@ -3,6 +3,7 @@ import {
   Entity,
   Enum,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,8 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
+import { Post } from './post.entity.js';
+import { PostPart } from './post-part.entity.js';
 
 // The spaCy analysis layer: deterministic sentence segmentation +
 // tokenisation, parallel to (not a replacement for) the node-tree annotation
@@ -24,12 +27,20 @@ export class Sentence {
 
   // Denormalised from post_parts.post_id so post-level reads (feed, CEFR
   // aggregation) don't need a join. Source of truth is postPartId.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   @Index()
   postId!: string;
 
   // Covered by the leading column of the composite unique above.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => PostPart, {
+    mapToPk: true,
+    fieldName: 'post_part_id',
+    deleteRule: 'cascade',
+  })
   postPartId!: string;
 
   // Which flattened unit within the part: 0 for a paragraph, the list-item

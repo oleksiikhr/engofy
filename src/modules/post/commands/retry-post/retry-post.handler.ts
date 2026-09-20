@@ -5,13 +5,11 @@ import { OutboxSenderService } from '../../../../core/queue/outbox-sender.servic
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import { stripSpans } from '../../domain/strip-spans.js';
 import { Exercise } from '../../entities/exercise.entity.js';
-import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { PostPublication } from '../../entities/post-publication.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { PublicationStatus } from '../../enums/publication-status.enum.js';
 import type { PostSpacyParseJobData } from '../ingest-post/ingest-post.handler.js';
@@ -43,18 +41,7 @@ export class RetryPostHandler implements ICommandHandler<RetryPostCommand> {
 
     const post = await this.em.findOneOrFail(Post, postId);
 
-    const sentenceIds = (
-      await this.em.find(Sentence, { postId }, { fields: ['id'] })
-    ).map((sentence) => sentence.id);
-
-    if (sentenceIds.length > 0) {
-      await this.em.nativeDelete(SentenceToken, {
-        sentenceId: { $in: sentenceIds },
-      });
-      await this.em.nativeDelete(GrammarMatch, {
-        sentenceId: { $in: sentenceIds },
-      });
-    }
+    // sentence_tokens and grammar_matches go with their sentences (FK cascade).
     await this.em.nativeDelete(Sentence, { postId });
     await this.em.nativeDelete(Exercise, { postId });
     await this.em.nativeDelete(PostPipelineRun, { postId });

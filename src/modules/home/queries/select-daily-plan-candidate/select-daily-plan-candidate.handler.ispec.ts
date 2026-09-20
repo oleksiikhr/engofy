@@ -148,7 +148,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
     ): Promise<void> {
       const sentence = factories(em).sentence.makeOne({
         postId: opts.postId,
-        postPartId: uuidv7(),
+        postPartId: factories(em).postPart.makeOne({ postId: opts.postId }).id,
         unitIndex: opts.unitIndex,
         position: opts.position,
         rawText: 'Some sentence.',

@@ -1,6 +1,5 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
-import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
@@ -132,7 +131,7 @@ async function seedPostWithSentence(em: EntityManager): Promise<string> {
 
   const sentence = factories(em).sentence.makeOne({
     postId: post.id,
-    postPartId: uuidv7(),
+    postPartId: factories(em).postPart.makeOne({ postId: post.id }).id,
     unitIndex: 0,
     position: 0,
     rawText: SENTENCE_TEXT,

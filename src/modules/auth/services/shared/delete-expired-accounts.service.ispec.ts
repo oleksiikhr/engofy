@@ -73,7 +73,7 @@ describe('DeleteExpiredAccountsService', () => {
     });
     factories(em).postRead.makeOne({
       userId,
-      postId: randomUUID(),
+      postId: post.id,
       readAt: DateTime.now(),
     });
     factories(em).dailyPlan.makeOne({

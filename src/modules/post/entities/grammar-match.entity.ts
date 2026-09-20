@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -9,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { Sentence } from './sentence.entity.js';
 
 // A grammar usage point detected in one sentence by the ai_grammar stage.
 // tokenStart/tokenEnd are SentenceToken.position offsets (half-open range)
@@ -27,7 +29,11 @@ export class GrammarMatch {
 
   // Covered as the leading column of the composite unique above; also the key
   // for the stage's delete-by-sentence.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Sentence, {
+    mapToPk: true,
+    fieldName: 'sentence_id',
+    deleteRule: 'cascade',
+  })
   sentenceId!: string;
 
   @Property({ type: 'uuid' })

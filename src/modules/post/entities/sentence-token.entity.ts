@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -9,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { Sentence } from './sentence.entity.js';
 
 // One row per spaCy token of a Sentence. This is the deterministic NLP layer;
 // its POS/tag/dep fields are raw spaCy output, deliberately not the curated
@@ -21,7 +23,11 @@ export class SentenceToken {
   id: string = uuidv7();
 
   // Covered by the leading column of the composite unique above.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Sentence, {
+    mapToPk: true,
+    fieldName: 'sentence_id',
+    deleteRule: 'cascade',
+  })
   sentenceId!: string;
 
   // Token order within the sentence.
