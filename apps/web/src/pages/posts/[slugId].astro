@@ -11,13 +11,16 @@ import {
   buildStudySteps,
 } from '../../lib/quick-check-steps';
 import { postSlugId } from '../../lib/post-url';
+import { CEFR_LEVELS } from '../../lib/posts-list';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import { publicOrigin } from '../../lib/site';
 import type {
+  CefrLevel,
   NewCardBudgetResponse,
   PostDetail,
   PracticeQueueResponse,
+  ProfileHub,
   StreakResponse,
 } from '../../lib/types';
 
@@ -59,7 +62,6 @@ const jsonLd = escapeJson(
   postJsonLd(post, publicOrigin(Astro.url), description),
 );
 
-const bodyHtml = renderDoc(post.doc, post.annotations);
 const lexicon = buildLexiconData(post.annotations, post.exercises);
 const lexiconJson = escapeJson(lexicon);
 // `?? []`: an API still on the previous release omits `tokens`.
@@ -82,7 +84,7 @@ const summaryText =
 
 // Both are best-effort, signed-in only: an API on the previous release lacks
 // the budget route, and neither may take the page down.
-const [budget, dueCards, streakResponse] = user
+const [budget, dueCards, streakResponse, profile] = user
   ? await Promise.all([
       apiGetOrNull<NewCardBudgetResponse>('/learning/new-card-budget', {
         request: Astro.request,
@@ -94,8 +96,20 @@ const [budget, dueCards, streakResponse] = user
       apiGetOrNull<StreakResponse>('/learning/streak', {
         request: Astro.request,
       }).catch(() => null),
+      apiGetOrNull<ProfileHub>('/profile', {
+        request: Astro.request,
+      }).catch(() => null),
     ])
-  : [null, null, null];
+  : [null, null, null, null];
+
+// Labels at or below the reader's level stay unhighlighted by default. A guest
+// has no level: one step under the text's own keeps the hard words lit.
+const guestLevel: CefrLevel | null = post.cefrLevel
+  ? CEFR_LEVELS[Math.max(CEFR_LEVELS.indexOf(post.cefrLevel) - 1, 0)]
+  : null;
+const readerLevel = profile?.cefrLevel ?? guestLevel;
+const bodyHtml = renderDoc(post.doc, post.annotations, readerLevel);
+
 const dueCount = dueCards?.items.length ?? 0;
 const steps = buildQuickCheckSteps(
   post.exercises,
@@ -174,19 +188,19 @@ const isRead = post.isRead ?? false;
         {
           hasTokens && (
             <>
-              <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false">
+              <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false" title="Underline nouns, verbs, adjectives and adverbs in different colours">
                 <b aria-hidden="true">Aa</b>Word types
               </button>
-              <button type="button" class="reader-toolbar__btn tone-blue" data-mode="tense" aria-pressed="false">
+              <button type="button" class="reader-toolbar__btn tone-blue" data-mode="tense" aria-pressed="false" title="Mark past, present and future verbs with a coloured line above">
                 <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l2.5 2.5" /></svg>Tenses
               </button>
-              <button type="button" class="reader-toolbar__btn tone-pink" data-mode="analyze" aria-pressed="false">
+              <button type="button" class="reader-toolbar__btn tone-pink" data-mode="analyze" aria-pressed="false" title="Label every word with its type and explain each grammar pattern">
                 <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="M20 20l-5.5-5.5" /></svg>Analyze
               </button>
             </>
           )
         }
-        <button type="button" class="reader-toolbar__btn tone-amber" data-study-toggle aria-pressed="false">
+        <button type="button" class="reader-toolbar__btn tone-amber" data-study-toggle aria-pressed="false" title="Read one paragraph at a time with a short quiz after each">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l13 8-13 8V4z" /></svg>Study mode
         </button>
         <span class="reader-toolbar__size">
@@ -200,13 +214,28 @@ const isRead = post.isRead ?? false;
           <span class="reader-legend__item tone-pink" data-pos-group="adv">adverb</span>
         </div>
         <p class="reader-legend" data-legend="tense">
-          <span class="reader-legend__item tone-amber" data-tense="past">past</span>
-          <span class="reader-legend__item tone-blue" data-tense="present">present</span>
-          <span class="reader-legend__item tone-green" data-tense="future">future</span>
+          <span class="reader-legend__item tone-pink" data-tense="past">past</span>
+          <span class="reader-legend__item tone-green" data-tense="present">present</span>
+          <span class="reader-legend__item tone-brand" data-tense="future">future</span>
         </p>
         <p class="reader-legend" data-legend="analyze">
           Tap a highlighted construction to see why it fits. Irregular verbs show their forms.
         </p>
+      </div>
+
+      <p class="reader-hint">
+        <span>Tap a highlighted word or phrase to see what it means.</span>
+        <button type="button" class="reader-hint__close" data-reader-hint-close aria-label="Dismiss hint">Got it</button>
+      </p>
+      <div class="reader-key" aria-label="Highlights">
+        <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--word"></i>Word or phrase</span>
+        <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--gram"></i>Grammar</span>
+        <span class="reader-key__density" role="group" aria-label="Highlight density">
+          <span class="reader-key__label">Show</span>
+          <button type="button" class="reader-key__opt" data-density="focus" aria-pressed="false" title="Only words and patterns above your level">New for me</button>
+          <button type="button" class="reader-key__opt" data-density="all" aria-pressed="false" title="Every word and pattern you have not learned yet">All</button>
+          <button type="button" class="reader-key__opt" data-density="off" aria-pressed="false" title="Plain text; tap any word to look it up">None</button>
+        </span>
       </div>
 
       <div class="analysis reading-body" set:html={bodyHtml} />
@@ -243,6 +272,7 @@ const isRead = post.isRead ?? false;
   import type { LexiconData } from '../../lib/reader-lexicon';
   import { initReaderFinal } from '../../lib/reader-final';
   import { initReadState } from '../../lib/reader-read';
+  import { initReaderHelp } from '../../lib/reader-help';
   import { initReaderPopup } from '../../lib/reader-popup';
   import { initReaderStudy } from '../../lib/reader-study';
   import { initReaderToolbar } from '../../lib/reader-toolbar';
@@ -256,6 +286,11 @@ const isRead = post.isRead ?? false;
   const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
   if (toolbar) {
     initReaderToolbar(toolbar);
+  }
+
+  const article = document.querySelector<HTMLElement>('.reader-article');
+  if (article) {
+    initReaderHelp(article);
   }
 
   const layout = document.querySelector<HTMLElement>('.reader-layout');
@@ -329,9 +364,8 @@ const isRead = post.isRead ?? false;
     font-size: var(--reader-font-size);
     line-height: 1.85;
   }
-  /* Words/phrases (amber chip) and grammar matches (blue chip) still to learn.
-     The spans come from set:html, so the selectors must be :global. Settled
-     ones (`data-known`) look like plain text and only hint at a click on hover. */
+  /* The chip colours and the `data-known` / `data-quiet` / density rules live
+     in app.css. The spans come from set:html, so the selectors must be :global. */
   .reading-body :global([data-word-definition-id]),
   .reading-body :global([data-phrase-id]),
   .reading-body :global([data-grammar-usage-point-id]) {
@@ -339,27 +373,6 @@ const isRead = post.isRead ?? false;
     border-radius: 0.5rem;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
-  }
-  .reading-body :global([data-word-definition-id]:not([data-known])),
-  .reading-body :global([data-phrase-id]:not([data-known])),
-  .reading-body :global([data-grammar-usage-point-id]:not([data-known])) {
-    /* The negative margin cancels the padding, so a chip never pushes a
-       neighbouring apostrophe or quote away from its word. */
-    padding: 1px 0.08em;
-    margin-inline: -0.08em;
-    color: var(--color-ink);
-    font-weight: 700;
-  }
-  .reading-body :global([data-word-definition-id]:not([data-known])),
-  .reading-body :global([data-phrase-id]:not([data-known])) {
-    background: var(--color-word);
-  }
-  .reading-body :global([data-grammar-usage-point-id]:not([data-known])) {
-    background: var(--color-gram);
-  }
-  .reading-body :global([data-known]:hover),
-  .reading-body :global([data-known]:focus-visible) {
-    background: var(--color-paper-soft);
   }
   .reading-body :global(.is-active) {
     outline: 2px solid var(--color-brand);
