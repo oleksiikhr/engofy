@@ -9,6 +9,7 @@
 // wrapped in `data-tok` spans as the text renders (lib/render-tokens.ts).
 
 import { applyGrammarMatches } from './apply-grammar-matches';
+import { CEFR_LEVELS } from './posts-list';
 import {
   groupTokens,
   renderTokenText,
@@ -18,6 +19,7 @@ import {
 } from './render-tokens';
 import type {
   Block,
+  CefrLevel,
   Doc,
   EffectiveState,
   InlineNode,
@@ -33,6 +35,8 @@ interface RenderContext {
   annotations: Annotations;
   // Grammar usage points the viewer no longer needs highlighted.
   settledGrammar: Set<string>;
+  readerLevel: CefrLevel | null;
+  grammarLevels: Map<string, CefrLevel>;
 }
 
 const ESCAPE: Record<string, string> = {
@@ -64,18 +68,49 @@ function isMarked(state: EffectiveState): boolean {
 }
 
 const KNOWN_ATTR = ' data-known';
+// A label at or below the reader's level: still clickable, highlighted only
+// when the reader asks for every label (html[data-reader-density="all"]).
+const QUIET_ATTR = ' data-quiet';
 
-function spanAttr(node: SpanNode, annotations: Annotations): string | null {
+// An unknown level counts as above: better a highlight too many than a hard
+// word hidden.
+function isBelowLevel(
+  level: CefrLevel | null | undefined,
+  readerLevel: CefrLevel | null,
+): boolean {
+  return (
+    Boolean(level && readerLevel) &&
+    CEFR_LEVELS.indexOf(level as CefrLevel) <=
+      CEFR_LEVELS.indexOf(readerLevel as CefrLevel)
+  );
+}
+
+// Proper nouns ("Maria") have no dictionary card worth opening.
+const NO_CARD_POS = 'proper_noun';
+
+function flags(
+  state: EffectiveState,
+  level: CefrLevel | null,
+  readerLevel: CefrLevel | null,
+): string {
+  if (!isMarked(state)) {
+    return KNOWN_ATTR;
+  }
+  return isBelowLevel(level, readerLevel) ? QUIET_ATTR : '';
+}
+
+function spanAttr(node: SpanNode, ctx: RenderContext): string | null {
+  const { annotations, readerLevel } = ctx;
   if (node.kind === 'word') {
-    const state = annotations.words[node.wordDefinitionId]?.state;
-    return state
-      ? `data-word-definition-id="${esc(node.wordDefinitionId)}"${isMarked(state) ? '' : KNOWN_ATTR}`
+    const word = annotations.words[node.wordDefinitionId];
+    return word && word.pos !== NO_CARD_POS
+      ? `data-word-definition-id="${esc(node.wordDefinitionId)}"${flags(word.state, word.cefrLevel, readerLevel)}`
       : null;
   }
   if (node.kind === 'phrase') {
-    const state = annotations.phrases[node.phraseId]?.state;
-    return state
-      ? `data-phrase-id="${esc(node.phraseId)}"${isMarked(state) ? '' : KNOWN_ATTR}`
+    const phrase = annotations.phrases[node.phraseId];
+    return phrase
+      ? `data-phrase-id="${esc(node.phraseId)}"${flags(phrase.state, phrase.cefrLevel, readerLevel)}`
       : null;
   }
   return null;
@@ -91,7 +126,7 @@ function renderNode(
     return `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
   if (node.type === 'span') {
-    const attr = spanAttr(node, ctx.annotations);
+    const attr = spanAttr(node, ctx);
     if (attr) {
       return `<span ${attr}>${text}</span>`;
     }
@@ -105,6 +140,15 @@ function renderInline(
   unit: UnitTokens,
 ): string {
   return wrapMarks(renderNode(node, ctx, unit), node.marks);
+}
+
+function grammarFlags(id: string, ctx: RenderContext): string {
+  if (ctx.settledGrammar.has(id)) {
+    return KNOWN_ATTR;
+  }
+  return isBelowLevel(ctx.grammarLevels.get(id), ctx.readerLevel)
+    ? QUIET_ATTR
+    : '';
 }
 
 // Consecutive nodes of one grammar usage point share a single wrapper: the
@@ -128,7 +172,7 @@ function renderChildren(
       .map((child) => renderInline(child, ctx, unit))
       .join('');
     out += id
-      ? `<span data-grammar-usage-point-id="${esc(id)}"${ctx.settledGrammar.has(id) ? KNOWN_ATTR : ''}>${html}</span>`
+      ? `<span data-grammar-usage-point-id="${esc(id)}"${grammarFlags(id, ctx)}>${html}</span>`
       : html;
     i = end;
   }
@@ -168,8 +212,13 @@ function renderBlock(
 }
 
 // Renders `Doc.children` to an HTML string. Caller wraps it in a
-// `.analysis` container so the span styles in app.css apply.
-export function renderDoc(doc: Doc, annotations: Annotations): string {
+// `.analysis` container so the span styles in app.css apply. `readerLevel`
+// marks the labels at or below it as quiet.
+export function renderDoc(
+  doc: Doc,
+  annotations: Annotations,
+  readerLevel: CefrLevel | null = null,
+): string {
   // `?? []`: an API still on the previous release omits `tokens` /
   // `grammarMatches`.
   const tokens = groupTokens(annotations.tokens ?? []);
@@ -180,6 +229,14 @@ export function renderDoc(doc: Doc, annotations: Annotations): string {
       matches
         .filter((match) => !isMarked(match.state))
         .map((match) => match.grammarUsagePointId),
+    ),
+    readerLevel,
+    grammarLevels: new Map(
+      Object.values(annotations.grammar).flatMap((construction) =>
+        construction.usagePoints.map(
+          (point) => [point.grammarUsagePointId, point.cefrLevel] as const,
+        ),
+      ),
     ),
   };
   return applyGrammarMatches(doc, matches)

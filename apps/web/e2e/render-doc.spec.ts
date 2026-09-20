@@ -32,6 +32,7 @@ function annotations(
   return {
     words: {},
     phrases: {},
+    grammar: {},
     tokens: [],
     grammarMatches: [],
     ...overrides,
@@ -110,5 +111,64 @@ test.describe('renderDoc', () => {
     );
     expect(html.match(/data-grammar-usage-point-id="g1"/g)).toHaveLength(1);
     expect(html).toContain('</span> <span data-phrase-id="p1">');
+  });
+  test('flags labels at or below the reader level as quiet', async () => {
+    const doc = paragraph([
+      {
+        type: 'span',
+        kind: 'word',
+        text: 'easy',
+        wordDefinitionId: 'w1',
+        pos: 'NOUN',
+      },
+      { type: 'text', text: ' ' },
+      {
+        type: 'span',
+        kind: 'word',
+        text: 'hard',
+        wordDefinitionId: 'w2',
+        pos: 'NOUN',
+      },
+      { type: 'text', text: ' ' },
+      {
+        type: 'span',
+        kind: 'word',
+        text: 'odd',
+        wordDefinitionId: 'w3',
+        pos: 'NOUN',
+      },
+    ]);
+    const words = {
+      w1: { state: 'new', cefrLevel: 'A2' },
+      w2: { state: 'new', cefrLevel: 'C1' },
+      w3: { state: 'new', cefrLevel: null },
+    };
+    const html = renderDoc(doc, annotations({ words } as never), 'B1');
+    expect(html).toContain('data-word-definition-id="w1" data-quiet');
+    expect(html).toMatch(/data-word-definition-id="w2">/);
+    expect(html).toMatch(/data-word-definition-id="w3">/);
+    // No reader level: nothing is quiet.
+    expect(renderDoc(doc, annotations({ words } as never))).not.toContain(
+      'data-quiet',
+    );
+  });
+
+  test('leaves a proper noun without a label', async () => {
+    const html = renderDoc(
+      paragraph([
+        {
+          type: 'span',
+          kind: 'word',
+          text: 'Maria',
+          wordDefinitionId: 'w1',
+          pos: 'NOUN',
+        },
+      ]),
+      annotations({
+        words: { w1: { state: 'new', pos: 'proper_noun' } },
+      } as never),
+    );
+    expect(html).not.toContain('data-word-definition-id');
+    expect(html).toContain('Maria');
   });
 });
