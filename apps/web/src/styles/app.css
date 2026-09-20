@@ -1522,10 +1522,30 @@ body {
   background: var(--color-paper-soft);
 }
 .reader-hint {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin: 0 0 1rem;
+  transition:
+    grid-template-rows 0.25s ease,
+    margin-bottom 0.25s ease,
+    opacity 0.2s ease;
+}
+/* Dismissing collapses the hint to nothing over a quarter second instead of
+   yanking the article up in one frame (see lib/reader-help.ts). */
+.reader-hint.is-closing {
+  grid-template-rows: 0fr;
+  margin-bottom: 0;
+  opacity: 0;
+}
+.reader-hint__clip {
+  min-height: 0;
+  overflow: hidden;
+}
+.reader-hint__body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 0 0 1rem;
+  margin: 0;
   padding: 0.6rem 0.9rem;
   border-radius: 0.75rem;
   background: var(--color-word);
@@ -1535,6 +1555,11 @@ body {
 }
 :root[data-reader-hint="seen"] .reader-hint {
   display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reader-hint {
+    transition: none;
+  }
 }
 .reader-hint__close {
   margin-left: auto;

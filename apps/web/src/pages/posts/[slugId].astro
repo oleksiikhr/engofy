@@ -223,10 +223,14 @@ const isRead = post.isRead ?? false;
         </p>
       </div>
 
-      <p class="reader-hint">
-        <span>Tap a highlighted word or phrase to see what it means.</span>
-        <button type="button" class="reader-hint__close" data-reader-hint-close aria-label="Dismiss hint">Got it</button>
-      </p>
+      <div class="reader-hint">
+        <div class="reader-hint__clip">
+          <p class="reader-hint__body">
+            <span>Tap a highlighted word or phrase to see what it means.</span>
+            <button type="button" class="reader-hint__close" data-reader-hint-close aria-label="Dismiss hint">Got it</button>
+          </p>
+        </div>
+      </div>
       <div class="reader-key" aria-label="Highlights">
         <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--word"></i>Word or phrase</span>
         <span class="reader-key__item"><i class="reader-key__chip reader-key__chip--gram"></i>Grammar</span>

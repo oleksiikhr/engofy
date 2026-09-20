@@ -6,10 +6,29 @@ import { type ReaderDensity, readPref, writePref } from './prefs';
 
 export function initReaderHelp(article: HTMLElement): void {
   // Only an explicit dismissal hides the hint: hiding it when a label opens
-  // would shift the article under the popup.
+  // would shift the article under the popup. The hint collapses first and the
+  // choice is stored once it is gone (storing hides it at once, which would
+  // make the article jump).
+  const hint = article.querySelector<HTMLElement>('.reader-hint');
   article
     .querySelector('[data-reader-hint-close]')
-    ?.addEventListener('click', () => writePref('readerHint', 'seen'));
+    ?.addEventListener('click', () => {
+      if (!hint) {
+        writePref('readerHint', 'seen');
+        return;
+      }
+      hint.classList.add('is-closing');
+      let done = false;
+      const finish = () => {
+        if (!done) {
+          done = true;
+          writePref('readerHint', 'seen');
+        }
+      };
+      hint.addEventListener('transitionend', finish, { once: true });
+      // No transition runs under reduced motion.
+      setTimeout(finish, 350);
+    });
 
   const buttons = article.querySelectorAll<HTMLElement>('[data-density]');
   const sync = (density: ReaderDensity) => {

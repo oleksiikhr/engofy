@@ -47,8 +47,27 @@ test.describe('reader page (guest)', () => {
     await expect(hint).toBeVisible();
     await expect(page.locator('.reader-key')).toContainText('Grammar');
 
+    // Dismissing collapses the hint; the article must glide, not jump.
+    await page.evaluate(() => {
+      const w = window as unknown as { __ys: number[] };
+      w.__ys = [];
+      const sample = () => {
+        w.__ys.push(
+          document.querySelector('.reading-body')?.getBoundingClientRect()
+            .top ?? 0,
+        );
+        requestAnimationFrame(sample);
+      };
+      sample();
+    });
     await hint.getByRole('button', { name: 'Dismiss hint' }).click();
     await expect(hint).toBeHidden();
+    const ys = await page.evaluate(
+      () => (window as unknown as { __ys: number[] }).__ys,
+    );
+    const steps = ys.slice(1).map((y, i) => Math.abs(y - ys[i]));
+    expect(ys.at(-1)).toBeLessThan(ys[0]);
+    expect(Math.max(...steps)).toBeLessThan(25);
     await page.reload();
     await expect(hint).toBeHidden();
   });
