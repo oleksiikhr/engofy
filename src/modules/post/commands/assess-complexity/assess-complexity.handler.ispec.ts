@@ -1,10 +1,10 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import type { ComplexityAssessment } from '../../domain/complexity-prompt.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
@@ -12,6 +12,7 @@ import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
+import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { AssessComplexityCommand } from './assess-complexity.command.js';
 
@@ -37,25 +38,24 @@ async function createPostWithSentences(
   em: EntityManager,
   rawTexts: string[],
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = rawTexts.join(' ');
+  const source = { format: PostSourceFormat.Text, rawText: rawTexts.join(' ') };
 
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+  });
 
   const postPartId = uuidv7();
   rawTexts.forEach((rawText, position) => {
-    const sentence = new Sentence();
-    sentence.postId = post.id;
-    sentence.postPartId = postPartId;
-    sentence.unitIndex = 0;
-    sentence.position = position;
-    sentence.rawText = rawText;
-    sentence.charStart = 0;
-    sentence.charEnd = rawText.length;
-    em.persist(sentence);
+    const _sentence = factories(em).sentence.makeOne({
+      postId: post.id,
+      postPartId,
+      unitIndex: 0,
+      position,
+      rawText,
+      charStart: 0,
+      charEnd: rawText.length,
+    });
   });
 
   await em.flush();
@@ -116,12 +116,11 @@ describe('AssessComplexityHandler', () => {
   });
 
   it('throws when spacy_parse has not produced sentences yet', async () => {
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'x';
-    const post = new Post();
-    post.source = source;
-    suite.orm.em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'x' };
+    const post = suite.factories.post.makeOne({
+      status: PostStatus.Pending,
+      source,
+    });
     await suite.orm.em.flush();
     const postId = post.id;
     suite.orm.em.clear();

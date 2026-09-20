@@ -1,15 +1,10 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { User } from '../../../auth/entities/user.entity.js';
-import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
-import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
-import { GrammarCategory } from '../../entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { GrammarGroupBy } from '../../enums/grammar-group-by.enum.js';
 import { PostModule } from '../../post.module.js';
@@ -17,33 +12,21 @@ import { GetGrammarReferenceQuery } from './get-grammar-reference.query.js';
 
 const BY_CATEGORY = { cefrLevels: [], groupBy: GrammarGroupBy.Category };
 
-async function seedUser(
-  em: EntityManager,
-  cefrLevel: CefrLevel = CefrLevel.A1,
-): Promise<User> {
-  const user = em.create(User, {
-    email: `${uuidv7()}@example.com`,
-    cefrLevel,
-  });
-  await em.flush();
-  return user;
-}
-
 function seedCategory(
   em: EntityManager,
   name: string,
   sortOrder: number,
   points: CefrLevel[],
 ): void {
-  const category = em.create(GrammarCategory, { name, sortOrder });
-  const construction = em.create(GrammarConstruction, {
+  const category = factories(em).grammarCategory.makeOne({ name, sortOrder });
+  const construction = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: `${name} construction`,
     slug: `${name.toLowerCase()}-${uuidv7().slice(0, 8)}`,
     sortOrder,
   });
   points.forEach((cefrLevel, i) => {
-    em.create(GrammarUsagePoint, {
+    factories(em).grammarUsagePoint.makeOne({
       constructionId: construction.id,
       cefrLevel,
       guideword: `USE ${i}`,
@@ -164,16 +147,19 @@ describe('GetGrammarReferenceHandler', () => {
       pointCefrLevels: CefrLevel[],
     ): Promise<{ slug: string; pointIds: string[] }> {
       const name = `STATE-${uuidv7().slice(0, 6)}`;
-      const category = em.create(GrammarCategory, { name, sortOrder: 1 });
+      const category = factories(em).grammarCategory.makeOne({
+        name,
+        sortOrder: 1,
+      });
       const slug = `${name.toLowerCase()}-${uuidv7().slice(0, 8)}`;
-      const construction = em.create(GrammarConstruction, {
+      const construction = factories(em).grammarConstruction.makeOne({
         categoryId: category.id,
         name: `${name} construction`,
         slug,
         sortOrder: 1,
       });
       const pointIds = pointCefrLevels.map((cefrLevel, i) => {
-        const point = em.create(GrammarUsagePoint, {
+        const point = factories(em).grammarUsagePoint.makeOne({
           constructionId: construction.id,
           cefrLevel,
           guideword: `USE ${i}`,
@@ -223,7 +209,7 @@ describe('GetGrammarReferenceHandler', () => {
         scheduledDays: number;
       }> = {},
     ): void {
-      em.create(LearningCard, {
+      factories(em).learningCard.makeOne({
         userId,
         grammarUsagePointId: pointId,
         due: DateTime.now(),
@@ -249,7 +235,9 @@ describe('GetGrammarReferenceHandler', () => {
     });
 
     it('is Learning with 0 resolved when one point has a fresh card and the other is untouched', async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const user = await suite.factories.user.createOne({
+        cefrLevel: CefrLevel.A1,
+      });
       const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
         CefrLevel.B1,
         CefrLevel.B1,
@@ -267,12 +255,14 @@ describe('GetGrammarReferenceHandler', () => {
     });
 
     it('is Learning with 1 resolved when only one of two points is Known', async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const user = await suite.factories.user.createOne({
+        cefrLevel: CefrLevel.A1,
+      });
       const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
         CefrLevel.B1,
         CefrLevel.B1,
       ]);
-      suite.orm.em.create(LearningDisposition, {
+      suite.factories.learningDisposition.makeOne({
         userId: user.id,
         grammarUsagePointId: pointIds[0],
         disposition: Disposition.Known,
@@ -289,17 +279,19 @@ describe('GetGrammarReferenceHandler', () => {
     });
 
     it('is Learned when every point is Known or Skipped', async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const user = await suite.factories.user.createOne({
+        cefrLevel: CefrLevel.A1,
+      });
       const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
         CefrLevel.B1,
         CefrLevel.B1,
       ]);
-      suite.orm.em.create(LearningDisposition, {
+      suite.factories.learningDisposition.makeOne({
         userId: user.id,
         grammarUsagePointId: pointIds[0],
         disposition: Disposition.Known,
       });
-      suite.orm.em.create(LearningDisposition, {
+      suite.factories.learningDisposition.makeOne({
         userId: user.id,
         grammarUsagePointId: pointIds[1],
         disposition: Disposition.Skipped,
@@ -316,7 +308,9 @@ describe('GetGrammarReferenceHandler', () => {
     });
 
     it('ignores the CEFR default: a below-level construction with no activity stays New', async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.B2);
+      const user = await suite.factories.user.createOne({
+        cefrLevel: CefrLevel.B2,
+      });
       const { slug } = await seedOneConstruction(suite.orm.em, [CefrLevel.A1]);
       suite.orm.em.clear();
 
@@ -329,11 +323,13 @@ describe('GetGrammarReferenceHandler', () => {
     });
 
     it('is Skipped when the learner dismissed the only usage point', async () => {
-      const user = await seedUser(suite.orm.em, CefrLevel.A1);
+      const user = await suite.factories.user.createOne({
+        cefrLevel: CefrLevel.A1,
+      });
       const { slug, pointIds } = await seedOneConstruction(suite.orm.em, [
         CefrLevel.C1,
       ]);
-      suite.orm.em.create(LearningDisposition, {
+      suite.factories.learningDisposition.makeOne({
         userId: user.id,
         grammarUsagePointId: pointIds[0],
         disposition: Disposition.Skipped,

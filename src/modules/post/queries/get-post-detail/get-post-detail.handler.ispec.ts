@@ -1,27 +1,13 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { User } from '../../../auth/entities/user.entity.js';
 import { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
-import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
-import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
-import { Exercise } from '../../entities/exercise.entity.js';
-import { GrammarCategory } from '../../entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
-import { GrammarMatch } from '../../entities/grammar-match.entity.js';
-import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
-import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
-import { PostRead } from '../../entities/post-read.entity.js';
-import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
-import { Word } from '../../entities/word.entity.js';
-import { WordDefinition } from '../../entities/word-definition.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import { ExerciseType } from '../../enums/exercise-type.enum.js';
@@ -38,27 +24,30 @@ async function seedPublishedPost(em: EntityManager): Promise<{
   wordDefinitionId: string;
   wordId: string;
 }> {
-  const word = em.create(Word, { lemma: `travel-${uuidv7().slice(0, 8)}` });
-  const definition = em.create(WordDefinition, {
+  const word = factories(em).word.makeOne({
+    lemma: `travel-${uuidv7().slice(0, 8)}`,
+  });
+  const definition = factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Verb,
     definition: 'to go from one place to another',
     cefrLevel: CefrLevel.A2,
   });
 
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'She loves to travel widely.';
-  source.attributionText = 'Original content';
+  const source = {
+    format: PostSourceFormat.Text,
+    type: PostSourceType.Original,
+    rawText: 'She loves to travel widely.',
+    attributionText: 'Original content',
+  };
 
-  const post = new Post();
-  post.source = source;
-  post.title = 'A Short Trip';
-  post.status = PostStatus.Published;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'A Short Trip',
+    status: PostStatus.Published,
+  });
 
-  em.create(PostPart, {
+  factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -78,7 +67,7 @@ async function seedPublishedPost(em: EntityManager): Promise<{
     },
   });
 
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: post.id,
     type: ExerciseType.FillBlank,
     source: ExerciseSource.Spacy,
@@ -97,34 +86,23 @@ async function seedPublishedPost(em: EntityManager): Promise<{
   };
 }
 
-async function seedUser(
-  em: EntityManager,
-  cefrLevel: CefrLevel = CefrLevel.A1,
-): Promise<User> {
-  const user = em.create(User, {
-    email: `${uuidv7()}@example.com`,
-    cefrLevel,
-  });
-  await em.flush();
-  return user;
-}
-
 async function seedPostWithPhrases(
   em: EntityManager,
   phraseIds: string[],
 ): Promise<{ shortId: string }> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'phrases';
-  source.attributionText = 'Original content';
-  const post = new Post();
-  post.source = source;
-  post.title = 'Phrases';
-  post.status = PostStatus.Published;
-  em.persist(post);
+  const source = {
+    format: PostSourceFormat.Text,
+    type: PostSourceType.Original,
+    rawText: 'phrases',
+    attributionText: 'Original content',
+  };
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'Phrases',
+    status: PostStatus.Published,
+  });
 
-  em.create(PostPart, {
+  factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -151,16 +129,17 @@ describe('GetPostDetailHandler', () => {
 
   it('does not expose a non-published post', async () => {
     const em = suite.orm.em;
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.type = PostSourceType.Original;
-    source.rawText = 'x';
-    source.attributionText = 'Original content';
-    const post = new Post();
-    post.source = source;
-    post.title = 'Draft';
-    post.status = PostStatus.Pending;
-    em.persist(post);
+    const source = {
+      format: PostSourceFormat.Text,
+      type: PostSourceType.Original,
+      rawText: 'x',
+      attributionText: 'Original content',
+    };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'Draft',
+      status: PostStatus.Pending,
+    });
     await em.flush();
     em.clear();
 
@@ -170,22 +149,25 @@ describe('GetPostDetailHandler', () => {
   it('resolves annotations.grammar from a grammar_only span, usage points sorted by CEFR', async () => {
     const em = suite.orm.em;
 
-    const category = em.create(GrammarCategory, { name: 'PAST', sortOrder: 0 });
-    const construction = em.create(GrammarConstruction, {
+    const category = factories(em).grammarCategory.makeOne({
+      name: 'PAST',
+      sortOrder: 0,
+    });
+    const construction = factories(em).grammarConstruction.makeOne({
       categoryId: category.id,
       name: 'past perfect',
       slug: 'past-perfect',
       sortOrder: 0,
     });
     // inserted B2 first, A2 second — the view must come back A2 first.
-    em.create(GrammarUsagePoint, {
+    factories(em).grammarUsagePoint.makeOne({
       constructionId: construction.id,
       egpIndex: 999,
       cefrLevel: CefrLevel.B2,
       guideword: 'later',
       canDoStatement: 'can do 999',
     });
-    em.create(GrammarUsagePoint, {
+    factories(em).grammarUsagePoint.makeOne({
       constructionId: construction.id,
       egpIndex: 412,
       cefrLevel: CefrLevel.A2,
@@ -193,18 +175,19 @@ describe('GetPostDetailHandler', () => {
       canDoStatement: 'can do 412',
     });
 
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.type = PostSourceType.Original;
-    source.rawText = 'She had left before noon.';
-    source.attributionText = 'Original content';
-    const post = new Post();
-    post.source = source;
-    post.title = 'Before Noon';
-    post.status = PostStatus.Published;
-    em.persist(post);
+    const source = {
+      format: PostSourceFormat.Text,
+      type: PostSourceType.Original,
+      rawText: 'She had left before noon.',
+      attributionText: 'Original content',
+    };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'Before Noon',
+      status: PostStatus.Published,
+    });
 
-    em.create(PostPart, {
+    factories(em).postPart.makeOne({
       postId: post.id,
       blockIndex: 0,
       kind: PostPartKind.Paragraph,
@@ -260,7 +243,7 @@ describe('GetPostDetailHandler', () => {
       postId: post.id,
     });
     part.blockIndex = 3;
-    const sentence = suite.orm.em.create(Sentence, {
+    const sentence = suite.factories.sentence.makeOne({
       postId: post.id,
       postPartId: part.id,
       unitIndex: 0,
@@ -269,7 +252,7 @@ describe('GetPostDetailHandler', () => {
       charStart: 0,
       charEnd: 27,
     });
-    suite.orm.em.create(Exercise, {
+    suite.factories.exercise.makeOne({
       postId: post.id,
       type: ExerciseType.Reorder,
       source: ExerciseSource.Spacy,
@@ -300,10 +283,10 @@ describe('GetPostDetailHandler', () => {
 
   it('reports isRead for the viewer who marked the post read, false for a guest or another user', async () => {
     const { shortId } = await seedPublishedPost(suite.orm.em);
-    const { id: userId } = await seedUser(suite.orm.em);
-    const { id: otherUserId } = await seedUser(suite.orm.em);
+    const { id: userId } = await suite.factories.user.createOne();
+    const { id: otherUserId } = await suite.factories.user.createOne();
     const post = await suite.orm.em.findOneOrFail(Post, { shortId });
-    suite.orm.em.create(PostRead, {
+    suite.factories.postRead.makeOne({
       userId,
       postId: post.id,
       readAt: DateTime.now(),
@@ -323,8 +306,8 @@ describe('GetPostDetailHandler', () => {
 
   it("reflects the user's card as Learning for a word", async () => {
     const { shortId, wordDefinitionId } = await seedPublishedPost(suite.orm.em);
-    const { id: userId } = await seedUser(suite.orm.em);
-    suite.orm.em.create(LearningCard, {
+    const { id: userId } = await suite.factories.user.createOne();
+    suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId,
       due: DateTime.now(),
@@ -348,13 +331,17 @@ describe('GetPostDetailHandler', () => {
   it('resolves a known disposition to Learned and a word at or below the user CEFR level to Learned', async () => {
     const em = suite.orm.em;
     const { shortId, wordDefinitionId } = await seedPublishedPost(em);
-    const known = await seedUser(em, CefrLevel.A1);
-    em.create(LearningDisposition, {
+    const known = await factories(em).user.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
+    factories(em).learningDisposition.makeOne({
       userId: known.id,
       wordDefinitionId,
       disposition: Disposition.Known,
     });
-    const advanced = await seedUser(em, CefrLevel.B2);
+    const advanced = await factories(em).user.createOne({
+      cefrLevel: CefrLevel.B2,
+    });
     await em.flush();
 
     const viewKnown = await suite.query(
@@ -375,18 +362,20 @@ describe('GetPostDetailHandler', () => {
 
   it('resolves a phrase card to Learning and an untouched phrase to New', async () => {
     const em = suite.orm.em;
-    const carded = em.create(Phrase, {
+    const carded = factories(em).phrase.makeOne({
       phraseText: `at loose ends ${uuidv7().slice(0, 8)}`,
     });
-    const untouched = em.create(Phrase, {
+    const untouched = factories(em).phrase.makeOne({
       phraseText: `hit the road ${uuidv7().slice(0, 8)}`,
     });
     const { shortId } = await seedPostWithPhrases(em, [
       carded.id,
       untouched.id,
     ]);
-    const { id: userId } = await seedUser(em, CefrLevel.A1);
-    em.create(LearningCard, {
+    const { id: userId } = await factories(em).user.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
+    factories(em).learningCard.makeOne({
       userId,
       phraseId: carded.id,
       due: DateTime.now(),
@@ -416,30 +405,33 @@ describe('GetPostDetailHandler', () => {
   // `wordDefinitionId` (learning-foundation §3).
   it('does not leak a card state onto a different sense of the same word', async () => {
     const em = suite.orm.em;
-    const word = em.create(Word, { lemma: `bank-${uuidv7().slice(0, 8)}` });
-    const nounSense = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `bank-${uuidv7().slice(0, 8)}`,
+    });
+    const nounSense = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a financial institution',
     });
-    const verbSense = em.create(WordDefinition, {
+    const verbSense = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Verb,
       definition: 'to tilt an aircraft',
     });
 
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.type = PostSourceType.Original;
-    source.rawText = 'The bank will bank sharply.';
-    source.attributionText = 'Original content';
-    const post = new Post();
-    post.source = source;
-    post.title = 'Two Senses';
-    post.status = PostStatus.Published;
-    em.persist(post);
+    const source = {
+      format: PostSourceFormat.Text,
+      type: PostSourceType.Original,
+      rawText: 'The bank will bank sharply.',
+      attributionText: 'Original content',
+    };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'Two Senses',
+      status: PostStatus.Published,
+    });
 
-    em.create(PostPart, {
+    factories(em).postPart.makeOne({
       postId: post.id,
       blockIndex: 0,
       kind: PostPartKind.Paragraph,
@@ -467,8 +459,10 @@ describe('GetPostDetailHandler', () => {
       },
     });
 
-    const { id: userId } = await seedUser(em, CefrLevel.A1);
-    em.create(LearningCard, {
+    const { id: userId } = await factories(em).user.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
+    factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: nounSense.id,
       due: DateTime.now(),
@@ -497,8 +491,10 @@ describe('GetPostDetailHandler', () => {
   it('places grammar_matches as unit char ranges with the viewer state per usage point', async () => {
     const em = suite.orm.em;
     const { shortId, pointA, pointB } = await seedPostWithGrammarMatches(em);
-    const { id: userId } = await seedUser(em, CefrLevel.A1);
-    em.create(LearningCard, {
+    const { id: userId } = await factories(em).user.createOne({
+      cefrLevel: CefrLevel.A1,
+    });
+    factories(em).learningCard.makeOne({
       userId,
       grammarUsagePointId: pointA,
       due: DateTime.now(),
@@ -603,24 +599,24 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
   pointA: string;
   pointB: string;
 }> {
-  const category = em.create(GrammarCategory, {
+  const category = factories(em).grammarCategory.makeOne({
     name: `PAST-${uuidv7().slice(0, 8)}`,
     sortOrder: 0,
   });
-  const construction = em.create(GrammarConstruction, {
+  const construction = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'past perfect',
     slug: `past-perfect-${uuidv7().slice(0, 8)}`,
     sortOrder: 0,
   });
-  const pointA = em.create(GrammarUsagePoint, {
+  const pointA = factories(em).grammarUsagePoint.makeOne({
     constructionId: construction.id,
     egpIndex: Math.floor(Math.random() * 1_000_000),
     cefrLevel: CefrLevel.B2,
     guideword: 'a',
     canDoStatement: 'can do a',
   });
-  const pointB = em.create(GrammarUsagePoint, {
+  const pointB = factories(em).grammarUsagePoint.makeOne({
     constructionId: construction.id,
     egpIndex: Math.floor(Math.random() * 1_000_000) + 1_000_000,
     cefrLevel: CefrLevel.B2,
@@ -628,18 +624,19 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
     canDoStatement: 'can do b',
   });
 
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'Intro text.';
-  source.attributionText = 'Original content';
-  const post = new Post();
-  post.source = source;
-  post.title = 'Matches';
-  post.status = PostStatus.Published;
-  em.persist(post);
+  const source = {
+    format: PostSourceFormat.Text,
+    type: PostSourceType.Original,
+    rawText: 'Intro text.',
+    attributionText: 'Original content',
+  };
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'Matches',
+    status: PostStatus.Published,
+  });
 
-  const intro = em.create(PostPart, {
+  const intro = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -648,7 +645,7 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
       children: [{ type: 'text', text: 'Intro text.' }],
     },
   });
-  const list = em.create(PostPart, {
+  const list = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 1,
     kind: PostPartKind.List,
@@ -668,7 +665,7 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
     },
   });
 
-  const stale = em.create(Sentence, {
+  const stale = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: intro.id,
     unitIndex: 0,
@@ -677,7 +674,7 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
     charStart: 0,
     charEnd: 9,
   });
-  const live = em.create(Sentence, {
+  const live = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: list.id,
     unitIndex: 1,
@@ -696,7 +693,7 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
   ];
   const lemmas: Record<string, string> = { had: 'have', left: 'leave' };
   tokenRows.forEach(([text, charStart, charEnd, pos, tag, morph], position) => {
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: live.id,
       position,
       text,
@@ -709,7 +706,7 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
       morph: morph as Record<string, string>,
     });
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: stale.id,
     position: 0,
     text: 'Outdated',
@@ -722,19 +719,19 @@ async function seedPostWithGrammarMatches(em: EntityManager): Promise<{
     morph: {},
   });
 
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: live.id,
     grammarUsagePointId: pointA.id,
     tokenStart: 1,
     tokenEnd: 3,
   });
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: live.id,
     grammarUsagePointId: pointB.id,
     tokenStart: 3,
     tokenEnd: 5,
   });
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: stale.id,
     grammarUsagePointId: pointA.id,
     tokenStart: 0,

@@ -1,27 +1,24 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.error.js';
 import type { GrammarContrastiveResult } from '../../domain/grammar-contrastive-prompt.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
-import { GrammarMatch } from '../../entities/grammar-match.entity.js';
-import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
-import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import { ExerciseType } from '../../enums/exercise-type.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
+import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { GenerateExercisesCommand } from './generate-exercises.command.js';
 
@@ -65,13 +62,14 @@ async function seedGrammar(
 ): Promise<SeededGrammar> {
   const sentence = await em.findOneOrFail(Sentence, { postId });
 
-  const past = new GrammarCategory();
-  past.name = 'PAST';
-  past.sortOrder = 0;
-  const lone = new GrammarCategory();
-  lone.name = 'LONE';
-  lone.sortOrder = 1;
-  em.persist([past, lone]);
+  const past = factories(em).grammarCategory.makeOne({
+    name: 'PAST',
+    sortOrder: 0,
+  });
+  const lone = factories(em).grammarCategory.makeOne({
+    name: 'LONE',
+    sortOrder: 1,
+  });
 
   const construct = (
     category: GrammarCategory,
@@ -79,21 +77,21 @@ async function seedGrammar(
     slug: string,
     sortOrder: number,
   ) => {
-    const construction = new GrammarConstruction();
-    construction.categoryId = category.id;
-    construction.name = name;
-    construction.slug = slug;
-    construction.sortOrder = sortOrder;
-    em.persist(construction);
+    const construction = factories(em).grammarConstruction.makeOne({
+      categoryId: category.id,
+      name,
+      slug,
+      sortOrder,
+    });
     return construction;
   };
   const point = (construction: GrammarConstruction, guideword: string) => {
-    const usagePoint = new GrammarUsagePoint();
-    usagePoint.constructionId = construction.id;
-    usagePoint.cefrLevel = CefrLevel.A2;
-    usagePoint.guideword = guideword;
-    usagePoint.canDoStatement = `can do ${guideword}`;
-    em.persist(usagePoint);
+    const usagePoint = factories(em).grammarUsagePoint.makeOne({
+      constructionId: construction.id,
+      cefrLevel: CefrLevel.A2,
+      guideword,
+      canDoStatement: `can do ${guideword}`,
+    });
     return usagePoint;
   };
   const pastSimple = point(
@@ -113,50 +111,49 @@ async function seedGrammar(
     [pastSimple, 3, 4],
     [loneUsage, 5, 7],
   ] as const) {
-    const match = new GrammarMatch();
-    match.sentenceId = sentence.id;
-    match.grammarUsagePointId = usagePoint.id;
-    match.tokenStart = tokenStart;
-    match.tokenEnd = tokenEnd;
-    em.persist(match);
+    const _match = factories(em).grammarMatch.makeOne({
+      sentenceId: sentence.id,
+      grammarUsagePointId: usagePoint.id,
+      tokenStart,
+      tokenEnd,
+    });
   }
   await em.flush();
   return { pastSimplePointId: pastSimple.id, sentenceId: sentence.id };
 }
 
 async function seedPostWithSentence(em: EntityManager): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = SENTENCE_TEXT;
+  const source = { format: PostSourceFormat.Text, rawText: SENTENCE_TEXT };
 
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+  });
 
-  const sentence = new Sentence();
-  sentence.postId = post.id;
-  sentence.postPartId = uuidv7();
-  sentence.unitIndex = 0;
-  sentence.position = 0;
-  sentence.rawText = SENTENCE_TEXT;
-  sentence.charStart = 0;
-  sentence.charEnd = SENTENCE_TEXT.length;
-  em.persist(sentence);
+  const sentence = factories(em).sentence.makeOne({
+    postId: post.id,
+    postPartId: uuidv7(),
+    unitIndex: 0,
+    position: 0,
+    rawText: SENTENCE_TEXT,
+    charStart: 0,
+    charEnd: SENTENCE_TEXT.length,
+  });
 
   TOKENS.forEach(
     ([charStart, charEnd, text, lemma, pos, tag, dep], position) => {
-      const token = new SentenceToken();
-      token.sentenceId = sentence.id;
-      token.position = position;
-      token.text = text;
-      token.charStart = charStart;
-      token.charEnd = charEnd;
-      token.lemma = lemma;
-      token.pos = pos;
-      token.tag = tag;
-      token.dep = dep;
-      token.morph = {};
-      em.persist(token);
+      const _token = factories(em).sentenceToken.makeOne({
+        sentenceId: sentence.id,
+        position,
+        text,
+        charStart,
+        charEnd,
+        lemma,
+        pos,
+        tag,
+        dep,
+        morph: {},
+      });
     },
   );
 
@@ -344,12 +341,11 @@ describe('GenerateExercisesHandler', () => {
   });
 
   it('throws when spacy_parse has not produced sentences yet', async () => {
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'x';
-    const post = new Post();
-    post.source = source;
-    suite.orm.em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'x' };
+    const post = suite.factories.post.makeOne({
+      status: PostStatus.Pending,
+      source,
+    });
     await suite.orm.em.flush();
     const postId = post.id;
     suite.orm.em.clear();

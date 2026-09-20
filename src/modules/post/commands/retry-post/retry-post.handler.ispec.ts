@@ -1,9 +1,9 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { Post } from '../../entities/post.entity.js';
@@ -30,72 +30,70 @@ interface SeededPost {
 }
 
 async function seedProcessedPost(em: EntityManager): Promise<SeededPost> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'Some text.';
-  const post = new Post();
-  post.source = source;
-  post.status = PostStatus.Published;
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: 'Some text.' };
+  const post = factories(em).post.makeOne({
+    source,
+    status: PostStatus.Published,
+  });
 
-  const part = new PostPart();
-  part.postId = post.id;
-  part.blockIndex = 0;
-  part.kind = PostPartKind.Paragraph;
-  part.body = {
-    type: 'paragraph',
-    children: [{ type: 'text', text: 'Some text.' }],
-  };
-  part.annotatedAt = DateTime.now();
-  em.persist(part);
+  const part = factories(em).postPart.makeOne({
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [{ type: 'text', text: 'Some text.' }],
+    },
+    annotatedAt: DateTime.now(),
+  });
 
-  const sentence = new Sentence();
-  sentence.postId = post.id;
-  sentence.postPartId = part.id;
-  sentence.unitIndex = 0;
-  sentence.position = 0;
-  sentence.rawText = 'Some text.';
-  sentence.charStart = 0;
-  sentence.charEnd = 10;
-  em.persist(sentence);
+  const sentence = factories(em).sentence.makeOne({
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: 'Some text.',
+    charStart: 0,
+    charEnd: 10,
+  });
 
-  const token = new SentenceToken();
-  token.sentenceId = sentence.id;
-  token.position = 0;
-  token.text = 'Some';
-  token.charStart = 0;
-  token.charEnd = 4;
-  token.lemma = 'some';
-  token.pos = 'DET';
-  token.tag = 'DT';
-  token.dep = 'det';
-  token.morph = {};
-  em.persist(token);
+  const _token = factories(em).sentenceToken.makeOne({
+    sentenceId: sentence.id,
+    position: 0,
+    text: 'Some',
+    charStart: 0,
+    charEnd: 4,
+    lemma: 'some',
+    pos: 'DET',
+    tag: 'DT',
+    dep: 'det',
+    morph: {},
+  });
 
-  const match = new GrammarMatch();
-  match.sentenceId = sentence.id;
-  match.grammarUsagePointId = post.id; // any uuid — no FK
-  match.tokenStart = 0;
-  match.tokenEnd = 1;
-  em.persist(match);
+  const _match = factories(em).grammarMatch.makeOne({
+    sentenceId: sentence.id,
+    grammarUsagePointId: post.id, // any uuid — no FK
+    tokenStart: 0,
+    tokenEnd: 1,
+  });
 
-  const exercise = new Exercise();
-  exercise.postId = post.id;
-  exercise.type = ExerciseType.GrammarContrastive;
-  exercise.source = ExerciseSource.Ai;
-  exercise.payload = {};
-  em.persist(exercise);
+  const _exercise = factories(em).exercise.makeOne({
+    postId: post.id,
+    type: ExerciseType.GrammarContrastive,
+    source: ExerciseSource.Ai,
+    payload: {},
+  });
 
   for (const [stage, status] of [
     [PostPipelineStage.SpacyParse, PostPipelineRunStatus.Completed],
     [PostPipelineStage.AiGrammar, PostPipelineRunStatus.Failed],
   ] as const) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = stage;
-    run.status = status;
-    run.completedAt = DateTime.now();
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage,
+      status,
+      completedAt: DateTime.now(),
+    });
   }
 
   await em.flush();
@@ -167,13 +165,11 @@ describe('RetryPostHandler', () => {
   });
 
   it('is a no-op-safe reset when the post has no artefacts yet', async () => {
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'x';
-    const post = new Post();
-    post.source = source;
-    post.status = PostStatus.Failed;
-    suite.orm.em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'x' };
+    const post = suite.factories.post.makeOne({
+      source,
+      status: PostStatus.Failed,
+    });
     await suite.orm.em.flush();
 
     await suite.command(new RetryPostCommand(post.id));
@@ -214,13 +210,13 @@ describe('RetryPostHandler', () => {
   it('resets a failed telegram publication so /retry re-announces the post', async () => {
     const { postId } = await seedProcessedPost(suite.orm.em);
 
-    const publication = new PostPublication();
-    publication.postId = postId;
-    publication.platform = PublicationPlatform.Telegram;
-    publication.status = PublicationStatus.Failed;
-    publication.retryCount = 3;
-    publication.errorMessage = 'chat not found';
-    suite.orm.em.persist(publication);
+    const publication = suite.factories.postPublication.makeOne({
+      postId,
+      platform: PublicationPlatform.Telegram,
+      status: PublicationStatus.Failed,
+      retryCount: 3,
+      errorMessage: 'chat not found',
+    });
     await suite.orm.em.flush();
     const publicationId = publication.id;
     suite.orm.em.clear();
@@ -240,12 +236,12 @@ describe('RetryPostHandler', () => {
   it('leaves an already-published telegram publication untouched on retry', async () => {
     const { postId } = await seedProcessedPost(suite.orm.em);
 
-    const publication = new PostPublication();
-    publication.postId = postId;
-    publication.platform = PublicationPlatform.Telegram;
-    publication.status = PublicationStatus.Published;
-    publication.externalId = '999';
-    suite.orm.em.persist(publication);
+    const publication = suite.factories.postPublication.makeOne({
+      postId,
+      platform: PublicationPlatform.Telegram,
+      status: PublicationStatus.Published,
+      externalId: '999',
+    });
     await suite.orm.em.flush();
     const publicationId = publication.id;
     suite.orm.em.clear();

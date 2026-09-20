@@ -1,25 +1,21 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
-import { GrammarCategory } from '../../entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarMatch } from '../../entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
-import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
-import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
+import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { TagGrammarCommand } from './tag-grammar.command.js';
 import type { PostAiGrammarJobData } from './tag-grammar.handler.js';
@@ -39,29 +35,29 @@ const TOKEN_SPEC: [number, number, string][] = [
 const DEFAULT_GRAMMAR_RESPONSE = `[0] She ⟦had never visited⟧{{g|past-perfect|412}} Tokyo before.`;
 
 async function seedCatalog(em: EntityManager): Promise<void> {
-  const category = new GrammarCategory();
-  category.name = 'PAST';
-  category.sortOrder = 0;
-  em.persist(category);
+  const category = factories(em).grammarCategory.makeOne({
+    name: 'PAST',
+    sortOrder: 0,
+  });
 
-  const construction = new GrammarConstruction();
-  construction.categoryId = category.id;
-  construction.name = 'past perfect';
-  construction.slug = 'past-perfect';
-  construction.sortOrder = 0;
-  em.persist(construction);
+  const construction = factories(em).grammarConstruction.makeOne({
+    categoryId: category.id,
+    name: 'past perfect',
+    slug: 'past-perfect',
+    sortOrder: 0,
+  });
 
   for (const [egpIndex, cefr] of [
     [412, CefrLevel.B1],
     [999, CefrLevel.B2],
   ] as const) {
-    const usagePoint = new GrammarUsagePoint();
-    usagePoint.constructionId = construction.id;
-    usagePoint.egpIndex = egpIndex;
-    usagePoint.cefrLevel = cefr;
-    usagePoint.guideword = `USE ${egpIndex}`;
-    usagePoint.canDoStatement = `can do ${egpIndex}`;
-    em.persist(usagePoint);
+    const _usagePoint = factories(em).grammarUsagePoint.makeOne({
+      constructionId: construction.id,
+      egpIndex,
+      cefrLevel: cefr,
+      guideword: `USE ${egpIndex}`,
+      canDoStatement: `can do ${egpIndex}`,
+    });
   }
 
   await em.flush();
@@ -71,54 +67,53 @@ async function seedPostWithSentence(
   em: EntityManager,
   opts: { annotationCompleted?: boolean } = {},
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = SENTENCE_TEXT;
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: SENTENCE_TEXT };
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+  });
 
-  const part = new PostPart();
-  part.postId = post.id;
-  part.blockIndex = 0;
-  part.kind = PostPartKind.Paragraph;
-  part.body = {
-    type: 'paragraph',
-    children: [{ type: 'text', text: SENTENCE_TEXT }],
-  };
-  em.persist(part);
+  const part = factories(em).postPart.makeOne({
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [{ type: 'text', text: SENTENCE_TEXT }],
+    },
+  });
 
-  const sentence = new Sentence();
-  sentence.postId = post.id;
-  sentence.postPartId = part.id;
-  sentence.unitIndex = 0;
-  sentence.position = 0;
-  sentence.rawText = SENTENCE_TEXT;
-  sentence.charStart = 0;
-  sentence.charEnd = SENTENCE_TEXT.length;
-  em.persist(sentence);
+  const sentence = factories(em).sentence.makeOne({
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: SENTENCE_TEXT,
+    charStart: 0,
+    charEnd: SENTENCE_TEXT.length,
+  });
 
   TOKEN_SPEC.forEach(([charStart, charEnd, text], position) => {
-    const token = new SentenceToken();
-    token.sentenceId = sentence.id;
-    token.position = position;
-    token.text = text;
-    token.charStart = charStart;
-    token.charEnd = charEnd;
-    token.lemma = text.toLowerCase();
-    token.pos = 'X';
-    token.tag = 'XX';
-    token.dep = 'dep';
-    token.morph = {};
-    em.persist(token);
+    const _token = factories(em).sentenceToken.makeOne({
+      sentenceId: sentence.id,
+      position,
+      text,
+      charStart,
+      charEnd,
+      lemma: text.toLowerCase(),
+      pos: 'X',
+      tag: 'XX',
+      dep: 'dep',
+      morph: {},
+    });
   });
 
   if (opts.annotationCompleted ?? true) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = PostPipelineStage.Annotation;
-    run.status = PostPipelineRunStatus.Completed;
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: PostPipelineStage.Annotation,
+      status: PostPipelineRunStatus.Completed,
+    });
   }
 
   await em.flush();

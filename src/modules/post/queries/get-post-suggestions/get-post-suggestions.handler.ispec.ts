@@ -1,12 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
-import { Phrase } from '../../entities/phrase.entity.js';
-import { Post } from '../../entities/post.entity.js';
-import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
-import { Word } from '../../entities/word.entity.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
@@ -17,15 +12,13 @@ function seedPostWith(
   status: PostStatus,
   link: { wordId?: string; phraseId?: string },
 ): void {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'seed';
-  const post = new Post();
-  post.source = source;
-  post.title = 'seed';
-  post.status = status;
-  em.persist(post);
-  const sentence = em.create(Sentence, {
+  const source = { format: PostSourceFormat.Text, rawText: 'seed' };
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'seed',
+    status,
+  });
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: randomUUID(),
     unitIndex: 0,
@@ -34,7 +27,7 @@ function seedPostWith(
     charStart: 0,
     charEnd: 5,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: sentence.id,
     position: 0,
     text: 'seed',
@@ -55,11 +48,13 @@ describe('GetPostSuggestionsHandler', () => {
   it('suggests words and phrases by case-insensitive prefix, only those in a published post, alphabetically', async () => {
     const em = suite.orm.em;
     const tag = randomUUID().slice(0, 8);
-    const harbour = em.create(Word, { lemma: `Zqx${tag}-harbour` });
-    const harvest = em.create(Word, { lemma: `zqx${tag}-harvest` });
-    const draftOnly = em.create(Word, { lemma: `zqx${tag}-draft` });
-    const unused = em.create(Word, { lemma: `zqx${tag}-unused` });
-    const phrase = em.create(Phrase, { phraseText: `zqx${tag} at last` });
+    const harbour = factories(em).word.makeOne({ lemma: `Zqx${tag}-harbour` });
+    const harvest = factories(em).word.makeOne({ lemma: `zqx${tag}-harvest` });
+    const draftOnly = factories(em).word.makeOne({ lemma: `zqx${tag}-draft` });
+    const unused = factories(em).word.makeOne({ lemma: `zqx${tag}-unused` });
+    const phrase = factories(em).phrase.makeOne({
+      phraseText: `zqx${tag} at last`,
+    });
     await em.flush();
     seedPostWith(em, PostStatus.Published, { wordId: harvest.id });
     seedPostWith(em, PostStatus.Published, { wordId: harbour.id });
@@ -84,7 +79,7 @@ describe('GetPostSuggestionsHandler', () => {
     const em = suite.orm.em;
     const tag = randomUUID().slice(0, 8);
     const words = [1, 2, 3].map((n) =>
-      em.create(Word, { lemma: `wld${tag}-${n}` }),
+      factories(em).word.makeOne({ lemma: `wld${tag}-${n}` }),
     );
     await em.flush();
     for (const word of words) {

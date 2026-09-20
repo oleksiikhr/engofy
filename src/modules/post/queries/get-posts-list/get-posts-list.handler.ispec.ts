@@ -1,15 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
-import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
-import { PostPart } from '../../entities/post-part.entity.js';
-import { PostRead } from '../../entities/post-read.entity.js';
-import { Sentence } from '../../entities/sentence.entity.js';
-import { SentenceToken } from '../../entities/sentence-token.entity.js';
-import { Word } from '../../entities/word.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
@@ -28,23 +22,20 @@ function seedPost(
     publishedAt?: DateTime;
   },
 ): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'seed';
-  source.attributionText = 'Original content';
+  const post = factories(em).post.makeOne({
+    source: {
+      format: PostSourceFormat.Text,
+      type: PostSourceType.Original,
+      rawText: 'seed',
+      attributionText: 'Original content',
+    },
+    title: opts.title,
+    status: opts.status ?? PostStatus.Published,
+    cefrLevel: opts.cefrLevel,
+    publishedAt: opts.publishedAt,
+  });
 
-  const post = new Post();
-  post.source = source;
-  post.title = opts.title;
-  post.status = opts.status ?? PostStatus.Published;
-  post.cefrLevel = opts.cefrLevel;
-  if (opts.publishedAt) {
-    post.publishedAt = opts.publishedAt;
-  }
-  em.persist(post);
-
-  em.create(PostPart, {
+  factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -60,7 +51,7 @@ function linkToken(
   post: Post,
   link: { wordId?: string; phraseId?: string },
 ): void {
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: randomUUID(),
     unitIndex: 0,
@@ -69,7 +60,7 @@ function linkToken(
     charStart: 0,
     charEnd: 5,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: sentence.id,
     position: 0,
     text: 'seed',
@@ -190,7 +181,11 @@ describe('GetPostsListHandler', () => {
     const read = seedPost(em, { title: 'read-post' });
     seedPost(em, { title: 'unread-post' });
     await em.flush();
-    em.create(PostRead, { userId, postId: read.id, readAt: DateTime.now() });
+    factories(em).postRead.makeOne({
+      userId,
+      postId: read.id,
+      readAt: DateTime.now(),
+    });
     await em.flush();
     em.clear();
 
@@ -230,8 +225,10 @@ describe('GetPostsListHandler', () => {
 
   it('filters by a word (matched via its lemma, case-insensitively) or a phrase', async () => {
     const em = suite.orm.em;
-    const word = em.create(Word, { lemma: `Harbour-${randomUUID()}` });
-    const phrase = em.create(Phrase, {
+    const word = factories(em).word.makeOne({
+      lemma: `Harbour-${randomUUID()}`,
+    });
+    const phrase = factories(em).phrase.makeOne({
       phraseText: `Take Off-${randomUUID()}`,
     });
     const withWord = seedPost(em, { title: 'with-word' });
@@ -277,7 +274,9 @@ describe('GetPostsListHandler', () => {
 
   it('combines term with the CEFR filter and paginates without duplicates', async () => {
     const em = suite.orm.em;
-    const word = em.create(Word, { lemma: `anchor-${randomUUID()}` });
+    const word = factories(em).word.makeOne({
+      lemma: `anchor-${randomUUID()}`,
+    });
     const posts = [
       seedPost(em, { title: 'a1-1', cefrLevel: CefrLevel.A1 }),
       seedPost(em, { title: 'a1-2', cefrLevel: CefrLevel.A1 }),
