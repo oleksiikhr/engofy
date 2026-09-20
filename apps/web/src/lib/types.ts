@@ -179,6 +179,8 @@ export interface PostDetail {
   sourceLink: string | null;
   sourceType: string;
   attributionText: string;
+  // Absent from an API still on the previous release.
+  isRead?: boolean;
   doc: Doc;
   annotations: {
     words: Record<string, WordAnnotation>;

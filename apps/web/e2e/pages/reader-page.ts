@@ -11,6 +11,9 @@ export class ReaderPage {
   readonly studyPanel: Locator;
   readonly finalScreen: Locator;
   readonly quickCheck: Locator;
+  readonly readState: Locator;
+  readonly readToggle: Locator;
+  readonly readBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +29,9 @@ export class ReaderPage {
     this.studyPanel = page.locator('.study-panel');
     this.finalScreen = page.locator('[data-reader-final]');
     this.quickCheck = this.finalScreen.locator('[data-qc]');
+    this.readState = page.locator('[data-read-state]');
+    this.readToggle = this.readState.locator('[data-read-toggle]');
+    this.readBadge = this.readState.locator('[data-read-badge]');
   }
 
   async goto(slug: string) {

@@ -158,6 +158,7 @@ const streak = streakResponse?.streak ?? 0;
 // The Home session sends the learner here with ?from=home and its next step
 // (today's practice) lives on Home.
 const fromHome = Astro.url.searchParams.get('from') === 'home';
+const isRead = post.isRead ?? false;
 
 const drills: DrillView[] = post.exercises
   .map(toDrill)
@@ -179,6 +180,16 @@ const drills: DrillView[] = post.exercises
         <div class="post-head__meta">
           {post.cefrLevel && <span class="badge">{post.cefrLevel}</span>}
           <time datetime={post.publishedAt}>{published}</time>
+          {
+            user && (
+              <span class="post-head__read" data-read-state data-read={String(isRead)}>
+                <span class="tag tone-green" data-read-badge hidden={!isRead}>✓ Read</span>
+                <button type="button" class="btn btn--ghost btn--sm" data-read-toggle>
+                  {isRead ? 'Mark as unread' : 'Mark as read'}
+                </button>
+              </span>
+            )
+          }
         </div>
         <h1>{post.title ?? 'Untitled'}</h1>
         {
@@ -338,6 +349,7 @@ const drills: DrillView[] = post.exercises
 <script>
   import type { LexiconData } from '../../lib/reader-lexicon';
   import { initReaderFinal } from '../../lib/reader-final';
+  import { initReadState } from '../../lib/reader-read';
   import { initReaderPopup } from '../../lib/reader-popup';
   import { initReaderStudy } from '../../lib/reader-study';
   import { initReaderToolbar } from '../../lib/reader-toolbar';
@@ -356,8 +368,18 @@ const drills: DrillView[] = post.exercises
 
   const layout = document.querySelector<HTMLElement>('.reader-layout');
   const final = document.querySelector<HTMLElement>('[data-reader-final]');
-  if (layout && final) {
-    initReaderFinal(final, layout.dataset.slugId ?? '');
+  const readState = document.querySelector<HTMLElement>('[data-read-state]');
+  const readControl =
+    layout && final && readState
+      ? initReadState(
+          readState,
+          final,
+          layout.dataset.slugId ?? '',
+          readState.dataset.read === 'true',
+        )
+      : null;
+  if (final) {
+    initReaderFinal(final, readControl ? () => readControl.mark() : null);
   }
   const studyToggle = toolbar?.querySelector<HTMLElement>('[data-study-toggle]');
   if (body && lexicon && studyToggle && final) {
@@ -464,6 +486,12 @@ const drills: DrillView[] = post.exercises
     font-weight: 700;
     color: var(--color-ink-faint);
     margin-bottom: 0.75rem;
+  }
+  .post-head__read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
   }
   .post-head__source {
     font-size: 0.875rem;
