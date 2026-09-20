@@ -62,6 +62,7 @@ describe('PublishPostHandler', () => {
     const post = await suite.orm.em.findOneOrFail(Post, postId);
     expect(post.status).toBe(PostStatus.Published);
     expect(post.publishedAt).toBeTruthy();
+    expect(post.contentUpdatedAt.toMillis()).toBe(post.publishedAt.toMillis());
 
     const publications = await suite.orm.em.find(PostPublication, { postId });
     expect(publications).toHaveLength(1);

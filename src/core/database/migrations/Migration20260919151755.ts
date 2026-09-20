@@ -146,7 +146,7 @@ export class Migration20260919151755 extends Migration {
     );
 
     this.addSql(
-      `create table "posts" ("id" uuid not null, "source_format" text not null, "source_type" text not null default 'original', "source_raw_text" text not null, "source_link" text null, "source_attribution_text" text not null default 'Original content', "title" text null, "type" text not null default 'post', "slug" text null, "short_id" text not null, "status" text not null default 'pending', "cefr_level" text null, "published_at" timestamp with time zone not null, "created_at" timestamp with time zone not null, "updated_at" timestamp with time zone not null, primary key ("id"));`,
+      `create table "posts" ("id" uuid not null, "source_format" text not null, "source_type" text not null default 'original', "source_raw_text" text not null, "source_link" text null, "source_attribution_text" text not null default 'Original content', "title" text null, "type" text not null default 'post', "slug" text null, "short_id" text not null, "status" text not null default 'pending', "cefr_level" text null, "published_at" timestamp with time zone not null, "content_updated_at" timestamp with time zone not null, "created_at" timestamp with time zone not null, "updated_at" timestamp with time zone not null, primary key ("id"));`,
     );
     this.addSql(
       `alter table "posts" add constraint "posts_short_id_unique" unique ("short_id");`,

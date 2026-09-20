@@ -107,7 +107,9 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
     }
 
     post.status = PostStatus.Published;
-    post.publishedAt = DateTime.now();
+    const now = DateTime.now();
+    post.publishedAt = now;
+    post.contentUpdatedAt = now;
 
     await this.em.upsert(
       PostPublication,
