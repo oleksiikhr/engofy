@@ -22,6 +22,7 @@ import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js'
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
+import { PostRead } from '../../entities/post-read.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { Word } from '../../entities/word.entity.js';
@@ -75,7 +76,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       return null;
     }
 
-    const [parts, exercises] = await Promise.all([
+    const [parts, exercises, readCount] = await Promise.all([
       this.em.find(
         PostPart,
         { postId: post.id },
@@ -86,6 +87,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         { postId: post.id },
         { orderBy: { createdAt: 'asc', id: 'asc' }, disableIdentityMap: true },
       ),
+      userId ? this.em.count(PostRead, { userId, postId: post.id }) : 0,
     ]);
 
     // Reassemble the per-part fragments into a Doc and re-validate the whole
@@ -110,6 +112,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       attributionText: post.source.attributionText,
       sourceType: post.source.type,
       sourceLink: post.source.link ?? null,
+      isRead: readCount > 0,
       doc,
       annotations,
       exercises: exercises.map(toExerciseView),

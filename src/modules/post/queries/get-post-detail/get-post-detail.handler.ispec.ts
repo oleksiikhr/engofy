@@ -17,6 +17,7 @@ import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js'
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
+import { PostRead } from '../../entities/post-read.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { Word } from '../../entities/word.entity.js';
@@ -260,6 +261,29 @@ describe('GetPostDetailHandler', () => {
     expect(view?.annotations.words[wordDefinitionId].state).toBe(
       EffectiveState.New,
     );
+  });
+
+  it('reports isRead for the viewer who marked the post read, false for a guest or another user', async () => {
+    const { shortId } = await seedPublishedPost(suite.orm.em);
+    const { id: userId } = await seedUser(suite.orm.em);
+    const { id: otherUserId } = await seedUser(suite.orm.em);
+    const post = await suite.orm.em.findOneOrFail(Post, { shortId });
+    suite.orm.em.create(PostRead, {
+      userId,
+      postId: post.id,
+      readAt: DateTime.now(),
+    });
+    await suite.orm.em.flush();
+
+    const asReader = await suite.query(new GetPostDetailQuery(shortId, userId));
+    const asOther = await suite.query(
+      new GetPostDetailQuery(shortId, otherUserId),
+    );
+    const asGuest = await suite.query(new GetPostDetailQuery(shortId));
+
+    expect(asReader?.isRead).toBe(true);
+    expect(asOther?.isRead).toBe(false);
+    expect(asGuest?.isRead).toBe(false);
   });
 
   it("reflects the user's card as Learning for a word", async () => {

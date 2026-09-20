@@ -16,6 +16,7 @@ import {
 import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
+import { UnmarkPostReadCommand } from './commands/unmark-post-read/unmark-post-read.command.js';
 import { GetGrammarConstructionQuery } from './queries/get-grammar-construction/get-grammar-construction.query.js';
 import type { GrammarConstructionView } from './queries/get-grammar-construction/grammar-construction-view.js';
 import {
@@ -142,6 +143,12 @@ export class PostService {
 
   async markPostRead(userId: string, shortId: string): Promise<void> {
     await this.commandBus.execute(new MarkPostReadCommand(userId, shortId));
+
+    await this.em.flush();
+  }
+
+  async unmarkPostRead(userId: string, shortId: string): Promise<void> {
+    await this.commandBus.execute(new UnmarkPostReadCommand(userId, shortId));
 
     await this.em.flush();
   }

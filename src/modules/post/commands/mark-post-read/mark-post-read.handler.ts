@@ -8,9 +8,9 @@ import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostNotFoundError } from '../../errors/post-not-found.error.js';
 import { MarkPostReadCommand } from './mark-post-read.command.js';
 
-// Marks a post read by the current user (PLAN.md §16/§17 Track B) — fired
-// when the comprehension quiz is submitted, regardless of correctness (never
-// a score). Idempotent: a re-submit is a silent no-op, the original
+// Marks a post read by the current user (PLAN.md §16/§17 Track B) — the
+// reader's "Mark as read" button, scrolling to the end of the article, or
+// finishing study mode; never a score. Idempotent: a re-submit is a silent no-op, the original
 // `readAt` is kept. No consumer reads `post_reads` yet (groundwork for feed
 // dedup); this never touches SRS.
 @CommandHandler(MarkPostReadCommand)

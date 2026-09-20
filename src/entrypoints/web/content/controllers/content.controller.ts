@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -114,8 +115,8 @@ export class ContentController {
   }
 
   // Marks the post read for the current user (PLAN.md §16/§17 Track B) —
-  // fired when the comprehension quiz is submitted, regardless of
-  // correctness. Requires login (unlike every other route here): a guest has
+  // the reader's "Mark as read" button, scrolling to the end, or finishing
+  // study mode. Requires login (unlike every other route here): a guest has
   // no persistent identity to attach a read record to.
   @ApiCookieAuth()
   @PostRoute('posts/:slugId/read')
@@ -129,6 +130,22 @@ export class ContentController {
       throw new NotFoundException('Post not found');
     }
     await this.post.markPostRead(actor.id, shortId);
+  }
+
+  // Reverts the mark above ("Mark as unread"); idempotent when the post
+  // isn't marked read.
+  @ApiCookieAuth()
+  @Delete('posts/:slugId/read')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async unmarkPostRead(
+    @Param('slugId') slugId: string,
+    @CurrentUser() actor: UserActor,
+  ): Promise<void> {
+    const shortId = parseSlugId(slugId);
+    if (!shortId) {
+      throw new NotFoundException('Post not found');
+    }
+    await this.post.unmarkPostRead(actor.id, shortId);
   }
 
   // "Report a mistake" in the reader popup: records that a word/phrase/grammar
@@ -216,6 +233,7 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
     attributionText: view.attributionText,
     sourceType: view.sourceType,
     sourceLink: view.sourceLink,
+    isRead: view.isRead,
     doc: view.doc,
     annotations: toAnnotationsDto(view.annotations),
     exercises: view.exercises.map((exercise) => ({
