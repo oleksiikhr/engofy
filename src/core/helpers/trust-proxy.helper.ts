@@ -1,8 +1,6 @@
 const HOP_COUNT_RE = /^\d+$/;
 
-export function parseTrustProxy(
-  raw: string | undefined,
-): boolean | string | string[] | number {
+export function parseTrustProxy(raw: string | undefined): boolean | string[] {
   if (!raw) {
     return [];
   }
@@ -22,15 +20,15 @@ export function parseTrustProxy(
     if (token.toLowerCase() === 'false') {
       return false;
     }
+  }
 
-    // A bare non-negative integer is a hop count (Fastify / proxy-addr: trust
-    // the Nth proxy back from the connecting socket). `TRUST_PROXY=1` behind
-    // exactly one proxy — cloudflared — resolves the real client IP without
-    // trusting a client-supplied X-Forwarded-For. An IP list would need the
-    // tunnel's own egress address, which is not stable.
-    if (HOP_COUNT_RE.test(token)) {
-      return Number(token);
-    }
+  // Fastify >=5.12.1 fails closed on a numeric hop count (a direct client could
+  // spoof X-Forwarded-For), so `TRUST_PROXY=1` would silently stop resolving the
+  // real client IP. Reject it at startup instead.
+  if (tokens.some((token) => HOP_COUNT_RE.test(token))) {
+    throw new Error(
+      'TRUST_PROXY: hop counts are not supported; use IP/CIDR entries or the proxy-addr keywords loopback, linklocal, uniquelocal',
+    );
   }
 
   return tokens;

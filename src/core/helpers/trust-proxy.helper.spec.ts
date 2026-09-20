@@ -25,14 +25,22 @@ describe('parseTrustProxy', () => {
     expect(parseTrustProxy('FALSE')).toBe(false);
   });
 
-  it('returns a number for a bare integer hop count', () => {
-    expect(parseTrustProxy('1')).toBe(1);
-    expect(parseTrustProxy('0')).toBe(0);
-    expect(parseTrustProxy('2')).toBe(2);
+  it('throws for a bare integer hop count', () => {
+    expect(() => parseTrustProxy('1')).toThrow('hop counts are not supported');
+    expect(() => parseTrustProxy('0')).toThrow('hop counts are not supported');
+    expect(() => parseTrustProxy('  2  ')).toThrow(
+      'hop counts are not supported',
+    );
   });
 
-  it('treats an integer with surrounding whitespace as a hop count', () => {
-    expect(parseTrustProxy('  1  ')).toBe(1);
+  it('throws when a list contains a hop count', () => {
+    expect(() => parseTrustProxy('127.0.0.1,1')).toThrow(
+      'hop counts are not supported',
+    );
+  });
+
+  it('passes a proxy-addr keyword through as a single-element array', () => {
+    expect(parseTrustProxy('uniquelocal')).toEqual(['uniquelocal']);
   });
 
   it('returns a single-element array for a single IP', () => {
