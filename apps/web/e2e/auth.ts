@@ -11,3 +11,9 @@ export const AUTHED_STATE = fileURLToPath(
 export const DELETION_STATE = fileURLToPath(
   new URL('.auth/deletion-state.json', import.meta.url),
 );
+
+// Separate seeded user with an empty deck, for specs that really save words
+// and phrases from the reader popup (which mutate that user's state).
+export const DECK_STATE = fileURLToPath(
+  new URL('.auth/deck-state.json', import.meta.url),
+);

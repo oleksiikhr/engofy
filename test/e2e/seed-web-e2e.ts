@@ -61,6 +61,10 @@ export const E2E_GRAMMAR_SLUG_2 = 'e2e-present-simple';
 export const E2E_GRAMMAR_SLUG_MUTABLE = 'e2e-conditionals';
 // A real EGP slug with a handcrafted page in apps/web/src/grammar-pages.
 export const E2E_GRAMMAR_HANDCRAFTED_SLUG = 'past-present-perfect-simple';
+// Own user + session with no cards or dispositions, so specs can really save
+// words/phrases from the reader popup without touching the shared e2e user.
+export const E2E_DECK_USER_EMAIL = 'deck-e2e@engofy.test';
+export const E2E_DECK_SESSION_TOKEN = 'e2e-deck-session-token-0000000000';
 // Fresh address (no user yet) + a pending OTP challenge, for the /login flow.
 export const E2E_LOGIN_EMAIL = 'login-e2e@engofy.test';
 export const E2E_LOGIN_OTP = '424242';
@@ -129,6 +133,19 @@ async function wipe(orm: MikroORM): Promise<void> {
     await em.nativeDelete(Subscription, { userId: user.id });
     await em.nativeDelete(AuthSession, { userId: user.id });
     await em.nativeDelete(User, { id: user.id });
+  }
+
+  const deckUser = await em.findOne(User, { email: E2E_DECK_USER_EMAIL });
+  if (deckUser) {
+    const deckCards = await em.find(LearningCard, { userId: deckUser.id });
+    await em.nativeDelete(ReviewLog, {
+      cardId: { $in: deckCards.map((c) => c.id) },
+    });
+    await em.nativeDelete(LearningCard, { userId: deckUser.id });
+    await em.nativeDelete(LearningDisposition, { userId: deckUser.id });
+    await em.nativeDelete(UserSkillProgress, { userId: deckUser.id });
+    await em.nativeDelete(AuthSession, { userId: deckUser.id });
+    await em.nativeDelete(User, { id: deckUser.id });
   }
 
   const deletionUser = await em.findOne(User, {
@@ -713,6 +730,13 @@ async function seed(orm: MikroORM): Promise<void> {
   em.create(AuthSession, {
     tokenHash: sha256(E2E_SESSION_TOKEN),
     userId: user.id,
+    expiresAt: now.plus({ days: 30 }),
+  });
+
+  const deckUser = em.create(User, { email: E2E_DECK_USER_EMAIL });
+  em.create(AuthSession, {
+    tokenHash: sha256(E2E_DECK_SESSION_TOKEN),
+    userId: deckUser.id,
     expiresAt: now.plus({ days: 30 }),
   });
 
