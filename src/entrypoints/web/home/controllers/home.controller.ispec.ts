@@ -162,7 +162,7 @@ describe('HomeController', () => {
     });
     const sentence = factories(em).sentence.makeOne({
       postId: post.id,
-      postPartId: uuidv7(),
+      postPartId: factories(em).postPart.makeOne({ postId: post.id }).id,
       unitIndex: 0,
       position: 0,
       rawText: 'She would perambulate the harbour.',

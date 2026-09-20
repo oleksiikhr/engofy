@@ -53,7 +53,7 @@ function linkToken(
 ): void {
   const sentence = factories(em).sentence.makeOne({
     postId: post.id,
-    postPartId: randomUUID(),
+    postPartId: factories(em).postPart.makeOne({ postId: post.id }).id,
     unitIndex: 0,
     position: 0,
     rawText: 'seed.',

@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { PostPipelineRunStatus } from '../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../enums/post-pipeline-stage.enum.js';
+import { Post } from './post.entity.js';
 
 @Entity({ tableName: 'post_pipeline_runs' })
 @Unique({ properties: ['postId', 'stage'] })
@@ -18,7 +20,11 @@ export class PostPipelineRun {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   postId!: string;
 
   @Enum({ items: () => PostPipelineStage })

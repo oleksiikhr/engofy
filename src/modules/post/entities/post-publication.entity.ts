@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Enum,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { PublicationPlatform } from '../enums/publication-platform.enum.js';
 import { PublicationStatus } from '../enums/publication-status.enum.js';
+import { Post } from './post.entity.js';
 
 // One post's publication to one external channel. V1 only ever writes
 // `telegram` rows; the other platforms exist so the publish stage and this
@@ -22,7 +24,11 @@ export class PostPublication {
   id: string = uuidv7();
 
   // Covered as the leading column of the (postId, platform) composite unique.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   postId!: string;
 
   @Enum({ items: () => PublicationPlatform })

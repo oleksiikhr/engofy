@@ -248,9 +248,10 @@ describe('ContentController', () => {
     const word = await em.findOneOrFail(Word, {
       lemma: { $like: 'travel-%' },
     });
+    const { id: postId } = await em.findOneOrFail(Post, { shortId });
     const sentence = factories(em).sentence.makeOne({
-      postId: (await em.findOneOrFail(Post, { shortId })).id,
-      postPartId: uuidv7(),
+      postId,
+      postPartId: factories(em).postPart.makeOne({ postId }).id,
       unitIndex: 0,
       position: 0,
       rawText: 'She loves to travel widely.',

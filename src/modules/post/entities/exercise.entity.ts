@@ -3,6 +3,7 @@ import {
   Entity,
   Enum,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
 } from '@mikro-orm/decorators/legacy';
@@ -11,6 +12,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { ExerciseSource } from '../enums/exercise-source.enum.js';
 import { ExerciseType } from '../enums/exercise-type.enum.js';
+import { Post } from './post.entity.js';
 
 // An exercise generated from a post. `payload` shape depends on `type`
 // (question, options, correct answer, token spans, ...) — kept as jsonb here,
@@ -20,7 +22,11 @@ export class Exercise {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   @Index()
   postId!: string;
 

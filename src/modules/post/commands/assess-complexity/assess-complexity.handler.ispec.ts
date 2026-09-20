@@ -1,5 +1,4 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
-import { v7 as uuidv7 } from 'uuid';
 import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
@@ -45,7 +44,7 @@ async function createPostWithSentences(
     source,
   });
 
-  const postPartId = uuidv7();
+  const postPartId = factories(em).postPart.makeOne({ postId: post.id }).id;
   rawTexts.forEach((rawText, position) => {
     const _sentence = factories(em).sentence.makeOne({
       postId: post.id,

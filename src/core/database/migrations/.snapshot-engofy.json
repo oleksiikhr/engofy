@@ -761,7 +761,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "exercises_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "exercises_post_id_foreign",
+          "localTableName": "public.exercises",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -1237,7 +1250,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "grammar_matches_sentence_id_foreign": {
+          "columnNames": [
+            "sentence_id"
+          ],
+          "constraintName": "grammar_matches_sentence_id_foreign",
+          "localTableName": "public.grammar_matches",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.sentences",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -2395,7 +2421,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_parts_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "post_parts_post_id_foreign",
+          "localTableName": "public.post_parts",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -2623,7 +2662,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_pipeline_runs_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "post_pipeline_runs_post_id_foreign",
+          "localTableName": "public.post_pipeline_runs",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -2849,7 +2901,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_publications_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "post_publications_post_id_foreign",
+          "localTableName": "public.post_publications",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -2950,7 +3015,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_reads_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "post_reads_post_id_foreign",
+          "localTableName": "public.post_reads",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -3880,7 +3958,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "sentence_tokens_sentence_id_foreign": {
+          "columnNames": [
+            "sentence_id"
+          ],
+          "constraintName": "sentence_tokens_sentence_id_foreign",
+          "localTableName": "public.sentence_tokens",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.sentences",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -4125,7 +4216,32 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "sentences_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "sentences_post_id_foreign",
+          "localTableName": "public.sentences",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        },
+        "sentences_post_part_id_foreign": {
+          "columnNames": [
+            "post_part_id"
+          ],
+          "constraintName": "sentences_post_part_id_foreign",
+          "localTableName": "public.sentences",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.post_parts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {

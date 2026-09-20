@@ -25,7 +25,7 @@ function seedPost(em: EntityManager): Post {
 function seedSentence(em: EntityManager, postId: string): Sentence {
   return factories(em).sentence.makeOne({
     postId,
-    postPartId: uuidv7(),
+    postPartId: factories(em).postPart.makeOne({ postId }).id,
     unitIndex: 0,
     position: 0,
     rawText: 'x term y',

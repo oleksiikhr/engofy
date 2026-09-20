@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { factories } from '../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
@@ -30,7 +29,7 @@ describe('loadExcerpts', () => {
 
   it('concatenates a post’s leading blocks in order', async () => {
     const em = suite.orm.em;
-    const postId = randomUUID();
+    const postId = factories(em).post.makeOne().id;
     seedPart(em, postId, 1, 'Second block.');
     seedPart(em, postId, 0, 'First block.');
     await em.flush();
@@ -42,7 +41,7 @@ describe('loadExcerpts', () => {
 
   it('truncates on a word boundary at the max length', async () => {
     const em = suite.orm.em;
-    const postId = randomUUID();
+    const postId = factories(em).post.makeOne().id;
     const long = 'lorem ipsum dolor sit amet '.repeat(20).trim();
     seedPart(em, postId, 0, long);
     await em.flush();

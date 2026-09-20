@@ -1,5 +1,6 @@
 import {
   Entity,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -7,6 +8,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { Post } from './post.entity.js';
 
 // One row per (user, post): the reader marked the article read (button,
 // scrolling to the end, or finishing study mode). Independent of SRS: it never
@@ -21,7 +23,11 @@ export class PostRead {
   @Property({ type: 'uuid' })
   userId!: string;
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => Post, {
+    mapToPk: true,
+    fieldName: 'post_id',
+    deleteRule: 'cascade',
+  })
   postId!: string;
 
   @Property({ type: LuxonTimestampType })

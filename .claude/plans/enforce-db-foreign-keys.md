@@ -64,10 +64,10 @@ reference про тести (`.agents/skills/engofy/references/`): нові фі
 токеном»), і вони самі викликають фабрики. Перевірити `grep`-ом, що в `*.ispec.ts` не лишилося прямих
 `em.create(<Entity>, …)` для сутностей, які мають фабрику.
 
-### [ ] 4. Агрегат поста
+### [x] 4. Агрегат поста
 - Branch: `enforce-db-foreign-keys-04-post-aggregate`
-- Base: `enforce-db-foreign-keys-03-factories-rest`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/96
 
 `CASCADE` для `sentences`, `post_parts`, `exercises`, `post_pipeline_runs`, `post_publications`,
 `sentence_tokens`, `grammar_matches`, `post_reads.post_id`, `daily_plans.post_id`. Звірити ручні

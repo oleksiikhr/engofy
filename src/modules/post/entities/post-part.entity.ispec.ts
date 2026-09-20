@@ -21,8 +21,9 @@ describe('PostPart entity', () => {
       ],
     };
 
+    const post = suite.factories.post.makeOne();
     const part = suite.factories.postPart.makeOne({
-      postId: crypto.randomUUID(),
+      postId: post.id,
       blockIndex: 0,
       kind: PostPartKind.Paragraph,
       body,
@@ -46,8 +47,9 @@ describe('PostPart entity', () => {
       ],
     };
 
+    const post = suite.factories.post.makeOne();
     const part = suite.factories.postPart.makeOne({
-      postId: crypto.randomUUID(),
+      postId: post.id,
       blockIndex: 0,
       kind: PostPartKind.List,
       body,
