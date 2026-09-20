@@ -14,10 +14,10 @@ e2e-тести, що падають проти prod-збірки. Ціль — �
 
 ## Зрізи
 
-### [ ] 1. Patch openssl in runtime images
+### [x] 1. Patch openssl in runtime images
 - Branch: `fix-predeploy-blockers-01-openssl-runtime-images`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/89
 
 У runtime-стадії `Dockerfile` (api) і `apps/web/Dockerfile` додати
 `apk upgrade --no-cache libcrypto3 libssl3`: базовий `node:26.7.0-alpine3.24` досі має
