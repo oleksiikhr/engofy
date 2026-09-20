@@ -95,9 +95,9 @@ test.describe('word detail (signed in)', () => {
       'to walk through or around a place, especially for pleasure',
     );
     await expect(verbSense).toContainText('/pəˈrambjʊleɪt/');
-    // Backed by an active card (see seed-web-e2e.ts) -> only "Видалити".
+    // Backed by an active card (see seed-web-e2e.ts) -> only "Remove".
     await expect(
-      verbSense.getByRole('button', { name: 'Видалити' }),
+      verbSense.getByRole('button', { name: 'Remove' }),
     ).toBeVisible();
 
     await expect(detail.posts).toContainText('Unread');
@@ -111,14 +111,12 @@ test.describe('word detail (signed in)', () => {
     await detail.goto('perambulate');
 
     const nounSense = detail.senseByPos('noun');
-    await nounSense.getByRole('button', { name: 'Позначити вивченим' }).click();
+    await nounSense.getByRole('button', { name: 'Mark as learned' }).click();
 
     await expect(nounSense).toContainText('Learned');
+    await expect(nounSense.getByRole('button', { name: 'Skip' })).toBeVisible();
     await expect(
-      nounSense.getByRole('button', { name: 'Пропустити' }),
-    ).toBeVisible();
-    await expect(
-      nounSense.getByRole('button', { name: 'Позначити вивченим' }),
+      nounSense.getByRole('button', { name: 'Mark as learned' }),
     ).toHaveCount(0);
   });
 });
@@ -142,9 +140,9 @@ test.describe('phrase detail (signed in)', () => {
     await expect(detail.phrase).toContainText(
       'having nothing particular to do; unoccupied',
     );
-    // Backed by an active card (see seed-web-e2e.ts) -> only "Видалити".
+    // Backed by an active card (see seed-web-e2e.ts) -> only "Remove".
     await expect(
-      detail.phrase.getByRole('button', { name: 'Видалити' }),
+      detail.phrase.getByRole('button', { name: 'Remove' }),
     ).toBeVisible();
 
     await expect(detail.posts).toContainText('Unread');
@@ -170,15 +168,15 @@ test.describe('phrase detail (signed in)', () => {
     await detail.goto('under the weather');
 
     await detail.phrase
-      .getByRole('button', { name: 'Позначити вивченим' })
+      .getByRole('button', { name: 'Mark as learned' })
       .click();
 
     await expect(detail.phrase).toContainText('Learned');
     await expect(
-      detail.phrase.getByRole('button', { name: 'Пропустити' }),
+      detail.phrase.getByRole('button', { name: 'Skip' }),
     ).toBeVisible();
     await expect(
-      detail.phrase.getByRole('button', { name: 'Позначити вивченим' }),
+      detail.phrase.getByRole('button', { name: 'Mark as learned' }),
     ).toHaveCount(0);
   });
 });

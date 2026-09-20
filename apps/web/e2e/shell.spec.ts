@@ -94,6 +94,25 @@ test.describe('signed-in shell', () => {
     await expect(shell.logOutButton).toBeVisible();
   });
 
+  test('the account menu opens above the reader toolbar', async ({ page }) => {
+    const shell = new ShellPage(page);
+    await page.goto('/posts/the-cartographer-at-dawn-E2Eread1');
+    await expect(
+      page.getByRole('toolbar', { name: 'Reader tools' }),
+    ).toBeVisible();
+
+    await shell.openAccountMenu();
+    const topmostIsMenu = await shell.themeButton('Auto').evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      const hit = document.elementFromPoint(
+        rect.left + rect.width / 2,
+        rect.top + rect.height / 2,
+      );
+      return hit !== null && el.closest('.menu')?.contains(hit) === true;
+    });
+    expect(topmostIsMenu).toBe(true);
+  });
+
   test('Escape closes the menu and returns focus to the avatar', async ({
     page,
   }) => {
