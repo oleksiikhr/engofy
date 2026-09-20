@@ -54,10 +54,10 @@ expand-contract не потрібні. Жоден зріз не змінює к�
 рідера з 2–3 речень: слова клікабельні, дані картки вбудовані в сторінку, без запитів до API. Прибрати
 «skills tree» зі сторінки Pricing, бо такої функції немає. Скріншоти в PR.
 
-### [ ] 4. Граматика: навігація
+### [x] 4. Граматика: навігація
 - Branch: `guest-reader-ux-round-2-04-grammar-navigation`
-- Base: `guest-reader-ux-round-2-03-home-live-reader`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/123
 
 Пошук по конструкціях у `grammar.astro`. Конструкції з `usagePointCount === 0` не показувати. Блок
 «Start here» для гостя бере рівень із cookie `reader-level` замість фіксованого A1. Прибрати плейсхолдер
