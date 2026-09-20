@@ -29,10 +29,10 @@ UUID, тож адмін не мав чим перезапустити пост. 
 `telegram/domain/parse-command.ts`, обробка в `poll-updates.service.ts`; дані брати з
 `post_pipeline_runs` без нового запиту, якщо є готова логіка.
 
-### [ ] 2. Сповіщення адміну про збій пайплайну
+### [x] 2. Сповіщення адміну про збій пайплайну
 - Branch: `pipeline-observability-02-failure-alerts`
-- Base: `pipeline-observability-01-post-status-command`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/74
 
 Коли пост стає `failed` (вичерпано спроби стадії), в адмін-чат (`TELEGRAM_ADMIN_USER_ID`) іде
 повідомлення: повний id, стадія, короткий текст помилки, готовий `/retry <id>`. Механізм (черга або

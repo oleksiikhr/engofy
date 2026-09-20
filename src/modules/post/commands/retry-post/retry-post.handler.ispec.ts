@@ -186,6 +186,19 @@ describe('RetryPostHandler', () => {
     );
   });
 
+  it('clears failureNotifiedAt so a later failure alerts the admin again', async () => {
+    const { postId } = await seedProcessedPost(suite.orm.em);
+    const seeded = await suite.orm.em.findOneOrFail(Post, postId);
+    seeded.status = PostStatus.Failed;
+    seeded.failureNotifiedAt = DateTime.now();
+    await suite.orm.em.flush();
+
+    await suite.command(new RetryPostCommand(postId));
+
+    const post = await suite.orm.em.findOneOrFail(Post, postId);
+    expect(post.failureNotifiedAt).toBeNull();
+  });
+
   it('resets a failed telegram publication so /retry re-announces the post', async () => {
     const { postId } = await seedProcessedPost(suite.orm.em);
 
