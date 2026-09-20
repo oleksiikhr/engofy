@@ -33,6 +33,53 @@ test('a public page has canonical, Open Graph and Twitter tags in the HTML', asy
   expect(html).not.toContain('name="robots"');
 });
 
+test.describe('post page', () => {
+  const path = '/posts/the-cartographer-at-dawn-E2Eread1';
+
+  test('has a unique description, article meta and Article/BreadcrumbList JSON-LD', async ({
+    request,
+  }) => {
+    const html = await head(request, path);
+
+    expect(html).toContain('<meta property="og:type" content="article"');
+    expect(html).toMatch(
+      /<meta property="article:published_time" content="\d{4}-\d{2}-\d{2}T[^"]+"/,
+    );
+    expect(html).toContain('<meta property="article:tag" content="B1"');
+    expect(html).toContain(
+      '<meta name="description" content="The old cartographer would perambulate the harbour at dawn',
+    );
+    expect(html).not.toContain(
+      'content="Learn English through short authentic texts."',
+    );
+
+    const raw = html.match(
+      /<script[^>]*type="application\/ld\+json"[^>]*>([^<]+)<\/script>/,
+    )?.[1];
+    expect(raw).toBeDefined();
+    const graph = JSON.parse(raw as string)['@graph'];
+    const article = graph.find(
+      (node: { '@type': string }) => node['@type'] === 'Article',
+    );
+    expect(article).toMatchObject({
+      headline: 'The Cartographer at Dawn',
+      inLanguage: 'en',
+      educationalLevel: 'B1',
+      isBasedOn: 'https://example.com/the-cartographer',
+      publisher: { '@type': 'Organization', name: 'Engofy' },
+    });
+    expect(article.url).toMatch(
+      /^https?:\/\/[^/]+\/posts\/the-cartographer-at-dawn-E2Eread1$/,
+    );
+    const crumbs = graph.find(
+      (node: { '@type': string }) => node['@type'] === 'BreadcrumbList',
+    );
+    expect(
+      crumbs.itemListElement.map((item: { name: string }) => item.name),
+    ).toEqual(['Home', 'Posts', 'The Cartographer at Dawn']);
+  });
+});
+
 test('/pricing stays indexable', async ({ request }) => {
   expect(await head(request, '/pricing')).not.toContain('name="robots"');
 });

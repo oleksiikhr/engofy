@@ -99,10 +99,10 @@ crawlable, щоб читався їхній `noindex`. `/dictionary` у sitemap 
 (`noindex` не конфліктує з robots); `cache-control: public, max-age=3600` лишається; `/dictionary` поза
 sitemap; `<lastmod>` лише для постів.
 
-### [ ] 4. Сторінка поста: description, OG article, Article JSON-LD, BreadcrumbList
+### [x] 4. Сторінка поста: description, OG article, Article JSON-LD, BreadcrumbList
 - Branch: `seo-indexing-improvements-04-post-meta`
-- Base: `seo-indexing-improvements-03-sitemap-robots`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/102
 
 Кожен пост отримує унікальну meta description, `og:type=article`, `article:published_time`,
 `article:tag` (CEFR), JSON-LD `Article` (headline, datePublished, inLanguage, educationalLevel,
