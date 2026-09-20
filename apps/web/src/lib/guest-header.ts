@@ -1,8 +1,15 @@
-import { dayKey, EXPLORED_EVENT, guestProgress } from './guest-progress';
+import { NUDGE_DISMISSED_KEY, nudgeVariant } from './guest-boot';
+import { DECK_EVENT, guestDeckCount } from './guest-deck';
+import {
+  dayKey,
+  EXPLORED_EVENT,
+  exploredCount,
+  guestProgress,
+} from './guest-progress';
 
 // Guest header: the day streak and daily-goal ring, both derived from the
-// words the guest explored (lib/guest-progress.ts). Hidden until the guest has
-// explored something.
+// words the guest explored (lib/guest-progress.ts), and the saved-cards count.
+// Hidden until the guest has explored or saved something.
 
 const REACHED_CLASS = 'goal--reached';
 const CELEBRATED_KEY = 'goal-celebrated';
@@ -53,11 +60,14 @@ export function initGuestHeader(wrap: HTMLElement): void {
   const arc = ring?.querySelector<SVGCircleElement>('.goal__arc');
   const streakChip = wrap.querySelector<HTMLElement>('[data-guest-streak]');
   const streakNumber = streakChip?.querySelector<HTMLElement>('b');
+  const savedChip = wrap.querySelector<HTMLElement>('[data-guest-deck]');
+  const savedNumber = savedChip?.querySelector<HTMLElement>('b');
 
   let reached: boolean | null = null;
   const render = () => {
     const { streak, today, goal } = guestProgress();
-    wrap.hidden = streak === 0 && today === 0;
+    const saved = guestDeckCount();
+    wrap.hidden = streak === 0 && today === 0 && saved === 0;
     if (ring && arc) {
       const percent = Math.min(100, Math.round((today / goal) * 100));
       arc.setAttribute('stroke-dasharray', `${percent} 100`);
@@ -77,8 +87,67 @@ export function initGuestHeader(wrap: HTMLElement): void {
       streakChip.hidden = streak === 0;
       streakChip.title = `${streak}-day streak`;
     }
+    if (savedChip && savedNumber) {
+      savedNumber.textContent = String(saved);
+      savedChip.hidden = saved === 0;
+      savedChip.title = `${saved} saved ${saved === 1 ? 'card' : 'cards'}`;
+    }
   };
 
   render();
   document.addEventListener(EXPLORED_EVENT, render);
+  document.addEventListener(DECK_EVENT, render);
+}
+
+function nudgeDismissed(): boolean {
+  try {
+    return localStorage.getItem(NUDGE_DISMISSED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+// One-time banner nudging a guest to log in once they have something to lose.
+// The head boot script (lib/guest-boot.ts) sets `data-guest-nudge` on <html>
+// before first paint, so the banner is in place from the first frame; this
+// keeps the attribute and the counts in step afterwards. Closing it is
+// remembered, so it never shows again.
+export function initGuestNudge(nudge: HTMLElement): void {
+  if (nudgeDismissed()) {
+    return;
+  }
+  const root = document.documentElement;
+  const counts = nudge.querySelectorAll<HTMLElement>('[data-nudge-count]');
+  let dismissed = false;
+  const render = () => {
+    const saved = guestDeckCount();
+    const explored = exploredCount();
+    const variant = dismissed ? null : nudgeVariant(saved, explored);
+    if (variant === null) {
+      delete root.dataset.guestNudge;
+      return;
+    }
+    for (const count of counts) {
+      count.textContent = String(
+        count.dataset.nudgeCount === 'saved' ? saved : explored,
+      );
+    }
+    root.dataset.guestNudge = variant;
+  };
+
+  nudge
+    .querySelector('[data-guest-nudge-close]')
+    ?.addEventListener('click', () => {
+      dismissed = true;
+      render();
+      try {
+        localStorage.setItem(NUDGE_DISMISSED_KEY, '1');
+      } catch {
+        // Blocked storage — the nudge stays closed for this page only.
+      }
+    });
+
+  render();
+  document.addEventListener(EXPLORED_EVENT, render);
+  document.addEventListener(DECK_EVENT, render);
 }

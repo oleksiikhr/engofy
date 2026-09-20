@@ -4,7 +4,7 @@
 // tally next to it backs the guest's day streak and daily counter (local days,
 // never synced to an account).
 
-const KEY = 'guest-explored';
+export const EXPLORED_KEY = 'guest-explored';
 const DAYS_KEY = 'guest-explored-days';
 const MAX_ENTRIES = 500;
 const MAX_DAYS = 400;
@@ -21,7 +21,9 @@ export interface GuestProgress {
 
 function read(): string[] {
   try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+    const parsed: unknown = JSON.parse(
+      localStorage.getItem(EXPLORED_KEY) ?? '[]',
+    );
     return Array.isArray(parsed)
       ? parsed.filter((id): id is string => typeof id === 'string' && id !== '')
       : [];
@@ -110,7 +112,7 @@ export function recordExplored(key: string): number {
     return new Set(ids).size;
   }
   ids.push(key);
-  write(KEY, ids);
+  write(EXPLORED_KEY, ids);
 
   const now = new Date();
   const days = readDays();

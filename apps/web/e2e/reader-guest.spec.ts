@@ -140,6 +140,125 @@ test.describe('reader guest strip', () => {
     await expect(ring).not.toHaveClass(/goal--reached/);
   });
 
+  test('counts saved cards in the header and nudges a login at the third', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('guest-deck')) {
+        localStorage.setItem(
+          'guest-deck',
+          JSON.stringify([
+            { kind: 'word', id: 'seed-1' },
+            { kind: 'word', id: 'seed-2' },
+          ]),
+        );
+      }
+    });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const saved = page.locator('[data-guest-deck]');
+    const nudge = page.locator('[data-nudge]');
+    await expect(saved).toHaveText('2');
+    await expect(nudge).toBeHidden();
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    await expect(saved).toHaveText('3');
+    await expect(nudge).toBeVisible();
+    await expect(nudge.locator('[data-nudge-variant="saved"]')).toContainText(
+      "You've saved 3 cards",
+    );
+    await expect(nudge.locator('[data-nudge-variant="explored"]')).toBeHidden();
+    await expect(nudge.getByRole('link', { name: 'Log in' })).toHaveAttribute(
+      'href',
+      '/login',
+    );
+
+    await nudge.getByRole('button', { name: 'Dismiss' }).click();
+    await expect(nudge).toBeHidden();
+    await page.reload();
+    await expect(saved).toHaveText('3');
+    await expect(nudge).toBeHidden();
+  });
+
+  test('nudges a login after ten explored words even with nothing saved', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('guest-explored')) {
+        localStorage.setItem(
+          'guest-explored',
+          JSON.stringify(Array.from({ length: 9 }, (_, i) => `word:seed-${i}`)),
+        );
+      }
+    });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const nudge = page.locator('[data-nudge]');
+    await expect(nudge).toBeHidden();
+
+    await reader.wordLabel('perambulate').click();
+    await expect(nudge).toBeVisible();
+    await expect(
+      nudge.locator('[data-nudge-variant="explored"]'),
+    ).toContainText("You've explored 10 words");
+  });
+
+  // Guest state that lives in localStorage must reach the first paint through
+  // the head boot script: with the page scripts blocked, the reader has to sit
+  // exactly where it sits once they've run, or the page jumps after load.
+  for (const [name, viewport] of [
+    ['desktop', { width: 1100, height: 700 }],
+    ['phone', { width: 390, height: 844 }],
+  ] as const) {
+    test(`the reader does not shift when scripts run (${name})`, async ({
+      browser,
+    }) => {
+      const firstParagraphY = async (scripts: boolean) => {
+        const context = await browser.newContext({ viewport });
+        await context.addInitScript(() => {
+          localStorage.setItem(
+            'guest-deck',
+            JSON.stringify(
+              [1, 2, 3].map((i) => ({ kind: 'word', id: `seed-${i}` })),
+            ),
+          );
+          localStorage.setItem(
+            'guest-explored',
+            JSON.stringify(
+              Array.from({ length: 12 }, (_, i) => `word:seed-${i}`),
+            ),
+          );
+        });
+        const page = await context.newPage();
+        if (!scripts) {
+          await page.route('**/_astro/**', (route) => route.abort());
+        }
+        await page.goto(`/posts/${READER_SLUG}`);
+        await expect(page.locator('[data-nudge]')).toBeVisible();
+        const box = await page
+          .locator('.reading-body > *')
+          .first()
+          .boundingBox();
+        await context.close();
+        return box?.y;
+      };
+      const beforeScripts = await firstParagraphY(false);
+      const afterScripts = await firstParagraphY(true);
+      expect(beforeScripts).toBeDefined();
+      expect(beforeScripts).toBeCloseTo(afterScripts ?? -1, 0);
+    });
+  }
+
+  test('never shows the nudge to a signed-in reader', async ({ browser }) => {
+    const context = await browser.newContext({ storageState: AUTHED_STATE });
+    const page = await context.newPage();
+    await new ReaderPage(page).goto(READER_SLUG);
+    await expect(page.locator('.reader-article')).toBeVisible();
+    await expect(page.locator('[data-nudge]')).toHaveCount(0);
+    await context.close();
+  });
+
   test('has no strip for a signed-in reader', async ({ browser }) => {
     const context = await browser.newContext({ storageState: AUTHED_STATE });
     const page = await context.newPage();
