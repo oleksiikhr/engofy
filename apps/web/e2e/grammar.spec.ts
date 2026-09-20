@@ -228,20 +228,3 @@ test.describe('grammar construction detail', () => {
     });
   });
 });
-
-test.describe('sitemap.xml', () => {
-  test('lists the grammar index and every construction', async ({
-    request,
-  }) => {
-    const res = await request.get('/sitemap.xml');
-    expect(res.status()).toBe(200);
-    expect(res.headers()['content-type']).toContain('application/xml');
-    const body = await res.text();
-    expect(body).toContain('<urlset');
-    expect(body).toMatch(/<loc>[^<]+\/grammar<\/loc>/);
-    expect(body).toMatch(/<loc>[^<]+\/grammar\/e2e-past-perfect<\/loc>/);
-    expect(body).toMatch(
-      /<loc>[^<]+\/grammar\/past-present-perfect-simple<\/loc>/,
-    );
-  });
-});

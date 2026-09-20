@@ -29,25 +29,3 @@ export function grammarSlugs(reference: GrammarReference): string[] {
   }
   return [...slugs];
 }
-
-// `sitemap.xml` for the grammar reference: the index plus one entry per
-// construction. `origin` has no trailing slash.
-export function buildGrammarSitemap(origin: string, slugs: string[]): string {
-  const paths = [
-    '/grammar',
-    ...slugs.map((slug) => `/grammar/${encodeURIComponent(slug)}`),
-  ];
-  const urls = paths
-    .map((path) => `  <url><loc>${escapeXml(`${origin}${path}`)}</loc></url>`)
-    .join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
-}
-
-function escapeXml(value: string): string {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;');
-}
