@@ -38,38 +38,38 @@ test.describe('reader page (guest)', () => {
     await expect(page.locator('.sidebar')).toHaveCount(0);
   });
 
-  test('shows the tap hint and highlight key, and the hint stays dismissed', async ({
+  test('one collapsed info row holds the hint and the highlight key', async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
-    const hint = page.locator('.reader-hint');
-    await expect(hint).toBeVisible();
-    await expect(page.locator('.reader-key')).toContainText('Grammar');
+    const info = page.locator('[data-reader-info]');
+    await expect(info.getByText('Tap a highlight')).toBeVisible();
+    await expect(page.locator('.reader-key')).toBeHidden();
 
-    // Dismissing collapses the hint; the article must glide, not jump.
-    await page.evaluate(() => {
-      const w = window as unknown as { __ys: number[] };
-      w.__ys = [];
-      const sample = () => {
-        w.__ys.push(
-          document.querySelector('.reading-body')?.getBoundingClientRect()
-            .top ?? 0,
-        );
-        requestAnimationFrame(sample);
-      };
-      sample();
-    });
-    await hint.getByRole('button', { name: 'Dismiss hint' }).click();
-    await expect(hint).toBeHidden();
-    const ys = await page.evaluate(
-      () => (window as unknown as { __ys: number[] }).__ys,
-    );
-    const steps = ys.slice(1).map((y, i) => Math.abs(y - ys[i]));
-    expect(ys.at(-1)).toBeLessThan(ys[0]);
-    expect(Math.max(...steps)).toBeLessThan(25);
+    // Opening the row is the reader's own click, so it may reflow. It also
+    // retires the hint: the row keeps its height and shows "Highlights".
+    const barHeight = async () =>
+      (await info.locator('.reader-info__bar').boundingBox())?.height;
+    const before = await barHeight();
+    await info.locator('summary').click();
+    await expect(page.locator('.reader-key')).toContainText('Grammar');
+    await expect(info.getByText('Highlights').first()).toBeVisible();
+    expect(await barHeight()).toBe(before);
+
     await page.reload();
-    await expect(hint).toBeHidden();
+    await expect(info.getByText('Highlights').first()).toBeVisible();
+    await expect(info.getByText('Tap a highlight')).toBeHidden();
+  });
+
+  test('opening a highlighted word retires the tap hint', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await reader.wordLabel('perambulate').click();
+    await page.reload();
+    await expect(
+      page.locator('[data-reader-info]').getByText('Tap a highlight'),
+    ).toBeHidden();
   });
 
   test('highlight density switches between new-for-me, all and none', async ({
@@ -81,6 +81,7 @@ test.describe('reader page (guest)', () => {
     const paint = () =>
       word.evaluate((el) => getComputedStyle(el).backgroundColor);
     const key = page.locator('.reader-key');
+    await page.locator('[data-reader-info] summary').click();
 
     // The seeded word is above the guest's level: highlighted by default.
     const lit = await paint();
@@ -101,6 +102,7 @@ test.describe('reader page (guest)', () => {
       'data-reader-density',
       'all',
     );
+    await page.locator('[data-reader-info] summary').click();
     await key.getByRole('button', { name: 'New for me' }).click();
     await expect(page.locator('html')).not.toHaveAttribute(
       'data-reader-density',
@@ -984,6 +986,57 @@ test.describe('reader page (guest)', () => {
     const reader = new ReaderPage(page);
     const res = await reader.goto('nope-ZZZ00000');
     expect(res?.status()).toBe(404);
+  });
+});
+
+test.describe('reader popup bottom sheet (phone)', () => {
+  test.use({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+
+  test('is a sheet on the bottom edge that keeps the read word above it', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const word = reader.wordLabel('perambulate');
+    // Put the word in the lower part of the screen, where a sheet would cover it.
+    await word.evaluate((el) => {
+      window.scrollBy({ top: el.getBoundingClientRect().top - 640 });
+    });
+    const before = await reader.analysis.boundingBox();
+
+    await word.tap();
+    await expect(reader.popup).toBeVisible();
+    await expect(reader.popup).toHaveAttribute('data-placement', 'sheet');
+    const sheet = await reader.popup.boundingBox();
+    if (!sheet) {
+      throw new Error('popup has no box');
+    }
+    expect(sheet.x).toBe(0);
+    expect(sheet.width).toBe(390);
+    expect(Math.round(sheet.y + sheet.height)).toBe(844);
+
+    // The page scrolled the word clear of the sheet; the text itself is intact.
+    const wordBox = await word.boundingBox();
+    if (!wordBox) {
+      throw new Error('word has no box');
+    }
+    expect(wordBox.y + wordBox.height).toBeLessThanOrEqual(sheet.y);
+    expect(wordBox.y).toBeGreaterThanOrEqual(0);
+    const after = await reader.analysis.boundingBox();
+    expect(after?.height).toBe(before?.height);
+  });
+
+  test('closes from its handle', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await reader.wordLabel('perambulate').tap();
+    await expect(reader.popup).toBeVisible();
+    await reader.popup.getByRole('button', { name: 'Close' }).tap();
+    await expect(reader.popup).toBeHidden();
   });
 });
 

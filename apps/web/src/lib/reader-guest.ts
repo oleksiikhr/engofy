@@ -5,30 +5,31 @@ import {
   writeLevelChoice,
 } from './reader-level';
 
-// The guest strip above the article: the level question and the explored-words
-// count. The level is stored in a cookie (see lib/reader-level.ts) and the page
-// reloads, so the server re-renders the highlights for it.
+// The guest part of the reader's info row: the level question and the
+// explored-words count. The level is stored in a cookie (see
+// lib/reader-level.ts) and the page reloads, so the server re-renders the
+// highlights for it.
 
-export function initReaderGuest(strip: HTMLElement): void {
-  const setRow = strip.querySelector<HTMLElement>('[data-level-set]');
-  const pickRow = strip.querySelector<HTMLElement>('[data-level-pick]');
-  const count = strip.querySelector<HTMLElement>('[data-explored]');
+export function initReaderGuest(info: HTMLElement): void {
+  const setRow = info.querySelector<HTMLElement>('[data-level-set]');
+  const pickRow = info.querySelector<HTMLElement>('[data-level-pick]');
+  const count = info.querySelector<HTMLElement>('[data-explored]');
   const number = count?.querySelector<HTMLElement>('b');
 
   const choose = (choice: LevelChoice) => {
     writeLevelChoice(choice);
     window.location.reload();
   };
-  strip.querySelector('[data-level-change]')?.addEventListener('click', () => {
+  info.querySelector('[data-level-change]')?.addEventListener('click', () => {
     if (setRow && pickRow) {
       setRow.hidden = true;
       pickRow.hidden = false;
     }
   });
-  strip.querySelector('[data-level-skip]')?.addEventListener('click', () => {
+  info.querySelector('[data-level-skip]')?.addEventListener('click', () => {
     choose(LEVEL_SKIPPED);
   });
-  for (const chip of strip.querySelectorAll<HTMLElement>('[data-level]')) {
+  for (const chip of info.querySelectorAll<HTMLElement>('[data-level]')) {
     chip.addEventListener('click', () => {
       choose(chip.dataset.level as LevelChoice);
     });

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
 import { ReaderPage } from './pages/reader-page';
 
-// Guest strip above the article: the level question (stored in a cookie so the
+// Guest part of the reader's info row: the level question (stored in a cookie so the
 // server renders highlights for it) and the explored-words count
 // (localStorage). Fixtures come from test/e2e/seed-web-e2e.ts.
 
@@ -13,13 +13,19 @@ test.describe('reader guest strip', () => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
     const strip = page.locator('[data-reader-guest]');
+    await strip.locator('summary').click();
     await expect(strip.getByText('What is your level?')).toBeVisible();
 
     await strip.getByRole('button', { name: 'B2', exact: true }).click();
+    // The pick reloads the page, which closes the row again.
+    await expect(strip.locator('.reader-info__level')).toHaveText('Level B2');
+    await strip.locator('summary').click();
     await expect(strip.getByText('Your level: B2')).toBeVisible();
     await expect(strip.getByText('What is your level?')).toBeHidden();
 
     await page.reload();
+    await expect(strip.locator('.reader-info__level')).toHaveText('Level B2');
+    await strip.locator('summary').click();
     await expect(strip.getByText('Your level: B2')).toBeVisible();
 
     await strip.getByRole('button', { name: 'Change' }).click();
@@ -30,12 +36,18 @@ test.describe('reader guest strip', () => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
     const strip = page.locator('[data-reader-guest]');
+    await strip.locator('summary').click();
     await strip.getByRole('button', { name: 'Skip' }).click();
+    await expect(strip.locator('.reader-info__level')).toHaveText('Set level');
+    await strip.locator('summary').click();
     await expect(strip.getByText('Your level: not set')).toBeVisible();
 
     await page.reload();
+    await strip.locator('summary').click();
     await expect(strip.getByText('What is your level?')).toBeHidden();
-    await expect(strip.getByRole('button', { name: 'Set' })).toBeVisible();
+    await expect(
+      strip.getByRole('button', { name: 'Set', exact: true }),
+    ).toBeVisible();
   });
 
   test('counts each opened word once and keeps the count across reloads', async ({
@@ -47,16 +59,16 @@ test.describe('reader guest strip', () => {
     await expect(count).toBeHidden();
 
     await reader.wordLabel('perambulate').click();
-    await expect(count).toHaveText("You've explored 1 word");
+    await expect(count).toHaveText('1 word explored');
     await reader.wordLabel('perambulate').click();
     await reader.wordLabel('perambulate').click();
-    await expect(count).toHaveText("You've explored 1 word");
+    await expect(count).toHaveText('1 word explored');
 
     await reader.phraseLabel('at loose ends').click();
-    await expect(count).toHaveText("You've explored 2 words");
+    await expect(count).toHaveText('2 words explored');
 
     await page.reload();
-    await expect(count).toHaveText("You've explored 2 words");
+    await expect(count).toHaveText('2 words explored');
   });
 
   test('shows a guest day streak and daily ring in the header once a word is explored', async ({
@@ -229,6 +241,7 @@ test.describe('reader guest strip', () => {
               Array.from({ length: 12 }, (_, i) => `word:seed-${i}`),
             ),
           );
+          localStorage.setItem('reader-hint', 'seen');
         });
         const page = await context.newPage();
         if (!scripts) {
