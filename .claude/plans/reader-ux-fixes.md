@@ -58,10 +58,10 @@ usage points Learned/Skipped через картку/disposition, Learning — �
 default показується як "Assumed known". Оновити ispec/spec/e2e (`get-grammar-reference.handler.ispec.ts`,
 `effective-state-priority.spec.ts`, `content.controller.ispec.ts`, `grammar.spec.ts`).
 
-### [ ] 5. Прочитано: кнопка та суворіший авто-тригер
+### [x] 5. Прочитано: кнопка та суворіший авто-тригер
 - Branch: `reader-ux-fixes-05-read-state`
-- Base: `reader-ux-fixes-04-grammar-status`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/84
 
 Правка №8. Бекенд: `DELETE /content/posts/:slugId/read` (204, login, ідемпотентний) +
 `UnmarkPostReadCommand`; `isRead` у `PostDetailResponseDto`. Web: `partials/unmark-read.ts`, контрол

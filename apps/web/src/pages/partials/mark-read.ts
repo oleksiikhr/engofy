@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
-import { apiPost } from '../../lib/api';
+import { ApiError, apiPost } from '../../lib/api';
 
-// Fire-and-forget target for the reader's mark-read trigger (PLAN.md
-// §16/§17 Track B): forwards to Nest `POST /content/posts/{slugId}/read`
-// with the visitor's session cookie. No UI reads the result — a guest (401)
-// or repeat submit both no-op silently, same as the mark-read command itself.
+// Target for the reader's "mark as read" — the toggle button, the scroll-to-end
+// trigger and study mode's Finish. Forwards to Nest
+// `POST /content/posts/{slugId}/read` with the visitor's session cookie. The
+// status tells the client whether to keep its optimistic state: 204 on
+// success (a repeat is a no-op), 401 for a guest, 502 otherwise.
 export const POST: APIRoute = async ({ request }) => {
   const form = await request.formData();
   // Same `{slug}-{shortId}` param the reader URL and the GET route use —
@@ -20,9 +21,10 @@ export const POST: APIRoute = async ({ request }) => {
       undefined,
       { request },
     );
-  } catch {
-    // Best-effort groundwork (no consumer reads post_reads yet) — never
-    // surface a failure to the reader.
+  } catch (error) {
+    return new Response(null, {
+      status: error instanceof ApiError && error.status === 401 ? 401 : 502,
+    });
   }
 
   return new Response(null, { status: 204 });

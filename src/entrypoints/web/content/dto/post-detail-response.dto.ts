@@ -169,6 +169,9 @@ export class PostDetailResponseDto {
 
   readonly sourceLink!: string | null;
 
+  // The viewer marked the post read; false for a guest.
+  readonly isRead!: boolean;
+
   // Reassembled node tree; the frontend SSR-renders it with per-span classes.
   readonly doc!: Doc;
 

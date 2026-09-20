@@ -8,11 +8,10 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 
-// One row per (user, post): the article was read to the end and the
-// comprehension quiz was submitted, regardless of correctness (PLAN.md §16 —
-// never shown to the user as a score). Independent of SRS: submitting the
-// quiz never creates a LearningCard. Groundwork for feed dedup (§17 Track B);
-// no consumer reads it yet.
+// One row per (user, post): the reader marked the article read (button,
+// scrolling to the end, or finishing study mode). Independent of SRS: it never
+// creates a LearningCard. Drives the `isRead` flag on the posts list and the
+// post detail.
 @Entity({ tableName: 'post_reads' })
 @Unique({ properties: ['userId', 'postId'] })
 export class PostRead {

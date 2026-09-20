@@ -402,6 +402,50 @@ describe('ContentController', () => {
     expect(await suite.orm.em.count(PostRead, { postId: post.id })).toBe(1);
   });
 
+  it('unmarks a post read for the logged-in user, idempotently, and reflects it in isRead', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+    const { cookie } = await login(suite.orm.em);
+    const path = `/content/posts/${slug}-${shortId}`;
+
+    await suite
+      .request('post', `${path}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+    const read = await suite
+      .request('get', path)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(read.body.isRead).toBe(true);
+
+    await suite
+      .request('delete', `${path}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+    // Unmarking a post that isn't read is a silent no-op.
+    await suite
+      .request('delete', `${path}/read`)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NO_CONTENT);
+    const unread = await suite
+      .request('get', path)
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(unread.body.isRead).toBe(false);
+  });
+
+  it('401s unmarking a post read for a guest and 404s an unknown post', async () => {
+    const { shortId, slug } = await seedPublishedPost(suite.orm.em);
+    const { cookie } = await login(suite.orm.em);
+
+    await suite
+      .request('delete', `/content/posts/${slug}-${shortId}/read`)
+      .expect(HttpStatus.UNAUTHORIZED);
+    await suite
+      .request('delete', '/content/posts/Zzz00000/read')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
   it('404s marking an unknown post read', async () => {
     const { cookie } = await login(suite.orm.em);
 

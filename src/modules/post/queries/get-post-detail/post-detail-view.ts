@@ -103,6 +103,8 @@ export interface PostDetailView {
   attributionText: string;
   sourceType: string;
   sourceLink: string | null;
+  // Whether the viewer marked the post read; always false for a guest.
+  isRead: boolean;
   // The reassembled node tree (all PostParts in block order). The frontend
   // SSR-renders this to HTML with per-span classes (PLAN.md §6).
   doc: Doc;

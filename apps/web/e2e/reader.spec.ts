@@ -12,6 +12,7 @@ import { ReaderPage } from './pages/reader-page';
 // the "reported" usage point (the seeded user marked it Known) on "war ended".
 
 const READER_SLUG = 'the-cartographer-at-dawn-E2Eread1';
+const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:4321';
 
 test.describe('reader page (guest)', () => {
   test('renders the article body with sparse labels on new words and phrases', async ({
@@ -510,17 +511,23 @@ test.describe('reader page (guest)', () => {
     await expect(reader.qcScreen('intro')).toHaveCount(0);
   });
 
-  test('reaching the final screen marks the post as read', async ({ page }) => {
+  test('a guest gets no read control and nothing is marked', async ({
+    page,
+  }) => {
+    const marks: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/partials/mark-read')) {
+        marks.push(request.url());
+      }
+    });
     const reader = new ReaderPage(page);
-    // This short fixture already shows the final screen on load, so the
-    // request is armed before navigating.
-    const marked = page.waitForRequest(
-      (request) =>
-        request.url().endsWith('/partials/mark-read') &&
-        request.method() === 'POST',
-    );
+    await page.setViewportSize({ width: 1280, height: 300 });
     await reader.goto(READER_SLUG);
-    await marked;
+    await expect(reader.readState).toHaveCount(0);
+
+    await reader.finalScreen.scrollIntoViewIfNeeded();
+    await reader.studyToggle.scrollIntoViewIfNeeded();
+    expect(marks).toEqual([]);
   });
 
   test('study mode walks the article block by block and hands over to the final screen', async ({
@@ -852,5 +859,109 @@ test.describe('reader popup deck state (signed in, empty deck)', () => {
     await expect(
       reader.popup.getByRole('button', { name: 'Add to deck' }),
     ).toHaveCount(0);
+  });
+});
+
+test.describe('reader read state (signed in)', () => {
+  // Marks and unmarks the post, so it runs as its own seeded user.
+  test.use({ storageState: DECK_STATE });
+
+  const marksRead = (page: Page) =>
+    page.waitForRequest(
+      (request) =>
+        request.url().endsWith('/partials/mark-read') &&
+        request.method() === 'POST',
+    );
+
+  // Astro's CSRF check wants an Origin on a form POST, which the browser adds
+  // on its own but the request fixture does not.
+  const unmarkRead = (page: Page) =>
+    page.request.post('/partials/unmark-read', {
+      form: { slugId: READER_SLUG },
+      headers: {
+        origin: new URL(page.url() === 'about:blank' ? BASE_URL : page.url())
+          .origin,
+      },
+    });
+
+  test.beforeEach(async ({ page }) => {
+    expect((await unmarkRead(page)).status()).toBe(204);
+  });
+
+  test.afterEach(async ({ page }) => {
+    await unmarkRead(page);
+  });
+
+  test('the first paint does not mark, scrolling to the end does, and it can be undone', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    // A short viewport keeps the final screen below the fold.
+    await page.setViewportSize({ width: 1280, height: 300 });
+    let marks = 0;
+    page.on('request', (request) => {
+      if (request.url().endsWith('/partials/mark-read')) {
+        marks += 1;
+      }
+    });
+    await reader.goto(READER_SLUG);
+
+    await expect(reader.readToggle).toHaveText('Mark as read');
+    await expect(reader.readBadge).toBeHidden();
+    await page.waitForTimeout(500);
+    expect(marks).toBe(0);
+
+    const marked = marksRead(page);
+    await reader.finalScreen.scrollIntoViewIfNeeded();
+    await marked;
+    await expect(reader.readBadge).toBeVisible();
+    await expect(reader.readToggle).toHaveText('Mark as unread');
+
+    await page.reload();
+    await expect(reader.readBadge).toBeVisible();
+
+    await reader.readToggle.click();
+    await expect(reader.readBadge).toBeHidden();
+    await expect(reader.readToggle).toHaveText('Mark as read');
+    await page.reload();
+    await expect(reader.readBadge).toBeHidden();
+  });
+
+  test('the button marks a short post that cannot scroll, and a manual unmark is not undone by scrolling', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await expect(reader.readBadge).toBeHidden();
+
+    await reader.readToggle.click();
+    await expect(reader.readBadge).toBeVisible();
+    await page.reload();
+    await expect(reader.readBadge).toBeVisible();
+
+    await reader.readToggle.click();
+    await expect(reader.readBadge).toBeHidden();
+    await page.setViewportSize({ width: 1280, height: 300 });
+    await reader.finalScreen.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    await expect(reader.readBadge).toBeHidden();
+  });
+
+  test('finishing study mode marks the post as read', async ({ page }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    await expect(reader.readBadge).toBeHidden();
+
+    await reader.studyToggle.click();
+    const cont = reader.studyPanel.getByRole('button', { name: 'Continue' });
+    const finish = reader.studyPanel.getByRole('button', { name: 'Finish' });
+    while (!(await finish.isVisible())) {
+      await cont.click();
+    }
+    await finish.click();
+
+    await expect(reader.readBadge).toBeVisible();
+    await page.reload();
+    await expect(reader.readBadge).toBeVisible();
   });
 });

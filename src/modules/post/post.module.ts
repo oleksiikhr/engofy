@@ -16,6 +16,7 @@ import { ReportLabelHandler } from './commands/report-label/report-label.handler
 import { RetryPostHandler } from './commands/retry-post/retry-post.handler.js';
 import { SpacyParsePostHandler } from './commands/spacy-parse-post/spacy-parse-post.handler.js';
 import { TagGrammarHandler } from './commands/tag-grammar/tag-grammar.handler.js';
+import { UnmarkPostReadHandler } from './commands/unmark-post-read/unmark-post-read.handler.js';
 import { PostService } from './post.service.js';
 import { PostQueueBootstrapService } from './post-queue-bootstrap.service.js';
 import { GetGrammarConstructionHandler } from './queries/get-grammar-construction/get-grammar-construction.handler.js';
@@ -36,6 +37,7 @@ const commandHandlers = [
   PublishPostHandler,
   RetryPostHandler,
   MarkPostReadHandler,
+  UnmarkPostReadHandler,
   ReportLabelHandler,
 ];
 
