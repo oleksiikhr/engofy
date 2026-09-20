@@ -148,6 +148,7 @@ export abstract class JobWorkerHost<T = unknown> {
           err.tool,
           stageRef?.stage ?? job.name,
         ],
+        extra: { rawInput: err.rawInput },
       }),
     });
   }

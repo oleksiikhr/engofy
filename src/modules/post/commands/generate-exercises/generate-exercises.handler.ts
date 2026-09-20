@@ -104,10 +104,8 @@ export class GenerateExercisesHandler
     }));
 
     const drafts = buildExercises(inputs);
-    const contrastive = await this.buildContrastive(
-      sentences,
-      tokensBySentence,
-    );
+    const { items: contrastive, requested: contrastiveRequested } =
+      await this.buildContrastive(sentences, tokensBySentence);
 
     await this.em.nativeDelete(Exercise, { postId });
 
@@ -138,6 +136,8 @@ export class GenerateExercisesHandler
         postId,
         deterministic: drafts.length,
         grammarContrastive: contrastive.length,
+        grammarContrastiveRequested: contrastiveRequested,
+        grammarContrastiveSkipped: contrastiveRequested - contrastive.length,
       },
       'ai_exercises generated',
     );
@@ -184,12 +184,12 @@ export class GenerateExercisesHandler
   private async buildContrastive(
     sentences: Sentence[],
     tokensBySentence: Map<string, SentenceToken[]>,
-  ): Promise<ContrastiveItem[]> {
+  ): Promise<{ items: ContrastiveItem[]; requested: number }> {
     const matches = await this.em.find(GrammarMatch, {
       sentenceId: { $in: sentences.map((s) => s.id) },
     });
     if (matches.length === 0) {
-      return [];
+      return { items: [], requested: 0 };
     }
 
     const sentenceOrder = new Map(sentences.map((s, i) => [s.id, i]));
@@ -283,7 +283,10 @@ export class GenerateExercisesHandler
         return result ? { ...ids, result } : null;
       }),
     );
-    return items.filter((item) => item !== null);
+    return {
+      items: items.filter((item) => item !== null),
+      requested: requests.length,
+    };
   }
 
   // One usage point's model call, retried on a malformed payload. A point

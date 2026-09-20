@@ -6,7 +6,10 @@ import type {
   AiCompleteParams,
   AiCompleteStructuredParams,
 } from './ai-client.port.js';
-import { AiSchemaMismatchError } from './ai-schema-mismatch.error.js';
+import {
+  AiSchemaMismatchError,
+  truncateRawInput,
+} from './ai-schema-mismatch.error.js';
 
 // $ per 1M tokens, matched against `model` by substring — see the "Current
 // Models" pricing table in Anthropic's docs. Update alongside AI_MODEL.
@@ -170,7 +173,15 @@ export class AnthropicClientService implements AiClient {
       // A schema-shape violation from the model (e.g. an array field returned
       // as a string) — distinct from a max_tokens truncation, and recoverable
       // by a pg-boss retry. Don't let it surface as an opaque ZodError.
-      throw new AiSchemaMismatchError(tool.name, { cause: parsed.error });
+      const rawInput = truncateRawInput(toolUse.input);
+      this.logger.warn(
+        { tool: tool.name, rawInput, issues: parsed.error.issues },
+        'ai completeStructured payload failed schema validation',
+      );
+      throw new AiSchemaMismatchError(tool.name, {
+        cause: parsed.error,
+        rawInput,
+      });
     }
     return parsed.data;
   }

@@ -29,6 +29,7 @@ socket timeout, which would fail the paid stage and force a full re-run.
 | AI3 | `complete()` **and** `completeStructured()` turn SDK `stop_reason === 'max_tokens'` into a distinct thrown error so the reconstruct-retry loop doesn't spin on a budget problem (a truncated tool call would otherwise surface as an opaque `ZodError` from `tool.schema.parse`). | `anthropic-client.service.ts` |
 | AI4 | Every call logs a structured usage line (`input`/`output`/`cache` tokens + `cost_usd`) from the streamed final message's `usage`. | `anthropic-client.service.ts` `logUsage` |
 | AI5 | Prompt strings + zod tool schemas live in pure `<module>/domain/*-prompt.ts`. | `post/domain/complexity-prompt.ts` |
+| AI6 | A `completeStructured` schema mismatch throws `AiSchemaMismatchError` carrying `rawInput` (JSON, cut to 2 KB) and logs it at `warn`; the worker attaches it to Sentry as `extra.rawInput`. | `ai-schema-mismatch.error.ts` |
 
 ## Inline-markup round-trip
 
