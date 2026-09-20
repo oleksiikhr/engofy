@@ -76,7 +76,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       return null;
     }
 
-    const [parts, exercises, readCount] = await Promise.all([
+    const [parts, exercises, exerciseSentences, readCount] = await Promise.all([
       this.em.find(
         PostPart,
         { postId: post.id },
@@ -87,8 +87,23 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         { postId: post.id },
         { orderBy: { createdAt: 'asc', id: 'asc' }, disableIdentityMap: true },
       ),
+      this.em.find(
+        Sentence,
+        { postId: post.id },
+        { fields: ['id', 'postPartId'], disableIdentityMap: true },
+      ),
       userId ? this.em.count(PostRead, { userId, postId: post.id }) : 0,
     ]);
+    const blockIndexBySentence = new Map<string, number>();
+    const blockIndexByPart = new Map(
+      parts.map((part) => [part.id, part.blockIndex]),
+    );
+    for (const sentence of exerciseSentences) {
+      const blockIndex = blockIndexByPart.get(sentence.postPartId);
+      if (blockIndex !== undefined) {
+        blockIndexBySentence.set(sentence.id, blockIndex);
+      }
+    }
 
     // Reassemble the per-part fragments into a Doc and re-validate the whole
     // tree at read time (PLAN.md §6, D12) — `PostPartBodyType` can't run
@@ -115,7 +130,9 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       isRead: readCount > 0,
       doc,
       annotations,
-      exercises: exercises.map(toExerciseView),
+      exercises: exercises.map((exercise) =>
+        toExerciseView(exercise, blockIndexBySentence),
+      ),
     };
   }
 
@@ -497,12 +514,21 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   }
 }
 
-function toExerciseView(exercise: Exercise): PostExerciseView {
+function toExerciseView(
+  exercise: Exercise,
+  blockIndexBySentence: Map<string, number>,
+): PostExerciseView {
+  const { sentenceId } = exercise.payload;
+  const blockIndex =
+    typeof sentenceId === 'string'
+      ? blockIndexBySentence.get(sentenceId)
+      : undefined;
   return {
     id: exercise.id,
     type: exercise.type,
     source: exercise.source,
     payload: exercise.payload,
+    ...(blockIndex === undefined ? {} : { blockIndex }),
   };
 }
 
