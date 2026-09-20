@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { AUTHED_STATE } from './auth';
+import { AUTHED_STATE, DECK_STATE } from './auth';
 import { ReaderPage } from './pages/reader-page';
 
 // Slice 8b page 1 — /posts/{slug}-{id}: node-tree reading. Only word/phrase
@@ -793,5 +793,64 @@ test.describe('reader page (signed in)', () => {
         name: "Continue to today's practice",
       }),
     ).toHaveAttribute('href', '/');
+  });
+});
+
+test.describe('reader popup deck state (signed in, empty deck)', () => {
+  // Really saves, so it runs as its own seeded user.
+  test.use({ storageState: DECK_STATE });
+
+  test('a saved word reopens as Learning without the Add action, also after reload', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const label = reader.wordLabel('cartographer');
+    await label.click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+    await label.click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+
+    await reader.goto(READER_SLUG);
+    await reader.wordLabel('cartographer').click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+  });
+
+  test('a saved phrase reopens as Learning without the Add action, also after reload', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const label = reader.phraseLabel('at loose ends');
+    await label.click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+    await label.click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+
+    await reader.goto(READER_SLUG);
+    await reader.phraseLabel('at loose ends').click();
+    await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
   });
 });

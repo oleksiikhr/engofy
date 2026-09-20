@@ -10,14 +10,17 @@ import { fileURLToPath } from 'node:url';
 // 2. Writes a Playwright storageState carrying the fixed session cookie for
 //    the seeded e2e user, so authed-page specs can `test.use({ storageState })`.
 //
-// The tokens here MUST match E2E_SESSION_TOKEN / E2E_DELETION_SESSION_TOKEN in
+// The tokens here MUST match E2E_SESSION_TOKEN / E2E_DECK_SESSION_TOKEN /
+// E2E_DELETION_SESSION_TOKEN in
 // test/e2e/seed-web-e2e.ts.
 
 const here = dirname(fileURLToPath(import.meta.url)); // apps/web/e2e
 const repoRoot = resolve(here, '../../..');
 const STATE_PATH = resolve(here, '.auth/state.json');
+const DECK_STATE_PATH = resolve(here, '.auth/deck-state.json');
 const DELETION_STATE_PATH = resolve(here, '.auth/deletion-state.json');
 const SESSION_TOKEN = 'e2e-fixed-session-token-000000000000';
+const DECK_SESSION_TOKEN = 'e2e-deck-session-token-0000000000';
 const DELETION_SESSION_TOKEN = 'e2e-deletion-session-token-0000000';
 const cookieName = process.env.AUTH_SESSION_COOKIE_NAME ?? '__Host-session';
 
@@ -34,6 +37,7 @@ export default function globalSetup(): void {
 
   const base = new URL(process.env.WEB_BASE_URL ?? 'http://localhost:4321');
   writeState(STATE_PATH, base, SESSION_TOKEN);
+  writeState(DECK_STATE_PATH, base, DECK_SESSION_TOKEN);
   writeState(DELETION_STATE_PATH, base, DELETION_SESSION_TOKEN);
 }
 
