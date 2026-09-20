@@ -18,6 +18,7 @@ import {
 } from './commands/resolve-session/resolve-session.command.js';
 import type { ResolveSessionDto } from './commands/resolve-session/resolve-session.dto.js';
 import { SetCefrLevelCommand } from './commands/set-cefr-level/set-cefr-level.command.js';
+import { SetDailyGoalCommand } from './commands/set-daily-goal/set-daily-goal.command.js';
 import { VerifyLoginCodeCommand } from './commands/verify-login-code/verify-login-code.command.js';
 import type { VerifyLoginCodeDto } from './commands/verify-login-code/verify-login-code.dto.js';
 import type { User } from './entities/user.entity.js';
@@ -73,6 +74,16 @@ export class AuthService {
   async setCefrLevel(userId: string, cefrLevel: CefrLevel): Promise<CefrLevel> {
     const result = await this.commandBus.execute(
       new SetCefrLevelCommand(userId, cefrLevel),
+    );
+
+    await this.em.flush();
+
+    return result;
+  }
+
+  async setDailyGoal(userId: string, dailyGoal: number): Promise<number> {
+    const result = await this.commandBus.execute(
+      new SetDailyGoalCommand(userId, dailyGoal),
     );
 
     await this.em.flush();

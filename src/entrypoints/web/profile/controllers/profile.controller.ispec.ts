@@ -59,7 +59,7 @@ describe('ProfileController', () => {
     await suite.request('get', '/profile').expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('returns the streak and self-reported CEFR level', async () => {
+  it('returns the streak, self-reported CEFR level and daily goal', async () => {
     const cookie = await login(suite.orm.em);
 
     const res = await suite
@@ -70,6 +70,7 @@ describe('ProfileController', () => {
     expect(res.body).toEqual({
       streak: 0,
       cefrLevel: 'A1',
+      dailyGoal: 10,
       accountDeletion: null,
       dailyPlanCompletedAt: null,
     });
@@ -278,6 +279,44 @@ describe('ProfileController', () => {
         .request('patch', '/profile/cefr-level')
         .set('Cookie', cookie)
         .send({ cefrLevel: 'not-a-level' })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('PATCH /profile/daily-goal', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('patch', '/profile/daily-goal')
+        .send({ dailyGoal: 20 })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('updates the goal and reflects it on the next GET /profile', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const patchRes = await suite
+        .request('patch', '/profile/daily-goal')
+        .set('Cookie', cookie)
+        .send({ dailyGoal: 20 })
+        .expect(HttpStatus.OK);
+
+      expect(patchRes.body).toEqual({ dailyGoal: 20 });
+
+      const getRes = await suite
+        .request('get', '/profile')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(getRes.body.dailyGoal).toBe(20);
+    });
+
+    it.each([0, -1, 1.5, 201, 'ten'])('rejects goal %s', async (dailyGoal) => {
+      const cookie = await login(suite.orm.em);
+
+      await suite
+        .request('patch', '/profile/daily-goal')
+        .set('Cookie', cookie)
+        .send({ dailyGoal })
         .expect(HttpStatus.BAD_REQUEST);
     });
   });

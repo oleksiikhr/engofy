@@ -14,6 +14,7 @@ import { Public } from '../../../../core/decorators/public.decorator.js';
 import { AuthService } from '../../../../modules/auth/auth.service.js';
 import { CancelAccountDeletionByTokenDto } from '../../../../modules/auth/commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.dto.js';
 import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-level/set-cefr-level.dto.js';
+import { SetDailyGoalDto } from '../../../../modules/auth/commands/set-daily-goal/set-daily-goal.dto.js';
 import type { AccountDeletionView } from '../../../../modules/auth/types/account-deletion-view.type.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
@@ -21,6 +22,7 @@ import { HomeService } from '../../../../modules/home/home.service.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import { AccountDeletionResponseDto } from '../dto/account-deletion-response.dto.js';
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
+import { DailyGoalResponseDto } from '../dto/daily-goal-response.dto.js';
 import { ProfileHubResponseDto } from '../dto/profile-hub-response.dto.js';
 import { ProfileProgressResponseDto } from '../dto/profile-progress-response.dto.js';
 import { ProfileSubscriptionResponseDto } from '../dto/profile-subscription-response.dto.js';
@@ -67,6 +69,7 @@ export class ProfileController {
         ? (dailyPlanCompletedAt.toUTC().toISO() ?? '')
         : null,
       cefrLevel: user.cefrLevel,
+      dailyGoal: user.dailyGoal,
       accountDeletion: accountDeletion
         ? toAccountDeletionDto(accountDeletion)
         : null,
@@ -121,6 +124,17 @@ export class ProfileController {
   ): Promise<CefrLevelResponseDto> {
     const cefrLevel = await this.auth.setCefrLevel(actor.id, dto.cefrLevel);
     return { cefrLevel };
+  }
+
+  // Change the learner's daily card goal (the header's progress ring).
+  @Patch('daily-goal')
+  @HttpCode(HttpStatus.OK)
+  async setDailyGoal(
+    @CurrentUser() actor: UserActor,
+    @Body() dto: SetDailyGoalDto,
+  ): Promise<DailyGoalResponseDto> {
+    const dailyGoal = await this.auth.setDailyGoal(actor.id, dto.dailyGoal);
+    return { dailyGoal };
   }
 
   // Starts the deletion grace period: mails a cancel link, ends premium now.

@@ -14,6 +14,7 @@ import { GetNewCardBudgetHandler } from './queries/get-new-card-budget/get-new-c
 import { GetPhraseDictionaryDetailHandler } from './queries/get-phrase-dictionary-detail/get-phrase-dictionary-detail.handler.js';
 import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practice-queue.handler.js';
 import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
+import { GetReviewsTodayHandler } from './queries/get-reviews-today/get-reviews-today.handler.js';
 import { GetStreakHandler } from './queries/get-streak/get-streak.handler.js';
 import { GetWordDictionaryDetailHandler } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
@@ -41,6 +42,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     GetCardUsageHandler,
     GetDueCardCountHandler,
     GetDuePostCardsHandler,
+    GetReviewsTodayHandler,
     GetStreakHandler,
     GetNewCardBudgetHandler,
     GetWordDictionaryDetailHandler,

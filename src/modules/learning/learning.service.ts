@@ -28,6 +28,7 @@ import type {
 } from './queries/get-practice-queue/practice-queue-item.js';
 import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
 import type { ProfileView } from './queries/get-profile/profile-view.js';
+import { GetReviewsTodayQuery } from './queries/get-reviews-today/get-reviews-today.query.js';
 import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
 import { GetWordDictionaryDetailQuery } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.query.js';
 import type { WordDictionaryDetailView } from './queries/get-word-dictionary-detail/word-dictionary-detail-view.js';
@@ -160,5 +161,9 @@ export class LearningService {
 
   getStreak(userId: string): Promise<number> {
     return this.queryBus.execute(new GetStreakQuery(userId));
+  }
+
+  getReviewsToday(userId: string): Promise<number> {
+    return this.queryBus.execute(new GetReviewsTodayQuery(userId));
   }
 }
