@@ -75,7 +75,8 @@ export function buildLexiconData(
           cefrLevel: point.cefrLevel,
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
-          exampleText: point.exampleText,
+          explanation: point.explanation,
+          examples: point.examples,
           contrast: contrast.get(point.grammarUsagePointId) ?? null,
           state,
         };

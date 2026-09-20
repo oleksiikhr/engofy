@@ -75,7 +75,8 @@ export interface GrammarLexiconEntry {
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
-  exampleText: string | null;
+  explanation: string | null;
+  examples: string[];
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
   state: EffectiveState;
@@ -195,8 +196,8 @@ function grammarSectionHtml(
     <span class="badge">${esc(entry.cefrLevel)}</span>
   </div>
   ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
-  <p class="lex-popup__def">${esc(entry.canDoStatement)}</p>
-  ${entry.exampleText ? `<p class="lex-popup__example">${esc(shortExample(entry.exampleText))}</p>` : ''}
+  <p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>
+  ${entry.examples[0] ? `<p class="lex-popup__example">${esc(shortExample(entry.examples[0]))}</p>` : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
   ${reportRowHtml({ kind: 'grammar', id: entry.id }, slugId)}

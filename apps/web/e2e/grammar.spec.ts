@@ -78,6 +78,33 @@ test.describe('grammar reference', () => {
     ).toBeVisible();
   });
 
+  test('a guest gets a Start here block at A1 with the learner explanation', async ({
+    page,
+  }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    const startHere = page.getByTestId('grammar-start-here');
+    await expect(startHere).toContainText('A1');
+    const card = startHere.locator('a[data-slug="e2e-present-simple"]');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText('routines and facts that are always true');
+    // The filter form does not change it.
+    await grammar.goto('cefr=C2');
+    await expect(
+      page
+        .getByTestId('grammar-start-here')
+        .locator('a[data-slug="e2e-present-simple"]'),
+    ).toBeVisible();
+  });
+
+  test('a construction card shows its summary', async ({ page }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await expect(grammar.constructionLink('e2e-past-perfect')).toContainText(
+      'which of two past actions happened first',
+    );
+  });
+
   test('a guest sees every construction as new', async ({ page }) => {
     const grammar = new GrammarPage(page);
     await grammar.goto();
@@ -126,6 +153,29 @@ test.describe('grammar construction detail', () => {
     await expect(construction.usageItems).toHaveCount(2);
     // No handcrafted page for this slug — the generic render.
     await expect(construction.handcrafted).toHaveCount(0);
+  });
+
+  test('shows the learner explanation and clean examples, and falls back to the can-do statement', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+
+    const enriched = construction.usageItem(0);
+    await expect(enriched).toContainText('which of two past actions');
+    await expect(
+      enriched.getByTestId('usage-examples').locator('li'),
+    ).toHaveText([
+      'She had drawn the map before he arrived.',
+      'I had eaten when they called.',
+    ]);
+    await expect(enriched).not.toContainText('every coastline');
+
+    const bare = construction.usageItem(1);
+    await expect(bare).toContainText(
+      'Can use the past perfect in reported speech.',
+    );
+    await expect(bare.getByTestId('usage-examples')).toHaveCount(0);
   });
 
   test('renders a handcrafted page with its compare links', async ({

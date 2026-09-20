@@ -122,7 +122,10 @@ export interface GrammarUsagePointRef {
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
-  exampleText: string | null;
+  // Learner-facing explanation and clean example sentences; null / empty
+  // until the backend's grammar enrichment has covered this point.
+  explanation: string | null;
+  examples: string[];
 }
 export interface GrammarAnnotation {
   slug: string;
@@ -205,6 +208,8 @@ export interface GrammarRefConstruction {
   name: string;
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
+  // Learner explanation of the construction's easiest usage point.
+  summary: string | null;
   state: EffectiveState;
   // Usage points the learner resolved (learned or skipped); absent for a guest.
   learnedCount?: number;
