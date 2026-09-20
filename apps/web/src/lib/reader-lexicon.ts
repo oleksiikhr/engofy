@@ -117,11 +117,13 @@ export function lexiconActionsId(target: LexiconTarget): string {
 
 // A New target offers both actions; any other state is settled (a card, a
 // known or a skip disposition) and shows just its label. `message` is trusted
-// HTML from `LEXICON_ACTION_MESSAGE` — never user input.
+// HTML from `LEXICON_ACTION_MESSAGE` — never user input. `fresh` marks a row
+// just settled by the visitor's own action, which plays the saved animation.
 export function lexiconActionsHtml(
   target: LexiconTarget,
   state: EffectiveState,
   message?: string,
+  fresh = false,
 ): string {
   const id = lexiconActionsId(target);
   const label = `<span class="lex-state lex-state--${esc(state)}" data-state="${esc(state)}">${esc(STATE_LABEL[state] ?? state)}</span>`;
@@ -130,7 +132,8 @@ export function lexiconActionsHtml(
     : '';
 
   if (state !== 'new') {
-    return `<div class="lex-actions" id="${id}">${label}</div>`;
+    const cls = fresh ? 'lex-actions lex-actions--fresh' : 'lex-actions';
+    return `<div class="${cls}" id="${id}">${label}</div>`;
   }
 
   const field = TARGET_FIELD[target.kind];

@@ -70,6 +70,8 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   return fragment(
-    lexiconActionsHtml(target, action === 'add' ? 'learning' : 'learned'),
+    action === 'add'
+      ? lexiconActionsHtml(target, 'learning', undefined, true)
+      : lexiconActionsHtml(target, 'learned'),
   );
 };

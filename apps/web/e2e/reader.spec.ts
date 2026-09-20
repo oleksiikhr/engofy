@@ -271,6 +271,10 @@ test.describe('reader page (guest)', () => {
     await expect(summary.locator('[data-guest-saved]')).toHaveText(
       'You saved 1 card here.',
     );
+    await expect(summary.locator('[data-qc-title]')).toHaveCSS(
+      'animation-name',
+      'reward-rise',
+    );
     await expect(
       summary.getByRole('link', { name: 'Sign up free' }),
     ).toHaveAttribute('href', '/login');
@@ -1354,11 +1358,13 @@ test.describe('reader popup deck state (signed in, empty deck)', () => {
     await label.click();
     await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
     await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(reader.popup.locator('.lex-actions--fresh')).toHaveCount(1);
 
     await page.keyboard.press('Escape');
     await expect(reader.popup).toBeHidden();
     await label.click();
     await expect(reader.popup.locator('.lex-state')).toHaveText('Learning');
+    await expect(reader.popup.locator('.lex-actions--fresh')).toHaveCount(0);
     await expect(
       reader.popup.getByRole('button', { name: 'Add to deck' }),
     ).toHaveCount(0);

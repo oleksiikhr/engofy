@@ -128,13 +128,14 @@ const themes = [
 </header>
 
 <script>
-  import { initGuestHeader } from '../lib/guest-header';
+  import { celebrateAccountGoal, initGuestHeader } from '../lib/guest-header';
   import { readPref, THEMES, type Theme, writePref } from '../lib/prefs';
 
   const guestProgress = document.querySelector<HTMLElement>('[data-guest-progress]');
   if (guestProgress) {
     initGuestHeader(guestProgress);
   }
+  celebrateAccountGoal();
 
   const menu = document.querySelector<HTMLDetailsElement>('[data-account-menu]');
   if (menu) {
