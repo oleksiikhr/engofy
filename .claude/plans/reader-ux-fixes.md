@@ -79,10 +79,10 @@ default показується як "Assumed known". Оновити ispec/spec/e
 `:root[data-reader-modes~=...]`, який виставляє pre-paint `bootScript`. e2e: з `reader-modes=analyze`
 геометрія `.reading-body` і toolbar однакова до та після гідратації.
 
-### [ ] 7. Клік на будь-яке слово/фразу/граматику
+### [x] 7. Клік на будь-яке слово/фразу/граматику
 - Branch: `reader-ux-fixes-07-click-any-word`
-- Base: `reader-ux-fixes-06-reader-no-shift`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/86
 
 Правка №4. `render-doc.ts` видає id для всіх lexicon-збігів (також learned/skipped); підсвітка лише для
 `new|learning`, решта — легка hover-афорданс. Попап для learned/skipped показує стан без "Add to deck".
