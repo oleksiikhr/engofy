@@ -336,9 +336,10 @@ API keys (Anthropic, Resend, Telegram, R2, Sentry) are simpler — steps 1, 2, 4
   behind `!isProdEnvironment()`), and `cloudflared` has no route to `/_swagger`.
 - Sentry: DSN via the `engofy_sentry_dsn` secret; `tracesSampleRate` defaults to
   `0.1` in prod (`SENTRY_TRACES_SAMPLE_RATE_{WEB,WORKER,CRON}` in the stack).
-- `TRUST_PROXY=1` (in the stack) = trust exactly one proxy hop (cloudflared);
-  the app then sees the real client IP for throttling / OTP counters /
-  secure-cookie decisions.
+- `TRUST_PROXY=uniquelocal` (in the stack) = trust peers in private ranges
+  (the overlay network, i.e. cloudflared); the app then sees the real client IP
+  for throttling / OTP counters / secure-cookie decisions. Numeric hop counts
+  (`TRUST_PROXY=1`) are rejected at startup.
 - Redis is ephemeral (throttler window + `otp:ip` counters). A Redis restart
   just resets rate-limit windows — it does not fail liveness, so Swarm will not
   kill `web` over it.

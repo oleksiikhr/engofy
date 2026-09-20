@@ -24,10 +24,12 @@ x-nest-env: &nest-env
   NODE_ENV: production
   HOST: 0.0.0.0
   PORT: "8080"
-  # Sits behind exactly one proxy hop (cloudflared). 1 = trust the first
-  # X-Forwarded-For entry, so throttler / OTP counters / secure-cookie / Sentry
-  # see the real client IP, not the tunnel's. (src/core/helpers/trust-proxy.helper.ts)
-  TRUST_PROXY: "1"
+  # Reached only over the overlay network (nothing published, firewall denies
+  # inbound), so trust the private-range peer (cloudflared): the first
+  # X-Forwarded-For entry it adds is the real client IP that throttler / OTP
+  # counters / secure-cookie / Sentry see. Fastify rejects numeric hop counts.
+  # (src/core/helpers/trust-proxy.helper.ts)
+  TRUST_PROXY: uniquelocal
   MIKRO_ORM_HOST: postgres
   MIKRO_ORM_PORT: "5432"
   MIKRO_ORM_USER: engofy
