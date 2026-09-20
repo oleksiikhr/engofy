@@ -1264,6 +1264,56 @@ body {
   background: var(--tone-wash);
   color: var(--tone-ink);
 }
+.lex-popup__speak--sm {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: 0;
+  background: var(--color-paper);
+}
+.lex-popup__sentence {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-paper-soft);
+  color: var(--color-ink-soft);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.lex-popup__sentence:hover {
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+}
+.listen-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: 0.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-faint);
+  vertical-align: middle;
+  cursor: pointer;
+}
+.listen-btn:hover,
+.listen-btn[aria-pressed="true"] {
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+}
+.is-reading {
+  background: var(--color-brand-wash);
+  border-radius: 0.5rem;
+}
 .lex-popup__divider {
   margin: 0.9rem 0;
   border: 0;
@@ -1279,6 +1329,10 @@ body {
   font-size: 0.9rem;
 }
 .lex-popup__example {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   border-radius: 0.625rem;
   background: var(--color-paper-soft);

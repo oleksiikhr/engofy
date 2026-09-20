@@ -1,3 +1,5 @@
+import { speak } from './speech';
+
 // Browser-side behaviour shared by every page that renders a practice card
 // (/practice and the home page's daily-session step 2). Delegated on
 // `document`, so it survives HTMX swapping the card in and out.
@@ -19,14 +21,6 @@ function revealAnswer(revealBtn: HTMLElement): void {
   }
 }
 
-// 🔊 pronunciation, client-side only (Web Speech API) — no audio asset.
-function speak(text: string | undefined): void {
-  if (text && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-  }
-}
-
 document.addEventListener('click', (e) => {
   const target = e.target as Element | null;
   const revealBtn = target?.closest<HTMLElement>('.practice__reveal');
@@ -36,7 +30,9 @@ document.addEventListener('click', (e) => {
   }
   const speakBtn = target?.closest<HTMLElement>('.practice__speak');
   if (speakBtn) {
-    speak(speakBtn.dataset.speak);
+    if (speakBtn.dataset.speak) {
+      speak(speakBtn.dataset.speak);
+    }
   }
 });
 

@@ -111,10 +111,10 @@ status: in-progress
 З'ясувати, чи дублі «A Saturday Morning at the Market» і пост «Untitled» це dev-дані, чи баг інжесту
 (заголовок повторено в тілі), і виправити причину. Додати пошук і теми до списку Posts.
 
-### [ ] 10. Озвучення речення й абзацу
+### [x] 10. Озвучення речення й абзацу
 - Branch: `guest-reader-ux-overhaul-10-read-aloud`
-- Base: `guest-reader-ux-overhaul-09-posts-discovery`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/116
 
 Озвучення речення й абзацу в рідері, аудіо в граматичній картці. Спосіб (Web Speech API чи збережене
 аудіо) вирішити на початку зрізу.
