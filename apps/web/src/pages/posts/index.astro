@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { ApiError, apiGet, isBadRequest } from '../../lib/api';
 import {
   CEFR_LEVELS,
+  levelHintHtml,
   POST_TOPICS,
   POSTS_ERROR_HTML,
   POSTS_INVALID_HTML,
@@ -10,12 +11,24 @@ import {
   renderPostsResults,
   toApiQuery,
 } from '../../lib/posts-list';
+import { levelRange, pickedLevel, LEVEL_COOKIE } from '../../lib/reader-level';
 import { getCurrentUser } from '../../lib/session';
 import type { PostsListResponse } from '../../lib/types';
 
 const user = await getCurrentUser(Astro.request);
 
 const query = parsePostsQuery(Astro.url.searchParams);
+
+// A guest's picked level narrows the list to that level ±1 — unless chips are
+// chosen explicitly or the guest asked for everything (`?all=1`). The chips then
+// show the range, so the form matches what is listed.
+const levelDefault =
+  query.cefr.length === 0 && Astro.url.searchParams.get('all') !== '1'
+    ? levelRange(pickedLevel(Astro.cookies.get(LEVEL_COOKIE)?.value))
+    : [];
+if (levelDefault.length > 0) {
+  query.cefr = levelDefault;
+}
 
 let resultsHtml: string;
 // An error or invalid-query state must not be indexed as the page, nor may a
@@ -28,6 +41,10 @@ try {
     { request: Astro.request },
   );
   resultsHtml = renderPostsResults(view, query, user !== null);
+  if (levelDefault.length > 0) {
+    resultsHtml =
+      levelHintHtml(levelDefault, '/posts?all=1') + resultsHtml;
+  }
 } catch (error) {
   if (!(error instanceof ApiError)) {
     throw error;
@@ -197,6 +214,16 @@ try {
     padding: 0.5rem 1rem;
     font-weight: 700;
     cursor: pointer;
+  }
+  .level-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0 0 1rem;
+    font-weight: 700;
+  }
+  .level-hint__range {
+    color: var(--color-ink-soft);
   }
   .posts-empty {
     color: var(--color-ink-soft);
