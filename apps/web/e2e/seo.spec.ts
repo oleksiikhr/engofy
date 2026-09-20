@@ -84,3 +84,78 @@ test('service routes send X-Robots-Tag: noindex', async ({ request }) => {
   const page = await request.get('/pricing');
   expect(page.headers()['x-robots-tag']).toBeUndefined();
 });
+
+test.describe('sitemaps and robots.txt', () => {
+  async function xml(
+    request: import('@playwright/test').APIRequestContext,
+    path: string,
+  ): Promise<string> {
+    const res = await request.get(path);
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('application/xml');
+    return res.text();
+  }
+
+  test('/sitemap.xml indexes the static and posts sitemaps', async ({
+    request,
+  }) => {
+    const body = await xml(request, '/sitemap.xml');
+    expect(body).toContain('<sitemapindex');
+    expect(body).toMatch(/<loc>[^<]+\/sitemap\/static\.xml<\/loc>/);
+    expect(body).toMatch(/<loc>[^<]+\/sitemap\/posts\.xml<\/loc>/);
+  });
+
+  test('static sitemap lists public pages and grammar, without dictionary', async ({
+    request,
+  }) => {
+    const body = await xml(request, '/sitemap/static.xml');
+    expect(body).toContain('<urlset');
+    for (const path of ['/', '/posts', '/pricing', '/grammar']) {
+      expect(body).toMatch(new RegExp(`<loc>https?://[^/<]+${path}</loc>`));
+    }
+    expect(body).toMatch(/<loc>[^<]+\/grammar\/e2e-past-perfect<\/loc>/);
+    expect(body).not.toContain('/dictionary');
+    expect(body).not.toContain('<lastmod>');
+  });
+
+  test('posts sitemap index points at 0-based page files', async ({
+    request,
+  }) => {
+    const body = await xml(request, '/sitemap/posts.xml');
+    expect(body).toContain('<sitemapindex');
+    expect(body).toMatch(
+      /<loc>[^<]+\/sitemap\/posts-0\.xml<\/loc><lastmod>\d{4}-\d{2}-\d{2}T[^<]+<\/lastmod>/,
+    );
+  });
+
+  test('posts-0.xml lists published posts at their canonical URL with lastmod', async ({
+    request,
+  }) => {
+    const body = await xml(request, '/sitemap/posts-0.xml');
+    expect(body).toContain('<urlset');
+    expect(body).toMatch(
+      /<loc>[^<]+\/posts\/the-cartographer-at-dawn-E2Eread1<\/loc><lastmod>\d{4}-\d{2}-\d{2}T[^<]+<\/lastmod>/,
+    );
+  });
+
+  test('a posts sitemap page past the last one is 404', async ({ request }) => {
+    expect((await request.get('/sitemap/posts-99999.xml')).status()).toBe(404);
+    expect((await request.get('/sitemap/posts-abc.xml')).status()).toBe(404);
+  });
+
+  test('robots.txt disallows service routes and points at the sitemap', async ({
+    request,
+  }) => {
+    const res = await request.get('/robots.txt');
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('text/plain');
+    const body = await res.text();
+    expect(body).toContain('User-agent: *');
+    for (const path of ['/api/', '/partials/', '/logout']) {
+      expect(body).toContain(`Disallow: ${path}\n`);
+    }
+    // Crawlable so their `noindex` is read.
+    expect(body).not.toMatch(/Disallow: \/(login|profile|practice)/);
+    expect(body).toMatch(/^Sitemap: https?:\/\/[^\s]+\/sitemap\.xml$/m);
+  });
+});

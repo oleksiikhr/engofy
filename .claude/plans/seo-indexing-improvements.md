@@ -29,6 +29,8 @@ OG/Twitter, JSON-LD; усі пости мають однакову meta descript
 Якщо питань немає, прямо сказати про це і все одно дочекатися підтвердження старту.
 
 **Інше.**
+- Продакшена ще нема: жодних backfill, expand-contract, зворотної сумісності чи порядку деплою
+  web/API. Не питати про це в зрізах — ламати контракти можна.
 - Один зріз на виклик; окремий PR на кожен зріз.
 - Публічна origin береться з `PUBLIC_URL` (див. `apps/web/src/pages/sitemap.xml.ts`), не з
   `Astro.url.origin` (за reverse proxy він внутрішній).
@@ -77,24 +79,25 @@ lastmod }] }`, порядок `published_at ASC, id ASC`). Нова колонк
 - Що таке `updatedAt` для поста: чи є таке поле в entity, чи використовувати `publishedAt`?
 - Нові інтеграційні тести: за конвенціями `engofy` skill (`.ispec.ts`) — чи потрібен e2e?
 
-### [ ] 3. Sitemap і robots.txt
+### [x] 3. Sitemap і robots.txt
 - Branch: `seo-indexing-improvements-03-sitemap-robots`
-- Base: `seo-indexing-improvements-02-sitemap-api`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/101
 
-`sitemap.xml` розширюється: `/`, `/posts`, `/pricing`, граматика, усі пости з `<lastmod>`. Додається
-динамічний `robots.txt` (з `PUBLIC_URL`) із директивою `Sitemap:` і `Disallow` для `/api/`,
-`/partials/`, `/login`, `/logout`, `/profile`, `/practice`, `/account-deletion`.
+`/sitemap.xml` стає sitemap index (`<sitemapindex>`) з посиланнями на:
+- `/sitemap/static.xml` — `/`, `/posts`, `/pricing`, `/grammar` і всі `/grammar/{slug}` (без `<lastmod>`);
+- `/sitemap/posts.xml` — index постів (API `GET /content/sitemap/posts`);
+- `/sitemap/posts-{index}.xml` — сторінки постів по 50 000 з `<lastmod>`; `index` 0-based
+  (`posts-0.xml` — перші 50k, `posts-1.xml` — другі 50k), API `:page` 1-based, тобто `page = index + 1`.
+  URL поста — `postUrl()`.
 
-Питання перед кодом:
-- Що робити, якщо web задеплоїться раніше за API і нового ендпоінта ще немає (помилка sitemap чи
-  часткова відповідь без постів через `apiGetOrNull`)? Деплой — окремий `v*` тег.
-- Sitemap index одразу чи один файл, доки постів мало?
-- `robots.txt` статичний файл чи динамічний маршрут (origin береться з `PUBLIC_URL`)?
-- `Disallow` не забороняє індексацію за наявності зовнішніх посилань — чи покладатися на `noindex` зі
-  зрізу 1, і чи не суперечать вони одне одному (заблокований в robots URL не читає `noindex`)?
-- Кеш `cache-control` для sitemap (зараз 1 год) — лишити?
-- Що робити з `/dictionary` у sitemap (вимагає логіну)?
+Додається динамічний `robots.txt` (з `PUBLIC_URL`) із директивою `Sitemap:` і `Disallow` лише для
+`/api/`, `/partials/`, `/logout`; `/login`, `/profile`, `/practice`, `/account-deletion` лишаються
+crawlable, щоб читався їхній `noindex`. `/dictionary` у sitemap не входить.
+
+Рішення (обговорено): index одразу; `robots.txt` динамічний; `Disallow` лише для службових шляхів
+(`noindex` не конфліктує з robots); `cache-control: public, max-age=3600` лишається; `/dictionary` поза
+sitemap; `<lastmod>` лише для постів.
 
 ### [ ] 4. Сторінка поста: description, OG article, Article JSON-LD, BreadcrumbList
 - Branch: `seo-indexing-improvements-04-post-meta`

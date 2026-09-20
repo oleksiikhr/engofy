@@ -441,3 +441,11 @@ export interface DispositionResponse {
   id: string;
   disposition: 'known' | 'skipped';
 }
+
+export interface PostsSitemapIndex {
+  // `page` is 1-based, as `GET /content/sitemap/posts/:page` expects.
+  pages: { page: number; lastmod: string }[];
+}
+export interface PostsSitemapPage {
+  items: { slug: string | null; shortId: string; lastmod: string }[];
+}
