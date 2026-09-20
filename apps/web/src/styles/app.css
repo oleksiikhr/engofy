@@ -1261,8 +1261,8 @@ body {
    server (lib/render-tokens.ts); each mode is a value in html[data-reader-modes]
    (pos / tense / analyze), set before first paint by the boot script
    (lib/prefs.ts), so the modes, their pressed buttons and legends never wait
-   for hydration. Word types are a coloured underline; tense is a wash, so the
-   two stack. --- */
+   for hydration. Word types are a coloured underline; tense is a line above
+   the word, so the two stack and neither touches the highlight wash. --- */
 :root {
   --pos-noun: var(--color-blue);
   --pos-noun-ink: var(--color-blue-ink);
@@ -1272,9 +1272,11 @@ body {
   --pos-adj-ink: var(--color-success-ink);
   --pos-adv: var(--color-pink);
   --pos-adv-ink: var(--color-pink-ink);
-  --tense-past: var(--color-warning-wash);
-  --tense-present: var(--color-blue-wash);
-  --tense-future: var(--color-success-wash);
+  /* Tense is a line above the word, in hues the base highlight (amber and
+     blue wash) never uses. */
+  --tense-past: var(--color-pink);
+  --tense-present: var(--color-success);
+  --tense-future: var(--color-brand);
 }
 
 /* Article text size: html[data-reader-size] is set before first paint from
@@ -1393,10 +1395,6 @@ body {
   border-radius: 999px;
   background: var(--tone);
 }
-.reader-legend__item[data-tense]::before {
-  border: 1px solid var(--color-border-strong);
-  background: var(--tone-wash);
-}
 
 :root[data-reader-modes~="pos"] [data-tok][data-pos-group="noun"] {
   color: var(--pos-noun-ink);
@@ -1415,16 +1413,13 @@ body {
   border-bottom: 2px solid var(--pos-adv);
 }
 :root[data-reader-modes~="tense"] [data-tok][data-tense="past"] {
-  background: var(--tense-past);
+  box-shadow: inset 0 0.14em 0 0 var(--tense-past);
 }
 :root[data-reader-modes~="tense"] [data-tok][data-tense="present"] {
-  background: var(--tense-present);
+  box-shadow: inset 0 0.14em 0 0 var(--tense-present);
 }
 :root[data-reader-modes~="tense"] [data-tok][data-tense="future"] {
-  background: var(--tense-future);
-}
-:root[data-reader-modes~="tense"] [data-tok][data-tense] {
-  border-radius: 0.3rem;
+  box-shadow: inset 0 0.14em 0 0 var(--tense-future);
 }
 
 /* Analyze: each token becomes a small column — the word, its POS tag, and for
@@ -1488,6 +1483,146 @@ body {
 .lex-report--done {
   font-size: 0.75rem;
   color: var(--color-success);
+}
+
+/* --- Base highlight layer: hint, key and density. html[data-reader-density]
+   (focus = absent / all / off) and html[data-reader-hint="seen"] come from the
+   boot script (lib/prefs.ts), so none of this waits for hydration. `focus`
+   lights only labels without `data-quiet` (at or below the reader's level,
+   see lib/render-doc.ts); `all` lights every unsettled label; `off` none. --- */
+.reading-body :is([data-word-definition-id], [data-phrase-id], [data-grammar-usage-point-id]):not([data-known]):not([data-quiet]),
+:root[data-reader-density="all"] .reading-body :is([data-word-definition-id], [data-phrase-id], [data-grammar-usage-point-id]):not([data-known]) {
+  /* The negative margin cancels the padding, so a chip never pushes a
+     neighbouring apostrophe or quote away from its word. */
+  padding: 1px 0.08em;
+  margin-inline: -0.08em;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.reading-body :is([data-word-definition-id], [data-phrase-id]):not([data-known]):not([data-quiet]),
+:root[data-reader-density="all"] .reading-body :is([data-word-definition-id], [data-phrase-id]):not([data-known]) {
+  background: var(--color-word);
+}
+.reading-body [data-grammar-usage-point-id]:not([data-known]):not([data-quiet]),
+:root[data-reader-density="all"] .reading-body [data-grammar-usage-point-id]:not([data-known]) {
+  background: var(--color-gram);
+}
+:root[data-reader-density="off"] .reading-body :is([data-word-definition-id], [data-phrase-id], [data-grammar-usage-point-id]) {
+  padding: 0;
+  margin-inline: 0;
+  background: none;
+  color: inherit;
+  font-weight: inherit;
+}
+.reading-body [data-known]:hover,
+.reading-body [data-known]:focus-visible,
+:root:not([data-reader-density="all"]) .reading-body [data-quiet]:hover,
+:root:not([data-reader-density="all"]) .reading-body [data-quiet]:focus-visible,
+:root[data-reader-density="off"] .reading-body :is([data-word-definition-id], [data-phrase-id], [data-grammar-usage-point-id]):hover {
+  background: var(--color-paper-soft);
+}
+.reader-hint {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin: 0 0 1rem;
+  transition:
+    grid-template-rows 0.25s ease,
+    margin-bottom 0.25s ease,
+    opacity 0.2s ease;
+}
+/* Dismissing collapses the hint to nothing over a quarter second instead of
+   yanking the article up in one frame (see lib/reader-help.ts). */
+.reader-hint.is-closing {
+  grid-template-rows: 0fr;
+  margin-bottom: 0;
+  opacity: 0;
+}
+.reader-hint__clip {
+  min-height: 0;
+  overflow: hidden;
+}
+.reader-hint__body {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.75rem;
+  background: var(--color-word);
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+:root[data-reader-hint="seen"] .reader-hint {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reader-hint {
+    transition: none;
+  }
+}
+.reader-hint__close {
+  margin-left: auto;
+  flex: none;
+  padding: 0.3rem 0.75rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.reader-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.125rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-ink-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.reader-key__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.reader-key__chip {
+  width: 1.5rem;
+  height: 0.85rem;
+  border-radius: 0.3rem;
+}
+.reader-key__chip--word {
+  background: var(--color-word);
+}
+.reader-key__chip--gram {
+  background: var(--color-gram);
+}
+.reader-key__density {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+.reader-key__opt {
+  min-height: 2rem;
+  padding: 0.2rem 0.7rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-soft);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+:root:not([data-reader-density]) .reader-key__opt[data-density="focus"],
+:root[data-reader-density="all"] .reader-key__opt[data-density="all"],
+:root[data-reader-density="off"] .reader-key__opt[data-density="off"] {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
 /* --- Study mode + final screen (reader-study.ts / reader-final.ts). Study is a

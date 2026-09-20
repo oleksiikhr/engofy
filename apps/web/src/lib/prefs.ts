@@ -12,6 +12,15 @@ export type Theme = (typeof THEMES)[number];
 export const READER_MODES = ['pos', 'tense', 'analyze'] as const;
 export type ReaderMode = (typeof READER_MODES)[number];
 
+// Which unsettled words, phrases and grammar patterns carry a highlight:
+// `focus` = only those above the reader's level, `all`, or `off`.
+export const READER_DENSITIES = ['focus', 'all', 'off'] as const;
+export type ReaderDensity = (typeof READER_DENSITIES)[number];
+
+// `seen` once the reader dismissed the "tap a highlight" hint.
+export const READER_HINTS = ['new', 'seen'] as const;
+export type ReaderHint = (typeof READER_HINTS)[number];
+
 export const READER_SIZE_STEPS = 6;
 export const DEFAULT_READER_SIZE = 2;
 
@@ -19,6 +28,8 @@ interface PrefTypes {
   theme: Theme;
   readerModes: ReaderMode[];
   readerSize: number;
+  readerDensity: ReaderDensity;
+  readerHint: ReaderHint;
 }
 export type PrefName = keyof PrefTypes;
 
@@ -29,6 +40,8 @@ const SPEC = {
   theme: { key: 'theme', attr: 'theme' },
   readerModes: { key: 'reader-modes', attr: 'readerModes' },
   readerSize: { key: 'reader-size', attr: 'readerSize' },
+  readerDensity: { key: 'reader-density', attr: 'readerDensity' },
+  readerHint: { key: 'reader-hint', attr: 'readerHint' },
 } as const satisfies Record<PrefName, { key: string; attr: string }>;
 
 function parse<N extends PrefName>(
@@ -50,6 +63,14 @@ function parse(name: PrefName, raw: string | null): PrefTypes[PrefName] | null {
         ? (modes as ReaderMode[])
         : null;
     }
+    case 'readerDensity':
+      return (READER_DENSITIES as readonly string[]).includes(raw)
+        ? (raw as ReaderDensity)
+        : null;
+    case 'readerHint':
+      return (READER_HINTS as readonly string[]).includes(raw)
+        ? (raw as ReaderHint)
+        : null;
     case 'readerSize': {
       const size = Number(raw);
       return Number.isInteger(size) && size >= 0 && size < READER_SIZE_STEPS
@@ -72,6 +93,8 @@ const DEFAULTS: PrefTypes = {
   theme: 'auto',
   readerModes: [],
   readerSize: DEFAULT_READER_SIZE,
+  readerDensity: 'focus',
+  readerHint: 'new',
 };
 
 function stored(name: PrefName): string | null {
@@ -122,9 +145,19 @@ export function bootScript(): string {
       steps: READER_SIZE_STEPS,
       off: String(DEFAULT_READER_SIZE),
     },
+    readerDensity: {
+      ...SPEC.readerDensity,
+      values: READER_DENSITIES,
+      off: DEFAULTS.readerDensity,
+    },
+    readerHint: {
+      ...SPEC.readerHint,
+      values: READER_HINTS,
+      off: DEFAULTS.readerHint,
+    },
   };
   return `try{var d=document.documentElement.dataset,s=${JSON.stringify(spec)},g=function(k){return localStorage.getItem(k)};
-var t=g(s.theme.key);if(t&&t!==s.theme.off&&s.theme.values.indexOf(t)>-1)d[s.theme.attr]=t;
+["theme","readerDensity","readerHint"].forEach(function(n){var c=s[n],v=g(c.key);if(v&&v!==c.off&&c.values.indexOf(v)>-1)d[c.attr]=v});
 var m=g(s.readerModes.key);if(m){var l=m.split(" ").filter(Boolean);if(l.length&&l.every(function(x){return s.readerModes.values.indexOf(x)>-1}))d[s.readerModes.attr]=l.join(" ")}
 var z=g(s.readerSize.key);if(z&&z!==s.readerSize.off&&/^[0-9]+$/.test(z)&&+z<s.readerSize.steps)d[s.readerSize.attr]=z}catch(e){}`;
 }

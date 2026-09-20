@@ -38,6 +38,76 @@ test.describe('reader page (guest)', () => {
     await expect(page.locator('.sidebar')).toHaveCount(0);
   });
 
+  test('shows the tap hint and highlight key, and the hint stays dismissed', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const hint = page.locator('.reader-hint');
+    await expect(hint).toBeVisible();
+    await expect(page.locator('.reader-key')).toContainText('Grammar');
+
+    // Dismissing collapses the hint; the article must glide, not jump.
+    await page.evaluate(() => {
+      const w = window as unknown as { __ys: number[] };
+      w.__ys = [];
+      const sample = () => {
+        w.__ys.push(
+          document.querySelector('.reading-body')?.getBoundingClientRect()
+            .top ?? 0,
+        );
+        requestAnimationFrame(sample);
+      };
+      sample();
+    });
+    await hint.getByRole('button', { name: 'Dismiss hint' }).click();
+    await expect(hint).toBeHidden();
+    const ys = await page.evaluate(
+      () => (window as unknown as { __ys: number[] }).__ys,
+    );
+    const steps = ys.slice(1).map((y, i) => Math.abs(y - ys[i]));
+    expect(ys.at(-1)).toBeLessThan(ys[0]);
+    expect(Math.max(...steps)).toBeLessThan(25);
+    await page.reload();
+    await expect(hint).toBeHidden();
+  });
+
+  test('highlight density switches between new-for-me, all and none', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const word = reader.wordLabel('perambulate');
+    const paint = () =>
+      word.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const key = page.locator('.reader-key');
+
+    // The seeded word is above the guest's level: highlighted by default.
+    const lit = await paint();
+    expect(lit).not.toBe('rgba(0, 0, 0, 0)');
+
+    await key.getByRole('button', { name: 'None' }).click();
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-reader-density',
+      'off',
+    );
+    expect(await paint()).toBe('rgba(0, 0, 0, 0)');
+
+    await key.getByRole('button', { name: 'All' }).click();
+    expect(await paint()).toBe(lit);
+
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-reader-density',
+      'all',
+    );
+    await key.getByRole('button', { name: 'New for me' }).click();
+    await expect(page.locator('html')).not.toHaveAttribute(
+      'data-reader-density',
+      /.*/,
+    );
+  });
+
   test('opens an anchored popup on a word without shifting the article', async ({
     page,
   }) => {
@@ -236,17 +306,16 @@ test.describe('reader page (guest)', () => {
       'data-pos-group',
       'adv',
     );
-    // POS mode alone paints no tense colour.
+    // POS mode alone paints no tense line.
     const ended = reader.token('ended');
     await expect(ended).toHaveAttribute('data-tense', 'past');
     const posOnly = await ended.evaluate(
-      (el) => getComputedStyle(el).backgroundColor,
+      (el) => getComputedStyle(el).boxShadow,
     );
+    expect(posOnly).toBe('none');
     await reader.modeToggle('Tenses').click();
-    const both = await ended.evaluate(
-      (el) => getComputedStyle(el).backgroundColor,
-    );
-    expect(both).not.toBe(posOnly);
+    const both = await ended.evaluate((el) => getComputedStyle(el).boxShadow);
+    expect(both).not.toBe('none');
 
     // The article's own text is untouched by the wrapping.
     await expect(reader.analysis).toContainText(

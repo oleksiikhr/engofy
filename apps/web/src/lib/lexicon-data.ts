@@ -29,6 +29,9 @@ export function buildLexiconData(
   const contrast = contrastByUsagePoint(exercises);
   const data: LexiconData = { words: {}, phrases: {}, grammar: {} };
   for (const w of Object.values(annotations.words)) {
+    if (w.pos === 'proper_noun') {
+      continue;
+    }
     data.words[w.wordDefinitionId] = {
       kind: 'word',
       id: w.wordDefinitionId,
