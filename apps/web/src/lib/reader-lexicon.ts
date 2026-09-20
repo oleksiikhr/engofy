@@ -47,7 +47,7 @@ export const LEXICON_ACTION_MESSAGE = {
 
 const PLUS_ICON =
   '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
-const SPEAK_ICON =
+export const SPEAK_ICON =
   '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>';
 
 export type LexiconTarget =
@@ -193,6 +193,12 @@ function topRowHtml(kicker: string, toggle: string): string {
   return `<div class="lex-popup__top"><p class="lex-popup__kicker">${esc(kicker)}</p>${toggle}</div>`;
 }
 
+// An example sentence with a button that reads it aloud.
+function exampleHtml(example: string): string {
+  const text = shortExample(example);
+  return `<p class="lex-popup__example"><span>${esc(text)}</span><button type="button" class="lex-popup__speak lex-popup__speak--sm" data-speak="${esc(text)}" aria-label="Read the example aloud">${SPEAK_ICON}</button></p>`;
+}
+
 function lexiconSectionHtml(
   entry: LexiconEntry,
   slugId: string,
@@ -220,7 +226,7 @@ function lexiconSectionHtml(
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
   ${translation ? `<p class="lex-popup__translation" lang="${esc(lang)}">${esc(translation)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
-  ${entry.example ? `<p class="lex-popup__example">${esc(shortExample(entry.example))}</p>` : ''}
+  ${entry.example ? exampleHtml(entry.example) : ''}
   ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
   ${reportRowHtml({ kind: entry.kind, id: entry.id }, slugId)}
 </section>`;
@@ -246,7 +252,7 @@ function grammarSectionHtml(
   </div>
   ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
   ${explanation}
-  ${entry.examples[0] ? `<p class="lex-popup__example">${esc(shortExample(entry.examples[0]))}</p>` : ''}
+  ${entry.examples[0] ? exampleHtml(entry.examples[0]) : ''}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${lexiconActionsHtml({ kind: 'grammar', id: entry.id }, entry.state)}
   ${reportRowHtml({ kind: 'grammar', id: entry.id }, slugId)}

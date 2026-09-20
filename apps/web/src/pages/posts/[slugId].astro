@@ -323,6 +323,7 @@ const isRead = post.isRead ?? false;
   import { initReaderFinal } from '../../lib/reader-final';
   import { initReadState } from '../../lib/reader-read';
   import { initReaderHelp } from '../../lib/reader-help';
+  import { initReaderListen } from '../../lib/reader-listen';
   import { initLevelNote } from '../../lib/reader-level-note';
   import { initReaderPopup } from '../../lib/reader-popup';
   import { initReaderProgress } from '../../lib/reader-progress';
@@ -334,6 +335,9 @@ const isRead = post.isRead ?? false;
   const lexicon: LexiconData | null = raw ? JSON.parse(raw) : null;
   if (body && lexicon) {
     initReaderPopup(body, lexicon);
+  }
+  if (body) {
+    initReaderListen(body);
   }
   const progress = document.querySelector<HTMLElement>('[data-reader-progress]');
   if (body && progress) {

@@ -9,8 +9,11 @@ import {
   lexiconActionsHtml,
   lexiconActionsId,
   readerPopupHtml,
+  SPEAK_ICON,
   TARGET_FIELD,
 } from './reader-lexicon';
+import { speakSentenceAt } from './reader-listen';
+import { speak, speechSupported } from './speech';
 import type { EffectiveState } from './types';
 
 // Client controller for the reader's anchored popup. One popup element,
@@ -191,8 +194,17 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       slugId,
       lang,
     );
-    if (!('speechSynthesis' in window)) {
-      popup.querySelector('.lex-popup__speak')?.remove();
+    if (speechSupported()) {
+      popup
+        .querySelector('.lex-popup__head')
+        ?.insertAdjacentHTML(
+          'afterend',
+          `<button type="button" class="lex-popup__sentence" data-speak-sentence>${SPEAK_ICON}Read the sentence</button>`,
+        );
+    } else {
+      for (const button of popup.querySelectorAll('[data-speak]')) {
+        button.remove();
+      }
     }
     popup.hidden = false;
     window.htmx?.process(popup);
@@ -289,14 +301,14 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       event.stopPropagation();
       return;
     }
-    const speak = (event.target as Element).closest('[data-speak]');
-    if (speak && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(
-        speak.getAttribute('data-speak') ?? '',
-      );
-      utterance.lang = 'en-US';
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+    const speakButton = (event.target as Element).closest('[data-speak]');
+    if (speakButton) {
+      speak(speakButton.getAttribute('data-speak') ?? '');
+    } else if (
+      active &&
+      (event.target as Element).closest('[data-speak-sentence]')
+    ) {
+      speakSentenceAt(active);
     }
   });
 

@@ -182,7 +182,7 @@ test.describe('reader page (guest)', () => {
     await reader.wordLabel('perambulate').click();
     await expect(translation).toHaveText('прогулюватися, прогулюватись');
 
-    await reader.popup.getByRole('button', { name: 'EN' }).click();
+    await reader.popup.getByRole('button', { name: 'EN', exact: true }).click();
     await expect(translation).toHaveCount(0);
   });
 
