@@ -21,6 +21,7 @@ import { PostQueueBootstrapService } from './post-queue-bootstrap.service.js';
 import { GetGrammarConstructionHandler } from './queries/get-grammar-construction/get-grammar-construction.handler.js';
 import { GetGrammarReferenceHandler } from './queries/get-grammar-reference/get-grammar-reference.handler.js';
 import { GetPostDetailHandler } from './queries/get-post-detail/get-post-detail.handler.js';
+import { GetPostPipelineStatusHandler } from './queries/get-post-pipeline-status/get-post-pipeline-status.handler.js';
 import { GetPostSuggestionsHandler } from './queries/get-post-suggestions/get-post-suggestions.handler.js';
 import { GetPostsListHandler } from './queries/get-posts-list/get-posts-list.handler.js';
 
@@ -42,6 +43,7 @@ const queryHandlers = [
   GetPostsListHandler,
   GetPostSuggestionsHandler,
   GetPostDetailHandler,
+  GetPostPipelineStatusHandler,
   GetGrammarReferenceHandler,
   GetGrammarConstructionHandler,
 ];
