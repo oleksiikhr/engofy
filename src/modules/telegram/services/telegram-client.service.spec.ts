@@ -14,6 +14,7 @@ function client(
     botToken: 'BOT:TOKEN',
     adminUserId: '',
     channelId: '',
+    stuckPostMinutes: 15,
     apiBaseUrl: 'https://tg.test',
     ...overrides,
   });

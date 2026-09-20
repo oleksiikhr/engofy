@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import { envString } from '../../../core/helpers/env.helper.js';
+import { envNumber, envString } from '../../../core/helpers/env.helper.js';
 
 // Admin bot (PLAN.md §3.9): a single operator drives content ingestion and
 // pipeline reruns from a Telegram chat, and published posts are announced to
@@ -13,5 +13,8 @@ export default registerAs('telegram', () => ({
   // Channel/chat id the publish cron posts announcements to (e.g. "@engofy"
   // or "-1001234567890").
   channelId: envString('TELEGRAM_CHANNEL_ID', ''),
+  // A `processing` post with no pipeline activity for this long alerts the
+  // admin chat as stuck.
+  stuckPostMinutes: envNumber('TELEGRAM_STUCK_POST_MINUTES', 15),
   apiBaseUrl: envString('TELEGRAM_API_BASE_URL', 'https://api.telegram.org'),
 }));

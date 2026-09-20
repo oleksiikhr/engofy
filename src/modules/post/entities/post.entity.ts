@@ -75,6 +75,12 @@ export class Post {
   @Property({ type: LuxonTimestampType, nullable: true })
   publishNotifiedAt?: DateTime | null;
 
+  // When the admin was last told this post is stuck in `processing`. The alert
+  // is owed again only once pipeline activity newer than this stamp goes idle,
+  // so a post is not re-alerted every tick and a `retry` needs no reset.
+  @Property({ type: LuxonTimestampType, nullable: true })
+  stuckNotifiedAt?: DateTime | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 
