@@ -104,22 +104,35 @@ function renderInline(
   ctx: RenderContext,
   unit: UnitTokens,
 ): string {
-  const html = renderNode(node, ctx, unit);
-  return wrapMarks(
-    node.grammarUsagePointId
-      ? `<span data-grammar-usage-point-id="${esc(node.grammarUsagePointId)}"${ctx.settledGrammar.has(node.grammarUsagePointId) ? KNOWN_ATTR : ''}>${html}</span>`
-      : html,
-    node.marks,
-  );
+  return wrapMarks(renderNode(node, ctx, unit), node.marks);
 }
 
+// Consecutive nodes of one grammar usage point share a single wrapper: the
+// word/phrase spans inside a match cut it into pieces, and a piece holding only
+// the space between two spans would otherwise render as an empty chip.
 function renderChildren(
   children: InlineNode[],
   ctx: RenderContext,
   tokens: ReaderToken[] | undefined,
 ): string {
   const unit = unitTokens(tokens);
-  return children.map((child) => renderInline(child, ctx, unit)).join('');
+  let out = '';
+  for (let i = 0; i < children.length; ) {
+    const id = children[i].grammarUsagePointId;
+    let end = i + 1;
+    while (id && children[end]?.grammarUsagePointId === id) {
+      end++;
+    }
+    const html = children
+      .slice(i, end)
+      .map((child) => renderInline(child, ctx, unit))
+      .join('');
+    out += id
+      ? `<span data-grammar-usage-point-id="${esc(id)}"${ctx.settledGrammar.has(id) ? KNOWN_ATTR : ''}>${html}</span>`
+      : html;
+    i = end;
+  }
+  return out;
 }
 
 // `data-block` / `data-item` carry the block's index in Doc.children and a
