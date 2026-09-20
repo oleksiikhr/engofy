@@ -52,10 +52,10 @@ status: in-progress
 тултіпи. Керування щільністю: за замовчуванням лише слова вище рівня читача. Власні назви («Maria») без
 картки. Залежить від зрізу 1, бо змінює ті самі стилі та токени.
 
-### [ ] 3. Мобільний макет рідера
+### [x] 3. Мобільний макет рідера
 - Branch: `guest-reader-ux-overhaul-03-mobile-reader-layout`
-- Base: `guest-reader-ux-overhaul-02-reader-onboarding-legend`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/109
 
 Навігація в один рядок, компактний тулбар (прокрутка або іконки), перший абзац тексту над фолдом на
 390px. Скріншоти до/після в PR.
