@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { DateTime } from 'luxon';
+import { seedPost } from '../../../../../test/helpers/seed-post.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Subscription } from '../../../billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.js';
@@ -40,6 +41,7 @@ describe('DeleteExpiredAccountsService', () => {
     const { em } = suite.orm;
     const user = em.create(User, { email: `user-${randomUUID()}@example.com` });
     const userId = user.id;
+    const post = await seedPost(em);
     const card = em.create(LearningCard, {
       userId,
       wordDefinitionId: randomUUID(),
@@ -72,7 +74,7 @@ describe('DeleteExpiredAccountsService', () => {
     em.create(DailyPlan, {
       userId,
       planDate: DateTime.now().startOf('day'),
-      postId: randomUUID(),
+      postId: post.id,
     });
     em.create(Subscription, {
       userId,

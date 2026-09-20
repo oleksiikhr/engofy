@@ -575,7 +575,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "daily_plans_post_id_foreign": {
+          "columnNames": [
+            "post_id"
+          ],
+          "constraintName": "daily_plans_post_id_foreign",
+          "localTableName": "public.daily_plans",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {

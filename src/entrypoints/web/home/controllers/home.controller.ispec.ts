@@ -96,6 +96,24 @@ describe('HomeController', () => {
     expect(second.body).toEqual(first.body);
   });
 
+  it("re-selects today's plan when its post was deleted", async () => {
+    const cookie = await login(suite.orm.em);
+    const deleted = await seedPost(suite.orm.em);
+    await suite
+      .request('get', '/home/daily-plan')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+
+    await suite.orm.em.nativeDelete(Post, { id: deleted.id });
+    const replacement = await seedPost(suite.orm.em);
+
+    const res = await suite
+      .request('get', '/home/daily-plan')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(res.body).toMatchObject({ postShortId: replacement.shortId });
+  });
+
   it('rejects an unauthenticated cards request', async () => {
     await suite
       .request('get', '/home/daily-plan/cards')

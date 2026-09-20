@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { seedPost } from '../../../../../test/helpers/seed-post.helper.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { DailyPlan } from '../../entities/daily-plan.entity.js';
 import { DailyPlanNotFoundError } from '../../errors/daily-plan-not-found.error.js';
@@ -17,10 +18,11 @@ describe('CompleteDailyPlanHandler', () => {
 
   it('sets completedAt on the first call', async () => {
     const userId = uuidv7();
+    const post = await seedPost(suite.orm.em);
     suite.orm.em.create(DailyPlan, {
       userId,
       planDate: DateTime.now(),
-      postId: uuidv7(),
+      postId: post.id,
       grammarUsagePointId: null,
     });
     await suite.orm.em.flush();
@@ -36,10 +38,11 @@ describe('CompleteDailyPlanHandler', () => {
 
   it('is idempotent — a second call keeps the first completion time', async () => {
     const userId = uuidv7();
+    const post = await seedPost(suite.orm.em);
     suite.orm.em.create(DailyPlan, {
       userId,
       planDate: DateTime.now(),
-      postId: uuidv7(),
+      postId: post.id,
       grammarUsagePointId: null,
     });
     await suite.orm.em.flush();

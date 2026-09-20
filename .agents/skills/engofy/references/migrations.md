@@ -12,6 +12,7 @@
 | MG4 | History is **immutable once a `v*` tag has shipped** — never edit a shipped migration; rename/rework via a new one. Before the first deploy the history is a single initial migration: regenerate it (`migration:create --initial` on an empty DB) instead of stacking alters. | `Migration20260919151755.ts` |
 | MG5 | Idempotent **data** imports (EGP, irregular verbs, word frequency) are CLI commands keyed by a natural key (`egpIndex`, `lower(lemma)`), **not** migrations. | `entrypoints/cli/grammar/*` |
 | MG6 | `.snapshot-engofy.json` is tracked; under **test** `snapshot:false` (schema is dropped + all migrations replayed from zero per worker process). | `mikro-orm.setup.ts:36`; `test/setup/migration-guard.helper.ts` |
+| MG7 | Adding an FK to a table that may hold orphans: in the same migration, `delete from "<child>" where "<fk>" not in (select "id" from "<parent>");` **before** the `add constraint ... foreign key`. Nullable FK → `update ... set "<fk>" = null` instead of delete when the row is still meaningful. Generate with `migration:create`, then insert the delete `addSql` above the generated constraint. | `Migration20260920124054.ts` |
 
 ## D17 — `migration:check` (done, Batch D)
 
