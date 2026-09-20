@@ -3,6 +3,30 @@
 NestJS backend (fastify, MikroORM/Postgres, pg-boss for queues). These rules are
 project-wide and override generic defaults.
 
+## apps/web: no layout shift after load
+
+Content that jumps after first paint hurts SEO (Cumulative Layout Shift is a Core Web Vital) and reads
+as a glitch. Any element that appears, disappears or changes size once page scripts run must not move
+what is already on screen. Pick one:
+
+1. **Known before paint** — server-rendered state (cookie, session, DB) is rendered into the HTML.
+   Never render a placeholder and let JS fill in something the server already knows.
+2. **localStorage-only state** (the server can't see it) — a tiny self-contained inline script in
+   `<head>` copies it onto `<html data-*>` before first paint, and CSS shows/hides/sizes the element
+   from that attribute. Reference: `lib/prefs.ts` `bootScript()` (theme, reader prefs) and
+   `lib/guest-boot.ts` `guestBootScript()` (guest nudge, explored count), both inlined in
+   `Layout.astro`. Component logic stays in the deferred scripts; they only keep the attribute in
+   step afterwards. Attributes on `<html>` must not collide with element selectors — give the element
+   its own marker (`data-nudge`), not the same name as the attribute.
+3. **Out of flow** — an element that can't be known before paint (toast, banner after a user action,
+   popup) is `position: fixed`/`absolute` so it overlays instead of pushing content. Changes caused by
+   the user's own action (a click) may reflow; ones caused by page load may not.
+
+Reserve the space (`visibility: hidden`, fixed `min-height`) rather than `display: none` → `block`
+when only the text arrives late. When adding such an element, add an e2e check like the "does not
+shift when scripts run" test in `e2e/reader-guest.spec.ts`: block `**/_astro/**`, seed the storage,
+and compare the position of the content below with scripts on and off.
+
 ## Skills
 
 Every skill's real file lives in `.agents/skills/<name>/SKILL.md`; `.claude/skills/<name>` is always
