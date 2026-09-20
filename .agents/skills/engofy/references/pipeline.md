@@ -11,6 +11,8 @@ flowchart LR
   sp -->|fan-out| cx["ai_complexity\npost-ai-complexity"]
   cx --> gr["ai_grammar\npost-ai-grammar"]
   gr --> ex["ai_exercises\npost-ai-exercises"]
+  gr --> ge["grammar_enrichment\npost-ai-grammar-enrichment"]
+  ge --> pub
   ex --> pub["publish\npost-publish"]
   ann -->|"gate: no-op + re-queue\nuntil Annotation Completed (D6)"| pub
 ```
@@ -45,6 +47,16 @@ flowchart LR
   `{ grammarUsagePointId, sentenceId, explanation, question, options,
   answerIndex, optionExplanations }`. `ExerciseType.Comprehension` is no longer
   generated; existing rows are left in place.
+- `grammar_enrichment` is a branch off `ai_grammar` completion (parallel to
+  `ai_exercises`; `TagGrammarHandler` enqueues both). It gap-fills
+  `grammar_usage_points.learner_explanation` / `learner_examples` for the usage
+  points the post matched (`grammar_matches` via the post's sentences) that still
+  have `learner_explanation IS NULL` — one `completeStructured` call per point,
+  flat fields (AI7), one retry on `AiSchemaMismatchError`, then the point is
+  skipped (left null). An empty pending set completes with zero AI calls.
+  `publish` gates on it together with `annotation` and `enrichment`
+  (`GATE_STAGES`). Learner surfaces read `learnerExplanation` / `learnerExamples`;
+  `exampleText` (raw EGP snippet) is import data and is not exposed.
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
   `PostPipelineStage` starts at `SpacyParse`; `'fetch'` is not in
   `post_pipeline_runs_stage_check`.

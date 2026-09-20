@@ -70,7 +70,8 @@ export class GetGrammarConstructionHandler
         cefrLevel: point.cefrLevel,
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
-        exampleText: point.exampleText ?? null,
+        explanation: point.learnerExplanation ?? null,
+        examples: point.learnerExamples ?? [],
         state,
         // Untouched but at or below the learner's own level — shown as
         // "Assumed known", never counted as learned.

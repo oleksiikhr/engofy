@@ -27,7 +27,7 @@ describe('GetDailyPlanHandler', () => {
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: HABITS',
       canDoStatement: 'Can talk about habits.',
-      exampleText: 'She usually walks to work.',
+      learnerExamples: ['She usually walks to work.'],
     });
     await suite.orm.em.flush();
 

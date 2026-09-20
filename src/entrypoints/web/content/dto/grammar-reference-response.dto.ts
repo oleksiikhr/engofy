@@ -10,6 +10,10 @@ export class GrammarReferenceConstructionDto {
 
   readonly usagePointCount!: number;
 
+  // Learner explanation of the construction's easiest usage point; null until
+  // the grammar_enrichment stage has covered it.
+  readonly summary!: string | null;
+
   // Collapsed from the learner's own cards/dispositions across the usage
   // points (no CEFR default). EffectiveState.New for a guest or a construction
   // with no cards/dispositions.

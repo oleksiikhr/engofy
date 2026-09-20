@@ -6,7 +6,8 @@ export interface ConstructionUsagePointView {
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
-  exampleText: string | null;
+  explanation: string | null;
+  examples: string[];
   // Per-point, not collapsed (unlike the reference list's construction-level
   // badge): gates that point's own "+ Add to deck" button. From the learner's
   // own cards/dispositions only — New for a guest or an untouched point.

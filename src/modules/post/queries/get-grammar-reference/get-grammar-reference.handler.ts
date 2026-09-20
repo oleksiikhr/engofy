@@ -115,6 +115,7 @@ export class GetGrammarReferenceHandler
         name: construction.name,
         cefrLevel: easiestLevel(points),
         usagePointCount: points.length,
+        summary: easiestPoint(points)?.learnerExplanation ?? null,
         state: progress?.state ?? EffectiveState.New,
         learnedCount: progress?.learnedCount,
       });
@@ -193,11 +194,12 @@ interface ConstructionProgress {
   learnedCount: number;
 }
 
-function easiestLevel(points: GrammarUsagePoint[]) {
-  if (points.length === 0) {
-    return null;
-  }
+function easiestPoint(points: GrammarUsagePoint[]) {
   return [...points].sort(
     (a, b) => cefrRank(a.cefrLevel) - cefrRank(b.cefrLevel),
-  )[0].cefrLevel;
+  )[0];
+}
+
+function easiestLevel(points: GrammarUsagePoint[]) {
+  return easiestPoint(points)?.cefrLevel ?? null;
 }

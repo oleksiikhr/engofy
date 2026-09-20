@@ -189,7 +189,7 @@ test.describe('reader page (guest)', () => {
     await expect(reader.knownLabel('word', 'perambulate')).toHaveCount(1);
   });
 
-  test('opens a grammar popup with guideword, can-do and example', async ({
+  test('opens a grammar popup with guideword, explanation and example', async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
@@ -205,10 +205,10 @@ test.describe('reader page (guest)', () => {
     );
     await expect(section.locator('.lex-popup__sub')).toHaveText('Earlier past');
     await expect(section.locator('.lex-popup__def')).toContainText(
-      'one past action happened before another',
+      'which of two past actions happened first',
     );
-    await expect(section.locator('.lex-popup__example')).toContainText(
-      'she had drawn every coastline',
+    await expect(section.locator('.lex-popup__example')).toHaveText(
+      'She had drawn the map before he arrived.',
     );
     await expect(reader.popupSection('word')).toHaveCount(0);
 

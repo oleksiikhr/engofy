@@ -99,7 +99,7 @@ export async function resolveCardTargets(
       phonetic: null,
       contextSentence: null,
       kicker,
-      exampleText: point.exampleText ?? null,
+      exampleText: point.learnerExamples?.[0] ?? null,
       detailSlug: slug,
     });
   }

@@ -74,7 +74,7 @@ function termChipsHtml(terms: { id: string; label: string }[]): string {
 function checkinHtml(entry: GrammarLexiconEntry): string {
   return `<details class="study-panel__checkin">
   <summary>Grammar check-in: ${esc(entry.guideword)}</summary>
-  <p>${esc(entry.canDoStatement)}</p>
+  <p>${esc(entry.explanation ?? entry.canDoStatement)}</p>
   ${entry.contrast ? `<p><b>Why this form?</b> ${esc(entry.contrast)}</p>` : ''}
 </details>`;
 }

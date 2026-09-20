@@ -6,6 +6,7 @@ export enum QueueName {
   PostAiComplexity = 'post-ai-complexity',
   PostAiGrammar = 'post-ai-grammar',
   PostAiEnrichment = 'post-ai-enrichment',
+  PostAiGrammarEnrichment = 'post-ai-grammar-enrichment',
   PostAiExercises = 'post-ai-exercises',
   PostPublish = 'post-publish',
 }

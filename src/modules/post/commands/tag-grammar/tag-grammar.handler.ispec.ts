@@ -171,6 +171,14 @@ describe('TagGrammarHandler', () => {
       stage: PostPipelineStage.AiGrammar,
     });
     expect(run.status).toBe(PostPipelineRunStatus.Completed);
+    queue.assertSent(
+      QueueName.PostAiGrammarEnrichment,
+      (data: { postId: string }) => data.postId === postId,
+    );
+    queue.assertSent(
+      QueueName.PostAiExercises,
+      (data: { postId: string }) => data.postId === postId,
+    );
   });
 
   it('drops a span whose usage-point index does not belong to the tagged construction', async () => {
@@ -230,6 +238,7 @@ describe('TagGrammarHandler', () => {
       (data) => data.postId === postId,
     );
     queue.assertNotSent(QueueName.PostAiExercises);
+    queue.assertNotSent(QueueName.PostAiGrammarEnrichment);
   });
 
   it('paints the construction slug onto the post part node tree', async () => {

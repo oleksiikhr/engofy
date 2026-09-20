@@ -7,6 +7,9 @@ export interface GrammarReferenceConstructionView {
   // Easiest CEFR level among the construction's usage points.
   cefrLevel: CefrLevel | null;
   usagePointCount: number;
+  // Learner explanation of the construction's easiest usage point; null until
+  // the grammar_enrichment stage has covered it.
+  summary: string | null;
   // Collapsed from the learner's own cards/dispositions across the usage
   // points (no CEFR default): Learned when all are resolved, Learning when
   // some are, New when none. EffectiveState.New for a guest.

@@ -1475,6 +1475,40 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
+        "learner_examples": {
+          "name": "learner_examples",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "json"
+        },
+        "learner_explanation": {
+          "name": "learner_explanation",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamptz(6)",
@@ -2736,6 +2770,7 @@
             "ai_complexity",
             "ai_grammar",
             "enrichment",
+            "grammar_enrichment",
             "ai_exercises",
             "publish"
           ],
@@ -2823,8 +2858,8 @@
       "checks": [
         {
           "name": "post_pipeline_runs_stage_check",
-          "expression": "\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'ai_exercises', 'publish')",
-          "definition": "check (\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'ai_exercises', 'publish'))",
+          "expression": "\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'grammar_enrichment', 'ai_exercises', 'publish')",
+          "definition": "check (\"stage\" in ('spacy_parse', 'annotation', 'ai_complexity', 'ai_grammar', 'enrichment', 'grammar_enrichment', 'ai_exercises', 'publish'))",
           "columnName": "stage"
         },
         {
@@ -3244,6 +3279,23 @@
           ],
           "mappedType": "enum"
         },
+        "content_updated_at": {
+          "name": "content_updated_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamptz(6)",
@@ -3314,23 +3366,6 @@
         },
         "published_at": {
           "name": "published_at",
-          "type": "timestamptz(6)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "unique": false,
-          "length": 6,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "collation": null,
-          "enumItems": [],
-          "mappedType": "datetime"
-        },
-        "content_updated_at": {
-          "name": "content_updated_at",
           "type": "timestamptz(6)",
           "unsigned": false,
           "autoincrement": false,

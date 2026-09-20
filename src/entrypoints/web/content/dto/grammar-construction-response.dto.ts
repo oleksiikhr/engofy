@@ -10,7 +10,11 @@ export class ConstructionUsagePointDto {
 
   readonly canDoStatement!: string;
 
-  readonly exampleText!: string | null;
+  // Learner-facing explanation and clean example sentences; null / empty
+  // until the grammar_enrichment stage has covered this point.
+  readonly explanation!: string | null;
+
+  readonly examples!: string[];
 
   // Per-point effective state — gates this point's own "+ Add to deck"
   // button. From the learner's own cards/dispositions only (no CEFR default);

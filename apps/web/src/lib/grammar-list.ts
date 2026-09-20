@@ -1,4 +1,9 @@
-import type { CefrLevel, EffectiveState } from './types';
+import type {
+  CefrLevel,
+  EffectiveState,
+  GrammarRefConstruction,
+  GrammarRefGroup,
+} from './types';
 
 // /grammar's filter state, carried in the URL: `?cefr=A1&cefr=B1&groupBy=time`.
 // Absent params mean the defaults (every level, grouped by category).
@@ -27,6 +32,37 @@ export const GRAMMAR_STATE_LABEL: Record<EffectiveState, string> = {
   learned: 'Learned',
   skipped: 'Skipped',
 };
+
+// The "Start here" block lists this many constructions.
+export const START_HERE_LIMIT = 4;
+
+// The constructions to begin with at `level`: still untouched, easiest level
+// equal to `level`, ones with a learner explanation first (list order is kept
+// within each half).
+export function startHereConstructions(
+  groups: GrammarRefGroup[],
+  level: CefrLevel,
+  limit = START_HERE_LIMIT,
+): GrammarRefConstruction[] {
+  const seen = new Set<string>();
+  const candidates = groups
+    .flatMap((group) => group.constructions)
+    .filter((con) => {
+      if (
+        con.cefrLevel !== level ||
+        con.state !== 'new' ||
+        seen.has(con.slug)
+      ) {
+        return false;
+      }
+      seen.add(con.slug);
+      return true;
+    });
+  return [
+    ...candidates.filter((con) => con.summary),
+    ...candidates.filter((con) => !con.summary),
+  ].slice(0, limit);
+}
 
 export interface GrammarListQuery {
   cefr: CefrLevel[];

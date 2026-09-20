@@ -46,7 +46,10 @@ export class GrammarPage {
   }
 
   // The dev DB also holds the real EGP data, so name-based lookups collide.
+  // Scoped to the filtered list: the Start here block repeats some cards.
   constructionLink(slug: string): Locator {
-    return this.page.locator(`a[href="/grammar/${slug}"]`);
+    return this.page
+      .locator('#grammar-results')
+      .locator(`a[href="/grammar/${slug}"]`);
   }
 }

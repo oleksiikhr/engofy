@@ -74,7 +74,9 @@ export class PostGrammarUsagePointDto {
 
   readonly canDoStatement!: string;
 
-  readonly exampleText!: string | null;
+  readonly explanation!: string | null;
+
+  readonly examples!: string[];
 }
 
 export class PostGrammarAnnotationDto {

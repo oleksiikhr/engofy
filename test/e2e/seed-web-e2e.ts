@@ -304,6 +304,12 @@ async function seed(orm: MikroORM): Promise<void> {
     canDoStatement:
       'Can show that one past action happened before another past action.',
     exampleText: 'By the time the war ended, she had drawn every coastline.',
+    learnerExplanation:
+      'We use the past perfect to show which of two past actions happened first. It is formed with had + past participle.',
+    learnerExamples: [
+      'She had drawn the map before he arrived.',
+      'I had eaten when they called.',
+    ],
   });
   const pastPerfectReported = factories(em).grammarUsagePoint.makeOne({
     constructionId: pastPerfect.id,
@@ -325,6 +331,9 @@ async function seed(orm: MikroORM): Promise<void> {
     guideword: 'USE: HABITS AND GENERAL FACTS',
     canDoStatement: 'Can describe routines and general facts.',
     exampleText: 'The tide comes in twice a day.',
+    learnerExplanation:
+      'We use the present simple for routines and facts that are always true. Add -s for he, she and it.',
+    learnerExamples: ['I get up at seven.', 'The sun rises in the east.'],
   });
 
   const conditionals = factories(em).grammarConstruction.makeOne({

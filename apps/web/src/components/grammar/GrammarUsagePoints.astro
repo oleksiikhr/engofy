@@ -42,8 +42,17 @@ const { usagePoints, levelProgress } = Astro.props;
             <span class="badge">{up.cefrLevel}</span>
             <span class="usage-item__guide">{up.guideword}</span>
           </div>
-          <p class="usage-item__can">{up.canDoStatement}</p>
-          {up.exampleText && <p class="usage-item__eg">“{up.exampleText}”</p>}
+          <p class="usage-item__can">{up.explanation ?? up.canDoStatement}</p>
+          {up.explanation && (
+            <p class="usage-item__cando">{up.canDoStatement}</p>
+          )}
+          {up.examples.length > 0 && (
+            <ul class="usage-item__examples" data-testid="usage-examples">
+              {up.examples.map((example) => (
+                <li>{example}</li>
+              ))}
+            </ul>
+          )}
           <Fragment
             set:html={usageActionsHtml(
               up.grammarUsagePointId,
@@ -119,8 +128,14 @@ const { usagePoints, levelProgress } = Astro.props;
     margin: 0 0 0.5rem;
     font-weight: 800;
   }
-  .usage-item__eg {
+  .usage-item__cando {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-faint);
+  }
+  .usage-item__examples {
     margin: 0 0 0.75rem;
+    padding-left: 1.25rem;
     color: var(--color-ink-soft);
     font-style: italic;
   }

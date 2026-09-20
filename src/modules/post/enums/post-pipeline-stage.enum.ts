@@ -17,6 +17,9 @@ export enum PostPipelineStage {
   // Fills WordDefinition/Phrase definition/example/cefrLevel stubs this
   // post references (gap-fill, PLAN.md §17 Track A).
   Enrichment = 'enrichment',
+  // Learner explanation + clean examples for the grammar usage points this
+  // post matched (row-level gap-fill).
+  GrammarEnrichment = 'grammar_enrichment',
   // Exercises beyond what deterministic generation covers.
   AiExercises = 'ai_exercises',
   // Flip posts.status = published, enqueue post_publications.
