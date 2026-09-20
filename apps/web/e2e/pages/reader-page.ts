@@ -42,22 +42,36 @@ export class ReaderPage {
     await expect(this.page.getByRole('heading', { name: title })).toBeVisible();
   }
 
-  // Spans the reader marked as new/learning targets, filtered by their text.
+  // Highlighted spans (new/learning targets), filtered by their text.
   wordLabel(text: string): Locator {
-    return this.analysis.locator('[data-word-definition-id]', {
-      hasText: text,
-    });
+    return this.analysis.locator(
+      '[data-word-definition-id]:not([data-known])',
+      { hasText: text },
+    );
   }
 
   phraseLabel(text: string): Locator {
-    return this.analysis.locator('[data-phrase-id]', { hasText: text });
-  }
-
-  // Spans the reader marked as grammar usage-point matches, filtered by text.
-  grammarLabel(text: string): Locator {
-    return this.analysis.locator('[data-grammar-usage-point-id]', {
+    return this.analysis.locator('[data-phrase-id]:not([data-known])', {
       hasText: text,
     });
+  }
+
+  // Highlighted grammar usage-point matches, filtered by text.
+  grammarLabel(text: string): Locator {
+    return this.analysis.locator(
+      '[data-grammar-usage-point-id]:not([data-known])',
+      { hasText: text },
+    );
+  }
+
+  // Clickable but unhighlighted spans (learned/skipped targets) of one kind.
+  knownLabel(kind: 'word' | 'phrase' | 'grammar', text: string): Locator {
+    const attr = {
+      word: 'data-word-definition-id',
+      phrase: 'data-phrase-id',
+      grammar: 'data-grammar-usage-point-id',
+    }[kind];
+    return this.analysis.locator(`[${attr}][data-known]`, { hasText: text });
   }
 
   // A token span (rendered by the server), filtered by its text.

@@ -88,20 +88,6 @@ function anchorRect(span: Element, clientY: number | null): DOMRect {
   return rects[0] ?? span.getBoundingClientRect();
 }
 
-function unmark(span: Element): void {
-  for (const attr of [
-    'data-word-definition-id',
-    'data-phrase-id',
-    'data-grammar-usage-point-id',
-    'tabindex',
-    'role',
-    'aria-haspopup',
-  ]) {
-    span.removeAttribute(attr);
-  }
-  span.classList.remove('is-active');
-}
-
 export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   const popup = document.createElement('div');
   popup.className = 'lex-popup';
@@ -230,8 +216,8 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   // An action swaps a section's row in place, which changes the popup's
   // height. The new state is written back to the lexicon data so reopening the
   // label shows it instead of the state the page loaded with. Once a target is
-  // settled as known/skipped it no longer counts as a label, so every span of
-  // it goes back to plain text.
+  // settled as known/skipped its spans lose the highlight (`data-known`) but
+  // stay clickable.
   popup.addEventListener('htmx:afterSwap', () => {
     for (const section of popup.querySelectorAll('[data-lex-kind]')) {
       const state = section
@@ -246,13 +232,11 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       if (entry) {
         entry.state = state;
       }
-      if (state !== 'learned' && state !== 'skipped') {
-        continue;
-      }
+      const settled = state === 'learned' || state === 'skipped';
       for (const span of root.querySelectorAll(
         `[${LABEL_ATTR[kind]}="${CSS.escape(id)}"]`,
       )) {
-        unmark(span);
+        span.toggleAttribute('data-known', settled);
       }
     }
     position();
