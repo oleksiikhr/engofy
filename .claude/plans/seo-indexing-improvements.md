@@ -79,10 +79,10 @@ lastmod }] }`, порядок `published_at ASC, id ASC`). Нова колонк
 - Що таке `updatedAt` для поста: чи є таке поле в entity, чи використовувати `publishedAt`?
 - Нові інтеграційні тести: за конвенціями `engofy` skill (`.ispec.ts`) — чи потрібен e2e?
 
-### [ ] 3. Sitemap і robots.txt
+### [x] 3. Sitemap і robots.txt
 - Branch: `seo-indexing-improvements-03-sitemap-robots`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/101
 
 `/sitemap.xml` стає sitemap index (`<sitemapindex>`) з посиланнями на:
 - `/sitemap/static.xml` — `/`, `/posts`, `/pricing`, `/grammar` і всі `/grammar/{slug}` (без `<lastmod>`);
