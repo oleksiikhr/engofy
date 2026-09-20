@@ -69,6 +69,12 @@ export class Post {
   @Property({ type: LuxonTimestampType, nullable: true })
   failureNotifiedAt?: DateTime | null;
 
+  // Set once the admin has been told this post was published; `retry` clears it
+  // so a re-published post alerts again. Null on a `published` post = notice
+  // still owed.
+  @Property({ type: LuxonTimestampType, nullable: true })
+  publishNotifiedAt?: DateTime | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 
