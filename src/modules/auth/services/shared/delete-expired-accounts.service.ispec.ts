@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { DateTime } from 'luxon';
-import { seedPost } from '../../../../../test/helpers/seed-post.helper.js';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Subscription } from '../../../billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.js';
@@ -39,10 +39,12 @@ describe('DeleteExpiredAccountsService', () => {
     cancelled?: boolean;
   }) => {
     const { em } = suite.orm;
-    const user = em.create(User, { email: `user-${randomUUID()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `user-${randomUUID()}@example.com`,
+    });
     const userId = user.id;
-    const post = await seedPost(em);
-    const card = em.create(LearningCard, {
+    const post = await suite.factories.post.createOne();
+    const card = factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: randomUUID(),
       due: DateTime.now(),
@@ -53,47 +55,50 @@ describe('DeleteExpiredAccountsService', () => {
       reps: 0,
       lapses: 0,
     });
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: card.id,
       rating: ReviewRating.Good,
       reviewedAt: DateTime.now(),
       elapsedDays: 0,
       scheduledDays: 1,
     });
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       phraseId: randomUUID(),
       disposition: Disposition.Known,
     });
-    em.create(UserSkillProgress, { userId, constructionId: randomUUID() });
-    em.create(PostRead, {
+    factories(em).userSkillProgress.makeOne({
+      userId,
+      constructionId: randomUUID(),
+    });
+    factories(em).postRead.makeOne({
       userId,
       postId: randomUUID(),
       readAt: DateTime.now(),
     });
-    em.create(DailyPlan, {
+    factories(em).dailyPlan.makeOne({
       userId,
       planDate: DateTime.now().startOf('day'),
       postId: post.id,
     });
-    em.create(Subscription, {
+    factories(em).subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       currentPeriodEnd: DateTime.now().plus({ days: 5 }),
     });
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId,
       tokenHash: randomUUID(),
       expiresAt: DateTime.now().plus({ days: 1 }),
     });
-    em.create(AuthChallenge, {
+    factories(em).authChallenge.makeOne({
       email: user.email,
       otpHash: 'hash',
       expiresAt: DateTime.now().plus({ minutes: 5 }),
     });
 
     if (opts.requestedDaysAgo !== undefined) {
-      em.create(AccountDeletionRequest, {
+      factories(em).accountDeletionRequest.makeOne({
         userId,
         cancelTokenHash: randomUUID(),
         requestedAt: DateTime.now().minus({ days: opts.requestedDaysAgo }),

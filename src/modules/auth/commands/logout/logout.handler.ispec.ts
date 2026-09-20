@@ -16,7 +16,7 @@ describe('LogoutHandler', () => {
       AuthConfig.KEY,
     );
     const token = generateToken();
-    suite.orm.em.create(AuthSession, {
+    suite.factories.authSession.makeOne({
       userId: randomUUID(),
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ milliseconds: config.sessionTtlMs }),

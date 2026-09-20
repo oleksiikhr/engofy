@@ -11,7 +11,7 @@ describe('SetCefrLevelHandler', () => {
   const uniqueEmail = () => `user-${randomUUID()}@example.com`;
 
   it('updates the user CEFR level and returns it', async () => {
-    const user = suite.orm.em.create(User, { email: uniqueEmail() });
+    const user = suite.factories.user.makeOne({ email: uniqueEmail() });
     await suite.orm.em.flush();
     suite.orm.em.clear();
 

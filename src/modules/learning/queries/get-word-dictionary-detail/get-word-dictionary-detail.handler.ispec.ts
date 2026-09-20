@@ -1,23 +1,15 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { User } from '../../../auth/entities/user.entity.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostRead } from '../../../post/entities/post-read.entity.js';
-import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../post/entities/sentence-token.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
-import { PostSourceType } from '../../../post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import { EffectiveState } from '../../domain/resolve-effective-state.js';
-import { LearningCard } from '../../entities/learning-card.entity.js';
-import { LearningDisposition } from '../../entities/learning-disposition.entity.js';
 import { Disposition } from '../../enums/disposition.enum.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -27,7 +19,7 @@ async function seedUser(
   em: EntityManager,
   cefrLevel: CefrLevel = CefrLevel.B1,
 ): Promise<User> {
-  const user = em.create(User, {
+  const user = factories(em).user.makeOne({
     email: `${uuidv7()}@example.com`,
     cefrLevel,
   });
@@ -39,19 +31,13 @@ function postLinking(
   em: EntityManager,
   opts: { status: PostStatus; wordId: string },
 ): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'seed';
-  source.attributionText = 'Original content';
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'seed' },
+    title: `post-${uuidv7().slice(0, 6)}`,
+    status: opts.status,
+  });
 
-  const post = new Post();
-  post.source = source;
-  post.title = `post-${uuidv7().slice(0, 6)}`;
-  post.status = opts.status;
-  em.persist(post);
-
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: uuidv7(),
     unitIndex: 0,
@@ -60,7 +46,7 @@ function postLinking(
     charStart: 0,
     charEnd: 8,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: sentence.id,
     position: 0,
     text: 'term',
@@ -91,7 +77,9 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('is case-insensitive on the lemma lookup', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `Harbour-${uuidv7().slice(0, 6)}` });
+    const word = factories(em).word.makeOne({
+      lemma: `Harbour-${uuidv7().slice(0, 6)}`,
+    });
     await em.flush();
 
     const view = await suite.query(
@@ -103,14 +91,16 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('lists every sense with per-sense effective state, including unsaved senses', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `bank-${uuidv7().slice(0, 6)}` });
-    const nounDef = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `bank-${uuidv7().slice(0, 6)}`,
+    });
+    const nounDef = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a financial institution',
       cefrLevel: CefrLevel.A2,
     });
-    em.create(WordDefinition, {
+    factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Verb,
       definition: 'to tilt an aircraft',
@@ -119,7 +109,7 @@ describe('GetWordDictionaryDetailHandler', () => {
     await em.flush();
 
     // Noun sense has an active card; verb sense was never saved at all.
-    const card = em.create(LearningCard, {
+    const card = factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: nounDef.id,
       due: DateTime.now(),
@@ -152,8 +142,10 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('folds the CEFR default into an unsaved sense at or below the learner level', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em, CefrLevel.B2)).id;
-    const word = em.create(Word, { lemma: `easy-${uuidv7().slice(0, 6)}` });
-    em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `easy-${uuidv7().slice(0, 6)}`,
+    });
+    factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Adjective,
       cefrLevel: CefrLevel.A1,
@@ -173,13 +165,15 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('reflects a skipped disposition with no active card', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `skip-${uuidv7().slice(0, 6)}` });
-    const def = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `skip-${uuidv7().slice(0, 6)}`,
+    });
+    const def = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
     await em.flush();
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       wordDefinitionId: def.id,
       disposition: Disposition.Skipped,
@@ -200,7 +194,7 @@ describe('GetWordDictionaryDetailHandler', () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
     // "go" is in the bundled assets/irregular-verbs.json.
-    em.create(Word, { lemma: 'go' });
+    factories(em).word.makeOne({ lemma: 'go' });
     await em.flush();
     em.clear();
 
@@ -216,7 +210,9 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('returns null irregularVerb for a regular lemma', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `regular-${uuidv7().slice(0, 6)}` });
+    const word = factories(em).word.makeOne({
+      lemma: `regular-${uuidv7().slice(0, 6)}`,
+    });
     await em.flush();
     em.clear();
 
@@ -229,7 +225,9 @@ describe('GetWordDictionaryDetailHandler', () => {
   it('lists published posts using the word, newest first, with a per-user read flag', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `tide-${uuidv7().slice(0, 6)}` });
+    const word = factories(em).word.makeOne({
+      lemma: `tide-${uuidv7().slice(0, 6)}`,
+    });
     await em.flush();
 
     const older = postLinking(em, {
@@ -247,7 +245,7 @@ describe('GetWordDictionaryDetailHandler', () => {
     newer.publishedAt = DateTime.now();
     await em.flush();
 
-    em.create(PostRead, {
+    factories(em).postRead.makeOne({
       userId,
       postId: older.id,
       readAt: DateTime.now(),

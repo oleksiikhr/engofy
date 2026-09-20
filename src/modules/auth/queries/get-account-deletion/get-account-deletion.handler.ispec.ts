@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AuthModule } from '../../auth.module.js';
-import { AccountDeletionRequest } from '../../entities/account-deletion-request.entity.js';
 import { GetAccountDeletionQuery } from './get-account-deletion.query.js';
 
 describe('GetAccountDeletionHandler', () => {
@@ -15,7 +14,7 @@ describe('GetAccountDeletionHandler', () => {
 
   it('returns the pending request with its scheduled deletion time', async () => {
     const userId = randomUUID();
-    suite.orm.em.create(AccountDeletionRequest, {
+    suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),
     });
@@ -28,7 +27,7 @@ describe('GetAccountDeletionHandler', () => {
 
   it('ignores a cancelled request', async () => {
     const userId = randomUUID();
-    const request = suite.orm.em.create(AccountDeletionRequest, {
+    const request = suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),
     });

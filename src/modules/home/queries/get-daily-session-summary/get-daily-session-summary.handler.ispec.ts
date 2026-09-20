@@ -1,9 +1,9 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
-import { ReviewLog } from '../../../learning/entities/review-log.entity.js';
 import { ReviewRating } from '../../../learning/enums/review-rating.enum.js';
 import { HomeModule } from '../../home.module.js';
 import { GetDailySessionSummaryQuery } from './get-daily-session-summary.query.js';
@@ -13,7 +13,7 @@ function seedCard(
   userId: string,
   createdAt: DateTime,
 ): LearningCard {
-  return em.create(LearningCard, {
+  return factories(em).learningCard.makeOne({
     userId,
     grammarUsagePointId: uuidv7(),
     due: DateTime.now(),
@@ -32,7 +32,7 @@ function seedReviewLog(
   cardId: string,
   reviewedAt: DateTime,
 ): void {
-  em.create(ReviewLog, {
+  factories(em).reviewLog.makeOne({
     cardId,
     rating: ReviewRating.Good,
     reviewedAt,

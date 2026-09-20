@@ -11,7 +11,7 @@ describe('GetSubscriptionHandler', () => {
   const suite = createIntegrationSuite({ imports: [BillingModule] });
 
   function seedSubscription(userId: string, currentPeriodEnd: DateTime): void {
-    suite.orm.em.create(Subscription, {
+    suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       status: SubscriptionStatus.Active,

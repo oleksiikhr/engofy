@@ -10,7 +10,7 @@ describe('CancelAccountDeletionHandler', () => {
 
   it('marks the pending request as cancelled', async () => {
     const userId = randomUUID();
-    suite.orm.em.create(AccountDeletionRequest, {
+    suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),
     });

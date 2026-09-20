@@ -13,7 +13,7 @@ describe('CancelSubscriptionHandler', () => {
 
   it('ends an active premium subscription immediately', async () => {
     const userId = uuidv7();
-    suite.orm.em.create(Subscription, {
+    suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       status: SubscriptionStatus.Active,
@@ -38,7 +38,7 @@ describe('CancelSubscriptionHandler', () => {
   it('leaves an already-lapsed period untouched', async () => {
     const userId = uuidv7();
     const lapsedEnd = DateTime.now().minus({ days: 3 });
-    suite.orm.em.create(Subscription, {
+    suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       status: SubscriptionStatus.Active,

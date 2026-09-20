@@ -1,18 +1,12 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { User } from '../../../auth/entities/user.entity.js';
-import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
-import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
-import { GrammarMatch } from '../../../post/entities/grammar-match.entity.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostRead } from '../../../post/entities/post-read.entity.js';
-import { Sentence } from '../../../post/entities/sentence.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
@@ -24,7 +18,7 @@ async function seedUser(
   em: EntityManager,
   cefrLevel: CefrLevel = CefrLevel.A1,
 ): Promise<User> {
-  const user = em.create(User, {
+  const user = factories(em).user.makeOne({
     email: `${uuidv7()}@example.com`,
     cefrLevel,
   });
@@ -40,15 +34,12 @@ async function seedPost(
     status?: PostStatus;
   },
 ): Promise<Post> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'Some text.';
-  const post = new Post();
-  post.source = source;
-  post.status = opts.status ?? PostStatus.Published;
-  post.cefrLevel = opts.cefrLevel;
-  post.publishedAt = opts.publishedAt;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'Some text.' },
+    status: opts.status ?? PostStatus.Published,
+    cefrLevel: opts.cefrLevel,
+    publishedAt: opts.publishedAt,
+  });
   await em.flush();
   return post;
 }
@@ -58,7 +49,7 @@ async function markRead(
   userId: string,
   postId: string,
 ): Promise<void> {
-  em.create(PostRead, { userId, postId, readAt: DateTime.now() });
+  factories(em).postRead.makeOne({ userId, postId, readAt: DateTime.now() });
   await em.flush();
 }
 
@@ -155,7 +146,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
         grammarUsagePointId: string;
       },
     ): Promise<void> {
-      const sentence = em.create(Sentence, {
+      const sentence = factories(em).sentence.makeOne({
         postId: opts.postId,
         postPartId: uuidv7(),
         unitIndex: opts.unitIndex,
@@ -165,7 +156,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
         charEnd: 14,
       });
       await em.flush();
-      em.create(GrammarMatch, {
+      factories(em).grammarMatch.makeOne({
         sentenceId: sentence.id,
         grammarUsagePointId: opts.grammarUsagePointId,
         tokenStart: 0,
@@ -178,13 +169,13 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A2);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.B1);
 
-      const belowLevel = suite.orm.em.create(GrammarUsagePoint, {
+      const belowLevel = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.A1,
         guideword: 'below level',
         canDoStatement: 'x',
       });
-      const aboveLevel = suite.orm.em.create(GrammarUsagePoint, {
+      const aboveLevel = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.B1,
         guideword: 'above level',
@@ -216,7 +207,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.B2);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.B1);
 
-      const belowLevel = suite.orm.em.create(GrammarUsagePoint, {
+      const belowLevel = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.A2,
         guideword: 'below level',
@@ -242,13 +233,13 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A1);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.C1);
 
-      const withCard = suite.orm.em.create(GrammarUsagePoint, {
+      const withCard = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.C1,
         guideword: 'has a card',
         canDoStatement: 'x',
       });
-      const withoutCard = suite.orm.em.create(GrammarUsagePoint, {
+      const withoutCard = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.C1,
         guideword: 'no card',
@@ -269,7 +260,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
         grammarUsagePointId: withoutCard.id,
       });
 
-      suite.orm.em.create(LearningCard, {
+      suite.factories.learningCard.makeOne({
         userId: user.id,
         grammarUsagePointId: withCard.id,
         due: DateTime.now(),
@@ -294,7 +285,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
       const user = await seedUser(suite.orm.em, CefrLevel.A1);
       const post = await seedPostWithSentences(suite.orm.em, CefrLevel.C1);
 
-      const skipped = suite.orm.em.create(GrammarUsagePoint, {
+      const skipped = suite.factories.grammarUsagePoint.makeOne({
         constructionId: uuidv7(),
         cefrLevel: CefrLevel.C1,
         guideword: 'skipped',
@@ -309,7 +300,7 @@ describe('SelectDailyPlanCandidateHandler', () => {
         grammarUsagePointId: skipped.id,
       });
 
-      suite.orm.em.create(LearningDisposition, {
+      suite.factories.learningDisposition.makeOne({
         userId: user.id,
         grammarUsagePointId: skipped.id,
         disposition: Disposition.Skipped,

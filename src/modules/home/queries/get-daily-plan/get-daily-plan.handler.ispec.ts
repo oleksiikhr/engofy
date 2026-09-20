@@ -1,32 +1,9 @@
-import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
-import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Post } from '../../../post/entities/post.entity.js';
-import { PostRead } from '../../../post/entities/post-read.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
-import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
-import { PostStatus } from '../../../post/enums/post-status.enum.js';
-import { DailyPlan } from '../../entities/daily-plan.entity.js';
 import { HomeModule } from '../../home.module.js';
 import { GetDailyPlanQuery } from './get-daily-plan.query.js';
-
-async function seedPost(em: EntityManager): Promise<Post> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'Some text.';
-  const post = new Post();
-  post.source = source;
-  post.status = PostStatus.Published;
-  post.title = 'A post';
-  post.cefrLevel = CefrLevel.B1;
-  em.persist(post);
-  await em.flush();
-  return post;
-}
 
 describe('GetDailyPlanHandler', () => {
   const suite = createIntegrationSuite({ imports: [HomeModule] });
@@ -37,14 +14,14 @@ describe('GetDailyPlanHandler', () => {
   });
 
   it('hydrates the selected post and grammar usage point', async () => {
-    const post = await seedPost(suite.orm.em);
-    const construction = suite.orm.em.create(GrammarConstruction, {
+    const post = await suite.factories.post.createOne();
+    const construction = suite.factories.grammarConstruction.makeOne({
       categoryId: uuidv7(),
       name: 'present simple',
       slug: 'present-simple',
       sortOrder: 1,
     });
-    const usagePoint = suite.orm.em.create(GrammarUsagePoint, {
+    const usagePoint = suite.factories.grammarUsagePoint.makeOne({
       constructionId: construction.id,
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: HABITS',
@@ -54,7 +31,7 @@ describe('GetDailyPlanHandler', () => {
     await suite.orm.em.flush();
 
     const userId = uuidv7();
-    suite.orm.em.create(DailyPlan, {
+    suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),
       postId: post.id,
@@ -79,9 +56,9 @@ describe('GetDailyPlanHandler', () => {
   });
 
   it('leaves grammar fields null when no usage point was selected', async () => {
-    const post = await seedPost(suite.orm.em);
+    const post = await suite.factories.post.createOne();
     const userId = uuidv7();
-    suite.orm.em.create(DailyPlan, {
+    suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),
       postId: post.id,
@@ -99,15 +76,15 @@ describe('GetDailyPlanHandler', () => {
   });
 
   it('reports isRead once a post_reads row exists for the plan post', async () => {
-    const post = await seedPost(suite.orm.em);
+    const post = await suite.factories.post.createOne();
     const userId = uuidv7();
-    suite.orm.em.create(DailyPlan, {
+    suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),
       postId: post.id,
       grammarUsagePointId: null,
     });
-    suite.orm.em.create(PostRead, {
+    suite.factories.postRead.makeOne({
       userId,
       postId: post.id,
       readAt: DateTime.now(),

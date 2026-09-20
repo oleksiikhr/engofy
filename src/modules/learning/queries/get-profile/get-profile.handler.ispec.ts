@@ -1,19 +1,13 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { AddCardCommand } from '../../commands/add-card/add-card.command.js';
 import { RemoveCardCommand } from '../../commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from '../../commands/review-card/review-card.command.js';
-import { LearningCard } from '../../entities/learning-card.entity.js';
-import { ReviewLog } from '../../entities/review-log.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -28,36 +22,39 @@ describe('GetProfileHandler', () => {
   const suite = createIntegrationSuite({ imports: [LearningModule] });
 
   async function seedCatalog(em: EntityManager): Promise<SeededCatalog> {
-    const present = em.create(GrammarCategory, {
+    const present = factories(em).grammarCategory.makeOne({
       name: 'PRESENT',
       sortOrder: 1,
     });
-    const past = em.create(GrammarCategory, { name: 'PAST', sortOrder: 2 });
-    const presentSimple = em.create(GrammarConstruction, {
+    const past = factories(em).grammarCategory.makeOne({
+      name: 'PAST',
+      sortOrder: 2,
+    });
+    const presentSimple = factories(em).grammarConstruction.makeOne({
       categoryId: present.id,
       name: 'present simple',
       slug: 'present-present-simple',
       sortOrder: 1,
     });
-    const pastPerfect = em.create(GrammarConstruction, {
+    const pastPerfect = factories(em).grammarConstruction.makeOne({
       categoryId: past.id,
       name: 'past perfect',
       slug: 'past-past-perfect',
       sortOrder: 2,
     });
-    const presentSimplePoint = em.create(GrammarUsagePoint, {
+    const presentSimplePoint = factories(em).grammarUsagePoint.makeOne({
       constructionId: presentSimple.id,
       cefrLevel: CefrLevel.A2,
       guideword: 'USE: habits',
       canDoStatement: 'Can describe habits.',
     });
-    em.create(GrammarUsagePoint, {
+    factories(em).grammarUsagePoint.makeOne({
       constructionId: presentSimple.id,
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: general truths',
       canDoStatement: 'Can state general truths.',
     });
-    const pastPerfectPoint = em.create(GrammarUsagePoint, {
+    const pastPerfectPoint = factories(em).grammarUsagePoint.makeOne({
       constructionId: pastPerfect.id,
       cefrLevel: CefrLevel.B2,
       guideword: 'USE: earlier past',
@@ -95,9 +92,9 @@ describe('GetProfileHandler', () => {
     const userId = uuidv7();
     const catalog = await seedCatalog(em);
 
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     await em.flush();
-    const definition = em.create(WordDefinition, {
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       cefrLevel: CefrLevel.B1,
@@ -141,9 +138,9 @@ describe('GetProfileHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
 
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     await em.flush();
-    const definition = em.create(WordDefinition, {
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       cefrLevel: CefrLevel.B1,
@@ -171,7 +168,7 @@ describe('GetProfileHandler', () => {
     const userId = uuidv7();
     const now = DateTime.now();
 
-    const card = em.create(LearningCard, {
+    const card = factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),
       due: now,
@@ -185,21 +182,21 @@ describe('GetProfileHandler', () => {
     });
     // Two logs on the same UTC day collapse into one entry; deliberately
     // out of order to prove the result comes back sorted.
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: card.id,
       rating: ReviewRating.Good,
       reviewedAt: now,
       elapsedDays: 0,
       scheduledDays: 1,
     });
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: card.id,
       rating: ReviewRating.Good,
       reviewedAt: now,
       elapsedDays: 0,
       scheduledDays: 1,
     });
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: card.id,
       rating: ReviewRating.Good,
       reviewedAt: now.minus({ days: 3 }),

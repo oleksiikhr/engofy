@@ -1,9 +1,5 @@
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningDisposition } from '../../entities/learning-disposition.entity.js';
@@ -16,8 +12,8 @@ describe('SetDispositionHandler', () => {
   const suite = createIntegrationSuite({ imports: [LearningModule] });
 
   async function seedWordDefinition(): Promise<string> {
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       cefrLevel: CefrLevel.A1,
@@ -48,7 +44,7 @@ describe('SetDispositionHandler', () => {
 
   it('overwrites the stored value on a second call for the same target', async () => {
     const userId = uuidv7();
-    const phrase = suite.orm.em.create(Phrase, {
+    const phrase = suite.factories.phrase.makeOne({
       phraseText: `p-${uuidv7()}`,
     });
     await suite.orm.em.flush();
@@ -85,7 +81,7 @@ describe('SetDispositionHandler', () => {
   });
 
   it('rejects a target with more than one id set', async () => {
-    const point = suite.orm.em.create(GrammarUsagePoint, {
+    const point = suite.factories.grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: past perfect',

@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { LearningCard } from '../../entities/learning-card.entity.js';
-import { ReviewLog } from '../../entities/review-log.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -19,7 +18,7 @@ describe('GetStreakHandler', () => {
     const userId = uuidv7();
     const em = suite.orm.em;
 
-    const card = em.create(LearningCard, {
+    const card = factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),
       due: DateTime.now(),
@@ -31,7 +30,7 @@ describe('GetStreakHandler', () => {
       lapses: 0,
       state: LearningCardState.Learning,
     });
-    em.create(ReviewLog, {
+    factories(em).reviewLog.makeOne({
       cardId: card.id,
       rating: ReviewRating.Good,
       reviewedAt: DateTime.now(),

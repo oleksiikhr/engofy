@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
 import { GetDueCardCountQuery } from './get-due-card-count.query.js';
@@ -14,7 +14,7 @@ describe('GetDueCardCountHandler', () => {
     const otherUserId = uuidv7();
     const em = suite.orm.em;
 
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),
@@ -26,7 +26,7 @@ describe('GetDueCardCountHandler', () => {
       lapses: 0,
       state: LearningCardState.Review,
     });
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       phraseId: uuidv7(),
       due: DateTime.now().plus({ days: 3 }),
@@ -38,7 +38,7 @@ describe('GetDueCardCountHandler', () => {
       lapses: 0,
       state: LearningCardState.Learning,
     });
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId: otherUserId,
       wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),
@@ -58,7 +58,7 @@ describe('GetDueCardCountHandler', () => {
 
   it('excludes archived cards', async () => {
     const userId = uuidv7();
-    suite.orm.em.create(LearningCard, {
+    suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),
       due: DateTime.now().minus({ days: 1 }),

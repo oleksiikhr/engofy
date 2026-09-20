@@ -1,26 +1,17 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { GrammarCategory } from '../../../post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../post/entities/grammar-construction.entity.js';
-import { GrammarMatch } from '../../../post/entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
-import { Post } from '../../../post/entities/post.entity.js';
-import { PostPart } from '../../../post/entities/post-part.entity.js';
-import { PostRead } from '../../../post/entities/post-read.entity.js';
-import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostPartKind } from '../../../post/enums/post-part-kind.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
 import { DAILY_NEW_CARD_LIMIT } from '../../domain/daily-new-card-limit.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
-import { ReviewLog } from '../../entities/review-log.entity.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../enums/review-rating.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -35,7 +26,7 @@ function card(
   >,
   state: LearningCardState = LearningCardState.New,
 ): void {
-  em.create(LearningCard, {
+  factories(em).learningCard.makeOne({
     userId,
     wordDefinitionId: target.wordDefinitionId ?? null,
     phraseId: target.phraseId ?? null,
@@ -61,14 +52,11 @@ async function seedPostWithWordSpan(
   wordDefinitionId: string,
   rawText: string,
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = rawText;
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: rawText },
+  });
 
-  const part = em.create(PostPart, {
+  const part = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -85,7 +73,7 @@ async function seedPostWithWordSpan(
       ],
     },
   });
-  em.create(Sentence, {
+  factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: part.id,
     unitIndex: 0,
@@ -103,14 +91,11 @@ async function seedPostWithPhraseSpan(
   phraseId: string,
   rawText: string,
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = rawText;
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: rawText },
+  });
 
-  const part = em.create(PostPart, {
+  const part = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -119,7 +104,7 @@ async function seedPostWithPhraseSpan(
       children: [{ type: 'span', kind: 'phrase', text: rawText, phraseId }],
     },
   });
-  em.create(Sentence, {
+  factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: part.id,
     unitIndex: 0,
@@ -140,20 +125,17 @@ async function seedPostWithGrammarMatch(
   rawText: string,
   confidence: number | null = 0.9,
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = rawText;
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: rawText },
+  });
 
-  const part = em.create(PostPart, {
+  const part = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
     body: { type: 'paragraph', children: [{ type: 'text', text: rawText }] },
   });
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: part.id,
     unitIndex: 0,
@@ -162,7 +144,7 @@ async function seedPostWithGrammarMatch(
     charStart: 0,
     charEnd: rawText.length,
   });
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId: sentence.id,
     grammarUsagePointId: usagePointId,
     confidence,
@@ -176,18 +158,18 @@ async function seedPostWithGrammarMatch(
 async function seedGrammarPoint(
   em: EntityManager,
 ): Promise<{ point: GrammarUsagePoint; slug: string }> {
-  const category = em.create(GrammarCategory, {
+  const category = factories(em).grammarCategory.makeOne({
     name: `PRESENT-${uuidv7()}`,
     sortOrder: 1,
   });
   const slug = `present-simple-${uuidv7()}`;
-  const construction = em.create(GrammarConstruction, {
+  const construction = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'Present simple',
     slug,
     sortOrder: 1,
   });
-  const point = em.create(GrammarUsagePoint, {
+  const point = factories(em).grammarUsagePoint.makeOne({
     constructionId: construction.id,
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
@@ -204,7 +186,7 @@ function seedRead(
   postId: string,
   readAt: DateTime,
 ): void {
-  em.create(PostRead, { userId, postId, readAt });
+  factories(em).postRead.makeOne({ userId, postId, readAt });
 }
 
 describe('GetPracticeQueueHandler', () => {
@@ -214,13 +196,13 @@ describe('GetPracticeQueueHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
 
-    const word = em.create(Word, { lemma: 'ephemeral' });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: 'ephemeral' });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Adjective,
     });
-    const phrase = em.create(Phrase, { phraseText: 'pick up' });
-    const grammar = em.create(GrammarUsagePoint, {
+    const phrase = factories(em).phrase.makeOne({ phraseText: 'pick up' });
+    const grammar = factories(em).grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.B1,
       guideword: 'past perfect',
@@ -254,8 +236,8 @@ describe('GetPracticeQueueHandler', () => {
     const userId = uuidv7();
 
     const definitions = Array.from({ length: 5 }, () => {
-      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+      return factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -283,16 +265,16 @@ describe('GetPracticeQueueHandler', () => {
     const newDefinitions = Array.from(
       { length: DAILY_NEW_CARD_LIMIT + 3 },
       () => {
-        const word = em.create(Word, { lemma: `new-${uuidv7()}` });
-        return em.create(WordDefinition, {
+        const word = factories(em).word.makeOne({ lemma: `new-${uuidv7()}` });
+        return factories(em).wordDefinition.makeOne({
           wordId: word.id,
           pos: PartOfSpeech.Noun,
         });
       },
     );
     const reviewDefinition = (() => {
-      const word = em.create(Word, { lemma: `review-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `review-${uuidv7()}` });
+      return factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -332,8 +314,8 @@ describe('GetPracticeQueueHandler', () => {
     const userId = uuidv7();
 
     const definitions = Array.from({ length: DAILY_NEW_CARD_LIMIT + 3 }, () => {
-      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+      return factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -366,12 +348,12 @@ describe('GetPracticeQueueHandler', () => {
     // response themselves).
     const alreadyIntroduced = DAILY_NEW_CARD_LIMIT - 2;
     for (let i = 0; i < alreadyIntroduced; i += 1) {
-      const word = em.create(Word, { lemma: `spent-${uuidv7()}` });
-      const definition = em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `spent-${uuidv7()}` });
+      const definition = factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
-      const graduated = em.create(LearningCard, {
+      const graduated = factories(em).learningCard.makeOne({
         userId,
         wordDefinitionId: definition.id,
         due: DateTime.now().plus({ days: 1 }),
@@ -384,7 +366,7 @@ describe('GetPracticeQueueHandler', () => {
         state: LearningCardState.Review,
         lastReview: DateTime.now(),
       });
-      em.create(ReviewLog, {
+      factories(em).reviewLog.makeOne({
         cardId: graduated.id,
         rating: ReviewRating.Good,
         reviewedAt: DateTime.now(),
@@ -395,8 +377,8 @@ describe('GetPracticeQueueHandler', () => {
     await em.flush();
 
     const freshDefinitions = Array.from({ length: 5 }, () => {
-      const word = em.create(Word, { lemma: `fresh-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `fresh-${uuidv7()}` });
+      return factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -425,8 +407,8 @@ describe('GetPracticeQueueHandler', () => {
     const userId = uuidv7();
 
     const definitions = Array.from({ length: 3 }, () => {
-      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+      return factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -474,13 +456,13 @@ describe('GetPracticeQueueHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
 
-    const word = em.create(Word, { lemma: 'ephemeral' });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: 'ephemeral' });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Adjective,
     });
-    const phrase = em.create(Phrase, { phraseText: 'pick up' });
-    const grammar = em.create(GrammarUsagePoint, {
+    const phrase = factories(em).phrase.makeOne({ phraseText: 'pick up' });
+    const grammar = factories(em).grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.B1,
       guideword: 'past perfect',
@@ -521,8 +503,8 @@ describe('GetPracticeQueueHandler', () => {
     const empty = await suite.query(new GetPracticeQueueQuery(userId, 20));
     expect(empty).toMatchObject({ items: [], hasAnyCards: false });
 
-    const word = em.create(Word, { lemma: 'later' });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: 'later' });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Adjective,
     });
@@ -546,14 +528,14 @@ describe('GetPracticeQueueHandler', () => {
   it('excludes archived cards from the queue', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
     await em.flush();
 
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: definition.id,
       due: DateTime.now().minus({ days: 1 }),
@@ -578,8 +560,8 @@ describe('GetPracticeQueueHandler', () => {
   it('resolves a word target from WordDefinition instead of hardcoded null', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Adjective,
       definition: 'lasting a very short time',
@@ -602,7 +584,7 @@ describe('GetPracticeQueueHandler', () => {
   it('resolves a phrase target definition, with no phonetic', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const phrase = em.create(Phrase, {
+    const phrase = factories(em).phrase.makeOne({
       phraseText: 'give up',
       definition: 'to stop trying',
     });
@@ -623,8 +605,8 @@ describe('GetPracticeQueueHandler', () => {
   it('finds a real context sentence for a word from a recently read post', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -650,7 +632,7 @@ describe('GetPracticeQueueHandler', () => {
   it('finds a real context sentence for a phrase from a recently read post', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const phrase = em.create(Phrase, { phraseText: 'give up' });
+    const phrase = factories(em).phrase.makeOne({ phraseText: 'give up' });
     await em.flush();
     const postId = await seedPostWithPhraseSpan(
       em,
@@ -673,16 +655,18 @@ describe('GetPracticeQueueHandler', () => {
   it('leaves contextSentence null with no fallback when nothing is found', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       exampleSentence: 'An AI-written example that must not leak through.',
     });
     await em.flush();
     // Read a post, but it doesn't mention this word at all.
-    const otherWord = em.create(Word, { lemma: `other-${uuidv7()}` });
-    const otherDefinition = em.create(WordDefinition, {
+    const otherWord = factories(em).word.makeOne({
+      lemma: `other-${uuidv7()}`,
+    });
+    const otherDefinition = factories(em).wordDefinition.makeOne({
       wordId: otherWord.id,
       pos: PartOfSpeech.Noun,
     });
@@ -708,8 +692,8 @@ describe('GetPracticeQueueHandler', () => {
   it('only searches the last 3 distinct read posts, most recent first', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -724,8 +708,10 @@ describe('GetPracticeQueueHandler', () => {
     seedRead(em, userId, stalePostId, DateTime.now().minus({ days: 4 }));
 
     const fillerDefinitions = Array.from({ length: 3 }, () => {
-      const otherWord = em.create(Word, { lemma: `filler-${uuidv7()}` });
-      return em.create(WordDefinition, {
+      const otherWord = factories(em).word.makeOne({
+        lemma: `filler-${uuidv7()}`,
+      });
+      return factories(em).wordDefinition.makeOne({
         wordId: otherWord.id,
         pos: PartOfSpeech.Noun,
       });
@@ -784,7 +770,7 @@ describe('GetPracticeQueueHandler', () => {
   it('leaves grammar kicker and slug null when the construction row is missing', async () => {
     const em = suite.orm.em;
     const userId = uuidv7();
-    const point = em.create(GrammarUsagePoint, {
+    const point = factories(em).grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.B1,
       guideword: 'past perfect',

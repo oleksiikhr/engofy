@@ -1,22 +1,16 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { User } from '../../../auth/entities/user.entity.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostRead } from '../../../post/entities/post-read.entity.js';
-import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../post/entities/sentence-token.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PhraseType } from '../../../post/enums/phrase-type.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
-import { PostSourceType } from '../../../post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import { EffectiveState } from '../../domain/resolve-effective-state.js';
-import { LearningCard } from '../../entities/learning-card.entity.js';
-import { LearningDisposition } from '../../entities/learning-disposition.entity.js';
 import { Disposition } from '../../enums/disposition.enum.js';
 import { LearningCardState } from '../../enums/learning-card-state.enum.js';
 import { LearningModule } from '../../learning.module.js';
@@ -26,7 +20,7 @@ async function seedUser(
   em: EntityManager,
   cefrLevel: CefrLevel = CefrLevel.B1,
 ): Promise<User> {
-  const user = em.create(User, {
+  const user = factories(em).user.makeOne({
     email: `${uuidv7()}@example.com`,
     cefrLevel,
   });
@@ -35,7 +29,7 @@ async function seedUser(
 }
 
 function uniquePhrase(em: EntityManager, overrides: Partial<Phrase> = {}) {
-  return em.create(Phrase, {
+  return factories(em).phrase.makeOne({
     phraseText: `at loose ends ${uuidv7().slice(0, 6)}`,
     ...overrides,
   });
@@ -45,19 +39,13 @@ function postLinking(
   em: EntityManager,
   opts: { status: PostStatus; phraseId: string },
 ): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'seed';
-  source.attributionText = 'Original content';
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'seed' },
+    title: `post-${uuidv7().slice(0, 6)}`,
+    status: opts.status,
+  });
 
-  const post = new Post();
-  post.source = source;
-  post.title = `post-${uuidv7().slice(0, 6)}`;
-  post.status = opts.status;
-  em.persist(post);
-
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: uuidv7(),
     unitIndex: 0,
@@ -66,7 +54,7 @@ function postLinking(
     charStart: 0,
     charEnd: 8,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: sentence.id,
     position: 0,
     text: 'term',
@@ -131,7 +119,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
     const userId = (await seedUser(em)).id;
     const phrase = uniquePhrase(em, { cefrLevel: CefrLevel.C1 });
     await em.flush();
-    const card = em.create(LearningCard, {
+    const card = factories(em).learningCard.makeOne({
       userId,
       phraseId: phrase.id,
       due: DateTime.now(),
@@ -160,7 +148,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
     const userId = (await seedUser(em)).id;
     const phrase = uniquePhrase(em, { cefrLevel: CefrLevel.C1 });
     await em.flush();
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       phraseId: phrase.id,
       due: DateTime.now(),
@@ -173,7 +161,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
       state: LearningCardState.Review,
       archivedAt: DateTime.now(),
     });
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       phraseId: phrase.id,
       disposition: Disposition.Known,
@@ -192,7 +180,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
     const userId = (await seedUser(em)).id;
     const phrase = uniquePhrase(em, { cefrLevel: CefrLevel.C1 });
     await em.flush();
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId,
       phraseId: phrase.id,
       disposition: Disposition.Skipped,
@@ -225,7 +213,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
     const otherId = (await seedUser(em)).id;
     const phrase = uniquePhrase(em, { cefrLevel: CefrLevel.C1 });
     await em.flush();
-    em.create(LearningDisposition, {
+    factories(em).learningDisposition.makeOne({
       userId: otherId,
       phraseId: phrase.id,
       disposition: Disposition.Skipped,
@@ -260,7 +248,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
     newer.publishedAt = DateTime.now();
     await em.flush();
 
-    em.create(PostRead, {
+    factories(em).postRead.makeOne({
       userId,
       postId: older.id,
       readAt: DateTime.now(),
