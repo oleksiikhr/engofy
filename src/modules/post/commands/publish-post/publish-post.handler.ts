@@ -23,6 +23,13 @@ export interface PostPublishJobData {
 // still gated (D6).
 const PUBLISH_GATE_RETRY_SECONDS = 30;
 
+// Branch stages that rejoin at publish.
+const GATE_STAGES = [
+  PostPipelineStage.Annotation,
+  PostPipelineStage.Enrichment,
+  PostPipelineStage.GrammarEnrichment,
+];
+
 // publish stage (PLAN.md §5): the terminal pipeline step. Flips
 // posts.status = published and enqueues a pending post_publications row per
 // target channel — V1 only telegram (§3.8, §10); the actual send is the
@@ -32,12 +39,13 @@ const PUBLISH_GATE_RETRY_SECONDS = 30;
 //
 // publish sits at the end of the ai_* branch, but the parallel annotation
 // and enrichment branches (word/phrase inline markup, word/phrase
-// definitions) fan out from spacy_parse/annotation completion and never
-// rejoin on their own. So publish is where all branches meet: it no-ops and
-// re-queues itself until BOTH the annotation stage (D6) and the enrichment
-// stage (PLAN.md §17 Track A) have Completed, otherwise a post could go
-// feed-visible with its inline annotations or lexicon definitions still
-// missing / failed.
+// definitions, grammar explanations) fan out from spacy_parse/annotation/
+// ai_grammar completion and never rejoin on their own. So publish is where
+// all branches meet: it no-ops and re-queues itself until the annotation
+// stage (D6), the lexicon enrichment stage (PLAN.md §17 Track A) and the
+// grammar enrichment stage have all Completed, otherwise a post could go
+// feed-visible with its inline annotations, lexicon definitions or grammar
+// explanations still missing / failed.
 //
 // The re-queue loop ends when the post is gone or `posts.status = failed`
 // (set by `JobWorkerHost` on retry exhaustion of any stage). A branch run
@@ -77,20 +85,12 @@ export class PublishPostHandler implements ICommandHandler<PublishPostCommand> {
       return;
     }
 
-    const [annotationRun, enrichmentRun] = await Promise.all([
-      this.em.findOne(PostPipelineRun, {
-        postId,
-        stage: PostPipelineStage.Annotation,
-      }),
-      this.em.findOne(PostPipelineRun, {
-        postId,
-        stage: PostPipelineStage.Enrichment,
-      }),
-    ]);
-    if (
-      annotationRun?.status !== PostPipelineRunStatus.Completed ||
-      enrichmentRun?.status !== PostPipelineRunStatus.Completed
-    ) {
+    const gateRuns = await this.em.find(PostPipelineRun, {
+      postId,
+      stage: { $in: GATE_STAGES },
+      status: PostPipelineRunStatus.Completed,
+    });
+    if (gateRuns.length < GATE_STAGES.length) {
       // One of the branches hasn't finished — don't publish yet. Re-queue a
       // delayed publish so every branch rejoins once it does.
       this.outbox.send<PostPublishJobData>(

@@ -67,7 +67,7 @@ export class GetDailyPlanHandler implements IQueryHandler<GetDailyPlanQuery> {
       grammarGuideword: grammar?.guideword ?? null,
       grammarConstructionSlug: construction?.slug ?? null,
       grammarCanDoStatement: grammar?.canDoStatement ?? null,
-      grammarExampleText: grammar?.exampleText ?? null,
+      grammarExampleText: grammar?.learnerExamples?.[0] ?? null,
       completedAt: plan.completedAt ?? null,
     };
   }

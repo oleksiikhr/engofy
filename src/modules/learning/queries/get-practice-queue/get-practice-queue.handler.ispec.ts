@@ -175,7 +175,7 @@ async function seedGrammarPoint(
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
     canDoStatement: 'Can talk about habits.',
-    exampleText: 'I walk to work every day.',
+    learnerExamples: ['I walk to work every day.'],
   });
   await em.flush();
   return { point, slug };

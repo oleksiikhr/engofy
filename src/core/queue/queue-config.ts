@@ -57,6 +57,10 @@ export const QUEUE_DEFINITIONS: Record<
   [QueueName.PostAiComplexity]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostAiGrammar]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostAiEnrichment]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
+  [QueueName.PostAiGrammarEnrichment]: {
+    ...PIPELINE_BASE,
+    ...AI_STAGE_RETRY,
+  },
   [QueueName.PostAiExercises]: { ...PIPELINE_BASE, ...AI_STAGE_RETRY },
   [QueueName.PostPublish]: { ...PIPELINE_BASE, ...DETERMINISTIC_RETRY },
 };

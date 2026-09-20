@@ -46,8 +46,18 @@ export class GrammarUsagePoint {
   @Property({ type: 'text' })
   canDoStatement!: string;
 
+  // Raw EGP corpus snippet, kept as import data — never shown to learners.
   @Property({ type: 'text', nullable: true })
   exampleText?: string | null;
+
+  // Learner-facing explanation (why it's used, how it's formed) and clean
+  // short example sentences, written by the grammar_enrichment stage. null =
+  // not yet enriched.
+  @Property({ type: 'text', nullable: true })
+  learnerExplanation?: string | null;
+
+  @Property({ type: 'json', nullable: true })
+  learnerExamples?: string[] | null;
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();

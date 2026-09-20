@@ -41,7 +41,8 @@ export interface GrammarUsagePointView {
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
-  exampleText: string | null;
+  explanation: string | null;
+  examples: string[];
 }
 
 // Resolved entry for a span's `grammarConstruct` slug. The inline tooltip

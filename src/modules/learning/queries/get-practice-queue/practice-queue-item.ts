@@ -22,7 +22,7 @@ export interface PracticeCardTarget {
   // label shown above the guideword. null for word/phrase, or when the usage
   // point's construction/category row is missing.
   kicker: string | null;
-  // Grammar-only: EGP example sentence (GrammarUsagePoint.exampleText).
+  // Grammar-only: first learner example sentence (GrammarUsagePoint.learnerExamples).
   exampleText: string | null;
   // Grammar-only: the construction's slug, for the "Детальніше" link to
   // `/grammar/[slug]`. null for word/phrase, or when the construction is

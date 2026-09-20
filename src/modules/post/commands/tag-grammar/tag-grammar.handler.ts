@@ -33,6 +33,7 @@ import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
+import type { PostAiGrammarEnrichmentJobData } from '../enrich-grammar/enrich-grammar.handler.js';
 import type { PostAiExercisesJobData } from '../generate-exercises/generate-exercises.handler.js';
 import { TagGrammarCommand } from './tag-grammar.command.js';
 
@@ -182,7 +183,14 @@ export class TagGrammarHandler implements ICommandHandler<TagGrammarCommand> {
     run.completedAt = DateTime.now();
     this.em.persist(run);
 
-    // Next stage in the pipeline chain (PLAN.md §5).
+    // Next stage in the pipeline chain (PLAN.md §5), plus the grammar
+    // enrichment branch — it needs the grammar_matches written above.
+    this.outbox.send<PostAiGrammarEnrichmentJobData>(
+      this.em,
+      QueueName.PostAiGrammarEnrichment,
+      { postId },
+      { singletonKey: postId },
+    );
     this.outbox.send<PostAiExercisesJobData>(
       this.em,
       QueueName.PostAiExercises,

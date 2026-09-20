@@ -506,7 +506,8 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
           cefrLevel: point.cefrLevel,
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
-          exampleText: point.exampleText ?? null,
+          explanation: point.learnerExplanation ?? null,
+          examples: point.learnerExamples ?? [],
         })),
       };
     }

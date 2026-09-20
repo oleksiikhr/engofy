@@ -130,7 +130,8 @@ async function seedGrammar(em: EntityManager): Promise<SeededGrammar> {
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
     canDoStatement: 'Can describe routines.',
-    exampleText: 'I get up at seven.',
+    learnerExplanation: 'We use the present simple for routines.',
+    learnerExamples: ['I get up at seven.'],
   });
   await em.flush();
   return { slug, grammarUsagePointId: point.id };
@@ -533,7 +534,12 @@ describe('ContentController', () => {
     expect(category).toBeTruthy();
     expect(
       category.constructions.find((c: { slug: string }) => c.slug === slug),
-    ).toMatchObject({ cefrLevel: 'A1', usagePointCount: 1, state: 'new' });
+    ).toMatchObject({
+      cefrLevel: 'A1',
+      usagePointCount: 1,
+      summary: 'We use the present simple for routines.',
+      state: 'new',
+    });
     // A guest carries no progress counts.
     expect(
       category.constructions.find((c: { slug: string }) => c.slug === slug),
@@ -548,9 +554,12 @@ describe('ContentController', () => {
     });
     expect(detail.body.usagePoints).toHaveLength(1);
     expect(detail.body.usagePoints[0]).toMatchObject({
+      explanation: 'We use the present simple for routines.',
+      examples: ['I get up at seven.'],
       state: 'new',
       assumedKnown: false,
     });
+    expect(detail.body.usagePoints[0]).not.toHaveProperty('exampleText');
     expect(detail.body).not.toHaveProperty('levelProgress');
     expect(detail.body.cheatSheetContent).toContain('Form');
   });

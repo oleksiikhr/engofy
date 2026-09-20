@@ -20,6 +20,7 @@ async function seedPost(
   opts: {
     annotationCompleted?: boolean;
     enrichmentCompleted?: boolean;
+    grammarEnrichmentCompleted?: boolean;
     status?: PostStatus;
   } = {},
 ): Promise<string> {
@@ -43,6 +44,14 @@ async function seedPost(
     });
   }
 
+  if (opts.grammarEnrichmentCompleted) {
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: PostPipelineStage.GrammarEnrichment,
+      status: PostPipelineRunStatus.Completed,
+    });
+  }
+
   await em.flush();
   return post.id;
 }
@@ -55,6 +64,7 @@ describe('PublishPostHandler', () => {
     const postId = await seedPost(suite.orm.em, {
       annotationCompleted: true,
       enrichmentCompleted: true,
+      grammarEnrichmentCompleted: true,
     });
 
     await suite.command(new PublishPostCommand(postId));
@@ -82,6 +92,7 @@ describe('PublishPostHandler', () => {
     const postId = await seedPost(suite.orm.em, {
       annotationCompleted: true,
       enrichmentCompleted: true,
+      grammarEnrichmentCompleted: true,
     });
 
     await suite.command(new PublishPostCommand(postId));
@@ -90,7 +101,7 @@ describe('PublishPostHandler', () => {
     expect(await suite.orm.em.count(PostPublication, { postId })).toBe(1);
   });
 
-  it('no-ops and re-queues itself until both the annotation and enrichment branches have completed', async () => {
+  it('no-ops and re-queues itself until the annotation, enrichment and grammar enrichment branches have completed', async () => {
     const postId = await seedPost(suite.orm.em);
 
     await suite.command(new PublishPostCommand(postId));
@@ -129,7 +140,23 @@ describe('PublishPostHandler', () => {
     expect(post.status).not.toBe(PostStatus.Published);
   });
 
-  it('publishes once both the annotation and enrichment runs flip to completed', async () => {
+  it('stays gated while only the grammar enrichment branch is missing', async () => {
+    const postId = await seedPost(suite.orm.em, {
+      annotationCompleted: true,
+      enrichmentCompleted: true,
+    });
+
+    await suite.command(new PublishPostCommand(postId));
+
+    const post = await suite.orm.em.findOneOrFail(Post, postId);
+    expect(post.status).not.toBe(PostStatus.Published);
+    queue.assertSent(
+      QueueName.PostPublish,
+      (data: { postId: string }) => data.postId === postId,
+    );
+  });
+
+  it('publishes once the annotation, enrichment and grammar enrichment runs flip to completed', async () => {
     const postId = await seedPost(suite.orm.em);
 
     await suite.command(new PublishPostCommand(postId));
@@ -143,6 +170,12 @@ describe('PublishPostHandler', () => {
     const _enrichmentRun = suite.factories.postPipelineRun.makeOne({
       postId,
       stage: PostPipelineStage.Enrichment,
+      status: PostPipelineRunStatus.Completed,
+    });
+
+    const _grammarEnrichmentRun = suite.factories.postPipelineRun.makeOne({
+      postId,
+      stage: PostPipelineStage.GrammarEnrichment,
       status: PostPipelineRunStatus.Completed,
     });
 
