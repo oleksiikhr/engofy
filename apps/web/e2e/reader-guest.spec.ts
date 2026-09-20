@@ -79,6 +79,67 @@ test.describe('reader guest strip', () => {
     await expect(progress.locator('[data-guest-streak]')).toHaveText('1');
   });
 
+  test('plays the saved animation when a guest adds a card, not when reopening it', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    const state = reader.popup.locator('.lex-actions--fresh .lex-state');
+    await expect(state).toHaveText('Learning');
+    await expect(state).toHaveCSS('animation-name', 'reward-badge');
+
+    await page.reload();
+    await reader.wordLabel('perambulate').click();
+    await expect(reader.popup.locator('.lex-state--learning')).toBeVisible();
+    await expect(reader.popup.locator('.lex-actions--fresh')).toHaveCount(0);
+  });
+
+  test('skips the reward animations for reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.wordLabel('perambulate').click();
+    await reader.popup.getByRole('button', { name: 'Add to deck' }).click();
+    await expect(
+      reader.popup.locator('.lex-actions--fresh .lex-state'),
+    ).toHaveCSS('animation-name', 'none');
+  });
+
+  test('pulses the header ring when the daily goal is reached, not on a later load', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      if (localStorage.getItem('guest-explored-days')) {
+        return;
+      }
+      const now = new Date();
+      const day = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, '0'),
+        String(now.getDate()).padStart(2, '0'),
+      ].join('-');
+      localStorage.setItem('guest-explored-days', JSON.stringify({ [day]: 9 }));
+    });
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+    const ring = page.locator('[data-guest-progress]').getByTestId('goal-ring');
+    await expect(ring).toBeVisible();
+    await expect(ring).not.toHaveClass(/goal--done/);
+
+    await reader.wordLabel('perambulate').click();
+    await expect(ring).toHaveClass(/goal--done/);
+    await expect(ring).toHaveClass(/goal--reached/);
+    await expect(ring).toHaveCSS('animation-name', 'reward-pulse');
+
+    await page.reload();
+    await expect(ring).toHaveClass(/goal--done/);
+    await expect(ring).not.toHaveClass(/goal--reached/);
+  });
+
   test('has no strip for a signed-in reader', async ({ browser }) => {
     const context = await browser.newContext({ storageState: AUTHED_STATE });
     const page = await context.newPage();
