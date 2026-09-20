@@ -19,6 +19,7 @@ import {
   type GrammarContrastiveResult,
   grammarContrastiveToolSchema,
   markSentenceSpan,
+  toGrammarContrastivePayload,
 } from '../../domain/grammar-contrastive-prompt.js';
 import { Exercise } from '../../entities/exercise.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
@@ -126,7 +127,7 @@ export class GenerateExercisesHandler
       exercise.payload = {
         grammarUsagePointId: item.grammarUsagePointId,
         sentenceId: item.sentenceId,
-        ...item.result,
+        ...toGrammarContrastivePayload(item.result),
       };
       this.em.persist(exercise);
     }

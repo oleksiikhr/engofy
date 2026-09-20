@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nestjs';
 import { v7 as uuidv7 } from 'uuid';
 import { injectOrm } from '../../../../test/helpers/orm.helper.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
@@ -10,18 +9,27 @@ import { PostPipelineRunStatus } from '../../../modules/post/enums/post-pipeline
 import { PostPipelineStage } from '../../../modules/post/enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../modules/post/enums/post-status.enum.js';
-import { JobWorkerHost, type PipelineStageRef } from '../job-worker-host.js';
+import {
+  type FailureHint,
+  JobWorkerHost,
+  type PipelineStageRef,
+} from '../job-worker-host.js';
 import { TagGrammarModule } from './tag-grammar.module.js';
 import { TagGrammarProcessor } from './tag-grammar.processor.js';
 
-vi.mock('@sentry/nestjs', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@sentry/nestjs')>()),
-  captureException: vi.fn(),
-}));
+type CaptureArgs = [err: unknown, hint: FailureHint];
+
+// Exposes the `reportFailure` seam so the Sentry hint can be asserted without
+// mocking `@sentry/nestjs` (see the seam's comment in job-worker-host.ts).
+const captured: CaptureArgs[] = [];
 
 class ThrowingProcessor extends JobWorkerHost<{ postId: string }> {
   constructor(private readonly error: Error) {
     super();
+  }
+
+  protected override reportFailure(...args: CaptureArgs): void {
+    captured.push(args);
   }
 
   protected pipelineStage(job: { data: { postId: string } }): PipelineStageRef {
@@ -148,7 +156,7 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
 
   describe('Sentry capture', () => {
     beforeEach(() => {
-      vi.mocked(Sentry.captureException).mockClear();
+      captured.length = 0;
     });
 
     function throwingProcessor(error: Error) {
@@ -165,13 +173,18 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
         ]),
       ).rejects.toThrow('boom');
 
-      expect(Sentry.captureException).toHaveBeenCalledExactlyOnceWith(error, {
-        tags: {
-          postId,
-          stage: PostPipelineStage.AiExercises,
-          exhausted: 'true',
-        },
-      });
+      expect(captured).toEqual([
+        [
+          error,
+          {
+            tags: {
+              postId,
+              stage: PostPipelineStage.AiExercises,
+              exhausted: 'true',
+            },
+          },
+        ],
+      ]);
     });
 
     it('flags an attempt with retries left as not exhausted', async () => {
@@ -183,12 +196,8 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
         ]),
       ).rejects.toThrow();
 
-      expect(Sentry.captureException).toHaveBeenCalledWith(
-        expect.any(Error),
-        expect.objectContaining({
-          tags: expect.objectContaining({ exhausted: 'false' }),
-        }),
-      );
+      expect(captured).toHaveLength(1);
+      expect(captured[0]?.[1].tags).toMatchObject({ exhausted: 'false' });
     });
 
     it('groups an AI schema mismatch under its own fingerprint per tool and stage', async () => {
@@ -201,16 +210,14 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
         ]),
       ).rejects.toThrow(AiSchemaMismatchError);
 
-      expect(Sentry.captureException).toHaveBeenCalledWith(
-        error,
-        expect.objectContaining({
-          fingerprint: [
-            'ai-schema-mismatch',
-            'report_grammar_contrastive',
-            PostPipelineStage.AiExercises,
-          ],
-        }),
-      );
+      expect(captured).toHaveLength(1);
+      expect(captured[0]?.[0]).toBe(error);
+      expect(captured[0]?.[1].fingerprint).toEqual([
+        'ai-schema-mismatch',
+        'report_grammar_contrastive',
+        PostPipelineStage.AiExercises,
+      ]);
+      expect(captured[0]?.[1].extra).toEqual({ rawInput: error.rawInput });
     });
 
     it('leaves other errors on the default fingerprint', async () => {
@@ -222,8 +229,8 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
         ]),
       ).rejects.toThrow();
 
-      const [, context] = vi.mocked(Sentry.captureException).mock.calls[0];
-      expect(context).not.toHaveProperty('fingerprint');
+      expect(captured).toHaveLength(1);
+      expect(captured[0]?.[1]).not.toHaveProperty('fingerprint');
     });
   });
 });

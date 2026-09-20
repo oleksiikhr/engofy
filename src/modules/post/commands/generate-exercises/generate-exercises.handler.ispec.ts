@@ -43,13 +43,12 @@ const FIXTURE_CONTRASTIVE: GrammarContrastiveResult = {
   explanation:
     'Past simple states a finished action; past continuous would describe it in progress.',
   question: 'The clever fox ____ over lazy dogs.',
-  options: ['jumped', 'was jumping', 'has jumped'],
-  answerIndex: 0,
-  optionExplanations: [
-    'A completed past action.',
-    'Describes an action in progress.',
-    'Links the past to now.',
-  ],
+  correctOption: 'jumped',
+  correctExplanation: 'A completed past action.',
+  wrongOption1: 'was jumping',
+  wrongExplanation1: 'Describes an action in progress.',
+  wrongOption2: 'has jumped',
+  wrongExplanation2: 'Links the past to now.',
 };
 
 interface SeededGrammar {
@@ -208,8 +207,22 @@ describe('GenerateExercisesHandler', () => {
     expect(contrastive[0]?.payload).toEqual({
       grammarUsagePointId: grammar.pastSimplePointId,
       sentenceId: grammar.sentenceId,
-      ...FIXTURE_CONTRASTIVE,
+      explanation: FIXTURE_CONTRASTIVE.explanation,
+      question: FIXTURE_CONTRASTIVE.question,
+      options: expect.arrayContaining(['jumped', 'was jumping', 'has jumped']),
+      answerIndex: expect.any(Number),
+      optionExplanations: expect.arrayContaining([
+        'A completed past action.',
+        'Describes an action in progress.',
+        'Links the past to now.',
+      ]),
     });
+
+    const payload = contrastive[0]?.payload as {
+      options: string[];
+      answerIndex: number;
+    };
+    expect(payload.options[payload.answerIndex]).toBe('jumped');
 
     expect(prompts).toHaveLength(1);
     expect(prompts[0]?.userText).toContain(

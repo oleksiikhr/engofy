@@ -3,19 +3,19 @@ import {
   buildGrammarContrastiveUserText,
   grammarContrastiveToolSchema,
   markSentenceSpan,
+  toGrammarContrastivePayload,
 } from './grammar-contrastive-prompt.js';
 
 function result(overrides: Record<string, unknown> = {}) {
   return {
     explanation: 'Present perfect links the past to now, unlike past simple.',
     question: 'She ____ here since 2010.',
-    options: ['has lived', 'lived', 'was living'],
-    answerIndex: 0,
-    optionExplanations: [
-      'Fits "since".',
-      'Ends in the past.',
-      'Not for states.',
-    ],
+    correctOption: 'has lived',
+    correctExplanation: 'Fits "since".',
+    wrongOption1: 'lived',
+    wrongExplanation1: 'Ends in the past.',
+    wrongOption2: 'was living',
+    wrongExplanation2: 'Not for states.',
     ...overrides,
   };
 }
@@ -52,58 +52,88 @@ describe('buildGrammarContrastiveUserText', () => {
 });
 
 describe('grammarContrastiveToolSchema', () => {
-  it('accepts three or four options with one explanation each', () => {
-    expect(grammarContrastiveToolSchema.parse(result()).options).toHaveLength(
-      3,
+  it('accepts two wrong options', () => {
+    expect(grammarContrastiveToolSchema.parse(result()).wrongOption3).toBe(
+      undefined,
     );
   });
 
-  it('rejects fewer than three options', () => {
-    expect(() =>
+  it('accepts a third wrong option with its explanation', () => {
+    expect(
       grammarContrastiveToolSchema.parse(
-        result({ options: ['a', 'b'], optionExplanations: ['x', 'y'] }),
-      ),
-    ).toThrow();
+        result({ wrongOption3: 'lives', wrongExplanation3: 'Not for since.' }),
+      ).wrongOption3,
+    ).toBe('lives');
   });
 
-  it('rejects an answerIndex outside the options', () => {
+  it('rejects a third wrong option without its explanation', () => {
     expect(() =>
-      grammarContrastiveToolSchema.parse(result({ answerIndex: 3 })),
+      grammarContrastiveToolSchema.parse(result({ wrongOption3: 'lives' })),
     ).toThrow();
   });
 
-  it('rejects a mismatched optionExplanations length', () => {
+  it('rejects a missing required option field', () => {
     expect(() =>
-      grammarContrastiveToolSchema.parse(
-        result({ optionExplanations: ['only one'] }),
-      ),
+      grammarContrastiveToolSchema.parse(result({ wrongOption2: undefined })),
     ).toThrow();
   });
 
-  it('unwraps array fields the model sent as JSON-encoded strings', () => {
-    const parsed = grammarContrastiveToolSchema.parse(
-      result({
-        options: JSON.stringify(['has lived', 'lived', 'was living']),
-        optionExplanations: JSON.stringify(['a', 'b', 'c']),
-      }),
-    );
-    expect(parsed.options).toEqual(['has lived', 'lived', 'was living']);
-    expect(parsed.optionExplanations).toEqual(['a', 'b', 'c']);
-  });
-
-  it('still rejects a string that is not a JSON array', () => {
+  it('rejects an empty option', () => {
     expect(() =>
-      grammarContrastiveToolSchema.parse(
-        result({ options: 'has lived, lived, was living' }),
-      ),
+      grammarContrastiveToolSchema.parse(result({ correctOption: '' })),
     ).toThrow();
   });
 
-  it('advertises the array fields as arrays in the JSON schema', () => {
+  it('advertises only scalar fields in the JSON schema', () => {
     const json = z.toJSONSchema(grammarContrastiveToolSchema) as {
       properties: Record<string, { type?: string }>;
+      required: string[];
     };
-    expect(json.properties.options?.type).toBe('array');
-    expect(json.properties.optionExplanations?.type).toBe('array');
+    expect(
+      Object.values(json.properties).every((field) => field.type === 'string'),
+    ).toBe(true);
+    expect(json.required).not.toContain('wrongOption3');
+    expect(json.required).toContain('wrongOption2');
+  });
+});
+
+describe('toGrammarContrastivePayload', () => {
+  it('builds the stored parallel-array shape with the correct option at answerIndex', () => {
+    const payload = toGrammarContrastivePayload(
+      grammarContrastiveToolSchema.parse(result()),
+    );
+    expect(payload.options).toHaveLength(3);
+    expect([...payload.options].sort()).toEqual(
+      ['has lived', 'lived', 'was living'].sort(),
+    );
+    expect(payload.options[payload.answerIndex]).toBe('has lived');
+    expect(payload.optionExplanations[payload.answerIndex]).toBe(
+      'Fits "since".',
+    );
+    const wrongIndex = payload.options.indexOf('lived');
+    expect(payload.optionExplanations[wrongIndex]).toBe('Ends in the past.');
+  });
+
+  it('includes the optional fourth option', () => {
+    const payload = toGrammarContrastivePayload(
+      grammarContrastiveToolSchema.parse(
+        result({ wrongOption3: 'lives', wrongExplanation3: 'Not for since.' }),
+      ),
+    );
+    expect(payload.options).toHaveLength(4);
+    expect(payload.optionExplanations).toHaveLength(4);
+    expect(payload.options[payload.answerIndex]).toBe('has lived');
+  });
+
+  it('is deterministic for the same question and varies across questions', () => {
+    const at = (question: string) =>
+      toGrammarContrastivePayload(
+        grammarContrastiveToolSchema.parse(result({ question })),
+      ).answerIndex;
+    expect(at('She ____ here.')).toBe(at('She ____ here.'));
+    const positions = new Set(
+      Array.from({ length: 30 }, (_, i) => at(`Question ${i} ____.`)),
+    );
+    expect(positions.size).toBeGreaterThan(1);
   });
 });

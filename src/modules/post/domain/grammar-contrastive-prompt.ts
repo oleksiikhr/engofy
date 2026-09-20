@@ -6,8 +6,6 @@ import { z } from 'zod';
 // used in a sentence fits and its same-category siblings do not, and asks a
 // contrastive multiple-choice question about that sentence.
 
-export const MIN_OPTIONS = 3;
-export const MAX_OPTIONS = 4;
 const MAX_SIBLING_GUIDEWORDS = 3;
 
 export const GRAMMAR_CONTRASTIVE_SYSTEM_PROMPT = `You write contrastive grammar exercises for a language-learning app.
@@ -17,55 +15,96 @@ You are given one English sentence from a reading passage, with the grammar cons
 Produce:
 - "explanation": 1-3 plain sentences telling the learner why the marked construction is used here and why a competing construction would not fit or would change the meaning. Name the competing construction.
 - "question": a multiple-choice question about this sentence that tests the contrast — e.g. the sentence with the marked part blanked out as "____", asking which form completes it.
-- "options": ${MIN_OPTIONS}-${MAX_OPTIONS} short options. Exactly one is the form actually used in the sentence; the others are natural forms of the competing constructions that are wrong in this context.
-- "answerIndex": the 0-based position of the correct option.
-- "optionExplanations": one short sentence per option, in the same order as "options" — for the correct option why it fits, for each wrong option why it does not.
+- "correctOption": a short option — the form actually used in the sentence — and "correctExplanation": one short sentence on why it fits.
+- "wrongOption1" and "wrongOption2" (and optionally "wrongOption3"): short options that are natural forms of the competing constructions but are wrong in this context, each with "wrongExplanation1", "wrongExplanation2" (and "wrongExplanation3"): one short sentence on why it does not fit. Leave "wrongOption3" and "wrongExplanation3" out unless a third wrong form is clearly useful.
 
 Keep everything in simple English suited to the learner. Base the exercise only on the given sentence.
 
 Answer only by calling the "report_grammar_contrastive" tool.`;
 
-// The model occasionally sends an array field as a JSON-encoded string
-// (`"[\"has lived\", \"lived\"]"`); unwrap it before validation. Anything that
-// does not decode to an array is passed through and fails the schema as before.
-function parseJsonArrayString(value: unknown): unknown {
-  if (typeof value !== 'string') {
-    return value;
-  }
-  try {
-    const parsed: unknown = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : value;
-  } catch {
-    return value;
-  }
-}
+// The options are flat scalar fields, not an array: when asked for an array of
+// options (strings or objects) the model intermittently breaks out of JSON and
+// sends the field as a mangled string, failing ~10% of attempts (~50% with
+// object items).
+const text = z.string().min(1);
 
 export const grammarContrastiveToolSchema = z
   .object({
-    explanation: z.string().min(1),
-    question: z.string().min(1),
-    options: z.preprocess(
-      parseJsonArrayString,
-      z.array(z.string().min(1)).min(MIN_OPTIONS).max(MAX_OPTIONS),
-    ),
-    answerIndex: z.number().int().min(0),
-    optionExplanations: z.preprocess(
-      parseJsonArrayString,
-      z.array(z.string().min(1)),
-    ),
+    explanation: text,
+    question: text,
+    correctOption: text,
+    correctExplanation: text,
+    wrongOption1: text,
+    wrongExplanation1: text,
+    wrongOption2: text,
+    wrongExplanation2: text,
+    wrongOption3: text.optional(),
+    wrongExplanation3: text.optional(),
   })
-  .refine((value) => value.answerIndex < value.options.length, {
-    message: 'answerIndex must point at one of the options',
-    path: ['answerIndex'],
-  })
-  .refine((value) => value.optionExplanations.length === value.options.length, {
-    message: 'optionExplanations must have one entry per option',
-    path: ['optionExplanations'],
-  });
+  .refine(
+    (value) =>
+      (value.wrongOption3 === undefined) ===
+      (value.wrongExplanation3 === undefined),
+    {
+      message: 'wrongOption3 and wrongExplanation3 must be given together',
+      path: ['wrongOption3'],
+    },
+  );
 
 export type GrammarContrastiveResult = z.infer<
   typeof grammarContrastiveToolSchema
 >;
+
+// The shape stored in `exercises.payload` (read by apps/web): parallel
+// `options` / `optionExplanations` arrays plus the correct option's index.
+export interface GrammarContrastivePayload {
+  explanation: string;
+  question: string;
+  options: string[];
+  answerIndex: number;
+  optionExplanations: string[];
+}
+
+// Stable per-question hash so the correct option is not always first, and a
+// stage re-run rebuilds the same order.
+function answerPosition(question: string, optionCount: number): number {
+  let hash = 0;
+  for (const char of question) {
+    hash = (hash * 31 + (char.codePointAt(0) ?? 0)) >>> 0;
+  }
+  return hash % optionCount;
+}
+
+export function toGrammarContrastivePayload(
+  result: GrammarContrastiveResult,
+): GrammarContrastivePayload {
+  const wrong = [
+    { text: result.wrongOption1, explanation: result.wrongExplanation1 },
+    { text: result.wrongOption2, explanation: result.wrongExplanation2 },
+  ];
+  if (
+    result.wrongOption3 !== undefined &&
+    result.wrongExplanation3 !== undefined
+  ) {
+    wrong.push({
+      text: result.wrongOption3,
+      explanation: result.wrongExplanation3,
+    });
+  }
+  const answerIndex = answerPosition(result.question, wrong.length + 1);
+  const ordered = [...wrong];
+  ordered.splice(answerIndex, 0, {
+    text: result.correctOption,
+    explanation: result.correctExplanation,
+  });
+  return {
+    explanation: result.explanation,
+    question: result.question,
+    options: ordered.map((option) => option.text),
+    answerIndex,
+    optionExplanations: ordered.map((option) => option.explanation),
+  };
+}
 
 export interface GrammarContrastiveSibling {
   name: string;
