@@ -1,4 +1,5 @@
 import { addToGuestDeck, readGuestDeck } from './guest-deck';
+import { recordExplored } from './guest-progress';
 import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 import {
   type GrammarLexiconEntry,
@@ -30,6 +31,8 @@ const LABEL_ATTR: Record<string, string> = {
   phrase: 'data-phrase-id',
   grammar: 'data-grammar-usage-point-id',
 };
+// Fired on `document` with the guest's new explored-words count as `detail`.
+export const EXPLORED_EVENT = 'reader:explored';
 const GAP = 8;
 const EDGE = 8;
 const ARROW_INSET = 28;
@@ -129,6 +132,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
 
   const slugId =
     root.closest<HTMLElement>('[data-slug-id]')?.dataset.slugId ?? '';
+  const isGuest = root.closest('[data-guest]') !== null;
   let active: Element | null = null;
   let current: Target | null = null;
   let anchorY: number | null = null;
@@ -218,6 +222,14 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
     anchorY = clientY;
     target.anchor.classList.add('is-active');
     render(target);
+    if (isGuest && target.lexical) {
+      const count = recordExplored(
+        `${target.lexical.kind}:${target.lexical.id}`,
+      );
+      document.dispatchEvent(
+        new CustomEvent(EXPLORED_EVENT, { detail: count }),
+      );
+    }
   }
 
   root.addEventListener('click', (event) => {

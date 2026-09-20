@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import QuickCheck from '../../components/QuickCheck.astro';
 import QuickCheckScreen from '../../components/QuickCheckScreen.astro';
-import { apiGetOrNull } from '../../lib/api';
+import { apiGetOrNull, apiPatch } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
 import { postDescription, postJsonLd } from '../../lib/post-seo';
 import { escapeJson } from '../../lib/seo';
@@ -18,6 +18,7 @@ import {
   readingMinutes,
   seenSummary,
 } from '../../lib/reader-summary';
+import { LEVEL_COOKIE, parseLevelChoice } from '../../lib/reader-level';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import { publicOrigin } from '../../lib/site';
@@ -135,7 +136,21 @@ const [budget, dueCards, streakResponse, profile] = user
 const guestLevel: CefrLevel | null = post.cefrLevel
   ? CEFR_LEVELS[Math.max(CEFR_LEVELS.indexOf(post.cefrLevel) - 1, 0)]
   : null;
-const readerLevel = profile?.cefrLevel ?? guestLevel;
+// A level the guest picked in the strip below lives in a cookie. Once signed
+// in it moves into the account and the cookie goes.
+const levelChoice = parseLevelChoice(Astro.cookies.get(LEVEL_COOKIE)?.value);
+const pickedLevel = levelChoice === 'skip' ? null : levelChoice;
+if (user && levelChoice) {
+  if (pickedLevel) {
+    await apiPatch(
+      '/profile/cefr-level',
+      { cefrLevel: pickedLevel },
+      { request: Astro.request },
+    ).catch(() => {});
+  }
+  Astro.cookies.delete(LEVEL_COOKIE, { path: '/' });
+}
+const readerLevel = (user ? (pickedLevel ?? profile?.cefrLevel) : (pickedLevel ?? guestLevel)) ?? null;
 const bodyHtml = renderDoc(post.doc, post.annotations, readerLevel);
 
 const dueCount = dueCards?.items.length ?? 0;
@@ -267,6 +282,29 @@ const isRead = post.isRead ?? false;
         </p>
       </div>
 
+      {
+        !user && (
+          <div class="reader-guest" data-reader-guest>
+            <p class="reader-guest__row" data-level-set hidden={!levelChoice}>
+              <span>Your level: <b>{pickedLevel ?? 'not set'}</b></span>
+              <button type="button" class="reader-guest__link" data-level-change>{pickedLevel ? 'Change' : 'Set'}</button>
+            </p>
+            <div class="reader-guest__row" data-level-pick hidden={Boolean(levelChoice)} role="group" aria-label="Your English level">
+              <span>What is your level?</span>
+              <span class="reader-guest__chips">
+                {CEFR_LEVELS.map((level) => (
+                  <button type="button" class="reader-guest__chip" data-level={level}>{level}</button>
+                ))}
+              </span>
+              <button type="button" class="reader-guest__link" data-level-skip>Skip</button>
+            </div>
+            <p class="reader-guest__count" data-explored hidden>
+              You've explored <b>0</b> <span data-explored-noun>words</span>
+            </p>
+          </div>
+        )
+      }
+
       <div class="reader-hint">
         <div class="reader-hint__clip">
           <p class="reader-hint__body">
@@ -322,6 +360,7 @@ const isRead = post.isRead ?? false;
   import type { LexiconData } from '../../lib/reader-lexicon';
   import { initReaderFinal } from '../../lib/reader-final';
   import { initReadState } from '../../lib/reader-read';
+  import { initReaderGuest } from '../../lib/reader-guest';
   import { initReaderHelp } from '../../lib/reader-help';
   import { initReaderListen } from '../../lib/reader-listen';
   import { initLevelNote } from '../../lib/reader-level-note';
@@ -351,6 +390,11 @@ const isRead = post.isRead ?? false;
   const toolbar = document.querySelector<HTMLElement>('.reader-toolbar');
   if (toolbar) {
     initReaderToolbar(toolbar);
+  }
+
+  const guestStrip = document.querySelector<HTMLElement>('[data-reader-guest]');
+  if (guestStrip) {
+    initReaderGuest(guestStrip);
   }
 
   const article = document.querySelector<HTMLElement>('.reader-article');
