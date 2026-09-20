@@ -5,8 +5,14 @@ import {
   posLabel,
   shortExample,
 } from './popup-labels';
-import type { PopupLang } from './prefs';
-import type { CefrLevel, EffectiveState } from './types';
+import { type PopupLang, TRANSLATION_LANGS } from './prefs';
+import type {
+  CefrLevel,
+  EffectiveState,
+  GrammarTranslations,
+  LexiconTranslations,
+  TranslationLang,
+} from './types';
 
 // Popup content for the reader's word, phrase and grammar labels — shared by
 // the client popup (bundled into the page) and the /partials/lexicon-action
@@ -52,7 +58,7 @@ interface LexiconEntryBase {
   id: string;
   definition: string | null;
   example: string | null;
-  translationUk: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -78,7 +84,7 @@ export interface GrammarLexiconEntry {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  explanationUk: string | null;
+  translations: GrammarTranslations;
   examples: string[];
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
@@ -162,12 +168,24 @@ export function reportRowHtml(target: LexiconTarget, slugId: string): string {
 export const REPORT_DONE_HTML =
   '<span class="lex-report lex-report--done" role="status">Thanks — reported.</span>';
 
+const LANG_LABEL: Record<PopupLang, string> = { en: 'EN', uk: 'УКР' };
+
+// The translation languages some section on screen has text for.
+function availableLangs(
+  lexical: LexiconEntry | null,
+  grammar: GrammarLexiconEntry | null,
+): TranslationLang[] {
+  return TRANSLATION_LANGS.filter(
+    (code) => lexical?.translations[code] || grammar?.translations[code],
+  );
+}
+
 // The EN / УКР switch for the popup's definitions. Only offered when some
-// section on screen has Ukrainian text to show.
-function langToggleHtml(lang: PopupLang): string {
-  const button = (value: PopupLang, label: string) =>
-    `<button type="button" class="lex-popup__lang-btn" data-popup-lang="${value}" aria-pressed="${lang === value}">${label}</button>`;
-  return `<div class="lex-popup__lang" role="group" aria-label="Definition language">${button('en', 'EN')}${button('uk', 'УКР')}</div>`;
+// section on screen has a translation to show.
+function langToggleHtml(lang: PopupLang, langs: TranslationLang[]): string {
+  const button = (value: PopupLang) =>
+    `<button type="button" class="lex-popup__lang-btn" data-popup-lang="${value}" aria-pressed="${lang === value}">${LANG_LABEL[value]}</button>`;
+  return `<div class="lex-popup__lang" role="group" aria-label="Definition language">${['en' as const, ...langs].map(button).join('')}</div>`;
 }
 
 function topRowHtml(kicker: string, toggle: string): string {
@@ -186,6 +204,8 @@ function lexiconSectionHtml(
       ? ['Word', posLabel(entry.pos)].filter(Boolean).join(' · ')
       : ['Phrase', phraseTypeLabel(entry.type)].filter(Boolean).join(' · ');
   const sub = entry.kind === 'word' ? (entry.phonetic ?? '') : '';
+  const translation =
+    lang === 'en' ? null : entry.translations[lang]?.translation;
   const cefr = entry.cefrLevel
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
     : '';
@@ -197,7 +217,7 @@ function lexiconSectionHtml(
     <button type="button" class="lex-popup__speak" data-speak="${esc(term)}" aria-label="Pronounce ${esc(term)}">${SPEAK_ICON}</button>
   </div>
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
-  ${lang === 'uk' && entry.translationUk ? `<p class="lex-popup__translation" lang="uk">${esc(entry.translationUk)}</p>` : ''}
+  ${translation ? `<p class="lex-popup__translation" lang="${esc(lang)}">${esc(translation)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
   ${entry.example ? `<p class="lex-popup__example">${esc(shortExample(entry.example))}</p>` : ''}
   ${lexiconActionsHtml({ kind: entry.kind, id: entry.id }, entry.state)}
@@ -212,9 +232,10 @@ function grammarSectionHtml(
   toggle: string,
 ): string {
   const guideword = guidewordLabel(entry.guideword);
-  const useUk = lang === 'uk' && entry.explanationUk;
-  const explanation = useUk
-    ? `<p class="lex-popup__def" lang="uk">${esc(entry.explanationUk ?? '')}</p>`
+  const translated =
+    lang === 'en' ? null : entry.translations[lang]?.explanation;
+  const explanation = translated
+    ? `<p class="lex-popup__def" lang="${esc(lang)}">${esc(translated)}</p>`
     : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
   ${topRowHtml('Grammar', toggle)}
@@ -240,8 +261,8 @@ export function readerPopupHtml(
   slugId: string,
   lang: PopupLang,
 ): string {
-  const hasUk = !!(lexical?.translationUk || grammar?.explanationUk);
-  const toggle = hasUk ? langToggleHtml(lang) : '';
+  const langs = availableLangs(lexical, grammar);
+  const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
   return [
     lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle) : '',
     grammar

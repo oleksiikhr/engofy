@@ -33,14 +33,14 @@ function fixtureEnrichment(userText: string): EnrichmentResult {
       phonetic: `/p${index}/`,
       example: `example-${index}`,
       cefrLevel: CefrLevel.A2,
-      translationUk: `переклад-${index}`,
+      translation: `переклад-${index}`,
     })),
     phrases: indexesOf(phrasesBlock ?? '').map((index) => ({
       index,
       definition: `phrase-definition-${index}`,
       example: `phrase-example-${index}`,
       cefrLevel: CefrLevel.B1,
-      translationUk: `фраза-${index}`,
+      translation: `фраза-${index}`,
     })),
   };
 }
@@ -137,13 +137,15 @@ describe('EnrichLexiconHandler', () => {
     expect(definition.phonetic).toBe('/p0/');
     expect(definition.exampleSentence).toBe('example-0');
     expect(definition.cefrLevel).toBe(CefrLevel.A2);
-    expect(definition.translationUk).toBe('переклад-0');
+    expect(definition.translations).toEqual({
+      uk: { translation: 'переклад-0' },
+    });
 
     const phrase = await suite.orm.em.findOneOrFail(Phrase, phraseId);
     expect(phrase.definition).toBe('phrase-definition-0');
     expect(phrase.exampleSentence).toBe('phrase-example-0');
     expect(phrase.cefrLevel).toBe(CefrLevel.B1);
-    expect(phrase.translationUk).toBe('фраза-0');
+    expect(phrase.translations).toEqual({ uk: { translation: 'фраза-0' } });
 
     const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
       postId,
@@ -173,7 +175,7 @@ describe('EnrichLexiconHandler', () => {
       definition: 'already enriched',
       exampleSentence: 'Already an example.',
       cefrLevel: CefrLevel.A1,
-      translationUk: 'уже є',
+      translations: { uk: { translation: 'уже є' } },
     });
 
     const source = { format: PostSourceFormat.Text, rawText: 'A word.' };
@@ -229,6 +231,8 @@ describe('EnrichLexiconHandler', () => {
       WordDefinition,
       wordDefinitionId,
     );
-    expect(filled.translationUk).toBe('переклад-0');
+    expect(filled.translations).toEqual({
+      uk: { translation: 'переклад-0' },
+    });
   });
 });

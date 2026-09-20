@@ -3,6 +3,10 @@ import type {
   IrregularVerbForms,
   TokenTense,
 } from '../../domain/analyze-token.js';
+import type {
+  GrammarTranslations,
+  LexiconTranslations,
+} from '../../domain/content-translations.js';
 import type { Doc } from '../../domain/node-tree.types.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
@@ -21,7 +25,7 @@ export interface WordAnnotationView {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
-  translationUk: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
   state: EffectiveState;
@@ -33,7 +37,7 @@ export interface PhraseAnnotationView {
   type: string | null;
   definition: string | null;
   example: string | null;
-  translationUk: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -44,7 +48,7 @@ export interface GrammarUsagePointView {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  explanationUk: string | null;
+  translations: GrammarTranslations;
   examples: string[];
 }
 

@@ -11,6 +11,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import type { GrammarTranslations } from '../domain/content-translations.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { GrammarConstruction } from './grammar-construction.entity.js';
 
@@ -59,10 +60,11 @@ export class GrammarUsagePoint {
   @Property({ type: 'json', nullable: true })
   learnerExamples?: string[] | null;
 
-  // Ukrainian translation of `learnerExplanation`, written by the same stage.
-  // null = not yet enriched (the stage's pending marker).
-  @Property({ type: 'text', nullable: true })
-  learnerExplanationUk?: string | null;
+  // Translations of `learnerExplanation` by language
+  // (`{ uk: { explanation } }`), written by the same stage; a missing key =
+  // not yet translated into that language.
+  @Property({ type: 'json', nullable: true })
+  translations?: GrammarTranslations | null;
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();

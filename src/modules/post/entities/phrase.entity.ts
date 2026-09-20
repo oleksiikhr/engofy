@@ -9,6 +9,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import type { LexiconTranslations } from '../domain/content-translations.js';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PhraseType } from '../enums/phrase-type.enum.js';
 
@@ -42,10 +43,10 @@ export class Phrase {
   @Property({ type: 'text', nullable: true })
   exampleSentence?: string | null;
 
-  // Short Ukrainian equivalent of the phrase, written by the enrichment stage.
-  // null = not yet enriched (the stage's pending marker).
-  @Property({ type: 'text', nullable: true })
-  translationUk?: string | null;
+  // Translations by language (`{ uk: { translation } }`), written by the
+  // enrichment stage; a missing key = not yet translated into that language.
+  @Property({ type: 'json', nullable: true })
+  translations?: LexiconTranslations | null;
 
   @Enum({ items: () => CefrLevel, nullable: true })
   cefrLevel?: CefrLevel | null;

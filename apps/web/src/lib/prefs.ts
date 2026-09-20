@@ -21,10 +21,10 @@ export type ReaderDensity = (typeof READER_DENSITIES)[number];
 export const READER_HINTS = ['new', 'seen'] as const;
 export type ReaderHint = (typeof READER_HINTS)[number];
 
-// Language of the reader popup's definitions: English only, or a Ukrainian
-// translation alongside. Read when the popup opens, so it is not in the boot
-// script.
-export const POPUP_LANGS = ['en', 'uk'] as const;
+// Language of the reader popup's definitions: English only, or a translation
+// alongside. Read when the popup opens, so it is not in the boot script.
+export const TRANSLATION_LANGS = ['uk'] as const;
+export const POPUP_LANGS = ['en', ...TRANSLATION_LANGS] as const;
 export type PopupLang = (typeof POPUP_LANGS)[number];
 
 export const READER_SIZE_STEPS = 6;

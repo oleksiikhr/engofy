@@ -1509,9 +1509,9 @@
           "enumItems": [],
           "mappedType": "text"
         },
-        "learner_explanation_uk": {
-          "name": "learner_explanation_uk",
-          "type": "text",
+        "translations": {
+          "name": "translations",
+          "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -1524,7 +1524,7 @@
           "comment": null,
           "collation": null,
           "enumItems": [],
-          "mappedType": "text"
+          "mappedType": "json"
         },
         "updated_at": {
           "name": "updated_at",
@@ -2390,9 +2390,9 @@
           "enumItems": [],
           "mappedType": "text"
         },
-        "translation_uk": {
-          "name": "translation_uk",
-          "type": "text",
+        "translations": {
+          "name": "translations",
+          "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -2405,7 +2405,7 @@
           "comment": null,
           "collation": null,
           "enumItems": [],
-          "mappedType": "text"
+          "mappedType": "json"
         },
         "type": {
           "name": "type",
@@ -5428,9 +5428,9 @@
           ],
           "mappedType": "enum"
         },
-        "translation_uk": {
-          "name": "translation_uk",
-          "type": "text",
+        "translations": {
+          "name": "translations",
+          "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -5443,7 +5443,7 @@
           "comment": null,
           "collation": null,
           "enumItems": [],
-          "mappedType": "text"
+          "mappedType": "json"
         },
         "updated_at": {
           "name": "updated_at",
