@@ -5,6 +5,7 @@ import { Command, CommandBus, Query, QueryBus } from '@nestjs/cqrs';
 import type { TestingModule } from '@nestjs/testing';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../src/core/redis/redis.tokens.js';
+import { type Factories, factories } from '../factories/factories.js';
 import {
   createIntegrationApp,
   type IntegrationApp,
@@ -13,6 +14,8 @@ import {
 import { useOrmSuiteLifecycle } from './orm-suite-lifecycle.helper.js';
 
 export interface IntegrationSuite extends IntegrationApp {
+  // Entity factories bound to the suite's global `orm.em`.
+  readonly factories: Factories;
   command<T>(command: Command<T>): Promise<T>;
   query<T>(query: Query<T>): Promise<T>;
 }
@@ -47,6 +50,9 @@ export function createIntegrationSuite(
     },
     get orm() {
       return orm;
+    },
+    get factories() {
+      return factories(orm.em);
     },
     async command<T>(command: Command<T>): Promise<T> {
       const result = await commandBus.execute(command);

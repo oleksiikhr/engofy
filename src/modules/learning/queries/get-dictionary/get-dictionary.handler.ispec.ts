@@ -1,19 +1,13 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { User } from '../../../auth/entities/user.entity.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../post/entities/sentence-token.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
-import { PostSourceType } from '../../../post/enums/post-source-type.enum.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import { EffectiveState } from '../../domain/resolve-effective-state.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
@@ -24,7 +18,7 @@ import { LearningModule } from '../../learning.module.js';
 import { GetDictionaryQuery } from './get-dictionary.query.js';
 
 async function seedUser(em: EntityManager): Promise<User> {
-  const user = em.create(User, { email: `${uuidv7()}@example.com` });
+  const user = factories(em).user.makeOne({ email: `${uuidv7()}@example.com` });
   await em.flush();
   return user;
 }
@@ -37,7 +31,7 @@ function card(
     Pick<LearningCard, 'state' | 'scheduledDays' | 'due'>
   > = {},
 ): void {
-  em.create(LearningCard, {
+  factories(em).learningCard.makeOne({
     userId,
     wordDefinitionId: target.wordDefinitionId ?? null,
     phraseId: target.phraseId ?? null,
@@ -58,7 +52,7 @@ function disposition(
   target: Partial<Pick<LearningDisposition, 'wordDefinitionId' | 'phraseId'>>,
   value: Disposition,
 ): void {
-  em.create(LearningDisposition, {
+  factories(em).learningDisposition.makeOne({
     userId,
     wordDefinitionId: target.wordDefinitionId ?? null,
     phraseId: target.phraseId ?? null,
@@ -70,19 +64,13 @@ function postLinking(
   em: EntityManager,
   opts: { status: PostStatus; wordId?: string; phraseId?: string },
 ): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.Original;
-  source.rawText = 'seed';
-  source.attributionText = 'Original content';
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'seed' },
+    title: `post-${uuidv7().slice(0, 6)}`,
+    status: opts.status,
+  });
 
-  const post = new Post();
-  post.source = source;
-  post.title = `post-${uuidv7().slice(0, 6)}`;
-  post.status = opts.status;
-  em.persist(post);
-
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: uuidv7(),
     unitIndex: 0,
@@ -91,7 +79,7 @@ function postLinking(
     charStart: 0,
     charEnd: 8,
   });
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId: sentence.id,
     position: 0,
     text: 'term',
@@ -123,13 +111,13 @@ describe('GetDictionaryHandler', () => {
   it('excludes archived cards', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
     await em.flush();
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: definition.id,
       due: DateTime.now(),
@@ -153,14 +141,14 @@ describe('GetDictionaryHandler', () => {
   it('surfaces a disposition-only target (no active card) as learned/skipped', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const knownWord = em.create(Word, {
+    const knownWord = factories(em).word.makeOne({
       lemma: `known-${uuidv7().slice(0, 6)}`,
     });
-    const knownDef = em.create(WordDefinition, {
+    const knownDef = factories(em).wordDefinition.makeOne({
       wordId: knownWord.id,
       pos: PartOfSpeech.Adjective,
     });
-    const skippedPhrase = em.create(Phrase, {
+    const skippedPhrase = factories(em).phrase.makeOne({
       phraseText: `skip-${uuidv7().slice(0, 6)}`,
     });
     await em.flush();
@@ -195,13 +183,15 @@ describe('GetDictionaryHandler', () => {
   it('groups multiple saved senses of the same lemma into one entry', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `bank-${uuidv7().slice(0, 6)}` });
-    const nounDef = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `bank-${uuidv7().slice(0, 6)}`,
+    });
+    const nounDef = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a financial institution',
     });
-    const verbDef = em.create(WordDefinition, {
+    const verbDef = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Verb,
       definition: 'to tilt an aircraft',
@@ -246,14 +236,14 @@ describe('GetDictionaryHandler', () => {
   it('filters by effective state', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const learningWord = em.create(Word, {
+    const learningWord = factories(em).word.makeOne({
       lemma: `learning-${uuidv7().slice(0, 6)}`,
     });
-    const learningDef = em.create(WordDefinition, {
+    const learningDef = factories(em).wordDefinition.makeOne({
       wordId: learningWord.id,
       pos: PartOfSpeech.Noun,
     });
-    const skippedPhrase = em.create(Phrase, {
+    const skippedPhrase = factories(em).phrase.makeOne({
       phraseText: `skipped-${uuidv7().slice(0, 6)}`,
     });
     await em.flush();
@@ -298,13 +288,15 @@ describe('GetDictionaryHandler', () => {
   it('searches case-insensitively on lemma / phrase text only', async () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
-    const word = em.create(Word, { lemma: `Harbour-${uuidv7().slice(0, 6)}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `Harbour-${uuidv7().slice(0, 6)}`,
+    });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'a sheltered anchorage',
     });
-    const phrase = em.create(Phrase, {
+    const phrase = factories(em).phrase.makeOne({
       phraseText: `set sail-${uuidv7().slice(0, 6)}`,
       definition: 'to depart by sea',
     });
@@ -350,8 +342,8 @@ describe('GetDictionaryHandler', () => {
       (prefix) => `${prefix}-${uuidv7().slice(0, 6)}`,
     );
     for (const lemma of lemmas) {
-      const word = em.create(Word, { lemma });
-      const definition = em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma });
+      const definition = factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
@@ -395,8 +387,10 @@ describe('GetDictionaryHandler', () => {
     const em = suite.orm.em;
     const userId = (await seedUser(em)).id;
 
-    const word = em.create(Word, { lemma: `tide-${uuidv7().slice(0, 6)}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({
+      lemma: `tide-${uuidv7().slice(0, 6)}`,
+    });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'the rise and fall of the sea',

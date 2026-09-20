@@ -39,10 +39,10 @@ ORM не додаємо: у сутності лишається скаляр `st
 осиротілих daily-планів (`get-daily-plan` / `create-daily-plan` + тести), який уже лежить у робочому
 дереві; після каскаду гілка «осиротілий план» стає мертвою, тож вирішити, чи лишати її як захист.
 
-### [ ] 2. Фабрики: інфраструктура і перші модулі
+### [x] 2. Фабрики: інфраструктура і перші модулі
 - Branch: `enforce-db-foreign-keys-02-factories-core`
-- Base: `enforce-db-foreign-keys-01-fk-spike`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/94
 
 Усі фікстури в тестах створюються через `Factory` з `@mikro-orm/seeder` (уже є в devDependencies),
 `test/factories/<entity>.factory.ts`, по одній фабриці на сутність з детермінованими дефолтами в

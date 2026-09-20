@@ -12,7 +12,7 @@ describe('CancelAccountDeletionByTokenHandler', () => {
   it('cancels the request that owns the token', async () => {
     const userId = randomUUID();
     const token = generateToken();
-    suite.orm.em.create(AccountDeletionRequest, {
+    suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: hashSecret(token),
     });
@@ -36,7 +36,7 @@ describe('CancelAccountDeletionByTokenHandler', () => {
 
   it('throws when the request was already cancelled', async () => {
     const token = generateToken();
-    const request = suite.orm.em.create(AccountDeletionRequest, {
+    const request = suite.factories.accountDeletionRequest.makeOne({
       userId: randomUUID(),
       cancelTokenHash: hashSecret(token),
     });

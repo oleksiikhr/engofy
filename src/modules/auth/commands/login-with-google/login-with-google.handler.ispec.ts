@@ -58,7 +58,7 @@ describe('LoginWithGoogleHandler', () => {
 
   it('backfills googleSub onto an existing user found by email', async () => {
     const email = uniqueEmail();
-    const existing = suite.orm.em.create(User, { email, googleSub: null });
+    const existing = suite.factories.user.makeOne({ email, googleSub: null });
     await suite.orm.em.flush();
     suite.orm.em.clear();
 

@@ -6,7 +6,6 @@ import type { SendAccountDeletionEmailJobData } from '../../../../entrypoints/wo
 import { AuthModule } from '../../auth.module.js';
 import { hashSecret } from '../../crypto/token.helper.js';
 import { AccountDeletionRequest } from '../../entities/account-deletion-request.entity.js';
-import { User } from '../../entities/user.entity.js';
 import { RequestAccountDeletionCommand } from './request-account-deletion.command.js';
 
 describe('RequestAccountDeletionHandler', () => {
@@ -14,7 +13,7 @@ describe('RequestAccountDeletionHandler', () => {
   const queue = useQueueSpy(suite);
 
   const createUser = async () => {
-    const user = suite.orm.em.create(User, {
+    const user = suite.factories.user.makeOne({
       email: `user-${randomUUID()}@example.com`,
     });
     await suite.orm.em.flush();

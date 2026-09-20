@@ -1,9 +1,6 @@
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { LearningDisposition } from '../../entities/learning-disposition.entity.js';
@@ -19,7 +16,7 @@ describe('RemoveCardHandler', () => {
   function makeCard(
     overrides: Partial<LearningCard> & { userId: string },
   ): LearningCard {
-    return suite.orm.em.create(LearningCard, {
+    return suite.factories.learningCard.makeOne({
       due: DateTime.now(),
       stability: 1,
       difficulty: 5,
@@ -34,8 +31,8 @@ describe('RemoveCardHandler', () => {
 
   it('physically deletes a never-reviewed card', async () => {
     const userId = uuidv7();
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -51,7 +48,9 @@ describe('RemoveCardHandler', () => {
 
   it('archives a reviewed phrase card and records a Known disposition', async () => {
     const userId = uuidv7();
-    const phrase = suite.orm.em.create(Phrase, { phraseText: `p-${uuidv7()}` });
+    const phrase = suite.factories.phrase.makeOne({
+      phraseText: `p-${uuidv7()}`,
+    });
     const card = makeCard({
       userId,
       phraseId: phrase.id,
@@ -76,8 +75,8 @@ describe('RemoveCardHandler', () => {
 
   it('archives a reviewed word card and records a Known disposition on that sense', async () => {
     const userId = uuidv7();
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -105,8 +104,10 @@ describe('RemoveCardHandler', () => {
 
   it('overwrites an existing disposition rather than duplicating it', async () => {
     const userId = uuidv7();
-    const phrase = suite.orm.em.create(Phrase, { phraseText: `p-${uuidv7()}` });
-    suite.orm.em.create(LearningDisposition, {
+    const phrase = suite.factories.phrase.makeOne({
+      phraseText: `p-${uuidv7()}`,
+    });
+    suite.factories.learningDisposition.makeOne({
       userId,
       phraseId: phrase.id,
       disposition: Disposition.Skipped,
@@ -130,8 +131,8 @@ describe('RemoveCardHandler', () => {
   });
 
   it('rejects a card id that does not belong to the user', async () => {
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });

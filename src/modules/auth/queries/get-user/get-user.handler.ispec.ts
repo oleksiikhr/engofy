@@ -1,14 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AuthModule } from '../../auth.module.js';
-import { User } from '../../entities/user.entity.js';
 import { GetUserQuery } from './get-user.query.js';
 
 describe('GetUserHandler', () => {
   const suite = createIntegrationSuite({ imports: [AuthModule] });
 
   it('returns the user matching the given id', async () => {
-    const user = suite.orm.em.create(User, {
+    const user = suite.factories.user.makeOne({
       email: `${randomUUID()}@example.com`,
     });
     await suite.orm.em.flush();

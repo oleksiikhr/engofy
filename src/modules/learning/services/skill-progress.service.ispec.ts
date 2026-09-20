@@ -1,9 +1,7 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
-import { GrammarCategory } from '../../post/entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../post/entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../post/entities/grammar-usage-point.entity.js';
 import { CefrLevel } from '../../post/enums/cefr-level.enum.js';
 import type { LearningCard } from '../entities/learning-card.entity.js';
 import { UserSkillProgress } from '../entities/user-skill-progress.entity.js';
@@ -24,17 +22,17 @@ describe('SkillProgressService', () => {
     usagePointId: string;
     constructionId: string;
   }> {
-    const category = em.create(GrammarCategory, {
+    const category = factories(em).grammarCategory.makeOne({
       name: `cat-${uuidv7()}`,
       sortOrder: 0,
     });
-    const construction = em.create(GrammarConstruction, {
+    const construction = factories(em).grammarConstruction.makeOne({
       categoryId: category.id,
       name: `con-${uuidv7()}`,
       slug: `con-${uuidv7()}`,
       sortOrder: 0,
     });
-    const point = em.create(GrammarUsagePoint, {
+    const point = factories(em).grammarUsagePoint.makeOne({
       constructionId: construction.id,
       egpIndex: Math.floor(Math.random() * 1_000_000),
       cefrLevel: CefrLevel.B1,

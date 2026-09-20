@@ -1,13 +1,10 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { Subscription } from '../../../billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../billing/enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../../billing/enums/subscription-status.enum.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
@@ -25,7 +22,7 @@ function fillLearningCards(
   count: number,
 ): void {
   for (let i = 0; i < count; i += 1) {
-    em.create(LearningCard, {
+    factories(em).learningCard.makeOne({
       userId,
       wordDefinitionId: uuidv7(),
       due: DateTime.now(),
@@ -44,8 +41,8 @@ describe('AddCardHandler', () => {
   const suite = createIntegrationSuite({ imports: [LearningModule] });
 
   async function seedWordDefinition(lemma: string): Promise<string> {
-    const word = suite.orm.em.create(Word, { lemma });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -94,7 +91,7 @@ describe('AddCardHandler', () => {
   it('does not fail when the target card already exists from a racing add', async () => {
     const userId = uuidv7();
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
-    suite.orm.em.create(LearningCard, {
+    suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId,
       due: DateTime.now(),
@@ -122,7 +119,7 @@ describe('AddCardHandler', () => {
   it('unarchives an existing archived card instead of creating a new one', async () => {
     const userId = uuidv7();
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
-    const archived = suite.orm.em.create(LearningCard, {
+    const archived = suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId,
       due: DateTime.now(),
@@ -154,7 +151,7 @@ describe('AddCardHandler', () => {
     const userId = uuidv7();
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     const archivedWordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
-    suite.orm.em.create(LearningCard, {
+    suite.factories.learningCard.makeOne({
       userId,
       wordDefinitionId: archivedWordDefinitionId,
       due: DateTime.now(),
@@ -199,7 +196,7 @@ describe('AddCardHandler', () => {
   it('unlocks the construction when a grammar card is added', async () => {
     const userId = uuidv7();
     const constructionId = uuidv7();
-    const point = suite.orm.em.create(GrammarUsagePoint, {
+    const point = suite.factories.grammarUsagePoint.makeOne({
       constructionId,
       cefrLevel: CefrLevel.B1,
       guideword: 'USE: past perfect',
@@ -223,7 +220,7 @@ describe('AddCardHandler', () => {
   it('lets a premium user past the cap', async () => {
     const userId = uuidv7();
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT);
-    suite.orm.em.create(Subscription, {
+    suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       status: SubscriptionStatus.Active,

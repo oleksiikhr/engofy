@@ -1,16 +1,10 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
-import { GrammarMatch } from '../../../post/entities/grammar-match.entity.js';
-import { GrammarUsagePoint } from '../../../post/entities/grammar-usage-point.entity.js';
-import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { Post } from '../../../post/entities/post.entity.js';
 import { Sentence } from '../../../post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../post/entities/sentence-token.entity.js';
-import { Word } from '../../../post/entities/word.entity.js';
-import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
@@ -21,18 +15,15 @@ import { LearningModule } from '../../learning.module.js';
 import { GetDuePostCardsQuery } from './get-due-post-cards.query.js';
 
 function seedPost(em: EntityManager): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'seed';
-  const post = new Post();
-  post.source = source;
-  post.title = `post-${uuidv7().slice(0, 6)}`;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'seed' },
+    title: `post-${uuidv7().slice(0, 6)}`,
+  });
   return post;
 }
 
 function seedSentence(em: EntityManager, postId: string): Sentence {
-  return em.create(Sentence, {
+  return factories(em).sentence.makeOne({
     postId,
     postPartId: uuidv7(),
     unitIndex: 0,
@@ -48,7 +39,7 @@ function seedToken(
   sentenceId: string,
   opts: { wordId?: string; phraseId?: string },
 ): void {
-  em.create(SentenceToken, {
+  factories(em).sentenceToken.makeOne({
     sentenceId,
     position: 0,
     text: 'term',
@@ -69,7 +60,7 @@ function seedGrammarMatch(
   sentenceId: string,
   grammarUsagePointId: string,
 ): void {
-  em.create(GrammarMatch, {
+  factories(em).grammarMatch.makeOne({
     sentenceId,
     grammarUsagePointId,
     tokenStart: 0,
@@ -89,7 +80,7 @@ function seedCard(
     archivedAt?: DateTime | null;
   },
 ): LearningCard {
-  return em.create(LearningCard, {
+  return factories(em).learningCard.makeOne({
     userId,
     wordDefinitionId: opts.wordDefinitionId ?? null,
     phraseId: opts.phraseId ?? null,
@@ -121,8 +112,8 @@ function createWordInPost(
   em: EntityManager,
   postId: string,
 ): { wordId: string; wordDefinitionId: string } {
-  const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-  const definition = em.create(WordDefinition, {
+  const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+  const definition = factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Noun,
   });
@@ -167,8 +158,8 @@ describe('GetDuePostCardsHandler', () => {
     await em.flush();
     await seedWordInPost(em, post.id);
 
-    const word = em.create(Word, { lemma: `other-${uuidv7()}` });
-    const definition = em.create(WordDefinition, {
+    const word = factories(em).word.makeOne({ lemma: `other-${uuidv7()}` });
+    const definition = factories(em).wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -185,7 +176,7 @@ describe('GetDuePostCardsHandler', () => {
     const em = suite.orm.em;
     const userId = uuidv7();
     const post = seedPost(em);
-    const phrase = em.create(Phrase, { phraseText: 'set sail' });
+    const phrase = factories(em).phrase.makeOne({ phraseText: 'set sail' });
     await em.flush();
     const sentence = seedSentence(em, post.id);
     await em.flush();
@@ -209,7 +200,7 @@ describe('GetDuePostCardsHandler', () => {
     await em.flush();
     const sentence = seedSentence(em, post.id);
     await em.flush();
-    const usagePoint = em.create(GrammarUsagePoint, {
+    const usagePoint = factories(em).grammarUsagePoint.makeOne({
       constructionId: uuidv7(),
       cefrLevel: CefrLevel.A1,
       guideword: 'present perfect',

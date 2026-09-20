@@ -32,7 +32,7 @@ describe('ActivateMockSubscriptionHandler', () => {
   it('extends the current period instead of stacking rows', async () => {
     const userId = uuidv7();
     const existingEnd = DateTime.utc().plus({ days: 10 });
-    suite.orm.em.create(Subscription, {
+    suite.factories.subscription.makeOne({
       userId,
       plan: SubscriptionPlan.Premium,
       status: SubscriptionStatus.Active,
