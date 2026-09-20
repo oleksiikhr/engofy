@@ -8,6 +8,9 @@ const KEY = 'guest-deck';
 const MAX_ENTRIES = 100;
 const KINDS = ['word', 'phrase', 'grammar'] as const;
 
+// Fired on `document` with the guest's new saved-cards count as `detail`.
+export const DECK_EVENT = 'reader:deck-saved';
+
 export interface GuestDeckEntry {
   kind: (typeof KINDS)[number];
   id: string;
@@ -32,6 +35,10 @@ export function readGuestDeck(): GuestDeckEntry[] {
   } catch {
     return [];
   }
+}
+
+export function guestDeckCount(): number {
+  return readGuestDeck().length;
 }
 
 function write(entries: GuestDeckEntry[]): void {

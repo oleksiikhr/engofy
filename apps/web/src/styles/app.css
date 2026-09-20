@@ -405,6 +405,49 @@ body {
 .streak[hidden] {
   display: none;
 }
+.streak--saved {
+  background: var(--color-brand-wash);
+  color: var(--color-brand-strong);
+}
+/* One-time sign-up nudge under the guest header. */
+.guest-nudge {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-brand-wash);
+  color: var(--color-ink);
+}
+.guest-nudge[hidden] {
+  display: none;
+}
+.guest-nudge__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+}
+.guest-nudge p {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.guest-nudge__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+.guest-nudge__close .ic {
+  width: 1rem;
+  height: 1rem;
+}
 
 /* Account menu: <details>, so it opens and closes without JS. */
 .account > summary {
@@ -591,6 +634,9 @@ body {
   }
   .menu {
     max-width: calc(100vw - 3rem);
+  }
+  .guest-nudge__inner {
+    padding-inline: 1rem;
   }
 }
 .reading-measure {

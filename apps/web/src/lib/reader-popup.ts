@@ -1,4 +1,9 @@
-import { addToGuestDeck, readGuestDeck } from './guest-deck';
+import {
+  addToGuestDeck,
+  DECK_EVENT,
+  guestDeckCount,
+  readGuestDeck,
+} from './guest-deck';
 import { EXPLORED_EVENT, recordExplored } from './guest-progress';
 import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 import {
@@ -281,6 +286,11 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       event.preventDefault();
       event.stopImmediatePropagation();
       const saved = addToGuestDeck(target);
+      if (saved) {
+        document.dispatchEvent(
+          new CustomEvent(DECK_EVENT, { detail: guestDeckCount() }),
+        );
+      }
       const row = popup.querySelector(`#${lexiconActionsId(target)}`);
       if (row) {
         row.outerHTML = saved
