@@ -3,14 +3,13 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { AuthWebModule } from '../../auth/auth-web.module.js';
 import { BillingWebModule } from '../billing-web.module.js';
 
@@ -25,9 +24,11 @@ describe('BillingController', () => {
     }).sessionCookieName;
 
   async function login(em: EntityManager): Promise<string> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),

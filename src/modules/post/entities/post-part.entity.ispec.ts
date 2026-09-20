@@ -21,12 +21,12 @@ describe('PostPart entity', () => {
       ],
     };
 
-    const part = new PostPart();
-    part.postId = crypto.randomUUID();
-    part.blockIndex = 0;
-    part.kind = PostPartKind.Paragraph;
-    part.body = body;
-    suite.orm.em.persist(part);
+    const part = suite.factories.postPart.makeOne({
+      postId: crypto.randomUUID(),
+      blockIndex: 0,
+      kind: PostPartKind.Paragraph,
+      body,
+    });
     await suite.orm.em.flush();
     suite.orm.em.clear();
 
@@ -46,12 +46,12 @@ describe('PostPart entity', () => {
       ],
     };
 
-    const part = new PostPart();
-    part.postId = crypto.randomUUID();
-    part.blockIndex = 0;
-    part.kind = PostPartKind.List;
-    part.body = body;
-    suite.orm.em.persist(part);
+    const part = suite.factories.postPart.makeOne({
+      postId: crypto.randomUUID(),
+      blockIndex: 0,
+      kind: PostPartKind.List,
+      body,
+    });
     await suite.orm.em.flush();
     suite.orm.em.clear();
 

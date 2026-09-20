@@ -1,8 +1,8 @@
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../test/factories/factories.js';
 import { injectOrm } from '../../../../test/helpers/orm.helper.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
 import { AiSchemaMismatchError } from '../../../core/ai/ai-schema-mismatch.error.js';
-import { PostSource } from '../../../modules/post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../modules/post/entities/post.entity.js';
 import { PostPipelineRun } from '../../../modules/post/entities/post-pipeline-run.entity.js';
 import { PostPipelineRunStatus } from '../../../modules/post/enums/post-pipeline-run-status.enum.js';
@@ -85,22 +85,20 @@ describe('JobWorkerHost pipeline-run tracking (D4)', () => {
 
   async function seedPost(): Promise<string> {
     const em = suite.orm.em.fork();
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'x';
-    const post = new Post();
-    post.source = source;
-    post.status = PostStatus.Pending;
-    em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'x' };
+    const post = factories(em).post.makeOne({
+      source,
+      status: PostStatus.Pending,
+    });
 
     // The ai_grammar stage gates on a Completed annotation run before it does
     // any work; seed one so the job reaches the "no sentences" throw this suite
     // uses to drive the D4 failure bookkeeping.
-    const annotationRun = new PostPipelineRun();
-    annotationRun.postId = post.id;
-    annotationRun.stage = PostPipelineStage.Annotation;
-    annotationRun.status = PostPipelineRunStatus.Completed;
-    em.persist(annotationRun);
+    const _annotationRun = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: PostPipelineStage.Annotation,
+      status: PostPipelineRunStatus.Completed,
+    });
 
     await em.flush();
     seededPostIds.push(post.id);

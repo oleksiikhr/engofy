@@ -1,47 +1,29 @@
 import { randomUUID } from 'node:crypto';
-import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
-import { Post } from '../../entities/post.entity.js';
-import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
-import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { GetPostPipelineStatusQuery } from './get-post-pipeline-status.query.js';
-
-function seedPost(
-  em: EntityManager,
-  status: PostStatus,
-  createdAt: DateTime,
-): Post {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'seed';
-  const post = new Post();
-  post.source = source;
-  post.title = `status ${randomUUID().slice(0, 8)}`;
-  post.status = status;
-  post.createdAt = createdAt;
-  em.persist(post);
-  return post;
-}
 
 describe('GetPostPipelineStatusHandler', () => {
   const suite = createIntegrationSuite({ imports: [PostModule] });
 
   it('returns one post by id in any status, with its stages in pipeline order', async () => {
     const em = suite.orm.em;
-    const post = seedPost(em, PostStatus.Published, DateTime.now());
+    const post = factories(em).post.makeOne({
+      status: PostStatus.Published,
+      createdAt: DateTime.now(),
+    });
     // Inserted out of pipeline order on purpose.
-    em.create(PostPipelineRun, {
+    factories(em).postPipelineRun.makeOne({
       postId: post.id,
       stage: PostPipelineStage.Publish,
       status: PostPipelineRunStatus.Completed,
     });
-    em.create(PostPipelineRun, {
+    factories(em).postPipelineRun.makeOne({
       postId: post.id,
       stage: PostPipelineStage.SpacyParse,
       status: PostPipelineRunStatus.Completed,
@@ -76,15 +58,23 @@ describe('GetPostPipelineStatusHandler', () => {
   it('without an id lists only processing and failed posts, newest first, with failure details', async () => {
     const em = suite.orm.em;
     const now = DateTime.now();
-    const older = seedPost(em, PostStatus.Processing, now.plus({ years: 50 }));
-    const failed = seedPost(
-      em,
-      PostStatus.Failed,
-      now.plus({ years: 50, days: 1 }),
-    );
-    seedPost(em, PostStatus.Published, now.plus({ years: 50, days: 2 }));
-    seedPost(em, PostStatus.Pending, now.plus({ years: 50, days: 3 }));
-    em.create(PostPipelineRun, {
+    const older = factories(em).post.makeOne({
+      status: PostStatus.Processing,
+      createdAt: now.plus({ years: 50 }),
+    });
+    const failed = factories(em).post.makeOne({
+      status: PostStatus.Failed,
+      createdAt: now.plus({ years: 50, days: 1 }),
+    });
+    factories(em).post.makeOne({
+      status: PostStatus.Published,
+      createdAt: now.plus({ years: 50, days: 2 }),
+    });
+    factories(em).post.makeOne({
+      status: PostStatus.Pending,
+      createdAt: now.plus({ years: 50, days: 3 }),
+    });
+    factories(em).postPipelineRun.makeOne({
       postId: failed.id,
       stage: PostPipelineStage.AiExercises,
       status: PostPipelineRunStatus.Failed,

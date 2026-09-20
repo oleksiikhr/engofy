@@ -4,28 +4,17 @@ import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import request from 'supertest';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
-import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
 import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
-import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
-import { Exercise } from '../../../../modules/post/entities/exercise.entity.js';
-import { GrammarCategory } from '../../../../modules/post/entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../../../modules/post/entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../../../modules/post/entities/grammar-usage-point.entity.js';
 import { Post } from '../../../../modules/post/entities/post.entity.js';
-import { PostPart } from '../../../../modules/post/entities/post-part.entity.js';
 import { PostRead } from '../../../../modules/post/entities/post-read.entity.js';
-import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
 import { Word } from '../../../../modules/post/entities/word.entity.js';
-import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';
 import { ExerciseType } from '../../../../modules/post/enums/exercise-type.enum.js';
@@ -44,30 +33,33 @@ interface SeededPost {
 }
 
 async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
-  const word = em.create(Word, { lemma: `travel-${uuidv7().slice(0, 8)}` });
-  const definition = em.create(WordDefinition, {
+  const word = factories(em).word.makeOne({
+    lemma: `travel-${uuidv7().slice(0, 8)}`,
+  });
+  const definition = factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Verb,
     definition: 'to go from one place to another',
     cefrLevel: CefrLevel.A2,
   });
 
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.type = PostSourceType.NewsSnippet;
-  source.rawText = 'She loves to travel widely.';
-  source.link = 'https://example.com/article';
-  source.attributionText = 'Example News, "On travel"';
+  const source = {
+    format: PostSourceFormat.Text,
+    type: PostSourceType.NewsSnippet,
+    rawText: 'She loves to travel widely.',
+    link: 'https://example.com/article',
+    attributionText: 'Example News, "On travel"',
+  };
 
-  const post = new Post();
-  post.source = source;
-  post.title = 'A Short Trip';
-  post.slug = 'a-short-trip';
-  post.status = PostStatus.Published;
-  post.cefrLevel = CefrLevel.A2;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'A Short Trip',
+    slug: 'a-short-trip',
+    status: PostStatus.Published,
+    cefrLevel: CefrLevel.A2,
+  });
 
-  const part = em.create(PostPart, {
+  const part = factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -87,7 +79,7 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
     },
   });
 
-  const sentence = em.create(Sentence, {
+  const sentence = factories(em).sentence.makeOne({
     postId: post.id,
     postPartId: part.id,
     unitIndex: 0,
@@ -96,7 +88,7 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
     charStart: 0,
     charEnd: 27,
   });
-  em.create(Exercise, {
+  factories(em).exercise.makeOne({
     postId: post.id,
     type: ExerciseType.FillBlank,
     source: ExerciseSource.Spacy,
@@ -122,18 +114,18 @@ interface SeededGrammar {
 
 async function seedGrammar(em: EntityManager): Promise<SeededGrammar> {
   const slug = `present-simple-${uuidv7().slice(0, 8)}`;
-  const category = em.create(GrammarCategory, {
+  const category = factories(em).grammarCategory.makeOne({
     name: `PRESENT-${uuidv7().slice(0, 8)}`,
     sortOrder: 1,
   });
-  const construction = em.create(GrammarConstruction, {
+  const construction = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'present simple',
     slug,
     cheatSheetContent: '## Form\nSubject + base verb',
     sortOrder: 1,
   });
-  const point = em.create(GrammarUsagePoint, {
+  const point = factories(em).grammarUsagePoint.makeOne({
     constructionId: construction.id,
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
@@ -157,9 +149,11 @@ describe('ContentController', () => {
   async function login(
     em: EntityManager,
   ): Promise<{ cookie: string; userId: string }> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -221,15 +215,16 @@ describe('ContentController', () => {
   it('filters the posts archive by a CEFR multi-select', async () => {
     const em = suite.orm.em;
     await seedPublishedPost(em);
-    const b2Source = new PostSource();
-    b2Source.format = PostSourceFormat.Text;
-    b2Source.rawText = 'A harder read.';
-    const b2Post = new Post();
-    b2Post.source = b2Source;
-    b2Post.title = 'A Harder Read';
-    b2Post.status = PostStatus.Published;
-    b2Post.cefrLevel = CefrLevel.B2;
-    em.persist(b2Post);
+    const b2Source = {
+      format: PostSourceFormat.Text,
+      rawText: 'A harder read.',
+    };
+    const _b2Post = factories(em).post.makeOne({
+      source: b2Source,
+      title: 'A Harder Read',
+      status: PostStatus.Published,
+      cefrLevel: CefrLevel.B2,
+    });
     await em.flush();
 
     const kept = await suite
@@ -253,7 +248,7 @@ describe('ContentController', () => {
     const word = await em.findOneOrFail(Word, {
       lemma: { $like: 'travel-%' },
     });
-    const sentence = em.create(Sentence, {
+    const sentence = factories(em).sentence.makeOne({
       postId: (await em.findOneOrFail(Post, { shortId })).id,
       postPartId: uuidv7(),
       unitIndex: 0,
@@ -262,7 +257,7 @@ describe('ContentController', () => {
       charStart: 0,
       charEnd: 27,
     });
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: sentence.id,
       position: 3,
       text: 'travel',
@@ -511,14 +506,12 @@ describe('ContentController', () => {
 
   it('does not expose a non-published post', async () => {
     const em = suite.orm.em;
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'draft';
-    const post = new Post();
-    post.source = source;
-    post.slug = 'draft';
-    post.status = PostStatus.Processing;
-    em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'draft' };
+    const post = factories(em).post.makeOne({
+      source,
+      slug: 'draft',
+      status: PostStatus.Processing,
+    });
     await em.flush();
 
     await suite
@@ -627,7 +620,7 @@ describe('ContentController', () => {
   it('personalizes grammar state for a logged-in learner and marks the response private', async () => {
     const { slug, grammarUsagePointId } = await seedGrammar(suite.orm.em);
     const { cookie, userId } = await login(suite.orm.em);
-    suite.orm.em.create(LearningCard, {
+    suite.factories.learningCard.makeOne({
       userId,
       grammarUsagePointId,
       due: DateTime.now(),

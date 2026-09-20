@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { factories } from '../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../test/setup/int-suite.helper.js';
-import { PostPart } from '../entities/post-part.entity.js';
 import { PostPartKind } from '../enums/post-part-kind.enum.js';
 import { PostModule } from '../post.module.js';
 import { loadExcerpts } from './load-excerpts.js';
@@ -12,7 +12,7 @@ function seedPart(
   blockIndex: number,
   text: string,
 ): void {
-  em.create(PostPart, {
+  factories(em).postPart.makeOne({
     postId,
     blockIndex,
     kind: PostPartKind.Paragraph,

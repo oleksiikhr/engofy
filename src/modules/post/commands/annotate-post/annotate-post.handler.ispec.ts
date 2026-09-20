@@ -1,4 +1,5 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import {
   FakeNlpClient,
@@ -10,7 +11,6 @@ import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import { NLP_CLIENT } from '../../../../core/nlp/nlp-client.port.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import type { Paragraph } from '../../domain/node-tree.types.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPart } from '../../entities/post-part.entity.js';
@@ -68,20 +68,19 @@ async function createPostWithParagraph(
   em: EntityManager,
   text: string,
 ): Promise<{ postId: string; partId: string }> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = text;
+  const source = { format: PostSourceFormat.Text, rawText: text };
 
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+  });
 
-  const part = new PostPart();
-  part.postId = post.id;
-  part.blockIndex = 0;
-  part.kind = PostPartKind.Paragraph;
-  part.body = { type: 'paragraph', children: [{ type: 'text', text }] };
-  em.persist(part);
+  const part = factories(em).postPart.makeOne({
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: { type: 'paragraph', children: [{ type: 'text', text }] },
+  });
 
   await em.flush();
   return { postId: post.id, partId: part.id };

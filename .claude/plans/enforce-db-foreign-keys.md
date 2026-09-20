@@ -53,10 +53,10 @@ ORM не додаємо: у сутності лишається скаляр `st
 (його замінює `PostFactory`) і локальні `seedPost`/`em.create` у цих модулях. Додати правило в
 reference про тести (`.agents/skills/engofy/references/`): нові фікстури тільки через фабрики.
 
-### [ ] 3. Фабрики: решта тестів
+### [x] 3. Фабрики: решта тестів
 - Branch: `enforce-db-foreign-keys-03-factories-rest`
-- Base: `enforce-db-foreign-keys-02-factories-core`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/95
 
 Перевести на фабрики решту: ispec модулів `post`, `telegram`, `entrypoints/**` (web, worker, cli),
 `test/e2e/seed-web-e2e.ts`. Прибрати всі локальні `seedPost*`/`seed*`-функції, що дублюють фабрики;

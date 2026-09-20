@@ -1,15 +1,12 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
 import type { EnrichmentResult } from '../../domain/enrichment-prompt.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Phrase } from '../../entities/phrase.entity.js';
-import { Post } from '../../entities/post.entity.js';
-import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
-import { Word } from '../../entities/word.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
@@ -18,6 +15,7 @@ import { PostPartKind } from '../../enums/post-part-kind.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
+import { PostStatus } from '../../enums/post-status.enum.js';
 import { PostModule } from '../../post.module.js';
 import { EnrichLexiconCommand } from './enrich-lexicon.command.js';
 
@@ -55,25 +53,29 @@ interface Fixture {
 // both still unenriched (definition null) — mirrors the seedPublishedPost
 // fixture in get-post-detail.handler.ispec.ts.
 async function seedPost(em: EntityManager): Promise<Fixture> {
-  const word = em.create(Word, { lemma: `run-${uuidv7().slice(0, 8)}` });
-  const definition = em.create(WordDefinition, {
+  const word = factories(em).word.makeOne({
+    lemma: `run-${uuidv7().slice(0, 8)}`,
+  });
+  const definition = factories(em).wordDefinition.makeOne({
     wordId: word.id,
     pos: PartOfSpeech.Verb,
   });
-  const phrase = em.create(Phrase, {
+  const phrase = factories(em).phrase.makeOne({
     phraseText: `give up ${uuidv7().slice(0, 8)}`,
     type: PhraseType.PhrasalVerb,
   });
 
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'She runs and gives up.';
+  const source = {
+    format: PostSourceFormat.Text,
+    rawText: 'She runs and gives up.',
+  };
 
-  const post = new Post();
-  post.source = source;
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    status: PostStatus.Pending,
+    source,
+  });
 
-  em.create(PostPart, {
+  factories(em).postPart.makeOne({
     postId: post.id,
     blockIndex: 0,
     kind: PostPartKind.Paragraph,
@@ -158,10 +160,10 @@ describe('EnrichLexiconHandler', () => {
   });
 
   it('skips the AI call entirely when nothing is pending', async () => {
-    const word = suite.orm.em.create(Word, {
+    const word = suite.factories.word.makeOne({
       lemma: `already-${uuidv7().slice(0, 8)}`,
     });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
       definition: 'already enriched',
@@ -169,14 +171,13 @@ describe('EnrichLexiconHandler', () => {
       cefrLevel: CefrLevel.A1,
     });
 
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'A word.';
-    const post = new Post();
-    post.source = source;
-    suite.orm.em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'A word.' };
+    const post = suite.factories.post.makeOne({
+      status: PostStatus.Pending,
+      source,
+    });
 
-    suite.orm.em.create(PostPart, {
+    suite.factories.postPart.makeOne({
       postId: post.id,
       blockIndex: 0,
       kind: PostPartKind.Paragraph,

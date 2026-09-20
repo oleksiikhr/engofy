@@ -1,8 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
 import { PostPipelineRun } from '../../../post/entities/post-pipeline-run.entity.js';
 import { PostPipelineRunStatus } from '../../../post/enums/post-pipeline-run-status.enum.js';
@@ -40,23 +40,21 @@ async function seedPost(
     }[];
   },
 ): Promise<Post> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'body';
-  const post = new Post();
-  post.source = source;
-  post.title = opts.title;
-  post.status = opts.status ?? PostStatus.Processing;
-  post.createdAt = minutesAgo(opts.createdMinutesAgo ?? 60);
-  post.stuckNotifiedAt = opts.stuckNotifiedAt ?? null;
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: 'body' };
+  const post = factories(em).post.makeOne({
+    source,
+    title: opts.title,
+    status: opts.status ?? PostStatus.Processing,
+    createdAt: minutesAgo(opts.createdMinutesAgo ?? 60),
+    stuckNotifiedAt: opts.stuckNotifiedAt ?? null,
+  });
   for (const spec of opts.runs ?? []) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = spec.stage;
-    run.status = spec.status;
-    run.updatedAt = minutesAgo(spec.updatedMinutesAgo);
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: spec.stage,
+      status: spec.status,
+      updatedAt: minutesAgo(spec.updatedMinutesAgo),
+    });
   }
   await em.flush();
   return post;

@@ -3,24 +3,16 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AccountDeletionRequest } from '../../../../modules/auth/entities/account-deletion-request.entity.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
-import { Subscription } from '../../../../modules/billing/entities/subscription.entity.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
 import { SubscriptionStatus } from '../../../../modules/billing/enums/subscription-status.enum.js';
 import { DailyPlan } from '../../../../modules/home/entities/daily-plan.entity.js';
-import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
-import { GrammarCategory } from '../../../../modules/post/entities/grammar-category.entity.js';
-import { GrammarConstruction } from '../../../../modules/post/entities/grammar-construction.entity.js';
-import { GrammarUsagePoint } from '../../../../modules/post/entities/grammar-usage-point.entity.js';
-import { Post } from '../../../../modules/post/entities/post.entity.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
@@ -47,9 +39,11 @@ describe('ProfileController', () => {
   async function loginAs(
     em: EntityManager,
   ): Promise<{ cookie: string; userId: string }> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -87,16 +81,14 @@ describe('ProfileController', () => {
       userId: string,
       completedAt: DateTime | null,
     ): Promise<void> {
-      const source = new PostSource();
-      source.format = PostSourceFormat.Text;
-      source.rawText = 'Some text.';
-      const post = new Post();
-      post.source = source;
-      post.status = PostStatus.Published;
-      post.title = 'A post';
-      post.cefrLevel = CefrLevel.A1;
-      em.persist(post);
-      em.create(DailyPlan, {
+      const source = { format: PostSourceFormat.Text, rawText: 'Some text.' };
+      const post = factories(em).post.makeOne({
+        source,
+        status: PostStatus.Published,
+        title: 'A post',
+        cefrLevel: CefrLevel.A1,
+      });
+      factories(em).dailyPlan.makeOne({
         userId,
         planDate: DateTime.now(),
         postId: post.id,
@@ -155,17 +147,17 @@ describe('ProfileController', () => {
     it('returns the skills tree, streak and CEFR breakdown', async () => {
       const cookie = await login(suite.orm.em);
 
-      const category = suite.orm.em.create(GrammarCategory, {
+      const category = suite.factories.grammarCategory.makeOne({
         name: `CAT-${uuidv7()}`,
         sortOrder: 1,
       });
-      const construction = suite.orm.em.create(GrammarConstruction, {
+      const construction = suite.factories.grammarConstruction.makeOne({
         categoryId: category.id,
         name: 'present simple',
         slug: `slug-${uuidv7()}`,
         sortOrder: 1,
       });
-      const point = suite.orm.em.create(GrammarUsagePoint, {
+      const point = suite.factories.grammarUsagePoint.makeOne({
         constructionId: construction.id,
         cefrLevel: CefrLevel.A2,
         guideword: 'USE: habits',
@@ -227,7 +219,7 @@ describe('ProfileController', () => {
     it('returns the premium plan and its renewal date with no cap', async () => {
       const { cookie, userId } = await loginAs(suite.orm.em);
       const periodEnd = DateTime.now().plus({ days: 20 });
-      suite.orm.em.create(Subscription, {
+      suite.factories.subscription.makeOne({
         userId,
         plan: SubscriptionPlan.Premium,
         status: SubscriptionStatus.Active,
@@ -302,7 +294,7 @@ describe('ProfileController', () => {
 
     it('requests deletion, ends premium and surfaces the request on GET /profile', async () => {
       const { cookie, userId } = await loginAs(suite.orm.em);
-      suite.orm.em.create(Subscription, {
+      suite.factories.subscription.makeOne({
         userId,
         plan: SubscriptionPlan.Premium,
         status: SubscriptionStatus.Active,
@@ -359,7 +351,7 @@ describe('ProfileController', () => {
     it('cancels from the e-mailed link without a session', async () => {
       const { userId } = await loginAs(suite.orm.em);
       const token = generateToken();
-      suite.orm.em.create(AccountDeletionRequest, {
+      suite.factories.accountDeletionRequest.makeOne({
         userId,
         cancelTokenHash: hashSecret(token),
       });

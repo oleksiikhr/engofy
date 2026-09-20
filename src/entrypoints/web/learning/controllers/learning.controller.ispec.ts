@@ -3,23 +3,15 @@ import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthSession } from '../../../../modules/auth/entities/auth-session.entity.js';
-import { User } from '../../../../modules/auth/entities/user.entity.js';
 import { DAILY_NEW_CARD_LIMIT } from '../../../../modules/learning/domain/daily-new-card-limit.js';
-import { LearningCard } from '../../../../modules/learning/entities/learning-card.entity.js';
 import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
-import { PostSource } from '../../../../modules/post/embeddables/post-source.embeddable.js';
-import { Post } from '../../../../modules/post/entities/post.entity.js';
-import { Sentence } from '../../../../modules/post/entities/sentence.entity.js';
-import { SentenceToken } from '../../../../modules/post/entities/sentence-token.entity.js';
-import { Word } from '../../../../modules/post/entities/word.entity.js';
-import { WordDefinition } from '../../../../modules/post/entities/word-definition.entity.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
@@ -37,9 +29,11 @@ describe('LearningController', () => {
     }).sessionCookieName;
 
   async function login(em: EntityManager): Promise<string> {
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -56,8 +50,8 @@ describe('LearningController', () => {
 
   it('adds a card, lists it in the practice queue, and reviews it', async () => {
     const cookie = await login(suite.orm.em);
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -92,9 +86,11 @@ describe('LearningController', () => {
 
   it('caps New cards at the daily limit and lifts it with bypassNewLimit', async () => {
     const em = suite.orm.em;
-    const user = em.create(User, { email: `u-${uuidv7()}@example.com` });
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
     const token = generateToken();
-    em.create(AuthSession, {
+    factories(em).authSession.makeOne({
       userId: user.id,
       tokenHash: hashSecret(token),
       expiresAt: DateTime.now().plus({ days: 1 }),
@@ -103,12 +99,12 @@ describe('LearningController', () => {
     const cookie = `${cookieName()}=${token}`;
 
     for (let i = 0; i < DAILY_NEW_CARD_LIMIT + 2; i += 1) {
-      const word = em.create(Word, { lemma: `w-${uuidv7()}` });
-      const definition = em.create(WordDefinition, {
+      const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+      const definition = factories(em).wordDefinition.makeOne({
         wordId: word.id,
         pos: PartOfSpeech.Noun,
       });
-      em.create(LearningCard, {
+      factories(em).learningCard.makeOne({
         userId: user.id,
         wordDefinitionId: definition.id,
         due: DateTime.now().minus({ minutes: i + 1 }),
@@ -183,8 +179,8 @@ describe('LearningController', () => {
 
   it('reports how many cards are due for the feed badge', async () => {
     const cookie = await login(suite.orm.em);
-    const word = suite.orm.em.create(Word, { lemma: `due-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `due-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -220,8 +216,8 @@ describe('LearningController', () => {
 
   it('deletes an unreviewed card and archives a reviewed one', async () => {
     const cookie = await login(suite.orm.em);
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
-    const definition = suite.orm.em.create(WordDefinition, {
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -255,9 +251,9 @@ describe('LearningController', () => {
 
   it('sets and overwrites a disposition for a word definition target', async () => {
     const cookie = await login(suite.orm.em);
-    const word = suite.orm.em.create(Word, { lemma: `w-${uuidv7()}` });
+    const word = suite.factories.word.makeOne({ lemma: `w-${uuidv7()}` });
     await suite.orm.em.flush();
-    const definition = suite.orm.em.create(WordDefinition, {
+    const definition = suite.factories.wordDefinition.makeOne({
       wordId: word.id,
       pos: PartOfSpeech.Noun,
     });
@@ -291,26 +287,24 @@ describe('LearningController', () => {
   it('lists only the due cards whose target occurs in the given post', async () => {
     const cookie = await login(suite.orm.em);
     const em = suite.orm.em;
-    const source = new PostSource();
-    source.format = PostSourceFormat.Text;
-    source.rawText = 'seed';
-    const post = new Post();
-    post.source = source;
-    post.title = 'due cards post';
-    post.status = PostStatus.Published;
-    em.persist(post);
+    const source = { format: PostSourceFormat.Text, rawText: 'seed' };
+    const post = factories(em).post.makeOne({
+      source,
+      title: 'due cards post',
+      status: PostStatus.Published,
+    });
 
-    const inPost = em.create(Word, { lemma: `in-${uuidv7()}` });
-    const inPostDefinition = em.create(WordDefinition, {
+    const inPost = factories(em).word.makeOne({ lemma: `in-${uuidv7()}` });
+    const inPostDefinition = factories(em).wordDefinition.makeOne({
       wordId: inPost.id,
       pos: PartOfSpeech.Noun,
     });
-    const elsewhere = em.create(Word, { lemma: `out-${uuidv7()}` });
-    const elsewhereDefinition = em.create(WordDefinition, {
+    const elsewhere = factories(em).word.makeOne({ lemma: `out-${uuidv7()}` });
+    const elsewhereDefinition = factories(em).wordDefinition.makeOne({
       wordId: elsewhere.id,
       pos: PartOfSpeech.Noun,
     });
-    const sentence = em.create(Sentence, {
+    const sentence = factories(em).sentence.makeOne({
       postId: post.id,
       postPartId: uuidv7(),
       unitIndex: 0,
@@ -319,7 +313,7 @@ describe('LearningController', () => {
       charStart: 0,
       charEnd: 6,
     });
-    em.create(SentenceToken, {
+    factories(em).sentenceToken.makeOne({
       sentenceId: sentence.id,
       position: 0,
       text: 'term',

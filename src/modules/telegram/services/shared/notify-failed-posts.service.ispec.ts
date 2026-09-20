@@ -1,10 +1,9 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { FakeTelegramClient } from '../../../../../test/fakes/telegram.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
-import { PostSource } from '../../../post/embeddables/post-source.embeddable.js';
 import { Post } from '../../../post/entities/post.entity.js';
-import { PostPipelineRun } from '../../../post/entities/post-pipeline-run.entity.js';
 import { PostPipelineRunStatus } from '../../../post/enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../../post/enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../../post/enums/post-source-format.enum.js';
@@ -30,24 +29,22 @@ async function seedPost(
     failedStage?: PostPipelineStage;
   },
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'body';
-  const post = new Post();
-  post.source = source;
-  post.title = opts.title;
-  post.status = opts.status;
-  post.failureNotifiedAt = opts.failureNotifiedAt ?? null;
-  em.persist(post);
+  const source = { format: PostSourceFormat.Text, rawText: 'body' };
+  const post = factories(em).post.makeOne({
+    source,
+    title: opts.title,
+    status: opts.status,
+    failureNotifiedAt: opts.failureNotifiedAt ?? null,
+  });
 
   if (opts.failedStage) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = opts.failedStage;
-    run.status = PostPipelineRunStatus.Failed;
-    run.errorMessage = 'model returned an invalid payload';
-    run.retryCount = 3;
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: opts.failedStage,
+      status: PostPipelineRunStatus.Failed,
+      errorMessage: 'model returned an invalid payload',
+      retryCount: 3,
+    });
   }
 
   await em.flush();

@@ -1,5 +1,6 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { TelegramUpdate } from '../../entities/telegram-update.entity.js';
 import { TelegramModule } from '../../telegram.module.js';
@@ -10,11 +11,11 @@ async function seedUpdate(
   updateId: string,
   createdDaysAgo: number,
 ): Promise<void> {
-  const row = new TelegramUpdate();
-  row.updateId = updateId;
-  row.rawPayload = { update_id: Number(updateId) };
-  row.processed = true;
-  em.persist(row);
+  const row = factories(em).telegramUpdate.makeOne({
+    updateId,
+    rawPayload: { update_id: Number(updateId) },
+    processed: true,
+  });
   await em.flush();
 
   await em

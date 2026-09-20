@@ -1,8 +1,8 @@
 import type { EntityManager } from '@mikro-orm/postgresql';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { useQueueSpy } from '../../../../../test/setup/queue-spy.helper.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
-import { PostSource } from '../../embeddables/post-source.embeddable.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { PostPublication } from '../../entities/post-publication.entity.js';
@@ -23,29 +23,24 @@ async function seedPost(
     status?: PostStatus;
   } = {},
 ): Promise<string> {
-  const source = new PostSource();
-  source.format = PostSourceFormat.Text;
-  source.rawText = 'Some text.';
-  const post = new Post();
-  post.source = source;
-  if (opts.status) {
-    post.status = opts.status;
-  }
-  em.persist(post);
+  const post = factories(em).post.makeOne({
+    source: { format: PostSourceFormat.Text, rawText: 'Some text.' },
+    status: opts.status ?? PostStatus.Pending,
+  });
 
   if (opts.annotationCompleted) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = PostPipelineStage.Annotation;
-    run.status = PostPipelineRunStatus.Completed;
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: PostPipelineStage.Annotation,
+      status: PostPipelineRunStatus.Completed,
+    });
   }
   if (opts.enrichmentCompleted) {
-    const run = new PostPipelineRun();
-    run.postId = post.id;
-    run.stage = PostPipelineStage.Enrichment;
-    run.status = PostPipelineRunStatus.Completed;
-    em.persist(run);
+    const _run = factories(em).postPipelineRun.makeOne({
+      postId: post.id,
+      stage: PostPipelineStage.Enrichment,
+      status: PostPipelineRunStatus.Completed,
+    });
   }
 
   await em.flush();
@@ -138,17 +133,17 @@ describe('PublishPostHandler', () => {
 
     await suite.command(new PublishPostCommand(postId));
 
-    const annotationRun = new PostPipelineRun();
-    annotationRun.postId = postId;
-    annotationRun.stage = PostPipelineStage.Annotation;
-    annotationRun.status = PostPipelineRunStatus.Completed;
-    suite.orm.em.persist(annotationRun);
+    const _annotationRun = suite.factories.postPipelineRun.makeOne({
+      postId,
+      stage: PostPipelineStage.Annotation,
+      status: PostPipelineRunStatus.Completed,
+    });
 
-    const enrichmentRun = new PostPipelineRun();
-    enrichmentRun.postId = postId;
-    enrichmentRun.stage = PostPipelineStage.Enrichment;
-    enrichmentRun.status = PostPipelineRunStatus.Completed;
-    suite.orm.em.persist(enrichmentRun);
+    const _enrichmentRun = suite.factories.postPipelineRun.makeOne({
+      postId,
+      stage: PostPipelineStage.Enrichment,
+      status: PostPipelineRunStatus.Completed,
+    });
 
     await suite.orm.em.flush();
 
@@ -185,11 +180,11 @@ describe('PublishPostHandler', () => {
       status: PostStatus.Processing,
       annotationCompleted: true,
     });
-    const run = new PostPipelineRun();
-    run.postId = postId;
-    run.stage = PostPipelineStage.Enrichment;
-    run.status = PostPipelineRunStatus.Failed;
-    suite.orm.em.persist(run);
+    const _run = suite.factories.postPipelineRun.makeOne({
+      postId,
+      stage: PostPipelineStage.Enrichment,
+      status: PostPipelineRunStatus.Failed,
+    });
     await suite.orm.em.flush();
 
     await suite.command(new PublishPostCommand(postId));

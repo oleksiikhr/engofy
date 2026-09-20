@@ -2,6 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 import { HttpStatus } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { DateTime } from 'luxon';
+import { factories } from '../../../../../test/factories/factories.js';
 import { createWebE2ESuite } from '../../../../../test/http/web/setup/e2e-suite.helper.js';
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
@@ -9,7 +10,6 @@ import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
-import { AuthChallenge } from '../../../../modules/auth/entities/auth-challenge.entity.js';
 import { AuthWebModule } from '../auth-web.module.js';
 
 describe('AuthController', () => {
@@ -31,7 +31,7 @@ describe('AuthController', () => {
     const token = generateToken();
     const otp = generateOtp();
 
-    em.create(AuthChallenge, {
+    factories(em).authChallenge.makeOne({
       email,
       otpHash: hashSecret(otp),
       attempts: 0,
