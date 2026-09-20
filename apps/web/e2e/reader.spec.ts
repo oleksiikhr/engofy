@@ -2,10 +2,11 @@ import { expect, type Page, type Route, test } from '@playwright/test';
 import { AUTHED_STATE, DECK_STATE } from './auth';
 import { ReaderPage } from './pages/reader-page';
 
-// Slice 8b page 1 — /posts/{slug}-{id}: node-tree reading. Only word/phrase
-// spans whose effective state for the viewer is new/learning carry a
-// `data-word-definition-id` / `data-phrase-id` label; grammar matches carry a
-// `data-grammar-usage-point-id` label under the same state rule.
+// Slice 8b page 1 — /posts/{slug}-{id}: node-tree reading. Every word/phrase
+// span carries a `data-word-definition-id` / `data-phrase-id` label and every
+// grammar match a `data-grammar-usage-point-id` label; ones whose effective
+// state for the viewer is learned/skipped also carry `data-known` (clickable,
+// not highlighted).
 // Fixtures come from test/e2e/seed-web-e2e.ts (global-setup): word
 // "perambulate", phrases "at loose ends" and "a piece of cake" (the seeded
 // user marked it Known), grammar "past perfect" matched on "had drawn" and
@@ -147,7 +148,7 @@ test.describe('reader page (guest)', () => {
     await reader.popup.getByRole('button', { name: 'I know it' }).click();
     await expect(reader.popup.locator('.lex-state')).toHaveText('Learned');
     await expect(reader.wordLabel('perambulate')).toHaveCount(0);
-    await expect(reader.analysis).toContainText('perambulate');
+    await expect(reader.knownLabel('word', 'perambulate')).toHaveCount(1);
   });
 
   test('opens a grammar popup with guideword, can-do and example', async ({
@@ -232,6 +233,9 @@ test.describe('reader page (guest)', () => {
       reader.popupSection('grammar').locator('.lex-state'),
     ).toHaveText('Learned');
     await expect(reader.grammarLabel('a piece of cake')).toHaveCount(0);
+    await expect(reader.knownLabel('grammar', 'a piece of cake')).toHaveCount(
+      1,
+    );
     await expect(reader.phraseLabel('a piece of cake')).toHaveCount(1);
     await expect(
       reader.popupSection('phrase').getByRole('button', { name: 'I know it' }),
@@ -625,24 +629,64 @@ test.describe('reader page (guest)', () => {
 test.describe('reader page (signed in)', () => {
   test.use({ storageState: AUTHED_STATE });
 
-  test('labels learning targets and leaves known ones as plain text', async ({
+  test('highlights learning targets; known ones are clickable but unhighlighted', async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
     await reader.goto(READER_SLUG);
 
     // Seeded: word card (Review, 3 days) and phrase card (Learning) read as
-    // Learning -> labelled; "a piece of cake" has a Known disposition -> plain.
+    // Learning -> highlighted; "a piece of cake" has a Known disposition ->
+    // still a clickable span, but unhighlighted.
     await expect(reader.wordLabel('perambulate')).toHaveCount(1);
     await expect(reader.phraseLabel('at loose ends')).toHaveCount(1);
-    await expect(reader.analysis).toContainText('a piece of cake');
     await expect(reader.phraseLabel('a piece of cake')).toHaveCount(0);
+    await expect(reader.knownLabel('phrase', 'a piece of cake')).toHaveCount(1);
 
-    // Grammar: the A2 point is New for this A1 user -> labelled; the B1 point
-    // has a Known disposition -> plain text.
+    // Grammar: the A2 point is New for this A1 user -> highlighted; the B1
+    // point has a Known disposition -> unhighlighted.
     await expect(reader.grammarLabel('had drawn')).toHaveCount(1);
-    await expect(reader.analysis).toContainText('war ended');
     await expect(reader.grammarLabel('war ended')).toHaveCount(0);
+    await expect(reader.knownLabel('grammar', 'war ended')).toHaveCount(1);
+  });
+
+  test('a known phrase opens a popup with its state and no Add to deck, also from the keyboard', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const known = reader.knownLabel('phrase', 'a piece of cake');
+    await known.click();
+    await expect(reader.popupSection('phrase')).toContainText(
+      'a piece of cake',
+    );
+    await expect(
+      reader.popupSection('phrase').locator('.lex-state'),
+    ).toHaveText('Learned');
+    await expect(
+      reader.popup.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+    await expect(known).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(reader.popupSection('phrase')).toBeVisible();
+  });
+
+  test('a known grammar match opens a popup with its state and no actions', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.knownLabel('grammar', 'war ended').first().click();
+    const section = reader.popupSection('grammar');
+    await expect(section.locator('.lex-state')).toBeVisible();
+    await expect(
+      section.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
   });
 
   test('grammar popup for a card-backed usage point shows its state without actions', async ({

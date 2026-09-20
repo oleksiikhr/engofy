@@ -114,7 +114,7 @@ export function initReaderStudy(options: StudyOptions): void {
       }
     }
     const grammarId = block
-      .querySelector('[data-grammar-usage-point-id]')
+      .querySelector('[data-grammar-usage-point-id]:not([data-known])')
       ?.getAttribute('data-grammar-usage-point-id');
     const grammar = grammarId ? lexicon.grammar[grammarId] : undefined;
     if (grammar) {

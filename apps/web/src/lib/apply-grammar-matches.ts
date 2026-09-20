@@ -1,9 +1,9 @@
 // Places grammar usage-point matches (`annotations.grammarMatches`, char ranges
 // in each block unit's flattened text) onto the node tree as
-// `grammarUsagePointId` labels, independent of the word/phrase spans. Only a
-// usage point whose effective state for the viewer is `new` or `learning` is
-// labelled. `renderDoc` turns the labels into `data-grammar-usage-point-id`
-// wrappers.
+// `grammarUsagePointId` labels, independent of the word/phrase spans. Every
+// match is labelled whatever its state for the viewer; `renderDoc` turns the
+// labels into `data-grammar-usage-point-id` wrappers and flags the settled
+// ones.
 //
 // Text nodes and `grammar_only` spans are cut at range edges. A `word` /
 // `phrase` span or a `link` is atomic: a match that only partly covers one is
@@ -11,13 +11,7 @@
 // Where matches overlap, the shortest wins, so every char carries at most one
 // usage point.
 
-import type {
-  Block,
-  Doc,
-  EffectiveState,
-  GrammarMatch,
-  InlineNode,
-} from './types';
+import type { Block, Doc, GrammarMatch, InlineNode } from './types';
 
 interface Range {
   start: number;
@@ -26,10 +20,6 @@ interface Range {
 }
 
 const NO_OWNER = -1;
-
-function isLabelled(state: EffectiveState): boolean {
-  return state === 'new' || state === 'learning';
-}
 
 function isSplittable(node: InlineNode): boolean {
   return (
@@ -137,13 +127,12 @@ function labelNodes(
 }
 
 export function applyGrammarMatches(doc: Doc, matches: GrammarMatch[]): Doc {
-  const labelled = matches.filter((match) => isLabelled(match.state));
-  if (labelled.length === 0) {
+  if (matches.length === 0) {
     return doc;
   }
 
   const inUnit = (blockIndex: number, itemIndex: number | null) =>
-    labelled.filter(
+    matches.filter(
       (match) =>
         match.blockIndex === blockIndex && match.itemIndex === itemIndex,
     );

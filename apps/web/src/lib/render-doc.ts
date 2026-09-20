@@ -1,10 +1,10 @@
-// Server-side node-tree -> HTML for the reader page (PLAN.md §6). Only a
-// word/phrase span whose effective state for the viewer is `new` or
-// `learning` is marked (`data-word-definition-id` / `data-phrase-id`); every
-// other span — known/skipped targets, grammar-only spans — renders exactly
-// like a text node. Grammar usage points are placed separately
-// (`applyGrammarMatches`) and wrap their nodes in a
-// `data-grammar-usage-point-id` span. Output is injected with `set:html`, so
+// Server-side node-tree -> HTML for the reader page (PLAN.md §6). Every
+// word/phrase span carries its id (`data-word-definition-id` /
+// `data-phrase-id`) so it opens the popup; one whose effective state for the
+// viewer is `learned` or `skipped` also carries `data-known` and stays
+// unhighlighted. Grammar-only spans render like a text node. Grammar usage
+// points are placed separately (`applyGrammarMatches`) and wrap their nodes in
+// a `data-grammar-usage-point-id` span, flagged the same way. Output is injected with `set:html`, so
 // every text value is escaped here. Content tokens of the spaCy layer are
 // wrapped in `data-tok` spans as the text renders (lib/render-tokens.ts).
 
@@ -28,6 +28,12 @@ import type {
 } from './types';
 
 type Annotations = PostDetail['annotations'];
+
+interface RenderContext {
+  annotations: Annotations;
+  // Grammar usage points the viewer no longer needs highlighted.
+  settledGrammar: Set<string>;
+}
 
 const ESCAPE: Record<string, string> = {
   '&': '&amp;',
@@ -53,19 +59,23 @@ function wrapMarks(html: string, marks: Mark[] | undefined): string {
   return out;
 }
 
-export function isMarked(state: EffectiveState | undefined): boolean {
+function isMarked(state: EffectiveState): boolean {
   return state === 'new' || state === 'learning';
 }
 
+const KNOWN_ATTR = ' data-known';
+
 function spanAttr(node: SpanNode, annotations: Annotations): string | null {
   if (node.kind === 'word') {
-    return isMarked(annotations.words[node.wordDefinitionId]?.state)
-      ? `data-word-definition-id="${esc(node.wordDefinitionId)}"`
+    const state = annotations.words[node.wordDefinitionId]?.state;
+    return state
+      ? `data-word-definition-id="${esc(node.wordDefinitionId)}"${isMarked(state) ? '' : KNOWN_ATTR}`
       : null;
   }
   if (node.kind === 'phrase') {
-    return isMarked(annotations.phrases[node.phraseId]?.state)
-      ? `data-phrase-id="${esc(node.phraseId)}"`
+    const state = annotations.phrases[node.phraseId]?.state;
+    return state
+      ? `data-phrase-id="${esc(node.phraseId)}"${isMarked(state) ? '' : KNOWN_ATTR}`
       : null;
   }
   return null;
@@ -73,7 +83,7 @@ function spanAttr(node: SpanNode, annotations: Annotations): string | null {
 
 function renderNode(
   node: InlineNode,
-  annotations: Annotations,
+  ctx: RenderContext,
   unit: UnitTokens,
 ): string {
   const text = renderTokenText(node.text, unit, esc);
@@ -81,7 +91,7 @@ function renderNode(
     return `<a href="${esc(node.href)}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
   if (node.type === 'span') {
-    const attr = spanAttr(node, annotations);
+    const attr = spanAttr(node, ctx.annotations);
     if (attr) {
       return `<span ${attr}>${text}</span>`;
     }
@@ -91,13 +101,13 @@ function renderNode(
 
 function renderInline(
   node: InlineNode,
-  annotations: Annotations,
+  ctx: RenderContext,
   unit: UnitTokens,
 ): string {
-  const html = renderNode(node, annotations, unit);
+  const html = renderNode(node, ctx, unit);
   return wrapMarks(
     node.grammarUsagePointId
-      ? `<span data-grammar-usage-point-id="${esc(node.grammarUsagePointId)}">${html}</span>`
+      ? `<span data-grammar-usage-point-id="${esc(node.grammarUsagePointId)}"${ctx.settledGrammar.has(node.grammarUsagePointId) ? KNOWN_ATTR : ''}>${html}</span>`
       : html,
     node.marks,
   );
@@ -105,13 +115,11 @@ function renderInline(
 
 function renderChildren(
   children: InlineNode[],
-  annotations: Annotations,
+  ctx: RenderContext,
   tokens: ReaderToken[] | undefined,
 ): string {
   const unit = unitTokens(tokens);
-  return children
-    .map((child) => renderInline(child, annotations, unit))
-    .join('');
+  return children.map((child) => renderInline(child, ctx, unit)).join('');
 }
 
 // `data-block` / `data-item` carry the block's index in Doc.children and a
@@ -119,7 +127,7 @@ function renderChildren(
 function renderBlock(
   block: Block,
   index: number,
-  annotations: Annotations,
+  ctx: RenderContext,
   tokens: Map<string, ReaderToken[]>,
 ): string {
   if (block.type === 'list') {
@@ -127,14 +135,14 @@ function renderBlock(
     const items = block.items
       .map(
         (item, itemIndex) =>
-          `<li data-item="${itemIndex}">${renderChildren(item.children, annotations, tokens.get(unitKey(index, itemIndex)))}</li>`,
+          `<li data-item="${itemIndex}">${renderChildren(item.children, ctx, tokens.get(unitKey(index, itemIndex)))}</li>`,
       )
       .join('');
     return `<${tag} data-block="${index}">${items}</${tag}>`;
   }
   const inner = renderChildren(
     block.children,
-    annotations,
+    ctx,
     tokens.get(unitKey(index, null)),
   );
   if (block.level) {
@@ -152,9 +160,16 @@ export function renderDoc(doc: Doc, annotations: Annotations): string {
   // `?? []`: an API still on the previous release omits `tokens` /
   // `grammarMatches`.
   const tokens = groupTokens(annotations.tokens ?? []);
-  return applyGrammarMatches(doc, annotations.grammarMatches ?? [])
-    .children.map((block, index) =>
-      renderBlock(block, index, annotations, tokens),
-    )
+  const matches = annotations.grammarMatches ?? [];
+  const ctx: RenderContext = {
+    annotations,
+    settledGrammar: new Set(
+      matches
+        .filter((match) => !isMarked(match.state))
+        .map((match) => match.grammarUsagePointId),
+    ),
+  };
+  return applyGrammarMatches(doc, matches)
+    .children.map((block, index) => renderBlock(block, index, ctx, tokens))
     .join('\n');
 }

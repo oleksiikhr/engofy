@@ -501,25 +501,34 @@ const drills: DrillView[] = post.exercises
     font-size: var(--reader-font-size);
     line-height: 1.85;
   }
-  /* Labelled words/phrases (amber chip) and grammar matches (blue chip). The
-     spans come from set:html, so the selectors must be :global. */
+  /* Words/phrases (amber chip) and grammar matches (blue chip) still to learn.
+     The spans come from set:html, so the selectors must be :global. Settled
+     ones (`data-known`) look like plain text and only hint at a click on hover. */
   .reading-body :global([data-word-definition-id]),
   .reading-body :global([data-phrase-id]),
   .reading-body :global([data-grammar-usage-point-id]) {
-    padding: 1px 6px;
-    border-radius: 0.5rem;
-    color: var(--color-ink);
-    font-weight: 700;
     cursor: pointer;
+    border-radius: 0.5rem;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
-  .reading-body :global([data-word-definition-id]),
-  .reading-body :global([data-phrase-id]) {
+  .reading-body :global([data-word-definition-id]:not([data-known])),
+  .reading-body :global([data-phrase-id]:not([data-known])),
+  .reading-body :global([data-grammar-usage-point-id]:not([data-known])) {
+    padding: 1px 6px;
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+  .reading-body :global([data-word-definition-id]:not([data-known])),
+  .reading-body :global([data-phrase-id]:not([data-known])) {
     background: var(--color-word);
   }
-  .reading-body :global([data-grammar-usage-point-id]) {
+  .reading-body :global([data-grammar-usage-point-id]:not([data-known])) {
     background: var(--color-gram);
+  }
+  .reading-body :global([data-known]:hover),
+  .reading-body :global([data-known]:focus-visible) {
+    background: var(--color-paper-soft);
   }
   .reading-body :global(.is-active) {
     outline: 2px solid var(--color-brand);

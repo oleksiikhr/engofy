@@ -74,8 +74,8 @@ export interface GrammarLexiconEntry {
   state: EffectiveState;
 }
 
-// The new/learning entries of a post, keyed by wordDefinitionId / phraseId /
-// grammarUsagePointId — exactly the ones `renderDoc` marks with a span.
+// The entries of a post, keyed by wordDefinitionId / phraseId /
+// grammarUsagePointId — exactly the ones `renderDoc` labels with a span.
 export interface LexiconData {
   words: Record<string, WordLexiconEntry>;
   phrases: Record<string, PhraseLexiconEntry>;

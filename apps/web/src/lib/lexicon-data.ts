@@ -1,5 +1,4 @@
 import type { LexiconData } from './reader-lexicon';
-import { isMarked } from './render-doc';
 import type { PostDetail } from './types';
 
 // The "why this, not that" explanation the grammar_contrastive exercise
@@ -22,9 +21,7 @@ function contrastByUsagePoint(
   return out;
 }
 
-// The popup data for the spans `renderDoc` marks: only new/learning
-// word/phrase/grammar annotations, so the JSON embedded in the page stays
-// small.
+// The popup data for every span `renderDoc` labels, whatever its state.
 export function buildLexiconData(
   annotations: PostDetail['annotations'],
   exercises: PostDetail['exercises'],
@@ -32,34 +29,30 @@ export function buildLexiconData(
   const contrast = contrastByUsagePoint(exercises);
   const data: LexiconData = { words: {}, phrases: {}, grammar: {} };
   for (const w of Object.values(annotations.words)) {
-    if (isMarked(w.state)) {
-      data.words[w.wordDefinitionId] = {
-        kind: 'word',
-        id: w.wordDefinitionId,
-        lemma: w.lemma,
-        pos: w.pos,
-        phonetic: w.phonetic,
-        frequencyRank: w.frequencyRank,
-        definition: w.definition,
-        example: w.example,
-        cefrLevel: w.cefrLevel,
-        state: w.state,
-      };
-    }
+    data.words[w.wordDefinitionId] = {
+      kind: 'word',
+      id: w.wordDefinitionId,
+      lemma: w.lemma,
+      pos: w.pos,
+      phonetic: w.phonetic,
+      frequencyRank: w.frequencyRank,
+      definition: w.definition,
+      example: w.example,
+      cefrLevel: w.cefrLevel,
+      state: w.state,
+    };
   }
   for (const p of Object.values(annotations.phrases)) {
-    if (isMarked(p.state)) {
-      data.phrases[p.phraseId] = {
-        kind: 'phrase',
-        id: p.phraseId,
-        text: p.text,
-        type: p.type,
-        definition: p.definition,
-        example: p.example,
-        cefrLevel: p.cefrLevel,
-        state: p.state,
-      };
-    }
+    data.phrases[p.phraseId] = {
+      kind: 'phrase',
+      id: p.phraseId,
+      text: p.text,
+      type: p.type,
+      definition: p.definition,
+      example: p.example,
+      cefrLevel: p.cefrLevel,
+      state: p.state,
+    };
   }
   // A usage point's viewer state rides on its matches; every match of one
   // point carries the same state.
@@ -72,7 +65,7 @@ export function buildLexiconData(
   for (const construction of Object.values(annotations.grammar)) {
     for (const point of construction.usagePoints) {
       const state = stateOf.get(point.grammarUsagePointId);
-      if (state && isMarked(state)) {
+      if (state) {
         data.grammar[point.grammarUsagePointId] = {
           id: point.grammarUsagePointId,
           construction: construction.name,
