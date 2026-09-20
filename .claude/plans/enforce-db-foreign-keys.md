@@ -73,10 +73,10 @@ reference про тести (`.agents/skills/engofy/references/`): нові фі
 `sentence_tokens`, `grammar_matches`, `post_reads.post_id`, `daily_plans.post_id`. Звірити ручні
 `nativeDelete` у `retry-post`, `generate-exercises`, `tag-grammar` з новими правилами.
 
-### [ ] 5. Дані юзера
+### [x] 5. Дані юзера
 - Branch: `enforce-db-foreign-keys-05-user-data`
-- Base: `enforce-db-foreign-keys-04-post-aggregate`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/97
 
 `CASCADE` для `subscriptions`, `learning_cards`, `learning_dispositions`, `user_skill_progress`,
 `post_reads.user_id`, `daily_plans.user_id`, `account_deletion_requests`, `review_logs → learning_cards`.

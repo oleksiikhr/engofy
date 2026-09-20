@@ -2,6 +2,7 @@ import type { Opt } from '@mikro-orm/core';
 import {
   Entity,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -9,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { User } from './user.entity.js';
 
 // A learner's request to delete their account after a grace period. Active
 // while `cancelledAt` is null; the deletion itself runs later off
@@ -18,7 +20,11 @@ export class AccountDeletionRequest {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => User, {
+    mapToPk: true,
+    fieldName: 'user_id',
+    deleteRule: 'cascade',
+  })
   @Index()
   userId!: string;
 

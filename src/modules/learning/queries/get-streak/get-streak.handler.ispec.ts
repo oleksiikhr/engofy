@@ -15,7 +15,7 @@ describe('GetStreakHandler', () => {
   });
 
   it('counts a review logged today as a 1-day streak', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const em = suite.orm.em;
 
     const card = factories(em).learningCard.makeOne({

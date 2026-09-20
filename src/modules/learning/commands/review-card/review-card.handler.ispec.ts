@@ -47,7 +47,7 @@ describe('ReviewCardHandler', () => {
   }
 
   it('reschedules the card and appends a review log', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const cardId = await seedCard(userId);
 
     const card = await suite.command(
@@ -65,7 +65,7 @@ describe('ReviewCardHandler', () => {
   });
 
   it('leaves user_skill_progress untouched for a non-grammar card', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const cardId = await seedCard(userId);
 
     await suite.command(
@@ -76,7 +76,7 @@ describe('ReviewCardHandler', () => {
   });
 
   it('updates skill progress when a grammar card is reviewed', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const constructionId = uuidv7();
     const cardId = await seedGrammarCard(userId, constructionId);
 
@@ -94,7 +94,7 @@ describe('ReviewCardHandler', () => {
   });
 
   it('resets the correct streak on an "Again" grade', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const constructionId = uuidv7();
     const cardId = await seedGrammarCard(userId, constructionId);
 
@@ -115,7 +115,7 @@ describe('ReviewCardHandler', () => {
   });
 
   it('will not review a card that belongs to another user', async () => {
-    const cardId = await seedCard(uuidv7());
+    const cardId = await seedCard((await suite.factories.user.createOne()).id);
 
     await expect(
       suite.command(new ReviewCardCommand(uuidv7(), cardId, ReviewRating.Good)),
@@ -131,7 +131,7 @@ describe('ReviewCardHandler', () => {
   });
 
   it('rejects reviewing an archived card', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const cardId = await seedCard(userId);
     const card = await suite.orm.em.findOneOrFail(LearningCard, {
       id: cardId,

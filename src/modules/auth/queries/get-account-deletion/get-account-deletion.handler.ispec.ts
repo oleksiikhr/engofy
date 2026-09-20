@@ -13,7 +13,7 @@ describe('GetAccountDeletionHandler', () => {
   });
 
   it('returns the pending request with its scheduled deletion time', async () => {
-    const userId = randomUUID();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),
@@ -26,7 +26,7 @@ describe('GetAccountDeletionHandler', () => {
   });
 
   it('ignores a cancelled request', async () => {
-    const userId = randomUUID();
+    const userId = (await suite.factories.user.createOne()).id;
     const request = suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),

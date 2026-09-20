@@ -162,7 +162,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "account_deletion_requests_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "account_deletion_requests_user_id_foreign",
+          "localTableName": "public.account_deletion_requests",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -586,6 +599,18 @@
             "id"
           ],
           "referencedTableName": "public.posts",
+          "deleteRule": "cascade"
+        },
+        "daily_plans_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "daily_plans_user_id_foreign",
+          "localTableName": "public.daily_plans",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
           "deleteRule": "cascade"
         }
       },
@@ -1844,7 +1869,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "learning_cards_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "learning_cards_user_id_foreign",
+          "localTableName": "public.learning_cards",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -2050,7 +2088,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "learning_dispositions_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "learning_dispositions_user_id_foreign",
+          "localTableName": "public.learning_dispositions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -3027,6 +3078,18 @@
           ],
           "referencedTableName": "public.posts",
           "deleteRule": "cascade"
+        },
+        "post_reads_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "post_reads_user_id_foreign",
+          "localTableName": "public.post_reads",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
         }
       },
       "comment": null
@@ -3582,7 +3645,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "review_logs_card_id_foreign": {
+          "columnNames": [
+            "card_id"
+          ],
+          "constraintName": "review_logs_card_id_foreign",
+          "localTableName": "public.review_logs",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.learning_cards",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -4444,7 +4520,20 @@
         }
       ],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "subscriptions_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "subscriptions_user_id_foreign",
+          "localTableName": "public.subscriptions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {
@@ -4764,7 +4853,20 @@
       ],
       "checks": [],
       "triggers": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_skill_progress_user_id_foreign": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "user_skill_progress_user_id_foreign",
+          "localTableName": "public.user_skill_progress",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade"
+        }
+      },
       "comment": null
     },
     {

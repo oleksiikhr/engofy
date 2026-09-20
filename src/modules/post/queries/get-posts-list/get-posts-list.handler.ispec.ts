@@ -177,7 +177,7 @@ describe('GetPostsListHandler', () => {
 
   it('excludes already-read posts only when unreadOnly is requested for a logged-in user', async () => {
     const em = suite.orm.em;
-    const userId = randomUUID();
+    const userId = (await suite.factories.user.createOne()).id;
     const read = seedPost(em, { title: 'read-post' });
     seedPost(em, { title: 'unread-post' });
     await em.flush();

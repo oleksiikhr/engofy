@@ -89,7 +89,7 @@ describe('GetProfileHandler', () => {
 
   it('unlocks a reviewed construction, counts the streak and CEFR cards', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const catalog = await seedCatalog(em);
 
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
@@ -136,7 +136,7 @@ describe('GetProfileHandler', () => {
 
   it('keeps a removed card in the streak but out of the CEFR breakdown', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
     await em.flush();
@@ -165,7 +165,7 @@ describe('GetProfileHandler', () => {
 
   it('returns every distinct review day across all cards, sorted ascending', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const now = DateTime.now();
 
     const card = factories(em).learningCard.makeOne({
@@ -216,7 +216,7 @@ describe('GetProfileHandler', () => {
 
   it('derives masteryScore from live FSRS card state', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const catalog = await seedCatalog(em);
 
     const card = await suite.command(

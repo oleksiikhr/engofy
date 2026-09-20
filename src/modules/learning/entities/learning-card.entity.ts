@@ -4,6 +4,7 @@ import {
   Entity,
   Enum,
   Index,
+  ManyToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { User } from '../../auth/entities/user.entity.js';
 import { LearningCardState } from '../enums/learning-card-state.enum.js';
 
 // One unified SRS card for a word, phrase, or grammar usage point — not three
@@ -38,7 +40,11 @@ export class LearningCard {
 
   // Covered as the leading column of the three composite uniques above and the
   // (userId, due) index.
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => User, {
+    mapToPk: true,
+    fieldName: 'user_id',
+    deleteRule: 'cascade',
+  })
   userId!: string;
 
   // FK -> word_definitions.id (one word sense, not the whole word — a word

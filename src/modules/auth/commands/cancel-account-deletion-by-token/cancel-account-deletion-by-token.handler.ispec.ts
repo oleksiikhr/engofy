@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AuthModule } from '../../auth.module.js';
 import { generateToken, hashSecret } from '../../crypto/token.helper.js';
@@ -10,7 +9,7 @@ describe('CancelAccountDeletionByTokenHandler', () => {
   const suite = createIntegrationSuite({ imports: [AuthModule] });
 
   it('cancels the request that owns the token', async () => {
-    const userId = randomUUID();
+    const userId = (await suite.factories.user.createOne()).id;
     const token = generateToken();
     suite.factories.accountDeletionRequest.makeOne({
       userId,
@@ -37,7 +36,7 @@ describe('CancelAccountDeletionByTokenHandler', () => {
   it('throws when the request was already cancelled', async () => {
     const token = generateToken();
     const request = suite.factories.accountDeletionRequest.makeOne({
-      userId: randomUUID(),
+      userId: (await suite.factories.user.createOne()).id,
       cancelTokenHash: hashSecret(token),
     });
     request.cancelledAt = request.requestedAt;

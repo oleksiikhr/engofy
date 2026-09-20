@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { BillingModule } from '../../billing.module.js';
 import { Subscription } from '../../entities/subscription.entity.js';
@@ -11,7 +10,7 @@ describe('ActivateMockSubscriptionHandler', () => {
   const suite = createIntegrationSuite({ imports: [BillingModule] });
 
   it('creates a mock premium subscription for a month', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     const subscription = await suite.command(
       new ActivateMockSubscriptionCommand(userId),
@@ -30,7 +29,7 @@ describe('ActivateMockSubscriptionHandler', () => {
   });
 
   it('extends the current period instead of stacking rows', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const existingEnd = DateTime.utc().plus({ days: 10 });
     suite.factories.subscription.makeOne({
       userId,

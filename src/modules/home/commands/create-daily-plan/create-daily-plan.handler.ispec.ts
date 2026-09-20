@@ -9,7 +9,7 @@ describe('CreateDailyPlanHandler', () => {
   const suite = createIntegrationSuite({ imports: [HomeModule] });
 
   it('creates a daily_plans row for today', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const postId = (await suite.factories.post.createOne()).id;
     const grammarUsagePointId = uuidv7();
 
@@ -25,7 +25,7 @@ describe('CreateDailyPlanHandler', () => {
   });
 
   it('allows a null grammar usage point', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const postId = (await suite.factories.post.createOne()).id;
 
     await suite.command(new CreateDailyPlanCommand(userId, postId, null));
@@ -35,7 +35,7 @@ describe('CreateDailyPlanHandler', () => {
   });
 
   it('is idempotent — a second call the same day keeps the first selection', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const firstPost = await suite.factories.post.createOne();
     const secondPost = await suite.factories.post.createOne();
 

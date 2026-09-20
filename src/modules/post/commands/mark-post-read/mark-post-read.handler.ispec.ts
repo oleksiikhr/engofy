@@ -14,7 +14,7 @@ describe('MarkPostReadHandler', () => {
     const { shortId } = await suite.factories.post.createOne({
       status: PostStatus.Published,
     });
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     await suite.command(new MarkPostReadCommand(userId, shortId));
 
@@ -30,7 +30,7 @@ describe('MarkPostReadHandler', () => {
     const { shortId } = await suite.factories.post.createOne({
       status: PostStatus.Published,
     });
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
 
     await suite.command(new MarkPostReadCommand(userId, shortId));
     await suite.command(new MarkPostReadCommand(userId, shortId));

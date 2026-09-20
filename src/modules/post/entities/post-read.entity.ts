@@ -8,6 +8,7 @@ import {
 import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
+import { User } from '../../auth/entities/user.entity.js';
 import { Post } from './post.entity.js';
 
 // One row per (user, post): the reader marked the article read (button,
@@ -20,7 +21,11 @@ export class PostRead {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
-  @Property({ type: 'uuid' })
+  @ManyToOne(() => User, {
+    mapToPk: true,
+    fieldName: 'user_id',
+    deleteRule: 'cascade',
+  })
   userId!: string;
 
   @ManyToOne(() => Post, {

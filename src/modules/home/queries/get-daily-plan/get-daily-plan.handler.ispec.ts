@@ -30,7 +30,7 @@ describe('GetDailyPlanHandler', () => {
     });
     await suite.orm.em.flush();
 
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),
@@ -57,7 +57,7 @@ describe('GetDailyPlanHandler', () => {
 
   it('leaves grammar fields null when no usage point was selected', async () => {
     const post = await suite.factories.post.createOne();
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),
@@ -77,7 +77,7 @@ describe('GetDailyPlanHandler', () => {
 
   it('reports isRead once a post_reads row exists for the plan post', async () => {
     const post = await suite.factories.post.createOne();
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.dailyPlan.makeOne({
       userId,
       planDate: DateTime.now(),

@@ -17,10 +17,7 @@ import { AccountDeletionRequest } from '../../entities/account-deletion-request.
 import { AuthChallenge } from '../../entities/auth-challenge.entity.js';
 import { AuthSession } from '../../entities/auth-session.entity.js';
 import { User } from '../../entities/user.entity.js';
-import {
-  DeleteExpiredAccountsService,
-  USER_OWNED_TABLES,
-} from './delete-expired-accounts.service.js';
+import { DeleteExpiredAccountsService } from './delete-expired-accounts.service.js';
 
 describe('DeleteExpiredAccountsService', () => {
   let service: DeleteExpiredAccountsService;
@@ -194,16 +191,19 @@ describe('DeleteExpiredAccountsService', () => {
     await expect(service.run()).resolves.toBeUndefined();
   });
 
-  it('covers every table with a user_id column', async () => {
+  it('leaves only auth_sessions without a cascading FK on user_id', async () => {
     const rows = await suite.orm.em
       .getConnection()
       .execute<{ table_name: string }[]>(
-        `select table_name from information_schema.columns
-         where table_schema = current_schema() and column_name = 'user_id'`,
+        `select c.table_name from information_schema.columns c
+         where c.table_schema = current_schema() and c.column_name = 'user_id'
+           and not exists (
+             select 1 from pg_constraint con
+             where con.contype = 'f' and con.confdeltype = 'c'
+               and con.confrelid = to_regclass('users')
+               and con.conrelid = to_regclass(quote_ident(c.table_name)))`,
       );
 
-    expect(rows.map((r) => r.table_name).sort()).toEqual(
-      [...USER_OWNED_TABLES].sort(),
-    );
+    expect(rows.map((r) => r.table_name)).toEqual(['auth_sessions']);
   });
 });

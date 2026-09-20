@@ -138,7 +138,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('includes a due word card whose word occurs in the post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     await em.flush();
     const { wordDefinitionId } = await seedWordInPost(em, post.id);
@@ -153,7 +153,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('excludes a due word card whose word does not occur in the post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     await em.flush();
     await seedWordInPost(em, post.id);
@@ -174,7 +174,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('includes a due phrase card whose phrase occurs in the post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     const phrase = factories(em).phrase.makeOne({ phraseText: 'set sail' });
     await em.flush();
@@ -195,7 +195,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('includes a due grammar card whose usage point is matched in the post', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     await em.flush();
     const sentence = seedSentence(em, post.id);
@@ -222,7 +222,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('excludes archived and not-yet-due cards', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     await em.flush();
     const { wordDefinitionId: archived } = await seedWordInPost(em, post.id);
@@ -244,7 +244,7 @@ describe('GetDuePostCardsHandler', () => {
 
   it('caps New cards at DAILY_NEW_CARD_LIMIT but never caps Review cards', async () => {
     const em = suite.orm.em;
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const post = seedPost(em);
     await em.flush();
 

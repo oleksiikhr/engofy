@@ -51,7 +51,7 @@ describe('AddCardHandler', () => {
   }
 
   it('creates a fresh New card for a word target', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
     const card = await suite.command(
@@ -69,7 +69,7 @@ describe('AddCardHandler', () => {
   });
 
   it('is idempotent — re-adding the same target returns the existing card', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
 
     const first = await suite.command(
@@ -89,7 +89,7 @@ describe('AddCardHandler', () => {
   // EM so the two inserts can't truly interleave here; seeding the row first
   // stands in for the loser of the race.
   it('does not fail when the target card already exists from a racing add', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     suite.factories.learningCard.makeOne({
       userId,
@@ -117,7 +117,7 @@ describe('AddCardHandler', () => {
   });
 
   it('unarchives an existing archived card instead of creating a new one', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     const archived = suite.factories.learningCard.makeOne({
       userId,
@@ -148,7 +148,7 @@ describe('AddCardHandler', () => {
   });
 
   it('does not count an archived card against the free-tier cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT - 1);
     const archivedWordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
     suite.factories.learningCard.makeOne({
@@ -183,7 +183,7 @@ describe('AddCardHandler', () => {
   });
 
   it('blocks a free user at the card cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT);
     await suite.orm.em.flush();
     const wordDefinitionId = await seedWordDefinition(`w-${uuidv7()}`);
@@ -194,7 +194,7 @@ describe('AddCardHandler', () => {
   });
 
   it('unlocks the construction when a grammar card is added', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     const constructionId = uuidv7();
     const point = suite.factories.grammarUsagePoint.makeOne({
       constructionId,
@@ -218,7 +218,7 @@ describe('AddCardHandler', () => {
   });
 
   it('lets a premium user past the cap', async () => {
-    const userId = uuidv7();
+    const userId = (await suite.factories.user.createOne()).id;
     fillLearningCards(suite.orm.em, userId, FREE_CARD_LIMIT);
     suite.factories.subscription.makeOne({
       userId,

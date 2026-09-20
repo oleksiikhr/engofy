@@ -9,7 +9,7 @@ describe('CancelAccountDeletionHandler', () => {
   const suite = createIntegrationSuite({ imports: [AuthModule] });
 
   it('marks the pending request as cancelled', async () => {
-    const userId = randomUUID();
+    const userId = (await suite.factories.user.createOne()).id;
     suite.factories.accountDeletionRequest.makeOne({
       userId,
       cancelTokenHash: randomUUID(),
