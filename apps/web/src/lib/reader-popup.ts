@@ -4,6 +4,7 @@ import {
   type LexiconEntry,
   readerPopupHtml,
 } from './reader-lexicon';
+import type { EffectiveState } from './types';
 
 // Client controller for the reader's anchored popup. One popup element,
 // absolutely positioned in document coordinates next to the clicked span
@@ -37,6 +38,28 @@ function lexicalEntry(span: Element | null, data: LexiconData) {
   }
   const phraseId = span?.getAttribute('data-phrase-id');
   return phraseId ? (data.phrases[phraseId] ?? null) : null;
+}
+
+function isEffectiveState(value: unknown): value is EffectiveState {
+  return (
+    value === 'new' ||
+    value === 'learning' ||
+    value === 'learned' ||
+    value === 'skipped'
+  );
+}
+
+function entriesOf(
+  data: LexiconData,
+  kind: string,
+): Record<string, { state: EffectiveState }> | null {
+  if (kind === 'word') {
+    return data.words;
+  }
+  if (kind === 'phrase') {
+    return data.phrases;
+  }
+  return kind === 'grammar' ? data.grammar : null;
 }
 
 function targetFor(el: Element, data: LexiconData): Target | null {
@@ -205,20 +228,29 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   });
 
   // An action swaps a section's row in place, which changes the popup's
-  // height. Once a target is settled as known/skipped it no longer counts as a
-  // label, so every span of it goes back to plain text.
+  // height. The new state is written back to the lexicon data so reopening the
+  // label shows it instead of the state the page loaded with. Once a target is
+  // settled as known/skipped it no longer counts as a label, so every span of
+  // it goes back to plain text.
   popup.addEventListener('htmx:afterSwap', () => {
     for (const section of popup.querySelectorAll('[data-lex-kind]')) {
       const state = section
         .querySelector('.lex-state')
         ?.getAttribute('data-state');
+      if (!isEffectiveState(state)) {
+        continue;
+      }
+      const kind = section.getAttribute('data-lex-kind') ?? '';
+      const id = section.getAttribute('data-lex-id') ?? '';
+      const entry = entriesOf(data, kind)?.[id];
+      if (entry) {
+        entry.state = state;
+      }
       if (state !== 'learned' && state !== 'skipped') {
         continue;
       }
-      const attr = LABEL_ATTR[section.getAttribute('data-lex-kind') ?? ''];
-      const id = section.getAttribute('data-lex-id') ?? '';
       for (const span of root.querySelectorAll(
-        `[${attr}="${CSS.escape(id)}"]`,
+        `[${LABEL_ATTR[kind]}="${CSS.escape(id)}"]`,
       )) {
         unmark(span);
       }
