@@ -24,10 +24,10 @@ ORM не додаємо: у сутності лишається скаляр `st
 
 ## Зрізи
 
-### [ ] 1. Спайк і правило
+### [x] 1. Спайк і правило
 - Branch: `enforce-db-foreign-keys-01-fk-spike`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/93
 
 Перевірити, що `mapToPk` + `deleteRule` на `daily_plans.post_id` дає FK у міграції та чистий
 `migration:check`. Вибрати для тестів `deferMode: INITIALLY_DEFERRED` або виправлення ~40 `ispec` із
