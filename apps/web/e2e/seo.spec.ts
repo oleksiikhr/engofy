@@ -80,6 +80,54 @@ test.describe('post page', () => {
   });
 });
 
+test.describe('post URL canonicalisation', () => {
+  const canonical = '/posts/the-cartographer-at-dawn-E2Eread1';
+
+  async function redirectOf(
+    request: import('@playwright/test').APIRequestContext,
+    path: string,
+  ) {
+    const response = await request.get(path, { maxRedirects: 0 });
+    return {
+      status: response.status(),
+      location: response.headers().location,
+    };
+  }
+
+  test('the canonical URL is served without a redirect', async ({
+    request,
+  }) => {
+    expect((await redirectOf(request, canonical)).status).toBe(200);
+  });
+
+  test('a bare shortId redirects to the canonical URL', async ({ request }) => {
+    expect(await redirectOf(request, '/posts/E2Eread1')).toEqual({
+      status: 301,
+      location: canonical,
+    });
+  });
+
+  test('a wrong slug redirects and keeps the query string', async ({
+    request,
+  }) => {
+    expect(
+      await redirectOf(request, '/posts/wrong-slug-E2Eread1?from=home'),
+    ).toEqual({ status: 301, location: `${canonical}?from=home` });
+  });
+
+  test('a wrong-case slug redirects', async ({ request }) => {
+    expect(
+      await redirectOf(request, '/posts/The-Cartographer-At-Dawn-E2Eread1'),
+    ).toEqual({ status: 301, location: canonical });
+  });
+
+  test('an unknown shortId is a 404, not a redirect', async ({ request }) => {
+    expect(
+      (await redirectOf(request, '/posts/some-slug-Zzzzzzzz')).status,
+    ).toBe(404);
+  });
+});
+
 test('/pricing stays indexable', async ({ request }) => {
   expect(await head(request, '/pricing')).not.toContain('name="robots"');
 });

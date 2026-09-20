@@ -117,10 +117,10 @@ sitemap; `<lastmod>` лише для постів.
 - `dateModified`: чи є оновлення тексту постів, чи достатньо `datePublished`?
 - Що з `og:image` для поста: дефолтна картинка, чи генерована (окремий зріз)?
 
-### [ ] 5. Канонічний URL поста (301)
+### [x] 5. Канонічний URL поста (301)
 - Branch: `seo-indexing-improvements-05-post-url-redirect`
-- Base: `seo-indexing-improvements-04-post-meta`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/103
 
 `/posts/{shortId}` і `/posts/{хибний-slug}-{shortId}` редіректяться (301) на канонічний
 `/posts/{slug}-{shortId}` (`postUrl`). Query-параметри (`?from=home`) зберігаються; canonical у

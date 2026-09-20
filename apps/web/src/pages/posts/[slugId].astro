@@ -9,6 +9,7 @@ import {
   buildQuickCheckSteps,
   buildStudySteps,
 } from '../../lib/quick-check-steps';
+import { postSlugId } from '../../lib/post-url';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
 import { publicOrigin } from '../../lib/site';
@@ -30,6 +31,16 @@ const post = slugId
 
 if (!post) {
   return new Response('Not found', { status: 404 });
+}
+
+// The API resolves a post by its shortId alone, so any slug prefix answers
+// 200. Send every other spelling to the one canonical URL, query kept.
+const canonicalSlugId = postSlugId(post);
+if (slugId !== canonicalSlugId) {
+  return Astro.redirect(
+    `/posts/${canonicalSlugId}${Astro.url.search}`,
+    301,
+  );
 }
 
 const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
