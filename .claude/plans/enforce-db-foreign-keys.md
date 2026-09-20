@@ -19,6 +19,9 @@ ORM не додаємо: у сутності лишається скаляр `st
 Продакшену ще нема, тож зворотна сумісність не потрібна: осиротілі рядки в міграціях просто
 видаляються, старі міграції можна не зберігати як історію, якщо це спрощує.
 
+Щоб не правити ~40 `ispec` вручну ще тричі, спершу (зрізи 2-3) всі фікстури переводяться на `Factory` з
+`@mikro-orm/seeder`; FK-зрізи 4-6 потім лише додають FK й підправляють фабрики.
+
 Політика `ON DELETE`: `CASCADE` для всього, що належить юзеру або посту; `RESTRICT` для довідників
 (`grammar_usage_points`, `grammar_constructions`, `words`, `word_definitions`, `phrases`).
 
@@ -36,27 +39,52 @@ ORM не додаємо: у сутності лишається скаляр `st
 осиротілих daily-планів (`get-daily-plan` / `create-daily-plan` + тести), який уже лежить у робочому
 дереві; після каскаду гілка «осиротілий план» стає мертвою, тож вирішити, чи лишати її як захист.
 
-### [ ] 2. Агрегат поста
-- Branch: `enforce-db-foreign-keys-02-post-aggregate`
+### [ ] 2. Фабрики: інфраструктура і перші модулі
+- Branch: `enforce-db-foreign-keys-02-factories-core`
 - Base: `enforce-db-foreign-keys-01-fk-spike`
+- PR: —
+
+Усі фікстури в тестах створюються через `Factory` з `@mikro-orm/seeder` (уже є в devDependencies),
+`test/factories/<entity>.factory.ts`, по одній фабриці на сутність з детермінованими дефолтами в
+`definition()` (без faker). `definition()` синхронний і не створює батьків: тест сам створює батька
+(`postFactory.createOne()`) і передає його id (`postId: post.id`). Реалізувати фабрики для всіх сутностей
+застосунку, спільний спосіб отримати їх із `suite` (наприклад `factories(suite.orm.em)`), перевести на
+них ispec модулів `home`, `auth`, `billing`, `learning`, прибрати `test/helpers/seed-post.helper.ts`
+(його замінює `PostFactory`) і локальні `seedPost`/`em.create` у цих модулях. Додати правило в
+reference про тести (`.agents/skills/engofy/references/`): нові фікстури тільки через фабрики.
+
+### [ ] 3. Фабрики: решта тестів
+- Branch: `enforce-db-foreign-keys-03-factories-rest`
+- Base: `enforce-db-foreign-keys-02-factories-core`
+- PR: —
+
+Перевести на фабрики решту: ispec модулів `post`, `telegram`, `entrypoints/**` (web, worker, cli),
+`test/e2e/seed-web-e2e.ts`. Прибрати всі локальні `seedPost*`/`seed*`-функції, що дублюють фабрики;
+залишаються лише сценарні хелпери, які збирають кілька фабрик разом (наприклад «пост із реченням і
+токеном»), і вони самі викликають фабрики. Перевірити `grep`-ом, що в `*.ispec.ts` не лишилося прямих
+`em.create(<Entity>, …)` для сутностей, які мають фабрику.
+
+### [ ] 4. Агрегат поста
+- Branch: `enforce-db-foreign-keys-04-post-aggregate`
+- Base: `enforce-db-foreign-keys-03-factories-rest`
 - PR: —
 
 `CASCADE` для `sentences`, `post_parts`, `exercises`, `post_pipeline_runs`, `post_publications`,
 `sentence_tokens`, `grammar_matches`, `post_reads.post_id`, `daily_plans.post_id`. Звірити ручні
 `nativeDelete` у `retry-post`, `generate-exercises`, `tag-grammar` з новими правилами.
 
-### [ ] 3. Дані юзера
-- Branch: `enforce-db-foreign-keys-03-user-data`
-- Base: `enforce-db-foreign-keys-02-post-aggregate`
+### [ ] 5. Дані юзера
+- Branch: `enforce-db-foreign-keys-05-user-data`
+- Base: `enforce-db-foreign-keys-04-post-aggregate`
 - PR: —
 
 `CASCADE` для `subscriptions`, `learning_cards`, `learning_dispositions`, `user_skill_progress`,
 `post_reads.user_id`, `daily_plans.user_id`, `account_deletion_requests`, `review_logs → learning_cards`.
 `auth_sessions.user_id` не чіпаємо. Спростити ручне видалення в `delete-expired-accounts`.
 
-### [ ] 4. Довідники
-- Branch: `enforce-db-foreign-keys-04-reference-data`
-- Base: `enforce-db-foreign-keys-03-user-data`
+### [ ] 6. Довідники
+- Branch: `enforce-db-foreign-keys-06-reference-data`
+- Base: `enforce-db-foreign-keys-05-user-data`
 - PR: —
 
 `RESTRICT` для посилань на `grammar_usage_points`, `grammar_constructions`, `words`, `word_definitions`,
