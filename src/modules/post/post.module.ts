@@ -25,6 +25,8 @@ import { GetPostDetailHandler } from './queries/get-post-detail/get-post-detail.
 import { GetPostPipelineStatusHandler } from './queries/get-post-pipeline-status/get-post-pipeline-status.handler.js';
 import { GetPostSuggestionsHandler } from './queries/get-post-suggestions/get-post-suggestions.handler.js';
 import { GetPostsListHandler } from './queries/get-posts-list/get-posts-list.handler.js';
+import { GetPostsSitemapIndexHandler } from './queries/get-posts-sitemap-index/get-posts-sitemap-index.handler.js';
+import { GetPostsSitemapPageHandler } from './queries/get-posts-sitemap-page/get-posts-sitemap-page.handler.js';
 
 const commandHandlers = [
   IngestPostHandler,
@@ -44,6 +46,8 @@ const commandHandlers = [
 const queryHandlers = [
   GetPostsListHandler,
   GetPostSuggestionsHandler,
+  GetPostsSitemapIndexHandler,
+  GetPostsSitemapPageHandler,
   GetPostDetailHandler,
   GetPostPipelineStatusHandler,
   GetGrammarReferenceHandler,
