@@ -60,10 +60,10 @@ status: in-progress
 Навігація в один рядок, компактний тулбар (прокрутка або іконки), перший абзац тексту над фолдом на
 390px. Скріншоти до/після в PR.
 
-### [ ] 4. Чистіші картки-підказки (лише `apps/web`)
+### [x] 4. Чистіші картки-підказки (лише `apps/web`)
 - Branch: `guest-reader-ux-overhaul-04-popup-card-cleanup`
-- Base: `guest-reader-ux-overhaul-03-mobile-reader-layout`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/110
 
 Заголовки без ALL CAPS і без символу `|`. Людські мітки замість `PROPER_NOUN`. Назва конструкції
 («third conditional») стоїть першою. Приклад обрізається до 1–2 речень. Не змінює контракт з бекендом.
