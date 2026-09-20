@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { grammarMetaDescription } from '../../lib/grammar-seo';
+import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
+import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
 import GrammarUsagePoints from './GrammarUsagePoints.astro';
 
@@ -20,6 +22,14 @@ const {
   description = grammarMetaDescription(con),
   handcrafted = false,
 } = Astro.props;
+
+const jsonLd = jsonLdGraph([
+  breadcrumbList(publicOrigin(Astro.url), [
+    { name: 'Home', path: '/' },
+    { name: 'Grammar', path: '/grammar' },
+    { name: con.name, path: `/grammar/${encodeURIComponent(con.slug)}` },
+  ]),
+]);
 ---
 
 <Layout
@@ -29,6 +39,9 @@ const {
   active="grammar"
   measure={true}
 >
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
+  </Fragment>
   <p class="crumb"><a href="/grammar">← Grammar reference</a></p>
 
   <header class="con-head">

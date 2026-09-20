@@ -9,8 +9,15 @@ test('renders the site shell with the guest landing', async ({ page }) => {
   expect(response?.status()).toBe(200);
 
   await expect(page.getByRole('link', { name: 'Engofy' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Grammar' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Engofy' })).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'Grammar', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Learn English by reading short texts',
+    }),
+  ).toBeVisible();
 });
 
 test('the guest landing lists the features and shows the product screenshots', async ({

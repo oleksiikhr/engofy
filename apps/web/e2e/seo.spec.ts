@@ -254,3 +254,101 @@ test.describe('sitemaps and robots.txt', () => {
     expect(body).toMatch(/^Sitemap: https?:\/\/[^\s]+\/sitemap\.xml$/m);
   });
 });
+
+function jsonLdGraph(html: string): { '@type': string }[] {
+  const raw = html.match(
+    /<script[^>]*type="application\/ld\+json"[^>]*>([^<]+)<\/script>/,
+  )?.[1];
+  expect(raw).toBeDefined();
+  return JSON.parse(raw as string)['@graph'];
+}
+
+test.describe('public pages', () => {
+  test('the guest home page has its own title, description and WebSite/Organization JSON-LD', async ({
+    request,
+  }) => {
+    const html = await head(request, '/');
+
+    expect(html).toContain(
+      '<title>Engofy — Learn English by Reading Short Texts (A1–C2)</title>',
+    );
+    expect(html).toContain(
+      '<meta name="description" content="Read short authentic English texts sorted by level',
+    );
+    expect(html).not.toContain(
+      'content="Learn English through short authentic texts."',
+    );
+    expect(jsonLdGraph(html).map((node) => node['@type'])).toEqual([
+      'WebSite',
+      'Organization',
+    ]);
+  });
+
+  test('the guest home page links to posts and grammar', async ({
+    request,
+  }) => {
+    const html = await head(request, '/');
+
+    expect(html).toContain('aria-label="Latest posts"');
+    expect(html).toContain('href="/posts/the-cartographer-at-dawn-E2Eread1"');
+    expect(html).toContain('href="/posts"');
+    expect(html).toContain('href="/grammar"');
+    expect(html).toMatch(/href="\/grammar\/[^"]+"/);
+  });
+
+  test('/posts and /grammar have their own description', async ({
+    request,
+  }) => {
+    for (const path of ['/posts', '/grammar']) {
+      const html = await head(request, path);
+      expect(html).not.toContain(
+        'content="Learn English through short authentic texts."',
+      );
+    }
+  });
+
+  test('filters and cursors canonicalise to the base page', async ({
+    request,
+  }) => {
+    expect(await head(request, '/posts?cefr=A1&cefr=B1&cursor=x')).toMatch(
+      /<link rel="canonical" href="https?:\/\/[^"?]+\/posts"/,
+    );
+    expect(await head(request, '/grammar?cefr=A1&groupBy=time')).toMatch(
+      /<link rel="canonical" href="https?:\/\/[^"?]+\/grammar"/,
+    );
+  });
+
+  test('a /posts text search is noindex, level filters are not', async ({
+    request,
+  }) => {
+    expect(await head(request, '/posts?term=harbour')).toContain(
+      '<meta name="robots" content="noindex"',
+    );
+    expect(await head(request, '/posts?cefr=B1')).not.toContain(
+      'name="robots"',
+    );
+  });
+
+  test('grammar pages have a BreadcrumbList', async ({ request }) => {
+    const list = jsonLdGraph(await head(request, '/grammar')).find(
+      (node) => node['@type'] === 'BreadcrumbList',
+    ) as unknown as { itemListElement: { name: string }[] };
+    expect(list.itemListElement.map((item) => item.name)).toEqual([
+      'Home',
+      'Grammar',
+    ]);
+
+    const detail = jsonLdGraph(await head(request, '/grammar/e2e-past-perfect'))
+      .filter((node) => node['@type'] === 'BreadcrumbList')
+      .flatMap(
+        (node) =>
+          (node as unknown as { itemListElement: { name: string }[] })
+            .itemListElement,
+      );
+    expect(detail.map((item) => item.name)).toEqual([
+      'Home',
+      'Grammar',
+      expect.any(String),
+    ]);
+  });
+});

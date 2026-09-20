@@ -13,7 +13,7 @@ const { user = null, active, streak = 0, dueCount = 0 } = Astro.props;
 const links = [
   { href: '/posts', label: 'Posts', key: 'posts', authOnly: false },
   { href: '/practice', label: 'Practice', key: 'practice', authOnly: true },
-  { href: '/dictionary', label: 'Dictionary', key: 'dictionary', authOnly: false },
+  { href: '/dictionary', label: 'Dictionary', key: 'dictionary', authOnly: true },
   { href: '/grammar', label: 'Grammar', key: 'grammar', authOnly: false },
 ].filter((link) => user || !link.authOnly);
 

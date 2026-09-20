@@ -17,8 +17,10 @@ const user = await getCurrentUser(Astro.request);
 const query = parsePostsQuery(Astro.url.searchParams);
 
 let resultsHtml: string;
-// An error or invalid-query state must not be indexed as the page.
-let noindex = false;
+// An error or invalid-query state must not be indexed as the page, nor may a
+// free-text search (an unbounded set of result pages). Crawlers still follow its
+// links. Level filters and cursors are only de-duplicated by the canonical.
+let noindex = query.term !== '';
 try {
   const view = await apiGet<PostsListResponse>(
     `/content/posts?${toApiQuery(query)}`,
@@ -34,7 +36,13 @@ try {
 }
 ---
 
-<Layout title="Posts — Engofy" user={user} active="posts" noindex={noindex}>
+<Layout
+  title="Posts — Read Short English Texts by Level | Engofy"
+  description="Short authentic English texts sorted from A1 to C2. Pick a level, open a text and tap any word for its meaning."
+  user={user}
+  active="posts"
+  noindex={noindex}
+>
   <h1>Posts</h1>
 
   <form

@@ -1,4 +1,5 @@
 import { postUrl } from './post-url';
+import { breadcrumbList } from './seo';
 import type { Block, PostDetail } from './types';
 
 const DESCRIPTION_MAX_CHARS = 155;
@@ -46,11 +47,6 @@ function truncate(text: string, max: number): string {
   return `${cut.trimEnd()}…`;
 }
 
-// `<` is escaped so the JSON can't close its own <script> element.
-export function escapeJson(value: unknown): string {
-  return JSON.stringify(value).replace(/</g, '\\u003c');
-}
-
 // One JSON-LD document: the Article plus the Home → Posts → post trail.
 export function postJsonLd(
   post: Pick<
@@ -82,24 +78,11 @@ export function postJsonLd(
           url: origin,
         },
       },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: `${origin}/`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Posts',
-            item: `${origin}/posts`,
-          },
-          { '@type': 'ListItem', position: 3, name: headline, item: url },
-        ],
-      },
+      breadcrumbList(origin, [
+        { name: 'Home', path: '/' },
+        { name: 'Posts', path: '/posts' },
+        { name: headline, path: postUrl(post) },
+      ]),
     ],
   };
 }
