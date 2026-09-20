@@ -4,12 +4,14 @@ import QuickCheck from '../../components/QuickCheck.astro';
 import QuickCheckScreen from '../../components/QuickCheckScreen.astro';
 import { apiGetOrNull } from '../../lib/api';
 import { buildLexiconData } from '../../lib/lexicon-data';
+import { escapeJson, postDescription, postJsonLd } from '../../lib/post-seo';
 import {
   buildQuickCheckSteps,
   buildStudySteps,
 } from '../../lib/quick-check-steps';
 import { renderDoc } from '../../lib/render-doc';
 import { getCurrentUser } from '../../lib/session';
+import { publicOrigin } from '../../lib/site';
 import type {
   NewCardBudgetResponse,
   PostDetail,
@@ -36,10 +38,16 @@ const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
   year: 'numeric',
 });
 
+const title = post.title ?? 'Untitled';
+const description = postDescription(
+  post.doc,
+  'A short English text to read, with word and grammar help.',
+);
+const jsonLd = escapeJson(
+  postJsonLd(post, publicOrigin(Astro.url), description),
+);
+
 const bodyHtml = renderDoc(post.doc, post.annotations);
-// `<` is escaped so the JSON can't close its own <script> element.
-const escapeJson = (value: unknown) =>
-  JSON.stringify(value).replace(/</g, '\\u003c');
 const lexicon = buildLexiconData(post.annotations, post.exercises);
 const lexiconJson = escapeJson(lexicon);
 // `?? []`: an API still on the previous release omits `tokens`.
@@ -96,10 +104,17 @@ const isRead = post.isRead ?? false;
 ---
 
 <Layout
-  title={`${post.title ?? 'Reading'} — Engofy`}
+  title={`${title} — Engofy`}
+  description={description}
+  ogType="article"
   user={user}
   active="posts"
 >
+  <Fragment slot="head">
+    <meta property="article:published_time" content={post.publishedAt} />
+    {post.cefrLevel && <meta property="article:tag" content={post.cefrLevel} />}
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
+  </Fragment>
   <div class="reader-layout" data-slug-id={slugId} data-new-budget={budget?.remaining}>
     <article class="reader-article">
       <header class="post-head">
@@ -121,7 +136,7 @@ const isRead = post.isRead ?? false;
             )
           }
         </div>
-        <h1>{post.title ?? 'Untitled'}</h1>
+        <h1>{title}</h1>
         {
           (post.sourceType !== 'original' || post.sourceLink) && (
             <p class="post-head__source">
