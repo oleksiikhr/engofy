@@ -27,6 +27,11 @@ interface Props {
   // "When it's used" and "Practice" are appended automatically — every page
   // has both.
   sections?: Section[];
+  // grammarUsagePointIds a handcrafted page already rendered inline (via
+  // GrammarUsagePointCard) next to the prose that explains them. Excluded
+  // from the generic "When it's used" list below so the rule isn't explained
+  // twice, once in prose and once as a disconnected card.
+  inlineUsagePointIds?: string[];
 }
 
 const {
@@ -35,7 +40,13 @@ const {
   description = grammarMetaDescription(con),
   handcrafted = false,
   sections = [],
+  inlineUsagePointIds = [],
 } = Astro.props;
+
+const inlineIds = new Set(inlineUsagePointIds);
+const remainingUsagePoints = con.usagePoints.filter(
+  (up) => !inlineIds.has(up.grammarUsagePointId),
+);
 
 const progressSections: Section[] = [
   ...sections,
@@ -81,7 +92,8 @@ const jsonLd = jsonLdGraph([
 
   <GrammarUsagePoints
     sectionId="use"
-    usagePoints={con.usagePoints}
+    usagePoints={remainingUsagePoints}
+    totalUsagePointCount={con.usagePoints.length}
     levelProgress={con.levelProgress}
   />
 

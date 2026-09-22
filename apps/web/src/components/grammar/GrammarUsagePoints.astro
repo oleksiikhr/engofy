@@ -1,19 +1,28 @@
 ---
-import { usageActionsHtml } from '../../lib/grammar-usage-actions';
 import type {
   GrammarConstructionUsagePoint,
   GrammarLevelProgress,
 } from '../../lib/types';
-import GrammarContrast from './GrammarContrast.astro';
+import GrammarUsagePointCard from './GrammarUsagePointCard.astro';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
   levelProgress?: GrammarLevelProgress[];
   // Anchor for GrammarSectionProgress: renders as `gp-section-${sectionId}`.
   sectionId?: string;
+  // Total usage points this construction has, including ones a handcrafted
+  // page already rendered inline (via GrammarUsagePointCard) inside its own
+  // sections and filtered out of `usagePoints` before it reached here. Lets
+  // the empty state tell "nothing recorded" apart from "covered above".
+  totalUsagePointCount?: number;
 }
 
-const { usagePoints, levelProgress, sectionId } = Astro.props;
+const {
+  usagePoints,
+  levelProgress,
+  sectionId,
+  totalUsagePointCount = usagePoints.length,
+} = Astro.props;
 ---
 
 <section
@@ -37,35 +46,20 @@ const { usagePoints, levelProgress, sectionId } = Astro.props;
     )
   }
   {
-    usagePoints.length === 0 && (
-      <p>No usage points recorded for this construction.</p>
-    )
+    usagePoints.length === 0 &&
+      (totalUsagePointCount === 0 ? (
+        <p>No usage points recorded for this construction.</p>
+      ) : (
+        <p>
+          Every usage point for this rule is covered in the sections above.
+        </p>
+      ))
   }
   <ul class="usage-list">
     {
       usagePoints.map((up) => (
-        <li class="usage-item card" data-state={up.state}>
-          <div class="usage-item__head">
-            <span class="badge">{up.cefrLevel}</span>
-            <span class="usage-item__guide">{up.guideword}</span>
-          </div>
-          <p class="usage-item__can">{up.explanation ?? up.canDoStatement}</p>
-          {up.explanation && (
-            <p class="usage-item__cando">{up.canDoStatement}</p>
-          )}
-          {up.examples.length > 0 && (
-            <div data-testid="usage-examples">
-              <GrammarContrast good={up.examples} />
-            </div>
-          )}
-          <Fragment
-            set:html={usageActionsHtml(
-              up.grammarUsagePointId,
-              up.state,
-              undefined,
-              up.assumedKnown,
-            )}
-          />
+        <li>
+          <GrammarUsagePointCard usagePoint={up} />
         </li>
       ))
     }
@@ -100,77 +94,5 @@ const { usagePoints, levelProgress, sectionId } = Astro.props;
     margin: 0;
     display: grid;
     gap: 1rem;
-  }
-  .usage-item {
-    padding: 1.125rem 1.25rem;
-  }
-  .usage-item[data-state='learning'] {
-    border-color: var(--color-brand);
-  }
-  .usage-item[data-state='learned'] {
-    border-color: var(--color-success);
-  }
-  .usage-item[data-state='skipped'] {
-    border-color: var(--color-warning);
-  }
-  .usage-item__head {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  .usage-item__guide {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-ink-faint);
-  }
-  .usage-item__can {
-    margin: 0 0 0.5rem;
-    font-weight: 800;
-  }
-  .usage-item__cando {
-    margin: 0 0 0.5rem;
-    font-size: 0.85rem;
-    color: var(--color-ink-faint);
-  }
-</style>
-
-<!-- The action row is injected via set:html (shared with the HTMX partial),
-     so its selectors must be global. -->
-<style is:global>
-  .gup-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .gup-actions form {
-    margin: 0;
-  }
-  .gup-state {
-    padding: 0.1rem 0.6rem;
-    border-radius: 999px;
-    background: var(--color-paper-soft);
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--color-ink-soft);
-  }
-  .gup-state--learning {
-    background: var(--color-brand-wash);
-    color: var(--color-brand-strong);
-  }
-  .gup-state--learned {
-    background: var(--color-success-wash);
-    color: var(--color-success-ink);
-  }
-  .gup-state--assumed {
-    background: var(--color-paper-soft);
-    color: var(--color-ink-faint);
-  }
-  .gup-state--skipped {
-    background: var(--color-warning-wash);
-    color: var(--color-warning-ink);
   }
 </style>

@@ -5,6 +5,7 @@ import GrammarExample from '../components/grammar/GrammarExample.astro';
 import GrammarFormula from '../components/grammar/GrammarFormula.astro';
 import GrammarSection from '../components/grammar/GrammarSection.astro';
 import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
 import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
 
 interface Props {
@@ -13,6 +14,22 @@ interface Props {
 }
 
 const { con, user } = Astro.props;
+
+// The EGP data for this construction has 3 USE/FORM-USE records — limiting
+// adjectives (main/only) and degree adjectives (real/absolute/complete) at
+// two levels — and both topics are already covered in prose below, in the
+// "attributive-only" section. Match by guideword and render their cards
+// right there instead of a disconnected list at the bottom of the page.
+const limitingPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('LIMITING ADJECTIVES'),
+);
+const degreePoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('DEGREE ADJECTIVES'),
+);
+const inlineUsagePointIds = [
+  ...(limitingPoint ? [limitingPoint] : []),
+  ...degreePoints,
+].map((p) => p.grammarUsagePointId);
 ---
 
 <GrammarShell
@@ -27,6 +44,7 @@ const { con, user } = Astro.props;
     { id: 'other-spots', title: 'Two more spots: after make, and after a noun', open: false },
     { id: 'common-mistake', title: 'A common mistake', open: false },
   ]}
+  inlineUsagePointIds={inlineUsagePointIds}
 >
   <Fragment slot="lede">
     <p>
@@ -44,11 +62,11 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="Attributive" parts={['a / an', 'adjective', 'noun']} />
     <GrammarExample note="Big and small sit directly in front of the nouns they describe.">
-      We have a big garden and a small swimming pool.
+      We have a <mark>big</mark> garden and a <mark>small</mark> swimming pool.
     </GrammarExample>
     <GrammarFormula label="Predicative" parts={['subject', 'be', 'adjective']} />
     <GrammarExample note="Big describes bedroom, but from the other side of is.">
-      My bedroom is big.
+      My bedroom is <mark>big</mark>.
     </GrammarExample>
     <p>
       Most adjectives — <em>nice</em>, <em>happy</em>, <em>expensive</em>,
@@ -66,10 +84,10 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="a- adjectives" parts={['subject', 'be / feel / look', 'a-adjective']} />
     <GrammarExample note="Alone here, not before a noun.">
-      I was very nervous because I was alone at the bus station.
+      I was very nervous because I was <mark>alone</mark> at the bus station.
     </GrammarExample>
     <GrammarExample note="Alive after was, describing my father from the other side of the verb.">
-      I was very happy that my father was still alive.
+      I was very happy that my father was still <mark>alive</mark>.
     </GrammarExample>
     <p>
       Two other linking verbs, <em>look</em> and <em>feel</em>, work the same
@@ -77,10 +95,10 @@ const { con, user } = Astro.props;
       subject, never a noun that follows them.
     </p>
     <GrammarExample note="Perfect describes it, after looks.">
-      It is black and it looks perfect.
+      It is black and it looks <mark>perfect</mark>.
     </GrammarExample>
     <GrammarExample note="Comfortable describes I, after feel.">
-      I feel comfortable when I am wearing these clothes.
+      I feel <mark>comfortable</mark> when I am wearing these clothes.
     </GrammarExample>
     <p>
       An adjective can also follow one of the indefinite pronouns
@@ -90,7 +108,7 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="With an indefinite pronoun" parts={['something / nothing', 'adjective']} />
     <GrammarExample note="Special comes after something, not before it.">
-      I want to cook something special.
+      I want to cook something <mark>special</mark>.
     </GrammarExample>
   </GrammarSection>
 
@@ -102,23 +120,25 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="Limiting adjectives" parts={['the', 'main / only', 'noun']} />
     <GrammarExample note="Main picks out one reason among several — it needs the noun right there.">
-      The main reason is that I am practising the language.
+      The <mark>main</mark> reason is that I am practising the language.
     </GrammarExample>
+    {limitingPoint && <GrammarUsagePointCard usagePoint={limitingPoint} />}
     <p>
       A small group of degree adjectives — <em>real</em>, <em>absolute</em>,
       <em>complete</em> — work the same way, adding intensity to a noun
       rather than describing a state.
     </p>
     <GrammarExample note="A real problem, not the problem is real (a different meaning: real vs fake).">
-      This is a real problem and our town is becoming very dangerous.
+      This is a <mark>real</mark> problem and our town is becoming very dangerous.
     </GrammarExample>
+    {degreePoints.map((p) => <GrammarUsagePointCard usagePoint={p} />)}
     <p>
       So do three time adjectives — <em>present</em>, <em>future</em>,
       <em>former</em> — which describe when something is true and, unlike
       most adjectives, never follow <em>be</em> at all.
     </p>
     <GrammarExample note="Present situation only — not the situation is present.">
-      We are all very concerned about the present situation.
+      We are all very concerned about the <mark>present</mark> situation.
     </GrammarExample>
   </GrammarSection>
 
@@ -130,7 +150,7 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="Result with make" parts={['make', 'someone/something', 'adjective']} />
     <GrammarExample note="Angry is the result of make, describing me.">
-      That's something that makes me angry!
+      That's something that makes me <mark>angry</mark>!
     </GrammarExample>
     <p>
       And a verb's <em>-ed</em> form can work as an adjective placed directly
@@ -139,7 +159,7 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="-ed form after a noun" parts={['noun', '-ed form']} />
     <GrammarExample note="Shown describes film, placed after it rather than before.">
-      I'd introduce discussions after each film shown.
+      I'd introduce discussions after each film <mark>shown</mark>.
     </GrammarExample>
   </GrammarSection>
 

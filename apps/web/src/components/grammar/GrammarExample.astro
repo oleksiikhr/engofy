@@ -1,5 +1,9 @@
 ---
-// An example sentence, optionally with a short note under it.
+// An example sentence, optionally with a short note under it. The handcrafted
+// page wraps the target word/phrase in <mark> itself, e.g.
+// `I was <mark>alone</mark> at the bus station.` — that markup lands in the
+// parent page's astro scope, not this component's, so it's styled by a
+// global rule below rather than a scoped one.
 interface Props {
   note?: string;
 }
@@ -29,5 +33,14 @@ const { note } = Astro.props;
     margin-top: 0.125rem;
     font-size: 0.85rem;
     color: var(--color-ink-soft);
+  }
+</style>
+
+<style is:global>
+  .gp-example mark {
+    background: var(--color-gram);
+    color: inherit;
+    padding: 0.05em 0.2em;
+    border-radius: 0.25em;
   }
 </style>
