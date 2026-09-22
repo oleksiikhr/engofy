@@ -181,6 +181,27 @@ test.describe('grammar reference', () => {
     );
   });
 
+  test('badges a construction with a handcrafted page, not a generic one', async ({
+    page,
+  }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await expect(
+      grammar
+        .constructionLink('past-present-perfect-simple')
+        .getByText('Guide'),
+    ).toBeVisible();
+    await expect(
+      grammar.constructionLink('e2e-past-perfect').getByText('Guide'),
+    ).toHaveCount(0);
+  });
+
+  test('a guest gets no "Continue learning" CTA', async ({ page }) => {
+    const grammar = new GrammarPage(page);
+    await grammar.goto();
+    await expect(page.getByTestId('grammar-continue')).toHaveCount(0);
+  });
+
   test.describe('signed in', () => {
     test.use({ storageState: AUTHED_STATE });
 
@@ -199,6 +220,17 @@ test.describe('grammar reference', () => {
       const presentSimple = grammar.constructionLink('e2e-present-simple');
       await expect(presentSimple).toHaveAttribute('data-state', 'new');
       await expect(presentSimple).toContainText('0/1 learned');
+    });
+
+    test('offers to continue the construction in progress', async ({
+      page,
+    }) => {
+      const grammar = new GrammarPage(page);
+      await grammar.goto();
+      const cta = page.getByTestId('grammar-continue');
+      await expect(cta).toHaveAttribute('href', '/grammar/e2e-past-perfect');
+      await expect(cta).toContainText('past perfect');
+      await expect(cta).toContainText('1/2 learned');
     });
   });
 

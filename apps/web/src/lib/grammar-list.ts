@@ -78,6 +78,28 @@ export function listedGroups(groups: GrammarRefGroup[]): GrammarRefGroup[] {
     .filter((group) => group.constructions.length > 0);
 }
 
+// Share of `total` resolved, for the card's progress bar. 0 with no usage
+// points rather than dividing by zero.
+export function progressPercent(learned: number, total: number): number {
+  return total > 0 ? Math.round((learned / total) * 100) : 0;
+}
+
+// The single construction the "Continue learning" CTA resumes: the first one
+// still in progress, in the list's own order. Guests never have a `learning`
+// construction (state is always `new`), so this naturally returns null for
+// them without a separate check.
+export function continueConstruction(
+  groups: GrammarRefGroup[],
+): GrammarRefConstruction | null {
+  for (const group of groups) {
+    const found = group.constructions.find((con) => con.state === 'learning');
+    if (found) {
+      return found;
+    }
+  }
+  return null;
+}
+
 export interface GrammarListQuery {
   cefr: CefrLevel[];
   groupBy: GrammarGroupBy;
