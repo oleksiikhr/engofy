@@ -57,6 +57,49 @@ describe('GetDueCardCountHandler', () => {
     expect(await suite.query(new GetDueCardCountQuery(uuidv7()))).toBe(0);
   });
 
+  it('narrows the count to the given card types, same as the practice queue filter', async () => {
+    const userId = (await suite.factories.user.createOne()).id;
+    const em = suite.orm.em;
+    const due = DateTime.now().minus({ days: 1 });
+
+    factories(em).learningCard.makeOne({
+      userId,
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
+      due,
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 0,
+      lapses: 0,
+      state: LearningCardState.Review,
+    });
+    factories(em).learningCard.makeOne({
+      userId,
+      phraseId: factories(em).phrase.makeOne().id,
+      due,
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 0,
+      lapses: 0,
+      state: LearningCardState.Review,
+    });
+    await em.flush();
+
+    expect(await suite.query(new GetDueCardCountQuery(userId, ['word']))).toBe(
+      1,
+    );
+    expect(
+      await suite.query(new GetDueCardCountQuery(userId, ['word', 'phrase'])),
+    ).toBe(2);
+    expect(
+      await suite.query(new GetDueCardCountQuery(userId, ['grammar'])),
+    ).toBe(0);
+    expect(await suite.query(new GetDueCardCountQuery(userId))).toBe(2);
+  });
+
   it('excludes archived cards', async () => {
     const userId = (await suite.factories.user.createOne()).id;
     suite.factories.learningCard.makeOne({

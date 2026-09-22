@@ -13,12 +13,16 @@ function isTyping(target: EventTarget | null): boolean {
 }
 
 function revealAnswer(revealBtn: HTMLElement): void {
-  const answer =
-    revealBtn.parentElement?.querySelector<HTMLElement>('.practice__answer');
+  const card = revealBtn.closest<HTMLElement>('.practice__card');
+  const answer = card?.querySelector<HTMLElement>('.practice__answer');
+  const actions = card?.querySelector<HTMLElement>('.practice__actions');
   if (answer) {
     answer.hidden = false;
-    revealBtn.hidden = true;
   }
+  if (actions) {
+    actions.hidden = false;
+  }
+  revealBtn.hidden = true;
 }
 
 document.addEventListener('click', (e) => {
@@ -37,8 +41,10 @@ document.addEventListener('click', (e) => {
 });
 
 // Space = show answer; 1-4 = the Nth grade button (2 buttons on a New card,
-// 4 otherwise). Grades only count once the answer is revealed, so a stray
-// keypress can't grade a card unseen.
+// 4 otherwise). The grade buttons are hidden until revealed (practice-card.ts)
+// for any card that has an answer to show, so this only guards the digit
+// shortcuts on a self-assess card, which has no reveal step and so nothing to
+// await.
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey || e.repeat || isTyping(e.target)) {
     return;

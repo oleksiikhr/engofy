@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { apiGet } from '../lib/api';
-import { renderPracticeQueue } from '../lib/practice-card';
+import { type PracticeProgress, renderPracticeQueue } from '../lib/practice-card';
 import {
   isTypeActive,
   PRACTICE_TYPE_LABEL,
@@ -12,19 +12,46 @@ import {
   typesQuery,
 } from '../lib/practice-filter';
 import { getCurrentUser } from '../lib/session';
-import type { PracticeQueueResponse } from '../lib/types';
+import type {
+  DueCardCountResponse,
+  PracticeQueueResponse,
+  StreakResponse,
+} from '../lib/types';
 
 const user = await getCurrentUser(Astro.request);
 const activeTypes = parseTypesParam(Astro.url.searchParams.get('types'));
 const filterQuery = typesQuery(activeTypes);
-const queue: PracticeQueueResponse = user
-  ? await apiGet<PracticeQueueResponse>(
-      `/learning/practice?limit=20${filterQuery ? `&${filterQuery}` : ''}`,
-      { request: Astro.request },
-    )
-  : { items: [], nextOffset: null, heldBackNewCount: 0, hasAnyCards: false };
+const [queue, streak, due]: [
+  PracticeQueueResponse,
+  StreakResponse | null,
+  DueCardCountResponse | null,
+] = user
+  ? await Promise.all([
+      apiGet<PracticeQueueResponse>(
+        `/learning/practice?limit=20${filterQuery ? `&${filterQuery}` : ''}`,
+        { request: Astro.request },
+      ),
+      apiGet<StreakResponse>('/learning/streak', { request: Astro.request }),
+      apiGet<DueCardCountResponse>(
+        `/learning/due-count${filterQuery ? `?${filterQuery}` : ''}`,
+        { request: Astro.request },
+      ),
+    ])
+  : [
+      { items: [], nextOffset: null, heldBackNewCount: 0, hasAnyCards: false },
+      null,
+      null,
+    ];
+const progress: PracticeProgress | null =
+  streak && due
+    ? {
+        dueCount: due.dueCount,
+        reviewedToday: streak.reviewedToday,
+        dailyGoal: streak.dailyGoal,
+      }
+    : null;
 
-const initialHtml = user ? renderPracticeQueue(queue, activeTypes) : '';
+const initialHtml = user ? renderPracticeQueue(queue, activeTypes, progress) : '';
 const chips = PRACTICE_TYPES.map((type) => {
   const next = typesQuery(toggleType(activeTypes, type));
   return {

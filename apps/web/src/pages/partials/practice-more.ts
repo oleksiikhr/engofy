@@ -1,8 +1,15 @@
 import type { APIRoute } from 'astro';
 import { ApiError, apiGet } from '../../lib/api';
-import { renderPracticeQueue } from '../../lib/practice-card';
+import {
+  type PracticeProgress,
+  renderPracticeQueue,
+} from '../../lib/practice-card';
 import { parseTypesParam, typesQuery } from '../../lib/practice-filter';
-import type { PracticeQueueResponse } from '../../lib/types';
+import type {
+  DueCardCountResponse,
+  PracticeQueueResponse,
+  StreakResponse,
+} from '../../lib/types';
 
 // HTMX target for the /practice "Show N more new" button — re-fetches the
 // queue with the daily new-card cap bypassed for this request only
@@ -19,11 +26,23 @@ export const GET: APIRoute = async ({ request, url }) => {
   const typeFilter = parseTypesParam(url.searchParams.get('types'));
   const filterQuery = typesQuery(typeFilter);
   try {
-    const next = await apiGet<PracticeQueueResponse>(
-      `/learning/practice?limit=20&bypassNewLimit=true${filterQuery ? `&${filterQuery}` : ''}`,
-      { request },
-    );
-    return html(renderPracticeQueue(next, typeFilter));
+    const [next, streak, due] = await Promise.all([
+      apiGet<PracticeQueueResponse>(
+        `/learning/practice?limit=20&bypassNewLimit=true${filterQuery ? `&${filterQuery}` : ''}`,
+        { request },
+      ),
+      apiGet<StreakResponse>('/learning/streak', { request }),
+      apiGet<DueCardCountResponse>(
+        `/learning/due-count${filterQuery ? `?${filterQuery}` : ''}`,
+        { request },
+      ),
+    ]);
+    const progress: PracticeProgress = {
+      dueCount: due.dueCount,
+      reviewedToday: streak.reviewedToday,
+      dailyGoal: streak.dailyGoal,
+    };
+    return html(renderPracticeQueue(next, typeFilter, progress));
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
       return html('<p><a href="/login">Sign in</a> to keep reviewing.</p>');

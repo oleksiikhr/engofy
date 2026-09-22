@@ -25,6 +25,8 @@ test.describe('practice (signed in)', () => {
     // The seeded word card is the oldest due item, so it comes first.
     await expect(practice.front).toHaveText('perambulate');
 
+    // Grades are hidden until the answer is revealed (practice card restyle).
+    await practice.revealButton.click();
     await practice.gradeButton('Good').click();
 
     // Card advanced to the next due item and dropped out of the queue.

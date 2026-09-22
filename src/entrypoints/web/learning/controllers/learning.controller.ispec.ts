@@ -201,6 +201,46 @@ describe('LearningController', () => {
     expect(res.body).toEqual({ dueCount: 1 });
   });
 
+  it('narrows the due count to `?types=` the same way the practice queue filter does', async () => {
+    const cookie = await login(suite.orm.em);
+    const word = suite.factories.word.makeOne({ lemma: `due-${uuidv7()}` });
+    const definition = suite.factories.wordDefinition.makeOne({
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+    });
+    const phrase = suite.factories.phrase.makeOne();
+    await suite.orm.em.flush();
+
+    await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ wordDefinitionId: definition.id })
+      .expect(HttpStatus.OK);
+    await suite
+      .request('post', '/learning/cards')
+      .set('Cookie', cookie)
+      .send({ phraseId: phrase.id })
+      .expect(HttpStatus.OK);
+
+    const wordOnly = await suite
+      .request('get', '/learning/due-count?types=word')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(wordOnly.body).toEqual({ dueCount: 1 });
+
+    const grammarOnly = await suite
+      .request('get', '/learning/due-count?types=grammar')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(grammarOnly.body).toEqual({ dueCount: 0 });
+
+    const all = await suite
+      .request('get', '/learning/due-count')
+      .set('Cookie', cookie)
+      .expect(HttpStatus.OK);
+    expect(all.body).toEqual({ dueCount: 2 });
+  });
+
   it('reports the full daily new-card budget for a user with no reviews, and rejects a guest', async () => {
     await suite
       .request('get', '/learning/new-card-budget')
