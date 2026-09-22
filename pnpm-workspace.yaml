@@ -44,5 +44,9 @@ overrides:
 allowBuilds:
   '@nestjs/core': true
   '@scarf/scarf': false
+  # Pulled in transitively (spotlightjs -> peer @sentry/astro -> @sentry/bundler-plugins). Its
+  # postinstall only fetches the native sentry-cli binary for sourcemap upload, which this repo
+  # doesn't use here (no sentry() integration / SENTRY_AUTH_TOKEN configured for apps/web) — skip it.
+  '@sentry/cli': false
   '@swc/core': true
   esbuild: true
