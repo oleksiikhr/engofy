@@ -4,16 +4,23 @@ import type {
   GrammarConstructionUsagePoint,
   GrammarLevelProgress,
 } from '../../lib/types';
+import GrammarContrast from './GrammarContrast.astro';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
   levelProgress?: GrammarLevelProgress[];
+  // Anchor for GrammarSectionProgress: renders as `gp-section-${sectionId}`.
+  sectionId?: string;
 }
 
-const { usagePoints, levelProgress } = Astro.props;
+const { usagePoints, levelProgress, sectionId } = Astro.props;
 ---
 
-<section class="usage" data-testid="grammar-usage">
+<section
+  class="usage"
+  data-testid="grammar-usage"
+  id={sectionId && `gp-section-${sectionId}`}
+>
   <h2>When it's used</h2>
   {
     levelProgress && levelProgress.length > 0 && (
@@ -47,11 +54,9 @@ const { usagePoints, levelProgress } = Astro.props;
             <p class="usage-item__cando">{up.canDoStatement}</p>
           )}
           {up.examples.length > 0 && (
-            <ul class="usage-item__examples" data-testid="usage-examples">
-              {up.examples.map((example) => (
-                <li>{example}</li>
-              ))}
-            </ul>
+            <div data-testid="usage-examples">
+              <GrammarContrast good={up.examples} />
+            </div>
           )}
           <Fragment
             set:html={usageActionsHtml(
@@ -129,12 +134,6 @@ const { usagePoints, levelProgress } = Astro.props;
     margin: 0 0 0.5rem;
     font-size: 0.85rem;
     color: var(--color-ink-faint);
-  }
-  .usage-item__examples {
-    margin: 0 0 0.75rem;
-    padding-left: 1.25rem;
-    color: var(--color-ink-soft);
-    font-style: italic;
   }
 </style>
 

@@ -4,7 +4,15 @@ import { grammarMetaDescription } from '../../lib/grammar-seo';
 import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
 import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
+import GrammarSection from './GrammarSection.astro';
+import GrammarSectionProgress from './GrammarSectionProgress.astro';
 import GrammarUsagePoints from './GrammarUsagePoints.astro';
+
+interface Section {
+  id: string;
+  title: string;
+  open: boolean;
+}
 
 interface Props {
   con: GrammarConstructionDetail;
@@ -14,6 +22,11 @@ interface Props {
   description?: string;
   // Set by the pages under `src/grammar-pages/`; the generic fallback leaves it off.
   handcrafted?: boolean;
+  // The GrammarSection ids/titles rendered in the default slot (Form, and
+  // whatever else a handcrafted page writes), for the sticky checklist below.
+  // "When it's used" and "Practice" are appended automatically — every page
+  // has both.
+  sections?: Section[];
 }
 
 const {
@@ -21,7 +34,14 @@ const {
   user,
   description = grammarMetaDescription(con),
   handcrafted = false,
+  sections = [],
 } = Astro.props;
+
+const progressSections: Section[] = [
+  ...sections,
+  { id: 'use', title: "When it's used", open: true },
+  { id: 'practice', title: 'Practice', open: false },
+];
 
 const jsonLd = jsonLdGraph([
   breadcrumbList(publicOrigin(Astro.url), [
@@ -53,14 +73,25 @@ const jsonLd = jsonLdGraph([
     <div class="con-head__lede"><slot name="lede" /></div>
   </header>
 
+  <GrammarSectionProgress sections={progressSections} />
+
   <div class="con-body" data-handcrafted={handcrafted ? 'true' : undefined}>
     <slot />
   </div>
 
   <GrammarUsagePoints
+    sectionId="use"
     usagePoints={con.usagePoints}
     levelProgress={con.levelProgress}
   />
+
+  <GrammarSection title="Practice" id="practice" open={false}>
+    <p>
+      Exercises for this rule are on the way — we're building them as a
+      separate step. For now, use the usage points above to track what
+      you've learned.
+    </p>
+  </GrammarSection>
 </Layout>
 
 <style>

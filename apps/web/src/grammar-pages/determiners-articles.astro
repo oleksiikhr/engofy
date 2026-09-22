@@ -18,6 +18,16 @@ const { con, user } = Astro.props;
   user={user}
   description="When to use a / an, the or no article in English: how the small word before a noun tells the listener which one you mean, with examples."
   handcrafted
+  sections={[
+    { id: 'which-one', title: 'Which one to choose', open: true },
+    { id: 'first-mention', title: 'First mention, then the', open: false },
+    {
+      id: 'fixed-patterns',
+      title: 'Fixed patterns worth learning',
+      open: false,
+    },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
 >
   <Fragment slot="lede">
     <p>
@@ -26,7 +36,7 @@ const { con, user } = Astro.props;
     </p>
   </Fragment>
 
-  <GrammarSection title="Which one to choose">
+  <GrammarSection title="Which one to choose" id="which-one" open>
     <table class="gp-table">
       <thead>
         <tr><th>Article</th><th>Use it when…</th><th>Example</th></tr>
@@ -59,7 +69,7 @@ const { con, user } = Astro.props;
     </table>
   </GrammarSection>
 
-  <GrammarSection title="First mention, then the">
+  <GrammarSection title="First mention, then the" id="first-mention" open={false}>
     <p>
       The first time a thing comes up it is new to the listener, so it gets
       <em>a</em>. After that it is known — <em>the</em>.
@@ -70,7 +80,11 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="Fixed patterns worth learning">
+  <GrammarSection
+    title="Fixed patterns worth learning"
+    id="fixed-patterns"
+    open={false}
+  >
     <GrammarExample note="the + comparative … the + comparative: one thing changes with another.">
       The more you practise, the better you get.
     </GrammarExample>
@@ -82,7 +96,7 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="A common mistake">
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
     <GrammarExample note="Wrong: a general statement takes no article.">
       ✗ The life is short.
     </GrammarExample>

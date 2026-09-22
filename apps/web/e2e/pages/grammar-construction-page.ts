@@ -11,7 +11,7 @@ export class GrammarConstructionPage {
   constructor(page: Page) {
     this.page = page;
     this.badge = page.locator('.con-head .badge');
-    this.cheatSheet = page.locator('.cheat');
+    this.cheatSheet = page.locator('#gp-section-form');
     this.usageItems = page.locator('.usage-item');
     this.handcrafted = page.locator('[data-handcrafted="true"]');
     this.compare = page.getByTestId('grammar-compare');

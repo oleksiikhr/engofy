@@ -19,6 +19,12 @@ const { con, user } = Astro.props;
   user={user}
   description="How to use “can” in English: ability, permission, requests, offers and possibility — one form, many jobs, with the form and examples."
   handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'what-it-does', title: 'What it does', open: false },
+    { id: 'no-past-form', title: 'No past form — borrow one', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
 >
   <Fragment slot="lede">
     <p>
@@ -28,7 +34,7 @@ const { con, user } = Astro.props;
     </p>
   </Fragment>
 
-  <GrammarSection title="Form">
+  <GrammarSection title="Form" id="form" open>
     <GrammarFormula label="Statement" parts={['subject', 'can', 'base verb']} />
     <GrammarFormula
       label="Negative"
@@ -40,7 +46,7 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="What it does">
+  <GrammarSection title="What it does" id="what-it-does" open={false}>
     <table class="gp-table">
       <thead>
         <tr><th>Job</th><th>Example</th></tr>
@@ -74,7 +80,7 @@ const { con, user } = Astro.props;
     </table>
   </GrammarSection>
 
-  <GrammarSection title="No past form — borrow one">
+  <GrammarSection title="No past form — borrow one" id="no-past-form" open={false}>
     <p>
       <em>Can</em> has no past tense of its own for a single achievement. Use
       <em>could</em> for a general past ability and <em>was able to</em> for
@@ -88,7 +94,7 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="A common mistake">
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
     <GrammarExample note="Wrong: can is followed by the bare verb.">
       ✗ She can to swim. / ✗ She cans swim.
     </GrammarExample>

@@ -1,8 +1,9 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import GrammarSection from '../../components/grammar/GrammarSection.astro';
 import GrammarShell from '../../components/grammar/GrammarShell.astro';
 import { apiGetOrNull } from '../../lib/api';
-import { renderMarkdown } from '../../lib/markdown';
+import { renderCheatSheetBullets } from '../../lib/markdown';
 import { getCurrentUser } from '../../lib/session';
 import type { GrammarConstructionDetail } from '../../lib/types';
 
@@ -28,20 +29,36 @@ if (!con) {
 }
 
 const Page = handcraftedPages[`../../grammar-pages/${con.slug}.astro`]?.default;
-const cheatSheetHtml =
-  !Page && con.cheatSheetContent ? renderMarkdown(con.cheatSheetContent) : null;
+const cheatSheet =
+  !Page && con.cheatSheetContent
+    ? renderCheatSheetBullets(con.cheatSheetContent)
+    : null;
+// Short cheat sheets (few EGP form facts) read fine open; long ones collapse
+// behind their own nested toggle so "Form" isn't a wall of bullets.
+const cheatSheetBulletsOpen = cheatSheet !== null && cheatSheet.count <= 3;
 ---
 
 {
   Page ? (
     <Page con={con} user={user} />
   ) : (
-    <GrammarShell con={con} user={user}>
+    <GrammarShell
+      con={con}
+      user={user}
+      sections={cheatSheet ? [{ id: 'form', title: 'Form', open: true }] : []}
+    >
       {
-        cheatSheetHtml && (
-          <section class="cheat card card--soft">
-            <div class="analysis" set:html={cheatSheetHtml} />
-          </section>
+        cheatSheet && (
+          <GrammarSection title="Form" id="form" open>
+            <details class="gp-form-bullets" open={cheatSheetBulletsOpen}>
+              <summary>
+                {cheatSheetBulletsOpen
+                  ? 'Form details'
+                  : `Show all form details (${cheatSheet.count})`}
+              </summary>
+              <div class="analysis" set:html={cheatSheet.html} />
+            </details>
+          </GrammarSection>
         )
       }
     </GrammarShell>
@@ -49,7 +66,15 @@ const cheatSheetHtml =
 }
 
 <style>
-  .cheat {
-    margin-bottom: 2rem;
+  .gp-form-bullets summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--color-brand-strong);
+  }
+  .gp-form-bullets summary::-webkit-details-marker {
+    display: none;
+  }
+  .gp-form-bullets[open] summary {
+    margin-bottom: 0.5rem;
   }
 </style>

@@ -1,0 +1,64 @@
+---
+// ✓ / ✗ contrastive examples: a wrong form next to the right one, or (when
+// there's nothing to contrast yet, e.g. the generic /grammar/[slug]
+// fallback) just a list of correct examples marked ✓. The mark is a CSS
+// ::before (see .practice__chip--on for the same pattern) so it never lands
+// in the list item's text content.
+interface Props {
+  good: string[];
+  bad?: string[];
+}
+
+const { good, bad = [] } = Astro.props;
+---
+
+<ul class="gp-contrast">
+  {
+    bad.map((example) => (
+      <li class="gp-contrast__item gp-contrast__item--bad">{example}</li>
+    ))
+  }
+  {
+    good.map((example) => (
+      <li class="gp-contrast__item gp-contrast__item--good">{example}</li>
+    ))
+  }
+</ul>
+
+<style>
+  .gp-contrast {
+    list-style: none;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .gp-contrast__item {
+    position: relative;
+    padding: 0.5rem 0.75rem 0.5rem 2rem;
+    border-radius: var(--radius-control);
+    font-weight: 700;
+  }
+  .gp-contrast__item::before {
+    position: absolute;
+    left: 0.75rem;
+    font-weight: 800;
+  }
+  .gp-contrast__item--good {
+    background: var(--color-success-wash);
+  }
+  .gp-contrast__item--good::before {
+    content: '✓';
+    color: var(--color-success);
+  }
+  .gp-contrast__item--bad {
+    font-weight: 500;
+    text-decoration: line-through;
+    text-decoration-color: var(--color-danger);
+    background: var(--color-danger-wash);
+  }
+  .gp-contrast__item--bad::before {
+    content: '✗';
+    color: var(--color-danger);
+  }
+</style>

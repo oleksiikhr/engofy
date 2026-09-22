@@ -19,6 +19,12 @@ const { con, user } = Astro.props;
   user={user}
   description="Past simple in English: form (regular and irregular verbs, negatives, questions) and when to use it for finished events in the past."
   handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'time-words', title: 'Time words', open: false },
+    { id: 'three-jobs', title: 'Three jobs', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
 >
   <Fragment slot="lede">
     <p>
@@ -27,7 +33,7 @@ const { con, user } = Astro.props;
     </p>
   </Fragment>
 
-  <GrammarSection title="Form">
+  <GrammarSection title="Form" id="form" open>
     <GrammarFormula label="Regular" parts={['verb', '-ed']} />
     <GrammarFormula label="Irregular" parts={['second form of the verb']} />
     <GrammarFormula label="Negative" parts={['did not', 'base verb']} />
@@ -43,7 +49,7 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="Time words">
+  <GrammarSection title="Time words" id="time-words" open={false}>
     <p>
       The past simple usually comes with a time that is over:
       <code>yesterday</code>, <code>last week</code>, <code>in 2019</code>,
@@ -51,7 +57,7 @@ const { con, user } = Astro.props;
     </p>
   </GrammarSection>
 
-  <GrammarSection title="Three jobs">
+  <GrammarSection title="Three jobs" id="three-jobs" open={false}>
     <table class="gp-table">
       <thead>
         <tr><th>Job</th><th>Example</th></tr>
@@ -73,7 +79,7 @@ const { con, user } = Astro.props;
     </table>
   </GrammarSection>
 
-  <GrammarSection title="A common mistake">
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
     <GrammarExample note="Wrong: the verb after did stays in the past.">
       ✗ Did you went there?
     </GrammarExample>
