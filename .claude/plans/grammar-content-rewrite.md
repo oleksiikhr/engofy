@@ -83,7 +83,7 @@ generic fallback — отже покращує всі ще не переписа
 
 Порядок — за CEFR рівнем (A1 → C2), потім алфавітно за slug.
 
-### [ ] 3. Adjectives — combining (`adjectives-combining`) — рівень A1
+### [x] 3. Adjectives — combining (`adjectives-combining`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
