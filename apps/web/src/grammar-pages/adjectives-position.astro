@@ -62,15 +62,14 @@ const inlineUsagePointIds = [
     </p>
     <GrammarFormula label="Attributive" parts={['a / an', 'adjective', 'noun']} />
     <GrammarExample note="Big and small sit directly in front of the nouns they describe.">
-      We have a <mark>big</mark> garden and a <mark>small</mark> swimming pool.
+      We have <mark data-role="grammar">a</mark> <mark data-role="content">big</mark> <mark data-role="grammar">garden</mark> and <mark data-role="grammar">a</mark> <mark data-role="content">small</mark> <mark data-role="grammar">swimming pool</mark>.
     </GrammarExample>
     <GrammarFormula label="Predicative" parts={['subject', 'be', 'adjective']} />
     <GrammarExample note="Big describes bedroom, but from the other side of is.">
-      My bedroom is <mark>big</mark>.
+      <mark data-role="grammar">My bedroom</mark> <mark data-role="grammar">is</mark> <mark data-role="content">big</mark>.
     </GrammarExample>
     <p>
-      Most adjectives — <em>nice</em>, <em>happy</em>, <em>expensive</em>,
-      <em>new</em> — move freely between the two. The rest of this page is
+      Most adjectives — <em>nice</em>, <em>happy</em>, <em>expensive</em>, <em>new</em> — move freely between the two. The rest of this page is
       about the adjectives that can't.
     </p>
   </GrammarSection>
@@ -84,10 +83,10 @@ const inlineUsagePointIds = [
     </p>
     <GrammarFormula label="a- adjectives" parts={['subject', 'be / feel / look', 'a-adjective']} />
     <GrammarExample note="Alone here, not before a noun.">
-      I was very nervous because I was <mark>alone</mark> at the bus station.
+      I was very nervous because <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">alone</mark> at the bus station.
     </GrammarExample>
     <GrammarExample note="Alive after was, describing my father from the other side of the verb.">
-      I was very happy that my father was still <mark>alive</mark>.
+      I was very happy that <mark data-role="grammar">my father</mark> <mark data-role="grammar">was</mark> still <mark data-role="content">alive</mark>.
     </GrammarExample>
     <p>
       Two other linking verbs, <em>look</em> and <em>feel</em>, work the same
@@ -95,32 +94,29 @@ const inlineUsagePointIds = [
       subject, never a noun that follows them.
     </p>
     <GrammarExample note="Perfect describes it, after looks.">
-      It is black and it looks <mark>perfect</mark>.
+      It is black and <mark data-role="grammar">it</mark> <mark data-role="grammar">looks</mark> <mark data-role="content">perfect</mark>.
     </GrammarExample>
     <GrammarExample note="Comfortable describes I, after feel.">
-      I feel <mark>comfortable</mark> when I am wearing these clothes.
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">feel</mark> <mark data-role="content">comfortable</mark> when I am wearing these clothes.
     </GrammarExample>
     <p>
-      An adjective can also follow one of the indefinite pronouns
-      <em>something</em>, <em>nothing</em>, <em>somewhere</em>,
-      <em>nowhere</em> — the reverse of the usual attributive order, since the
+      An adjective can also follow one of the indefinite pronouns <em>something</em>, <em>nothing</em>, <em>somewhere</em>, <em>nowhere</em> — the reverse of the usual attributive order, since the
       adjective comes after the word it describes rather than before it.
     </p>
     <GrammarFormula label="With an indefinite pronoun" parts={['something / nothing', 'adjective']} />
     <GrammarExample note="Special comes after something, not before it.">
-      I want to cook something <mark>special</mark>.
+      I want to cook <mark data-role="grammar">something</mark> <mark data-role="content">special</mark>.
     </GrammarExample>
   </GrammarSection>
 
   <GrammarSection title="Adjectives that only go before a noun" id="attributive-only" open={false}>
     <p>
       Other adjectives go the opposite way: they only work directly in front
-      of a noun, never after <em>be</em>. <em>Main</em> and <em>only</em>
-      narrow down which noun is meant, so they need to sit right next to it.
+      of a noun, never after <em>be</em>. <em>Main</em> and <em>only</em> narrow down which noun is meant, so they need to sit right next to it.
     </p>
     <GrammarFormula label="Limiting adjectives" parts={['the', 'main / only', 'noun']} />
     <GrammarExample note="Main picks out one reason among several — it needs the noun right there.">
-      The <mark>main</mark> reason is that I am practising the language.
+      <mark data-role="grammar">The</mark> <mark data-role="content">main</mark> <mark data-role="grammar">reason</mark> is that I am practising the language.
     </GrammarExample>
     {limitingPoint && <GrammarUsagePointCard usagePoint={limitingPoint} />}
     <p>
@@ -129,7 +125,7 @@ const inlineUsagePointIds = [
       rather than describing a state.
     </p>
     <GrammarExample note="A real problem, not the problem is real (a different meaning: real vs fake).">
-      This is a <mark>real</mark> problem and our town is becoming very dangerous.
+      This is <mark data-role="grammar">a</mark> <mark data-role="content">real</mark> <mark data-role="grammar">problem</mark> and our town is becoming very dangerous.
     </GrammarExample>
     {degreePoints.map((p) => <GrammarUsagePointCard usagePoint={p} />)}
     <p>
@@ -138,7 +134,7 @@ const inlineUsagePointIds = [
       most adjectives, never follow <em>be</em> at all.
     </p>
     <GrammarExample note="Present situation only — not the situation is present.">
-      We are all very concerned about the <mark>present</mark> situation.
+      We are all very concerned about <mark data-role="grammar">the</mark> <mark data-role="content">present</mark> <mark data-role="grammar">situation</mark>.
     </GrammarExample>
   </GrammarSection>
 
@@ -150,7 +146,7 @@ const inlineUsagePointIds = [
     </p>
     <GrammarFormula label="Result with make" parts={['make', 'someone/something', 'adjective']} />
     <GrammarExample note="Angry is the result of make, describing me.">
-      That's something that makes me <mark>angry</mark>!
+      That's something that <mark data-role="grammar">makes</mark> <mark data-role="grammar">me</mark> <mark data-role="content">angry</mark>!
     </GrammarExample>
     <p>
       And a verb's <em>-ed</em> form can work as an adjective placed directly
@@ -159,7 +155,7 @@ const inlineUsagePointIds = [
     </p>
     <GrammarFormula label="-ed form after a noun" parts={['noun', '-ed form']} />
     <GrammarExample note="Shown describes film, placed after it rather than before.">
-      I'd introduce discussions after each film <mark>shown</mark>.
+      I'd introduce discussions after each <mark data-role="grammar">film</mark> <mark data-role="content">shown</mark>.
     </GrammarExample>
   </GrammarSection>
 

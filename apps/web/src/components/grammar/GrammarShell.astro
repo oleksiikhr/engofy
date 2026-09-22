@@ -50,7 +50,9 @@ const remainingUsagePoints = con.usagePoints.filter(
 
 const progressSections: Section[] = [
   ...sections,
-  { id: 'use', title: "When it's used", open: true },
+  ...(remainingUsagePoints.length > 0
+    ? [{ id: 'use', title: "When it's used", open: true }]
+    : []),
   { id: 'practice', title: 'Practice', open: false },
 ];
 
@@ -82,6 +84,20 @@ const jsonLd = jsonLdGraph([
       {con.name}
     </h1>
     <div class="con-head__lede"><slot name="lede" /></div>
+    {
+      con.levelProgress && con.levelProgress.length > 0 && (
+        <ul class="con-head__progress" data-testid="grammar-level-progress">
+          {con.levelProgress.map((level) => (
+            <li data-level={level.cefrLevel}>
+              <span class="badge">{level.cefrLevel}</span>
+              <span>
+                {level.learnedCount}/{level.totalCount} learned
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </header>
 
   <GrammarSectionProgress sections={progressSections} />
@@ -90,12 +106,7 @@ const jsonLd = jsonLdGraph([
     <slot />
   </div>
 
-  <GrammarUsagePoints
-    sectionId="use"
-    usagePoints={remainingUsagePoints}
-    totalUsagePointCount={con.usagePoints.length}
-    levelProgress={con.levelProgress}
-  />
+  <GrammarUsagePoints sectionId="use" usagePoints={remainingUsagePoints} />
 
   <GrammarSection title="Practice" id="practice" open={false}>
     <p>
@@ -137,6 +148,22 @@ const jsonLd = jsonLdGraph([
     margin: 0.75rem 0 0;
     font-size: 1.05rem;
     color: var(--color-ink-soft);
+  }
+  .con-head__progress {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+  }
+  .con-head__progress li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 </style>
 

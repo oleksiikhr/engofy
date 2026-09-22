@@ -43,21 +43,21 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="With and" parts={['adjective', 'and', 'adjective']} />
     <GrammarExample note="A small, everyday pair of adjectives.">
-      The kitchen is <mark>small</mark> and <mark>bright</mark>.
+      The kitchen is <mark data-role="content">small</mark> <mark data-role="grammar">and</mark> <mark data-role="content">bright</mark>.
     </GrammarExample>
     <GrammarFormula
       label="With but"
       parts={['subject', 'be', 'adjective', 'but', 'adjective']}
     />
     <GrammarExample note="But signals a contrast, and comes after be.">
-      The film was <mark>long</mark> but <mark>interesting</mark>.
+      <mark data-role="grammar">The film</mark> <mark data-role="grammar">was</mark> <mark data-role="content">long</mark> <mark data-role="grammar">but</mark> <mark data-role="content">interesting</mark>.
     </GrammarExample>
     <GrammarFormula
       label="Before a noun, with a comma"
       parts={['adjective', ',', 'adjective', 'noun']}
     />
     <GrammarExample note="Order still matters — size usually comes before shape.">
-      a <mark>small</mark>, <mark>round</mark> table
+      a <mark data-role="content">small</mark>, <mark data-role="content">round</mark> <mark data-role="grammar">table</mark>
     </GrammarExample>
     <p>
       That order isn't random: opinion, then size, then age, then shape, then
@@ -77,17 +77,17 @@ const { con, user } = Astro.props;
       parts={['subject', 'be', 'adj', ',', 'adj', 'and', 'adj']}
     />
     <GrammarExample note="Commas separate, and joins the final pair.">
-      The soup was <mark>hot</mark>, <mark>spicy</mark> and <mark>delicious</mark>.
+      <mark data-role="grammar">The soup</mark> <mark data-role="grammar">was</mark> <mark data-role="content">hot</mark>, <mark data-role="content">spicy</mark> <mark data-role="grammar">and</mark> <mark data-role="content">delicious</mark>.
     </GrammarExample>
     <p>
       Comparatives can join with <em>and</em> too — either two different ones,
       or the same one repeated to show a change building up over time.
     </p>
     <GrammarExample note="Two different comparatives.">
-      The paths get <mark>steeper</mark> and <mark>narrower</mark> as you climb.
+      The paths get <mark data-role="content">steeper</mark> <mark data-role="grammar">and</mark> <mark data-role="content">narrower</mark> as you climb.
     </GrammarExample>
     <GrammarExample note="The same comparative, repeated for a change over time — usually after become or get.">
-      Tickets are getting <mark>more and more</mark> expensive.
+      Tickets are getting <mark data-role="grammar">more and more</mark> <mark data-role="content">expensive</mark>.
     </GrammarExample>
   </GrammarSection>
 
@@ -98,19 +98,19 @@ const { con, user } = Astro.props;
       combination.
     </p>
     <GrammarExample note="A common, everyday compound adjective.">
-      a <mark>well-known</mark> author
+      a <mark data-role="content">well-known</mark> author
     </GrammarExample>
     <GrammarExample note="A more specific, less everyday one.">
-      the company's <mark>state-of-the-art</mark> equipment
+      the company's <mark data-role="content">state-of-the-art</mark> equipment
     </GrammarExample>
     <GrammarExample note="A number + noun compound — noun stays singular here.">
-      a <mark>five-year-old</mark> car
+      a <mark data-role="content">five-year-old</mark> car
     </GrammarExample>
     <p>
       Adjective <em>phrases</em> work the same way, hyphenated into a single
       unit before the noun they modify:
     </p>
-    <GrammarExample>an <mark>easy-to-use</mark> app</GrammarExample>
+    <GrammarExample>an <mark data-role="content">easy-to-use</mark> app</GrammarExample>
   </GrammarSection>
 
   <GrammarSection title="A common mistake" id="common-mistake" open={false}>

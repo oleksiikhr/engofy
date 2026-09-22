@@ -1,92 +1,47 @@
 ---
-import type {
-  GrammarConstructionUsagePoint,
-  GrammarLevelProgress,
-} from '../../lib/types';
+// The generic "When it's used" list: usage points a handcrafted page hasn't
+// already rendered inline next to its own prose (see GrammarShell's
+// `inlineUsagePointIds`), or — for the generic /grammar/[slug] fallback —
+// every usage point the construction has. Renders nothing when there's
+// nothing left to show, so a handcrafted page that covers every usage point
+// inline doesn't leave an empty section (and its own progress bar, if the
+// construction has one, lives in GrammarShell's header instead).
+import type { GrammarConstructionUsagePoint } from '../../lib/types';
 import GrammarUsagePointCard from './GrammarUsagePointCard.astro';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
-  levelProgress?: GrammarLevelProgress[];
   // Anchor for GrammarSectionProgress: renders as `gp-section-${sectionId}`.
   sectionId?: string;
-  // Total usage points this construction has, including ones a handcrafted
-  // page already rendered inline (via GrammarUsagePointCard) inside its own
-  // sections and filtered out of `usagePoints` before it reached here. Lets
-  // the empty state tell "nothing recorded" apart from "covered above".
-  totalUsagePointCount?: number;
 }
 
-const {
-  usagePoints,
-  levelProgress,
-  sectionId,
-  totalUsagePointCount = usagePoints.length,
-} = Astro.props;
+const { usagePoints, sectionId } = Astro.props;
 ---
 
-<section
-  class="usage"
-  data-testid="grammar-usage"
-  id={sectionId && `gp-section-${sectionId}`}
->
-  <h2>When it's used</h2>
-  {
-    levelProgress && levelProgress.length > 0 && (
-      <ul class="usage-progress" data-testid="grammar-level-progress">
-        {levelProgress.map((level) => (
-          <li data-level={level.cefrLevel}>
-            <span class="badge">{level.cefrLevel}</span>
-            <span>
-              {level.learnedCount}/{level.totalCount} learned
-            </span>
+{
+  usagePoints.length > 0 && (
+    <section
+      class="usage"
+      data-testid="grammar-usage"
+      id={sectionId && `gp-section-${sectionId}`}
+    >
+      <h2>When it's used</h2>
+      <ul class="usage-list">
+        {usagePoints.map((up) => (
+          <li>
+            <GrammarUsagePointCard usagePoint={up} />
           </li>
         ))}
       </ul>
-    )
-  }
-  {
-    usagePoints.length === 0 &&
-      (totalUsagePointCount === 0 ? (
-        <p>No usage points recorded for this construction.</p>
-      ) : (
-        <p>
-          Every usage point for this rule is covered in the sections above.
-        </p>
-      ))
-  }
-  <ul class="usage-list">
-    {
-      usagePoints.map((up) => (
-        <li>
-          <GrammarUsagePointCard usagePoint={up} />
-        </li>
-      ))
-    }
-  </ul>
-</section>
+    </section>
+  )
+}
 
 <style>
   .usage h2 {
     margin: 0 0 0.75rem;
     font-size: 1.19rem;
     font-weight: 800;
-  }
-  .usage-progress {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-ink-soft);
-  }
-  .usage-progress li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
   }
   .usage-list {
     list-style: none;

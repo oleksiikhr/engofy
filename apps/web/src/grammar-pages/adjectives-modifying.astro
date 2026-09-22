@@ -38,27 +38,25 @@ const { con, user } = Astro.props;
   <GrammarSection title="Strengthening one adjective" id="form" open>
     <p>
       <em>Very</em>, <em>really</em>, <em>so</em> and <em>quite</em> go
-      straight before an adjective to say how much of it there is. <em>Very</em>
-      is the plainest and most common; the others add a slightly different
+      straight before an adjective to say how much of it there is. <em>Very</em> is the plainest and most common; the others add a slightly different
       shade.
     </p>
     <GrammarFormula label="Basic" parts={['very', 'adjective']} />
     <GrammarExample note="The everyday, neutral intensifier.">
-      My neighbours are <mark>very friendly</mark>.
+      My neighbours are <mark data-role="grammar">very</mark> <mark data-role="content">friendly</mark>.
     </GrammarExample>
     <GrammarFormula label="Also common" parts={['really / so / quite', 'adjective']} />
     <GrammarExample note="So often carries extra feeling, especially in speech.">
-      I'm <mark>so happy</mark> we can have a party together!
+      I'm <mark data-role="grammar">so</mark> <mark data-role="content">happy</mark> we can have a party together!
     </GrammarExample>
     <GrammarExample note="Quite can mean fairly, or — with the right tone — very.">
-      The exam was <mark>quite hard</mark>, actually.
+      The exam was <mark data-role="grammar">quite</mark> <mark data-role="content">hard</mark>, actually.
     </GrammarExample>
     <p>
       These words only work with <em>gradable</em> adjectives — ones that
       have degrees, like <em>big</em>, <em>happy</em> or <em>expensive</em>.
       A thing can be a little happy or extremely happy. Some adjectives
-      don't have degrees at all, and those need different treatment — see
-      <em>Extreme adjectives</em> below.
+      don't have degrees at all, and those need different treatment — see <em>Extreme adjectives</em> below.
     </p>
   </GrammarSection>
 
@@ -70,46 +68,44 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="Too — more than wanted" parts={['too', 'adjective']} />
     <GrammarExample note="Too means more than is good or wanted — almost always a problem.">
-      They aren't <mark>too expensive</mark>. They cost about £30.
+      They aren't <mark data-role="grammar">too</mark> <mark data-role="content">expensive</mark>. They cost about £30.
     </GrammarExample>
     <GrammarFormula label="Enough — comes after" parts={['adjective', 'enough']} />
     <GrammarExample note="Enough means as much as needed — and, unlike every other intensifier here, it follows the adjective.">
-      My room is <mark>big enough</mark> — there's a lot of space.
+      My room is <mark data-role="content">big</mark> <mark data-role="grammar">enough</mark> — there's a lot of space.
     </GrammarExample>
     <p>
       Mixing up <em>too</em> and <em>very</em> is easy for learners because
       both translate as "very" in some languages, but they don't mean the
-      same thing: <em>very tired</em> is just a strong feeling, while
-      <em>too tired</em> means tired enough that something can't happen.
+      same thing: <em>very tired</em> is just a strong feeling, while <em>too tired</em> means tired enough that something can't happen.
     </p>
   </GrammarSection>
 
   <GrammarSection title="Adding more detail" id="adding-detail" open={false}>
     <p>
       An adjective can take extra material after it: a prepositional
-      phrase, or — especially with <em>too</em> and <em>enough</em> — a
-      <em>to</em>-infinitive explaining the consequence.
+      phrase, or — especially with <em>too</em> and <em>enough</em> — a <em>to</em>-infinitive explaining the consequence.
     </p>
     <GrammarFormula
       label="Adjective + preposition"
       parts={['adjective', 'preposition', 'noun / -ing']}
     />
     <GrammarExample note="A small set of adjectives regularly pair with a fixed preposition.">
-      I think swimming is <mark>good for</mark> my body.
+      I think swimming is <mark data-role="content">good</mark> <mark data-role="grammar">for</mark> <mark data-role="grammar">my body</mark>.
     </GrammarExample>
     <GrammarFormula
       label="Too + adjective + to-infinitive"
       parts={['too', 'adjective', 'to', 'verb']}
     />
     <GrammarExample note="Too old to work well — the consequence of being too much of something.">
-      The machine is <mark>too old to work</mark> well.
+      The machine is <mark data-role="grammar">too</mark> <mark data-role="content">old</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">work</mark> well.
     </GrammarExample>
     <GrammarFormula
       label="Adjective + enough + to-infinitive"
       parts={['adjective', 'enough', 'to', 'verb']}
     />
     <GrammarExample note="Lucky enough to take part — enough stays right after the adjective, before to.">
-      I was <mark>lucky enough to take part</mark> in it.
+      I was <mark data-role="content">lucky</mark> <mark data-role="grammar">enough</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">take part</mark> in it.
     </GrammarExample>
     <p>
       A more formal pair, <em>quite a</em> and <em>rather a</em>, also
@@ -118,7 +114,7 @@ const { con, user } = Astro.props;
     </p>
     <GrammarFormula label="Quite/rather a" parts={['quite / rather', 'a', 'adjective', 'noun']} />
     <GrammarExample note="Not a quite good idea — quite a goes before the article, not after it.">
-      This is <mark>quite a good</mark> idea.
+      This is <mark data-role="grammar">quite</mark> <mark data-role="grammar">a</mark> <mark data-role="content">good</mark> <mark data-role="grammar">idea</mark>.
     </GrammarExample>
   </GrammarSection>
 
@@ -128,17 +124,15 @@ const { con, user } = Astro.props;
     open={false}
   >
     <p>
-      Adjectives like <em>perfect</em>, <em>freezing</em>, <em>huge</em> and
-      <em>unique</em> already describe the top (or bottom) of the scale —
+      Adjectives like <em>perfect</em>, <em>freezing</em>, <em>huge</em> and <em>unique</em> already describe the top (or bottom) of the scale —
       they're not gradable, so <em>very</em> doesn't fit them. Instead, use a
-      stronger group of adverbs: <em>absolutely</em>, <em>totally</em>,
-      <em>completely</em>, <em>incredibly</em>.
+      stronger group of adverbs: <em>absolutely</em>, <em>totally</em>, <em>completely</em>, <em>incredibly</em>.
     </p>
     <GrammarExample note="Absolutely fits an extreme adjective; very does not.">
-      I am <mark>absolutely sure</mark> that it will work.
+      I am <mark data-role="grammar">absolutely</mark> <mark data-role="content">sure</mark> that it will work.
     </GrammarExample>
     <GrammarExample note="Incredibly also works with an ordinary gradable adjective, for extra force.">
-      The evolution in technology has been <mark>incredibly fast</mark>.
+      The evolution in technology has been <mark data-role="grammar">incredibly</mark> <mark data-role="content">fast</mark>.
     </GrammarExample>
   </GrammarSection>
 
