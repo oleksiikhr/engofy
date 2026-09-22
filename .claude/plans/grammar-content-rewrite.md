@@ -90,7 +90,7 @@ generic fallback — отже покращує всі ще не переписа
 
 Див. «Спільний процес» вище. Slug: `adjectives-combining`.
 
-### [ ] 4. Adjectives — modifying (`adjectives-modifying`) — рівень A1
+### [x] 4. Adjectives — modifying (`adjectives-modifying`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
