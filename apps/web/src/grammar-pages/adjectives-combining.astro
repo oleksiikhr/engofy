@@ -1,0 +1,148 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to combine two or more English adjectives: and/but, commas, the usual adjective order, and compound adjectives like well-known or up-to-date."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Joining two adjectives', open: true },
+    { id: 'longer-lists', title: 'Longer lists and repeats', open: false },
+    { id: 'compound', title: 'Compound adjectives', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      One adjective is easy. Two or more need a rule for how to join them —
+      <em>and</em>, <em>but</em>, a comma, or a hyphen, depending on how many
+      there are and where they sit.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Joining two adjectives" id="form" open>
+    <p>
+      Before a noun, two adjectives usually sit side by side with no joining
+      word at all. <em>And</em> and <em>but</em> only show up in specific
+      spots.
+    </p>
+    <GrammarFormula label="With and" parts={['adjective', 'and', 'adjective']} />
+    <GrammarExample note="A small, everyday pair of adjectives.">
+      The kitchen is small and bright.
+    </GrammarExample>
+    <GrammarFormula
+      label="With but"
+      parts={['subject', 'be', 'adjective', 'but', 'adjective']}
+    />
+    <GrammarExample note="But signals a contrast, and comes after be.">
+      The film was long but interesting.
+    </GrammarExample>
+    <GrammarFormula
+      label="Before a noun, with a comma"
+      parts={['adjective', ',', 'adjective', 'noun']}
+    />
+    <GrammarExample note="Order still matters — size usually comes before shape.">
+      a small, round table
+    </GrammarExample>
+    <p>
+      That order isn't random: opinion, then size, then age, then shape, then
+      colour, then origin, then material — <em>a lovely old round wooden
+      table</em>, not the other way round. Two adjectives from the same group
+      (both about size, say) are the ones a comma most often separates.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Longer lists and repeats" id="longer-lists" open={false}>
+    <p>
+      Three or more adjectives after <em>be</em> follow the list pattern:
+      commas between the early ones, <em>and</em> before the last.
+    </p>
+    <GrammarFormula
+      label="A list"
+      parts={['subject', 'be', 'adj', ',', 'adj', 'and', 'adj']}
+    />
+    <GrammarExample note="Commas separate, and joins the final pair.">
+      The soup was hot, spicy and delicious.
+    </GrammarExample>
+    <p>
+      Comparatives can join with <em>and</em> too — either two different ones,
+      or the same one repeated to show a change building up over time.
+    </p>
+    <GrammarExample note="Two different comparatives.">
+      The paths get steeper and narrower as you climb.
+    </GrammarExample>
+    <GrammarExample note="The same comparative, repeated for a change over time — usually after become or get.">
+      Tickets are getting more and more expensive.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Compound adjectives" id="compound" open={false}>
+    <p>
+      Two words joined by a hyphen and used as one adjective, almost always
+      before the noun. The most common ones describe age, size or a simple
+      combination.
+    </p>
+    <GrammarExample note="A common, everyday compound adjective.">
+      a well-known author
+    </GrammarExample>
+    <GrammarExample note="A more specific, less everyday one.">
+      the company's state-of-the-art equipment
+    </GrammarExample>
+    <GrammarExample note="A number + noun compound — noun stays singular here.">
+      a five-year-old car
+    </GrammarExample>
+    <p>
+      Adjective <em>phrases</em> work the same way, hyphenated into a single
+      unit before the noun they modify:
+    </p>
+    <GrammarExample>an easy-to-use app</GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      <em>And</em> doesn't belong between every pair of adjectives before a
+      noun — only in the specific patterns above (a list's last item, or two
+      comparatives). Ordinary adjectives before a noun just sit next to each
+      other, in order, with no joining word.
+    </p>
+    <GrammarContrast
+      bad={['a lovely and old wooden table']}
+      good={['a lovely old wooden table']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-position',
+        name: 'adjective position',
+        note: 'the order rule behind which adjective goes first.',
+      },
+      {
+        slug: 'adjectives-comparatives',
+        name: 'comparatives',
+        note: 'forming bigger, more interesting — the pieces this page joins.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'very, quite and other words that strengthen or soften one adjective.',
+      },
+    ]}
+  />
+</GrammarShell>
