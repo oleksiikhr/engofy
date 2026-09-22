@@ -9,21 +9,29 @@ flowchart LR
   ingest["ingest\n(HTTP, sync)"] --> sp["spacy_parse\npg-boss post-spacy-parse"]
   sp -->|fan-out| ann["annotation\npost-annotation"]
   sp -->|fan-out| cx["ai_complexity\npost-ai-complexity"]
+  ann -->|fan-out| lex["enrichment\npost-ai-enrichment"]
   cx --> gr["ai_grammar\npost-ai-grammar"]
-  gr --> ex["ai_exercises\npost-ai-exercises"]
-  gr --> ge["grammar_enrichment\npost-ai-grammar-enrichment"]
+  gr -->|fan-out| ex["ai_exercises\npost-ai-exercises"]
+  gr -->|fan-out| ge["grammar_enrichment\npost-ai-grammar-enrichment"]
   ge --> pub
   ex --> pub["publish\npost-publish"]
-  ann -->|"gate: no-op + re-queue\nuntil Annotation Completed (D6)"| pub
+  lex -->|"gate (GATE_STAGES)"| pub
+  ann -->|"gate (GATE_STAGES):\nno-op + re-queue until Completed"| pub
 ```
 
 - `ingest` / `retry` enqueue **only** `spacy_parse`.
 - Each completing handler enqueues its successor via
   `OutboxSenderService.send(…, { singletonKey: postId })`, drained on `afterFlush`.
-- `spacy_parse` fans out to **two branches** (`annotation`, `ai_complexity`).
-  They rejoin at `publish`: `PublishPostHandler` no-ops and re-queues a delayed
-  `post-publish` until `PostPipelineRun(stage=Annotation, status=Completed)`
-  exists (D6). The loop stops (no re-queue, `warn` log) when the post is gone or
+- `spacy_parse` fans out to **two branches** (`annotation`, `ai_complexity`);
+  `annotation` itself fans out to a **third branch**, `enrichment`, on its own
+  completion (`annotate-post.handler.ts:169-177`) — enrichment needs the
+  `WordDefinition`/`Phrase` links annotation just resolved onto the node tree.
+  All three of `annotation` / `enrichment` / `grammar_enrichment` rejoin at
+  `publish` via `GATE_STAGES` (`publish-post.handler.ts:27-31`):
+  `PublishPostHandler` no-ops and re-queues a delayed `post-publish` until
+  every stage in `GATE_STAGES` has a `Completed` `PostPipelineRun` row (D6,
+  extended to `enrichment` + `grammar_enrichment` by PLAN §17 Track A/B). The
+  loop stops (no re-queue, `warn` log) when the post is gone or
   `posts.status = failed`; a `Failed` branch run row alone keeps it polling,
   since pg-boss may still retry that stage. Reference:
   `commands/publish-post/publish-post.handler.ts`.
@@ -59,15 +67,26 @@ flowchart LR
   `publish` gates on it together with `annotation` and `enrichment`
   (`GATE_STAGES`). Learner surfaces read `learnerExplanation` / `learnerExamples`;
   `exampleText` (raw EGP snippet) is import data and is not exposed.
-- `enrichment` gap-fills `word_definitions` / `phrases` rows (definition,
-  phonetic, example, CEFR level) and their `translations[<lang>].translation`;
-  a row is pending while any `ENRICHMENT_LANGUAGES` language is missing, with one
-  call per post and language. Translations are a `jsonb` column keyed by
-  `ContentLanguage` (`domain/content-translations.ts`); English stays in the
-  entity's own columns. Adding a language = an enum member + a
-  `CONTENT_LANGUAGE_INFO` entry, no migration. `get-post-detail` exposes
-  `translations` on words, phrases and grammar usage points for the reader
-  popup's language switch.
+- `enrichment` branches off `annotation` completion (`annotate-post.handler.ts:172-177`,
+  queue `post-ai-enrichment`) — it needs the `WordDefinition`/`Phrase` ids
+  annotation already resolved onto the node tree. It gap-fills
+  `word_definitions` / `phrases` rows (definition, phonetic, example, CEFR
+  level) and their `translations[<lang>].translation`; a row is pending while
+  any `ENRICHMENT_LANGUAGES` language is missing, with one call per post and
+  language, flushed after each language (cqrs.md 4th sanctioned Q2 exception)
+  with a retry-then-skip on `AiSchemaMismatchError` so one bad language can't
+  discard another's already-computed writes in the same job attempt. It never
+  writes `words` — `words.lemma` (+ `frequencyRank`, filled
+  by a separate frequency-import CLI, unrelated to this pipeline) is the
+  language-neutral dictionary key, already fully written by `annotation`'s
+  `upsertWordId`; every AI-derived field is POS-specific (`run` as noun vs.
+  verb has a different definition/example/CEFR), so it lives on
+  `word_definitions` (one row per `(wordId, pos)`), never on `words`.
+  Translations are a `jsonb` column keyed by `ContentLanguage`
+  (`domain/content-translations.ts`); English stays in the entity's own
+  columns. Adding a language = an enum member + a `CONTENT_LANGUAGE_INFO`
+  entry, no migration. `get-post-detail` exposes `translations` on words,
+  phrases and grammar usage points for the reader popup's language switch.
 - There is **no** `fetch` stage — ingest takes pasted text synchronously (D7).
   `PostPipelineStage` starts at `SpacyParse`; `'fetch'` is not in
   `post_pipeline_runs_stage_check`.
