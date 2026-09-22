@@ -341,9 +341,12 @@ importers:
       '@playwright/test':
         specifier: ^1.62.0
         version: 1.62.1
+      '@sentry/astro':
+        specifier: ^10.74.0
+        version: 10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))
       '@spotlightjs/astro':
         specifier: ^3.2.6
-        version: 3.2.6(@sentry/astro@10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26)))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)
+        version: 3.2.6(@sentry/astro@10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26)))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)
       '@tailwindcss/vite':
         specifier: 4.3.3
         version: 4.3.3(vite@8.2.1(@types/node@26.4.0)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))
@@ -8154,12 +8157,12 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@sentry/astro@10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))':
+  '@sentry/astro@10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))':
     dependencies:
       '@sentry/browser': 10.74.0
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.74.0
-      '@sentry/node': 10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(supports-color@8.1.1)
+      '@sentry/node': 10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)
       '@sentry/vite-plugin': 5.4.0(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))
       astro: 7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0)
     transitivePeerDependencies:
@@ -8288,15 +8291,15 @@ snapshots:
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
 
-  '@sentry/node-core@10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
+  '@sentry/node-core@10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.74.0
-      '@sentry/opentelemetry': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
+      '@sentry/opentelemetry': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
       import-in-the-middle: 3.3.3
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
 
@@ -8316,15 +8319,15 @@ snapshots:
       - '@opentelemetry/exporter-trace-otlp-http'
       - supports-color
 
-  '@sentry/node@10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(supports-color@8.1.1)':
+  '@sentry/node@10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.74.0
-      '@sentry/node-core': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
-      '@sentry/opentelemetry': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
+      '@sentry/node-core': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
+      '@sentry/opentelemetry': 10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
       '@sentry/server-utils': 10.74.0
       import-in-the-middle: 3.3.3
     transitivePeerDependencies:
@@ -8380,10 +8383,10 @@ snapshots:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.69.0
 
-  '@sentry/opentelemetry@10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
+  '@sentry/opentelemetry@10.74.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.74.0
@@ -8476,9 +8479,9 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@spotlightjs/astro@3.2.6(@sentry/astro@10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26)))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)':
+  '@spotlightjs/astro@3.2.6(@sentry/astro@10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26)))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)':
     dependencies:
-      '@sentry/astro': 10.74.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))
+      '@sentry/astro': 10.74.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0))(supports-color@8.1.1)(webpack@5.106.2(@swc/core@1.15.47)(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))
       '@spotlightjs/spotlight': 3.0.2(supports-color@8.1.1)
       astro: 7.2.9(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@26.4.0)(ioredis@6.0.0(supports-color@8.1.1))(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.11)(yaml@2.9.0)
     transitivePeerDependencies:
