@@ -171,3 +171,32 @@ seed: ## Seed grammar and word reference data
 	pnpm cli grammar import-irregular-verbs
 	pnpm cli words import-frequency
 	pnpm cli grammar import-usage-point-exercises
+
+# ------------------------------------------------------------------------------
+# Worktree isolation
+# ------------------------------------------------------------------------------
+
+.PHONY: ports
+ports: ## Isolate this worktree's backend port/DB/Redis DB for offset N, e.g. `make ports OFFSET=1`
+	@case "$(OFFSET)" in ''|*[!0-9]*) echo "OFFSET must be a non-negative integer (0-7), got '$(OFFSET)'. Usage: make ports OFFSET=<N>" >&2; exit 1 ;; esac
+	@test "$(OFFSET)" -le 7 || { echo "OFFSET must be <= 7 (Redis has 16 logical DBs by default, 0-15, and each offset uses 2 of them)" >&2; exit 1; }
+	@touch .env.development.local .env.test.local
+	@set_var() { grep -q "^$$1=" "$$3" 2>/dev/null && sed -i.bak "s#^$$1=.*#$$1=$$2#" "$$3" && rm -f "$$3.bak" || echo "$$1=$$2" >> "$$3"; }; \
+	N=$(OFFSET); \
+	PORT=$$((8080 + N)); \
+	REDIS_DB_DEV=$$((2 * N)); \
+	REDIS_DB_TEST=$$((2 * N + 1)); \
+	if [ "$$N" -eq 0 ]; then DB_DEV=engofy; DB_TEST=engofy-testing; else DB_DEV=engofy_wt$$N; DB_TEST=engofy-testing-wt$$N; fi; \
+	set_var PORT $$PORT .env.development.local; \
+	set_var MIKRO_ORM_DB_NAME $$DB_DEV .env.development.local; \
+	set_var REDIS_DB $$REDIS_DB_DEV .env.development.local; \
+	set_var MIKRO_ORM_DB_NAME $$DB_TEST .env.test.local; \
+	set_var REDIS_DB $$REDIS_DB_TEST .env.test.local; \
+	echo "----------------------------------------"; \
+	echo " Worktree offset:  $$N"; \
+	echo " Backend port:     $$PORT"; \
+	echo " Postgres (dev):   $$DB_DEV"; \
+	echo " Postgres (test):  $$DB_TEST"; \
+	echo " Redis DB (dev):   $$REDIS_DB_DEV"; \
+	echo " Redis DB (test):  $$REDIS_DB_TEST"; \
+	echo "----------------------------------------"
