@@ -74,6 +74,33 @@ export interface PartUnit {
   text: string;
 }
 
+// Char ranges of `word`/`phrase` spans in one flattened unit's plain text
+// (same coordinate system as `flattenPostPartUnits`) — a `grammar_only` span
+// carries no lexicon entry, so it is not a range here. Used to tell whether a
+// spaCy token already has a real dictionary hit before falling back to a
+// generic role description (post-detail-view.ts `TokenView.roleFallback`).
+export function lexicalSpanRanges(
+  block: Block,
+  unitIndex: number,
+): { start: number; end: number }[] {
+  const children = isListBlock(block)
+    ? (block.items[unitIndex]?.children ?? [])
+    : block.children;
+  let cursor = 0;
+  const ranges: { start: number; end: number }[] = [];
+  for (const node of children) {
+    const end = cursor + node.text.length;
+    if (
+      node.type === 'span' &&
+      (node.kind === 'word' || node.kind === 'phrase')
+    ) {
+      ranges.push({ start: cursor, end });
+    }
+    cursor = end;
+  }
+  return ranges;
+}
+
 export function flattenPostPartUnits(block: Block): PartUnit[] {
   if (block.type === 'list') {
     return block.items.map((item, unitIndex) => ({

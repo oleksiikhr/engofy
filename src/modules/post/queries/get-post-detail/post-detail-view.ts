@@ -9,6 +9,7 @@ import type {
   LexiconTranslations,
 } from '../../domain/content-translations.js';
 import type { Doc } from '../../domain/node-tree.types.js';
+import type { WordRoleFallback } from '../../domain/word-role-fallback.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../enums/exercise-type.enum.js';
@@ -89,6 +90,9 @@ export interface GrammarMatchView {
 // `irregular` on a verb in an irregular past form; `verbGroup` carries the
 // same tense+aspect to every token of the verb's aux chain (e.g. "had" and
 // "drawn" both read as Past Perfect), verbGroupId scoped per sentence.
+// `roleFallback` is set only when the token falls outside every `word`/
+// `phrase` span — a generic POS + typical-role description for a click-popup
+// with no dictionary entry to show (PLAN.md, slice 2/3).
 export interface TokenView {
   blockIndex: number;
   itemIndex: number | null;
@@ -98,6 +102,7 @@ export interface TokenView {
   tense: TokenTense | null;
   irregular: IrregularVerbForms | null;
   verbGroup: VerbGroupTense | null;
+  roleFallback?: WordRoleFallback;
 }
 
 export interface PostExerciseView {

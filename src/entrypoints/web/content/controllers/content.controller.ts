@@ -370,6 +370,7 @@ function toAnnotationsDto(
         pastSimple: token.irregular.pastSimple,
         pastParticiple: token.irregular.pastParticiple,
       },
+      ...(token.roleFallback ? { roleFallback: token.roleFallback } : {}),
     })),
   };
 }

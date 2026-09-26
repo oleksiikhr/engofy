@@ -144,6 +144,14 @@ export class PostIrregularVerbDto {
   readonly pastParticiple!: string[];
 }
 
+export class PostWordRoleFallbackDto {
+  // Short human-readable part-of-speech label, e.g. "definite article".
+  readonly posLabel!: string;
+
+  // Typical role of this part of speech in a sentence.
+  readonly roleHint!: string;
+}
+
 export class PostTokenDto {
   // Index within Doc.children.
   readonly blockIndex!: number;
@@ -164,6 +172,10 @@ export class PostTokenDto {
 
   // Set on a verb in an irregular past form.
   readonly irregular!: PostIrregularVerbDto | null;
+
+  // Generic POS + typical-role description for a token with no `word`/
+  // `phrase` span (no dictionary entry to show in the click popup).
+  readonly roleFallback?: PostWordRoleFallbackDto;
 }
 
 export class PostAnnotationsDto {
