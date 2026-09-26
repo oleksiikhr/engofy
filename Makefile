@@ -1,9 +1,10 @@
 .DEFAULT_GOAL := help
 
 COMPOSE := docker compose -f compose.yaml
+E2E_COMPOSE := docker compose -f compose.e2e.yaml
 
 help: ## Show available commands
-	@awk 'BEGIN {FS = ":.*?## "} /^[%a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*?## "} /^[%a-zA-Z0-9_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Docker
@@ -22,8 +23,8 @@ down: ## Stop and remove all containers
 	$(COMPOSE) down --remove-orphans
 
 .PHONY: down-volumes
-down-volumes: ## Stop containers and delete all named volumes (destructive)
-	$(COMPOSE) down --remove-orphans -v
+down-volumes: ## Stop containers and delete all named volumes, including compose.e2e.yaml's (destructive)
+	$(E2E_COMPOSE) down --remove-orphans -v
 
 .PHONY: stop
 stop: ## Stop all containers
@@ -200,3 +201,16 @@ ports: ## Isolate this worktree's backend port/DB/Redis DB for offset N, e.g. `m
 	echo " Redis DB (dev):   $$REDIS_DB_DEV"; \
 	echo " Redis DB (test):  $$REDIS_DB_TEST"; \
 	echo "----------------------------------------"
+
+# ------------------------------------------------------------------------------
+# Isolated e2e stack (compose.e2e.yaml) — dev image, hot reload, own DB/Redis
+# index, alongside the normal dev stack. See .claude/plans/e2e-isolated-stack.md.
+# ------------------------------------------------------------------------------
+
+.PHONY: e2e-up
+e2e-up: ## Start the isolated e2e backend stack (dev image, hot reload) alongside the normal dev stack
+	$(E2E_COMPOSE) up -d --wait backend-e2e
+
+.PHONY: e2e-down
+e2e-down: ## Stop and remove the isolated e2e backend stack — the shared dev Postgres/Redis/etc. are untouched
+	$(E2E_COMPOSE) rm -sf backend-e2e
