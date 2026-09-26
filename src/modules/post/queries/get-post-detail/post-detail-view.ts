@@ -2,6 +2,7 @@ import type { EffectiveState } from '../../../learning/domain/resolve-effective-
 import type {
   IrregularVerbForms,
   TokenTense,
+  VerbGroupTense,
 } from '../../domain/analyze-token.js';
 import type {
   GrammarTranslations,
@@ -85,7 +86,9 @@ export interface GrammarMatchView {
 // One spaCy token placed on the doc (same block/unit/char coordinates as a
 // GrammarMatchView). Punctuation and whitespace tokens are left out. `pos` is
 // the raw spaCy UPOS tag; `tense` is set on finite verbs and `will`;
-// `irregular` on a verb in an irregular past form.
+// `irregular` on a verb in an irregular past form; `verbGroup` carries the
+// same tense+aspect to every token of the verb's aux chain (e.g. "had" and
+// "drawn" both read as Past Perfect), verbGroupId scoped per sentence.
 export interface TokenView {
   blockIndex: number;
   itemIndex: number | null;
@@ -94,6 +97,7 @@ export interface TokenView {
   pos: string;
   tense: TokenTense | null;
   irregular: IrregularVerbForms | null;
+  verbGroup: VerbGroupTense | null;
 }
 
 export interface PostExerciseView {
