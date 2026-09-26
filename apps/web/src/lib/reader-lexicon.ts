@@ -11,6 +11,7 @@ import type {
   EffectiveState,
   GrammarTranslations,
   LexiconTranslations,
+  TokenTense,
   TranslationLang,
 } from './types';
 
@@ -122,6 +123,16 @@ export interface LexiconData {
   words: Record<string, WordLexiconEntry>;
   phrases: Record<string, PhraseLexiconEntry>;
   grammar: Record<string, GrammarLexiconEntry>;
+}
+
+// A token with no word/phrase span read straight off its `data-tok`
+// attributes (render-tokens.ts) rather than looked up in `LexiconData` — it
+// has no id to key a dictionary or a save/report action against.
+export interface TokenFallback {
+  term: string;
+  posLabel: string;
+  roleHint: string;
+  tense: TokenTense | null;
 }
 
 export function entryTerm(entry: LexiconEntry): string {
@@ -340,17 +351,48 @@ function grammarSectionHtml(
 </section>`;
 }
 
+const TENSE_LABEL: Record<TokenTense, string> = {
+  past: 'Past tense',
+  present: 'Present tense',
+  future: 'Future tense',
+};
+
+function upperFirst(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// A generic POS + typical-role card for a token with no dictionary entry —
+// no save/report actions (nothing to save) and no language toggle (the text
+// isn't translated).
+function tokenFallbackHtml(fallback: TokenFallback): string {
+  return `<section class="lex-popup__section tone-slate" data-lex-kind="token">
+  ${topRowHtml(`Word · ${fallback.posLabel}`, '')}
+  <div class="lex-popup__head">
+    <span class="lex-popup__term">${esc(fallback.term)}</span>
+    <button type="button" class="lex-popup__speak" data-speak="${esc(fallback.term)}" aria-label="Pronounce ${esc(fallback.term)}">${SPEAK_ICON}</button>
+  </div>
+  ${fallback.tense ? `<p class="lex-popup__sub">${esc(TENSE_LABEL[fallback.tense])}</p>` : ''}
+  <p class="lex-popup__def">${esc(upperFirst(fallback.roleHint))}</p>
+</section>`;
+}
+
 // The popup body: the lexical section on top, the grammar section below it
 // (a thin divider between them) when a label carries both. The language
 // switch sits in the first section's top row. `demo` swaps the save and
-// report rows for a sign-in note.
+// report rows for a sign-in note. `fallback` is mutually exclusive with
+// lexical/grammar (reader-popup.ts's `targetFor` only falls back to it when
+// neither matched).
 export function readerPopupHtml(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
+  fallback: TokenFallback | null,
   slugId: string,
   lang: PopupLang,
   demo = false,
 ): string {
+  if (fallback) {
+    return tokenFallbackHtml(fallback);
+  }
   const langs = availableLangs(lexical, grammar);
   const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
   return [

@@ -189,6 +189,13 @@ export interface GrammarMatch {
   state: EffectiveState;
 }
 export type TokenTense = 'past' | 'present' | 'future';
+// Generic POS + typical-role description for a token with no `word`/`phrase`
+// span (no dictionary entry to show in the click popup) — reader-lexicon.ts's
+// lightweight fallback popup.
+export interface TokenRoleFallback {
+  posLabel: string;
+  roleHint: string;
+}
 // A content token (no punctuation) of the post's spaCy layer, in the same
 // block/unit/char coordinates as a GrammarMatch.
 export interface ReaderToken {
@@ -204,6 +211,9 @@ export interface ReaderToken {
     pastSimple: string[];
     pastParticiple: string[];
   } | null;
+  // Absent from an API still on the previous release, and for a token
+  // already covered by a word/phrase span.
+  roleFallback?: TokenRoleFallback;
 }
 export type ExerciseType =
   | 'fill_blank'
