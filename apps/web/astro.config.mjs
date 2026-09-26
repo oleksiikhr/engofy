@@ -12,11 +12,15 @@ import { defineConfig } from 'astro/config';
 // The Nest web server listens on PORT (default 8080 — see
 // src/core/config/app.config.ts). Override API_ORIGIN per environment.
 const API_ORIGIN = process.env.API_ORIGIN ?? 'http://localhost:8080';
+// `server.port` only affects `astro dev`/`astro preview` — the standalone
+// node adapter reads process.env.PORT directly at runtime for a built
+// server, so this only needs to cover the dev-server case.
+const PORT = process.env.PORT ? Number(process.env.PORT) : 4321;
 
 export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
-  server: { port: 4321, host: true },
+  server: { port: PORT, host: true },
   // No `<Image>` usage — skip the sharp-based optimizer (and its churny
   // platform binaries) entirely.
   image: { service: { entrypoint: 'astro/assets/services/noop' } },
