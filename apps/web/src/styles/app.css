@@ -1527,6 +1527,8 @@ body {
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.6rem;
+  max-height: 5.5rem;
+  overflow-y: auto;
 }
 .usage-picker__pill {
   padding: 0.3rem 0.7rem;

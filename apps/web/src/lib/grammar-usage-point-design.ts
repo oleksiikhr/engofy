@@ -51,8 +51,9 @@ const MOCK_SIBLING_POOL: Omit<MockUsagePoint, 'id' | 'matched'>[] = [
   },
 ];
 
-// The real matched usage point, dropped into a fixed slot among the mock
-// siblings so the active pill isn't always first or last.
+// The real matched usage point always comes first — a construction can have
+// dozens of siblings (EGP's "adverbs as modifiers" has 31), so the matched
+// one must stay visible without scrolling the pill row.
 export function mockUsagePoints(
   entry: GrammarLexiconEntry,
   guideword: string,
@@ -70,5 +71,5 @@ export function mockUsagePoints(
     id: `mock-usage-point-${index}`,
     matched: false,
   }));
-  return [others[0], matched, ...others.slice(1)];
+  return [matched, ...others];
 }

@@ -41,6 +41,11 @@ Present Simple), це вже видно в `GrammarMatch`. Цей план **н�
 Скріншотити кожен варіант через skill `run`, показати користувачу для вибору. Рішення фіксується тут,
 до того як писати реальну логіку в зрізі 4.
 
+**Рішення: варіант 1** (стрічка пігулок знизу, inline-перемикання). Реальні конструкції можуть мати
+десятки usage points (EGP "adverbs as modifiers" — 31, легітимні дані, не помилка сидінгу) — стрічка
+пігулок має `max-height` + `overflow-y: auto` (вертикальний скрол), а matched usage point завжди
+рендериться першим у списку, щоб лишатись видимим без скролу незалежно від кількості siblings.
+
 ### [ ] 2. Модель і seed-імпортер для банку вправ на usage point
 - Branch: `grammar-usage-point-exercises-02-exercise-bank-seed-import`
 - Base: `grammar-usage-point-exercises-01-popup-design-variants`
