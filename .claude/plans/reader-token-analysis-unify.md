@@ -59,10 +59,10 @@ Reader (`apps/web/src/pages/posts/[slugId].astro`) має чотири неза�
 
 ## Зрізи
 
-### [ ] 1. Backend: tense + aspect на рівні групи дієслова
+### [x] 1. Backend: tense + aspect на рівні групи дієслова
 - Branch: `reader-token-analysis-unify-01-tense-aspect`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/143
 
 Розширити `analyze-token.ts` / `locate-sentence-tokens.ts` детермінованим
 детектором verb-групи (aux-ланцюжок через `dep`/`headPosition`): обчислює
