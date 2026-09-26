@@ -20,6 +20,7 @@ import { PostReadFactory } from './post-read.factory.js';
 import { ReviewLogFactory } from './review-log.factory.js';
 import { SentenceFactory } from './sentence.factory.js';
 import { SentenceTokenFactory } from './sentence-token.factory.js';
+import { StreakFreezeFactory } from './streak-freeze.factory.js';
 import { SubscriptionFactory } from './subscription.factory.js';
 import { TelegramUpdateFactory } from './telegram-update.factory.js';
 import { UserFactory } from './user.factory.js';
@@ -51,6 +52,7 @@ export function factories(em: EntityManager) {
     reviewLog: new ReviewLogFactory(em),
     sentence: new SentenceFactory(em),
     sentenceToken: new SentenceTokenFactory(em),
+    streakFreeze: new StreakFreezeFactory(em),
     subscription: new SubscriptionFactory(em),
     telegramUpdate: new TelegramUpdateFactory(em),
     user: new UserFactory(em),

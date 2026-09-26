@@ -52,6 +52,7 @@ describe('entity factories', () => {
       constructionId: construction.id,
     });
     await f.subscription.createOne({ userId: user.id });
+    await f.streakFreeze.createOne({ userId: user.id });
     await f.accountDeletionRequest.createOne({ userId: user.id });
     await f.authSession.createOne({ userId: user.id });
     await f.authChallenge.createOne();

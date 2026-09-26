@@ -5,6 +5,7 @@ import { Post } from '../post/entities/post.entity.js';
 import { PostStatus } from '../post/enums/post-status.enum.js';
 import { PostNotFoundError } from '../post/errors/post-not-found.error.js';
 import { AddCardCommand } from './commands/add-card/add-card.command.js';
+import { ApplyStreakFreezeCommand } from './commands/apply-streak-freeze/apply-streak-freeze.command.js';
 import { RemoveCardCommand } from './commands/remove-card/remove-card.command.js';
 import { ReviewCardCommand } from './commands/review-card/review-card.command.js';
 import { SetDispositionCommand } from './commands/set-disposition/set-disposition.command.js';
@@ -31,9 +32,14 @@ import { GetProfileQuery } from './queries/get-profile/get-profile.query.js';
 import type { ProfileView } from './queries/get-profile/profile-view.js';
 import { GetReviewsTodayQuery } from './queries/get-reviews-today/get-reviews-today.query.js';
 import { GetStreakQuery } from './queries/get-streak/get-streak.query.js';
+import { GetStreakFreezeStatusQuery } from './queries/get-streak-freeze-status/get-streak-freeze-status.query.js';
 import { GetWordDictionaryDetailQuery } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.query.js';
 import type { WordDictionaryDetailView } from './queries/get-word-dictionary-detail/word-dictionary-detail-view.js';
 import type { CardUsage } from './services/card-limit.service.js';
+import type {
+  StreakFreezeApplication,
+  StreakFreezeStatus,
+} from './services/streak-freeze.service.js';
 import type { CardView } from './types/card-view.type.js';
 import type { DispositionView } from './types/disposition-view.type.js';
 
@@ -170,5 +176,19 @@ export class LearningService {
 
   getReviewsToday(userId: string): Promise<number> {
     return this.queryBus.execute(new GetReviewsTodayQuery(userId));
+  }
+
+  getStreakFreezeStatus(userId: string): Promise<StreakFreezeStatus> {
+    return this.queryBus.execute(new GetStreakFreezeStatusQuery(userId));
+  }
+
+  async applyStreakFreeze(userId: string): Promise<StreakFreezeApplication> {
+    const application = await this.commandBus.execute(
+      new ApplyStreakFreezeCommand(userId),
+    );
+
+    await this.em.flush();
+
+    return application;
   }
 }

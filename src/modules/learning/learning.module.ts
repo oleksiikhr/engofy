@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { BillingModule } from '../billing/billing.module.js';
 import { AddCardHandler } from './commands/add-card/add-card.handler.js';
+import { ApplyStreakFreezeHandler } from './commands/apply-streak-freeze/apply-streak-freeze.handler.js';
 import { RemoveCardHandler } from './commands/remove-card/remove-card.handler.js';
 import { ReviewCardHandler } from './commands/review-card/review-card.handler.js';
 import { SetDispositionHandler } from './commands/set-disposition/set-disposition.handler.js';
@@ -17,11 +18,13 @@ import { GetPracticeQueueHandler } from './queries/get-practice-queue/get-practi
 import { GetProfileHandler } from './queries/get-profile/get-profile.handler.js';
 import { GetReviewsTodayHandler } from './queries/get-reviews-today/get-reviews-today.handler.js';
 import { GetStreakHandler } from './queries/get-streak/get-streak.handler.js';
+import { GetStreakFreezeStatusHandler } from './queries/get-streak-freeze-status/get-streak-freeze-status.handler.js';
 import { GetWordDictionaryDetailHandler } from './queries/get-word-dictionary-detail/get-word-dictionary-detail.handler.js';
 import { CardLimitService } from './services/card-limit.service.js';
 import { FsrsService } from './services/fsrs.service.js';
 import { NewCardBudgetService } from './services/new-card-budget.service.js';
 import { SkillProgressService } from './services/skill-progress.service.js';
+import { StreakFreezeService } from './services/streak-freeze.service.js';
 
 // SRS over words / phrases / grammar (PLAN.md §3.5). Wraps ts-fsrs and the
 // free-tier card cap; skill aggregation (Slice 7) will live alongside.
@@ -33,10 +36,12 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     CardLimitService,
     NewCardBudgetService,
     SkillProgressService,
+    StreakFreezeService,
     AddCardHandler,
     ReviewCardHandler,
     RemoveCardHandler,
     SetDispositionHandler,
+    ApplyStreakFreezeHandler,
     GetPracticeQueueHandler,
     GetProfileHandler,
     GetDictionaryHandler,
@@ -46,6 +51,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     GetDuePostCardsHandler,
     GetReviewsTodayHandler,
     GetStreakHandler,
+    GetStreakFreezeStatusHandler,
     GetNewCardBudgetHandler,
     GetWordDictionaryDetailHandler,
     GetPhraseDictionaryDetailHandler,

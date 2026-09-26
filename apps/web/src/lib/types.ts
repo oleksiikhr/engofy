@@ -54,6 +54,16 @@ export interface StreakResponse {
   dailyGoal: number;
   reviewedToday: number;
 }
+export interface StreakFreezeStatus {
+  // Remaining freezes this calendar month (0 for Free/guest).
+  balance: number;
+  // Whether POST /learning/streak/freeze would succeed right now.
+  applicable: boolean;
+}
+export interface StreakFreezeResult {
+  streak: number;
+  balance: number;
+}
 
 // --- post detail (node tree + annotations) ---
 export type Mark = 'bold' | 'italic';
