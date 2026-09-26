@@ -203,14 +203,42 @@ ports: ## Isolate this worktree's backend port/DB/Redis DB for offset N, e.g. `m
 	echo "----------------------------------------"
 
 # ------------------------------------------------------------------------------
-# Isolated e2e stack (compose.e2e.yaml) — dev image, hot reload, own DB/Redis
-# index, alongside the normal dev stack. See .claude/plans/e2e-isolated-stack.md.
+# Isolated e2e stack (compose.e2e.yaml) — dev images, hot reload, own DB/Redis
+# index/ports, alongside the normal dev stack. See
+# .claude/plans/e2e-isolated-stack.md.
 # ------------------------------------------------------------------------------
 
 .PHONY: e2e-up
-e2e-up: ## Start the isolated e2e backend stack (dev image, hot reload) alongside the normal dev stack
-	$(E2E_COMPOSE) up -d --wait backend-e2e
+e2e-up: ## Start the isolated e2e stack (backend + web, dev images, hot reload) alongside the normal dev stack
+	$(E2E_COMPOSE) up -d --wait backend-e2e web-e2e
 
 .PHONY: e2e-down
-e2e-down: ## Stop and remove the isolated e2e backend stack — the shared dev Postgres/Redis/etc. are untouched
-	$(E2E_COMPOSE) rm -sf backend-e2e
+e2e-down: ## Stop and remove the isolated e2e stack — the shared dev Postgres/Redis/etc. are untouched
+	$(E2E_COMPOSE) rm -sf backend-e2e web-e2e
+
+.PHONY: e2e-reset
+e2e-reset: ## Drop and reseed the isolated e2e database (engofy-e2e) with deterministic Playwright fixtures
+	MIKRO_ORM_DB_NAME=engofy-e2e pnpm exec mikro-orm migration:fresh
+	MIKRO_ORM_DB_NAME=engofy-e2e node --import @swc-node/register/esm-register test/e2e/seed-web-e2e.ts
+
+.PHONY: e2e
+e2e: ## Run the Playwright e2e suite against the isolated e2e stack
+	pnpm --dir apps/web run test:e2e
+
+.PHONY: e2e-ui
+e2e-ui: ## Run the Playwright e2e suite in UI mode against the isolated e2e stack
+	pnpm --dir apps/web exec playwright test --ui
+
+.PHONY: e2e-headed
+e2e-headed: ## Run the Playwright e2e suite headed against the isolated e2e stack
+	pnpm --dir apps/web exec playwright test --headed
+
+.PHONY: e2e-report
+e2e-report: ## Open the last Playwright HTML report
+	pnpm --dir apps/web exec playwright show-report
+
+.PHONY: e2e-full
+e2e-full: ## Bring up the isolated e2e stack, reset its DB, and run the Playwright suite end-to-end
+	$(MAKE) e2e-up
+	$(MAKE) e2e-reset
+	$(MAKE) e2e
