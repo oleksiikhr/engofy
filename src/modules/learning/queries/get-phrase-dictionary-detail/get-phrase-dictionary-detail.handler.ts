@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { User } from '../../../auth/entities/user.entity.js';
+import { readLexiconTranslations } from '../../../post/domain/content-translations.js';
 import { Phrase } from '../../../post/entities/phrase.entity.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
 import { resolveEffectiveState } from '../../domain/resolve-effective-state.js';
@@ -62,6 +63,7 @@ export class GetPhraseDictionaryDetailHandler
       type: phrase.type ?? null,
       definition: phrase.definition ?? null,
       example: phrase.exampleSentence ?? null,
+      translations: readLexiconTranslations(phrase.translations),
       cefrLevel: phrase.cefrLevel ?? null,
       state: resolveEffectiveState({
         card: card

@@ -1,3 +1,4 @@
+import type { LexiconTranslations } from '../../../post/domain/content-translations.js';
 import type { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import type { PartOfSpeech } from '../../../post/enums/part-of-speech.enum.js';
 import type { EffectiveState } from '../../domain/resolve-effective-state.js';
@@ -8,6 +9,8 @@ export interface WordDictionarySenseView {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
+  // By language code; a language with no entry is not translated yet.
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // The active LearningCard backing `state`, when there is one — the

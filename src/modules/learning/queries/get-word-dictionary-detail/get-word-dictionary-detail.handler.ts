@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { User } from '../../../auth/entities/user.entity.js';
+import { readLexiconTranslations } from '../../../post/domain/content-translations.js';
 import { loadIrregularVerbsByLemma } from '../../../post/domain/irregular-verb.js';
 import { WordDefinition } from '../../../post/entities/word-definition.entity.js';
 import { PostStatus } from '../../../post/enums/post-status.enum.js';
@@ -134,6 +135,7 @@ export class GetWordDictionaryDetailHandler
           definition: definition.definition ?? null,
           phonetic: definition.phonetic ?? null,
           example: definition.exampleSentence ?? null,
+          translations: readLexiconTranslations(definition.translations),
           cefrLevel: definition.cefrLevel ?? null,
           state: resolveEffectiveState({
             card: card

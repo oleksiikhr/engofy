@@ -64,6 +64,7 @@ describe('DictionaryController words/:lemma', () => {
       wordId: word.id,
       pos: PartOfSpeech.Verb,
       definition: 'to move from one place to another',
+      translations: { uk: { translation: 'йти, рухатися' } },
     });
     await em.flush();
 
@@ -79,6 +80,7 @@ describe('DictionaryController words/:lemma', () => {
       state: 'new',
       cardId: null,
       definition: 'to move from one place to another',
+      translations: { uk: { translation: 'йти, рухатися' } },
     });
     expect(res.body.posts).toEqual([]);
   });
