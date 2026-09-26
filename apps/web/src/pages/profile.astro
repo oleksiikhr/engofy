@@ -7,6 +7,7 @@ import type {
   CefrLevel,
   ProfileHub,
   ProfileSubscription,
+  StreakFreezeStatus,
 } from '../lib/types';
 
 const LEVELS: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -20,6 +21,7 @@ const user = await getCurrentUser(Astro.request);
 let levelError = false;
 let goalError = false;
 let deletionError: string | null = null;
+let freezeError: string | null = null;
 if (user && Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
   const action = form.get('action');
@@ -45,26 +47,34 @@ if (user && Astro.request.method === 'POST') {
     } else if (action === 'cancel-deletion') {
       await apiPost('/profile/account-deletion/cancel', undefined, opts);
       return Astro.redirect('/profile');
+    } else if (action === 'apply-streak-freeze') {
+      await apiPost('/learning/streak/freeze', undefined, opts);
+      return Astro.redirect('/profile');
     }
   } catch {
     if (action === 'set-level') {
       levelError = true;
     } else if (action === 'set-goal') {
       goalError = true;
+    } else if (action === 'apply-streak-freeze') {
+      freezeError = 'Could not apply a streak freeze, try again.';
     } else {
       deletionError = 'Something went wrong, please try again.';
     }
   }
 }
 
-const [hub, subscription] = user
+const [hub, subscription, freezeStatus] = user
   ? await Promise.all([
       apiGet<ProfileHub>('/profile', { request: Astro.request }),
       apiGet<ProfileSubscription>('/profile/subscription', {
         request: Astro.request,
       }),
+      apiGet<StreakFreezeStatus>('/learning/streak/freezes', {
+        request: Astro.request,
+      }),
     ])
-  : [null, null];
+  : [null, null, null];
 
 const isPremium = subscription?.plan === 'premium' && subscription.active;
 const links = [
@@ -84,7 +94,7 @@ const links = [
       <p>
         <a href="/login">Sign in</a> to track your streak, skills and levels.
       </p>
-    ) : hub && subscription ? (
+    ) : hub && subscription && freezeStatus ? (
       <>
         <p class="greeting" data-testid="profile-greeting">
           Signed in as <strong>{user.email}</strong>
@@ -204,6 +214,29 @@ const links = [
             </p>
           )}
         </section>
+
+        {isPremium && (
+          <section class="card level" data-testid="streak-freeze">
+            <h2>Streak freeze</h2>
+            <p class="level__hint">
+              Missed a day? Spend a freeze to keep your streak going.{' '}
+              <b>{freezeStatus.balance}</b> left this month.
+            </p>
+            {freezeStatus.applicable && (
+              <form method="post">
+                <input type="hidden" name="action" value="apply-streak-freeze" />
+                <button class="btn" type="submit">
+                  Apply a freeze
+                </button>
+              </form>
+            )}
+            {freezeError && (
+              <p class="form-error" role="alert">
+                {freezeError}
+              </p>
+            )}
+          </section>
+        )}
 
         {!hub.accountDeletion && (
           <section class="card card--soft danger">
