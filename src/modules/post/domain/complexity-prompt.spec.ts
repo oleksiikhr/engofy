@@ -1,10 +1,21 @@
 import { CefrLevel } from '../enums/cefr-level.enum.js';
 import { PostTopic } from '../enums/post-topic.enum.js';
 import {
+  buildComplexitySystemPrompt,
   buildComplexityUserText,
   type ComplexityAssessment,
   indexComplexityLevels,
 } from './complexity-prompt.js';
+
+describe('buildComplexitySystemPrompt', () => {
+  it('omits the title field when the post already has a title', () => {
+    expect(buildComplexitySystemPrompt(false)).not.toContain('"title"');
+  });
+
+  it('asks for a title when the post has none', () => {
+    expect(buildComplexitySystemPrompt(true)).toContain('"title"');
+  });
+});
 
 describe('buildComplexityUserText', () => {
   it('numbers each sentence on its own line', () => {
@@ -20,6 +31,7 @@ describe('indexComplexityLevels', () => {
   ): ComplexityAssessment => ({
     overall: CefrLevel.B1,
     topic: PostTopic.DailyLife,
+    metaDescription: 'A short summary.',
     newVocabRatio: 0.1,
     sentences,
   });
