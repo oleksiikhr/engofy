@@ -2,6 +2,7 @@ import { STATE_LABEL, STATE_TONE } from './dictionary-state';
 import { postUrl } from './post-url';
 import type {
   EffectiveState,
+  LexiconTranslations,
   PhraseDictionaryDetail,
   WordDictionaryDetail,
   WordDictionarySense,
@@ -113,6 +114,16 @@ export function senseActionsHtml(
   );
 }
 
+// The learner's saved uk translation, when one exists — same field the
+// reader popup shows via its EN/УКР toggle (`reader-lexicon.ts`), surfaced
+// here unconditionally since the dictionary page has no such toggle.
+function translationHtml(translations: LexiconTranslations): string {
+  const translation = translations.uk?.translation;
+  return translation
+    ? `<p class="wd-sense__translation" lang="uk">${esc(translation)}</p>`
+    : '';
+}
+
 function senseHtml(lemma: string, sense: WordDictionarySense): string {
   return `<li class="wd-sense card" data-testid="wd-sense">
     <div class="wd-sense__head">
@@ -120,6 +131,7 @@ function senseHtml(lemma: string, sense: WordDictionarySense): string {
       ${sense.cefrLevel ? `<span class="badge">${esc(sense.cefrLevel)}</span>` : ''}
     </div>
     ${sense.phonetic ? `<p class="wd-sense__phonetic">${esc(sense.phonetic)}</p>` : ''}
+    ${translationHtml(sense.translations)}
     ${sense.definition ? `<p class="wd-sense__def">${esc(sense.definition)}</p>` : ''}
     ${sense.example ? `<p class="wd-sense__eg">“${esc(sense.example)}”</p>` : ''}
     ${senseActionsHtml(lemma, sense)}
@@ -187,6 +199,7 @@ export function renderPhraseDetail(view: PhraseDictionaryDetail): string {
           ${view.type ? `<span class="eyebrow">${esc(view.type)}</span>` : ''}
           ${view.cefrLevel ? `<span class="badge">${esc(view.cefrLevel)}</span>` : ''}
         </div>
+        ${translationHtml(view.translations)}
         ${view.definition ? `<p class="wd-sense__def">${esc(view.definition)}</p>` : ''}
         ${view.example ? `<p class="wd-sense__eg">“${esc(view.example)}”</p>` : ''}
         ${actionsHtml(target, view)}

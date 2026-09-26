@@ -337,6 +337,7 @@ export interface WordDictionarySense {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this sense — needed by
@@ -374,6 +375,7 @@ export interface PhraseDictionaryDetail {
   type: string | null;
   definition: string | null;
   example: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this phrase — needed by
