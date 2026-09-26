@@ -100,6 +100,10 @@ reset: ## Drop and recreate the database schema (destructive)
 watch: ## Start in development mode with hot reload
 	NODE_ENV=development pnpm exec nest start --type-check --watch
 
+.PHONY: web
+web: ## Start the Astro frontend (apps/web) in development mode
+	$(MAKE) -C apps/web dev
+
 .PHONY: queue
 worker: ## Start worker (all queues)
 	pnpm worker $(filter-out $@,$(MAKECMDGOALS))
