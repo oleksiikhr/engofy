@@ -27,3 +27,7 @@ CREATE DATABASE "engofy-testing-wt6";
 
 CREATE DATABASE "engofy_wt7";
 CREATE DATABASE "engofy-testing-wt7";
+
+-- Isolated e2e stack (compose.e2e.yaml) — its own logical DB, outside the
+-- worktree-offset range above, so Playwright never touches dev/test data.
+CREATE DATABASE "engofy-e2e";
