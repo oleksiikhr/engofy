@@ -128,10 +128,16 @@ reserved-index note.
   `.env.development`/`.env.test` are the same tracked file checked out identically into every worktree,
   so every worktree's `MIKRO_ORM_DB_NAME`/`REDIS_DB` points at the same logical database/Redis DB on
   the one shared stack above. Fine for sequential work (only one worktree's app/tests actually running
-  at a time — the common case). For genuinely concurrent worktrees, rename that worktree's own copy of
-  `MIKRO_ORM_DB_NAME` (and create the DB first — the `engofy` role has `CREATEDB`:
-  `docker compose exec postgres createdb -U engofy <name>`) and pick a different `REDIS_DB` index;
-  otherwise concurrent migrations/tests race on the same schema/rows.
+  at a time — the common case). For genuinely concurrent worktrees, run `make ports OFFSET=<N>` inside
+  each extra worktree (`N` from 1 to 7, one per concurrently-running worktree — Redis's default 16
+  logical DBs limit `N` to that range; see `git worktree list` to pick a free one). It patches
+  `.env.development.local`/`.env.test.local` with an offset backend port (`8080+N`), Postgres DB name
+  (`engofy_wt<N>` dev / `engofy-testing-wt<N>` test), and Redis DB index, plus `apps/web/.env.local`
+  with an offset `apps/web` port (`4321+N`) and matching `API_ORIGIN`. All 16 possible Postgres
+  databases (offset 0-7 × dev/test) are pre-created by `docker/postgres-initdb.sql` — see the next
+  bullet for the one-time-only caveat on an existing `postgres_data` volume. `nlp-service` isn't
+  dockerized in dev and has no `.env` file, so `make ports` only prints the port to pass by hand:
+  `uvicorn app:app --port <8000+N>`.
 - **`make e2e-up`/`e2e-full` fails because `engofy-e2e` doesn't exist** — `docker/postgres-initdb.sql`
   only runs once, when the `postgres_data` volume is first created. An environment set up before the
   isolated e2e stack was added needs to pick that database up: either `make down-volumes && make up`
