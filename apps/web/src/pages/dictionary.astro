@@ -73,18 +73,32 @@ if (user) {
               aria-label="Search your dictionary"
             />
           </div>
-          <select
-            id="dict-state"
-            class="input"
-            name="state"
-            aria-label="Filter by status"
-          >
-            {STATES.map((s) => (
-              <option value={s.value} selected={s.value === state}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+          <div class="dict-select">
+            <select
+              id="dict-state"
+              class="input"
+              name="state"
+              aria-label="Filter by status"
+            >
+              {STATES.map((s) => (
+                <option value={s.value} selected={s.value === state}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M6 9l6 6l6-6" />
+            </svg>
+          </div>
         </form>
 
         <div class="dict-skeleton" aria-hidden="true">
@@ -124,9 +138,26 @@ if (user) {
   .dict-search .input {
     padding-left: 2.5rem;
   }
-  .dict-controls select.input {
+  .dict-select {
+    position: relative;
+  }
+  .dict-select .ic {
+    position: absolute;
+    top: 50%;
+    right: 0.875rem;
+    transform: translateY(-50%);
+    width: 0.85rem;
+    height: 0.85rem;
+    color: var(--color-ink-faint);
+    pointer-events: none;
+  }
+  .dict-select select.input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     width: auto;
     min-width: 11rem;
+    padding-right: 2.25rem;
   }
   .dict-empty {
     text-align: center;
