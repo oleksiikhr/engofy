@@ -4,6 +4,11 @@ import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.j
 export class ConstructionUsagePointDto {
   readonly grammarUsagePointId!: string;
 
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. The page anchors this point at `#usage-point-
+  // -{egpIndex}` for the Reader popup's "Practice" link.
+  readonly egpIndex!: number | null;
+
   readonly cefrLevel!: CefrLevel;
 
   readonly guideword!: string;

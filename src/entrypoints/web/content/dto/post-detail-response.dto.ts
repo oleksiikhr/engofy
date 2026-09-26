@@ -90,6 +90,11 @@ export class PostPhraseAnnotationDto {
 export class PostGrammarUsagePointDto {
   readonly grammarUsagePointId!: string;
 
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. Builds the "Practice" link to `/grammar/{slug}#usage-
+  // -point-{egpIndex}`.
+  readonly egpIndex!: number | null;
+
   readonly cefrLevel!: CefrLevel;
 
   readonly guideword!: string;
