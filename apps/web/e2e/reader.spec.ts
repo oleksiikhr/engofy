@@ -13,7 +13,7 @@ import { ReaderPage } from './pages/reader-page';
 // the "reported" usage point (the seeded user marked it Known) on "war ended".
 
 const READER_SLUG = 'the-cartographer-at-dawn-E2Eread1';
-const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:4321';
+const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:3100';
 
 test.describe('reader page (guest)', () => {
   test('renders the article body with sparse labels on new words and phrases', async ({

@@ -1,14 +1,17 @@
 /**
  * Deterministic fixtures for the `apps/web` Playwright suite (PLAN.md Slice 8b).
  *
- * Run against the local *dev* database (the one the hand-started Nest web
- * server and `astro dev` talk to) — NOT the test DB, and it never drops the
- * schema. Playwright's global-setup shells out to:
+ * Runs against the isolated e2e database (`engofy-e2e` — see
+ * .claude/plans/e2e-isolated-stack.md), never the shared dev DB, and never
+ * drops the schema. Playwright's global-setup shells out to:
  *
  *   node --import @swc-node/register/esm-register test/e2e/seed-web-e2e.ts
  *
- * It wipes its own previous rows (everything tagged `E2E` / `e2e-` / the
- * fixed e2e user) and re-inserts, so it is safe to run repeatedly.
+ * with MIKRO_ORM_DB_NAME defaulted to `engofy-e2e` (it reads the same
+ * MikroORM config as the app, `preferEnvVars: true`, so the env var alone
+ * retargets it). It wipes its own previous rows (everything tagged `E2E` /
+ * `e2e-` / the fixed e2e user) and re-inserts, so it is safe to run
+ * repeatedly — `make e2e-reset` also runs a schema-level reset first.
  */
 import 'reflect-metadata';
 import { createHash } from 'node:crypto';
