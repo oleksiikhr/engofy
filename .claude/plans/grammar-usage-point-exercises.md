@@ -65,10 +65,10 @@ Present Simple), це вже видно в `GrammarMatch`. Цей план **н�
 Query `get-usage-point-exercises` (або розширення `get-grammar-construction`), що повертає пул вправ
 для конкретного usage point.
 
-### [ ] 4. Реалізація обраного варіанту попапу з реальними даними
+### [x] 4. Реалізація обраного варіанту попапу з реальними даними
 - Branch: `grammar-usage-point-exercises-04-popup-chosen-variant`
-- Base: `grammar-usage-point-exercises-03-usage-point-exercises-query`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/131
 
 Backend: розширити payload Reader'а списком sibling usage points construction'у з позначкою
 "matched". Frontend: повна реалізація варіанту, обраного в зрізі 1, з реальними даними; недообрані
