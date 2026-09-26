@@ -126,6 +126,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       shortId: post.shortId,
       slug: post.slug ?? null,
       title: post.title ?? null,
+      metaDescription: post.metaDescription ?? null,
       cefrLevel: post.cefrLevel ?? null,
       publishedAt: post.publishedAt.toISO() ?? post.publishedAt.toString(),
       attributionText: post.source.attributionText,

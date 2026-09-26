@@ -114,6 +114,9 @@ export interface PostDetailView {
   shortId: string;
   slug: string | null;
   title: string | null;
+  // AI-written summary (~155 chars); null only in the brief window before
+  // ai_complexity has run — impossible in practice once a post is published.
+  metaDescription: string | null;
   cefrLevel: CefrLevel | null;
   // ISO-8601.
   publishedAt: string;

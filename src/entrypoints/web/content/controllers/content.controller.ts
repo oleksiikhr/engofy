@@ -290,6 +290,7 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
     shortId: view.shortId,
     slug: view.slug,
     title: view.title,
+    metaDescription: view.metaDescription,
     cefrLevel: view.cefrLevel,
     publishedAt: view.publishedAt,
     attributionText: view.attributionText,

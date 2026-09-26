@@ -190,6 +190,10 @@ export class PostDetailResponseDto {
 
   readonly title!: string | null;
 
+  // AI-written summary (~155 chars); null only in the brief window before
+  // ai_complexity has run — impossible in practice once a post is published.
+  readonly metaDescription!: string | null;
+
   readonly cefrLevel!: CefrLevel | null;
 
   // ISO-8601.
