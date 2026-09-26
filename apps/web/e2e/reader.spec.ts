@@ -397,6 +397,32 @@ test.describe('reader page (guest)', () => {
     await expect(section.locator('.lex-state--learning')).toBeVisible();
   });
 
+  test('switches to a sibling usage point via the pill row', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    const section = reader.popupSection('grammar');
+    const picker = section.locator('.usage-picker');
+    const matchedPill = picker.getByRole('button', { name: 'Earlier past' });
+    const siblingPill = picker.getByRole('button', { name: 'Reported' });
+    await expect(matchedPill).toHaveAttribute('aria-pressed', 'true');
+    await expect(siblingPill).toHaveAttribute('aria-pressed', 'false');
+
+    await siblingPill.click();
+
+    await expect(matchedPill).toHaveAttribute('aria-pressed', 'false');
+    await expect(siblingPill).toHaveAttribute('aria-pressed', 'true');
+    await expect(section.locator('.lex-popup__sub')).toHaveText('Reported');
+    await expect(section.locator('.lex-popup__def')).toContainText(
+      'reported speech',
+    );
+    // The fixture's "reported" usage point has no enrichment example yet.
+    await expect(section.locator('.lex-popup__example span')).toHaveText('');
+  });
+
   test('shows lexical and grammar sections when the labels overlap', async ({
     page,
   }) => {

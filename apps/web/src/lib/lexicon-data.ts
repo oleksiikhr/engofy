@@ -1,5 +1,5 @@
-import type { LexiconData } from './reader-lexicon';
-import type { PostDetail } from './types';
+import type { GrammarSiblingUsagePoint, LexiconData } from './reader-lexicon';
+import type { GrammarAnnotation, PostDetail } from './types';
 
 // The "why this, not that" explanation the grammar_contrastive exercise
 // generated for each usage point (the first one when a point has several).
@@ -19,6 +19,33 @@ function contrastByUsagePoint(
     }
   }
   return out;
+}
+
+// This point first, then its construction's other usage points, in their
+// existing (CEFR-ascending) order — a construction can have dozens of
+// siblings, so the matched one must stay visible without scrolling the pill
+// row (grammar-usage-point-exercises plan, slice 1's design decision).
+function buildSiblings(
+  points: GrammarAnnotation['usagePoints'],
+  matchedId: string,
+): GrammarSiblingUsagePoint[] {
+  const toSibling = (
+    point: GrammarAnnotation['usagePoints'][number],
+    matched: boolean,
+  ): GrammarSiblingUsagePoint => ({
+    id: point.grammarUsagePointId,
+    guideword: point.guideword,
+    canDoStatement: point.canDoStatement,
+    explanation: point.explanation,
+    translations: point.translations,
+    examples: point.examples,
+    matched,
+  });
+  const matched = points.find((p) => p.grammarUsagePointId === matchedId);
+  const others = points.filter((p) => p.grammarUsagePointId !== matchedId);
+  return matched
+    ? [toSibling(matched, true), ...others.map((p) => toSibling(p, false))]
+    : others.map((p) => toSibling(p, false));
 }
 
 // The popup data for every span `renderDoc` labels, whatever its state.
@@ -82,6 +109,10 @@ export function buildLexiconData(
           examples: point.examples,
           contrast: contrast.get(point.grammarUsagePointId) ?? null,
           state,
+          siblings: buildSiblings(
+            construction.usagePoints,
+            point.grammarUsagePointId,
+          ),
         };
       }
     }
