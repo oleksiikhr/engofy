@@ -3,6 +3,14 @@
 NestJS backend (fastify, MikroORM/Postgres, pg-boss for queues). These rules are
 project-wide and override generic defaults.
 
+## No production yet
+
+This project has no production deployment and no production data. When redesigning schema,
+entities, or pipeline stages, do not propose or ask about backward compatibility, data migrations,
+or backfills for existing rows — there is nothing to preserve. Prefer the cleanest shape for the new
+design over one that eases a transition. This changes the moment production exists; until then, skip
+the question entirely rather than asking about it.
+
 ## apps/web: no layout shift after load
 
 Content that jumps after first paint hurts SEO (Cumulative Layout Shift is a Core Web Vital) and reads
