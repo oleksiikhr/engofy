@@ -57,10 +57,10 @@ Present Simple), це вже видно в `GrammarMatch`. Цей план **н�
 ті usage points, де таких вправ ще немає (ідемпотентно, ~10 на usage point). Зафіксувати й
 задокументувати формат seed-файлу, щоб окрема сесія, яка генерує контент, знала цільову структуру.
 
-### [ ] 3. Backend query для видачі вправ usage point
+### [x] 3. Backend query для видачі вправ usage point
 - Branch: `grammar-usage-point-exercises-03-usage-point-exercises-query`
-- Base: `grammar-usage-point-exercises-02-exercise-bank-seed-import`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/129
 
 Query `get-usage-point-exercises` (або розширення `get-grammar-construction`), що повертає пул вправ
 для конкретного usage point.
