@@ -66,6 +66,11 @@ const grammar: Record<string, GrammarLexiconEntry> = {
   'demo-grammar-used-to': {
     id: 'demo-grammar-used-to',
     construction: 'used to + infinitive',
+    // No real construction backs this demo, so the "Practice" link (which
+    // needs a real `/grammar/{slug}` page) stays hidden — null egpIndex does
+    // that regardless of the placeholder slug.
+    constructionSlug: 'used-to',
+    egpIndex: null,
     cefrLevel: 'B1',
     guideword: 'past habits',
     canDoStatement:
