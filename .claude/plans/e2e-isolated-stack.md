@@ -69,10 +69,10 @@ seed-скрипт читає ту саму конфігурацію MikroORM). `
 на e2e-web-порт, прибрати застарілий коментар "No webServer... підніми стек сам". Makefile: `e2e-reset`
 (дроп+ресід `engofy-e2e`), `e2e`, `e2e-ui`, `e2e-headed`, `e2e-report`, `e2e-full` (up → reset → run).
 
-### [ ] 3. compose.e2e-prod.yaml + prod-цілі Makefile
+### [x] 3. compose.e2e-prod.yaml + prod-цілі Makefile
 - Branch: `e2e-isolated-stack-03-prod-stack`
-- Base: `e2e-isolated-stack-02-web-playwright`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/139
 
 Той самий стек, зібраний з реальних production-образів (кореневий `Dockerfile`, `apps/web/Dockerfile`,
 `include: - compose.yaml`) — передрелізна перевірка перед тегом деплою (`v*` git tag), повільніша, без
