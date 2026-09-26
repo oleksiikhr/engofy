@@ -170,3 +170,7 @@ seed: ## Seed grammar and word reference data
 	pnpm cli grammar import-egp
 	pnpm cli grammar import-irregular-verbs
 	pnpm cli words import-frequency
+
+.PHONY: seed-usage-point-exercises
+seed-usage-point-exercises: ## Seed the usage-point exercise bank from assets/grammar-usage-point-exercises.json (not checked in yet, see assets/README.md) — not part of `make seed` until that file lands
+	pnpm cli grammar import-usage-point-exercises
