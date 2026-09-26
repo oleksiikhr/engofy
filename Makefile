@@ -2,6 +2,7 @@
 
 COMPOSE := docker compose -f compose.yaml
 E2E_COMPOSE := docker compose -f compose.e2e.yaml
+E2E_PROD_COMPOSE := docker compose -f compose.e2e-prod.yaml
 
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[%a-zA-Z0-9_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -241,4 +242,36 @@ e2e-report: ## Open the last Playwright HTML report
 e2e-full: ## Bring up the isolated e2e stack, reset its DB, and run the Playwright suite end-to-end
 	$(MAKE) e2e-up
 	$(MAKE) e2e-reset
+	$(MAKE) e2e
+
+# ------------------------------------------------------------------------------
+# E2E pre-release checks (compose.e2e-prod.yaml) — real production images,
+# same isolated e2e data as above. `make e2e-full` (dev images) is the one to
+# reach for day to day; this full, real-image rebuild is for when the change
+# itself could only break in a real build. See
+# .claude/plans/e2e-isolated-stack.md.
+# ------------------------------------------------------------------------------
+
+.PHONY: e2e-prod-up
+e2e-prod-up: ## Build and start the e2e-prod containers (backend-e2e-prod, web-e2e-prod)
+	$(E2E_PROD_COMPOSE) build
+	$(E2E_PROD_COMPOSE) up -d --remove-orphans --wait backend-e2e-prod web-e2e-prod
+
+.PHONY: e2e-prod-down
+e2e-prod-down: ## Stop and remove the e2e-prod containers — the shared dev Postgres/Redis/etc. are untouched
+	$(E2E_PROD_COMPOSE) rm -sf backend-e2e-prod web-e2e-prod
+
+.PHONY: e2e-prod-exec-%
+e2e-prod-exec-%: ## Open a shell in an e2e-prod container  (e.g. make e2e-prod-exec-backend-e2e-prod)
+	$(E2E_PROD_COMPOSE) exec $* sh
+
+.PHONY: e2e-prod-logs-%
+e2e-prod-logs-%: ## Follow logs from a specific e2e-prod container
+	$(E2E_PROD_COMPOSE) logs -f $*
+
+.PHONY: e2e-prod-full
+e2e-prod-full: ## One-shot pre-release check against the real production images: reset+seed, build+start e2e-prod, run the suite, tear down
+	trap '$(MAKE) e2e-prod-down' EXIT; \
+	$(MAKE) e2e-reset && \
+	$(MAKE) e2e-prod-up && \
 	$(MAKE) e2e
