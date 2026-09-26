@@ -100,6 +100,10 @@ reset: ## Drop and recreate the database schema (destructive)
 watch: ## Start in development mode with hot reload
 	NODE_ENV=development pnpm exec nest start --type-check --watch
 
+.PHONY: web
+web: ## Start the Astro frontend (apps/web) in development mode
+	$(MAKE) -C apps/web dev
+
 .PHONY: queue
 worker: ## Start worker (all queues)
 	pnpm worker $(filter-out $@,$(MAKECMDGOALS))
@@ -162,5 +166,7 @@ orm-debug: ## Run MikroORM debug to inspect entities and configuration
 	pnpm exec mikro-orm debug
 
 .PHONY: seed
-seed: ## Seed with dictionary data, dev fixtures, and job board data
-	echo "Todo"
+seed: ## Seed grammar and word reference data
+	pnpm cli grammar import-egp
+	pnpm cli grammar import-irregular-verbs
+	pnpm cli words import-frequency
