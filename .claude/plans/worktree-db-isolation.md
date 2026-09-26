@@ -56,10 +56,10 @@ worktree цього репозиторію — не по одному стеку
 `postgres_data`-тому; вже наявний том підхоплює зміну лише через `make down-volumes && make up`
 (деструктивно).
 
-### [ ] 2. Офсет порту apps/web + документація порту nlp-service
+### [x] 2. Офсет порту apps/web + документація порту nlp-service
 - Branch: `worktree-db-isolation-02-web-nlp-ports`
-- Base: `worktree-db-isolation-01-backend-db-redis-ports`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/141
 
 Поширює ту саму offset-схему на `apps/web`: `make ports OFFSET=<N>` додатково пише
 `apps/web/.env.local` (Astro/Vite читає `.env.local` автоматично) з `PORT=4321+N` та `API_ORIGIN`, що
