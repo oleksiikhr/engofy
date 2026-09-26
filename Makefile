@@ -174,3 +174,31 @@ seed: ## Seed grammar and word reference data
 .PHONY: seed-usage-point-exercises
 seed-usage-point-exercises: ## Seed the usage-point exercise bank from assets/grammar-usage-point-exercises.json (not checked in yet, see assets/README.md) — not part of `make seed` until that file lands
 	pnpm cli grammar import-usage-point-exercises
+
+# ------------------------------------------------------------------------------
+# Worktree isolation
+# ------------------------------------------------------------------------------
+
+.PHONY: ports
+ports: ## Isolate this worktree's backend port/DB/Redis DB for offset N, e.g. `make ports OFFSET=1`
+	@N="$(OFFSET)"; \
+	case "$$N" in ''|*[!0-9]*) echo "OFFSET must be a non-negative integer (0-7), got '$$N'. Usage: make ports OFFSET=<N>" >&2; exit 1 ;; esac; \
+	if [ "$$N" -gt 7 ]; then echo "OFFSET must be <= 7 (Redis has 16 logical DBs by default, 0-15, and each offset uses 2 of them)" >&2; exit 1; fi; \
+	PORT=$$((8080 + N)); \
+	REDIS_DB_DEV=$$((2 * N)); \
+	REDIS_DB_TEST=$$((2 * N + 1)); \
+	if [ "$$N" -eq 0 ]; then DB_DEV=engofy; DB_TEST=engofy-testing; else DB_DEV=engofy_wt$$N; DB_TEST=engofy-testing-wt$$N; fi; \
+	printf 'PORT=%s\nMIKRO_ORM_DB_NAME=%s\nREDIS_DB=%s\n' "$$PORT" "$$DB_DEV" "$$REDIS_DB_DEV" > .env.development.local; \
+	printf 'MIKRO_ORM_DB_NAME=%s\nREDIS_DB=%s\n' "$$DB_TEST" "$$REDIS_DB_TEST" > .env.test.local; \
+	for DB in "$$DB_DEV" "$$DB_TEST"; do \
+		EXISTS=$$($(COMPOSE) exec -T postgres psql -U engofy -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname = '$$DB'"); \
+		if [ "$$EXISTS" != "1" ]; then $(COMPOSE) exec -T postgres createdb -U engofy "$$DB"; fi; \
+	done; \
+	echo "----------------------------------------"; \
+	echo " Worktree offset:  $$N"; \
+	echo " Backend port:     $$PORT"; \
+	echo " Postgres (dev):   $$DB_DEV"; \
+	echo " Postgres (test):  $$DB_TEST"; \
+	echo " Redis DB (dev):   $$REDIS_DB_DEV"; \
+	echo " Redis DB (test):  $$REDIS_DB_TEST"; \
+	echo "----------------------------------------"
