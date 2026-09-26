@@ -1,10 +1,15 @@
 import { Command, CommandRunner } from 'nest-commander';
 import { GrammarImportEgpCommand } from './grammar-import-egp.command.js';
 import { GrammarImportIrregularVerbsCommand } from './grammar-import-irregular-verbs.command.js';
+import { GrammarImportUsagePointExercisesCommand } from './grammar-import-usage-point-exercises.command.js';
 
 @Command({
   name: 'grammar',
-  subCommands: [GrammarImportIrregularVerbsCommand, GrammarImportEgpCommand],
+  subCommands: [
+    GrammarImportIrregularVerbsCommand,
+    GrammarImportEgpCommand,
+    GrammarImportUsagePointExercisesCommand,
+  ],
   description: 'Grammar and reference-data import commands',
 })
 export class GrammarCommand extends CommandRunner {
