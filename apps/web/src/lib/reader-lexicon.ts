@@ -1,4 +1,3 @@
-import { type GupVariant, mockUsagePoints } from './grammar-usage-point-design';
 import {
   constructionLabel,
   guidewordLabel,
@@ -78,6 +77,19 @@ export interface PhraseLexiconEntry extends LexiconEntryBase {
 }
 export type LexiconEntry = WordLexiconEntry | PhraseLexiconEntry;
 
+// Another usage point of the same construction, offered as a pill next to the
+// matched one — clicking it swaps the guideword/explanation/example shown
+// above the pill row (reader-popup.ts's pill click handler).
+export interface GrammarSiblingUsagePoint {
+  id: string;
+  guideword: string;
+  canDoStatement: string;
+  explanation: string | null;
+  translations: GrammarTranslations;
+  examples: string[];
+  matched: boolean;
+}
+
 // A grammar usage point with the construction it belongs to.
 export interface GrammarLexiconEntry {
   id: string;
@@ -91,6 +103,10 @@ export interface GrammarLexiconEntry {
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
   state: EffectiveState;
+  // This point first, then its construction's other usage points — a
+  // construction can have dozens (EGP "adverbs as modifiers" has 31), so the
+  // matched one must stay visible without scrolling the pill row.
+  siblings: GrammarSiblingUsagePoint[];
 }
 
 // The entries of a post, keyed by wordDefinitionId / phraseId /
@@ -252,30 +268,21 @@ function lexiconSectionHtml(
 </section>`;
 }
 
-// The design-check pills for one usage point among its (mocked) siblings —
-// clicking a pill swaps the guideword/explanation/example shown above it, via
-// the plain DOM update in reader-popup.ts's popup click handler. Shared
-// markup for variants 1 and 2; only where the caller places it differs.
-function usagePickerHtml(entry: GrammarLexiconEntry, detail: string): string {
-  const guideword = guidewordLabel(entry.guideword);
-  const points = mockUsagePoints(entry, guideword, detail);
-  const pills = points
-    .map(
-      (point) =>
-        `<button type="button" class="usage-picker__pill" data-usage-pill aria-pressed="${point.matched}" data-guideword="${esc(point.guideword)}" data-detail="${esc(point.detail)}" data-example="${esc(shortExample(point.example))}">${esc(point.guideword)}</button>`,
-    )
+// Pills for a construction's other usage points, matched one first —
+// clicking a pill swaps the guideword/explanation/example shown above the
+// row, via the plain DOM update in reader-popup.ts's popup click handler.
+function usagePickerHtml(entry: GrammarLexiconEntry, lang: PopupLang): string {
+  const pills = entry.siblings
+    .map((point) => {
+      const guideword = guidewordLabel(point.guideword);
+      const translated =
+        lang === 'en' ? null : point.translations[lang]?.explanation;
+      const detail = translated ?? point.explanation ?? point.canDoStatement;
+      const example = shortExample(point.examples[0] ?? '');
+      return `<button type="button" class="usage-picker__pill" data-usage-pill aria-pressed="${point.matched}" data-guideword="${esc(guideword)}" data-detail="${esc(detail)}" data-example="${esc(example)}">${esc(guideword)}</button>`;
+    })
     .join('');
   return `<div class="usage-picker" role="tablist" aria-label="Other cases of ${esc(constructionLabel(entry.construction))}">${pills}</div>`;
-}
-
-// Variant 3: a plain link to the construction's usage-point list, no
-// inline switching.
-function usagePointsLinkHtml(construction: string): string {
-  return `<p class="usage-picker-link"><a href="/grammar/${esc(
-    constructionLabel(construction)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-'),
-  )}">See all cases of ${esc(constructionLabel(construction))} →</a></p>`;
 }
 
 function grammarSectionHtml(
@@ -284,28 +291,26 @@ function grammarSectionHtml(
   lang: PopupLang,
   toggle: string,
   demo: boolean,
-  gupVariant?: GupVariant,
 ): string {
   const guideword = guidewordLabel(entry.guideword);
   const translated =
     lang === 'en' ? null : entry.translations[lang]?.explanation;
-  const detail = translated ?? entry.explanation ?? entry.canDoStatement;
   const explanation = translated
     ? `<p class="lex-popup__def" lang="${esc(lang)}">${esc(translated)}</p>`
     : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;
-  const picker = gupVariant ? usagePickerHtml(entry, detail) : '';
+  // A construction with only this one usage point has no "other cases" to
+  // switch between.
+  const picker = entry.siblings.length > 1 ? usagePickerHtml(entry, lang) : '';
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
   ${topRowHtml('Grammar', toggle)}
   <div class="lex-popup__head">
     <span class="lex-popup__term">${esc(constructionLabel(entry.construction))}</span>
     <span class="badge">${esc(entry.cefrLevel)}</span>
   </div>
-  ${gupVariant === 2 ? picker : ''}
   ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
   ${explanation}
   ${entry.examples[0] ? exampleHtml(entry.examples[0]) : ''}
-  ${gupVariant === 1 ? picker : ''}
-  ${gupVariant === 3 ? usagePointsLinkHtml(entry.construction) : ''}
+  ${picker}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${footerHtml({ kind: 'grammar', id: entry.id }, entry.state, slugId, demo)}
 </section>`;
@@ -321,21 +326,13 @@ export function readerPopupHtml(
   slugId: string,
   lang: PopupLang,
   demo = false,
-  gupVariant?: GupVariant,
 ): string {
   const langs = availableLangs(lexical, grammar);
   const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
   return [
     lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle, demo) : '',
     grammar
-      ? grammarSectionHtml(
-          grammar,
-          slugId,
-          lang,
-          lexical ? '' : toggle,
-          demo,
-          gupVariant,
-        )
+      ? grammarSectionHtml(grammar, slugId, lang, lexical ? '' : toggle, demo)
       : '',
   ]
     .filter(Boolean)

@@ -81,6 +81,7 @@ const grammar: Record<string, GrammarLexiconEntry> = {
     examples: ['We used to live by the sea.'],
     contrast: null,
     state: 'new',
+    siblings: [],
   },
 };
 

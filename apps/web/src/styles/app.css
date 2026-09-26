@@ -1520,8 +1520,8 @@ body {
   font-size: 0.9rem;
   font-style: italic;
 }
-/* Slice 1 of grammar-usage-point-exercises: mock sibling-usage-point pills
-   (variants 1 and 2), gone once slice 4 replaces them with the real thing. */
+/* Sibling usage-point pills below the grammar explanation (Reader popup) —
+   the matched point renders first, kept visible without scrolling the row. */
 .usage-picker {
   display: flex;
   flex-wrap: wrap;
@@ -1543,13 +1543,6 @@ body {
 .usage-picker__pill[aria-pressed="true"] {
   border-color: var(--tone);
   background: var(--tone-wash);
-  color: var(--tone-ink);
-}
-.usage-picker-link {
-  margin-top: 0.6rem;
-  font-weight: 700;
-}
-.usage-picker-link a {
   color: var(--tone-ink);
 }
 .lex-actions {

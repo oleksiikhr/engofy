@@ -1,4 +1,3 @@
-import { readGupVariant } from './grammar-usage-point-design';
 import {
   addToGuestDeck,
   DECK_EVENT,
@@ -147,7 +146,6 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   let current: Target | null = null;
   let anchorY: number | null = null;
   let lang: PopupLang = readPref('popupLang');
-  const gupVariant = readGupVariant(window.location.search);
   // A guest's "Add to deck" is kept in the browser until they sign in.
   const guest = root.closest('[data-guest]') !== null;
   if (guest) {
@@ -226,7 +224,6 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       slugId,
       lang,
       demo,
-      gupVariant,
     );
     if (speechSupported()) {
       popup
