@@ -24,8 +24,11 @@ what is already on screen. Pick one:
 
 Reserve the space (`visibility: hidden`, fixed `min-height`) rather than `display: none` → `block`
 when only the text arrives late. When adding such an element, add an e2e check like the "does not
-shift when scripts run" test in `e2e/reader-guest.spec.ts`: block `**/_astro/**`, seed the storage,
-and compare the position of the content below with scripts on and off.
+shift when scripts run" test in `e2e/reader-guest.spec.ts`: block scripts with `e2e/block-scripts.ts`'s
+`blockScripts()` (filters by resource type, not a `**/_astro/**` URL glob — dev and a production build
+serve scripts from different paths, and a production build's CSS lands in the same `_astro/` directory
+as its JS, so a glob either blocks nothing or blocks styling too), seed the storage, and compare the
+position of the content below with scripts on and off.
 
 ## Skills
 
