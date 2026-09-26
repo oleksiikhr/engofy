@@ -166,5 +166,7 @@ orm-debug: ## Run MikroORM debug to inspect entities and configuration
 	pnpm exec mikro-orm debug
 
 .PHONY: seed
-seed: ## Seed with dictionary data, dev fixtures, and job board data
-	echo "Todo"
+seed: ## Seed grammar and word reference data
+	pnpm cli grammar import-egp
+	pnpm cli grammar import-irregular-verbs
+	pnpm cli words import-frequency

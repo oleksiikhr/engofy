@@ -1520,6 +1520,36 @@ body {
   font-size: 0.9rem;
   font-style: italic;
 }
+/* Slice 1 of grammar-usage-point-exercises: mock sibling-usage-point pills
+   (variants 1 and 2), gone once slice 4 replaces them with the real thing. */
+.usage-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.usage-picker__pill {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-paper-soft);
+  color: var(--color-ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.usage-picker__pill[aria-pressed="true"] {
+  border-color: var(--tone);
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+}
+.usage-picker-link {
+  margin-top: 0.6rem;
+  font-weight: 700;
+}
+.usage-picker-link a {
+  color: var(--tone-ink);
+}
 .lex-actions {
   display: flex;
   flex-wrap: wrap;

@@ -1,3 +1,4 @@
+import { readGupVariant } from './grammar-usage-point-design';
 import {
   addToGuestDeck,
   DECK_EVENT,
@@ -146,6 +147,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   let current: Target | null = null;
   let anchorY: number | null = null;
   let lang: PopupLang = readPref('popupLang');
+  const gupVariant = readGupVariant(window.location.search);
   // A guest's "Add to deck" is kept in the browser until they sign in.
   const guest = root.closest('[data-guest]') !== null;
   if (guest) {
@@ -224,6 +226,7 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       slugId,
       lang,
       demo,
+      gupVariant,
     );
     if (speechSupported()) {
       popup
@@ -353,6 +356,27 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       // The clicked button is gone after the re-render; without this the
       // outside-click handler would see a detached target and close the popup.
       event.stopPropagation();
+      return;
+    }
+    const pillButton = (event.target as Element).closest('[data-usage-pill]');
+    if (pillButton) {
+      const section = pillButton.closest('.lex-popup__section');
+      for (const pill of section?.querySelectorAll('[data-usage-pill]') ?? []) {
+        pill.setAttribute('aria-pressed', String(pill === pillButton));
+      }
+      const sub = section?.querySelector('.lex-popup__sub');
+      if (sub) {
+        sub.textContent = pillButton.getAttribute('data-guideword') ?? '';
+      }
+      const def = section?.querySelector('.lex-popup__def');
+      if (def) {
+        def.textContent = pillButton.getAttribute('data-detail') ?? '';
+      }
+      const exampleText = section?.querySelector('.lex-popup__example span');
+      if (exampleText) {
+        exampleText.textContent = pillButton.getAttribute('data-example') ?? '';
+      }
+      position();
       return;
     }
     const speakButton = (event.target as Element).closest('[data-speak]');
