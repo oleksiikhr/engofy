@@ -14,10 +14,10 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Конфігурований денний ліміт нових карток
+### [x] 1. Конфігурований денний ліміт нових карток
 - Branch: `premium-limit-streak-freeze-01-configurable-card-limit`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/130
 
 Додати на `User` нове nullable поле `dailyNewCardLimitOverride` (integer), за зразком уже наявного
 `dailyGoal`/`PATCH /profile/daily-goal` (`user.entity.ts`, `set-daily-goal` command,
