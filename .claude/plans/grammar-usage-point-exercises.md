@@ -27,10 +27,10 @@ Present Simple), це вже видно в `GrammarMatch`. Цей план **н�
 
 ## Зрізи
 
-### [ ] 1. Дизайн-перевірка попапу: 3 варіанти списку usage points
+### [x] 1. Дизайн-перевірка попапу: 3 варіанти списку usage points
 - Branch: `grammar-usage-point-exercises-01-popup-design-variants`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/127
 
 Реалізувати всі 3 UI-варіанти на статичних mock-даних всередині Reader popup, обрані query-параметром
 для порівняння:
