@@ -82,6 +82,27 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
 | http://localhost:5432               | Postgres                                  |
 | http://localhost:6379               | Redis                                     |
 
+## E2E tests
+
+Playwright (`apps/web/e2e`) runs against a fully isolated stack — its own `backend-e2e`/`web-e2e`
+containers, own logical Postgres DB (`engofy-e2e`), own Redis index (`16`), own ports — layered on the
+shared dev Postgres/Redis via `include` so it never touches the normal dev stack's or any worktree's
+data. Not part of CI (`.github/workflows/app.yaml`: e2e runs locally only) — dev-only tooling.
+
+| Command | Description |
+|----------|--------------|
+| `make e2e-full` | Bring up the stack (dev images, hot reload), reset+seed `engofy-e2e`, run the suite. Day-to-day default. |
+| `make e2e-prod-full` | Same, but built from the real production images (root `Dockerfile`, `apps/web/Dockerfile`) — slower, no hot reload. Run before pushing a `v*` deploy tag, or when the change could only break in a real build (a Dockerfile, production build config). |
+| `make e2e-up` / `make e2e-down` | Start / stop the dev-image stack without running tests |
+| `make e2e-reset` | Drop and reseed `engofy-e2e` with deterministic Playwright fixtures |
+| `make e2e` / `make e2e-ui` / `make e2e-headed` | Run the suite (against whichever stack, dev or prod, is already up) |
+| `make e2e-report` | Open the last Playwright HTML report |
+
+Run `make help` for the full list, including per-container `e2e-prod-exec-%`/`e2e-prod-logs-%`. See
+`compose.e2e.yaml` / `compose.e2e-prod.yaml` for how the isolation is built (shared Postgres/Redis
+container via `include`, separate DB/Redis index/ports) and `compose.yaml`'s `redis` service for the
+reserved-index note.
+
 ## Troubleshooting
 
 - **`pnpm` fails with `This is a placeholder. pnpm's native binary replaces this file during
@@ -111,6 +132,11 @@ The Astro frontend (`apps/web`) and the NLP service (`nlp-service`) each have th
   `MIKRO_ORM_DB_NAME` (and create the DB first — the `engofy` role has `CREATEDB`:
   `docker compose exec postgres createdb -U engofy <name>`) and pick a different `REDIS_DB` index;
   otherwise concurrent migrations/tests race on the same schema/rows.
+- **`make e2e-up`/`e2e-full` fails because `engofy-e2e` doesn't exist** — `docker/postgres-initdb.sql`
+  only runs once, when the `postgres_data` volume is first created. An environment set up before the
+  isolated e2e stack was added needs to pick that database up: either `make down-volumes && make up`
+  (destructive — wipes the shared dev DB) or, to avoid a full reset,
+  `docker compose exec postgres createdb -U engofy engofy-e2e` (the `engofy` role has `CREATEDB`).
 
 ## Project Structure
 
