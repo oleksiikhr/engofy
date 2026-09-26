@@ -1,11 +1,39 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { apiGet } from '../../lib/api';
+import { apiGet, apiPatch } from '../../lib/api';
 import { formatDate } from '../../lib/format-date';
 import { getCurrentUser } from '../../lib/session';
 import type { ProfileSubscription } from '../../lib/types';
 
+const MAX_DAILY_NEW_CARD_LIMIT = 100;
+
 const user = await getCurrentUser(Astro.request);
+
+// Plain form POST + redirect (no client JS), same pattern as the daily-goal
+// form on `/profile`: Premium-only new-card-limit override
+// (`PATCH /profile/daily-new-card-limit`).
+let limitError = false;
+if (user && Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const limit = Number(form.get('dailyNewCardLimit'));
+  try {
+    if (
+      Number.isInteger(limit) &&
+      limit >= 1 &&
+      limit <= MAX_DAILY_NEW_CARD_LIMIT
+    ) {
+      await apiPatch(
+        '/profile/daily-new-card-limit',
+        { dailyNewCardLimit: limit },
+        { request: Astro.request },
+      );
+      return Astro.redirect('/profile/subscription');
+    }
+    limitError = true;
+  } catch {
+    limitError = true;
+  }
+}
 
 const sub = user
   ? await apiGet<ProfileSubscription>('/profile/subscription', {
@@ -78,6 +106,49 @@ const usedPct =
           }
         </section>
 
+        <section class="card plan" data-testid="daily-new-card-limit">
+          <h2>New cards per day</h2>
+          {
+            isPremium ? (
+              <>
+                <p class="plan__detail">
+                  How many new words/phrases the reader and practice queue
+                  introduce each day.
+                </p>
+                <form
+                  method="post"
+                  class="limit-form"
+                  data-testid="daily-new-card-limit-form"
+                >
+                  <input
+                    class="input"
+                    type="number"
+                    name="dailyNewCardLimit"
+                    min="1"
+                    max={MAX_DAILY_NEW_CARD_LIMIT}
+                    step="1"
+                    required
+                    value={sub.dailyNewCardLimit}
+                  />
+                  <button class="btn" type="submit">
+                    Save
+                  </button>
+                </form>
+                {limitError && (
+                  <p class="form-error" role="alert">
+                    Enter a whole number from 1 to {MAX_DAILY_NEW_CARD_LIMIT}.
+                  </p>
+                )}
+              </>
+            ) : (
+              <p class="plan__detail">
+                <span class="num">{sub.dailyNewCardLimit}</span> new cards a
+                day — upgrade to Premium to raise this.
+              </p>
+            )
+          }
+        </section>
+
         <p>
           <a class="btn" href="/pricing">
             {isPremium ? 'View plans' : 'Upgrade to Premium'}
@@ -113,5 +184,19 @@ const usedPct =
   }
   .plan__bar {
     margin-top: 0.75rem;
+  }
+  .limit-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .limit-form input {
+    width: 5.5rem;
+  }
+  .form-error {
+    margin: 0.75rem 0 0;
+    color: var(--color-danger);
+    font-size: 0.9rem;
+    font-weight: 700;
   }
 </style>
