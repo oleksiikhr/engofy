@@ -1,9 +1,11 @@
 import {
-  type AnalyzableToken,
+  type AnalyzableSentenceToken,
+  detectVerbGroups,
   type IrregularVerbForms,
   type TokenTense,
   tokenIrregularForms,
   tokenTense,
+  type VerbGroupTense,
 } from './analyze-token.js';
 import type { IrregularVerbEntry } from './irregular-verb.js';
 import {
@@ -21,6 +23,7 @@ export interface LocatedToken {
   pos: string;
   tense: TokenTense | null;
   irregular: IrregularVerbForms | null;
+  verbGroup: VerbGroupTense | null;
 }
 
 // Punctuation and whitespace carry nothing to colour or tag.
@@ -31,7 +34,7 @@ const SKIPPED_POS = new Set(['PUNCT', 'SPACE']);
 export function locateSentenceTokens(input: {
   block: Block;
   sentence: LocatedSentence;
-  tokens: (AnalyzableToken & { charStart: number; charEnd: number })[];
+  tokens: (AnalyzableSentenceToken & { charStart: number; charEnd: number })[];
   irregularByLemma: Map<string, IrregularVerbEntry>;
 }): LocatedToken[] {
   const { block, sentence, tokens, irregularByLemma } = input;
@@ -39,6 +42,7 @@ export function locateSentenceTokens(input: {
     return [];
   }
   const itemIndex = block.type === 'list' ? sentence.unitIndex : null;
+  const verbGroupsByPosition = detectVerbGroups(tokens);
   return tokens
     .filter((token) => !SKIPPED_POS.has(token.pos))
     .map((token) => ({
@@ -48,5 +52,6 @@ export function locateSentenceTokens(input: {
       pos: token.pos,
       tense: tokenTense(token),
       irregular: tokenIrregularForms(token, irregularByLemma),
+      verbGroup: verbGroupsByPosition.get(token.position) ?? null,
     }));
 }
