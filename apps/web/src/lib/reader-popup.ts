@@ -17,10 +17,11 @@ import {
   readerPopupHtml,
   SPEAK_ICON,
   TARGET_FIELD,
+  type TokenFallback,
 } from './reader-lexicon';
 import { speakSentenceAt } from './reader-listen';
 import { speak, speechSupported } from './speech';
-import type { EffectiveState } from './types';
+import type { EffectiveState, TokenTense } from './types';
 
 // Client controller for the reader's anchored popup. One popup element,
 // absolutely positioned in document coordinates next to the clicked span
@@ -33,6 +34,9 @@ import type { EffectiveState } from './types';
 const LEXICAL_SELECTOR = '[data-word-definition-id],[data-phrase-id]';
 const GRAMMAR_SELECTOR = '[data-grammar-usage-point-id]';
 const LABEL_SELECTOR = `${LEXICAL_SELECTOR},${GRAMMAR_SELECTOR}`;
+// A content token with no word/phrase span (render-tokens.ts only sets
+// `data-pos-label` when it also rendered a role fallback for this token).
+const TOKEN_SELECTOR = '[data-tok][data-pos-label]';
 const LABEL_ATTR: Record<string, string> = {
   word: 'data-word-definition-id',
   phrase: 'data-phrase-id',
@@ -49,6 +53,9 @@ interface Target {
   anchor: Element;
   lexical: LexiconEntry | null;
   grammar: GrammarLexiconEntry | null;
+  // Set only when neither lexical nor grammar matched — a bare token's own
+  // generic POS + role card.
+  fallback: TokenFallback | null;
 }
 
 function lexicalEntry(span: Element | null, data: LexiconData) {
@@ -104,6 +111,22 @@ function formTarget(form: HTMLFormElement): LexiconTarget | null {
   return null;
 }
 
+function isTense(value: string | null): value is TokenTense {
+  return value === 'past' || value === 'present' || value === 'future';
+}
+
+// Read straight off the span's own attributes (render-tokens.ts) — a bare
+// token has no id to look up in `LexiconData`.
+function tokenFallback(span: Element): TokenFallback {
+  const tense = span.getAttribute('data-tense');
+  return {
+    term: span.textContent ?? '',
+    posLabel: span.getAttribute('data-pos-label') ?? '',
+    roleHint: span.getAttribute('data-role-hint') ?? '',
+    tense: isTense(tense) ? tense : null,
+  };
+}
+
 function targetFor(el: Element, data: LexiconData): Target | null {
   if (el.closest('a')) {
     return null;
@@ -113,8 +136,19 @@ function targetFor(el: Element, data: LexiconData): Target | null {
   const lexical = lexicalEntry(lexicalSpan, data);
   const grammarId = grammarSpan?.getAttribute('data-grammar-usage-point-id');
   const grammar = grammarId ? (data.grammar[grammarId] ?? null) : null;
-  const anchor = lexical ? lexicalSpan : grammar ? grammarSpan : null;
-  return anchor ? { anchor, lexical, grammar } : null;
+  if (lexical || grammar) {
+    const anchor = lexical ? lexicalSpan : grammarSpan;
+    return anchor ? { anchor, lexical, grammar, fallback: null } : null;
+  }
+  const tokenSpan = el.closest(TOKEN_SELECTOR);
+  return tokenSpan
+    ? {
+        anchor: tokenSpan,
+        lexical: null,
+        grammar: null,
+        fallback: tokenFallback(tokenSpan),
+      }
+    : null;
 }
 
 // A span wrapped over several lines has one client rect per line; anchor to
@@ -216,11 +250,19 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
   }
 
   function render(target: Target): void {
+    // A bare token's fallback card gets its own restrained tone — neither the
+    // word amber nor the grammar blue, so it doesn't read as a full
+    // dictionary/grammar explanation.
     popup.classList.toggle('tone-amber', target.lexical !== null);
-    popup.classList.toggle('tone-blue', target.lexical === null);
+    popup.classList.toggle(
+      'tone-blue',
+      target.lexical === null && target.fallback === null,
+    );
+    popup.classList.toggle('tone-slate', target.fallback !== null);
     popup.innerHTML = readerPopupHtml(
       target.lexical,
       target.grammar,
+      target.fallback,
       slugId,
       lang,
       demo,
