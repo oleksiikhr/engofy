@@ -97,9 +97,11 @@ Once confirmed:
 - Branch/commit naming, and creating the branch itself, follow the `git-workflow` skill exactly
   (hotfix or ad-hoc) — don't duplicate those rules here, just invoke that skill's Step 1.
 - If a worktree was requested: `git worktree add -b <branch> <path> <base>` where `<path>` is a
-  sibling directory (`../<repo-dirname>-<slug>`). This isolates the git checkout only — the repo's
-  local dev stack (`make up`/`docker compose`) is a single shared instance, not per-worktree. Don't
-  invent port-offset/env-isolation machinery unless it's actually already in `compose.yaml`.
+  sibling directory (`../<repo-dirname>-<slug>`). The repo's local dev stack (`make up`/`docker
+  compose`) is a single shared instance, not per-worktree — but the backend/`apps/web` ports and the
+  dev/test Postgres DB name and Redis DB index can be offset per worktree: count existing worktrees via
+  `git worktree list --porcelain` to pick a free `OFFSET` (0-7), then run `make ports OFFSET=<N>`
+  inside the new worktree before `pnpm i`/`make sync`.
 - Implement the task fully — code + tests — following whichever area(s) it touches: read the root
   `CLAUDE.md` and the `engofy` skill (for `src/`/`test/` conventions) before writing code rather than
   freehand.
@@ -218,5 +220,6 @@ This skill does **not**:
 - Delete branches or worktrees — that's the `cleanup` skill's job, after the whole stack merges. (A
   completed plan's file *is* deleted, but by `slice` on the last slice, as part of that slice's own
   PR — not by this skill, and not as a separate cleanup pass.)
-- Invent Docker port-offset or per-worktree environment isolation — a worktree here isolates the git
-  checkout only, unless the repo's own tooling says otherwise.
+- Invent port-offset or per-worktree environment isolation beyond `make ports OFFSET=<N>` — that's the
+  one mechanism this repo provides for running multiple worktrees concurrently; use it, don't build an
+  alternative.
