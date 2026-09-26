@@ -8,8 +8,11 @@
 // and `call()` prepends `/api`.
 
 // Nest web server origin. Default matches the repo's dev PORT (8080); set
-// API_ORIGIN in each environment.
-const API_ORIGIN = import.meta.env.API_ORIGIN ?? 'http://localhost:8080';
+// API_ORIGIN in each environment. `process.env`, not `import.meta.env` — Vite
+// statically inlines `import.meta.env.*` into the built SSR bundle at build
+// time, so a value only set on the running container (as ours is) would
+// never take effect; `process.env` stays a live lookup at request time.
+const API_ORIGIN = process.env.API_ORIGIN ?? 'http://localhost:8080';
 
 export class ApiError extends Error {
   constructor(
