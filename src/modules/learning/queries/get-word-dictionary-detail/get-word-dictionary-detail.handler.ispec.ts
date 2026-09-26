@@ -99,6 +99,7 @@ describe('GetWordDictionaryDetailHandler', () => {
       pos: PartOfSpeech.Noun,
       definition: 'a financial institution',
       cefrLevel: CefrLevel.A2,
+      translations: { uk: { translation: 'банк' } },
     });
     factories(em).wordDefinition.makeOne({
       wordId: word.id,
@@ -134,9 +135,14 @@ describe('GetWordDictionaryDetailHandler', () => {
       state: EffectiveState.Learning,
       cardId: card.id,
       definition: 'a financial institution',
+      translations: { uk: { translation: 'банк' } },
     });
     // No card, no disposition, C1 > the learner's B1 default -> New.
-    expect(verb).toMatchObject({ state: EffectiveState.New, cardId: null });
+    expect(verb).toMatchObject({
+      state: EffectiveState.New,
+      cardId: null,
+      translations: {},
+    });
   });
 
   it('folds the CEFR default into an unsaved sense at or below the learner level', async () => {
