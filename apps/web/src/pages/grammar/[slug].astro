@@ -1,10 +1,13 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import GrammarShell from '../../components/grammar/GrammarShell.astro';
-import { apiGetOrNull } from '../../lib/api';
+import { apiGet, apiGetOrNull } from '../../lib/api';
 import { renderMarkdown } from '../../lib/markdown';
 import { getCurrentUser } from '../../lib/session';
-import type { GrammarConstructionDetail } from '../../lib/types';
+import type {
+  GrammarConstructionDetail,
+  UsagePointExercise,
+} from '../../lib/types';
 
 // Handcrafted construction pages live in `src/grammar-pages/<slug>.astro` and
 // each render their own body inside `GrammarShell`. A slug without one falls
@@ -26,6 +29,21 @@ const con = slug
 if (!con) {
   return new Response('Not found', { status: 404 });
 }
+
+// Each usage point's reusable exercise pool (grammar-usage-point-exercises
+// plan, slice 5) — fetched in parallel and merged in here so `GrammarShell` /
+// `GrammarUsagePoints` need no signature change. Best-effort: the pool is
+// supplementary (rollout is gradual, one usage point at a time), so a failed
+// fetch shows the point with no exercises rather than 500ing the page.
+con.usagePoints = await Promise.all(
+  con.usagePoints.map(async (up) => {
+    const exercises = await apiGet<{ items: UsagePointExercise[] }>(
+      `/content/grammar/${encodeURIComponent(con.slug)}/usage-points/${encodeURIComponent(up.grammarUsagePointId)}/exercises`,
+      { request: Astro.request },
+    ).catch(() => ({ items: [] }));
+    return { ...up, exercises: exercises.items };
+  }),
+);
 
 const Page = handcraftedPages[`../../grammar-pages/${con.slug}.astro`]?.default;
 const cheatSheetHtml =

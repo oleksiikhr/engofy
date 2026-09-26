@@ -44,6 +44,10 @@ export interface PhraseAnnotationView {
 
 export interface GrammarUsagePointView {
   grammarUsagePointId: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. The Reader popup's "Practice" link needs it to build
+  // `/grammar/{slug}#usage-point-{egpIndex}` — null hides the button.
+  egpIndex: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;

@@ -373,6 +373,16 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       if (exampleText) {
         exampleText.textContent = pillButton.getAttribute('data-example') ?? '';
       }
+      const practiceLink = section?.querySelector<HTMLAnchorElement>(
+        '[data-practice-link]',
+      );
+      if (practiceLink) {
+        const href = pillButton.getAttribute('data-practice-href') ?? '';
+        practiceLink.hidden = !href;
+        if (href) {
+          practiceLink.href = href;
+        }
+      }
       position();
       return;
     }

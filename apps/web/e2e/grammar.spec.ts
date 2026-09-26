@@ -246,6 +246,30 @@ test.describe('grammar construction detail', () => {
     await expect(bare.getByTestId('usage-examples')).toHaveCount(0);
   });
 
+  test('anchors a usage point at its egpIndex and lets the visitor answer its exercise pool', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+
+    // The fixture's "Earlier past" point has egpIndex 90012 — the Reader
+    // popup's "Practice" link targets this anchor.
+    await expect(page.locator('#usage-point-90012')).toBeVisible();
+
+    const enriched = construction.usageItem(0);
+    const exercise = enriched.locator('.upe__item').first();
+    await expect(exercise).toContainText('By the time he arrived');
+    await exercise.locator('[data-upe-input]').fill('had drawn');
+    await exercise.locator('[data-upe-check]').click();
+    await expect(exercise.locator('[data-upe-feedback]')).toContainText(
+      'Correct',
+    );
+
+    // The "Reported" point has no seeded pool yet — no exercises section.
+    const bare = construction.usageItem(1);
+    await expect(bare.locator('.upe')).toHaveCount(0);
+  });
+
   test('renders a handcrafted page with its compare links', async ({
     page,
   }) => {

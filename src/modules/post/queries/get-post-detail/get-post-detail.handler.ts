@@ -509,6 +509,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         cefrLevel: constructionPoints[0]?.cefrLevel ?? null,
         usagePoints: constructionPoints.map((point) => ({
           grammarUsagePointId: point.id,
+          egpIndex: point.egpIndex ?? null,
           cefrLevel: point.cefrLevel,
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,

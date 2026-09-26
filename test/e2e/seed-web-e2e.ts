@@ -32,6 +32,7 @@ import { GrammarCategory } from '../../src/modules/post/entities/grammar-categor
 import { GrammarConstruction } from '../../src/modules/post/entities/grammar-construction.entity.js';
 import { GrammarMatch } from '../../src/modules/post/entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../src/modules/post/entities/grammar-usage-point.entity.js';
+import { GrammarUsagePointExercise } from '../../src/modules/post/entities/grammar-usage-point-exercise.entity.js';
 import { Phrase } from '../../src/modules/post/entities/phrase.entity.js';
 import { Post } from '../../src/modules/post/entities/post.entity.js';
 import { PostPart } from '../../src/modules/post/entities/post-part.entity.js';
@@ -115,6 +116,7 @@ const ENTITIES = [
   GrammarCategory,
   GrammarConstruction,
   GrammarUsagePoint,
+  GrammarUsagePointExercise,
   GrammarMatch,
 ];
 
@@ -304,6 +306,12 @@ async function seed(orm: MikroORM): Promise<void> {
   });
   const pastPerfectUp = factories(em).grammarUsagePoint.makeOne({
     constructionId: pastPerfect.id,
+    // Fixed (not random) so e2e specs can assert the "Practice" link/anchor
+    // it drives: `/grammar/e2e-past-perfect#usage-point-90012`. Well outside
+    // the real EGP corpus's 1..574 range (`assets/egp.json`) so this never
+    // collides with `pnpm cli grammar import-egp` data on a dev DB that has
+    // it loaded.
+    egpIndex: 90012,
     cefrLevel: CefrLevel.A2,
     guideword: 'USE: EARLIER PAST',
     canDoStatement:
@@ -328,6 +336,18 @@ async function seed(orm: MikroORM): Promise<void> {
     guideword: 'USE: REPORTED',
     canDoStatement: 'Can use the past perfect in reported speech.',
     exampleText: 'He said he had finished the chart.',
+  });
+  // Practice pool for `pastPerfectUp` (grammar-usage-point-exercises plan,
+  // slice 5's exercises section + the reader popup's "Practice" link).
+  // `pastPerfectReported` deliberately has no exercises and no egpIndex,
+  // covering the "not seeded yet" / "no anchor" cases.
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.FillBlank,
+    payload: {
+      prompt: 'By the time he arrived, she ___ the map.',
+      answer: 'had drawn',
+    },
   });
   const presentSimple = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
