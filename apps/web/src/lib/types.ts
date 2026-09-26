@@ -224,6 +224,7 @@ export interface PostDetail {
   shortId: string;
   slug: string | null;
   title: string | null;
+  metaDescription: string | null;
   cefrLevel: CefrLevel | null;
   publishedAt: string;
   sourceLink: string | null;
