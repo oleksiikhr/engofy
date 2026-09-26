@@ -430,6 +430,7 @@ export interface ProfileSubscription {
   currentPeriodEnd: string | null;
   cardsUsed: number;
   cardLimit: number | null;
+  dailyNewCardLimit: number;
 }
 
 // --- daily session (home) ---

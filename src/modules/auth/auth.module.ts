@@ -14,6 +14,7 @@ import { RequestLoginCodeHandler } from './commands/request-login-code/request-l
 import { ResolveSessionHandler } from './commands/resolve-session/resolve-session.handler.js';
 import { SetCefrLevelHandler } from './commands/set-cefr-level/set-cefr-level.handler.js';
 import { SetDailyGoalHandler } from './commands/set-daily-goal/set-daily-goal.handler.js';
+import { SetDailyNewCardLimitHandler } from './commands/set-daily-new-card-limit/set-daily-new-card-limit.handler.js';
 import { VerifyLoginCodeHandler } from './commands/verify-login-code/verify-login-code.handler.js';
 import AuthConfig from './config/auth.config.js';
 import { GetAccountDeletionHandler } from './queries/get-account-deletion/get-account-deletion.handler.js';
@@ -38,6 +39,7 @@ const commandHandlers = [
   ResolveSessionHandler,
   SetCefrLevelHandler,
   SetDailyGoalHandler,
+  SetDailyNewCardLimitHandler,
   VerifyLoginCodeHandler,
 ];
 

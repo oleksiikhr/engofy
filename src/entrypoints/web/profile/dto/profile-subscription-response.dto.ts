@@ -15,4 +15,8 @@ export class ProfileSubscriptionResponseDto {
 
   // Free-tier card cap; null on premium (unlimited).
   readonly cardLimit!: number | null;
+
+  // Today's effective New-card limit: `DAILY_NEW_CARD_LIMIT` unless `active`
+  // Premium set an override (`PATCH /profile/daily-new-card-limit`).
+  readonly dailyNewCardLimit!: number;
 }

@@ -6,6 +6,11 @@ import { LearningCardState } from '../enums/learning-card-state.enum.js';
 // зріз 2 reuses this same constant instead of defining its own).
 export const DAILY_NEW_CARD_LIMIT = 12;
 
+// Upper bound a Premium user may override `DAILY_NEW_CARD_LIMIT` with
+// (`PATCH /profile/daily-new-card-limit`) — keeps a single misconfigured
+// override from blowing up the practice queue or the New-card budget query.
+export const MAX_DAILY_NEW_CARD_LIMIT_OVERRIDE = 100;
+
 export interface NewCardCapInput {
   state: LearningCardState;
 }
