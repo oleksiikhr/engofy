@@ -5381,6 +5381,23 @@
           "enumItems": [],
           "mappedType": "integer"
         },
+        "daily_new_card_limit_override": {
+          "name": "daily_new_card_limit_override",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "integer"
+        },
         "email": {
           "name": "email",
           "type": "text",

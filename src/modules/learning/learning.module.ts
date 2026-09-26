@@ -7,6 +7,7 @@ import { ReviewCardHandler } from './commands/review-card/review-card.handler.js
 import { SetDispositionHandler } from './commands/set-disposition/set-disposition.handler.js';
 import { LearningService } from './learning.service.js';
 import { GetCardUsageHandler } from './queries/get-card-usage/get-card-usage.handler.js';
+import { GetDailyNewCardLimitHandler } from './queries/get-daily-new-card-limit/get-daily-new-card-limit.handler.js';
 import { GetDictionaryHandler } from './queries/get-dictionary/get-dictionary.handler.js';
 import { GetDueCardCountHandler } from './queries/get-due-card-count/get-due-card-count.handler.js';
 import { GetDuePostCardsHandler } from './queries/get-due-post-cards/get-due-post-cards.handler.js';
@@ -40,6 +41,7 @@ import { SkillProgressService } from './services/skill-progress.service.js';
     GetProfileHandler,
     GetDictionaryHandler,
     GetCardUsageHandler,
+    GetDailyNewCardLimitHandler,
     GetDueCardCountHandler,
     GetDuePostCardsHandler,
     GetReviewsTodayHandler,

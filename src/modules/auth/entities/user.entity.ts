@@ -35,6 +35,13 @@ export class User {
   @Property({ type: 'integer' })
   dailyGoal: Opt<number> = 10;
 
+  // Premium-only override of `DAILY_NEW_CARD_LIMIT` (`PATCH
+  // /profile/daily-new-card-limit`). Null means "use the default"; ignored
+  // entirely for a non-Premium user even if a value is still stored here
+  // (e.g. after a subscription lapses) — see `NewCardBudgetService.remaining`.
+  @Property({ type: 'integer', nullable: true })
+  dailyNewCardLimitOverride?: number | null;
+
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();
 
