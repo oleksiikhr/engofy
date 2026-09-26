@@ -43,10 +43,10 @@ only, not in CI") — це суто dev-тулінг, зміни цього пл
 
 ## Зрізи
 
-### [ ] 1. Ізольована Postgres/Redis-конфігурація + compose.e2e.yaml (backend-e2e)
+### [x] 1. Ізольована Postgres/Redis-конфігурація + compose.e2e.yaml (backend-e2e)
 - Branch: `e2e-isolated-stack-01-backend-container`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/136
 
 Додає логічну БД `engofy-e2e` у `docker/postgres-initdb.sql`; піднімає `redis`-сервіс у `compose.yaml`
 до `--databases 32` (чи достатнього запасу) і документує зарезервований e2e-індекс. Новий
