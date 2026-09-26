@@ -1329,6 +1329,166 @@
       "comment": null
     },
     {
+      "name": "grammar_usage_point_exercises",
+      "schema": "public",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "json"
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "fill_blank",
+            "find_error",
+            "multiple_choice",
+            "grammar_contrastive",
+            "reorder"
+          ],
+          "mappedType": "enum"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "usage_point_id": {
+          "name": "usage_point_id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "grammar_usage_point_exercises_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "usage_point_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "grammar_usage_point_exercises_usage_point_id_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [
+        {
+          "name": "grammar_usage_point_exercises_type_check",
+          "expression": "\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'grammar_contrastive', 'reorder')",
+          "definition": "check (\"type\" in ('fill_blank', 'find_error', 'multiple_choice', 'grammar_contrastive', 'reorder'))",
+          "columnName": "type"
+        }
+      ],
+      "triggers": [],
+      "foreignKeys": {
+        "grammar_usage_point_exercises_usage_point_id_foreign": {
+          "columnNames": [
+            "usage_point_id"
+          ],
+          "constraintName": "grammar_usage_point_exercises_usage_point_id_foreign",
+          "localTableName": "public.grammar_usage_point_exercises",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.grammar_usage_points",
+          "deleteRule": "cascade"
+        }
+      },
+      "comment": null
+    },
+    {
       "name": "grammar_usage_points",
       "schema": "public",
       "columns": {
