@@ -17,6 +17,7 @@ import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { toOffsetPage } from '../../../../core/http/dto/offset-page.js';
 import { AuthService } from '../../../../modules/auth/auth.service.js';
+import { BillingService } from '../../../../modules/billing/billing.service.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { PracticeQueueItem } from '../../../../modules/learning/queries/get-practice-queue/practice-queue-item.js';
 import type { CardView } from '../../../../modules/learning/types/card-view.type.js';
@@ -34,6 +35,8 @@ import {
 } from '../dto/practice-queue-response.dto.js';
 import { ReviewCardDto } from '../dto/review-card.dto.js';
 import { SetDispositionDto } from '../dto/set-disposition.dto.js';
+import { StreakFreezeResponseDto } from '../dto/streak-freeze-response.dto.js';
+import { StreakFreezeStatusResponseDto } from '../dto/streak-freeze-status-response.dto.js';
 import { StreakResponseDto } from '../dto/streak-response.dto.js';
 
 function iso(value: DateTime): string {
@@ -87,6 +90,7 @@ export class LearningController {
   constructor(
     private readonly learning: LearningService,
     private readonly auth: AuthService,
+    private readonly billing: BillingService,
   ) {}
 
   // Add a word / phrase / grammar point to the SRS queue. Idempotent — a
@@ -180,6 +184,31 @@ export class LearningController {
       this.auth.getUser(actor.id),
     ]);
     return { streak, dailyGoal: user.dailyGoal, reviewedToday };
+  }
+
+  // This month's remaining streak-freeze balance and whether one can be
+  // applied right now — backs `/profile`'s Premium-only streak-freeze card.
+  // 0/false for Free/guest (`StreakFreezeService.status`), so no gate here.
+  @Get('streak/freezes')
+  async streakFreezeStatus(
+    @CurrentUser() actor: UserActor,
+  ): Promise<StreakFreezeStatusResponseDto> {
+    const { balance, applicable } = await this.learning.getStreakFreezeStatus(
+      actor.id,
+    );
+    return { balance, applicable };
+  }
+
+  // Spends one of the fixed monthly streak freezes to cover yesterday's gap.
+  // Premium-only, same gate as `PATCH /profile/daily-new-card-limit`.
+  @Post('streak/freeze')
+  @HttpCode(HttpStatus.OK)
+  async applyStreakFreeze(
+    @CurrentUser() actor: UserActor,
+  ): Promise<StreakFreezeResponseDto> {
+    await this.billing.assertPremium(actor.id);
+    const { streak, balance } = await this.learning.applyStreakFreeze(actor.id);
+    return { streak, balance };
   }
 
   // Grade a card and reschedule it.

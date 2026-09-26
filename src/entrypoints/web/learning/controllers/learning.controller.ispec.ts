@@ -10,8 +10,11 @@ import {
   generateToken,
   hashSecret,
 } from '../../../../modules/auth/crypto/token.helper.js';
+import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
+import { SubscriptionStatus } from '../../../../modules/billing/enums/subscription-status.enum.js';
 import { DAILY_NEW_CARD_LIMIT } from '../../../../modules/learning/domain/daily-new-card-limit.js';
 import { LearningCardState } from '../../../../modules/learning/enums/learning-card-state.enum.js';
+import { ReviewRating } from '../../../../modules/learning/enums/review-rating.enum.js';
 import { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
 import { PostSourceFormat } from '../../../../modules/post/enums/post-source-format.enum.js';
 import { PostStatus } from '../../../../modules/post/enums/post-status.enum.js';
@@ -40,6 +43,22 @@ describe('LearningController', () => {
     });
     await em.flush();
     return `${cookieName()}=${token}`;
+  }
+
+  async function loginAs(
+    em: EntityManager,
+  ): Promise<{ cookie: string; userId: string }> {
+    const user = factories(em).user.makeOne({
+      email: `u-${uuidv7()}@example.com`,
+    });
+    const token = generateToken();
+    factories(em).authSession.makeOne({
+      userId: user.id,
+      tokenHash: hashSecret(token),
+      expiresAt: DateTime.now().plus({ days: 1 }),
+    });
+    await em.flush();
+    return { cookie: `${cookieName()}=${token}`, userId: user.id };
   }
 
   it('rejects an unauthenticated request', async () => {
@@ -398,5 +417,143 @@ describe('LearningController', () => {
     await suite
       .request('get', '/learning/posts/some-post-Zz9Zz9Zz/due-cards')
       .expect(HttpStatus.UNAUTHORIZED);
+  });
+
+  describe('GET /learning/streak/freezes', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('get', '/learning/streak/freezes')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('is 0/not applicable for a free user', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const res = await suite
+        .request('get', '/learning/streak/freezes')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body).toEqual({ balance: 0, applicable: false });
+    });
+
+    it('is applicable for a premium user with a one-day gap', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      const em = suite.orm.em;
+      factories(em).subscription.makeOne({
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+      });
+      const definition = factories(em).wordDefinition.makeOne({
+        wordId: factories(em).word.makeOne({ lemma: `w-${uuidv7()}` }).id,
+        pos: PartOfSpeech.Noun,
+      });
+      await em.flush();
+      const card = factories(em).learningCard.makeOne({
+        userId,
+        wordDefinitionId: definition.id,
+        due: DateTime.now(),
+        stability: 1,
+        difficulty: 5,
+        elapsedDays: 0,
+        scheduledDays: 0,
+        reps: 1,
+        lapses: 0,
+        state: LearningCardState.Learning,
+      });
+      factories(em).reviewLog.makeOne({
+        cardId: card.id,
+        rating: ReviewRating.Good,
+        reviewedAt: DateTime.now().minus({ days: 2 }),
+        elapsedDays: 0,
+        scheduledDays: 1,
+      });
+      await em.flush();
+
+      const res = await suite
+        .request('get', '/learning/streak/freezes')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body).toEqual({ balance: 2, applicable: true });
+    });
+  });
+
+  describe('POST /learning/streak/freeze', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('post', '/learning/streak/freeze')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('rejects a free user with 403', async () => {
+      const cookie = await login(suite.orm.em);
+
+      await suite
+        .request('post', '/learning/streak/freeze')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('rejects a premium user with no coverable gap', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      factories(suite.orm.em).subscription.makeOne({
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+      });
+      await suite.orm.em.flush();
+
+      await suite
+        .request('post', '/learning/streak/freeze')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('spends a freeze and returns the extended streak and remaining balance', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      const em = suite.orm.em;
+      factories(em).subscription.makeOne({
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+      });
+      const definition = factories(em).wordDefinition.makeOne({
+        wordId: factories(em).word.makeOne({ lemma: `w-${uuidv7()}` }).id,
+        pos: PartOfSpeech.Noun,
+      });
+      await em.flush();
+      const card = factories(em).learningCard.makeOne({
+        userId,
+        wordDefinitionId: definition.id,
+        due: DateTime.now(),
+        stability: 1,
+        difficulty: 5,
+        elapsedDays: 0,
+        scheduledDays: 0,
+        reps: 1,
+        lapses: 0,
+        state: LearningCardState.Learning,
+      });
+      factories(em).reviewLog.makeOne({
+        cardId: card.id,
+        rating: ReviewRating.Good,
+        reviewedAt: DateTime.now().minus({ days: 2 }),
+        elapsedDays: 0,
+        scheduledDays: 1,
+      });
+      await em.flush();
+
+      const res = await suite
+        .request('post', '/learning/streak/freeze')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(res.body).toEqual({ streak: 2, balance: 1 });
+    });
   });
 });
