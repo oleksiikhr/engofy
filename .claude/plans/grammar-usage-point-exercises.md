@@ -46,10 +46,10 @@ Present Simple), це вже видно в `GrammarMatch`. Цей план **н�
 пігулок має `max-height` + `overflow-y: auto` (вертикальний скрол), а matched usage point завжди
 рендериться першим у списку, щоб лишатись видимим без скролу незалежно від кількості siblings.
 
-### [ ] 2. Модель і seed-імпортер для банку вправ на usage point
+### [x] 2. Модель і seed-імпортер для банку вправ на usage point
 - Branch: `grammar-usage-point-exercises-02-exercise-bank-seed-import`
-- Base: `grammar-usage-point-exercises-01-popup-design-variants`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/128
 
 Нова сутність для пулу вправ, привʼязаних до `grammar_usage_point` (не до `post`, на відміну від
 існуючого `Exercise`). Команда за зразком `grammar-import-egp.command.ts`, яка читає seed JSON
