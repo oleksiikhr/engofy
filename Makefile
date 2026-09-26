@@ -195,8 +195,6 @@ ports: ## Isolate this worktree's backend port/DB/Redis DB for offset N, e.g. `m
 	set_var REDIS_DB $$REDIS_DB_DEV .env.development.local; \
 	set_var MIKRO_ORM_DB_NAME $$DB_TEST .env.test.local; \
 	set_var REDIS_DB $$REDIS_DB_TEST .env.test.local; \
-	$(COMPOSE) exec -T postgres createdb -U engofy "$$DB_DEV" 2>/dev/null || true; \
-	$(COMPOSE) exec -T postgres createdb -U engofy "$$DB_TEST" 2>/dev/null || true; \
 	echo "----------------------------------------"; \
 	echo " Worktree offset:  $$N"; \
 	echo " Backend port:     $$PORT"; \

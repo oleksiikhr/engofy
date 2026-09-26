@@ -44,10 +44,17 @@ worktree цього репозиторію — не по одному стеку
 - Валідує, що `OFFSET` — ціле число ≥0 і ≤7 (ліміт Redis DB, див. вище); повідомляє про помилку інакше.
 - Пише в `.env.development.local`: `PORT=8080+N`, `MIKRO_ORM_DB_NAME` та `REDIS_DB` за схемою вище.
 - Пише в `.env.test.local`: `MIKRO_ORM_DB_NAME` та `REDIS_DB` за тестовою схемою вище.
-- Автоматично створює обидві Postgres-бази (`docker compose exec postgres createdb -U engofy <name>`),
-  ідемпотентно (не падає, якщо БД вже існує).
+- Значення точково патчаться (grep+sed, з fallback на append) — інші рядки в цих файлах не чіпаються.
 - В кінці друкує підсумок (offset, порт бекенда, назви БД, індекси Redis) — за зразком фінального
   `echo` у `shift`'s `make ports`.
+
+Всі 16 можливих Postgres-баз (offset 0-7 × dev/test) заздалегідь створюються через
+`docker/postgres-initdb.sql`, змонтований у `compose.yaml` як
+`/docker-entrypoint-initdb.d/postgres-initdb.sql` (та ж механіка, що й `shift`'s
+`create_test_databases.sql`) — `make ports` сам по собі більше не звертається до Postgres. Обмеження
+офіційного postgres-образу: цей скрипт виконується лише один раз, при першій ініціалізації порожнього
+`postgres_data`-тому; вже наявний том підхоплює зміну лише через `make down-volumes && make up`
+(деструктивно).
 
 ### [ ] 2. Офсет порту apps/web + документація порту nlp-service
 - Branch: `worktree-db-isolation-02-web-nlp-ports`

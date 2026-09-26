@@ -11,6 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/18/docker
+      - ./docker/postgres-initdb.sql:/docker-entrypoint-initdb.d/postgres-initdb.sql:ro
     environment:
       POSTGRES_USER: engofy
       POSTGRES_PASSWORD: engofy
