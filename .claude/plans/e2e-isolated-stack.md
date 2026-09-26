@@ -56,10 +56,10 @@ bind mount (`pnpm i && nest start --watch`, як `compose.e2e.yaml`'s `backend-e
 `e2e-down`. Перевіряється самостійно (без web/Playwright ще): `make e2e-up` + `curl
 localhost:8180/_healthz`.
 
-### [ ] 2. web-e2e контейнер + переорієнтація Playwright на ізольований стек
+### [x] 2. web-e2e контейнер + переорієнтація Playwright на ізольований стек
 - Branch: `e2e-isolated-stack-02-web-playwright`
-- Base: `e2e-isolated-stack-01-backend-container`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/137
 
 Додає `web-e2e` у `compose.e2e.yaml` (Astro dev, hot reload, `API_ORIGIN` → `backend-e2e`, власний
 порт напр. `3100`, health-check рішення зі вступу плану). Оновлює `apps/web/e2e/global-setup.ts` і

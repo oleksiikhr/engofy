@@ -13,3 +13,8 @@ draft/results/*
 
 # Production env (real values); only .env.production.example is committed
 .env.production
+
+# `make e2e-reset` runs `mikro-orm migration:fresh` against `engofy-e2e` —
+# MikroORM names the snapshot after the dbName, so this is a local-only
+# duplicate of the committed .snapshot-engofy.json.
+src/core/database/migrations/.snapshot-engofy-e2e.json
