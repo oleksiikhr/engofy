@@ -1,14 +1,17 @@
 /**
  * Deterministic fixtures for the `apps/web` Playwright suite (PLAN.md Slice 8b).
  *
- * Run against the local *dev* database (the one the hand-started Nest web
- * server and `astro dev` talk to) — NOT the test DB, and it never drops the
- * schema. Playwright's global-setup shells out to:
+ * Runs against the isolated e2e database (`engofy-e2e` — see
+ * .claude/plans/e2e-isolated-stack.md), never the shared dev DB, and never
+ * drops the schema. Playwright's global-setup shells out to:
  *
  *   node --import @swc-node/register/esm-register test/e2e/seed-web-e2e.ts
  *
- * It wipes its own previous rows (everything tagged `E2E` / `e2e-` / the
- * fixed e2e user) and re-inserts, so it is safe to run repeatedly.
+ * with MIKRO_ORM_DB_NAME defaulted to `engofy-e2e` (it reads the same
+ * MikroORM config as the app, `preferEnvVars: true`, so the env var alone
+ * retargets it). It wipes its own previous rows (everything tagged `E2E` /
+ * `e2e-` / the fixed e2e user) and re-inserts, so it is safe to run
+ * repeatedly — `make e2e-reset` also runs a schema-level reset first.
  */
 import 'reflect-metadata';
 import { createHash } from 'node:crypto';
@@ -32,6 +35,7 @@ import { GrammarCategory } from '../../src/modules/post/entities/grammar-categor
 import { GrammarConstruction } from '../../src/modules/post/entities/grammar-construction.entity.js';
 import { GrammarMatch } from '../../src/modules/post/entities/grammar-match.entity.js';
 import { GrammarUsagePoint } from '../../src/modules/post/entities/grammar-usage-point.entity.js';
+import { GrammarUsagePointExercise } from '../../src/modules/post/entities/grammar-usage-point-exercise.entity.js';
 import { Phrase } from '../../src/modules/post/entities/phrase.entity.js';
 import { Post } from '../../src/modules/post/entities/post.entity.js';
 import { PostPart } from '../../src/modules/post/entities/post-part.entity.js';
@@ -115,6 +119,7 @@ const ENTITIES = [
   GrammarCategory,
   GrammarConstruction,
   GrammarUsagePoint,
+  GrammarUsagePointExercise,
   GrammarMatch,
 ];
 
@@ -304,6 +309,12 @@ async function seed(orm: MikroORM): Promise<void> {
   });
   const pastPerfectUp = factories(em).grammarUsagePoint.makeOne({
     constructionId: pastPerfect.id,
+    // Fixed (not random) so e2e specs can assert the "Practice" link/anchor
+    // it drives: `/grammar/e2e-past-perfect#usage-point-90012`. Well outside
+    // the real EGP corpus's 1..574 range (`assets/egp.json`) so this never
+    // collides with `pnpm cli grammar import-egp` data on a dev DB that has
+    // it loaded.
+    egpIndex: 90012,
     cefrLevel: CefrLevel.A2,
     guideword: 'USE: EARLIER PAST',
     canDoStatement:
@@ -328,6 +339,18 @@ async function seed(orm: MikroORM): Promise<void> {
     guideword: 'USE: REPORTED',
     canDoStatement: 'Can use the past perfect in reported speech.',
     exampleText: 'He said he had finished the chart.',
+  });
+  // Practice pool for `pastPerfectUp` (grammar-usage-point-exercises plan,
+  // slice 5's exercises section + the reader popup's "Practice" link).
+  // `pastPerfectReported` deliberately has no exercises and no egpIndex,
+  // covering the "not seeded yet" / "no anchor" cases.
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.FillBlank,
+    payload: {
+      prompt: 'By the time he arrived, she ___ the map.',
+      answer: 'had drawn',
+    },
   });
   const presentSimple = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,

@@ -34,6 +34,7 @@ function buildSiblings(
     matched: boolean,
   ): GrammarSiblingUsagePoint => ({
     id: point.grammarUsagePointId,
+    egpIndex: point.egpIndex ?? null,
     guideword: point.guideword,
     canDoStatement: point.canDoStatement,
     explanation: point.explanation,
@@ -101,6 +102,8 @@ export function buildLexiconData(
         data.grammar[point.grammarUsagePointId] = {
           id: point.grammarUsagePointId,
           construction: construction.name,
+          constructionSlug: construction.slug,
+          egpIndex: point.egpIndex ?? null,
           cefrLevel: point.cefrLevel,
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,

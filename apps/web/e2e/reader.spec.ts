@@ -13,7 +13,7 @@ import { ReaderPage } from './pages/reader-page';
 // the "reported" usage point (the seeded user marked it Known) on "war ended".
 
 const READER_SLUG = 'the-cartographer-at-dawn-E2Eread1';
-const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:4321';
+const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:3100';
 
 test.describe('reader page (guest)', () => {
   test('renders the article body with sparse labels on new words and phrases', async ({
@@ -421,6 +421,30 @@ test.describe('reader page (guest)', () => {
     );
     // The fixture's "reported" usage point has no enrichment example yet.
     await expect(section.locator('.lex-popup__example span')).toHaveText('');
+  });
+
+  test('the Practice link deep-links to the matched usage point and hides for one with no egpIndex', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    const section = reader.popupSection('grammar');
+    const practiceLink = section.locator('[data-practice-link]');
+    // The fixture's matched point ("Earlier past") has egpIndex 90012.
+    await expect(practiceLink).toBeVisible();
+    await expect(practiceLink).toHaveAttribute(
+      'href',
+      '/grammar/e2e-past-perfect#usage-point-90012',
+    );
+
+    // The sibling ("Reported") has no egpIndex — switching to it hides the link.
+    await section
+      .locator('.usage-picker')
+      .getByRole('button', { name: 'Reported' })
+      .click();
+    await expect(practiceLink).toBeHidden();
   });
 
   test('shows lexical and grammar sections when the labels overlap', async ({

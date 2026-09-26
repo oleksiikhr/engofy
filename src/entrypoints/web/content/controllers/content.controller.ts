@@ -46,6 +46,7 @@ import {
   PostsSitemapPageResponseDto,
 } from '../dto/posts-sitemap-response.dto.js';
 import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
+import { UsagePointExercisesResponseDto } from '../dto/usage-point-exercises-response.dto.js';
 
 // Guest-readable content surface (PLAN.md §2, §4): the posts archive, a single
 // post with its inline analysis, and the grammar reference. Served under
@@ -241,6 +242,27 @@ export class ContentController {
     }
     return toGrammarConstructionResponse(view);
   }
+
+  // The reusable exercise pool for one usage point (PLAN.md grammar-usage-
+  // -point-exercises, slice 5) — the exercises section under each usage point
+  // on `/grammar/{slug}`. `:slug` isn't used to look anything up (usagePointId
+  // is already globally unique); it's kept in the path for URL readability,
+  // matching the page it's fetched from. Not user-specific: no override of
+  // the class-level public cache policy.
+  @Public()
+  @Get('grammar/:slug/usage-points/:usagePointId/exercises')
+  async usagePointExercises(
+    @Param('usagePointId') usagePointId: string,
+  ): Promise<UsagePointExercisesResponseDto> {
+    const view = await this.post.getUsagePointExercises(usagePointId);
+    return {
+      items: view.items.map((item) => ({
+        id: item.id,
+        type: item.type,
+        payload: item.payload,
+      })),
+    };
+  }
 }
 
 function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
@@ -319,6 +341,7 @@ function toAnnotationsDto(
       cefrLevel: entry.cefrLevel,
       usagePoints: entry.usagePoints.map((point) => ({
         grammarUsagePointId: point.grammarUsagePointId,
+        egpIndex: point.egpIndex,
         cefrLevel: point.cefrLevel,
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
@@ -381,6 +404,7 @@ function toGrammarConstructionResponse(
     cefrLevel: view.cefrLevel,
     usagePoints: view.usagePoints.map((point) => ({
       grammarUsagePointId: point.grammarUsagePointId,
+      egpIndex: point.egpIndex,
       cefrLevel: point.cefrLevel,
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,

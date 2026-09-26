@@ -82,6 +82,9 @@ export type LexiconEntry = WordLexiconEntry | PhraseLexiconEntry;
 // above the pill row (reader-popup.ts's pill click handler).
 export interface GrammarSiblingUsagePoint {
   id: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source — that pill's "Practice" link is hidden.
+  egpIndex: number | null;
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
@@ -94,6 +97,10 @@ export interface GrammarSiblingUsagePoint {
 export interface GrammarLexiconEntry {
   id: string;
   construction: string;
+  // The construction's `/grammar/{slug}` page, for the "Practice" link.
+  constructionSlug: string;
+  // This entry's own egpIndex (see `GrammarSiblingUsagePoint`).
+  egpIndex: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
@@ -268,6 +275,17 @@ function lexiconSectionHtml(
 </section>`;
 }
 
+// `/grammar/{slug}#usage-point-{egpIndex}` — the "Practice" link's target for
+// a usage point; null egpIndex (added from a non-EGP source) has no anchor.
+function practiceHref(
+  constructionSlug: string,
+  egpIndex: number | null,
+): string {
+  return egpIndex === null
+    ? ''
+    : `/grammar/${encodeURIComponent(constructionSlug)}#usage-point-${egpIndex}`;
+}
+
 // Pills for a construction's other usage points, matched one first —
 // clicking a pill swaps the guideword/explanation/example shown above the
 // row, via the plain DOM update in reader-popup.ts's popup click handler.
@@ -279,7 +297,8 @@ function usagePickerHtml(entry: GrammarLexiconEntry, lang: PopupLang): string {
         lang === 'en' ? null : point.translations[lang]?.explanation;
       const detail = translated ?? point.explanation ?? point.canDoStatement;
       const example = shortExample(point.examples[0] ?? '');
-      return `<button type="button" class="usage-picker__pill" data-usage-pill aria-pressed="${point.matched}" data-guideword="${esc(guideword)}" data-detail="${esc(detail)}" data-example="${esc(example)}">${esc(guideword)}</button>`;
+      const href = practiceHref(entry.constructionSlug, point.egpIndex);
+      return `<button type="button" class="usage-picker__pill" data-usage-pill aria-pressed="${point.matched}" data-guideword="${esc(guideword)}" data-detail="${esc(detail)}" data-example="${esc(example)}" data-practice-href="${esc(href)}">${esc(guideword)}</button>`;
     })
     .join('');
   return `<div class="usage-picker" role="tablist" aria-label="Other cases of ${esc(constructionLabel(entry.construction))}">${pills}</div>`;
@@ -301,6 +320,10 @@ function grammarSectionHtml(
   // A construction with only this one usage point has no "other cases" to
   // switch between.
   const picker = entry.siblings.length > 1 ? usagePickerHtml(entry, lang) : '';
+  // Hidden (not omitted) when the matched point has no egpIndex, so the pill
+  // click handler can still reveal it for a sibling that does have one.
+  const href = practiceHref(entry.constructionSlug, entry.egpIndex);
+  const practiceLink = `<a class="lex-popup__practice" data-practice-link href="${esc(href || '#')}" ${href ? '' : 'hidden'}>Practice this →</a>`;
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
   ${topRowHtml('Grammar', toggle)}
   <div class="lex-popup__head">
@@ -311,6 +334,7 @@ function grammarSectionHtml(
   ${explanation}
   ${entry.examples[0] ? exampleHtml(entry.examples[0]) : ''}
   ${picker}
+  ${practiceLink}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${footerHtml({ kind: 'grammar', id: entry.id }, entry.state, slugId, demo)}
 </section>`;

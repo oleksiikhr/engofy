@@ -4,6 +4,7 @@ import type {
   GrammarConstructionUsagePoint,
   GrammarLevelProgress,
 } from '../../lib/types';
+import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
@@ -11,6 +12,11 @@ interface Props {
 }
 
 const { usagePoints, levelProgress } = Astro.props;
+// Deep-link target for the Reader popup's "Practice" button
+// (`lib/reader-lexicon.ts`'s `practiceHref`); null for a usage point added
+// from a non-EGP source, which has no anchor.
+const anchorId = (egpIndex?: number | null) =>
+  egpIndex == null ? undefined : `usage-point-${egpIndex}`;
 ---
 
 <section class="usage" data-testid="grammar-usage">
@@ -37,7 +43,11 @@ const { usagePoints, levelProgress } = Astro.props;
   <ul class="usage-list">
     {
       usagePoints.map((up) => (
-        <li class="usage-item card" data-state={up.state}>
+        <li
+          class="usage-item card"
+          data-state={up.state}
+          id={anchorId(up.egpIndex)}
+        >
           <div class="usage-item__head">
             <span class="badge">{up.cefrLevel}</span>
             <span class="usage-item__guide">{up.guideword}</span>
@@ -61,6 +71,7 @@ const { usagePoints, levelProgress } = Astro.props;
               up.assumedKnown,
             )}
           />
+          <Fragment set:html={usagePointExercisesHtml(up.exercises)} />
         </li>
       ))
     }
@@ -136,6 +147,26 @@ const { usagePoints, levelProgress } = Astro.props;
     color: var(--color-ink-soft);
     font-style: italic;
   }
+  .upe {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .upe__title {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+  .upe__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .upe__item {
+    padding: 1rem;
+  }
 </style>
 
 <!-- The action row is injected via set:html (shared with the HTMX partial),
@@ -175,3 +206,9 @@ const { usagePoints, levelProgress } = Astro.props;
     color: var(--color-warning-ink);
   }
 </style>
+
+<script>
+  import { initUsagePointExercises } from '../../lib/usage-point-exercises-client';
+
+  initUsagePointExercises(document);
+</script>

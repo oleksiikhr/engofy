@@ -158,6 +158,9 @@ export interface PhraseAnnotation {
 }
 export interface GrammarUsagePointRef {
   grammarUsagePointId: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. Absent from an API still on the previous release.
+  egpIndex?: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
@@ -265,10 +268,22 @@ export interface GrammarRefGroup {
 export interface GrammarReference {
   groups: GrammarRefGroup[];
 }
+// One reusable practice exercise from the usage point's bank (grammar-usage-
+// -point-exercises plan, slice 2/3) — the same `payload` shapes as
+// `PostExercise`'s spaCy drills (fill_blank / find_error / multiple_choice /
+// reorder), just not tied to a post.
+export interface UsagePointExercise {
+  id: string;
+  type: ExerciseType;
+  payload: Record<string, unknown>;
+}
 export interface GrammarConstructionUsagePoint extends GrammarUsagePointRef {
   state: EffectiveState;
   // Untouched but at or below the learner's own level.
   assumedKnown: boolean;
+  // Fetched separately per point and merged in by the page — empty until
+  // seeded (rollout is gradual, one usage point at a time).
+  exercises: UsagePointExercise[];
 }
 export interface GrammarLevelProgress {
   cefrLevel: CefrLevel;
