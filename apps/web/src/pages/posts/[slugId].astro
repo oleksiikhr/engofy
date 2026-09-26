@@ -62,10 +62,15 @@ const published = new Date(post.publishedAt).toLocaleDateString('en-GB', {
 });
 
 const title = post.title ?? 'Untitled';
-const description = postDescription(
-  post.doc,
-  'A short English text to read, with word and grammar help.',
-);
+// A published post always has an AI-written metaDescription (ai_complexity
+// runs before publish) — the body-derived postDescription is only a
+// defensive fallback for the pre-ai_complexity window.
+const description =
+  post.metaDescription ??
+  postDescription(
+    post.doc,
+    'A short English text to read, with word and grammar help.',
+  );
 const jsonLd = escapeJson(
   postJsonLd(post, publicOrigin(Astro.url), description),
 );
