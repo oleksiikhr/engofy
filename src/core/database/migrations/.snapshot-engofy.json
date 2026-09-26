@@ -3541,6 +3541,23 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
         "publish_notified_at": {
           "name": "publish_notified_at",
           "type": "timestamptz(6)",

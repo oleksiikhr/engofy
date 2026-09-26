@@ -72,10 +72,10 @@ Reader (`apps/web/src/pages/posts/[slugId].astro`) має чотири неза�
 `get-post-detail` і `apps/web` типи не ламаються в цьому зрізі. Юніт-тести на
 всі 4 aspect × 3 tense + going-to future.
 
-### [ ] 2. Backend: fallback-пояснення ролі слова без словникової статті
+### [x] 2. Backend: fallback-пояснення ролі слова без словникової статті
 - Branch: `reader-token-analysis-unify-02-role-fallback`
-- Base: `reader-token-analysis-unify-01-tense-aspect`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/144
 
 Новий детермінований модуль: за (pos, tag, lemma) — короткий людський опис
 частини мови + типова роль у реченні; окремі записи для найчастотніших
