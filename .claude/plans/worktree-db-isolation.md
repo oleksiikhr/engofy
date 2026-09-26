@@ -35,10 +35,10 @@ worktree цього репозиторію — не по одному стеку
 
 ## Зрізи
 
-### [ ] 1. Ізоляція БД/Redis/порту бекенда через `make ports`
+### [x] 1. Ізоляція БД/Redis/порту бекенда через `make ports`
 - Branch: `worktree-db-isolation-01-backend-db-redis-ports`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/134
 
 Новий таргет `make ports OFFSET=<N>` у кореневому Makefile:
 - Валідує, що `OFFSET` — ціле число ≥0 і ≤7 (ліміт Redis DB, див. вище); повідомляє про помилку інакше.
