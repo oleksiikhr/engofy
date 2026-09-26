@@ -8,6 +8,7 @@ import { GrammarCategoryFactory } from './grammar-category.factory.js';
 import { GrammarConstructionFactory } from './grammar-construction.factory.js';
 import { GrammarMatchFactory } from './grammar-match.factory.js';
 import { GrammarUsagePointFactory } from './grammar-usage-point.factory.js';
+import { GrammarUsagePointExerciseFactory } from './grammar-usage-point-exercise.factory.js';
 import { LearningCardFactory } from './learning-card.factory.js';
 import { LearningDispositionFactory } from './learning-disposition.factory.js';
 import { PhraseFactory } from './phrase.factory.js';
@@ -38,6 +39,7 @@ export function factories(em: EntityManager) {
     grammarConstruction: new GrammarConstructionFactory(em),
     grammarMatch: new GrammarMatchFactory(em),
     grammarUsagePoint: new GrammarUsagePointFactory(em),
+    grammarUsagePointExercise: new GrammarUsagePointExerciseFactory(em),
     learningCard: new LearningCardFactory(em),
     learningDisposition: new LearningDispositionFactory(em),
     phrase: new PhraseFactory(em),
