@@ -1,0 +1,267 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 11 EGP rows (1032-1042): 9 pure FORM rows (modal/be/do/auxiliary be/
+// auxiliary have to build a yes/no question, plus the same four ways to
+// negate one) written without a card; 2 USE rows inlined, matched by
+// egpIndex — 1041 (seeking agreement) and 1042 (formal emphasis). Distinct
+// from `clauses-interrogatives` (already-written sibling, cross-referenced
+// below), which owns the general be/auxiliary/do/modal word-order mechanics
+// shared with wh-questions; this page stays yes/no-specific: the plain forms,
+// how to answer them with a short answer, and what a negative yes/no
+// question is actually used for.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const seekingAgreementB1 = point(1041);
+const emphasisC2 = point(1042);
+
+const inlineUsagePointIds = [seekingAgreementB1, emphasisC2]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to build and answer a yes/no question in English: put a modal, be, do or have in front of the subject to ask, repeat the same word in a short answer, and use a negative question (isn't it? / don't you?) to invite agreement rather than ask something you don't know."
+  handcrafted
+  sections={[
+    { id: 'modal', title: 'With a modal verb', open: true },
+    { id: 'be', title: 'With be', open: false },
+    { id: 'do', title: 'With an ordinary verb: do', open: false },
+    { id: 'auxiliary', title: 'Continuous and perfect: auxiliary be and have', open: false },
+    { id: 'short-answers', title: 'Answering: short answers', open: false },
+    { id: 'negative', title: 'Negative yes/no questions', open: false },
+    { id: 'seeking-agreement', title: 'Seeking agreement', open: false },
+    { id: 'emphasis', title: 'Formal emphasis with uncontracted not', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A yes/no question can only be answered <em>yes</em> or <em>no</em> — it
+      asks whether something is true, not for new information. Whichever verb
+      the sentence already has (a modal, <em>be</em>, or an ordinary verb with{' '}
+      <em>do</em>) moves in front of the subject to ask it, and the same verb
+      comes back in the short answer.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="With a modal verb" id="modal" open>
+    <p>
+      When the sentence has a modal verb (<em>can</em>, <em>could</em>,{' '}
+      <em>will</em>, <em>would</em> …), the modal alone moves in front of the
+      subject. Nothing else changes.
+    </p>
+    <GrammarFormula label="Modal first" parts={['modal', 'subject', 'verb (base form)']} />
+    <GrammarExample note="1032 A1: can moves in front of you; come stays in its base form.">
+      <mark data-role="content">Can</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> to dinner in my house?
+    </GrammarExample>
+    <GrammarExample note="1034 A2: the range of modals grows — could, asking a favour.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">meet</mark> me at my home at 7 pm?
+    </GrammarExample>
+    <GrammarExample note="1034 A2: would, offering or inviting.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> to go with me to the concert?
+    </GrammarExample>
+    <GrammarExample note="1034 A2: will, asking about the future.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> with me?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="With be" id="be" open={false}>
+    <p>
+      When <em>be</em> is the only verb in the sentence, <em>be</em> itself
+      moves in front of the subject.
+    </p>
+    <GrammarFormula label="Be first" parts={['am / is / are', 'subject', 'complement']} />
+    <GrammarExample note="1033 A2: are moves in front of you; nothing else is added.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> OK?
+    </GrammarExample>
+    <GrammarExample note="1033 A2: the same with is and a longer subject.">
+      <mark data-role="content">Is</mark> <mark data-role="grammar">your dog</mark> OK?
+    </GrammarExample>
+    <GrammarExample note="1033 A2: ready is the complement after are.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> ready?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="With an ordinary verb: do" id="do" open={false}>
+    <p>
+      An ordinary verb like <em>know</em>, <em>like</em> or <em>see</em> can't
+      move to the front on its own — English adds <em>do</em> to do that job.{' '}
+      <em>Do</em> takes the tense, so the main verb goes back to its base
+      form.
+    </p>
+    <GrammarFormula label="Do-support" parts={['do / does / did', 'subject', 'verb (base form)']} />
+    <GrammarExample note="1035 A2: do comes first; know stays in its base form.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">know</mark> it?
+    </GrammarExample>
+    <GrammarExample note="1035 A2: did takes the past tense, so it's see, not saw.">
+      <mark data-role="content">Did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">see</mark> the football match last night?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Continuous and perfect: auxiliary be and have" id="auxiliary" open={false}>
+    <p>
+      In a continuous form (<em>are going</em>) or a perfect form (<em>have
+      watched</em>), only the auxiliary moves to the front — the <em>-ing</em>{' '}
+      form or the past participle stays after the subject.
+    </p>
+    <GrammarFormula label="Auxiliary be + -ing" parts={['am / is / are', 'subject', 'verb-ing']} />
+    <GrammarExample note="1036 A2: are moves; going stays after you.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">going</mark> to come?
+    </GrammarExample>
+    <GrammarExample note="1036 A2: same pattern, asking about a plan.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">doing</mark> anything on Friday?
+    </GrammarExample>
+    <GrammarFormula label="Auxiliary have + -ed" parts={['have / has', 'subject', 'past participle']} />
+    <GrammarExample note="1037 A2: have moves; watched stays after you.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">watched</mark> it?
+    </GrammarExample>
+    <GrammarExample note="1037 A2: the same after I left my mobile in your house.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">seen</mark> it?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Answering: short answers" id="short-answers" open={false}>
+    <p>
+      A short answer doesn't repeat the whole sentence — it repeats
+      <em> only</em> the word that moved to the front: the same modal,{' '}
+      <em>be</em>, <em>do/does/did</em>, or <em>have/has</em> the question
+      used, followed by <em>not</em> or <em>n't</em> for no.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Question</th><th>Yes</th><th>No</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Are you OK?</td><td>Yes, I am.</td><td>No, I'm not.</td></tr>
+        <tr><td>Do you like it?</td><td>Yes, I do.</td><td>No, I don't.</td></tr>
+        <tr><td>Did you see it?</td><td>Yes, I did.</td><td>No, I didn't.</td></tr>
+        <tr><td>Have you seen it?</td><td>Yes, I have.</td><td>No, I haven't.</td></tr>
+        <tr><td>Can you come?</td><td>Yes, I can.</td><td>No, I can't.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      The subject in the answer also changes to match the speaker:{' '}
+      <em>Are you …?</em> is answered with <em>I am</em>, not{' '}
+      <em>you are</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Negative yes/no questions" id="negative" open={false}>
+    <p>
+      To make a yes/no question negative, attach <em>n't</em> to whichever
+      word moved to the front — <em>isn't</em>, <em>don't</em>,{' '}
+      <em>haven't</em>, <em>wouldn't</em>. The one exception is{' '}
+      <em>I</em>: English says <em>aren't I</em>, never <em>amn't I</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={["be / do / have / modal + n't", 'subject', '(verb)']} />
+    <GrammarExample note="1038 B1: negative be, the aren't I exception aside, works like any other subject.">
+      <mark data-role="content">Aren't</mark> <mark data-role="grammar">you</mark> excited about it?
+    </GrammarExample>
+    <GrammarExample note="1038 B1: isn't, before an adjective.">
+      <mark data-role="content">Isn't</mark> <mark data-role="grammar">he</mark> sweet?
+    </GrammarExample>
+    <GrammarExample note="1039 B1: negative do-support, ordinary verb think.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">think</mark> so?
+    </GrammarExample>
+    <GrammarExample note="1039 B1: negative auxiliary have, perfect form.">
+      <mark data-role="content">Haven't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">seen</mark> it yet?
+    </GrammarExample>
+    <GrammarExample note="1040 B1: negative modal, would.">
+      <mark data-role="content">Wouldn't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> to come?
+    </GrammarExample>
+    <GrammarExample note="1040 B1: negative modal, can.">
+      <mark data-role="content">Can't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">make</mark> both?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Seeking agreement" id="seeking-agreement" open={false}>
+    <p>
+      A negative yes/no question is often not a real question at all — the
+      speaker already believes the answer is <em>yes</em>, and asks only to
+      involve the listener and invite them to agree.
+    </p>
+    <GrammarExample note="1041 B1: not really asking — inviting agreement that it's funny.">
+      It's funny! <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> think?
+    </GrammarExample>
+    <GrammarExample note="1041 B1: the speaker is sure it's great, and wants the listener to agree.">
+      <mark data-role="content">Isn't</mark> <mark data-role="grammar">that</mark> great?
+    </GrammarExample>
+    <GrammarExample note="1041 B1: an enthusiastic invitation to agree, not a genuine doubt.">
+      <mark data-role="content">Wouldn't</mark> <mark data-role="grammar">that</mark> be amazing?
+    </GrammarExample>
+    {seekingAgreementB1 && <GrammarUsagePointCard usagePoint={seekingAgreementB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Formal emphasis with uncontracted not" id="emphasis" open={false}>
+    <p>
+      In formal writing and argument, a negative question can keep{' '}
+      <em>not</em> uncontracted and place it after the subject instead of
+      attaching <em>n't</em> to the front verb. This makes the question land
+      as a rhetorical, emphatic point rather than a real one.
+    </p>
+    <GrammarFormula label="Uncontracted not" parts={['do / be / can', 'subject', 'not', 'verb']} />
+    <GrammarExample note="1042 C2: a rhetorical point in an argument, not a genuine question.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">we</mark> not want our children to be as happy as possible?
+    </GrammarExample>
+    <GrammarExample note="1042 C2: the same pattern with be, in formal criticism.">
+      <mark data-role="content">Is</mark> <mark data-role="grammar">it</mark> not too easy to put the blame systematically on our education?
+    </GrammarExample>
+    {emphasisC2 && <GrammarUsagePointCard usagePoint={emphasisC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      An ordinary verb can't move to the front on its own — it always needs{' '}
+      <em>do</em>. A short answer repeats only the moved word, never the
+      whole verb. And <em>I</em> pairs with <em>aren't</em>, not{' '}
+      <em>amn't</em>.
+    </p>
+    <GrammarContrast
+      bad={['Like you it?', 'Do you like it? Yes, I like.', 'Have you seen it? Yes, I have seen.', "Amn't I right?"]}
+      good={['Do you like it?', 'Do you like it? Yes, I do.', 'Have you seen it? Yes, I have.', "Aren't I right?"]}
+    />
+    <p>
+      With a modal, nothing else is added — no <em>to</em> before the base
+      verb.
+    </p>
+    <GrammarContrast bad={["Can't you to help me?"]} good={["Can't you help me?"]} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-interrogatives',
+        name: 'clauses — interrogatives',
+        note: 'the shared word-order mechanics (be/auxiliary/do/modal moving to the front) behind every kind of question, including wh- questions.',
+      },
+      {
+        slug: 'questions-wh',
+        name: 'questions — wh-',
+        note: 'open questions with what, where, when, why, who, how — asking for information instead of yes or no.',
+      },
+      {
+        slug: 'questions-tags',
+        name: 'questions — tags',
+        note: "turning a statement into a question by adding a short tag like isn't it? at the end, instead of moving the verb to the front.",
+      },
+    ]}
+  />
+</GrammarShell>
