@@ -1,82 +1,41 @@
 ---
-import { usageActionsHtml } from '../../lib/grammar-usage-actions';
-import type {
-  GrammarConstructionUsagePoint,
-  GrammarLevelProgress,
-} from '../../lib/types';
-import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
+// The generic "When it's used" list: usage points a handcrafted page hasn't
+// already rendered inline next to its own prose (see GrammarShell's
+// `inlineUsagePointIds`), or — for the generic /grammar/[slug] fallback —
+// every usage point the construction has. Renders nothing when there's
+// nothing left to show, so a handcrafted page that covers every usage point
+// inline doesn't leave an empty section (and its own progress bar, if the
+// construction has one, lives in GrammarShell's header instead).
+import type { GrammarConstructionUsagePoint } from '../../lib/types';
+import GrammarUsagePointCard from './GrammarUsagePointCard.astro';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
-  levelProgress?: GrammarLevelProgress[];
+  // Anchor for GrammarSectionProgress: renders as `gp-section-${sectionId}`.
+  sectionId?: string;
 }
 
-const { usagePoints, levelProgress } = Astro.props;
-// Deep-link target for the Reader popup's "Practice" button
-// (`lib/reader-lexicon.ts`'s `practiceHref`); null for a usage point added
-// from a non-EGP source, which has no anchor.
-const anchorId = (egpIndex?: number | null) =>
-  egpIndex == null ? undefined : `usage-point-${egpIndex}`;
+const { usagePoints, sectionId } = Astro.props;
 ---
 
-<section class="usage" data-testid="grammar-usage">
-  <h2>When it's used</h2>
-  {
-    levelProgress && levelProgress.length > 0 && (
-      <ul class="usage-progress" data-testid="grammar-level-progress">
-        {levelProgress.map((level) => (
-          <li data-level={level.cefrLevel}>
-            <span class="badge">{level.cefrLevel}</span>
-            <span>
-              {level.learnedCount}/{level.totalCount} learned
-            </span>
+{
+  usagePoints.length > 0 && (
+    <section
+      class="usage"
+      data-testid="grammar-usage"
+      id={sectionId && `gp-section-${sectionId}`}
+    >
+      <h2>When it's used</h2>
+      <ul class="usage-list">
+        {usagePoints.map((up) => (
+          <li>
+            <GrammarUsagePointCard usagePoint={up} />
           </li>
         ))}
       </ul>
-    )
-  }
-  {
-    usagePoints.length === 0 && (
-      <p>No usage points recorded for this construction.</p>
-    )
-  }
-  <ul class="usage-list">
-    {
-      usagePoints.map((up) => (
-        <li
-          class="usage-item card"
-          data-state={up.state}
-          id={anchorId(up.egpIndex)}
-        >
-          <div class="usage-item__head">
-            <span class="badge">{up.cefrLevel}</span>
-            <span class="usage-item__guide">{up.guideword}</span>
-          </div>
-          <p class="usage-item__can">{up.explanation ?? up.canDoStatement}</p>
-          {up.explanation && (
-            <p class="usage-item__cando">{up.canDoStatement}</p>
-          )}
-          {up.examples.length > 0 && (
-            <ul class="usage-item__examples" data-testid="usage-examples">
-              {up.examples.map((example) => (
-                <li>{example}</li>
-              ))}
-            </ul>
-          )}
-          <Fragment
-            set:html={usageActionsHtml(
-              up.grammarUsagePointId,
-              up.state,
-              undefined,
-              up.assumedKnown,
-            )}
-          />
-          <Fragment set:html={usagePointExercisesHtml(up.exercises)} />
-        </li>
-      ))
-    }
-  </ul>
-</section>
+    </section>
+  )
+}
 
 <style>
   .usage h2 {
@@ -84,131 +43,9 @@ const anchorId = (egpIndex?: number | null) =>
     font-size: 1.19rem;
     font-weight: 800;
   }
-  .usage-progress {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-ink-soft);
-  }
-  .usage-progress li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
   .usage-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: grid;
-    gap: 1rem;
-  }
-  .usage-item {
-    padding: 1.125rem 1.25rem;
-  }
-  .usage-item[data-state='learning'] {
-    border-color: var(--color-brand);
-  }
-  .usage-item[data-state='learned'] {
-    border-color: var(--color-success);
-  }
-  .usage-item[data-state='skipped'] {
-    border-color: var(--color-warning);
-  }
-  .usage-item__head {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  .usage-item__guide {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-ink-faint);
-  }
-  .usage-item__can {
-    margin: 0 0 0.5rem;
-    font-weight: 800;
-  }
-  .usage-item__cando {
-    margin: 0 0 0.5rem;
-    font-size: 0.85rem;
-    color: var(--color-ink-faint);
-  }
-  .usage-item__examples {
-    margin: 0 0 0.75rem;
-    padding-left: 1.25rem;
-    color: var(--color-ink-soft);
-    font-style: italic;
-  }
-  .upe {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-  .upe__title {
-    margin: 0 0 0.75rem;
-    font-size: 0.95rem;
-    font-weight: 800;
-  }
-  .upe__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.75rem;
-  }
-  .upe__item {
-    padding: 1rem;
   }
 </style>
-
-<!-- The action row is injected via set:html (shared with the HTMX partial),
-     so its selectors must be global. -->
-<style is:global>
-  .gup-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .gup-actions form {
-    margin: 0;
-  }
-  .gup-state {
-    padding: 0.1rem 0.6rem;
-    border-radius: 999px;
-    background: var(--color-paper-soft);
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--color-ink-soft);
-  }
-  .gup-state--learning {
-    background: var(--color-brand-wash);
-    color: var(--color-brand-strong);
-  }
-  .gup-state--learned {
-    background: var(--color-success-wash);
-    color: var(--color-success-ink);
-  }
-  .gup-state--assumed {
-    background: var(--color-paper-soft);
-    color: var(--color-ink-faint);
-  }
-  .gup-state--skipped {
-    background: var(--color-warning-wash);
-    color: var(--color-warning-ink);
-  }
-</style>
-
-<script>
-  import { initUsagePointExercises } from '../../lib/usage-point-exercises-client';
-
-  initUsagePointExercises(document);
-</script>

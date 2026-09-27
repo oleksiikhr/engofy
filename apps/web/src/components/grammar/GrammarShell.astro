@@ -4,7 +4,15 @@ import { grammarMetaDescription } from '../../lib/grammar-seo';
 import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
 import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
+import GrammarSection from './GrammarSection.astro';
+import GrammarSectionProgress from './GrammarSectionProgress.astro';
 import GrammarUsagePoints from './GrammarUsagePoints.astro';
+
+interface Section {
+  id: string;
+  title: string;
+  open: boolean;
+}
 
 interface Props {
   con: GrammarConstructionDetail;
@@ -14,6 +22,16 @@ interface Props {
   description?: string;
   // Set by the pages under `src/grammar-pages/`; the generic fallback leaves it off.
   handcrafted?: boolean;
+  // The GrammarSection ids/titles rendered in the default slot (Form, and
+  // whatever else a handcrafted page writes), for the sticky checklist below.
+  // "When it's used" and "Practice" are appended automatically — every page
+  // has both.
+  sections?: Section[];
+  // grammarUsagePointIds a handcrafted page already rendered inline (via
+  // GrammarUsagePointCard) next to the prose that explains them. Excluded
+  // from the generic "When it's used" list below so the rule isn't explained
+  // twice, once in prose and once as a disconnected card.
+  inlineUsagePointIds?: string[];
 }
 
 const {
@@ -21,7 +39,22 @@ const {
   user,
   description = grammarMetaDescription(con),
   handcrafted = false,
+  sections = [],
+  inlineUsagePointIds = [],
 } = Astro.props;
+
+const inlineIds = new Set(inlineUsagePointIds);
+const remainingUsagePoints = con.usagePoints.filter(
+  (up) => !inlineIds.has(up.grammarUsagePointId),
+);
+
+const progressSections: Section[] = [
+  ...sections,
+  ...(remainingUsagePoints.length > 0
+    ? [{ id: 'use', title: "When it's used", open: true }]
+    : []),
+  { id: 'practice', title: 'Practice', open: false },
+];
 
 const jsonLd = jsonLdGraph([
   breadcrumbList(publicOrigin(Astro.url), [
@@ -51,16 +84,37 @@ const jsonLd = jsonLdGraph([
       {con.name}
     </h1>
     <div class="con-head__lede"><slot name="lede" /></div>
+    {
+      con.levelProgress && con.levelProgress.length > 0 && (
+        <ul class="con-head__progress" data-testid="grammar-level-progress">
+          {con.levelProgress.map((level) => (
+            <li data-level={level.cefrLevel}>
+              <span class="badge">{level.cefrLevel}</span>
+              <span>
+                {level.learnedCount}/{level.totalCount} learned
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </header>
+
+  <GrammarSectionProgress sections={progressSections} />
 
   <div class="con-body" data-handcrafted={handcrafted ? 'true' : undefined}>
     <slot />
   </div>
 
-  <GrammarUsagePoints
-    usagePoints={con.usagePoints}
-    levelProgress={con.levelProgress}
-  />
+  <GrammarUsagePoints sectionId="use" usagePoints={remainingUsagePoints} />
+
+  <GrammarSection title="Practice" id="practice" open={false}>
+    <p>
+      Exercises for this rule are on the way — we're building them as a
+      separate step. For now, use the usage points above to track what
+      you've learned.
+    </p>
+  </GrammarSection>
 </Layout>
 
 <style>
@@ -94,6 +148,22 @@ const jsonLd = jsonLdGraph([
     margin: 0.75rem 0 0;
     font-size: 1.05rem;
     color: var(--color-ink-soft);
+  }
+  .con-head__progress {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+  }
+  .con-head__progress li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 </style>
 

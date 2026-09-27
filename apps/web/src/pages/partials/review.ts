@@ -1,8 +1,16 @@
 import type { APIRoute } from 'astro';
 import { ApiError, apiGet, apiPost } from '../../lib/api';
-import { renderPracticeQueue } from '../../lib/practice-card';
+import {
+  type PracticeProgress,
+  renderPracticeQueue,
+} from '../../lib/practice-card';
 import { parseTypesParam, typesQuery } from '../../lib/practice-filter';
-import type { LearningCard, PracticeQueueResponse } from '../../lib/types';
+import type {
+  DueCardCountResponse,
+  LearningCard,
+  PracticeQueueResponse,
+  StreakResponse,
+} from '../../lib/types';
 
 // HTMX target for the /practice grade buttons. Grades the card via Nest, then
 // re-fetches the queue and returns the next card (or the "all caught up"
@@ -35,11 +43,23 @@ export const POST: APIRoute = async ({ request }) => {
       { request },
     );
     const filterQuery = typesQuery(typeFilter);
-    const next = await apiGet<PracticeQueueResponse>(
-      `/learning/practice?limit=20${filterQuery ? `&${filterQuery}` : ''}`,
-      { request },
-    );
-    return html(renderPracticeQueue(next, typeFilter));
+    const [next, streak, due] = await Promise.all([
+      apiGet<PracticeQueueResponse>(
+        `/learning/practice?limit=20${filterQuery ? `&${filterQuery}` : ''}`,
+        { request },
+      ),
+      apiGet<StreakResponse>('/learning/streak', { request }),
+      apiGet<DueCardCountResponse>(
+        `/learning/due-count${filterQuery ? `?${filterQuery}` : ''}`,
+        { request },
+      ),
+    ]);
+    const progress: PracticeProgress = {
+      dueCount: due.dueCount,
+      reviewedToday: streak.reviewedToday,
+      dailyGoal: streak.dailyGoal,
+    };
+    return html(renderPracticeQueue(next, typeFilter, progress));
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
       return html('<p><a href="/login">Sign in</a> to keep reviewing.</p>');

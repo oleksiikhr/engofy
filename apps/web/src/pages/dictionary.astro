@@ -101,16 +101,18 @@ if (user) {
           </div>
         </form>
 
-        <div class="dict-skeleton" aria-hidden="true">
-          {[0, 1, 2].map(() => (
-            <div class="card dict-skeleton__card">
-              <span class="skeleton" style="width: 30%; height: 1rem" />
-              <span class="skeleton" style="width: 55%; height: 1.75rem" />
-              <span class="skeleton" style="height: 2.5rem" />
-            </div>
-          ))}
+        <div class="dict-results-wrap">
+          <div class="dict-skeleton" aria-hidden="true">
+            {[0, 1, 2].map(() => (
+              <div class="card dict-skeleton__card">
+                <span class="skeleton" style="width: 30%; height: 1rem" />
+                <span class="skeleton" style="width: 55%; height: 1.75rem" />
+                <span class="skeleton" style="height: 2.5rem" />
+              </div>
+            ))}
+          </div>
+          <div id="dict-results" set:html={resultsHtml} />
         </div>
-        <div id="dict-results" set:html={resultsHtml} />
       </>
     )
   }
@@ -225,35 +227,33 @@ if (user) {
     margin-top: 1.5rem;
     text-align: center;
   }
+  .dict-results-wrap {
+    position: relative;
+  }
   .dict-skeleton {
     display: none;
+    position: absolute;
+    inset: 0;
   }
   .dict-skeleton__card {
     display: grid;
     gap: 0.75rem;
   }
-  /* Skeleton cards stand in for the results while a filter request is in
-     flight — delayed, so a fast response never flashes them. */
-  #dict-results {
-    overflow: hidden;
-  }
-  #dict-filters.htmx-request ~ .dict-skeleton {
+  /* Skeleton overlays the old results out of flow, so swapping it in never
+     changes the wrapper's height — only the eventual new results do.
+     Delayed, so a fast response never flashes it. */
+  #dict-filters.htmx-request ~ .dict-results-wrap .dict-skeleton {
     display: grid;
     opacity: 0;
     animation: dict-fade-in 0s 0.2s forwards;
   }
-  #dict-filters.htmx-request ~ #dict-results {
-    animation: dict-fade-out 0s 0.2s forwards;
+  #dict-filters.htmx-request ~ .dict-results-wrap #dict-results {
+    opacity: 0;
+    transition: opacity 0.15s ease 0.2s;
   }
   @keyframes dict-fade-in {
     to {
       opacity: 1;
-    }
-  }
-  @keyframes dict-fade-out {
-    to {
-      opacity: 0;
-      max-height: 0;
     }
   }
 </style>

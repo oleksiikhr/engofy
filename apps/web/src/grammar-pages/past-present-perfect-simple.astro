@@ -19,6 +19,12 @@ const { con, user } = Astro.props;
   user={user}
   description="Present perfect simple in English: how to form it with have / has + past participle, and when a past event still matters now."
   handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'core-idea', title: 'The core idea', open: false },
+    { id: 'words-that-go-with-it', title: 'Words that go with it', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
 >
   <Fragment slot="lede">
     <p>
@@ -27,7 +33,7 @@ const { con, user } = Astro.props;
     </p>
   </Fragment>
 
-  <GrammarSection title="Form">
+  <GrammarSection title="Form" id="form" open>
     <GrammarFormula
       label="Statement"
       parts={['have / has', 'past participle']}
@@ -46,7 +52,7 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="The core idea">
+  <GrammarSection title="The core idea" id="core-idea" open={false}>
     <p>
       The present perfect looks back from now. You are not telling a story
       about a finished moment in the past — you are saying something about
@@ -60,7 +66,11 @@ const { con, user } = Astro.props;
     </GrammarExample>
   </GrammarSection>
 
-  <GrammarSection title="Words that go with it">
+  <GrammarSection
+    title="Words that go with it"
+    id="words-that-go-with-it"
+    open={false}
+  >
     <table class="gp-table">
       <thead>
         <tr><th>Word</th><th>Meaning</th><th>Example</th></tr>
@@ -100,7 +110,7 @@ const { con, user } = Astro.props;
     </table>
   </GrammarSection>
 
-  <GrammarSection title="A common mistake">
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
     <p>
       Do not pair the present perfect with a finished time such as
       <em>yesterday</em>, <em>last week</em> or <em>in 2019</em>. Those

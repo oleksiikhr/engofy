@@ -8,6 +8,8 @@ import {
   GRAMMAR_GROUP_BY_LABEL,
   GRAMMAR_STATE_LABEL,
   startHereConstructions,
+  continueConstruction,
+  progressPercent,
   parseGrammarQuery,
   toGrammarApiQuery,
 } from '../lib/grammar-list';
@@ -60,6 +62,17 @@ const jsonLd = jsonLdGraph([
 ]);
 
 const groups = listedGroups(ref.groups);
+const continueCon = continueConstruction(groups);
+
+// Handcrafted construction pages live in `src/grammar-pages/<slug>.astro`
+// (same glob [slug].astro uses to pick a page over the generic render) — a
+// slug with one gets a "Guide" badge on its card.
+const handcraftedPages = import.meta.glob('../grammar-pages/*.astro');
+const manualSlugs = new Set(
+  Object.keys(handcraftedPages).map((path) =>
+    path.replace(/^.*\//, '').replace(/\.astro$/, ''),
+  ),
+);
 ---
 
 <Layout
@@ -76,6 +89,22 @@ const groups = listedGroups(ref.groups);
     The Cambridge English Grammar Profile — filter by the levels you're working
     on and group the list the way that helps you most.
   </p>
+
+  {
+    continueCon && (
+      <a
+        href={`/grammar/${continueCon.slug}`}
+        class="grammar-continue card card--hi"
+        data-testid="grammar-continue"
+      >
+        <span class="eyebrow">Continue learning</span>
+        <span class="grammar-continue__name">{continueCon.name}</span>
+        <span class="meta">
+          {continueCon.learnedCount}/{continueCon.usagePointCount} learned
+        </span>
+      </a>
+    )
+  }
 
   <div class="grammar-search">
     <svg
@@ -208,6 +237,11 @@ const groups = listedGroups(ref.groups);
                 >
                   <span class="grammar-con__head">
                     {con.cefrLevel && <span class="badge">{con.cefrLevel}</span>}
+                    {manualSlugs.has(con.slug) && (
+                      <span class="tag tone-blue" title="Written guide, not an auto-generated cheat sheet">
+                        Guide
+                      </span>
+                    )}
                     {con.state !== 'new' && (
                       <span
                         class={`tag grammar-con__state ${STATE_TONE[con.state]}`}
@@ -219,6 +253,14 @@ const groups = listedGroups(ref.groups);
                   <span class="grammar-con__name">{con.name}</span>
                   {con.summary && (
                     <span class="grammar-con__summary">{con.summary}</span>
+                  )}
+                  {con.learnedCount !== undefined && (
+                    <span class="grammar-con__progress-track" aria-hidden="true">
+                      <span
+                        class="grammar-con__progress-fill"
+                        style={`width:${progressPercent(con.learnedCount, con.usagePointCount)}%`}
+                      />
+                    </span>
                   )}
                   <span class="grammar-con__count meta">
                     {con.learnedCount !== undefined
@@ -248,6 +290,25 @@ const groups = listedGroups(ref.groups);
   .grammar-intro {
     color: var(--color-ink-soft);
     margin: 0 0 1.25rem;
+  }
+  .grammar-continue {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    margin-bottom: 1.25rem;
+    text-decoration: none;
+    color: var(--color-ink);
+  }
+  .grammar-continue:hover {
+    border-color: var(--color-brand);
+  }
+  .grammar-continue .eyebrow {
+    flex-basis: 100%;
+  }
+  .grammar-continue__name {
+    font-weight: 800;
+    font-size: 1.05rem;
   }
   .start-here {
     margin-bottom: 2rem;
@@ -368,8 +429,26 @@ const groups = listedGroups(ref.groups);
     font-weight: 800;
     line-height: 1.3;
   }
+  .grammar-con__progress-track {
+    margin-top: auto;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+  .grammar-con__progress-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-brand);
+  }
   .grammar-con__count {
     margin-top: auto;
     font-size: 0.8rem;
+  }
+  /* The track already claims the pushed-to-bottom margin; the count right
+     below it only needs the flex gap. */
+  .grammar-con__progress-track ~ .grammar-con__count {
+    margin-top: 0;
   }
 </style>

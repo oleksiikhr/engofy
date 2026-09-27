@@ -48,8 +48,9 @@ sequenceDiagram
 | `AnnotatePostHandler` | flush-per-`PostPart` so a mid-job crash keeps completed parts (a part with `annotatedAt` set is skipped on retry). | PLAN §12; `commands/annotate-post/annotate-post.handler.ts` |
 | `SpacyParsePostHandler` | same flush-per-`PostPart` pattern. | `commands/spacy-parse-post/spacy-parse-post.handler.ts:81` |
 | `TagGrammarHandler` | second phase (F3) paints `grammarConstruct` onto each `post_parts.body`; flush-per-`PostPart` for the same mid-job durability. Gated on `PostPipelineRun(Annotation)=Completed` so it is the last writer of `part.body` (no race with the parallel `annotate-post`). | `commands/tag-grammar/tag-grammar.handler.ts` `paintGrammarConstructs` |
+| `EnrichLexiconHandler` | flush-per-`ENRICHMENT_LANGUAGES` language: without it, a later language's `AiSchemaMismatchError` (or any throw) discards every earlier language's already-computed `WordDefinition`/`Phrase` writes in the same job attempt, since the facade's single end-of-job flush is never reached — the stage's own gap-fill idempotency (only re-pay for what's still missing) only holds *across* job attempts, not within one, unless each language is flushed as it completes. Paired with a retry-then-skip on `AiSchemaMismatchError` per language (mirrors `EnrichGrammarHandler.enrichPoint`). | `commands/enrich-lexicon/enrich-lexicon.handler.ts` `execute` / `completeEnrichment` |
 
-These three are the **only** sanctioned CQRS-handler exceptions. `assess-complexity`
+These four are the **only** sanctioned CQRS-handler exceptions. `assess-complexity`
 / `generate-exercises` / `publish` / `retry` previously flushed internally too —
 that was redundant with the facade re-flush and has been removed (Batch A, D3).
 `tag-grammar`'s tail (run row + `outbox.send`) still rides the facade flush; only

@@ -1,5 +1,16 @@
 ---
-// An example sentence, optionally with a short note under it.
+// An example sentence, optionally with a short note under it. The handcrafted
+// page marks every formula slot the sentence realizes, not just the target
+// word — same two roles as the formula's own parts:
+//   `<mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark>
+//    <mark data-role="content">alone</mark> at the bus station.`
+// "content" = the open-class word the slot stands for (adjective, -ed form
+// used as one); "grammar" = everything else the formula names (subject,
+// be/feel/look, determiners, conjunctions, prepositions, intensifiers). Same
+// two tokens the reader already uses for word-definition vs grammar-match
+// highlights, so the colour means the same thing in both places. That markup
+// lands in the parent page's astro scope, not this component's, so it's
+// styled by a global rule below rather than a scoped one.
 interface Props {
   note?: string;
 }
@@ -29,5 +40,19 @@ const { note } = Astro.props;
     margin-top: 0.125rem;
     font-size: 0.85rem;
     color: var(--color-ink-soft);
+  }
+</style>
+
+<style is:global>
+  .gp-example mark {
+    color: inherit;
+    padding: 0.05em 0.2em;
+    border-radius: 0.25em;
+  }
+  .gp-example mark[data-role='content'] {
+    background: var(--color-word);
+  }
+  .gp-example mark[data-role='grammar'] {
+    background: var(--color-gram);
   }
 </style>

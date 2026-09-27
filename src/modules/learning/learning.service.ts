@@ -135,8 +135,11 @@ export class LearningService {
     );
   }
 
-  getDueCardCount(userId: string): Promise<number> {
-    return this.queryBus.execute(new GetDueCardCountQuery(userId));
+  getDueCardCount(
+    userId: string,
+    types?: readonly CardTargetType[],
+  ): Promise<number> {
+    return this.queryBus.execute(new GetDueCardCountQuery(userId, types));
   }
 
   // How many New cards the user may still add today (daily limit minus the

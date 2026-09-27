@@ -21,13 +21,27 @@ interface Grade {
   rating: string;
   label: string;
   tone: string;
+  // Filled instead of outlined — the two most-picked ratings read as the
+  // default path, "Again"/"Hard" stay visually lighter (practice card
+  // restyle, PLAN.md practice-redesign follow-up).
+  primary?: boolean;
+}
+
+// Today's goal progress — `/learning/streak` (dailyGoal, reviewedToday) plus
+// the real due-card count from `/learning/due-count`, not the size of the
+// (`?limit=20`-capped) queue batch. Optional because `renderDailyPracticeQueue`
+// (the home page's daily-session step 2) has no equivalent data to pass.
+export interface PracticeProgress {
+  dueCount: number;
+  reviewedToday: number;
+  dailyGoal: number;
 }
 
 const GRADES: Grade[] = [
   { rating: 'again', label: 'Again', tone: 'tone-danger' },
   { rating: 'hard', label: 'Hard', tone: 'tone-amber' },
-  { rating: 'good', label: 'Good', tone: 'tone-green' },
-  { rating: 'easy', label: 'Easy', tone: 'tone-blue' },
+  { rating: 'good', label: 'Good', tone: 'tone-green', primary: true },
+  { rating: 'easy', label: 'Easy', tone: 'tone-blue', primary: true },
 ];
 
 // A card that has never been reviewed has nothing to rate "hard"/"easy"
@@ -35,7 +49,7 @@ const GRADES: Grade[] = [
 // `ReviewRating` either way.
 const NEW_CARD_GRADES: Grade[] = [
   { rating: 'again', label: 'Again', tone: 'tone-danger' },
-  { rating: 'good', label: 'Got it', tone: 'tone-green' },
+  { rating: 'good', label: 'Got it', tone: 'tone-green', primary: true },
 ];
 
 const TYPE_LABEL: Record<string, string> = {
@@ -99,12 +113,17 @@ function renderCard(
   const buttons = grades
     .map(
       (g, i) =>
-        `<button type="submit" name="rating" value="${g.rating}" class="practice__grade ${g.tone}" aria-keyshortcuts="${i + 1}">${g.label}<kbd class="practice__key" aria-hidden="true">${i + 1}</kbd></button>`,
+        `<button type="submit" name="rating" value="${g.rating}" class="practice__grade ${g.tone}${g.primary ? ' practice__grade--primary' : ''}" aria-keyshortcuts="${i + 1}">${g.label}<kbd class="practice__key" aria-hidden="true">${i + 1}</kbd></button>`,
     )
     .join('');
 
-  const reveal = t.secondary
-    ? `<button type="button" class="btn btn--sec practice__reveal" aria-keyshortcuts="Space">Show answer <kbd class="practice__key" aria-hidden="true">␣</kbd></button>
+  // Recall-then-grade: a card with an answer to reveal hides the whole grade
+  // strip until "Show answer" is clicked (practice-client.ts un-hides both
+  // together), so only one action is ever on screen at a time. A self-assess
+  // card (nothing to reveal) has no recall step, so its grades stay visible.
+  const hasReveal = Boolean(t.secondary);
+  const stage = hasReveal
+    ? `<button type="button" class="btn btn--lg practice__reveal" aria-keyshortcuts="Space">Show answer <kbd class="practice__key" aria-hidden="true">␣</kbd></button>
        <div class="practice__answer" hidden>${renderAnswerBody(t)}</div>`
     : `<p class="practice__answer practice__answer--self">Recall its meaning, then grade yourself.</p>`;
 
@@ -113,19 +132,37 @@ function renderCard(
       <p class="practice__kicker eyebrow">${esc(t.type === 'grammar' && t.kicker ? t.kicker : (TYPE_LABEL[t.type] ?? t.type))}</p>
       <p class="practice__count meta">${remaining} card${remaining === 1 ? '' : 's'} to review</p>
     </div>
-    <p class="practice__front">${esc(t.primary)}</p>
-    ${reveal}
-    <form
-      hx-post="${partialUrl}"
-      hx-target="${target}"
-      hx-swap="innerHTML"
-      class="practice__grades"
-    >
-      <input type="hidden" name="cardId" value="${esc(card.cardId)}" />
-      ${types.length > 0 ? `<input type="hidden" name="types" value="${types.join(',')}" />` : ''}
-      ${buttons}
-    </form>
+    <div class="practice__stage">
+      <p class="practice__front">${esc(t.primary)}</p>
+      ${stage}
+    </div>
+    <div class="practice__actions"${hasReveal ? ' hidden' : ''}>
+      <form
+        hx-post="${partialUrl}"
+        hx-target="${target}"
+        hx-swap="innerHTML"
+        class="practice__grades"
+      >
+        <input type="hidden" name="cardId" value="${esc(card.cardId)}" />
+        ${types.length > 0 ? `<input type="hidden" name="types" value="${types.join(',')}" />` : ''}
+        ${buttons}
+      </form>
+    </div>
   </div>`;
+}
+
+// A closing line for the two "nothing left to review" states — the payoff
+// moment where a plain checkmark used to be the only feedback. Silent when
+// nothing was actually reviewed yet (a first-time empty queue has no session
+// to recap).
+function renderSessionStat(progress: PracticeProgress | null): string {
+  if (!progress || progress.reviewedToday <= 0) {
+    return '';
+  }
+  const plural = progress.reviewedToday === 1 ? '' : 's';
+  const goal =
+    progress.dailyGoal > 0 ? ` · today's goal is ${progress.dailyGoal}` : '';
+  return `<p class="practice__stat meta">${progress.reviewedToday} card${plural} reviewed today${goal}</p>`;
 }
 
 // The queue emptied out but the daily new-card cap held some back
@@ -134,6 +171,7 @@ function renderCard(
 function renderDailyLimitReached(
   heldBackNewCount: number,
   types: readonly PracticeType[],
+  progress: PracticeProgress | null,
 ): string {
   const moreQuery = typesQuery(types);
   const plural = heldBackNewCount === 1 ? '' : 's';
@@ -141,6 +179,7 @@ function renderDailyLimitReached(
     <p class="practice__done-emoji">✓</p>
     <h2>Daily new-card limit reached</h2>
     <p>${heldBackNewCount} more new card${plural} waiting — come back tomorrow, or keep going now.</p>
+    ${renderSessionStat(progress)}
     <button
       type="button"
       class="btn btn--sec"
@@ -160,11 +199,33 @@ function renderEmpty(): string {
   </div>`;
 }
 
-function renderDone(): string {
+function renderDone(progress: PracticeProgress | null): string {
   return `<div class="practice__done card card--soft" data-testid="practice-done">
     <p class="practice__done-emoji">✓</p>
     <h2>All caught up</h2>
     <p>No cards are due right now. Come back later or <a href="/">read something new</a>.</p>
+    ${renderSessionStat(progress)}
+  </div>`;
+}
+
+// Slim goal-progress bar shown above the card (practice-redesign UX pass) —
+// makes the header's small `GoalRing` legible again right where attention
+// already is, and fills what used to be dead space above a lone floating
+// card. Silent when there's no goal to show progress against.
+function renderGoalBar(progress: PracticeProgress | null): string {
+  if (!progress || progress.dailyGoal <= 0) {
+    return '';
+  }
+  const pct = Math.min(
+    100,
+    Math.round((progress.reviewedToday / progress.dailyGoal) * 100),
+  );
+  const reached = progress.reviewedToday >= progress.dailyGoal;
+  return `<div class="practice__goal" data-testid="practice-goal">
+    <div class="practice__goal-track">
+      <div class="practice__goal-fill${reached ? ' practice__goal-fill--done' : ''}" style="width:${pct}%"></div>
+    </div>
+    <p class="practice__goal-label meta">${progress.reviewedToday} of ${progress.dailyGoal} today${reached ? ' — goal reached' : ''}</p>
   </div>`;
 }
 
@@ -173,21 +234,27 @@ function renderDone(): string {
 export function renderPracticeQueue(
   response: PracticeQueueResponse,
   types: readonly PracticeType[] = [],
+  progress: PracticeProgress | null = null,
 ): string {
   if (response.items.length === 0) {
     if (!response.hasAnyCards) {
       return renderEmpty();
     }
     return response.heldBackNewCount > 0
-      ? renderDailyLimitReached(response.heldBackNewCount, types)
-      : renderDone();
+      ? renderDailyLimitReached(response.heldBackNewCount, types, progress)
+      : renderDone(progress);
   }
-  return renderCard(
-    response.items[0],
-    response.items.length,
-    undefined,
-    undefined,
-    types,
+  // `dueCount` is the true total, not the size of this `?limit=20` batch —
+  // falls back to the batch size only when no progress data was fetched.
+  return (
+    renderGoalBar(progress) +
+    renderCard(
+      response.items[0],
+      progress?.dueCount ?? response.items.length,
+      undefined,
+      undefined,
+      types,
+    )
   );
 }
 

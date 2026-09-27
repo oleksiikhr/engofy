@@ -25,6 +25,7 @@ import type { DispositionView } from '../../../../modules/learning/types/disposi
 import { parseSlugId } from '../../../../modules/post/queries/parse-slug-id.js';
 import { AddCardDto } from '../dto/add-card.dto.js';
 import { DispositionResponseDto } from '../dto/disposition-response.dto.js';
+import { DueCardCountQueryDto } from '../dto/due-card-count-query.dto.js';
 import { DueCardCountResponseDto } from '../dto/due-card-count-response.dto.js';
 import { LearningCardResponseDto } from '../dto/learning-card-response.dto.js';
 import { NewCardBudgetResponseDto } from '../dto/new-card-budget-response.dto.js';
@@ -154,12 +155,16 @@ export class LearningController {
   }
 
   // How many of the user's cards are due right now — backs the feed's soft
-  // "N due" badge (PLAN.md §16/§17 Track B), not the queue itself.
+  // "N due" badge (PLAN.md §16/§17 Track B) and the /practice header count,
+  // not the queue itself. `?types=` narrows it the same way the practice
+  // queue's own filter chips do (omitted everywhere else, so the header/feed
+  // badge stays unfiltered).
   @Get('due-count')
   async dueCount(
     @CurrentUser() actor: UserActor,
+    @Query() query: DueCardCountQueryDto,
   ): Promise<DueCardCountResponseDto> {
-    const dueCount = await this.learning.getDueCardCount(actor.id);
+    const dueCount = await this.learning.getDueCardCount(actor.id, query.types);
     return { dueCount };
   }
 

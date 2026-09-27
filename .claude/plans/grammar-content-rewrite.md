@@ -1,0 +1,795 @@
+---
+slug: grammar-content-rewrite
+title: Переробка граматичного розділу — ручний контент замість EGP cheat sheet
+base_branch: changes
+created: 2026-09-22
+status: in-progress
+---
+
+# Переробка граматичного розділу
+
+## Виконання — ВАЖЛИВО, override дефолтного flow
+
+Ця робота виконується **без worktree, без нових гілок і без PR/push**, на прохання користувача:
+
+- Кожен зріз = звичайний `git commit` прямо в поточну гілку `changes`. Не створювати нову гілку,
+  не запускати `git worktree add`, не викликати `git-workflow` для PR.
+- Нічого не пушити, поки користувач явно не попросить.
+- Кожен зріз Фази 2 (контент по одному правилу) виконується в **окремій новій сесії** — навмисно,
+  щоб writer уважно і якісно пропрацював саме це правило. Не намагайся зробити кілька зрізів Фази 2
+  за один виклик `slice`.
+- Поля `Branch`/`PR` у кожному зрізі нижче навмисно порожні/незастосовні — це не помилка формату
+  плану, а свідомий відступ від стандартного `slice`-флоу для цієї задачі.
+
+## Контекст
+
+`/grammar/[slug]` для конструкцій без ручної сторінки в `apps/web/src/grammar-pages/*.astro`
+рендерить generic fallback: `GrammarConstruction.cheatSheetContent` — один markdown-блок,
+механічно згенерований `buildCheatSheet()` (`src/modules/post/domain/egp.ts`) зі списку EGP
+FORM-рядків, без жодної педагогічної обробки. Нижче завжди рендериться `GrammarUsagePoints` — список
+usage points з AI-написаним поясненням/прикладами (стадія `grammar_enrichment`), без жодних вправ.
+
+Лише 4 конструкції з 90 мають ручні сторінки (`determiners-articles`, `modality-can`,
+`past-past-simple`, `past-present-perfect-simple`), написані за допомогою компонентів
+`GrammarShell`/`GrammarSection`/`GrammarFormula`/`GrammarExample`/`GrammarCompare`
+(`apps/web/src/components/grammar/`). Мета цього плану — довести решту 86 конструкцій до того ж
+рівня якості вручну, і паралельно покращити UI/UX сторінки правила й списку `/grammar`.
+
+## TODO на майбутнє (НЕ зріз, лише зафіксована ідея)
+
+Користувач хоче згодом вправи на кожен usage point, показуючи типові речення/патерни, з яких можна
+вчитися. Формат і джерело зафіксовані 2026-09-22 (обговорення після live-огляду
+`adjectives-position`), сама реалізація свідомо не входить у зрізи нижче — розглянути окремо, коли
+Фаза 2 буде завершена або значно просунута:
+
+- **Формат**: fill-the-gap як основний тип (вставити пропущене слово/форму в речення за патерном), MCQ
+  для вибору слова з варіантів — обидва мають одну однозначну правильну відповідь, отже легко 100%
+  автоматично перевіряються. Без transform/error-correction (складніше валідувати без fuzzy-matching).
+- **Джерело речень**: AI генерує нові речення за патерном usage point (промпт на
+  `canDoStatement`/`explanation` + рівень + 2-3 EGP-приклади як few-shot), а не бере готові EGP-корпус
+  речення напряму (їх на usage point часто лише 2-4 — не вистачить навіть на MVP) і не бере гібрид.
+  Означає, що якість генерації і LLM-галюцинації неоднозначних речень треба буде верифікувати окремим
+  проходом, коли до цього дійде.
+- **Обсяг старту**: MVP — 10-15 вправ на usage point на 1-2 usage points спочатку, щоб підтвердити
+  формат/якість, і лише після цього масштабувати до ~100 на всі. Повний обсяг (~100 × ~3-4 usage
+  points × 90 конструкцій) — десятки тисяч вправ, не робити одразу.
+
+## Зрізи
+
+### [x] 1. Секційна структура сторінки правила + акордеон + контрастні приклади
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+На сторінці `/grammar/[slug]` (і для generic fallback, і для ручних сторінок): розбити тіло на
+секції Form → Use → Типові помилки → Практика (поки заглушка/анонс, вправ ще нема) з прогресивним
+розкриттям замість суцільного скролу; sticky чекліст-прогрес по секціях, перевикористовуючи паттерн
+track+fill (`.practice__goal-track`/`.practice__goal-fill` з `apps/web/src/lib/practice-card.ts` /
+`app.css`); `<details>`-акордеон для form-буллетів у cheat sheet (застосовується одразу до
+generic fallback — отже покращує всі ще не переписані 86 правил негайно, до того як дійде Фаза 2);
+новий компонент для ✅/❌ контрастних прикладів (вживається і в generic fallback для usage points, і
+пізніше в ручних сторінках Фази 2, замість сухого can-do-стейтменту).
+
+### [x] 2. UX списку /grammar
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+На `apps/web/src/pages/grammar.astro`: візуальний progress (ring/bar) на картці конструкції замість
+текстового `learnedCount/usagePointCount`; CTA "продовжити навчання" зверху сторінки (для
+конструкції в процесі); бейдж "ручний контент" vs "автозгенерований" на картці — за наявністю
+відповідного файлу в `apps/web/src/grammar-pages/`.
+
+## Фаза 2 — контент по одному правилу (86 зрізів)
+
+Спільний процес для кожного зрізу нижче (не повторюється в кожному пункті):
+
+Написати `apps/web/src/grammar-pages/<slug>.astro`, що замінює generic fallback для цієї
+конструкції. Використати `GrammarShell`/`GrammarSection`/`GrammarFormula`/`GrammarExample`/
+`GrammarCompare`/`GrammarUsagePointCard` + нові компоненти із зрізу 1 (секції, акордеон, контрастні
+приклади). Існуючі дані з `grammar_constructions`/`grammar_usage_points` (сирий EGP + вже
+AI-збагачені `learnerExplanation`/`learnerExamples`) — це довідковий матеріал для перевірки фактів, а
+не текст для копіювання; писати пояснення, формулу, приклади і типові помилки вручну заради
+педагогічної ясності. Секція "Практика" — заглушка/анонс (вправи — окремий TODO вище, не цей зріз).
+
+UI-правила, зафіксовані 2026-09-22 (зрізи 5b/5c) після живого огляду `adjectives-position`,
+обов'язкові для кожної сторінки:
+
+- **Підсвітка в прикладах — усі слоти формули, не тільки цільове слово**: для кожного слова/фрази
+  прикладу, що відповідає слоту `GrammarFormula`, обгорнути його прямо в тексті речення в
+  `<mark data-role="content">…</mark>` або `<mark data-role="grammar">…</mark>`. `content` (жовтий,
+  `--color-word`) — слот, названий у формулі "adjective"/"a-adjective"/"-ed form" (сама відмінювана
+  граматична категорія, яку вчить сторінка); `grammar` (синій, `--color-gram`) — усі інші слоти формули
+  (subject, be/feel/look, the/a, noun, and/but, make, someone/something, too/enough, prepositions
+  тощо). Ті самі 2 токени, що й у рідері (word-definition vs grammar-match), для візуальної
+  консистентності. Якщо для абзацу нема окремого `GrammarFormula` (напр. "degree adjectives"/"time
+  adjectives" на `adjectives-position`, які прямим текстом кажуть "work the same way" як уже показана
+  формула) — усе одно розмітити всі слоти за тим самим шаблоном; якщо приклад справді ізольований без
+  жодної формули поруч (напр. compound adjectives на `adjectives-combining`), досить одного
+  `data-role="content"` на цільове слово. **Пастка**: Astro прибирає прогалину-з-переносом-рядка між
+  закриттям тегу і наступним тегом/словом повністю (не стискає в один пробіл, як звичайний HTML) —
+  тому кожен розмічений приклад пишеться одним рядком у файлі (`<mark>…</mark> <mark>…</mark>` через
+  пробіл, без переносу рядка між ними), інакше слова зливаються в тексті сторінки (`isbig`,
+  `onlynarrow`) непомітно для ока (padding `<mark>` це маскує), але ламає копіювання/screen-reader.
+  Так само стежити за переносами рядків між `</em>`/`<em>` і сусіднім словом у звичайній прозі.
+- **Usage points вплітаються в секцію, а не дублюються знизу**: для кожного `con.usagePoints` знайти
+  відповідну `GrammarSection` за `guideword` (підрядком, регістронезалежно) і вставити туди
+  `<GrammarUsagePointCard usagePoint={…} />` одразу після прикладу, що це правило ілюструє; зібрати
+  `grammarUsagePointId` таких точок у масив і передати як `inlineUsagePointIds` у `<GrammarShell>` —
+  тоді generic блок "When it's used" внизу не дублює те, що вже показано в прозі (і взагалі не
+  рендериться, якщо після фільтра нічого не лишилось). Якщо usage point не має явного відповідника
+  серед написаних секцій (напр. рідкісна C2-конструкція поза темою сторінки), **не** притягувати його
+  штучно — залишити в generic-блоці знизу як є.
+- **FORM-факти без usage point — це нормально**: правила, яких нема серед `con.usagePoints` (чисті
+  EGP `FORM`-рядки, не `USE`/`FORM/USE`), пишуться так само повноцінно (формула + приклад), просто без
+  `GrammarUsagePointCard`/кнопки "я це знаю" — рішення 2026-09-22, гейміфікація навмисно лишається
+  тільки на USE-класифікованих правилах, не розширювати на FORM без окремого рішення.
+- **CEFR-прогрес — угорі, не внизу**: `GrammarShell` сам рендерить `con.levelProgress` (бейджі
+  A2/B2/C2 "X/Y learned") одразу під lede, у шапці сторінки — це не частина `GrammarUsagePoints`
+  більше, окремо піклуватись про це в зрізі не треба.
+
+Перевірити рендер сторінки (`run` skill / dev-сервер) перед комітом.
+
+Порядок — за CEFR рівнем (A1 → C2), потім алфавітно за slug.
+
+### [x] 3. Adjectives — combining (`adjectives-combining`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adjectives-combining`.
+
+### [x] 4. Adjectives — modifying (`adjectives-modifying`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adjectives-modifying`.
+
+### [x] 5. Adjectives — position (`adjectives-position`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adjectives-position`.
+
+### [x] 5b. UI-фундамент: підсвітка в прикладах + вплетені usage points
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Після живого огляду `adjectives-position` користувач вказав, що ручні секції відчуваються
+відірваними від 3 реальних EGP usage points (дублюються окремим блоком карток внизу) і що приклади не
+підсвічують слово, яке ілюструють. Рішення (детальніше — обговорення 2026-09-22, зафіксовано вище у
+«Спільному процесі» і в TODO про вправи):
+
+- `GrammarExample.astro`: глобальний стиль для `<mark>` всередині прикладу (`--color-gram`, той самий
+  токен, що й grammar-хайлайти в reader).
+- Новий `GrammarUsagePointCard.astro`, винесений з `GrammarUsagePoints.astro` (той сам рендер картки
+  usage point, тепер придатний і для generic-списку знизу, і для вставки прямо в секцію).
+- `GrammarShell.astro`: новий проп `inlineUsagePointIds` — фільтрує `con.usagePoints`, що вже показані
+  inline, з generic-блоку "When it's used"; якщо після фільтра нічого не лишилось, текст-заглушка
+  міняється на "Every usage point for this rule is covered in the sections above." замість "No usage
+  points recorded".
+- Ретрофіт усіх 3 вже написаних сторінок (`adjectives-position`, `adjectives-combining`,
+  `adjectives-modifying`): `<mark>` на цільові слова в кожному прикладі; для `adjectives-position` всі
+  3 usage points (LIMITING ADJECTIVES, DEGREE ADJECTIVES ×2) вплетені в секцію "attributive-only" —
+  темово збігаються з прозою. `adjectives-combining` має 1 usage point (`USE: FOCUS`, C2, про
+  еліптичні речення) без відповідника серед написаних секцій — залишено в generic-блоці свідомо, не
+  притягнуто штучно (окрема тема, потребує власного параграфа — не цей зріз). `adjectives-modifying`
+  не має usage points узагалі — без змін по цій частині.
+
+Перевірено: `pnpm astro check` (0 помилок), живий рендер трьох сторінок через dev-сервер + Playwright
+(мітки/картки на місці, DOM-снапшот `adjectives-position` підтверджує inline-картку під "Limiting
+adjectives"/"Degree adjectives" параграфами).
+
+### [x] 5c. Ролі-кольори по слотах формули + прогрес угору + fix whitespace-бага
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Друге коло фідбеку 2026-09-22 після 5b: одна підсвітка на слово не показувала всю формулу (напр. "the
++ main / only + noun" — 3 слоти, 1 мітка); "When it's used" внизу лишався майже пустим блоком (лише
+progress-бар) на сторінках, де всі usage points уже inline; кольори підсвітки мали бути тими самими
+токенами, що й у рідері, а не довільними. Рішення — див. оновлений «Спільний процес» вище. Крім того,
+знайдено і виправлено **окремий, попередньо існуючий баг** під час розмітки: Astro прибирає
+whitespace-only текстовий вузол між тегами, якщо він містить перенос рядка (не стискає в пробіл, як
+звичайний HTML) — це вже ламало пробіли в оригінальній прозі (`Main and only` + перенос →
+`onlynarrow`, `expensive,` + перенос → `expensive,new`) до будь-яких моїх правок; виправлено всюди, де
+знайдено на цих 3 сторінках.
+
+- `GrammarExample.astro`: `<mark>` тепер вимагає `data-role="content"|"grammar"`, стилізовані
+  `--color-word`/`--color-gram` відповідно (раніше — один нерозрізнений синій `<mark>`).
+  `GrammarShell.astro`: `con.levelProgress` рендериться в шапці (`.con-head__progress`), прибрано з
+  `GrammarUsagePoints`; `GrammarUsagePoints.astro` тепер не рендерить взагалі нічого (ні h2, ні пункт
+  sticky-нав), коли `usagePoints` порожній (спрощено — раніше було "No usage points recorded" текстом).
+- Усі 3 вже написані сторінки: кожен приклад під кожною наявною `GrammarFormula` розмічений по всіх
+  слотах (subject/be/determiner/noun/conjunction/preposition → `grammar`, adjective/-ed-form →
+  `content`); приклади без формули (compound adjectives) лишились з одинарною `content`-міткою.
+
+Перевірено: `pnpm astro check` (0 помилок), Playwright-скріншоти всіх 3 сторінок (progress-бейджі
+вгорі, "When it's used" відсутній на `adjectives-position`/`adjectives-modifying`, наявний на
+`adjectives-combining` з 1 незакладеним usage point), скрипт-перевірка на злиплі слова
+(`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всіх 3 рендерах — чисто.
+
+### [ ] 6. Adjectives — superlatives (`adjectives-superlatives`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adjectives-superlatives`.
+
+### [ ] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adverbs-adverb-phrases-form`.
+
+### [ ] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adverbs-adverbs-and-adverb-phrases-types-and-meanings`.
+
+### [ ] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adverbs-adverbs-as-modifiers`.
+
+### [ ] 10. Adverbs — position (`adverbs-position`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adverbs-position`.
+
+### [ ] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-coordinated`.
+
+### [ ] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-declarative`.
+
+### [ ] 13. Clauses — interrogatives (`clauses-interrogatives`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-interrogatives`.
+
+### [ ] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-subordinated`.
+
+### [ ] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `conjunctions-coordinating`.
+
+### [ ] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `conjunctions-subordinating`.
+
+### [ ] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `determiners-demonstratives`.
+
+### [ ] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `determiners-possessives`.
+
+### [ ] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `determiners-quantity`.
+
+### [ ] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-simple-with-will-and-shall`.
+
+### [ ] 21. Modality — will (`modality-will`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-will`.
+
+### [ ] 22. Modality — would (`modality-would`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-would`.
+
+### [ ] 23. Negation — negation (`negation-negation`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `negation-negation`.
+
+### [ ] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `nouns-noun-phrases`.
+
+### [ ] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `nouns-noun-phrases-grammatical-functions`.
+
+### [ ] 26. Nouns — plural (`nouns-plural`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `nouns-plural`.
+
+### [ ] 27. Nouns — types (`nouns-types`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `nouns-types`.
+
+### [ ] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `prepositions-prepositions`.
+
+### [ ] 29. Present — present continuous (`present-present-continuous`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `present-present-continuous`.
+
+### [ ] 30. Present — present simple (`present-present-simple`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `present-present-simple`.
+
+### [ ] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-indefinite-thing-one-body-etc`.
+
+### [ ] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-subject-object`.
+
+### [ ] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `questions-yes-no`.
+
+### [ ] 34. Verbs — linking (`verbs-linking`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-linking`.
+
+### [ ] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-patterns-with-to-and-ing`.
+
+### [ ] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-prepositional`.
+
+### [ ] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-there-is-are`.
+
+### [ ] 38. Verbs — types (`verbs-types`) — рівень A1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-types`.
+
+### [ ] 39. Adjectives — comparatives (`adjectives-comparatives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `adjectives-comparatives`.
+
+### [ ] 40. Clauses — comparatives (`clauses-comparatives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-comparatives`.
+
+### [ ] 41. Clauses — conditional (`clauses-conditional`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-conditional`.
+
+### [ ] 42. Clauses — imperatives (`clauses-imperatives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-imperatives`.
+
+### [ ] 43. Clauses — phrases/exclamations (`clauses-phrases-exclamations`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-phrases-exclamations`.
+
+### [ ] 44. Clauses — relative (`clauses-relative`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `clauses-relative`.
+
+### [ ] 45. Discourse markers — discourse markers in writing (`discourse-markers-discourse-markers-in-writing`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `discourse-markers-discourse-markers-in-writing`.
+
+### [ ] 46. Focus — focus (`focus-focus`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `focus-focus`.
+
+### [ ] 47. Future — future continuous (`future-future-continuous`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-continuous`.
+
+### [ ] 48. Future — future with be going to (`future-future-with-be-going-to`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-with-be-going-to`.
+
+### [ ] 49. Future — present continuous for future use (`future-present-continuous-for-future-use`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-present-continuous-for-future-use`.
+
+### [ ] 50. Modality — adjectives (`modality-adjectives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-adjectives`.
+
+### [ ] 51. Modality — adverbs (`modality-adverbs`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-adverbs`.
+
+### [ ] 52. Modality — could (`modality-could`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-could`.
+
+### [ ] 53. Modality — expressions with be (`modality-expressions-with-be`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-expressions-with-be`.
+
+### [ ] 54. Modality — have (got) to (`modality-have-got-to`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-have-got-to`.
+
+### [ ] 55. Modality — may (`modality-may`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-may`.
+
+### [ ] 56. Modality — might (`modality-might`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-might`.
+
+### [ ] 57. Modality — must (`modality-must`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-must`.
+
+### [ ] 58. Modality — shall (`modality-shall`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-shall`.
+
+### [ ] 59. Modality — should (`modality-should`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-should`.
+
+### [ ] 60. Nouns — uncountable (`nouns-uncountable`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `nouns-uncountable`.
+
+### [ ] 61. Passives — passives: form (`passives-passives-form`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `passives-passives-form`.
+
+### [ ] 62. Past — past continuous (`past-past-continuous`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `past-past-continuous`.
+
+### [ ] 63. Pronouns — demonstratives (`pronouns-demonstratives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-demonstratives`.
+
+### [ ] 64. Pronouns — generic use (`pronouns-generic-use`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-generic-use`.
+
+### [ ] 65. Pronouns — possessive (`pronouns-possessive`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-possessive`.
+
+### [ ] 66. Pronouns — quantity (`pronouns-quantity`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-quantity`.
+
+### [ ] 67. Pronouns — reflexive (`pronouns-reflexive`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-reflexive`.
+
+### [ ] 68. Pronouns — substitution, one, ones, none (`pronouns-substitution-one-ones-none`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-substitution-one-ones-none`.
+
+### [ ] 69. Questions — alternatives (`questions-alternatives`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `questions-alternatives`.
+
+### [ ] 70. Questions — tags (`questions-tags`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `questions-tags`.
+
+### [ ] 71. Questions — wh- (`questions-wh`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `questions-wh`.
+
+### [ ] 72. Reported speech — reported speech (`reported-speech-reported-speech`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `reported-speech-reported-speech`.
+
+### [ ] 73. Verbs — patterns_that clauses (`verbs-patterns-that-clauses`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-patterns-that-clauses`.
+
+### [ ] 74. Verbs — phrasal (`verbs-phrasal`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-phrasal`.
+
+### [ ] 75. Verbs — phrasal-prepositional (`verbs-phrasal-prepositional`) — рівень A2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `verbs-phrasal-prepositional`.
+
+### [ ] 76. Future — future in the past (`future-future-in-the-past`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-in-the-past`.
+
+### [ ] 77. Modality — ought (`modality-ought`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-ought`.
+
+### [ ] 78. Modality — used to (`modality-used-to`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-used-to`.
+
+### [ ] 79. Passives — get and have (`passives-get-and-have`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `passives-get-and-have`.
+
+### [ ] 80. Past — past perfect continuous (`past-past-perfect-continuous`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `past-past-perfect-continuous`.
+
+### [ ] 81. Past — past perfect simple (`past-past-perfect-simple`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `past-past-perfect-simple`.
+
+### [ ] 82. Past — present perfect continuous (`past-present-perfect-continuous`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `past-present-perfect-continuous`.
+
+### [ ] 83. Pronouns — reciprocal (`pronouns-reciprocal`) — рівень B1
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `pronouns-reciprocal`.
+
+### [ ] 84. Future — future expressions with be (`future-future-expressions-with-be`) — рівень B2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-expressions-with-be`.
+
+### [ ] 85. Future — future perfect continuous (`future-future-perfect-continuous`) — рівень B2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-perfect-continuous`.
+
+### [ ] 86. Future — future perfect simple (`future-future-perfect-simple`) — рівень B2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `future-future-perfect-simple`.
+
+### [ ] 87. Modality — dare (`modality-dare`) — рівень B2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-dare`.
+
+### [ ] 88. Modality — need (`modality-need`) — рівень B2
+- Branch: (немає — коміт прямо в `changes`)
+- Base: `changes`
+- PR: — (не потрібен)
+
+Див. «Спільний процес» вище. Slug: `modality-need`.
+

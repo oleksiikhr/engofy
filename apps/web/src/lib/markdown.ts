@@ -70,3 +70,16 @@ export function renderMarkdown(src: string): string {
   flushPara();
   return html.join('\n');
 }
+
+// Cheat sheets are always `## Form` followed by bullets (see buildCheatSheet
+// in the Nest EGP importer) — split out just the bullet HTML and its count,
+// so the /grammar/[slug] fallback can nest it in its own <details> without
+// repeating the "Form" heading its wrapping GrammarSection already renders.
+export function renderCheatSheetBullets(src: string): {
+  html: string;
+  count: number;
+} {
+  const html = renderMarkdown(src).replace(/^<h[1-6]>.*?<\/h[1-6]>\n?/, '');
+  const count = (html.match(/<li>/g) ?? []).length;
+  return { html, count };
+}

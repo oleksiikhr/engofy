@@ -4,6 +4,7 @@ import { factories } from '../../../../../test/factories/factories.js';
 import { FakeAiClient } from '../../../../../test/fakes/ai.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { AI_CLIENT } from '../../../../core/ai/ai-client.port.js';
+import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.error.js';
 import type { EnrichmentResult } from '../../domain/enrichment-prompt.js';
 import { Phrase } from '../../entities/phrase.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
@@ -234,5 +235,27 @@ describe('EnrichLexiconHandler', () => {
     expect(filled.translations).toEqual({
       uk: { translation: 'переклад-0' },
     });
+  });
+
+  it('retries once then skips the language on a schema-mismatch payload, leaving the row pending but completing the run', async () => {
+    const { postId, wordDefinitionId } = await seedPost(suite.orm.em);
+    fakeAi.onCompleteStructured = () => {
+      throw new AiSchemaMismatchError('report_enrichment');
+    };
+    const callsBefore = fakeAi.structuredCallCount;
+
+    await suite.command(new EnrichLexiconCommand(postId));
+
+    expect(fakeAi.structuredCallCount - callsBefore).toBe(2);
+    const definition = await suite.orm.em.findOneOrFail(
+      WordDefinition,
+      wordDefinitionId,
+    );
+    expect(definition.translations).toBeFalsy();
+    const run = await suite.orm.em.findOneOrFail(PostPipelineRun, {
+      postId,
+      stage: PostPipelineStage.Enrichment,
+    });
+    expect(run.status).toBe(PostPipelineRunStatus.Completed);
   });
 });

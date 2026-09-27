@@ -1,0 +1,194 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// The EGP data for this construction has 3 USE/FORM-USE records — limiting
+// adjectives (main/only) and degree adjectives (real/absolute/complete) at
+// two levels — and both topics are already covered in prose below, in the
+// "attributive-only" section. Match by guideword and render their cards
+// right there instead of a disconnected list at the bottom of the page.
+const limitingPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('LIMITING ADJECTIVES'),
+);
+const degreePoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('DEGREE ADJECTIVES'),
+);
+const inlineUsagePointIds = [
+  ...(limitingPoint ? [limitingPoint] : []),
+  ...degreePoints,
+].map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Where an English adjective goes: before the noun it describes, or after a linking verb like be, look or feel — plus the small groups of adjectives that only work in one of those two spots."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Before the noun, or after be', open: true },
+    { id: 'predicative-only', title: 'Adjectives that only go after a verb', open: false },
+    { id: 'attributive-only', title: 'Adjectives that only go before a noun', open: false },
+    { id: 'other-spots', title: 'Two more spots: after make, and after a noun', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Most English adjectives are flexible — they can sit right before the
+      noun they describe, or after a linking verb like <em>be</em>. A smaller
+      set of adjectives are pickier and only work in one of those two spots.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Before the noun, or after be" id="form" open>
+    <p>
+      The two basic positions for an adjective. <em>Attributive</em> means
+      right before the noun it describes; <em>predicative</em> means after a
+      form of <em>be</em>, separated from the noun.
+    </p>
+    <GrammarFormula label="Attributive" parts={['a / an', 'adjective', 'noun']} />
+    <GrammarExample note="Big and small sit directly in front of the nouns they describe.">
+      We have <mark data-role="grammar">a</mark> <mark data-role="content">big</mark> <mark data-role="grammar">garden</mark> and <mark data-role="grammar">a</mark> <mark data-role="content">small</mark> <mark data-role="grammar">swimming pool</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Predicative" parts={['subject', 'be', 'adjective']} />
+    <GrammarExample note="Big describes bedroom, but from the other side of is.">
+      <mark data-role="grammar">My bedroom</mark> <mark data-role="grammar">is</mark> <mark data-role="content">big</mark>.
+    </GrammarExample>
+    <p>
+      Most adjectives — <em>nice</em>, <em>happy</em>, <em>expensive</em>, <em>new</em> — move freely between the two. The rest of this page is
+      about the adjectives that can't.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Adjectives that only go after a verb" id="predicative-only" open={false}>
+    <p>
+      A handful of adjectives never go before a noun at all. The clearest
+      group is built on the prefix <em>a-</em>: <em>asleep</em>,
+      <em>awake</em>, <em>alive</em>, <em>alone</em>. They only appear after a
+      linking verb.
+    </p>
+    <GrammarFormula label="a- adjectives" parts={['subject', 'be / feel / look', 'a-adjective']} />
+    <GrammarExample note="Alone here, not before a noun.">
+      I was very nervous because <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">alone</mark> at the bus station.
+    </GrammarExample>
+    <GrammarExample note="Alive after was, describing my father from the other side of the verb.">
+      I was very happy that <mark data-role="grammar">my father</mark> <mark data-role="grammar">was</mark> still <mark data-role="content">alive</mark>.
+    </GrammarExample>
+    <p>
+      Two other linking verbs, <em>look</em> and <em>feel</em>, work the same
+      way as <em>be</em> — they introduce an adjective describing the
+      subject, never a noun that follows them.
+    </p>
+    <GrammarExample note="Perfect describes it, after looks.">
+      It is black and <mark data-role="grammar">it</mark> <mark data-role="grammar">looks</mark> <mark data-role="content">perfect</mark>.
+    </GrammarExample>
+    <GrammarExample note="Comfortable describes I, after feel.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">feel</mark> <mark data-role="content">comfortable</mark> when I am wearing these clothes.
+    </GrammarExample>
+    <p>
+      An adjective can also follow one of the indefinite pronouns <em>something</em>, <em>nothing</em>, <em>somewhere</em>, <em>nowhere</em> — the reverse of the usual attributive order, since the
+      adjective comes after the word it describes rather than before it.
+    </p>
+    <GrammarFormula label="With an indefinite pronoun" parts={['something / nothing', 'adjective']} />
+    <GrammarExample note="Special comes after something, not before it.">
+      I want to cook <mark data-role="grammar">something</mark> <mark data-role="content">special</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Adjectives that only go before a noun" id="attributive-only" open={false}>
+    <p>
+      Other adjectives go the opposite way: they only work directly in front
+      of a noun, never after <em>be</em>. <em>Main</em> and <em>only</em> narrow down which noun is meant, so they need to sit right next to it.
+    </p>
+    <GrammarFormula label="Limiting adjectives" parts={['the', 'main / only', 'noun']} />
+    <GrammarExample note="Main picks out one reason among several — it needs the noun right there.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">main</mark> <mark data-role="grammar">reason</mark> is that I am practising the language.
+    </GrammarExample>
+    {limitingPoint && <GrammarUsagePointCard usagePoint={limitingPoint} />}
+    <p>
+      A small group of degree adjectives — <em>real</em>, <em>absolute</em>,
+      <em>complete</em> — work the same way, adding intensity to a noun
+      rather than describing a state.
+    </p>
+    <GrammarExample note="A real problem, not the problem is real (a different meaning: real vs fake).">
+      This is <mark data-role="grammar">a</mark> <mark data-role="content">real</mark> <mark data-role="grammar">problem</mark> and our town is becoming very dangerous.
+    </GrammarExample>
+    {degreePoints.map((p) => <GrammarUsagePointCard usagePoint={p} />)}
+    <p>
+      So do three time adjectives — <em>present</em>, <em>future</em>,
+      <em>former</em> — which describe when something is true and, unlike
+      most adjectives, never follow <em>be</em> at all.
+    </p>
+    <GrammarExample note="Present situation only — not the situation is present.">
+      We are all very concerned about <mark data-role="grammar">the</mark> <mark data-role="content">present</mark> <mark data-role="grammar">situation</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Two more spots: after make, and after a noun" id="other-spots" open={false}>
+    <p>
+      Two further patterns place an adjective away from both usual spots.
+      After <em>make</em>, an adjective describes the result of an action on
+      its object.
+    </p>
+    <GrammarFormula label="Result with make" parts={['make', 'someone/something', 'adjective']} />
+    <GrammarExample note="Angry is the result of make, describing me.">
+      That's something that <mark data-role="grammar">makes</mark> <mark data-role="grammar">me</mark> <mark data-role="content">angry</mark>!
+    </GrammarExample>
+    <p>
+      And a verb's <em>-ed</em> form can work as an adjective placed directly
+      after the noun it describes, usually shorthand for a fuller relative
+      clause (<em>the film shown</em> = <em>the film that was shown</em>).
+    </p>
+    <GrammarFormula label="-ed form after a noun" parts={['noun', '-ed form']} />
+    <GrammarExample note="Shown describes film, placed after it rather than before.">
+      I'd introduce discussions after each <mark data-role="grammar">film</mark> <mark data-role="content">shown</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      Because <em>a-</em> adjectives look like ordinary adjectives, learners
+      often try to put them before a noun anyway. The fix isn't reordering
+      the sentence — it's swapping in a different word that means almost the
+      same thing and does work attributively.
+    </p>
+    <GrammarContrast
+      bad={['an asleep baby', 'an alive fish', 'an alone traveller']}
+      good={['a sleeping baby', 'a living fish', 'a lonely traveller']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-combining',
+        name: 'combining adjectives',
+        note: 'the order rule for two or more adjectives sitting before the same noun.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'very, quite and other words that strengthen or soften a single adjective.',
+      },
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'how an adjective fits into the larger phrase built around a noun.',
+      },
+    ]}
+  />
+</GrammarShell>

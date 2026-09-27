@@ -6,6 +6,7 @@ import {
   AI_CLIENT,
   type AiClient,
 } from '../../../../core/ai/ai-client.port.js';
+import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.error.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
 import {
   CONTENT_LANGUAGE_INFO,
@@ -14,6 +15,7 @@ import {
 import {
   buildEnrichmentSystemPrompt,
   buildEnrichmentUserText,
+  type EnrichmentResult,
   enrichmentToolSchema,
   indexEnrichmentResult,
   type PendingPhrase,
@@ -43,6 +45,10 @@ interface PendingLexicon {
   phrases: Phrase[];
 }
 
+// Model calls per language before a malformed payload is skipped (mirrors
+// EnrichGrammarHandler's per-point retry).
+const ENRICHMENT_MAX_ATTEMPTS = 2;
+
 // enrichment stage (PLAN.md §17 Track A): fills the WordDefinition/Phrase
 // stubs `annotate-post` find-or-creates for this post — definition,
 // phonetic (words only), example, cefrLevel, translations. Runs as a third branch off the
@@ -57,6 +63,13 @@ interface PendingLexicon {
 // enriched by an earlier post is never re-billed. `publish` gates on this
 // stage the same way it gates on `annotation` (D6) and `ai_grammar`'s paint
 // phase (F3).
+//
+// Flush-per-language (sanctioned Q2 exception, cqrs.md, 4th) and a
+// retry-then-skip on `AiSchemaMismatchError` per language (mirrors
+// EnrichGrammarHandler.enrichPoint) keep a bad response for one language from
+// discarding another language's already-computed writes: the facade's single
+// end-of-job flush means an unhandled throw here would otherwise lose every
+// language processed so far in the same job attempt.
 @CommandHandler(EnrichLexiconCommand)
 export class EnrichLexiconHandler
   implements ICommandHandler<EnrichLexiconCommand>
@@ -85,10 +98,16 @@ export class EnrichLexiconHandler
       await this.collectPostLexicon(postId);
 
     // One call per target language; a language already covered for every row
-    // of this post costs nothing.
+    // of this post costs nothing. Flush-per-language (sanctioned Q2 exception,
+    // cqrs.md) so a later language's AI failure can't discard an earlier
+    // language's already-computed WordDefinition/Phrase writes — without this,
+    // the whole job's unit of work is never flushed on throw (JobWorkerHost
+    // just forks a scoped EM, it opens no DB transaction of its own) and a
+    // retry would re-pay for every language that already succeeded.
     for (const language of ENRICHMENT_LANGUAGES) {
-      // biome-ignore lint/performance/noAwaitInLoops: languages are enriched one after another.
+      // biome-ignore lint/performance/noAwaitInLoops: languages are enriched one after another, each flushed before the next starts.
       await this.enrichLanguage(postId, language, wordDefinitionIds, phraseIds);
+      await this.em.flush();
     }
 
     const run = existingRun ?? new PostPipelineRun();
@@ -116,15 +135,15 @@ export class EnrichLexiconHandler
       return;
     }
 
-    const assessment = await this.ai.completeStructured({
-      system: buildEnrichmentSystemPrompt(language),
-      userText: buildEnrichmentUserText(pendingWords, pendingPhrases),
-      tool: {
-        name: 'report_enrichment',
-        description: `Report a learner-dictionary definition, example sentence, CEFR level, ${CONTENT_LANGUAGE_INFO[language].name} translation (and phonetic for words) for every word and phrase listed.`,
-        schema: enrichmentToolSchema,
-      },
-    });
+    const assessment = await this.completeEnrichment(
+      postId,
+      language,
+      pendingWords,
+      pendingPhrases,
+    );
+    if (!assessment) {
+      return;
+    }
 
     const indexed = indexEnrichmentResult(
       assessment,
@@ -164,6 +183,43 @@ export class EnrichLexiconHandler
       },
       'ai_enrichment filled pending lexicon entries',
     );
+  }
+
+  // One language's model call, retried on a malformed payload. A language
+  // that still fails after the last attempt is skipped (left pending): its
+  // bad payload must not fail the whole stage for every other language, and
+  // a later post gap-fills it — same stance as EnrichGrammarHandler.enrichPoint.
+  private async completeEnrichment(
+    postId: string,
+    language: ContentLanguage,
+    pendingWords: PendingWord[],
+    pendingPhrases: PendingPhrase[],
+  ): Promise<EnrichmentResult | null> {
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        // biome-ignore lint/performance/noAwaitInLoops: each attempt only runs after the previous one failed.
+        return await this.ai.completeStructured({
+          system: buildEnrichmentSystemPrompt(language),
+          userText: buildEnrichmentUserText(pendingWords, pendingPhrases),
+          tool: {
+            name: 'report_enrichment',
+            description: `Report a learner-dictionary definition, example sentence, CEFR level, ${CONTENT_LANGUAGE_INFO[language].name} translation (and phonetic for words) for every word and phrase listed.`,
+            schema: enrichmentToolSchema,
+          },
+        });
+      } catch (err) {
+        if (!(err instanceof AiSchemaMismatchError)) {
+          throw err;
+        }
+        if (attempt >= ENRICHMENT_MAX_ATTEMPTS) {
+          this.logger.warn(
+            { err, postId, language, attempts: attempt },
+            'ai_enrichment: language skipped — AI payload failed schema validation',
+          );
+          return null;
+        }
+      }
+    }
   }
 
   // The word/phrase ids this post's node-tree references — the same span

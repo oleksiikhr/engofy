@@ -1,4 +1,5 @@
 import node from '@astrojs/node';
+import spotlightjs from '@spotlightjs/astro';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
@@ -24,6 +25,10 @@ export default defineConfig({
   // No `<Image>` usage — skip the sharp-based optimizer (and its churny
   // platform binaries) entirely.
   image: { service: { entrypoint: 'astro/assets/services/noop' } },
+  // Dev-only: hosts the Spotlight overlay that the Nest backend's Sentry SDK
+  // already forwards events to outside production (`spotlight: env !==
+  // Environment.Production` in src/core/observability/sentry.ts).
+  integrations: process.env.NODE_ENV === 'production' ? [] : [spotlightjs()],
   vite: {
     plugins: [tailwindcss()],
     server: {

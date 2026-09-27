@@ -7,7 +7,9 @@
         "dlx",
         "@playwright/mcp@latest",
         "--output-dir",
-        ".playwright-mcp"
+        ".playwright-mcp",
+        "--config",
+        ".claude/mcp/playwright-config.json"
       ]
     }
   }

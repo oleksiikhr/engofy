@@ -1,30 +1,66 @@
 ---
-// One titled block of a handcrafted construction page.
+// One titled, collapsible block of a construction page. Plain <details>/
+// <summary> so the open/closed state needs no client JS; `id` doubles as the
+// in-page anchor and the key GrammarSectionProgress uses to track it
+// (`gp-section-${id}`).
 interface Props {
   title: string;
+  id: string;
+  open?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, id, open = true } = Astro.props;
 ---
 
-<section class="gp-section">
-  <h2>{title}</h2>
-  <slot />
-</section>
+<details class="gp-section" id={`gp-section-${id}`} data-gp-section open={open}>
+  <summary class="gp-section__summary">
+    <h2>{title}</h2>
+    <span class="gp-section__chev" aria-hidden="true"></span>
+  </summary>
+  <div class="gp-section__body">
+    <slot />
+  </div>
+</details>
 
 <style>
   .gp-section {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
-  .gp-section :global(h2) {
-    margin: 0 0 0.75rem;
+  .gp-section__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .gp-section__summary::-webkit-details-marker {
+    display: none;
+  }
+  .gp-section__summary :global(h2) {
+    margin: 0;
     font-size: 1.19rem;
     font-weight: 800;
   }
-  .gp-section :global(p) {
+  .gp-section__chev {
+    flex: none;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-right: 2px solid var(--color-ink-faint);
+    border-bottom: 2px solid var(--color-ink-faint);
+    transform: rotate(-45deg);
+    transition: transform 0.15s ease;
+  }
+  .gp-section[open] > .gp-section__summary .gp-section__chev {
+    transform: rotate(45deg);
+  }
+  .gp-section__body {
+    padding-top: 0.75rem;
+  }
+  .gp-section__body :global(p) {
     margin: 0 0 0.75rem;
   }
-  .gp-section :global(code) {
+  .gp-section__body :global(code) {
     padding: 0.1rem 0.4rem;
     border-radius: 0.5rem;
     background: var(--color-paper-soft);

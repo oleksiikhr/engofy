@@ -1,0 +1,170 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to make a single adjective stronger or weaker in English: very, really, so and quite, the special word order of too and enough, and why extreme adjectives need their own intensifiers."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Strengthening one adjective', open: true },
+    { id: 'too-and-enough', title: "Too and enough", open: false },
+    { id: 'adding-detail', title: 'Adding more detail', open: false },
+    { id: 'extreme', title: 'Extreme adjectives need extreme adverbs', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      One adjective, made stronger or weaker with a single word in front of
+      it — or, in one special case, a word placed <em>after</em> it instead.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Strengthening one adjective" id="form" open>
+    <p>
+      <em>Very</em>, <em>really</em>, <em>so</em> and <em>quite</em> go
+      straight before an adjective to say how much of it there is. <em>Very</em> is the plainest and most common; the others add a slightly different
+      shade.
+    </p>
+    <GrammarFormula label="Basic" parts={['very', 'adjective']} />
+    <GrammarExample note="The everyday, neutral intensifier.">
+      My neighbours are <mark data-role="grammar">very</mark> <mark data-role="content">friendly</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Also common" parts={['really / so / quite', 'adjective']} />
+    <GrammarExample note="So often carries extra feeling, especially in speech.">
+      I'm <mark data-role="grammar">so</mark> <mark data-role="content">happy</mark> we can have a party together!
+    </GrammarExample>
+    <GrammarExample note="Quite can mean fairly, or — with the right tone — very.">
+      The exam was <mark data-role="grammar">quite</mark> <mark data-role="content">hard</mark>, actually.
+    </GrammarExample>
+    <p>
+      These words only work with <em>gradable</em> adjectives — ones that
+      have degrees, like <em>big</em>, <em>happy</em> or <em>expensive</em>.
+      A thing can be a little happy or extremely happy. Some adjectives
+      don't have degrees at all, and those need different treatment — see <em>Extreme adjectives</em> below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Too and enough" id="too-and-enough" open={false}>
+    <p>
+      <em>Too</em> and <em>enough</em> both talk about degree, but they
+      behave differently from <em>very</em> in two ways: their meaning, and
+      where they go.
+    </p>
+    <GrammarFormula label="Too — more than wanted" parts={['too', 'adjective']} />
+    <GrammarExample note="Too means more than is good or wanted — almost always a problem.">
+      They aren't <mark data-role="grammar">too</mark> <mark data-role="content">expensive</mark>. They cost about £30.
+    </GrammarExample>
+    <GrammarFormula label="Enough — comes after" parts={['adjective', 'enough']} />
+    <GrammarExample note="Enough means as much as needed — and, unlike every other intensifier here, it follows the adjective.">
+      My room is <mark data-role="content">big</mark> <mark data-role="grammar">enough</mark> — there's a lot of space.
+    </GrammarExample>
+    <p>
+      Mixing up <em>too</em> and <em>very</em> is easy for learners because
+      both translate as "very" in some languages, but they don't mean the
+      same thing: <em>very tired</em> is just a strong feeling, while <em>too tired</em> means tired enough that something can't happen.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Adding more detail" id="adding-detail" open={false}>
+    <p>
+      An adjective can take extra material after it: a prepositional
+      phrase, or — especially with <em>too</em> and <em>enough</em> — a <em>to</em>-infinitive explaining the consequence.
+    </p>
+    <GrammarFormula
+      label="Adjective + preposition"
+      parts={['adjective', 'preposition', 'noun / -ing']}
+    />
+    <GrammarExample note="A small set of adjectives regularly pair with a fixed preposition.">
+      I think swimming is <mark data-role="content">good</mark> <mark data-role="grammar">for</mark> <mark data-role="grammar">my body</mark>.
+    </GrammarExample>
+    <GrammarFormula
+      label="Too + adjective + to-infinitive"
+      parts={['too', 'adjective', 'to', 'verb']}
+    />
+    <GrammarExample note="Too old to work well — the consequence of being too much of something.">
+      The machine is <mark data-role="grammar">too</mark> <mark data-role="content">old</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">work</mark> well.
+    </GrammarExample>
+    <GrammarFormula
+      label="Adjective + enough + to-infinitive"
+      parts={['adjective', 'enough', 'to', 'verb']}
+    />
+    <GrammarExample note="Lucky enough to take part — enough stays right after the adjective, before to.">
+      I was <mark data-role="content">lucky</mark> <mark data-role="grammar">enough</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">take part</mark> in it.
+    </GrammarExample>
+    <p>
+      A more formal pair, <em>quite a</em> and <em>rather a</em>, also
+      modifies an adjective — but only when there's an indefinite article
+      and a noun involved, and the word order flips around them:
+    </p>
+    <GrammarFormula label="Quite/rather a" parts={['quite / rather', 'a', 'adjective', 'noun']} />
+    <GrammarExample note="Not a quite good idea — quite a goes before the article, not after it.">
+      This is <mark data-role="grammar">quite</mark> <mark data-role="grammar">a</mark> <mark data-role="content">good</mark> <mark data-role="grammar">idea</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection
+    title="Extreme adjectives need extreme adverbs"
+    id="extreme"
+    open={false}
+  >
+    <p>
+      Adjectives like <em>perfect</em>, <em>freezing</em>, <em>huge</em> and <em>unique</em> already describe the top (or bottom) of the scale —
+      they're not gradable, so <em>very</em> doesn't fit them. Instead, use a
+      stronger group of adverbs: <em>absolutely</em>, <em>totally</em>, <em>completely</em>, <em>incredibly</em>.
+    </p>
+    <GrammarExample note="Absolutely fits an extreme adjective; very does not.">
+      I am <mark data-role="grammar">absolutely</mark> <mark data-role="content">sure</mark> that it will work.
+    </GrammarExample>
+    <GrammarExample note="Incredibly also works with an ordinary gradable adjective, for extra force.">
+      The evolution in technology has been <mark data-role="grammar">incredibly</mark> <mark data-role="content">fast</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      <em>Enough</em> is the one word here that goes after the adjective,
+      not before it — the opposite order from every other intensifier on
+      this page.
+    </p>
+    <GrammarContrast
+      bad={['My English is not enough good.', 'She is very unique.']}
+      good={['My English is not good enough.', 'She is absolutely unique.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-combining',
+        name: 'combining adjectives',
+        note: 'joining two or more adjectives with and, but, or a comma.',
+      },
+      {
+        slug: 'adjectives-comparatives',
+        name: 'comparatives',
+        note: 'bigger, more interesting — comparing two things instead of intensifying one.',
+      },
+      {
+        slug: 'adjectives-position',
+        name: 'adjective position',
+        note: 'where an adjective sits relative to the noun it describes.',
+      },
+    ]}
+  />
+</GrammarShell>
