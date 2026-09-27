@@ -992,12 +992,37 @@ clause (995) та 'anything' + post-modifier (997) в одній секції, �
 усі 8 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
 regex-перевірку `innerHTML`).
 
-### [ ] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
+### [x] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `pronouns-subject-object`.
+
+16 EGP-рядків (922-937), лише 1 класифікований як FORM/USE (936, 'it' +
+passive, C1) — вплетений інлайн, матч за `egpIndex`; решта 15 чисті FORM
+написані без картки. У learner_explanation/examples єдиної точки порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій:
+форма (subject I/you/he/she/it/we/they vs object me/you/him/her/it/us/them,
+у заявах/питаннях/після прийменника); 'it' для вже згаданої речі/ситуації
+(922, об'єкт); 'it's me' для ідентифікації мовця (925, 'it' замість 'I'
+перед 'be'); порожнє 'it' для погоди/часу (930) і зі seems/appears/looks
+(934) разом, той самий "порожній підмет"; 'it' щоб відкласти реальний
+підмет/додаток — dummy subject it+adjective+to-inf (931) і object it+make
+(932) разом; еліпсис підмета — after hope (929) і в застиглих неформальних
+виразах (933) разом; generic 'one' (935); 'it' + passive (936, картка);
+cleft it was...who... (937); типові помилки (object форма після
+verb/preposition, it's me замість it's I, порожній підмет пропущений).
+Content-мітка — сам займенник у своїй ролі (або дієслово, що виходить перед
+підметом у cleft), grammar — решта слотів формули (дієслово, be, прийменник,
+make, seems/appears).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 10 секцій + Practice розкрито, 1 картка в
+секції `it-passive`, "When it's used" відсутній — єдина точка вже інлайн,
+0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку `innerHTML`,
+без горизонтального скролу на 390px).
 
 ### [ ] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
