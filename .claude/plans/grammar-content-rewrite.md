@@ -370,7 +370,7 @@ not only/nor), grammar-мітка — auxiliary/subject у прикладах і
 рівнем/guideword, "When it's used" відсутній — усі USE вже інлайн,
 перевірка на злиплі слова навколо `<mark>` через `innerText` — 0 збігів).
 
-### [ ] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
+### [x] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
