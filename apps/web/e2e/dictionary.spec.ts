@@ -95,6 +95,7 @@ test.describe('word detail (signed in)', () => {
       'to walk through or around a place, especially for pleasure',
     );
     await expect(verbSense).toContainText('/pəˈrambjʊleɪt/');
+    await expect(verbSense).toContainText('прогулюватися, прогулюватись');
     // Backed by an active card (see seed-web-e2e.ts) -> only "Remove".
     await expect(
       verbSense.getByRole('button', { name: 'Remove' }),
@@ -140,6 +141,7 @@ test.describe('phrase detail (signed in)', () => {
     await expect(detail.phrase).toContainText(
       'having nothing particular to do; unoccupied',
     );
+    await expect(detail.phrase).toContainText('не знати, чим зайнятися');
     // Backed by an active card (see seed-web-e2e.ts) -> only "Remove".
     await expect(
       detail.phrase.getByRole('button', { name: 'Remove' }),

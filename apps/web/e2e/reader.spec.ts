@@ -566,6 +566,47 @@ test.describe('reader page (guest)', () => {
     ).toHaveCount(0);
   });
 
+  test('opens a light role popup for a function word with no dictionary entry', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const the = reader.token('the').first();
+    await expect(the).toHaveAttribute('data-pos-label', 'definite article');
+    await the.click();
+    await expect(reader.popup).toBeVisible();
+    const section = reader.popupSection('token');
+    await expect(section).toContainText('Word · definite article');
+    await expect(section.locator('.lex-popup__term')).toHaveText('the');
+    await expect(section.locator('.lex-popup__def')).toHaveText(
+      'Points to one specific, already-known thing',
+    );
+    // Not a real dictionary entry: nothing to save or report.
+    await expect(
+      section.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+    await expect(section.locator('.lex-report')).toHaveCount(0);
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+  });
+
+  test('a function word opens its role popup from the keyboard too', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const twice = reader.token('twice').first();
+    await expect(twice).toHaveAttribute('tabindex', '0');
+    await twice.focus();
+    await page.keyboard.press('Enter');
+    const section = reader.popupSection('token');
+    await expect(section).toContainText('Word · adverb');
+    await expect(section.locator('.lex-popup__term')).toHaveText('twice');
+  });
+
   test('a stored mode is in place before hydration and hydrating moves nothing', async ({
     page,
   }) => {

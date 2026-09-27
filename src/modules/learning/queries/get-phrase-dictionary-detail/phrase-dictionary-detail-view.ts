@@ -1,3 +1,4 @@
+import type { LexiconTranslations } from '../../../post/domain/content-translations.js';
 import type { CefrLevel } from '../../../post/enums/cefr-level.enum.js';
 import type { PhraseType } from '../../../post/enums/phrase-type.enum.js';
 import type { EffectiveState } from '../../domain/resolve-effective-state.js';
@@ -15,6 +16,8 @@ export interface PhraseDictionaryDetailView {
   type: PhraseType | null;
   definition: string | null;
   example: string | null;
+  // By language code; a language with no entry is not translated yet.
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // The active LearningCard backing `state`, when there is one — the

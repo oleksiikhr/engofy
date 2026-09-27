@@ -72,10 +72,10 @@ Reader (`apps/web/src/pages/posts/[slugId].astro`) має чотири неза�
 `get-post-detail` і `apps/web` типи не ламаються в цьому зрізі. Юніт-тести на
 всі 4 aspect × 3 tense + going-to future.
 
-### [ ] 2. Backend: fallback-пояснення ролі слова без словникової статті
+### [x] 2. Backend: fallback-пояснення ролі слова без словникової статті
 - Branch: `reader-token-analysis-unify-02-role-fallback`
-- Base: `reader-token-analysis-unify-01-tense-aspect`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/144
 
 Новий детермінований модуль: за (pos, tag, lemma) — короткий людський опис
 частини мови + типова роль у реченні; окремі записи для найчастотніших
@@ -83,10 +83,10 @@ Reader (`apps/web/src/pages/posts/[slugId].astro`) має чотири неза�
 як необов'язкове поле на `annotations.tokens`, заповнюється лише коли токен ще
 не має `word_definition`/`phrase`. Юніт-тести на кожну POS-групу.
 
-### [ ] 3. apps/web: click-popup працює на кожному слові
+### [x] 3. apps/web: click-popup працює на кожному слові
 - Branch: `reader-token-analysis-unify-03-click-every-word`
-- Base: `reader-token-analysis-unify-02-role-fallback`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/147
 
 `reader-popup.ts`: `targetFor()` падає на будь-який `data-tok`, коли
 word/phrase entry немає. `reader-lexicon.ts` рендерить легкий fallback-попап
