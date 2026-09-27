@@ -1,0 +1,468 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// The three USE rows (341 a little / a bit of, 351 hyperbole, 352 many a)
+// are inlined, matched by EGP index. The other 19 rows are plain FORM rows
+// (which quantifier goes with which kind of noun, much/many in negatives and
+// questions, so/too much/many, quantifier + of, almost all, very little/few,
+// either/neither) and are written in full without a card.
+const littlePoint = con.usagePoints.find((p) => p.egpIndex === 341);
+const hyperbolePoint = con.usagePoints.find((p) => p.egpIndex === 351);
+const manyAPoint = con.usagePoints.find((p) => p.egpIndex === 352);
+
+const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Some, any, no, much, many, a lot of, a few, a little, each, every, both, either, most, enough: which quantity word goes with which noun, much vs a lot of, all of my friends, and many a."
+  handcrafted
+  sections={[
+    { id: 'which-noun', title: 'Which word goes with which noun', open: true },
+    { id: 'some-any-no', title: 'Some, any, no', open: false },
+    { id: 'much-many', title: 'Much and many', open: false },
+    { id: 'a-lot-of', title: 'A lot of, lots of, plenty of', open: false },
+    { id: 'few-little', title: 'A few, a little, a bit of', open: false },
+    { id: 'each-every', title: 'Each, every, both, either, neither', open: false },
+    { id: 'all-most', title: 'All, most, several, enough', open: false },
+    { id: 'of', title: 'Some of my friends: quantity + of', open: false },
+    { id: 'many-a', title: 'Many a time', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Quantity words — some, many, much, a few, a little, every, both and
+      others — go before a noun to say how many or how much: <em>some shops</em>, <em>much money</em>, <em>every day</em>.
+      The noun decides which word you can use.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Which word goes with which noun" id="which-noun" open>
+    <p>
+      First ask what kind of noun follows. A singular countable noun (day,
+      class), a plural noun (friends, shops) and an uncountable noun (money,
+      time, water) each take a different set of quantity words. Some words
+      work with two kinds.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Noun</th><th>Quantity words</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>singular</th><td><code>a / an, one, each, every, either, neither</code></td><td>every day, one ticket</td></tr>
+        <tr><th>plural</th><td><code>two, three…, many, a few, few, several, both</code></td><td>three rooms, a few things</td></tr>
+        <tr><th>uncountable</th><td><code>much, a little, little, a bit of</code></td><td>much money, a little time</td></tr>
+        <tr><th>plural or uncountable</th><td><code>some, any, no, more, most, all, enough, a lot of, lots of, plenty of</code></td><td>some shops, some water</td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Quantity + noun" parts={['quantity word', 'noun']} />
+    <GrammarExample note="Some + a plural noun: an amount that isn't counted exactly.">
+      Near my home there are <mark data-role="content">some</mark> <mark data-role="grammar">shops</mark>.
+    </GrammarExample>
+    <GrammarExample note="A number + a plural noun.">
+      My house has got <mark data-role="content">three</mark> <mark data-role="grammar">rooms</mark>.
+    </GrammarExample>
+    <GrammarExample note="Every + a singular noun, even though it means all the days.">
+      I go to college <mark data-role="content">every</mark> <mark data-role="grammar">day</mark>.
+    </GrammarExample>
+    <GrammarExample note="Some + an uncountable noun: the same word works for water.">
+      We should bring <mark data-role="content">some</mark> <mark data-role="grammar">water</mark> to drink.
+    </GrammarExample>
+    <p>
+      The quantity word takes the place of the article: <em>some shops</em>, not <em>the some shops</em>.
+      To talk about a part of a specific group, add of — see "Some of my friends" below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Some, any, no" id="some-any-no" open={false}>
+    <p>
+      Some, any and no all go with plural and uncountable nouns. Some is the
+      usual choice in positive sentences. Any is the usual choice in
+      negative sentences and questions.
+    </p>
+    <GrammarFormula label="Some / any / no" parts={['some / any / no', 'plural or uncountable noun']} />
+    <GrammarExample note="Some in a positive sentence, with a plural noun.">
+      <mark data-role="content">Some</mark> <mark data-role="grammar">friends</mark> gave me books.
+    </GrammarExample>
+    <GrammarExample note="Any after a negative verb (don't have), with a plural noun.">
+      I don't have <mark data-role="content">any</mark> <mark data-role="grammar">clothes</mark> for the summer.
+    </GrammarExample>
+    <GrammarExample note="Any in a question, with an uncountable noun.">
+      Is there <mark data-role="content">any</mark> <mark data-role="grammar">milk</mark> in the fridge?
+    </GrammarExample>
+    <p>
+      In offers and requests, use some even in a question — you expect the answer yes: <em>Would you like some tea?</em>
+    </p>
+    <p>
+      No means "not any". It goes with a positive verb, so the sentence has
+      only one negative word.
+    </p>
+    <GrammarExample note="No + a plural noun = there weren't any clouds.">
+      The weather was great. There were <mark data-role="content">no</mark> <mark data-role="grammar">clouds</mark>.
+    </GrammarExample>
+    <GrammarExample note="No + an uncountable noun, after a positive verb (have).">
+      I have <mark data-role="content">no</mark> <mark data-role="grammar">time</mark> today.
+    </GrammarExample>
+    <p>
+      More also works with both kinds of noun: <em>more details</em>, <em>more time</em>.
+    </p>
+    <GrammarExample note="More + an uncountable noun.">
+      We'll have <mark data-role="content">more</mark> <mark data-role="grammar">time</mark> in the club.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Much and many" id="much-many" open={false}>
+    <p>
+      Many goes with plural nouns, much with uncountable nouns. Both are
+      used mostly in negative sentences and in questions.
+    </p>
+    <GrammarFormula label="Many" parts={['many', 'plural noun']} />
+    <GrammarFormula label="Much" parts={['much', 'uncountable noun']} />
+    <GrammarExample note="Negative: much + money (uncountable), many + things (plural).">
+      We didn't have <mark data-role="content">much</mark> <mark data-role="grammar">money</mark>, so we didn't buy <mark data-role="content">many</mark> <mark data-role="grammar">things</mark>.
+    </GrammarExample>
+    <GrammarExample note="Negative: not many + a plural noun.">
+      There aren't <mark data-role="content">many</mark> <mark data-role="grammar">tickets</mark> left.
+    </GrammarExample>
+    <GrammarExample note="Question: much + an uncountable noun.">
+      Do you watch <mark data-role="content">much</mark> <mark data-role="grammar">TV</mark>?
+    </GrammarExample>
+    <GrammarExample note="Question: many + a plural noun.">
+      Have you got <mark data-role="content">many</mark> <mark data-role="grammar">friends</mark> in England?
+    </GrammarExample>
+    <p>
+      To ask about an amount, use how much or how many.
+    </p>
+    <GrammarFormula label="Questions" parts={['how much / how many', 'noun']} />
+    <GrammarExample note="How much + an uncountable noun.">
+      <mark data-role="content">How much</mark> <mark data-role="grammar">television</mark> do you watch?
+    </GrammarExample>
+    <GrammarExample note="How many + a plural noun.">
+      <mark data-role="content">How many</mark> <mark data-role="grammar">channels</mark> are there in Britain?
+    </GrammarExample>
+    <p>
+      In positive sentences, much and many alone sound formal. They are
+      natural after so and too, which make the amount bigger or say it is
+      more than you want.
+    </p>
+    <GrammarFormula label="So / too" parts={['so / too', 'many / much', 'noun']} />
+    <GrammarExample note="So many + a plural noun: a very large number.">
+      We visited <mark data-role="grammar">so</mark> <mark data-role="content">many</mark> <mark data-role="grammar">places</mark>.
+    </GrammarExample>
+    <GrammarExample note="Too many: more than was needed.">
+      I bought <mark data-role="grammar">too</mark> <mark data-role="content">many</mark> <mark data-role="grammar">things</mark>, but I liked all of them.
+    </GrammarExample>
+    <GrammarExample note="So much + an uncountable noun, often followed by that + result.">
+      I have <mark data-role="grammar">so</mark> <mark data-role="content">much</mark> <mark data-role="grammar">work</mark> at the moment that I can't help you.
+    </GrammarExample>
+    <GrammarExample note="Too much + an uncountable noun: more than is acceptable.">
+      My neighbours are making <mark data-role="grammar">too</mark> <mark data-role="content">much</mark> <mark data-role="grammar">noise</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A lot of, lots of, plenty of" id="a-lot-of" open={false}>
+    <p>
+      A lot of and lots of go with both plural and uncountable nouns. They
+      are the normal way to say "a large amount" in a positive sentence.
+      Lots of is a little more informal.
+    </p>
+    <GrammarFormula label="A large amount" parts={['a lot of / lots of / plenty of / loads of', 'plural or uncountable noun']} />
+    <GrammarExample note="A lot of + a plural noun, in a positive sentence.">
+      I had <mark data-role="content">a lot of</mark> <mark data-role="grammar">friends</mark> in this town.
+    </GrammarExample>
+    <GrammarExample note="Lots of + an uncountable noun.">
+      We danced, played games and had <mark data-role="content">lots of</mark> <mark data-role="grammar">fun</mark>.
+    </GrammarExample>
+    <p>
+      Plenty of means "enough, or more than enough" — it sounds positive.
+      Loads of is very informal, for speaking and messages to friends.
+    </p>
+    <GrammarExample note="Plenty of time = more time than we need.">
+      If we meet at 8, we'll have <mark data-role="content">plenty of</mark> <mark data-role="grammar">time</mark> to buy the tickets.
+    </GrammarExample>
+    <GrammarExample note="Loads of + a plural noun: informal for a lot of.">
+      We went to <mark data-role="content">loads of</mark> <mark data-role="grammar">beautiful places</mark>.
+    </GrammarExample>
+    <p>
+      Millions of can be an exact number: <em>millions of dollars</em>. In informal English, millions of, loads of and tons of
+      also exaggerate on purpose — the speaker doesn't mean the real number,
+      just "very many".
+    </p>
+    <GrammarFormula label="Exaggeration" parts={['millions of / loads of / tons of', 'plural or uncountable noun']} />
+    <GrammarExample note="Not literally millions — just a very large number of cookbooks in a small kitchen.">
+      I managed to fit in a table as well as <mark data-role="content">millions of</mark> <mark data-role="grammar">cookbooks</mark>.
+    </GrammarExample>
+    <GrammarExample note="Tons of: informal exaggeration, not a real weight.">
+      I received <mark data-role="content">tons of</mark> <mark data-role="grammar">plastic ducks</mark> every birthday.
+    </GrammarExample>
+    {hyperbolePoint && <GrammarUsagePointCard usagePoint={hyperbolePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A few, a little, a bit of" id="few-little" open={false}>
+    <p>
+      A few goes with plural nouns, a little with uncountable nouns. Both
+      mean "some, a small number or amount" and sound positive.
+    </p>
+    <GrammarFormula label="A few" parts={['a few', 'plural noun']} />
+    <GrammarFormula label="A little" parts={['a little / a bit of / a little bit of', 'uncountable noun']} />
+    <GrammarExample note="A few + a plural noun: a small number of things.">
+      I'm writing to tell you <mark data-role="content">a few</mark> <mark data-role="grammar">things</mark>.
+    </GrammarExample>
+    <GrammarExample note="A little + an uncountable noun: a small amount of time, and it was enough.">
+      We could spend <mark data-role="content">a little</mark> <mark data-role="grammar">time</mark> together.
+    </GrammarExample>
+    <p>
+      A bit of and a little bit of mean the same as a little, but are more
+      informal — common in speaking and friendly writing.
+    </p>
+    <GrammarExample note="A bit of + an uncountable noun: informal for a little.">
+      I had <mark data-role="content">a bit of</mark> <mark data-role="grammar">free time</mark>, so I went to my friend's house.
+    </GrammarExample>
+    <GrammarExample note="A little bit of: even more informal and softer.">
+      I just watch <mark data-role="content">a little bit of</mark> <mark data-role="grammar">TV</mark> when I come home.
+    </GrammarExample>
+    {littlePoint && <GrammarUsagePointCard usagePoint={littlePoint} />}
+    <p>
+      Without a, few and little change the meaning: they mean "not many" or "not much", less than you want or expect.
+      They usually come after very, so or too.
+    </p>
+    <GrammarFormula label="Not enough" parts={['very / so / too', 'few / little', 'noun']} />
+    <GrammarExample note="Very little time: almost no time, and that's a problem.">
+      I spend <mark data-role="grammar">very</mark> <mark data-role="content">little</mark> <mark data-role="grammar">time</mark> outside.
+    </GrammarExample>
+    <GrammarExample note="So little money: less money than is fair for the work.">
+      We are tired of working hard for <mark data-role="grammar">so</mark> <mark data-role="content">little</mark> <mark data-role="grammar">money</mark>.
+    </GrammarExample>
+    <GrammarExample note="So few + a plural noun: a worryingly small number.">
+      There are <mark data-role="grammar">so</mark> <mark data-role="content">few</mark> <mark data-role="grammar">pandas</mark> left in the wild.
+    </GrammarExample>
+    <p>
+      Compare: <em>I have a few friends here</em> (some — I'm fine) and <em>I have very few friends here</em> (not many — I'm lonely).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Each, every, both, either, neither" id="each-every" open={false}>
+    <p>
+      A / an and one go with a singular noun. One stresses the number — one, not two.
+    </p>
+    <GrammarExample note="One + a singular noun, repeated for each colour.">
+      I bought <mark data-role="content">one</mark> <mark data-role="grammar">blue t-shirt</mark> and <mark data-role="content">one</mark> <mark data-role="grammar">pink t-shirt</mark>.
+    </GrammarExample>
+    <p>
+      Every and each also take a singular noun and a singular verb, even though they are about all the members of a group.
+      Every looks at the group as a whole; each looks at the members one by one.
+    </p>
+    <GrammarFormula label="Every / each" parts={['every / each', 'singular noun']} />
+    <GrammarExample note="Every year: all the years, seen together.">
+      I go to India <mark data-role="content">every</mark> <mark data-role="grammar">year</mark> to see my family.
+    </GrammarExample>
+    <GrammarExample note="Each class: the classes one at a time. Singular verb: is.">
+      <mark data-role="content">Each</mark> <mark data-role="grammar">class</mark> is about an hour long.
+    </GrammarExample>
+    <p>
+      For exactly two things, use each, not every: <em>She had a bag in each hand.</em>
+    </p>
+    <p>
+      Both is for two things together, so it takes a plural noun.
+    </p>
+    <GrammarFormula label="Both" parts={['both', 'plural noun']} />
+    <GrammarExample note="Both teams = the two teams, and a plural verb (played).">
+      It was exciting as <mark data-role="content">both</mark> <mark data-role="grammar">teams</mark> played well.
+    </GrammarExample>
+    <p>
+      Either means "one or the other of two"; neither means "not one and not the other".
+      Both take a singular noun.
+    </p>
+    <GrammarFormula label="Either / neither" parts={['either / neither', 'singular noun']} />
+    <GrammarExample note="Either floor = the ground floor or the first floor, it doesn't matter which.">
+      The toilet can be reached easily from <mark data-role="content">either</mark> <mark data-role="grammar">floor</mark>.
+    </GrammarExample>
+    <GrammarExample note="Neither party = not the first party and not the second. Formal.">
+      <mark data-role="content">Neither</mark> <mark data-role="grammar">party</mark> could predict the rise in the price of wheat.
+    </GrammarExample>
+    <p>
+      Neither already contains the negative, so the verb stays positive: <em>neither party could</em>, not <em>neither party couldn't</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="All, most, several, enough" id="all-most" open={false}>
+    <p>
+      All and most go with plural and uncountable nouns. Without the, they
+      talk about things or people in general.
+    </p>
+    <GrammarFormula label="In general" parts={['all / most / several / enough', 'noun']} />
+    <GrammarExample note="All students = every student the notice is for.">
+      This notice is for <mark data-role="content">all</mark> <mark data-role="grammar">students</mark>.
+    </GrammarExample>
+    <GrammarExample note="Most people = the majority of people in general. No the before most.">
+      I'm sure <mark data-role="content">most</mark> <mark data-role="grammar">people</mark> watch too much TV these days.
+    </GrammarExample>
+    <p>
+      Several means "more than two, but not many". It takes a plural noun.
+    </p>
+    <GrammarExample note="Several + a plural noun: a few days, a bit more than two.">
+      <mark data-role="content">Several</mark> <mark data-role="grammar">days</mark> ago we received a complaint.
+    </GrammarExample>
+    <p>
+      Enough means "as much or as many as you need". It goes before the noun.
+    </p>
+    <GrammarExample note="Enough + an uncountable noun: the amount you need.">
+      If you haven't got <mark data-role="content">enough</mark> <mark data-role="grammar">credit</mark> on your phone, we can meet at the bookshop.
+    </GrammarExample>
+    <p>
+      Almost and nearly can go before all, every and no to make the amount a little less than complete.
+    </p>
+    <GrammarFormula label="Almost all" parts={['almost / nearly', 'all / every / no', 'noun']} />
+    <GrammarExample note="Almost all = not every programme, but very close.">
+      <mark data-role="grammar">Almost</mark> <mark data-role="content">all</mark> <mark data-role="grammar">programmes</mark> are boring.
+    </GrammarExample>
+    <GrammarExample note="Nearly every day: most days, with only a few exceptions.">
+      We've spent <mark data-role="grammar">nearly</mark> <mark data-role="content">every</mark> <mark data-role="grammar">day</mark> together since we were kids.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Some of my friends: quantity + of" id="of" open={false}>
+    <p>
+      To talk about part of a specific group — my friends, the books, these
+      games — put of between the quantity word and the/my/these. Without
+      the/my, there is no of: <em>some friends</em> (friends in general) but <em>some of my friends</em>.
+    </p>
+    <GrammarFormula label="Part of a group" parts={['some / all / many / five / none …', 'of', 'the / my / these …', 'noun']} />
+    <GrammarExample note="Some of my friends: part of a specific group, my friends.">
+      <mark data-role="content">Some</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">friends</mark> gave me books.
+    </GrammarExample>
+    <GrammarExample note="Many of my relatives: a large part of them.">
+      <mark data-role="content">Many</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">relatives</mark> had come.
+    </GrammarExample>
+    <GrammarExample note="A number + of: five from the group of my friends.">
+      I had invited <mark data-role="content">five</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">friends</mark>.
+    </GrammarExample>
+    <GrammarExample note="Any of the books, in a negative sentence.">
+      Without a library card you can't take <mark data-role="content">any</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the</mark> <mark data-role="grammar">books</mark> with you.
+    </GrammarExample>
+    <GrammarExample note="None of the stores = not one store. Positive verb (had).">
+      <mark data-role="content">None</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the</mark> <mark data-role="grammar">stores</mark> had the dress I wanted.
+    </GrammarExample>
+    <GrammarExample note="Half of + your + a singular noun: half the time.">
+      You should spend <mark data-role="content">half</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">your</mark> <mark data-role="grammar">holiday</mark> with your parents.
+    </GrammarExample>
+    <p>
+      After all, both and half the of is optional: <em>all my money</em> = <em>all of my money</em>, <em>both the teams</em> = <em>both of the teams</em>.
+      With other words, of is needed.
+    </p>
+    <GrammarExample note="All of my money = all my money: both are correct.">
+      I spent <mark data-role="content">all</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">money</mark>!
+    </GrammarExample>
+    <p>
+      Every and no can't be followed by of. Use each of and none of instead: <em>each of the students</em>, <em>none of the students</em>.
+    </p>
+    <p>
+      Either of and neither of work the same way, with a plural noun phrase or a pronoun (us, these, them).
+    </p>
+    <GrammarFormula label="Either / neither of" parts={['either / neither', 'of', 'the / these / us …', 'plural noun or pronoun']} />
+    <GrammarExample note="Neither of these games = not one of the two games.">
+      If you don't like sport, <mark data-role="content">neither</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">these</mark> <mark data-role="grammar">games</mark> will interest you.
+    </GrammarExample>
+    <GrammarExample note="Neither of + a pronoun: us.">
+      <mark data-role="content">Neither</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">us</mark> could foresee the rise in prices.
+    </GrammarExample>
+    <p>
+      Quantity words used without any noun after them (<em>Some were late</em>, <em>I've got none</em>) are covered on the quantity pronouns page — see the links below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Many a time" id="many-a" open={false}>
+    <p>
+      In formal or literary English, many a / many an + a singular noun means "many" — with extra emphasis.
+      The noun and the verb stay singular.
+    </p>
+    <GrammarFormula label="Emphasis" parts={['many a / many an', 'singular noun']} />
+    <GrammarExample note="Many a time = many times, said with emphasis.">
+      Mary was threatened <mark data-role="content">many a</mark> <mark data-role="grammar">time</mark> on her way home from work.
+    </GrammarExample>
+    <GrammarExample note="Many a mountain: singular noun, but the meaning is plural.">
+      We have come a long way and climbed <mark data-role="content">many a</mark> <mark data-role="grammar">mountain</mark>.
+    </GrammarExample>
+    <GrammarExample note="Many an before a vowel sound, like the article an.">
+      It has raised <mark data-role="content">many an</mark> <mark data-role="grammar">issue</mark> which I would like to comment on.
+    </GrammarExample>
+    {manyAPoint && <GrammarUsagePointCard usagePoint={manyAPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Much goes with uncountable nouns, many with plural nouns. Informations, advices and furnitures don't exist — these nouns are uncountable.
+    </p>
+    <GrammarContrast
+      bad={['I have too much friends.', 'How many money do you need?', 'I need some informations.']}
+      good={['I have too many friends.', 'How much money do you need?', 'I need some information.']}
+    />
+    <p>
+      Each, every, either and neither take a singular noun and a singular verb.
+    </p>
+    <GrammarContrast
+      bad={['Every students have a book.', 'Each rooms has a TV.']}
+      good={['Every student has a book.', 'Each room has a TV.']}
+    />
+    <p>
+      Of goes only before the/my/these; most people in general has no the.
+    </p>
+    <GrammarContrast
+      bad={['Some my friends are here.', 'The most people like music.', 'Most of people like music.']}
+      good={['Some of my friends are here.', 'Most people like music.', 'Most of the people here like music.']}
+    />
+    <p>
+      No and neither are already negative — don't add not.
+    </p>
+    <GrammarContrast
+      bad={["I don't have no time.", "Neither answer isn't correct."]}
+      good={["I don't have any time. / I have no time.", 'Neither answer is correct.']}
+    />
+    <p>
+      A little / a few (some, positive) is not the same as little / few (not enough).
+    </p>
+    <GrammarContrast
+      bad={["Don't worry, I have little money — let's go.", 'Very a few people came.']}
+      good={["Don't worry, I have a little money — let's go.", 'Very few people came.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-quantity',
+        name: 'quantity pronouns',
+        note: "some, many, none… without a noun: Some were late. I've got none.",
+      },
+      {
+        slug: 'nouns-uncountable',
+        name: 'uncountable nouns',
+        note: 'money, time, information — the nouns that take much and a little, not many and a few.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'a / an and the — a quantity word replaces them, so never the some shops.',
+      },
+    ]}
+  />
+</GrammarShell>
