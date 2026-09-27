@@ -746,12 +746,30 @@ dev-сервер + Playwright (13 details, 249 міток, 6 карток у п�
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
+### [x] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-noun-phrases-grammatical-functions`.
+
+5 EGP-рядків (698-702), усі чисті FORM (A1), usage points немає — сторінка
+без карток, "When it's used" не рендериться. 6 секцій за функцією noun
+phrase у реченні: підмет (узгодження дієслова, обов'язковий підмет → it);
+додаток (одразу після дієслова, два додатки person + thing, порядок слів
+замість відмінків); після прийменника (+ об'єктна форма займенника: for
+her); після be (He is a student, it's Mohamad, a / an для професій) і
+there is / are з узгодженням; часові noun phrases без прийменника (next /
+last / this / every + time noun, today / tomorrow / yesterday + morning /
+afternoon / evening, tonight); типові помилки (пропущений / подвійний
+підмет, My friends is, He is student, visit to, with I, in next week / on
+last Monday). Content-мітка — noun phrase у своїй функції (або часовий
+іменник), grammar — решта слотів формули (дієслово, be, прийменник,
+підмет, next/last/this/every).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (6 details, 65 міток, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
 
 ### [ ] 26. Nouns — plural (`nouns-plural`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
