@@ -826,82 +826,396 @@ dev-сервер + Playwright (7 details, 61 мітка, 0 карток, "When i
 відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
 скролу на 390px).
 
-### [ ] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
+### [x] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `prepositions-prepositions`.
 
-### [ ] 29. Present — present continuous (`present-present-continuous`) — рівень A1
+Гілки `changes` на момент виконання цього зрізу не існувало (ні локально, ні
+на remote) — увесь попередній контент зрізів 1-27 вже влитий у `main` через
+звичайні merged PR (#149, #152, #154), а не прямими комітами в `changes`, як
+описано в override вище. За підтвердженням користувача створено нову гілку
+`changes` з поточного `main`, і цей та наступні зрізи Фази 2 комітяться в неї
+далі за тим самим override-процесом.
+
+15 EGP-рядків (836-850): 12 чистих FORM (зростаючий діапазон простих і
+складних прийменників, 'just'/adverb-of-degree + preposition, preposition +
+-ing, stranding у wh-питаннях/непрямих питаннях/relative clauses) написані
+без картки; 3 FORM/USE (848 preposition + wh-word як формальна альтернатива
+stranding, 849/850 формальні прості/складні прийменники) — усі 3 вплетені
+інлайн, матч за `egpIndex`. У learner_explanation/examples усіх точок
+порожньо (не перевірялось окремим DB-запитом — факти взято за EGP can-do +
+прикладами з `assets/egp.json`, як і в усіх попередніх чисто-FORM зрізах).
+Приклади написані вручну (не скопійовані з EGP-корпусу) одним рядком у
+файлі. 9 секцій: preposition + noun phrase (базова форма); зростання
+діапазону простих прийменників (A2→B1: opposite/between/during →
+through/along/beside/within/via); складні (багатослівні) прийменники
+(A2→B2: near to/in front of/instead of → due to/thanks to → in spite
+of/apart from/in addition to); adverb of degree перед прийменником (just/
+right, quite/really); preposition + -ing як додаток; stranding наприкінці
+wh-питання/непрямого питання/relative clause (картка не потрібна — чистий
+FORM); формальна альтернатива preposition + which/whom/whose замість
+stranding (848, картка); формальні/літературні/бізнес-прийменники, прості
+(849) і складні (850) в одній секції, обидва з карткою за прецедентом
+DEGREE ADJECTIVES/FORMAL FORM+USE подвійних карток в одній секції; типові
+помилки (залежний прийменник після дієслова/прикметника не за словниковим
+перекладом — married to/depend on/interested in, прийменник часу — on
+Monday/at the airport, відкинутий прийменник без свого noun phrase у
+stranding). Content-мітка — прийменник (або комплексний прийменник як одна
+фраза), grammar — решта слотів формули (noun phrase, adverb, wh-word/
+relative pronoun, -ing complement, підмет+дієслово в stranding).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend `pnpm
+dev` на 8080 + `apps/web` `astro dev` на 4321, обидва були зупинені після
+перевірки) + Playwright (усі 9 details з правильними заголовками, 66 міток
+31 content/35 grammar з правильними кольорами `--color-word`/`--color-gram`,
+усі 3 usage-point картки на місцях `usage-point-848/849/850`, "When it's
+used" відсутній — усі 3 точки вже інлайн, 0 склеєних слів навколо
+`<mark>`/`<em>` через regex-перевірку `innerText`, без горизонтального
+скролу на 390px). Побічний ефект запуску backend dev-сервера — регенерація
+`src/metadata.ts` (несуттєве форматування) — відкинуто через `git checkout`
+перед комітом, до цього зрізу не стосується.
+
+### [x] 29. Present — present continuous (`present-present-continuous`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `present-present-continuous`.
 
-### [ ] 30. Present — present simple (`present-present-simple`) — рівень A1
+14 EGP-рядків (851-864): 3 чисті FORM (affirmative, negative, questions)
+написані без картки; 11 USE/FORM-USE — усі 11 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: EVENTS IN PROGRESS на A1/A2/B1,
+TEMPORARY SITUATIONS на A2/B1, WITH ADVERBS OF INDEFINITE FREQUENCY на
+A2/B2/C2). У learner_explanation/examples усіх точок не перевірялось окремим
+DB-запитом — факти взято за EGP can-do + прикладами з `assets/egp.json`, як і
+в усіх попередніх чисто-FORM/малих зрізах. Приклади написані вручну одним
+рядком у файлі. 8 секцій: форма (am/is/are + verb-ing, заперечення,
+питання/wh-питання); події в процесі зараз (зростаючий діапазон дієслів на
+трьох рівнях, картки 852/856/859); тимчасові ситуації (два рівні, картки
+857/860); тимчасові повторювані дії (858); always/constantly/permanently для
+скарги — зростаючий діапазон на трьох рівнях (картки 855/861/863);
+риторичні питання (862); пом'якшення звичайно-статичними дієсловами
+want/hope/wonder/ask (864, з протиставленням випадковому вжитку статичних
+дієслів like/know у типових помилках); типові помилки (пропущений
+am/is/are, випадковий continuous зі статичним дієсловом, continuous замість
+simple для постійного факту). Content-мітка — am/is/are (або злита
+контракція I'm/it's, за прецедентом I'll з modality-will), grammar — підмет
++ verb-ing (+ always/constantly, wh-word). "Compare with" веде на
+`present-present-simple`, `future-present-continuous-for-future-use`,
+`future-future-with-be-going-to`, `past-past-continuous` — жодна ще не
+написана вручну (майбутні зрізи плану), посилання коректні через generic
+fallback до того часу.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений з попередньої сесії) + Playwright (усі 8 details, 71 мітка, 11
+карток у правильних секціях, "When it's used" відсутній — усі 11 точок
+вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку
+`innerHTML`, повний скріншот сторінки перевірено вручну).
+
+### [x] 30. Present — present simple (`present-present-simple`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `present-present-simple`.
 
-### [ ] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
+24 EGP-рядки (865-888): 10 чистих FORM (affirmative/negative/questions на
+двох зростаючих діапазонах, indirect questions, 'really'-інтенсифікатор,
+adverbs of indefinite frequency, formal-інверсія not only...but also)
+написані без картки; 14 USE/FORM-USE — усі 14 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: FORM: AFFIRMATIVE/NEGATIVE/QUESTIONS на
+A1/A2/B1, USE: MENTAL PROCESS VERBS на A2/B1, USE: SPEECH ACT VERBS на B1/B2,
+USE: REPORTING VERBS на B1/C1). 12 секцій: форма (affirmative + -s,
+negative, questions + wh-, indirect questions, really, adverbs of frequency
+з крос-посиланням на `adverbs-position`); habits/general facts (868, головне
+значення); if-clauses (869, з крос-посиланням на `clauses-subordinated` за
+повним діапазоном умовних речень); instructions/directions (875);
+suggestions "why don't...?" (877); mental process verbs (876/880, зростаючий
+діапазон); reporting + speech-act verbs разом в одній секції як пара
+споріднених формальних груп (881/888 reporting, 882/884 speech-act);
+tag questions "don't you think?" (878); historic present для переказу
+сюжету/історії (885, з крос-посиланням на `past-past-simple`); негативні
+питання для persuasion (886) і opinion (887); formal-інверсія "Not only
+do...but also" (883, чистий FORM, з крос-посиланнями на
+`conjunctions-coordinating` і `clauses-coordinated`); типові помилки
+(пропущене -s, подвійне маркування -s з do/does, continuous замість simple
+для тимчасової дії). Content-мітка — фінітна форма дієслова, що несе
+present-simple маркування (base(+s)/do-does/don't-doesn't), або специфічне
+дієслово секції (think/apologise/demonstrates тощо) — той самий слот, що й
+be-дієслово на `present-present-continuous`; grammar — решта слотів формули.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений з попередньої сесії) + Playwright (усі 12 секцій + Practice
+розкрито, 14 карток у правильних секціях, "When it's used" відсутній —
+усі 14 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
+regex-перевірку `innerHTML`, без горизонтального скролу на 390px).
+
+### [x] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `pronouns-indefinite-thing-one-body-etc`.
 
-### [ ] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
+17 EGP-рядків (982-998): 9 чистих FORM (об'єкт/додаток прийменника на
+зростаючих діапазонах A1→B2, підмет з дієсловом однини на зростаючих
+діапазонах A1→B2, negative + 'anything', pronoun + 'else') написані без
+картки; 8 FORM/USE або USE — усі 8 вплетені інлайн, матч за `egpIndex`
+(987 + adjective, 988 + to-infinitive, 990 vague 'something', 993
+premodifiers-intensifying, 995 relative clause focus, 996 vague ширший
+діапазон, 997 'anything' focus, 998 'anything' ellipsis). 9 секцій: форма
+(об'єкт/додаток і підмет, обидва як одна прогресія по рівнях, з
+крос-посиланням на `determiners-quantity` за логікою some-/any-/no-);
+'anything' після заперечення (з крос-посиланням на `negation-negation`);
+'else' після займенника; уточнення прикметником/to-інфінітивом (987+988
+разом, спільна тема); vague-вирази 'or something'/'or something like that'
+(990+996 разом, та сама тема на різних рівнях); інтенсифікатори
+absolutely/nearly (993); складні підмети для фокусу — pronoun + relative
+clause (995) та 'anything' + post-modifier (997) в одній секції, спільна
+тема; ellipsis 'anything you need, ask...' (998); типові помилки (everybody
++ однина дієслова, подвійне заперечення nothing/anything, some- в
+стверджувальному реченні замість any-). Content-мітка — сам займенник
+(everything/someone/anything тощо) або найближчий модифікатор, що ілюструє
+секцію (else/adjective/intensifier); grammar — решта слотів формули
+(дієслово, прийменник, релятивний займенник).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 9 секцій + Practice розкрито, 8 карток у
+правильних секціях одразу після прикладу, "When it's used" відсутній —
+усі 8 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
+regex-перевірку `innerHTML`).
+
+### [x] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `pronouns-subject-object`.
 
-### [ ] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
+16 EGP-рядків (922-937), лише 1 класифікований як FORM/USE (936, 'it' +
+passive, C1) — вплетений інлайн, матч за `egpIndex`; решта 15 чисті FORM
+написані без картки. У learner_explanation/examples єдиної точки порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій:
+форма (subject I/you/he/she/it/we/they vs object me/you/him/her/it/us/them,
+у заявах/питаннях/після прийменника); 'it' для вже згаданої речі/ситуації
+(922, об'єкт); 'it's me' для ідентифікації мовця (925, 'it' замість 'I'
+перед 'be'); порожнє 'it' для погоди/часу (930) і зі seems/appears/looks
+(934) разом, той самий "порожній підмет"; 'it' щоб відкласти реальний
+підмет/додаток — dummy subject it+adjective+to-inf (931) і object it+make
+(932) разом; еліпсис підмета — after hope (929) і в застиглих неформальних
+виразах (933) разом; generic 'one' (935); 'it' + passive (936, картка);
+cleft it was...who... (937); типові помилки (object форма після
+verb/preposition, it's me замість it's I, порожній підмет пропущений).
+Content-мітка — сам займенник у своїй ролі (або дієслово, що виходить перед
+підметом у cleft), grammar — решта слотів формули (дієслово, be, прийменник,
+make, seems/appears).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 10 секцій + Practice розкрито, 1 картка в
+секції `it-passive`, "When it's used" відсутній — єдина точка вже інлайн,
+0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку `innerHTML`,
+без горизонтального скролу на 390px).
+
+### [x] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `questions-yes-no`.
 
-### [ ] 34. Verbs — linking (`verbs-linking`) — рівень A1
+11 EGP-рядків (1032-1042): 9 чистих FORM (modal-first на двох зростаючих
+діапазонах A1/A2, be-first, do-support, auxiliary be + -ing, auxiliary have
++ -ed, негативні питання be/aux/modal на B1) написані без картки; 2 USE/
+FORM-USE — 1041 (seeking agreement, B1) і 1042 (emphasis з uncontracted not,
+C2) — обидва вплетені інлайн, матч за `egpIndex`. Значне тематичне
+перетинання з уже написаною `clauses-interrogatives` (та сама механіка
+be/aux/do/modal-first), яка вже мала `GrammarCompare`-посилання на цю
+сторінку з обіцянкою "how yes/no questions are used and answered, including
+short answers" — тому ця сторінка навмисно не повторює загальну механіку
+з нуля, а фокусується на yes/no-специфіці: власні FORM-факти за EGP
+1032-1042, секція коротких відповідей (не окремий EGP-рядок, а прямий
+наслідок форм вище — той самий підхід, що вже застосовувався в
+modality-will/would/future-simple, тут винесений у власну повноцінну
+секцію з таблицею замість короткої згадки) і дві USE-точки про негативні
+питання. 9 секцій: modal-first (1032+1034); be-first (1033); do-support
+(1035); continuous/perfect auxiliary (1036+1037); короткі відповіді
+(таблиця be/do/have/modal, узгодження підмета); негативні питання
+be/aux/modal разом (1038+1039+1040, з окремою згадкою винятку "aren't I"
+замість "amn't I"); seeking agreement (1041, картка); formal emphasis з
+uncontracted not (1042, картка); типові помилки (пропущений do-support,
+повторення повного дієслова замість aux у короткій відповіді, amn't I,
+зайве to після модального в запереченні). Content-мітка — слово, що
+рухається на початок питання (modal/be/do/have, або негативна стягнена
+форма), grammar — решта слотів формули.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 9 секцій + Practice розкрито, 2 картки в
+секціях `seeking-agreement`/`emphasis`, "When it's used" відсутній — обидві
+точки вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через DOM-перевірку
+сусідніх текстових вузлів, без горизонтального скролу на 390px).
+
+### [x] 34. Verbs — linking (`verbs-linking`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-linking`.
 
-### [ ] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
+3 EGP-рядки (1102-1104), усі чисті FORM ('be' + complement A1, зростаючий
+діапазон лінкінг-дієслів A2, широкий діапазон B2) — usage points немає,
+сторінка без карток, "When it's used" не рендериться. 5 секцій: 'be' +
+complement (adjective / noun / phrase, "nothing happens to the subject");
+senses (look/feel/sound/taste/smell + adjective, з поясненням, що ті самі
+дієслова бувають і дієсловами дії з іншим значенням — look at/smell/taste
+щось); change (become/get/turn/grow + adjective/noun); staying/seeming
+(remain/stay/appear/seem); типові помилки (пропущений be перед прикметником,
+adjective не adverb після linking-дієслова, узгодження дієслова з підметом).
+Content-мітка — сам linking-дієслово (той самий слот, що й модальне
+дієслово в modality-will/would), grammar — підмет + доповнення (adjective/
+noun/phrase). Крос-посилання на `adjectives-position` (predicative після
+linking verbs — уже його власний FORM-рядок), `adverbs-adverbs-as-modifiers`
+(контраст: adverb модифікує дієслово дії, не linking verb), `nouns-noun-
+phrases-grammatical-functions` (noun phrase після be), `verbs-types`
+(ще не написана сторінка — forward-посилання за прецедентом попередніх
+зрізів).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 5 секцій + Practice розкрито, "When it's
+used" відсутній, 0 карток, перевірка `innerText` після розкриття всіх
+`<details>` — жодного склеєного слова навколо `<mark>`/`<em>`).
+
+### [x] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-patterns-with-to-and-ing`.
 
-### [ ] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
+### [x] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-prepositional`.
 
-### [ ] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
+4 EGP-рядки (1048-1051), усі чисті FORM (обмежений і зростаючий діапазон
+verb + preposition + object на A1/B1, stranded preposition на B2, adverb
+між дієсловом і прийменником на B2) — сторінка без карток, "When it's
+used" не рендериться. 6 секцій: verb + preposition + object базовий
+діапазон (listen to/look after/look for); ширший діапазон на B1 (look
+at/deal with, + проза про depend on/believe in/care about/apologise
+for/agree with/consist of); stranded preposition у relative clause й
+після adjective + to-infinitive (з крос-посиланням на
+`prepositions-prepositions` за загальною механікою stranding, щоб не
+дублювати); adverb між дієсловом і прийменником (look carefully at/deal
+properly with); look forward to / be used to + -ing, де `to` — фіксований
+прийменник, а не інфінітивний маркер (виконує обіцянку крос-посилання,
+дане раніше з `verbs-patterns-with-to-and-ing`); типові помилки (пропущений
+прийменник калькою з рідної мови, пропущений прийменник після
+фронтованого об'єкта, інфінітив замість -ing після look forward
+to/be used to). Content-мітка — прийменник (фіксований для цього
+дієслова), grammar — решта слотів формули (підмет, дієслово, adverb,
+об'єкт). Крос-посилання вперед на ще не написані `modality-used-to`
+(зріз 78) і `verbs-phrasal` (зріз 74) — за прецедентом forward-посилань
+на ще не написані сторінки з попередніх зрізів.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (7 details,
+41 мітка/28 `<em>`, 0 карток очікувано, "When it's used" відсутній, 0
+злиплих слів навколо `<mark>`/`<em>` через перевірку сусідніх текстових
+вузлів, без горизонтального скролу на 390px). Побічний ефект живого
+рендеру — регенерація `src/metadata.ts` — відкинуто через `git checkout`
+перед комітом, до цього зрізу не стосується.
+
+### [x] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-there-is-are`.
 
-### [ ] 38. Verbs — types (`verbs-types`) — рівень A1
+7 EGP-рядків (1095-1101), усі чисті FORM (there is/are A1, + uncountable і
++ 'a lot of' A2, negative B1, there + modal verbs B1, there + інші
+дієслова з модальним значенням B2) — usage points немає, сторінка без
+карток, "When it's used" не рендериться, немає ні CEFR-бейджа, ні
+level-progress у шапці (той самий патерн, що й на `nouns-plural`/
+`verbs-linking`, підтверджено порівнянням реального рендеру обох сторінок).
+6 секцій: форма (there is/are + однина/множина, дефіс "there" як
+формальний, а не смисловий підмет — узгодження be з noun phrase, а не з
+"there"); + uncountable і + 'a lot of' разом (та сама тема — який
+іменник іде далі, з крос-посиланням на `determiners-quantity` за
+загальним правилом узгодження 'a lot of'); заперечення + питання/короткі
+відповіді разом (питання не власний EGP-рядок, а природне завершення форми
+— за прецедентом modality-will/would/future-simple/questions-yes-no, там
+само додавали short answers без окремого EGP-рядка); модальні дієслова
+(will be/wouldn't be/might be); дієслова з модальним значенням (has to
+be/needs to be/is going to be, forward-посилання на ще не написані
+`future-future-with-be-going-to` і `modality-have-got-to`); типові помилки
+(пропущений "there" — калька з рідної мови де підмет-локація йде першою,
+неузгодження be з іменником у множині — особливо після скороченого
+"there's", плутанина з порожнім підметом "it"). Content-мітка — уся фраза
+"there + be(-форма)" одним записом (There is/There are/There isn't/There
+will be/There has to be тощо, за прецедентом злитих контракцій I'll/it's з
+modality-will/present-present-continuous), grammar — noun phrase, що йде
+після (+ будь-які модифікатори). Приклади написані вручну (не скопійовані
+з EGP-корпусу) одним рядком у файлі.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (7 details,
+32 мітки/42 `<em>`, 0 карток очікувано, "When it's used" відсутній, 0
+злиплих слів навколо `<mark>`/`<em>` через regex-перевірку `innerText`,
+скріншот усієї сторінки перевірено вручну).
+
+### [x] 38. Verbs — types (`verbs-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-types`.
+
+10 EGP-рядків (1066-1075), усі чисті FORM — usage points немає, сторінка без
+карток, "When it's used" не рендериться, немає ні CEFR-бейджа, ні
+level-progress у шапці (той самий патерн, що й на `verbs-linking`/
+`nouns-plural`/`verbs-there-is-are`). Це оглядова сторінка про 5 ролей
+дієслова, на яку вже посилався наперед `verbs-linking` ("where linking
+verbs fit among action, auxiliary and modal verbs"). 6 секцій: main verbs
+(regular/irregular, з крос-посиланням на `present-present-simple`/
+`past-past-simple`); linking verbs (be + зростаючий діапазон look/feel/
+seem/become, з крос-посиланням на вже написану `verbs-linking` за повним
+діапазоном); auxiliary verbs (be/have/do, жодного власного значення,
+з крос-посиланням на `present-present-continuous` і `questions-yes-no`
+за do-support); modal verbs (can/will/would на обмеженому і зростаючому
+діапазоні, з крос-посиланням на `modality-can`/`modality-will`/
+`modality-would` і `future-future-simple-with-will-and-shall` за
+розмежуванням will-як-час vs will-як-модальність); semi-modal verbs
+(have (got) to/used to/ought to/dare/need, форвард-посилання на ще не
+написані `modality-have-got-to`/`modality-used-to`/`modality-ought`/
+`modality-dare`/`modality-need`, за прецедентом форвард-посилань з
+попередніх зрізів); типові помилки (пропущений допоміжний be/have/do,
+модальне дієслово з to або -s, подвійний модаль will can). Content-мітка —
+дієслово, що виконує роль секції (main verb / linking verb / auxiliary /
+modal / semi-modal), grammar — решта слотів формули (підмет, додаток,
+доповнення, головне дієслово після auxiliary/modal).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (усі 6
+секцій + Practice розкрито, "When it's used" відсутній, 0 карток, 36
+міток/37 `<em>`, перевірка на злиплі слова через `innerHTML`-regex —
+жодного справжнього збігу, лише навмисні "/"-розділювачі типу
+`will</em>/<em>shall`, повний скріншот сторінки перевірено вручну).
 
 ### [ ] 39. Adjectives — comparatives (`adjectives-comparatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)

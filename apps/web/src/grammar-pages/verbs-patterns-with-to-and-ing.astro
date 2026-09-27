@@ -1,0 +1,279 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 19 EGP rows (1076-1094): 13 pure FORM (growing range of verb + to-infinitive,
+// like/love/hate/prefer + to-infinitive or -ing with no meaning change, enjoy/
+// finish/mind + -ing, help + object, verb + object + to-infinitive, make/let +
+// bare infinitive, a new subject before -ing) written without a card; 6 FORM/USE
+// (1081 would love + to for emphasis, 1084 would prefer + to for politeness,
+// 1091 to-infinitive vs -ing with a real change of meaning, 1092/1093 senses +
+// object + -ing/infinitive, 1094 would hate + to for emphasis) get a usage-point
+// card, all inlined below.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const wouldLovePoint = point(1081);
+const wouldPreferPoint = point(1084);
+const meaningChangePoint = point(1091);
+const sensesIngPoint = point(1092);
+const sensesInfPoint = point(1093);
+const wouldHatePoint = point(1094);
+
+const inlineUsagePointIds = [
+  wouldLovePoint,
+  wouldPreferPoint,
+  meaningChangePoint,
+  sensesIngPoint,
+  sensesInfPoint,
+  wouldHatePoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="What comes after a verb: a to-infinitive (want to go), an -ing form (enjoy going), or either — with or without a change of meaning — plus the object-before-infinitive, help, make/let and senses patterns that decide the second verb's form."
+  handcrafted
+  sections={[
+    { id: 'to-infinitive-basic', title: 'Want to, hope to: verb + to-infinitive', open: true },
+    { id: 'to-or-ing-same', title: 'Love it or love to: to-infinitive or -ing, no difference', open: false },
+    { id: 'would-degree', title: 'Would like, love, prefer, hate + to', open: false },
+    { id: 'verb-ing', title: 'Enjoy doing, finish doing: verb + -ing', open: false },
+    { id: 'help-object', title: 'Help someone (to) do something', open: false },
+    { id: 'object-to-infinitive', title: 'Want you to, ask you to: verb + object + to-infinitive', open: false },
+    { id: 'make-let', title: "Make and let: infinitive without 'to'", open: false },
+    { id: 'new-subject-ing', title: 'Mind you doing, imagine it being: a new subject before -ing', open: false },
+    { id: 'meaning-change', title: 'Remember to vs remember doing: a real change of meaning', open: false },
+    { id: 'senses-object', title: 'See someone do vs see someone doing: the senses', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      After some verbs, the next verb has to be a <em>to</em>-infinitive (<em>want to go</em>); after others it has to be an <em>-ing</em> form (<em>enjoy going</em>); after a few it can be either, sometimes with no difference in meaning and sometimes with a real one. There's no single rule for which pattern a verb takes — it's something you learn verb by verb, starting with a handful of very common ones.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Want to, hope to: verb + to-infinitive" id="to-infinitive-basic" open>
+    <p>
+      After a small set of everyday verbs, the following verb takes the <em>to</em>-infinitive: the base form with <em>to</em> in front. The list is short at first — <em>want</em>, <em>need</em>, <em>would like</em> — and keeps growing: <em>hope</em>, <em>remember</em>, <em>forget</em> and <em>decide</em> follow the same pattern a little later, then a much wider range — <em>agree</em>, <em>offer</em>, <em>promise</em>, <em>refuse</em>, <em>seem</em> — once you're comfortable with the basics.
+    </p>
+    <GrammarFormula label="Verb + to-infinitive" parts={['subject', 'verb', "'to' + infinitive"]} />
+    <GrammarExample note="want + to-infinitive: A1, one of the first verbs learners use this way.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">want</mark> <mark data-role="content">to go</mark> to the zoo this weekend.
+    </GrammarExample>
+    <GrammarExample note="need + to-infinitive: A1.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">needs</mark> <mark data-role="content">to finish</mark> her homework before dinner.
+    </GrammarExample>
+    <GrammarExample note="hope + to-infinitive: A2, a growing range.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">hope</mark> <mark data-role="content">to pass</mark> the exam next month.
+    </GrammarExample>
+    <GrammarExample note="decide + to-infinitive: B1, a wide range of verbs by this level.">
+      <mark data-role="grammar">He</mark> finally <mark data-role="grammar">decided</mark> <mark data-role="content">to change</mark> his job.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Love it or love to: to-infinitive or -ing, no difference" id="to-or-ing-same" open={false}>
+    <p>
+      A small group of verbs — <em>like</em> at A1, then <em>love</em>, <em>prefer</em> and <em>hate</em> at A2 — can be followed by either a <em>to</em>-infinitive or an <em>-ing</em> form, with no change in meaning at all. Pick whichever sounds more natural to you.
+    </p>
+    <GrammarFormula label="Verb + to-infinitive OR -ing" parts={['subject', 'like / love / prefer / hate', "'to' + infinitive OR verb-ing"]} />
+    <GrammarExample note="like + to-infinitive: A1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">like</mark> <mark data-role="content">to work</mark> with my classmates.
+    </GrammarExample>
+    <GrammarExample note="like + -ing, same meaning: A1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">like</mark> <mark data-role="content">reading</mark> magazines in bed.
+    </GrammarExample>
+    <GrammarExample note="prefer + to-infinitive: A2.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">prefers</mark> <mark data-role="content">to play</mark> football rather than watch it.
+    </GrammarExample>
+    <GrammarExample note="hate + -ing, same meaning: A2.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">hates</mark> <mark data-role="content">wearing</mark> a coat in summer.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Would like, love, prefer, hate + to" id="would-degree" open={false}>
+    <p>
+      <em>Would</em> in front of <em>like</em>, <em>love</em>, <em>prefer</em> or <em>hate</em>, followed by a <em>to</em>-infinitive, expresses a wish, a preference or a strong feeling right now — more polite and more definite than the plain verb on its own.
+    </p>
+    <GrammarFormula label="Would + verb + to-infinitive" parts={['subject', "would + like / love / prefer / hate", "'to' + infinitive"]} />
+    <GrammarExample note="would like + to-infinitive: A1, the most basic form.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">would like</mark> <mark data-role="content">to meet</mark> you on Sunday afternoon.
+    </GrammarExample>
+    <GrammarExample note="would love + to-infinitive, for emphasis: A2.">
+      <mark data-role="grammar">I</mark>'d <mark data-role="grammar">love</mark> <mark data-role="content">to see</mark> the finished photos.
+    </GrammarExample>
+    {wouldLovePoint && <GrammarUsagePointCard usagePoint={wouldLovePoint} />}
+    <GrammarExample note="would prefer + to-infinitive, often for politeness: B1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">would prefer</mark> <mark data-role="content">to pay</mark> by card, if that's all right.
+    </GrammarExample>
+    {wouldPreferPoint && <GrammarUsagePointCard usagePoint={wouldPreferPoint} />}
+    <GrammarExample note="would hate + to-infinitive, for emphasis: C2.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">would hate</mark> <mark data-role="content">to see</mark> all that hard work go to waste.
+    </GrammarExample>
+    {wouldHatePoint && <GrammarUsagePointCard usagePoint={wouldHatePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Enjoy doing, finish doing: verb + -ing" id="verb-ing" open={false}>
+    <p>
+      After some verbs the next verb must be the <em>-ing</em> form, never a <em>to</em>-infinitive: <em>enjoy</em> at A2, then <em>mind</em> and <em>finish</em> at B1, then a wider range — <em>avoid</em>, <em>consider</em>, <em>can't stand</em> — at B2.
+    </p>
+    <GrammarFormula label="Verb + -ing" parts={['subject', 'verb', 'verb-ing']} />
+    <GrammarExample note="enjoy + -ing: A2.">
+      <mark data-role="grammar">We</mark> really <mark data-role="grammar">enjoy</mark> <mark data-role="content">playing</mark> the piano together.
+    </GrammarExample>
+    <GrammarExample note="mind + -ing: B1, a limited range at this level.">
+      Would <mark data-role="grammar">you</mark> <mark data-role="grammar">mind</mark> <mark data-role="content">closing</mark> the window?
+    </GrammarExample>
+    <GrammarExample note="avoid + -ing: B2, a wider range by this level.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">avoided</mark> <mark data-role="content">answering</mark> the question directly.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Help someone (to) do something" id="help-object" open={false}>
+    <p>
+      After <em>help</em> plus an object, the following verb can take <em>to</em> or leave it out — both are correct and mean exactly the same thing.
+    </p>
+    <GrammarFormula label="Help + object + (to) infinitive" parts={['subject', 'help', 'object', "(to) infinitive"]} />
+    <GrammarExample note="help + object + to-infinitive: B1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">helped</mark> <mark data-role="grammar">him</mark> <mark data-role="content">to make</mark> some new friends.
+    </GrammarExample>
+    <GrammarExample note="help + object + bare infinitive, same meaning: B1.">
+      Can <mark data-role="grammar">you</mark> <mark data-role="grammar">help</mark> <mark data-role="grammar">me</mark> <mark data-role="content">choose</mark> a present for her?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Want you to, ask you to: verb + object + to-infinitive" id="object-to-infinitive" open={false}>
+    <p>
+      Some verbs of requesting, wanting and commanding place a direct object between the verb and the <em>to</em>-infinitive — the object is who's being asked or told to do something.
+    </p>
+    <GrammarFormula label="Verb + object + to-infinitive" parts={['subject', 'verb', 'object', "'to' + infinitive"]} />
+    <GrammarExample note="want + object + to-infinitive: B1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">would like</mark> <mark data-role="grammar">you</mark> <mark data-role="content">to come</mark> to the picnic on Saturday.
+    </GrammarExample>
+    <GrammarExample note="ask + object + to-infinitive: B1.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">asked</mark> <mark data-role="grammar">me</mark> <mark data-role="content">to tell</mark> her about my trip.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Make and let: infinitive without 'to'" id="make-let" open={false}>
+    <p>
+      After <em>make</em> and <em>let</em> plus an object, the following verb is a bare infinitive — no <em>to</em> at all, unlike almost every other verb in this pattern.
+    </p>
+    <GrammarFormula label="Make / let + object + bare infinitive" parts={['subject', 'make / let', 'object', 'infinitive (no to)']} />
+    <GrammarExample note="make + object + bare infinitive: B1.">
+      That song always <mark data-role="grammar">makes</mark> <mark data-role="grammar">me</mark> <mark data-role="content">smile</mark>.
+    </GrammarExample>
+    <GrammarExample note="let + object + bare infinitive: B1.">
+      <mark data-role="grammar">My parents</mark> <mark data-role="grammar">let</mark> <mark data-role="grammar">me</mark> <mark data-role="content">stay</mark> out a bit later at weekends.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Mind you doing, imagine it being: a new subject before -ing" id="new-subject-ing" open={false}>
+    <p>
+      Before an <em>-ing</em> form, you can introduce a new subject of your own — a noun or an object pronoun — instead of leaving it implied. It says who or what is doing the action described by the <em>-ing</em> form.
+    </p>
+    <GrammarFormula label="Verb + new subject + -ing" parts={['subject', 'verb', 'noun / object pronoun', 'verb-ing']} />
+    <GrammarExample note="mind + new subject + -ing: B2.">
+      Would <mark data-role="grammar">your boss</mark> <mark data-role="grammar">mind</mark> <mark data-role="grammar">you</mark> <mark data-role="content">arriving</mark> a bit late tomorrow?
+    </GrammarExample>
+    <GrammarExample note="imagine + new subject + -ing: B2.">
+      <mark data-role="grammar">We</mark> can't <mark data-role="grammar">imagine</mark> <mark data-role="grammar">it</mark> <mark data-role="content">being</mark> any colder than this.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Remember to vs remember doing: a real change of meaning" id="meaning-change" open={false}>
+    <p>
+      A few verbs — <em>remember</em>, <em>forget</em>, <em>stop</em>, <em>try</em> among them — take either a <em>to</em>-infinitive or an <em>-ing</em> form, but here the choice actually changes what the sentence means: the <em>to</em>-infinitive describes an action that comes after, the <em>-ing</em> form one that came before or is happening at the same time.
+    </p>
+    <GrammarFormula label="Verb + to-infinitive OR -ing, different meaning" parts={['subject', 'remember / forget / stop / try', "'to' + infinitive OR verb-ing"]} />
+    <GrammarExample note="remember + to-infinitive: the reminder comes first, the action after.">
+      Please <mark data-role="grammar">remember</mark> <mark data-role="content">to lock</mark> the door before you leave.
+    </GrammarExample>
+    <GrammarExample note="remember + -ing: the memory is of something already done.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">remember</mark> <mark data-role="content">feeling</mark> very confused on my first day here.
+    </GrammarExample>
+    <GrammarExample note="stop + to-infinitive: stopped one thing in order to start another.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">stopped</mark> <mark data-role="content">to think</mark> before answering.
+    </GrammarExample>
+    <GrammarExample note="stop + -ing: stopped doing the thing itself.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">stopped</mark> <mark data-role="content">smoking</mark> two years ago.
+    </GrammarExample>
+    {meaningChangePoint && <GrammarUsagePointCard usagePoint={meaningChangePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="See someone do vs see someone doing: the senses" id="senses-object" open={false}>
+    <p>
+      After a verb of the senses — <em>see</em>, <em>hear</em>, <em>watch</em>, <em>feel</em> — plus a direct object, the choice between an <em>-ing</em> form and the bare infinitive changes what's emphasised: <em>-ing</em> for something already in progress, caught partway through; the infinitive for the whole action, seen from start to finish.
+    </p>
+    <GrammarFormula label="Senses + object + -ing OR infinitive" parts={['subject', 'see / hear / watch / feel', 'object', "verb-ing OR infinitive (no to)"]} />
+    <GrammarExample note="senses + object + -ing, an ongoing activity: B2.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">heard</mark> <mark data-role="grammar">someone</mark> <mark data-role="content">shouting</mark> in the street outside.
+    </GrammarExample>
+    {sensesIngPoint && <GrammarUsagePointCard usagePoint={sensesIngPoint} />}
+    <GrammarExample note="senses + object + bare infinitive, the complete action: C1.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">saw</mark> <mark data-role="grammar">him</mark> <mark data-role="content">cross</mark> the road and go into the shop.
+    </GrammarExample>
+    {sensesInfPoint && <GrammarUsagePointCard usagePoint={sensesInfPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Some of the most common verbs — <em>want</em>, <em>decide</em>, <em>hope</em> — need a <em>to</em>-infinitive, not an <em>-ing</em> form.
+    </p>
+    <GrammarContrast
+      bad={['I want going to the party.', 'She decided going home early.']}
+      good={['I want to go to the party.', 'She decided to go home early.']}
+    />
+    <p>
+      Other common verbs — <em>enjoy</em>, <em>finish</em>, <em>mind</em> — go the other way: they need an <em>-ing</em> form, not a <em>to</em>-infinitive.
+    </p>
+    <GrammarContrast
+      bad={['I enjoy to read in the evening.', 'Please finish to eat before we leave.']}
+      good={['I enjoy reading in the evening.', 'Please finish eating before we leave.']}
+    />
+    <p>
+      After <em>make</em> and <em>let</em>, don't add <em>to</em> — this is the one pair where the infinitive is always bare.
+    </p>
+    <GrammarContrast
+      bad={['My parents let me to stay out late.', 'This song always makes me to cry.']}
+      good={['My parents let me stay out late.', 'This song always makes me cry.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-would',
+        name: "'would'",
+        note: "the same modal that opens 'would like/love/prefer/hate to' here has its own full range of uses.",
+      },
+      {
+        slug: 'verbs-prepositional',
+        name: 'prepositional verbs',
+        note: "look forward to doing, be used to doing — a preposition, not a verb, followed by -ing.",
+      },
+      {
+        slug: 'verbs-types',
+        name: 'types of verbs',
+        note: 'where these to-infinitive/-ing patterns fit among action, linking and modal verbs.',
+      },
+    ]}
+  />
+</GrammarShell>

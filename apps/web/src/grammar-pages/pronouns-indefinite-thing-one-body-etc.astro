@@ -1,0 +1,268 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 17 EGP rows (982-998): 9 pure FORM rows (object/subject roles across a
+// growing range at A1/A2/B1/B2, negative + 'anything', 'else') written
+// without a card; 8 FORM/USE or USE rows — all 8 inlined, matched by
+// egpIndex.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const adjectiveA2 = point(987);
+const toInfinitiveA2 = point(988);
+const vagueSomethingA2 = point(990);
+const premodifiersB1 = point(993);
+const relativeClauseB2 = point(995);
+const vagueWiderB2 = point(996);
+const focusC1 = point(997);
+const ellipsisC1 = point(998);
+
+const inlineUsagePointIds = [
+  adjectiveA2,
+  toInfinitiveA2,
+  vagueSomethingA2,
+  premodifiersB1,
+  relativeClauseB2,
+  vagueWiderB2,
+  focusC1,
+  ellipsisC1,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Indefinite pronouns in English: something, someone/somebody, everything, everyone/everybody, anything, anyone/anybody, nothing, no one/nobody — form, singular verb agreement, and how to make them more specific with an adjective, a to-infinitive, else, or a relative clause."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'negative', title: "Anything after a negative", open: false },
+    { id: 'else', title: "Something else, no one else", open: false },
+    { id: 'specifying', title: 'Making it more specific', open: false },
+    { id: 'vague', title: 'Vague expressions: or something, or anything like that', open: false },
+    { id: 'premodifiers', title: 'Intensifying: absolutely anything, nearly everyone', open: false },
+    { id: 'focus', title: 'Complex subjects for focus', open: false },
+    { id: 'ellipsis', title: "Ellipsis: 'anything you need, ask...'", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Indefinite pronouns are built from a quantity part (<em>some-</em>, <em>any-</em>, <em>every-</em>, <em>no-</em>) and a category part (<em>-thing</em>, <em>-one</em>/<em>-body</em>) — <em>something</em>, <em>everyone</em>, <em>nobody</em>. They stand in for a person or thing you don't need, or don't want, to name exactly, and they always take a singular verb even when the meaning feels plural, as in <em>everybody</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form" id="form" open>
+    <p>
+      The quantity part follows the same logic as <a href="/grammar/determiners-quantity">some, any and no as determiners</a>: <em>some-</em> in statements, <em>any-</em> in questions and negatives, <em>no-</em> for a flat "not one". The category part is <em>-thing</em> for objects/ideas and <em>-one</em>/<em>-body</em> for people (the two are interchangeable — <em>someone</em> and <em>somebody</em> mean the same thing).
+    </p>
+    <GrammarFormula label="As object or complement" parts={['verb / preposition', 'some-/any-/every-/no- + -thing/-one/-body']} />
+    <GrammarExample note="982 A1: a limited range as a verb's object.">
+      I like to eat <mark data-role="content">everything</mark>.
+    </GrammarExample>
+    <GrammarExample note="982 A1: after 'if', a limited range as object.">
+      If you need <mark data-role="content">anything</mark>, please let me know.
+    </GrammarExample>
+    <GrammarExample note="984 A2: an increasing range, including as the complement of a preposition.">
+      I have borrowed it from <mark data-role="content">somebody</mark>.
+    </GrammarExample>
+    <GrammarExample note="992 B1: a wide range — nothing, anyone.">
+      My computer is broken and I have <mark data-role="content">nothing</mark> to do.
+    </GrammarExample>
+    <GrammarExample note="992 B1: anyone as object, in a negative sentence.">
+      It's a tennis club and the people there were all strangers — I didn't know <mark data-role="content">anyone</mark>.
+    </GrammarExample>
+    <GrammarFormula label="As subject" parts={['some-/any-/every-/no- + -thing/-one/-body', 'singular verb']} />
+    <GrammarExample note="983 A1: 'everything' as subject, with a singular verb (is, not are).">
+      <mark data-role="content">Everything</mark> <mark data-role="grammar">is</mark> nice and green there.
+    </GrammarExample>
+    <GrammarExample note="985 A2: 'someone'/'everyone' as subject, a limited range.">
+      <mark data-role="content">Someone</mark> <mark data-role="grammar">stole</mark> my luggage at the airport.
+    </GrammarExample>
+    <GrammarExample note="991 B1: an increasing range — something, nobody.">
+      I tried to call for help, but <mark data-role="content">nobody</mark> <mark data-role="grammar">answered</mark>.
+    </GrammarExample>
+    <GrammarExample note="994 B2: the full range as subject — nothing, everybody.">
+      Nowadays <mark data-role="content">nothing</mark> <mark data-role="grammar">is</mark> free, so you have to pay for everything.
+    </GrammarExample>
+    <GrammarExample note="994 B2: everybody with a singular verb, even though the meaning is plural.">
+      It was Christmas, that's why <mark data-role="content">everybody</mark> <mark data-role="grammar">tried</mark> to smile.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Anything after a negative" id="negative">
+    <p>
+      In a negative sentence, the <em>any-</em> form is the one that follows the negative verb — the same statement-vs-negative split as <a href="/grammar/determiners-quantity">some/any as determiners</a>, just with a pronoun standing alone instead of a noun after it.
+    </p>
+    <GrammarFormula label="Negative + anything" parts={["don't/doesn't/can't + verb", "any- + -thing/-one/-body"]} />
+    <GrammarExample note="986 A2: 'anything' after a negative verb form.">
+      You <mark data-role="grammar">don't have to bring</mark> <mark data-role="content">anything</mark>.
+    </GrammarExample>
+    <GrammarExample note="986 A2: 'anything' after a second negative in the same sentence.">
+      It is too dark, so I <mark data-role="grammar">can't find</mark> <mark data-role="content">anything</mark>.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/negation-negation">negation</a> for negative verb forms in general.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Something else, no one else" id="else">
+    <p>
+      Adding <em>else</em> right after the pronoun means "a different thing/person" — someone or something other than what's already been mentioned.
+    </p>
+    <GrammarFormula label="Pronoun + else" parts={['some-/any-/every-/no- + -thing/-one/-body', 'else']} />
+    <GrammarExample note="989 A2: 'else' after 'something', offering an alternative.">
+      Have you got <mark data-role="content">something</mark> <mark data-role="grammar">else</mark> to do on Saturday?
+    </GrammarExample>
+    <GrammarExample note="989 A2: 'else' after 'nothing', ruling out anything further.">
+      We have to bring some paints, but <mark data-role="content">nothing</mark> <mark data-role="grammar">else</mark>.
+    </GrammarExample>
+    <GrammarExample note="989 A2: 'else' after 'someone', looking for a different person.">
+      I'm looking for <mark data-role="content">someone</mark> <mark data-role="grammar">else</mark> to go with me.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Making it more specific" id="specifying">
+    <p>
+      <em>Something</em> and <em>anything</em> are deliberately vague on their own — an adjective or a <em>to</em>-infinitive right after the pronoun narrows down what kind of thing you mean, without naming it.
+    </p>
+    <GrammarFormula label="+ adjective" parts={['something/anything', 'adjective']} />
+    <GrammarExample note="987 A2: an adjective straight after 'something', no noun needed.">
+      I needed <mark data-role="grammar">something</mark> <mark data-role="content">new</mark> to wear.
+    </GrammarExample>
+    <GrammarExample note="987 A2: an adjective after 'anything', in a negative sentence.">
+      I didn't find <mark data-role="grammar">anything</mark> <mark data-role="content">wrong</mark>.
+    </GrammarExample>
+    {adjectiveA2 && <GrammarUsagePointCard usagePoint={adjectiveA2} />}
+    <GrammarFormula label="+ to-infinitive" parts={['something/anything', 'to + base verb']} />
+    <GrammarExample note="988 A2: a 'to'-infinitive naming the purpose of the thing.">
+      Please, bring <mark data-role="grammar">something</mark> <mark data-role="content">to drink</mark>.
+    </GrammarExample>
+    <GrammarExample note="988 A2: 'anything' + to-infinitive, in a negative sentence.">
+      I didn't have <mark data-role="grammar">anything</mark> <mark data-role="content">to wear</mark> on my holidays.
+    </GrammarExample>
+    {toInfinitiveA2 && <GrammarUsagePointCard usagePoint={toInfinitiveA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Vague expressions: or something, or anything like that" id="vague">
+    <p>
+      Tacked onto the end of a sentence, <em>or something</em> and <em>or anything like that</em> soften a suggestion or an example into "this, or something similar" — a common, informal way of not committing to one exact thing.
+    </p>
+    <GrammarFormula label="Vague tag" parts={['(noun/idea)', 'or something / or something like that']} />
+    <GrammarExample note="990 A2: 'or something else', softening a suggestion.">
+      After the concert we can have a pizza <mark data-role="content">or something else</mark>.
+    </GrammarExample>
+    <GrammarExample note="990 A2: 'or something', trailing off a short list of examples.">
+      Please bring something to drink — wine, coke, <mark data-role="content">or something</mark>.
+    </GrammarExample>
+    {vagueSomethingA2 && <GrammarUsagePointCard usagePoint={vagueSomethingA2} />}
+    <GrammarExample note="996 B2: 'or anything like that', a wider range of vague tags.">
+      Is it worth having a nervous breakdown <mark data-role="content">or anything like that</mark>?
+    </GrammarExample>
+    <GrammarExample note="996 B2: 'or somewhere else', naming a vague place instead.">
+      Try planting more trees around the college, <mark data-role="content">or somewhere else</mark>.
+    </GrammarExample>
+    {vagueWiderB2 && <GrammarUsagePointCard usagePoint={vagueWiderB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Intensifying: absolutely anything, nearly everyone" id="premodifiers">
+    <p>
+      A premodifier like <em>absolutely</em>, <em>practically</em> or <em>nearly</em> right before the pronoun pushes it to an extreme (absolutely = 100%) or pulls it just short of one (nearly = almost 100%).
+    </p>
+    <GrammarFormula label="Intensifier + pronoun" parts={['absolutely / practically / nearly / almost', 'some-/any-/every-/no- + -thing/-one/-body']} />
+    <GrammarExample note="993 B1: 'absolutely' pushing 'anything' to its full range.">
+      You can find <mark data-role="content">absolutely</mark> <mark data-role="grammar">anything</mark>, whatever you need.
+    </GrammarExample>
+    <GrammarExample note="993 B1: 'nearly' pulling 'everyone' just short of 100%.">
+      <mark data-role="content">Nearly</mark> <mark data-role="grammar">everyone</mark> I know sits at a computer all day.
+    </GrammarExample>
+    {premodifiersB1 && <GrammarUsagePointCard usagePoint={premodifiersB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Complex subjects for focus" id="focus">
+    <p>
+      Starting a sentence with <em>something</em> or <em>anything</em> and building a longer subject around it — with a relative clause or another post-modifier — puts the whole idea in focus before saying what it is or does, a more formal, writing-oriented alternative to naming the thing directly.
+    </p>
+    <GrammarFormula label="Pronoun + relative clause" parts={['something/everything/everyone', 'that/which/who...', 'verb']} />
+    <GrammarExample note="995 B2: 'something' + relative clause, as the focused subject of 'is'.">
+      <mark data-role="content">Something that I like very much</mark> <mark data-role="grammar">is</mark> the idea of the classes.
+    </GrammarExample>
+    <GrammarExample note="995 B2: 'everything' + relative clause, still with a singular verb.">
+      <mark data-role="content">Everything that I believed</mark> <mark data-role="grammar">changed</mark>.
+    </GrammarExample>
+    {relativeClauseB2 && <GrammarUsagePointCard usagePoint={relativeClauseB2} />}
+    <GrammarFormula label="Anything + post-modifier" parts={['anything', 'else / to-infinitive / that-clause', 'singular verb']} />
+    <GrammarExample note="997 C1: 'anything else' as a focused subject.">
+      <mark data-role="content">Anything else</mark> <mark data-role="grammar">can be attached</mark> too if needed.
+    </GrammarExample>
+    <GrammarExample note="997 C1: 'anything' + relative clause, as subject.">
+      <mark data-role="content">Anything that puts you in contact with the English language</mark> <mark data-role="grammar">is</mark> important.
+    </GrammarExample>
+    {focusC1 && <GrammarUsagePointCard usagePoint={focusC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Ellipsis: 'anything you need, ask...'" id="ellipsis">
+    <p>
+      In a more formal, often written style, <em>anything</em> can open a clause with the usual <em>if there is</em> left out — the clause still means "if there is anything you need", it's just not said.
+    </p>
+    <GrammarFormula label="Ellipted 'anything' clause" parts={['Anything', '(that) subject + verb', 'main clause']} />
+    <GrammarExample note="998 C1: 'anything else you need' standing for 'if there is anything else you need'.">
+      <mark data-role="content">Anything else you need</mark>, ask Sarah.
+    </GrammarExample>
+    <GrammarExample note="998 C1: same ellipsis, opening a formal instruction.">
+      <mark data-role="content">Anything you want to ask me</mark>, feel free to do so.
+    </GrammarExample>
+    {ellipsisC1 && <GrammarUsagePointCard usagePoint={ellipsisC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      A plural-feeling word like <em>everybody</em> or <em>everyone</em> still takes a singular verb — it's grammatically singular even though it refers to many people.
+    </p>
+    <GrammarContrast bad={['Everybody are ready.', 'Everyone have a book.']} good={['Everybody is ready.', 'Everyone has a book.']} />
+    <p>
+      English doesn't stack a negative pronoun on top of a negative verb — use <em>anything</em> after <em>don't</em>, or <em>nothing</em> on its own with a positive verb, never both together.
+    </p>
+    <GrammarContrast bad={["I don't want nothing.", "She doesn't know nobody here."]} good={["I don't want anything.", "She doesn't know anybody here.", 'I want nothing.']} />
+    <p>
+      And in a plain statement, <em>some-</em> is the natural choice, not <em>any-</em> — save <em>any-</em> for questions, negatives, and the "it doesn't matter which" meaning.
+    </p>
+    <GrammarContrast bad={['I need anybody to help me carry this.']} good={['I need somebody to help me carry this.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'determiners-quantity',
+        name: 'determiners — quantity',
+        note: 'some, any, no and the other quantity words used before a noun, instead of standing alone as a pronoun.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'pronouns — subject/object',
+        note: 'personal pronouns (I/me, she/her) that replace a specific noun, rather than an unspecified one.',
+      },
+      {
+        slug: 'negation-negation',
+        name: 'negation',
+        note: 'how to build the negative verb forms that anything and its family usually follow.',
+      },
+    ]}
+  />
+</GrammarShell>
