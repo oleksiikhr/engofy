@@ -797,12 +797,34 @@ dev-сервер + Playwright (8 details, 53 мітки, 0 карток, "When i
 відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
 скролу на 390px).
 
-### [ ] 27. Nouns — types (`nouns-types`) — рівень A1
+### [x] 27. Nouns — types (`nouns-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-types`.
+
+7 EGP-рядків (677-683), усі чисті FORM (A1-C1), usage points немає —
+сторінка без карток, "When it's used" не рендериться. 6 секцій: common
+nouns (determiner + noun, конкретні й абстрактні — design / damage, B1
+681); proper nouns (велика літера для людей, міст/країн, днів/місяців,
+мов/національностей, без артикля; сезони — з малої); compound nouns
+(noun / verb-ing / adjective + головний іменник, одним словом / двома /
+через дефіс, наголос на першому, множина лише на останньому); -ing як
+noun у позиції додатка (like / prefer / go / practise + -ing, після
+прийменника, A2 680); -ing як підмет + однинне дієслово (B2 682) і
+абстрактні -ing (teaching / advertising / learning, C1 683); типові
+помилки (monday / english з малої, the London / The Monika, stop bus /
+shoes shop, I like swim / Drive in a city / go to swimming, Reading
+books are). Content-мітка — іменник цього типу (для compound — головний
+іменник, однослівний compound — цілком; для -ing — сама -ing форма),
+grammar — решта слотів формули (determiner, прийменник, перша частина
+compound, like / go / practise, is / has / seems).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (7 details, 61 мітка, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
+скролу на 390px).
 
 ### [ ] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
