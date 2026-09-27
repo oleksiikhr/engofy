@@ -453,12 +453,38 @@ not only без інверсії). Відмежовано від `clauses-coordi
 dev-сервер + Playwright (10 details, 98 міток, 11 карток у правильних
 секціях, "When it's used" відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
 
-### [ ] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
+### [x] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `conjunctions-subordinating`.
+
+7 EGP-рядків: 2 FORM/USE — обидва вплетені інлайн (FOCUS whatever/
+wherever на початку речення, C1; 'IN THAT', C2); 5 чистих FORM (because
+A1, прості сполучники A2/B1/B2, складені B2) написані без картки. У
+learner_explanation/examples обох точок порожньо — факти перевірено
+за EGP can-do + прикладами. Відмежовано від `clauses-subordinated` (та
+організована за значенням клаузи — reason/time/condition…, тут — самі
+слова і пари, які плутають, як і обіцяє її GrammarCompare). 12 секцій:
+because vs because of (+ due to the fact that); if vs when; while/as/
+since з двома значеннями; before/after/until/once/as soon as; although/
+though/whereas (+ though-прислівник у кінці, despite the fact that); so
+vs so that/in order that; unless/provided/as long as/except that;
+whether vs if; as if/as though; -ever на початку речення; in that;
+типові помилки (despite/because of + клауза, unless + not, will після
+when, on if). Content-мітка — сполучник, grammar — підмет/дієслово
+підрядної клаузи (+ look/talks перед as if, прикметник після however).
+**Нова пастка**: не лише `</em>`/`<mark>` між тегами — перенос рядка
+одразу перед `<em>` посеред прози теж з'їдається (`not\n<em>as` →
+`notas`); `<em>` завжди на тому ж рядку, що попереднє слово. Контракції
+не розбивати між двома `<mark>` (`you</mark> <mark>'ve` дає зайвий
+пробіл) — писати повну форму.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 118 міток, 2 картки в секціях
+`ever`/`in-that`, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>` — перевірка за символом до/після кожного тегу).
 
 ### [ ] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
