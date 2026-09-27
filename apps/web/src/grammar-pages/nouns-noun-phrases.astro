@@ -1,0 +1,531 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 6 USE / FORM/USE rows are inlined, matched by EGP index. The other 24
+// rows (determiner + noun, adjectives before the noun, noun + noun, 's and
+// s', a friend of mine, prepositional / adjective phrases after the noun,
+// relative clauses, apposition, indefinite pronoun + adjective, little or no)
+// are plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const suchPoint = point(659);
+const dentistsPoint = point(662);
+const superlativePoint = point(661);
+const theThingPoint = point(668);
+const whatCleftPoint = point(675);
+const nominalisationPoint = point(674);
+
+const inlineUsagePointIds = [
+  suchPoint,
+  dentistsPoint,
+  superlativePoint,
+  theThingPoint,
+  whatCleftPoint,
+  nominalisationPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to build English noun phrases: determiner + noun, adjectives before the noun, such a, noun + noun, 's and s', a friend of mine, phrases and relative clauses after the noun, apposition, the thing / what for focus, and formal nominalisation."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'A park, my friend, some food: determiner + noun', open: true },
+    { id: 'adjectives', title: 'A big garden, nice people: adjectives before the noun', open: false },
+    { id: 'emphasis', title: 'Really good friends, such a long time', open: false },
+    { id: 'noun-noun', title: 'Computer games, tomato sauce: noun + noun', open: false },
+    { id: 'possessive', title: "My sister's jacket, my grandparents' house, the dentist's", open: false },
+    { id: 'of-mine', title: 'A friend of mine, a friend of my father', open: false },
+    { id: 'after-noun', title: 'A dress with blue flowers, something to drink: words after the noun', open: false },
+    { id: 'relative', title: 'The phone which I bought: clauses after the noun', open: false },
+    { id: 'apposition', title: 'Mr Miller, the Sales Director: two noun phrases side by side', open: false },
+    { id: 'focus', title: 'The thing I enjoyed most…, What tourists want is…', open: false },
+    { id: 'formal', title: 'A significant growth in output: formal noun phrases', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A noun phrase is a noun plus the words that belong to it: <em>a park</em>, <em>my best friend</em>, <em>a beautiful old city</em>, <em>the phone which I bought yesterday</em>. The noun is the head. Determiners and adjectives go before it; prepositional phrases and clauses go after it. The whole group works like one noun in the sentence.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="A park, my friend, some food: determiner + noun" id="form" open>
+    <p>
+      A singular countable noun almost always needs a determiner in front of it: <em>a</em>, <em>the</em>, <em>my</em>, <em>this</em>, <em>every</em>. Plural and uncountable nouns can have one too, or stand alone when you mean things in general.
+    </p>
+    <GrammarFormula label="Basic" parts={['determiner', 'noun']} />
+    <GrammarExample note="A + singular noun: one park, not a specific one.">
+      There is also <mark data-role="grammar">a</mark> <mark data-role="content">park</mark> near my house.
+    </GrammarExample>
+    <GrammarExample note="Jobs need a / an: a teacher, not just teacher.">
+      <mark data-role="grammar">My</mark> <mark data-role="content">husband</mark> is <mark data-role="grammar">a</mark> <mark data-role="content">teacher</mark>.
+    </GrammarExample>
+    <GrammarExample note="This + place; every + day.">
+      That's why I like <mark data-role="grammar">this</mark> <mark data-role="content">place</mark>. I go to college <mark data-role="grammar">every</mark> <mark data-role="content">day</mark>.
+    </GrammarExample>
+    <p>
+      Uncountable nouns (food, music, weather, information, homework) never take a / an. Use the, a possessive, or a quantity word such as some or more.
+    </p>
+    <GrammarExample note="The + uncountable noun: the food at that party.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">food</mark> was delicious and <mark data-role="grammar">the</mark> <mark data-role="content">music</mark> was great.
+    </GrammarExample>
+    <GrammarExample note="More + uncountable noun: no a / an.">
+      I phoned for <mark data-role="grammar">more</mark> <mark data-role="content">information</mark> two days ago.
+    </GrammarExample>
+    <GrammarExample note="Some + homework.">
+      I need to do <mark data-role="grammar">some</mark> <mark data-role="content">homework</mark> tonight.
+    </GrammarExample>
+    <p>
+      Longer quantity phrases work as determiners too: <em>a lot of</em>, <em>so many</em>, <em>too much</em>, <em>all of our</em>, <em>some of my</em>.
+    </p>
+    <GrammarExample note="A lot of + plural noun.">
+      I visited <mark data-role="grammar">a lot of</mark> <mark data-role="content">museums</mark> and I went shopping.
+    </GrammarExample>
+    <GrammarExample note="Too much + uncountable noun.">
+      I spent <mark data-role="grammar">too much</mark> <mark data-role="content">money</mark>, but I don't mind.
+    </GrammarExample>
+    <GrammarExample note="All of + our + noun; some of + my + noun.">
+      <mark data-role="grammar">All of our</mark> <mark data-role="content">classmates</mark> were there and <mark data-role="grammar">some of my</mark> <mark data-role="content">cousins</mark> too.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A big garden, nice people: adjectives before the noun" id="adjectives" open={false}>
+    <p>
+      An adjective goes between the determiner and the noun. Adjectives in English never change: <em>a big garden</em>, <em>big gardens</em> — no plural -s on the adjective.
+    </p>
+    <GrammarFormula label="One adjective" parts={['determiner', 'adjective', 'noun']} />
+    <GrammarExample note="My + best + friend.">
+      Martin is <mark data-role="grammar">my</mark> <mark data-role="grammar">best</mark> <mark data-role="content">friend</mark>.
+    </GrammarExample>
+    <GrammarExample note="A + big + garden; a + small + swimming pool.">
+      We have <mark data-role="grammar">a</mark> <mark data-role="grammar">big</mark> <mark data-role="content">garden</mark> and <mark data-role="grammar">a</mark> <mark data-role="grammar">small</mark> <mark data-role="content">swimming pool</mark>.
+    </GrammarExample>
+    <p>
+      With a plural noun in general, there is often no determiner at all: just adjective + noun.
+    </p>
+    <GrammarFormula label="Plural, no determiner" parts={['adjective', 'plural noun']} />
+    <GrammarExample note="New + neighbours: no a, because it's plural.">
+      I have <mark data-role="grammar">new</mark> <mark data-role="content">neighbours</mark>.
+    </GrammarExample>
+    <GrammarExample note="Nice + people (people is already plural).">
+      They're <mark data-role="grammar">nice</mark> <mark data-role="content">people</mark>.
+    </GrammarExample>
+    <GrammarExample note="Interesting + books: books in general.">
+      I like reading <mark data-role="grammar">interesting</mark> <mark data-role="content">books</mark>.
+    </GrammarExample>
+    <p>
+      You can put two or more adjectives before a noun. Opinion adjectives (beautiful, nice, nasty) usually come first; facts like size, age and colour come after them, and colour comes closest to the noun.
+    </p>
+    <GrammarFormula label="Several adjectives" parts={['determiner', 'opinion', 'size / age', 'colour', 'noun']} />
+    <GrammarExample note="Opinion (beautiful) + colour (pink).">
+      I bought <mark data-role="grammar">a</mark> <mark data-role="grammar">beautiful</mark> <mark data-role="grammar">pink</mark> <mark data-role="content">skirt</mark> and <mark data-role="grammar">a</mark> <mark data-role="grammar">white</mark> <mark data-role="content">top</mark>.
+    </GrammarExample>
+    <GrammarExample note="Size (short) + colour (black), no determiner with hair.">
+      She has <mark data-role="grammar">short</mark> <mark data-role="grammar">black</mark> <mark data-role="content">hair</mark>.
+    </GrammarExample>
+    <GrammarExample note="Opinion (beautiful) + age (old).">
+      It is <mark data-role="grammar">a</mark> <mark data-role="grammar">beautiful</mark> <mark data-role="grammar">old</mark> <mark data-role="content">city</mark>.
+    </GrammarExample>
+    <GrammarExample note="Opinion (exciting) + age (new).">
+      I know your company is offering <mark data-role="grammar">an</mark> <mark data-role="grammar">exciting</mark> <mark data-role="grammar">new</mark> <mark data-role="content">service</mark> in our area.
+    </GrammarExample>
+    <GrammarExample note="A list of noun phrases, each with its own adjectives.">
+      He was wearing <mark data-role="grammar">an</mark> <mark data-role="grammar">elegant</mark> <mark data-role="grammar">black</mark> <mark data-role="content">suit</mark> with <mark data-role="grammar">a</mark> <mark data-role="grammar">red</mark> <mark data-role="content">tie</mark>.
+    </GrammarExample>
+    <p>
+      Two adjectives of the same kind can be joined with and, or with but when the second one is a surprise after the first.
+    </p>
+    <GrammarFormula label="With but" parts={['a', 'adjective', 'but', 'adjective', 'noun']} />
+    <GrammarExample note="Small + but + beautiful: small, and yet beautiful.">
+      I was born in <mark data-role="grammar">a</mark> <mark data-role="grammar">small</mark> <mark data-role="grammar">but</mark> <mark data-role="grammar">beautiful</mark> <mark data-role="content">city</mark>.
+    </GrammarExample>
+    <GrammarExample note="Simple + but + tricky.">
+      You need to ask yourself <mark data-role="grammar">a</mark> <mark data-role="grammar">simple</mark> <mark data-role="grammar">but</mark> <mark data-role="grammar">tricky</mark> <mark data-role="content">question</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Really good friends, such a long time" id="emphasis" open={false}>
+    <p>
+      To make the adjective stronger, put an adverb like very, really or quite in front of it. The adverb goes with the adjective, not the noun.
+    </p>
+    <GrammarFormula label="Adverb + adjective" parts={['determiner', 'very / really', 'adjective', 'noun']} />
+    <GrammarExample note="A + very + long + time.">
+      It took us <mark data-role="grammar">a</mark> <mark data-role="grammar">very</mark> <mark data-role="grammar">long</mark> <mark data-role="content">time</mark>.
+    </GrammarExample>
+    <GrammarExample note="Really + good + friends: plural, no determiner.">
+      They became <mark data-role="grammar">really</mark> <mark data-role="grammar">good</mark> <mark data-role="content">friends</mark>.
+    </GrammarExample>
+    <p>
+      For emphasis, use such a before an adjective + singular noun, and such (without a) before an adjective + plural or uncountable noun. Such goes before a, not after it.
+    </p>
+    <GrammarFormula label="Such" parts={['such a / such', 'adjective', 'noun']} />
+    <GrammarExample note="Such a + terrible + situation: singular noun.">
+      I've never been in <mark data-role="grammar">such a</mark> <mark data-role="grammar">terrible</mark> <mark data-role="content">situation</mark>.
+    </GrammarExample>
+    <GrammarExample note="Such a + fantastic + birthday present.">
+      Thank you for giving me <mark data-role="grammar">such a</mark> <mark data-role="grammar">fantastic</mark> <mark data-role="content">birthday present</mark>.
+    </GrammarExample>
+    <GrammarExample note="Such + good + friends: plural, so no a.">
+      We both liked to read and that was why we were <mark data-role="grammar">such</mark> <mark data-role="grammar">good</mark> <mark data-role="content">friends</mark>.
+    </GrammarExample>
+    <GrammarExample note="Such + high + heels.">
+      I had never worn <mark data-role="grammar">such</mark> <mark data-role="grammar">high</mark> <mark data-role="content">heels</mark> before.
+    </GrammarExample>
+    {suchPoint && <GrammarUsagePointCard usagePoint={suchPoint} />}
+    <p>
+      Compare so: so goes before an adjective alone (<em>It was so terrible</em>), such goes before a noun phrase (<em>such a terrible situation</em>).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Computer games, tomato sauce: noun + noun" id="noun-noun" open={false}>
+    <p>
+      A noun can describe another noun, like an adjective. The first noun says what kind; the second noun is the head. The first noun is normally singular, even when the meaning is plural.
+    </p>
+    <GrammarFormula label="Noun + noun" parts={['(determiner)', 'noun', 'noun']} />
+    <GrammarExample note="Computer + games: a kind of games.">
+      Every Friday I go swimming and play <mark data-role="grammar">computer</mark> <mark data-role="content">games</mark>.
+    </GrammarExample>
+    <GrammarExample note="A + dinner + party.">
+      I am having <mark data-role="grammar">a</mark> <mark data-role="grammar">dinner</mark> <mark data-role="content">party</mark> on Friday.
+    </GrammarExample>
+    <GrammarExample note="Friday + evening: a day or time can describe a noun too.">
+      Can you come to my house on <mark data-role="grammar">Friday</mark> <mark data-role="content">evening</mark>?
+    </GrammarExample>
+    <GrammarExample note="Vegetable (not vegetables) + pasta; tomato + sauce.">
+      My girlfriend likes <mark data-role="grammar">vegetable</mark> <mark data-role="content">pasta</mark> with <mark data-role="grammar">tomato</mark> <mark data-role="content">sauce</mark>.
+    </GrammarExample>
+    <p>
+      The stress is usually on the first noun: a <em>DINner party</em>, <em>COMputer games</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="My sister's jacket, my grandparents' house, the dentist's" id="possessive" open={false}>
+    <p>
+      To show who something belongs to, add 's to the owner. The owner comes first, then the thing. The determiner belongs to the owner, so there is no second one before the thing: <em>my sister's jacket</em>, not <em>the my sister's jacket</em>.
+    </p>
+    <GrammarFormula label="Singular owner" parts={["noun + 's", 'noun']} />
+    <GrammarExample note="My sister + 's + jacket.">
+      It's <mark data-role="grammar">my sister's</mark> <mark data-role="content">jacket</mark>.
+    </GrammarExample>
+    <GrammarExample note="My father + 's + birthday.">
+      Next Sunday it will be <mark data-role="grammar">my father's</mark> <mark data-role="content">birthday</mark>.
+    </GrammarExample>
+    <GrammarExample note="My neighbour + 's + car.">
+      I saw two men near <mark data-role="grammar">my neighbour's</mark> <mark data-role="content">car</mark>.
+    </GrammarExample>
+    <p>
+      If the owner is a plural ending in -s, add only an apostrophe: <em>my grandparents'</em>, <em>customers'</em>. Irregular plurals take 's as usual: <em>children's</em>, <em>people's</em>. The same form works with time: <em>15 years' experience</em>.
+    </p>
+    <GrammarFormula label="Plural owner" parts={["plural noun + '", 'noun']} />
+    <GrammarExample note="Grandparents + ' + house: more than one grandparent.">
+      He had promised to go to <mark data-role="grammar">his grandparents'</mark> <mark data-role="content">house</mark> this afternoon.
+    </GrammarExample>
+    <GrammarExample note="Years + ': experience of 15 years.">
+      We are a digital company with <mark data-role="grammar">15 years'</mark> <mark data-role="content">experience</mark>.
+    </GrammarExample>
+    <GrammarExample note="Customers + ' + attention: the attention of many customers.">
+      Special offers help to get <mark data-role="grammar">customers'</mark> <mark data-role="content">attention</mark>.
+    </GrammarExample>
+    <p>
+      A possessive phrase can sit inside a bigger noun phrase after of.
+    </p>
+    <GrammarFormula label="Inside of" parts={['the + noun', 'of', "noun + 's", 'noun']} />
+    <GrammarExample note="The window + of + my neighbour's car.">
+      I saw that <mark data-role="grammar">the</mark> <mark data-role="content">window</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my neighbour's car</mark> was broken.
+    </GrammarExample>
+    <GrammarExample note="The sister + of + my brother's girlfriend.">
+      She is <mark data-role="grammar">the</mark> <mark data-role="content">sister</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my brother's girlfriend</mark>.
+    </GrammarExample>
+    <p>
+      For shops, surgeries and people's homes, you can leave out the noun after 's. Everyone knows which place you mean: <em>the dentist's</em> (surgery), <em>my grandma's</em> (house).
+    </p>
+    <GrammarFormula label="Place" parts={['the / my', "noun + 's"]} />
+    <GrammarExample note="The dentist's = the dentist's surgery.">
+      I have to go to <mark data-role="grammar">the</mark> <mark data-role="content">dentist's</mark>.
+    </GrammarExample>
+    <GrammarExample note="The dry cleaner's = the dry cleaner's shop.">
+      I left my clothes at <mark data-role="grammar">the</mark> <mark data-role="content">dry cleaner's</mark>.
+    </GrammarExample>
+    <GrammarExample note="Your grandma's = your grandma's house.">
+      It's next to <mark data-role="grammar">your</mark> <mark data-role="content">grandma's</mark>.
+    </GrammarExample>
+    {dentistsPoint && <GrammarUsagePointCard usagePoint={dentistsPoint} />}
+    <p>
+      You can also leave out a noun that was just mentioned, so you don't repeat it.
+    </p>
+    <GrammarExample note="A teacher's = a teacher's view.">
+      It would be better to include <mark data-role="grammar">a student's</mark> <mark data-role="content">view</mark> of the college, not only <mark data-role="grammar">a</mark> <mark data-role="content">teacher's</mark>.
+    </GrammarExample>
+    <GrammarExample note="Our competitors' = our competitors' team.">
+      Our team is now seen as faster and friendlier than <mark data-role="grammar">our</mark> <mark data-role="content">competitors'</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A friend of mine, a friend of my father" id="of-mine" open={false}>
+    <p>
+      A / some + noun + of + possessive pronoun (mine, yours, his, hers, ours, theirs) means "one of my…" or "some of my…". It's the normal way to say this: you can't put a and my together (<em>a my friend</em>).
+    </p>
+    <GrammarFormula label="Of mine" parts={['a / some', 'noun', 'of', 'mine / yours / his…']} />
+    <GrammarExample note="A colleague of mine = one of my colleagues.">
+      <mark data-role="grammar">A</mark> <mark data-role="content">colleague</mark> <mark data-role="grammar">of mine</mark> told me about a Swiss hotel in London.
+    </GrammarExample>
+    <GrammarExample note="Some schoolmates of mine = some of my schoolmates.">
+      <mark data-role="grammar">Some</mark> <mark data-role="content">schoolmates</mark> <mark data-role="grammar">of mine</mark> invited me to join the cycling holiday.
+    </GrammarExample>
+    <GrammarExample note="A fan of his: I'm one of his fans.">
+      I'm <mark data-role="grammar">a</mark> <mark data-role="content">fan</mark> <mark data-role="grammar">of his</mark> — he is my favourite singer.
+    </GrammarExample>
+    <GrammarExample note="This + dream + of mine: this with a possessive.">
+      I want <mark data-role="grammar">this</mark> <mark data-role="content">dream</mark> <mark data-role="grammar">of mine</mark> to come true.
+    </GrammarExample>
+    <p>
+      When the owner is a noun, use a friend of + my / your… + noun. Adding 's at the end (<em>a friend of my father's</em>) is also correct and common in speech.
+    </p>
+    <GrammarFormula label="Of + noun" parts={['a / some', 'friend(s)', 'of', 'my / your…', "noun ('s)"]} />
+    <GrammarExample note="A friend + of + my husband.">
+      He is <mark data-role="grammar">a</mark> <mark data-role="content">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my husband</mark>.
+    </GrammarExample>
+    <GrammarExample note="Friends + of + my neighbour.">
+      I thought they were <mark data-role="content">friends</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my neighbour</mark> who were going to visit him.
+    </GrammarExample>
+    <GrammarExample note="A friend + of + my father's: with 's at the end.">
+      They can give us a discount because the owner is <mark data-role="grammar">a</mark> <mark data-role="content">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my father's</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A dress with blue flowers, something to drink: words after the noun" id="after-noun" open={false}>
+    <p>
+      To add more information about a noun, put a prepositional phrase (with, about, of, in front of…) after it. The whole group is one noun phrase.
+    </p>
+    <GrammarFormula label="Prepositional phrase" parts={['determiner', 'noun', 'preposition + noun phrase']} />
+    <GrammarExample note="A dress + with blue flowers: which dress.">
+      It was <mark data-role="grammar">a</mark> beautiful red <mark data-role="content">dress</mark> <mark data-role="grammar">with blue flowers on the back</mark>.
+    </GrammarExample>
+    <GrammarExample note="A film + about Bavarian pupils: what kind of film.">
+      A TV company came to our school to make <mark data-role="grammar">a</mark> <mark data-role="content">film</mark> <mark data-role="grammar">about Bavarian pupils</mark>.
+    </GrammarExample>
+    <GrammarExample note="The future + of my town.">
+      You asked me about <mark data-role="grammar">the</mark> <mark data-role="content">future</mark> <mark data-role="grammar">of my town</mark>.
+    </GrammarExample>
+    <GrammarExample note="Some problems + with my health.">
+      I'm having <mark data-role="grammar">some</mark> <mark data-role="content">problems</mark> <mark data-role="grammar">with my health</mark>.
+    </GrammarExample>
+    <p>
+      A longer adjective phrase (an adjective with its own words after it) also goes after the noun, not before it.
+    </p>
+    <GrammarFormula label="Adjective phrase" parts={['determiner', 'noun', 'adjective + more words']} />
+    <GrammarExample note="An island + full of birds (not a full of birds island).">
+      We could go by boat to <mark data-role="grammar">a</mark> small <mark data-role="content">island</mark> <mark data-role="grammar">full of exotic birds</mark>.
+    </GrammarExample>
+    <GrammarExample note="A story + beautifully set in these moors.">
+      She wrote <mark data-role="grammar">a</mark> romantic <mark data-role="content">story</mark>, <mark data-role="grammar">beautifully set in these mysterious moors</mark>.
+    </GrammarExample>
+    <p>
+      With something, anything, nothing, someone etc., the adjective or to-infinitive always comes after.
+    </p>
+    <GrammarFormula label="Indefinite pronoun" parts={['something / nothing…', 'adjective / to + verb']} />
+    <GrammarExample note="Something + different (not different something).">
+      We do <mark data-role="content">something</mark> <mark data-role="grammar">different</mark> every day.
+    </GrammarExample>
+    <GrammarExample note="Something + to drink.">
+      You could bring <mark data-role="content">something</mark> <mark data-role="grammar">to drink</mark>.
+    </GrammarExample>
+    <GrammarExample note="Nothing + special + to eat: adjective and to-infinitive together.">
+      But then there is <mark data-role="content">nothing</mark> <mark data-role="grammar">special</mark> <mark data-role="grammar">to eat</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The phone which I bought: clauses after the noun" id="relative" open={false}>
+    <p>
+      A relative clause (who / which / that + verb) after the noun says exactly which person or thing you mean. There are no commas, because without the clause the meaning isn't complete.
+    </p>
+    <GrammarFormula label="Defining" parts={['the + noun', 'who / which / that', 'clause']} />
+    <GrammarExample note="The mobile phone + which I bought yesterday: which phone.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">mobile phone</mark> <mark data-role="grammar">which I bought yesterday</mark> is brilliant.
+    </GrammarExample>
+    <GrammarExample note="The person + who gave it to me.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">person</mark> <mark data-role="grammar">who gave it to me</mark> was my father.
+    </GrammarExample>
+    <GrammarExample note="The music + that I like.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">music</mark> <mark data-role="grammar">that I like</mark> is rock and roll.
+    </GrammarExample>
+    <p>
+      A clause after a comma just adds extra information about a noun that is already clear. Use which or who here, not that.
+    </p>
+    <GrammarFormula label="Extra information" parts={['noun phrase', ', which / who', 'clause']} />
+    <GrammarExample note="Our Shopping Centre, which is…: extra information.">
+      You can always visit <mark data-role="grammar">our</mark> <mark data-role="content">Shopping Centre</mark>, <mark data-role="grammar">which is one of the biggest in Brazil</mark>.
+    </GrammarExample>
+    <GrammarExample note="The other team, which lost.">
+      She was playing for <mark data-role="grammar">the</mark> other <mark data-role="content">team</mark>, <mark data-role="grammar">which lost</mark>.
+    </GrammarExample>
+    <p>
+      After a superlative (the best, the funniest), a clause with the present perfect or past perfect says "of all the ones I have ever…". Which / that is usually left out, and ever is common.
+    </p>
+    <GrammarFormula label="Superlative" parts={['the + superlative', 'noun', 'I have (ever) + past participle']} />
+    <GrammarExample note="The best + book + I've read.">
+      <mark data-role="grammar">The best</mark> <mark data-role="content">book</mark> <mark data-role="grammar">I've read</mark> is The Da Vinci Code.
+    </GrammarExample>
+    <GrammarExample note="The funniest + person + I've ever known.">
+      She's <mark data-role="grammar">the funniest</mark> <mark data-role="content">person</mark> <mark data-role="grammar">I've ever known</mark>!
+    </GrammarExample>
+    <GrammarExample note="Past perfect: you had ever made (up to then).">
+      It was <mark data-role="grammar">the best</mark> <mark data-role="content">decision</mark> <mark data-role="grammar">you had ever made</mark>.
+    </GrammarExample>
+    {superlativePoint && <GrammarUsagePointCard usagePoint={superlativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Mr Miller, the Sales Director: two noun phrases side by side" id="apposition" open={false}>
+    <p>
+      You can put two noun phrases next to each other when they mean the same person or thing. The second one explains or names the first. Put commas around it.
+    </p>
+    <GrammarFormula label="Apposition" parts={['noun phrase', ', noun phrase ,']} />
+    <GrammarExample note="The Sales Director = Mr Miller.">
+      <mark data-role="content">Mr Miller</mark>, <mark data-role="grammar">the Sales Director</mark>, will visit us next Thursday.
+    </GrammarExample>
+    <GrammarExample note="Mary Watts = the new employee.">
+      <mark data-role="grammar">A</mark> new <mark data-role="content">employee</mark>, <mark data-role="grammar">Mary Watts</mark>, has just joined our company.
+    </GrammarExample>
+    <GrammarExample note="Alison = her best friend.">
+      She is a little sad because <mark data-role="grammar">her</mark> best <mark data-role="content">friend</mark>, <mark data-role="grammar">Alison</mark>, did not pass the exam.
+    </GrammarExample>
+    <GrammarExample note="At the end of a sentence there is only one comma.">
+      We visited some places near <mark data-role="content">Eboli</mark>, <mark data-role="grammar">the town where we live</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The thing I enjoyed most…, What tourists want is…" id="focus" open={false}>
+    <p>
+      To point at one thing and give it focus, start the sentence with the thing + clause, then be, then the thing you want to highlight.
+    </p>
+    <GrammarFormula label="The thing" parts={['The thing', 'subject + verb', 'is / was', 'focus']} />
+    <GrammarExample note="The thing + I enjoyed most + was + …">
+      <mark data-role="grammar">The</mark> <mark data-role="content">thing</mark> <mark data-role="grammar">I enjoyed most about it</mark> <mark data-role="grammar">was</mark> a new computer game.
+    </GrammarExample>
+    <GrammarExample note="The thing + I prefer there + is + …">
+      <mark data-role="grammar">The</mark> <mark data-role="content">thing</mark> <mark data-role="grammar">I prefer there</mark> <mark data-role="grammar">is</mark> the swimming pool.
+    </GrammarExample>
+    {theThingPoint && <GrammarUsagePointCard usagePoint={theThingPoint} />}
+    <p>
+      In more formal writing, use a what-clause instead of the thing (that). What + clause is a whole noun phrase; it is followed by is / was.
+    </p>
+    <GrammarFormula label="What-clause" parts={['What', 'subject + verb', 'is / was', 'focus']} />
+    <GrammarExample note="What + tourists want + is + …">
+      <mark data-role="content">What</mark> <mark data-role="grammar">tourists want</mark> <mark data-role="grammar">is</mark> to see the most typical things in England.
+    </GrammarExample>
+    <GrammarExample note="What + companies care about + is + money.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">companies care about</mark> <mark data-role="grammar">is</mark> money.
+    </GrammarExample>
+    <GrammarExample note="What + everyone loved + were + the special effects: were, because the focus is plural.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">everyone loved</mark> <mark data-role="grammar">were</mark> the special effects.
+    </GrammarExample>
+    {whatCleftPoint && <GrammarUsagePointCard usagePoint={whatCleftPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A significant growth in output: formal noun phrases" id="formal" open={false}>
+    <p>
+      Academic and business writing often turns a verb or adjective into a noun (nominalisation): <em>grow → growth</em>, <em>increase → an increase</em>, <em>advance → advances</em>. The action becomes a noun phrase, which sounds more formal and objective.
+    </p>
+    <GrammarFormula label="Nominalisation" parts={['(a) adjective', 'noun from a verb', 'in / of + noun phrase']} />
+    <GrammarExample note="Less formal: output grew significantly in 2002.">
+      2002 brought <mark data-role="grammar">a significant</mark> <mark data-role="content">growth</mark> <mark data-role="grammar">in the output</mark>.
+    </GrammarExample>
+    <GrammarExample note="Less formal: output went up and down.">
+      The industry recorded <mark data-role="content">fluctuations</mark> <mark data-role="grammar">in industrial output</mark> throughout the three years.
+    </GrammarExample>
+    <GrammarExample note="Less formal: because science and culture have advanced.">
+      Things have been altered by <mark data-role="grammar">the</mark> <mark data-role="content">advances</mark> <mark data-role="grammar">of science and culture</mark>.
+    </GrammarExample>
+    {nominalisationPoint && <GrammarUsagePointCard usagePoint={nominalisationPoint} />}
+    <p>
+      Little or no + noun is a formal way to say "almost none". It goes with uncountable nouns.
+    </p>
+    <GrammarFormula label="Little or no" parts={['little or no', 'uncountable noun']} />
+    <GrammarExample note="Little or no + value.">
+      He refused to act in Hollywood blockbusters with <mark data-role="grammar">little or no</mark> artistic <mark data-role="content">value</mark>.
+    </GrammarExample>
+    <GrammarExample note="Little or no + money.">
+      Their careers started at a very young age with <mark data-role="grammar">little or no</mark> <mark data-role="content">money</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      A singular countable noun needs a determiner; an uncountable noun never takes a / an.
+    </p>
+    <GrammarContrast
+      bad={['My husband is teacher.', 'I have a homework.', 'We had a good weather.']}
+      good={['My husband is a teacher.', 'I have some homework.', 'We had good weather.']}
+    />
+    <p>
+      Adjectives don't take -s, go before the noun, and come after something / nothing. The first noun in noun + noun is singular.
+    </p>
+    <GrammarContrast
+      bad={['They are nices people.', 'I have a car red.', 'I want different something.', 'a vegetables soup']}
+      good={['They are nice people.', 'I have a red car.', 'I want something different.', 'a vegetable soup']}
+    />
+    <p>
+      Use 's for a person's things, not the … of + person, and don't put a / the before the owner and the thing together.
+    </p>
+    <GrammarContrast
+      bad={['the jacket of my sister', "the my sister's jacket", 'a my friend']}
+      good={["my sister's jacket", 'a friend of mine']}
+    />
+    <p>
+      Such goes before a; so doesn't go before a noun.
+    </p>
+    <GrammarContrast
+      bad={['It was a such nice day.', 'They are so good friends.']}
+      good={['It was such a nice day.', 'They are such good friends.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-noun-phrases-grammatical-functions',
+        name: 'noun phrases: functions',
+        note: 'where a noun phrase goes in a sentence — subject, object, complement.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'a / an / the',
+        note: 'which article to put in front of the noun.',
+      },
+      {
+        slug: 'adjectives-position',
+        name: 'adjective position',
+        note: 'adjectives before the noun and after be.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'who, which, that and whose in detail.',
+      },
+      {
+        slug: 'pronouns-possessive',
+        name: 'possessive pronouns',
+        note: 'mine, yours, his, hers — also in a friend of mine.',
+      },
+    ]}
+  />
+</GrammarShell>
