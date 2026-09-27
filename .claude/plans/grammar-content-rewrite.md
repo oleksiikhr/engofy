@@ -315,12 +315,32 @@ Playwright (усі 13 секцій розкрито, усі 31 картки на
 рівнем/guideword, скрипт-перевірка на злиплі слова навколо `<mark>`/`<em>` —
 0 збігів).
 
-### [ ] 10. Adverbs — position (`adverbs-position`) — рівень A1
+### [x] 10. Adverbs — position (`adverbs-position`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-position`.
+
+15 EGP-рядків (126-140), лише 3 класифіковані як USE/FORM-USE (138 NEVER-
+inversion B2, 139 HARDLY-inversion C2, 140 mid-position distancing C2) — усі
+3 вплетені інлайн, решта 12 чисті FORM-рядки без картки. 6 секцій за
+позицією в реченні, а не за типом адверба: front position (просте
+фронтування + sentence-адверби, що лінкують до попереднього речення, з
+карткою), mid position (перед дієсловом, з really, після be/auxiliary/modal,
++ advanced distancing use з карткою), end position (time/place/manner/degree
+разом), degree-адверби перед прикметником (коротко, з крос-посиланням на
+`adjectives-modifying` за повним списком інтенсифікаторів — уникнення
+дублювання того самого патерну "very + adjective"), inversion після
+fronted never/hardly (обидві картки), типова помилка (позиція frequency-
+адверба + забута інверсія після never).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 6 секцій
+розкрито, усі 3 usage-point картки на місцях, CEFR-бейдж у шапці як і на
+інших уже написаних сторінках з високорівневими usage points), перевірка
+злиплих слів навколо `<mark>` через DOM (сусідні text-вузли) — 36 міток, 0
+збігів.
 
 ### [ ] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
