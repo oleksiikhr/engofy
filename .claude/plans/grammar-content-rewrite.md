@@ -1138,12 +1138,45 @@ apps/web вже були запущені з попередньої сесії) 
 рендеру — регенерація `src/metadata.ts` — відкинуто через `git checkout`
 перед комітом, до цього зрізу не стосується.
 
-### [ ] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
+### [x] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `verbs-there-is-are`.
+
+7 EGP-рядків (1095-1101), усі чисті FORM (there is/are A1, + uncountable і
++ 'a lot of' A2, negative B1, there + modal verbs B1, there + інші
+дієслова з модальним значенням B2) — usage points немає, сторінка без
+карток, "When it's used" не рендериться, немає ні CEFR-бейджа, ні
+level-progress у шапці (той самий патерн, що й на `nouns-plural`/
+`verbs-linking`, підтверджено порівнянням реального рендеру обох сторінок).
+6 секцій: форма (there is/are + однина/множина, дефіс "there" як
+формальний, а не смисловий підмет — узгодження be з noun phrase, а не з
+"there"); + uncountable і + 'a lot of' разом (та сама тема — який
+іменник іде далі, з крос-посиланням на `determiners-quantity` за
+загальним правилом узгодження 'a lot of'); заперечення + питання/короткі
+відповіді разом (питання не власний EGP-рядок, а природне завершення форми
+— за прецедентом modality-will/would/future-simple/questions-yes-no, там
+само додавали short answers без окремого EGP-рядка); модальні дієслова
+(will be/wouldn't be/might be); дієслова з модальним значенням (has to
+be/needs to be/is going to be, forward-посилання на ще не написані
+`future-future-with-be-going-to` і `modality-have-got-to`); типові помилки
+(пропущений "there" — калька з рідної мови де підмет-локація йде першою,
+неузгодження be з іменником у множині — особливо після скороченого
+"there's", плутанина з порожнім підметом "it"). Content-мітка — уся фраза
+"there + be(-форма)" одним записом (There is/There are/There isn't/There
+will be/There has to be тощо, за прецедентом злитих контракцій I'll/it's з
+modality-will/present-present-continuous), grammar — noun phrase, що йде
+після (+ будь-які модифікатори). Приклади написані вручну (не скопійовані
+з EGP-корпусу) одним рядком у файлі.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (7 details,
+32 мітки/42 `<em>`, 0 карток очікувано, "When it's used" відсутній, 0
+злиплих слів навколо `<mark>`/`<em>` через regex-перевірку `innerText`,
+скріншот усієї сторінки перевірено вручну).
 
 ### [ ] 38. Verbs — types (`verbs-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
