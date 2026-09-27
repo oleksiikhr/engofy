@@ -1,0 +1,244 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// 4 of this construction's 10 EGP rows are plain FORM (no usage point) —
+// written in full below anyway, per "FORM-факти без usage point — це
+// нормально". The 6 USE/FORM-USE rows are matched by guideword and inlined
+// right next to the pattern they refine.
+const instructionsPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('INSTRUCTIONS'),
+);
+const narrativePoint = con.usagePoints.find((p) =>
+  p.guideword.includes('NARRATIVE'),
+);
+const neitherNorPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('NEITHER'),
+);
+const notOnlyPoint = con.usagePoints.find(
+  (p) => p.guideword.includes('NOT ONLY') && !p.guideword.includes('INVERSION'),
+);
+const notOnlyInversionPoint = con.usagePoints.find(
+  (p) => p.guideword.includes('NOT ONLY') && p.guideword.includes('INVERSION'),
+);
+const negativeNorPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('NEGATIVE CLAUSE'),
+);
+const inlineUsagePointIds = [
+  instructionsPoint,
+  narrativePoint,
+  neitherNorPoint,
+  notOnlyPoint,
+  notOnlyInversionPoint,
+  negativeNorPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to join two or more main clauses into one sentence with and, but, or or — from a simple pair, through chained instructions and stories, to the paired conjunctions (either...or, neither...nor, not only...but also) and the inversion the most emphatic ones trigger."
+  handcrafted
+  sections={[
+    { id: 'joining', title: 'Two clauses, one sentence', open: true },
+    { id: 'ellipsis', title: 'Dropping the repeated subject', open: false },
+    { id: 'chaining', title: 'Chaining several clauses', open: false },
+    { id: 'same-type', title: 'Only clauses of the same type', open: false },
+    { id: 'either-neither', title: 'Either...or and neither...nor', open: false },
+    { id: 'not-only', title: 'Not only...but (also)', open: false },
+    { id: 'negative-nor', title: 'Negative clause + nor', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Coordination links complete clauses as equals, side by side, rather than
+      making one depend on the other. The conjunction that joins them — and,
+      but, or, or one of their paired forms — is the whole story here.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Two clauses, one sentence" id="joining" open>
+    <p>
+      A coordinating conjunction joins two complete main clauses — each with
+      its own subject and verb — into a single sentence.
+    </p>
+    <GrammarFormula label="Two main clauses" parts={['main clause', 'and / but / or', 'main clause']} />
+    <GrammarExample note="And simply adds a second complete idea onto the first.">
+      I study Spanish, <mark data-role="content">and</mark> my brother studies French.
+    </GrammarExample>
+    <GrammarExample note="But signals a contrast between the two clauses.">
+      We wanted to go for a walk, <mark data-role="content">but</mark> it started raining.
+    </GrammarExample>
+    <GrammarExample note="Or offers a straightforward alternative.">
+      You can pay by card, <mark data-role="content">or</mark> you can pay in cash.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Dropping the repeated subject" id="ellipsis" open={false}>
+    <p>
+      When the second clause shares the same subject as the first, English
+      usually drops it rather than repeating it — the reader tracks it from
+      the first clause.
+    </p>
+    <GrammarFormula label="Shared subject dropped" parts={['subject + verb', 'and', 'verb']} />
+    <GrammarExample note="The second verb has no subject of its own — she carries over from the first clause.">
+      She opened the window <mark data-role="content">and</mark> looked outside.
+    </GrammarExample>
+    <GrammarExample note="Three verbs share the one subject I, stated only once.">
+      I got up, made coffee <mark data-role="content">and</mark> sat down to read.
+    </GrammarExample>
+    <p>
+      Repeating the subject isn't ungrammatical, but it reads as unnecessarily
+      formal or emphatic in ordinary writing — the dropped form is the
+      default.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Chaining several clauses" id="chaining" open={false}>
+    <p>
+      Coordination isn't limited to two clauses — a chain of several, linked
+      by commas with a conjunction only before the last one, is common in two
+      everyday contexts: giving instructions, and telling a story.
+    </p>
+    <GrammarFormula label="Instructions" parts={['clause', ', clause', ', and clause']} />
+    <GrammarExample note="Each clause is one step; and only appears once, before the last step.">
+      Turn left at the lights, go straight for two blocks, <mark data-role="content">and</mark> the station is on your right.
+    </GrammarExample>
+    {instructionsPoint && <GrammarUsagePointCard usagePoint={instructionsPoint} />}
+    <GrammarFormula label="Narrative" parts={['clause', ', clause', ', but clause']} />
+    <GrammarExample note="The chain builds up the story; but at the end signals how it resolves.">
+      He looked for his keys everywhere, checked every pocket twice, <mark data-role="content">but</mark> never found them.
+    </GrammarExample>
+    {narrativePoint && <GrammarUsagePointCard usagePoint={narrativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Only clauses of the same type" id="same-type" open={false}>
+    <p>
+      Coordination only works cleanly when both sides are the same kind of
+      clause — both with a normal finite verb, or both with an -ing/to-
+      infinitive form. Mixing types across the conjunction reads as broken,
+      even when each half is fine on its own.
+    </p>
+    <GrammarContrast
+      bad={['She likes swimming and to run.']}
+      good={['She likes swimming and running.', 'She likes to swim and to run.']}
+    />
+    <p>
+      The same rule applies to subordinate clauses: two reasons joined by
+      because, two conditions joined by if, and so on, each keep the same
+      finite form on both sides.
+    </p>
+    <GrammarExample note="Both subordinate clauses repeat because and share the same finite form.">
+      I stayed home because I felt tired <mark data-role="content">and</mark> because it was raining.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Either...or and neither...nor" id="either-neither" open={false}>
+    <p>
+      Either...or and neither...nor work as a pair spanning both clauses, not
+      as a single conjunction — either/neither opens the sentence or sits
+      before the first clause's verb, and or/nor introduces the second.
+    </p>
+    <GrammarFormula label="Either...or" parts={['either', 'main clause', 'or', 'main clause']} />
+    <GrammarExample note="Either marks the first option, or the second — a straightforward choice between the two.">
+      You can <mark data-role="content">either</mark> stay here <mark data-role="content">or</mark> come with us.
+    </GrammarExample>
+    <GrammarFormula label="Neither...nor, for emphasis" parts={['neither', 'main clause', 'nor', 'main clause']} />
+    <GrammarExample note="Neither...nor negates both clauses at once, more emphatically than two separate not sentences.">
+      I <mark data-role="content">neither</mark> called <mark data-role="content">nor</mark> texted her back.
+    </GrammarExample>
+    {neitherNorPoint && <GrammarUsagePointCard usagePoint={neitherNorPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Not only...but (also)" id="not-only" open={false}>
+    <p>
+      Not only...but (also) links two clauses to emphasise that the second is
+      at least as significant as the first — often more surprising than it.
+    </p>
+    <GrammarFormula label="Not only...but also" parts={['main clause', 'not only', 'clause', 'but (also)', 'clause']} />
+    <GrammarExample note="Not only introduces the first fact; but (also) adds the more striking second one.">
+      She <mark data-role="content">not only</mark> passed the exam <mark data-role="content">but</mark> got the highest score in the class.
+    </GrammarExample>
+    {notOnlyPoint && <GrammarUsagePointCard usagePoint={notOnlyPoint} />}
+    <p>
+      Moving not only to the very front of the sentence adds even more
+      emphasis — but it forces the same subject-auxiliary inversion a
+      question uses.
+    </p>
+    <GrammarFormula label="Fronted, with inversion" parts={['not only', 'auxiliary', 'subject', 'verb', 'but (also)', 'clause']} />
+    <GrammarExample note="Did and they swap order once not only is fronted, exactly as in a question.">
+      <mark data-role="content">Not only</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">win</mark> the match, <mark data-role="content">but</mark> they broke the tournament record too.
+    </GrammarExample>
+    {notOnlyInversionPoint && <GrammarUsagePointCard usagePoint={notOnlyInversionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Negative clause + nor" id="negative-nor" open={false}>
+    <p>
+      A negative main clause can be echoed by a second one starting with nor,
+      for extra focus — and nor triggers the same subject-auxiliary inversion
+      as a fronted never or hardly (see <em>Adverb position</em> for that same
+      word-order shift from the other direction).
+    </p>
+    <GrammarFormula label="Negative clause + nor" parts={['negative clause', ', nor', 'auxiliary', 'subject']} />
+    <GrammarExample note="Nor carries the negation over to the second clause; did and my sister swap order after it.">
+      I didn't enjoy the film, <mark data-role="content">nor</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">my sister</mark>.
+    </GrammarExample>
+    {negativeNorPoint && <GrammarUsagePointCard usagePoint={negativeNorPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      The most frequent slip is mixing clause types across the conjunction —
+      one side a finite clause, the other an -ing or to-infinitive form. A
+      second, subtler one is fronting not only for emphasis without inverting
+      the subject and auxiliary that the fronting requires.
+    </p>
+    <GrammarContrast
+      bad={[
+        'She enjoys reading and to write.',
+        'Not only she passed the exam but also got the highest score.',
+      ]}
+      good={[
+        'She enjoys reading and writing.',
+        'Not only did she pass the exam but she also got the highest score.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'conjunctions-coordinating',
+        name: 'coordinating conjunctions',
+        note: 'and, but, or, so themselves — meaning and use, not just how they join two main clauses.',
+      },
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinated clauses',
+        note: 'joining a main clause to a dependent one with because, although, when — subordination rather than coordination.',
+      },
+      {
+        slug: 'clauses-declarative',
+        name: 'declarative clauses',
+        note: 'the plain main clause this page joins two (or more) of together.',
+      },
+    ]}
+  />
+</GrammarShell>
