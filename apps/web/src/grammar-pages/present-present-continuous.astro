@@ -1,0 +1,242 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 14 EGP rows (851-864): 3 pure FORM (affirmative, negative, questions)
+// written without a card; 11 USE / FORM-USE (events in progress at three
+// growing levels, temporary situations at two levels, temporary repeated
+// actions, always + complaint at three growing levels, rhetorical questions,
+// politeness with normally-stative verbs) get a usage-point card, all
+// inlined below — matched by egpIndex, since several guidewords ("EVENTS IN
+// PROGRESS", "TEMPORARY SITUATIONS", "WITH ADVERBS OF INDEFINITE FREQUENCY")
+// repeat across levels.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const eventsA1 = point(852);
+const eventsA2 = point(856);
+const eventsB1 = point(859);
+const temporaryA2 = point(857);
+const temporaryB1 = point(860);
+const repeatedB1 = point(858);
+const alwaysA2 = point(855);
+const alwaysB2 = point(861);
+const alwaysC2 = point(863);
+const rhetoricalC1 = point(862);
+const politenessC2 = point(864);
+
+const inlineUsagePointIds = [
+  eventsA1,
+  eventsA2,
+  eventsB1,
+  temporaryA2,
+  temporaryB1,
+  repeatedB1,
+  alwaysA2,
+  alwaysB2,
+  alwaysC2,
+  rhetoricalC1,
+  politenessC2,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Present continuous in English: form (am/is/are + verb-ing, negatives, questions) and when to use it — events in progress, temporary situations, complaining with always, rhetorical questions and polite requests."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'events-in-progress', title: 'Right now, in front of you', open: false },
+    { id: 'temporary-situations', title: 'These days: a temporary situation', open: false },
+    { id: 'temporary-repeated', title: 'Doing it a lot, but only for now', open: false },
+    { id: 'always-complaining', title: "Always losing your keys: complaining with always", open: false },
+    { id: 'rhetorical-questions', title: 'Rhetorical questions', open: false },
+    { id: 'politeness', title: 'Sounding less direct', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The present continuous is <em>am/is/are</em> + a verb ending in <em>-ing</em>. It's built from two moving parts — a form of <em>be</em> that agrees with the subject, and the main verb with <em>-ing</em> attached — and it's the tense you reach for when something is happening around now rather than always being true.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form" id="form" open>
+    <GrammarFormula label="Affirmative" parts={['subject', 'am/is/are', 'verb-ing']} />
+    <GrammarExample note="851 A1: am + verb-ing.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">writing</mark> to you from the airport.
+    </GrammarExample>
+    <GrammarExample note="Contracted subject + am: written as one word, one mark.">
+      <mark data-role="content">I'm</mark> <mark data-role="grammar">flying</mark> to Berlin tomorrow morning.
+    </GrammarExample>
+    <GrammarExample note="is + verb-ing.">
+      <mark data-role="grammar">My sister</mark> <mark data-role="content">is</mark> <mark data-role="grammar">staying</mark> with us this week.
+    </GrammarExample>
+    <GrammarFormula label="Negative" parts={["subject", "'m not / isn't / aren't", 'verb-ing']} />
+    <GrammarExample note="853 A2: is not / isn't.">
+      <mark data-role="grammar">The printer</mark> <mark data-role="content">isn't</mark> <mark data-role="grammar">working</mark> today.
+    </GrammarExample>
+    <GrammarExample note="are not / aren't.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">aren't</mark> <mark data-role="grammar">listening</mark> to a word I say.
+    </GrammarExample>
+    <GrammarFormula label="Question" parts={['am/is/are', 'subject', 'verb-ing']} />
+    <GrammarFormula label="Wh- question" parts={['wh-word', 'am/is/are', 'subject', 'verb-ing']} />
+    <GrammarExample note="854 A2: wh- question, common in letters and emails.">
+      <mark data-role="grammar">How</mark> <mark data-role="content">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">doing</mark>?
+    </GrammarExample>
+    <GrammarExample note="854 A2: wh- question.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">bringing</mark> to the picnic?
+    </GrammarExample>
+    <GrammarExample note="Yes/no question.">
+      <mark data-role="content">Is</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">coming</mark> with us?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Right now, in front of you" id="events-in-progress">
+    <p>
+      The most basic job of the present continuous: something is happening at this exact moment, while you're speaking or writing about it. Early on you'll use it with a small, familiar set of verbs — the range widens as your level grows.
+    </p>
+    <GrammarFormula label="Event in progress" parts={['subject', 'am/is/are', 'verb-ing']} />
+    <GrammarExample note="852 A1: a limited range of verbs, right now.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">missing</mark> you a lot since you left.
+    </GrammarExample>
+    {eventsA1 && <GrammarUsagePointCard usagePoint={eventsA1} />}
+    <GrammarExample note="856 A2: a wider range of verbs.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">is</mark> <mark data-role="grammar">getting</mark> dark already, even though it's only five o'clock.
+    </GrammarExample>
+    {eventsA2 && <GrammarUsagePointCard usagePoint={eventsA2} />}
+    <GrammarExample note="859 B1: a wide range of verbs.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">planning</mark> a surprise party for my brother this weekend.
+    </GrammarExample>
+    {eventsB1 && <GrammarUsagePointCard usagePoint={eventsB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="These days: a temporary situation" id="temporary-situations">
+    <p>
+      The present continuous doesn't only describe the exact second you're speaking — it also covers something true around now, for a limited stretch of time, but not forever. A time word like <em>at the moment</em>, <em>this month</em> or <em>these days</em> often signals it.
+    </p>
+    <GrammarFormula label="Temporary situation" parts={['subject', 'am/is/are', 'verb-ing', '(time expression)']} />
+    <GrammarExample note="857 A2: a limited range of verbs.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">staying</mark> <mark data-role="grammar">with a friend</mark> while my flat is being repainted.
+    </GrammarExample>
+    {temporaryA2 && <GrammarUsagePointCard usagePoint={temporaryA2} />}
+    <GrammarExample note="860 B1: a wide range of verbs.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">are</mark> <mark data-role="grammar">renting</mark> <mark data-role="grammar">a small flat near the city centre</mark> this year.
+    </GrammarExample>
+    {temporaryB1 && <GrammarUsagePointCard usagePoint={temporaryB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Doing it a lot, but only for now" id="temporary-repeated">
+    <p>
+      A repeated or regular action can also take the present continuous, as long as the whole pattern is temporary — a project you're in the middle of, a habit you've picked up for a while, not something you always do.
+    </p>
+    <GrammarFormula label="Temporary repeated action" parts={['subject', 'am/is/are', 'verb-ing']} />
+    <GrammarExample note="858 B1: repeated, but only for a limited time.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">going</mark> to the gym every morning this month, to get ready for the race.
+    </GrammarExample>
+    {repeatedB1 && <GrammarUsagePointCard usagePoint={repeatedB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Always losing your keys: complaining with always" id="always-complaining">
+    <p>
+      Put an adverb of indefinite frequency — <em>always</em>, <em>constantly</em>, <em>continuously</em>, <em>permanently</em> — inside a present continuous, and it stops being neutral. It now says the habit is surprising, annoying or excessive, not just frequent.
+    </p>
+    <GrammarFormula label="Complaint with always" parts={['subject', 'am/is/are', 'always', 'verb-ing']} />
+    <GrammarExample note="855 A2: a limited range of adverbs, especially always.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">are</mark> <mark data-role="grammar">always</mark> <mark data-role="grammar">losing</mark> your keys.
+    </GrammarExample>
+    {alwaysA2 && <GrammarUsagePointCard usagePoint={alwaysA2} />}
+    <GrammarExample note="861 B2: a wider range of adverbs.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">is</mark> <mark data-role="grammar">constantly</mark> <mark data-role="grammar">checking</mark> his phone, even during meetings.
+    </GrammarExample>
+    {alwaysB2 && <GrammarUsagePointCard usagePoint={alwaysB2} />}
+    <GrammarExample note="863 C2: a wide range of adverbs.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">are</mark> <mark data-role="grammar">persistently</mark> <mark data-role="grammar">asking</mark> for information they already have.
+    </GrammarExample>
+    {alwaysC2 && <GrammarUsagePointCard usagePoint={alwaysC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Rhetorical questions" id="rhetorical-questions">
+    <p>
+      A present continuous question doesn't always want an answer. In essays, articles and opinion pieces, it can pose a question purely to make the reader think, or to introduce the writer's own point.
+    </p>
+    <GrammarFormula label="Rhetorical question" parts={['wh-word (or none)', 'am/is/are', 'subject', 'verb-ing']} />
+    <GrammarExample note="862 C1: asked for effect, not for an answer.">
+      <mark data-role="grammar">Why</mark> <mark data-role="content">are</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">still</mark> <mark data-role="grammar">arguing</mark> about this after all these years?
+    </GrammarExample>
+    <GrammarExample note="862 C1.">
+      <mark data-role="content">Is</mark> <mark data-role="grammar">technology</mark> <mark data-role="grammar">changing</mark> childhood forever?
+    </GrammarExample>
+    {rhetoricalC1 && <GrammarUsagePointCard usagePoint={rhetoricalC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Sounding less direct" id="politeness">
+    <p>
+      A small group of verbs don't normally take the continuous at all — <em>want</em>, <em>hope</em>, <em>wonder</em>, <em>ask</em> — because they describe a state, not an action. Putting one of them in the present continuous anyway softens a statement or a request, making it sound more tentative and less pushy than the plain present simple.
+    </p>
+    <GrammarFormula label="Softened statement/request" parts={['subject', 'am/is/are', 'stative verb-ing']} />
+    <GrammarExample note="864 C2: softer than 'I ask for your support'.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">asking</mark> for your support with this matter.
+    </GrammarExample>
+    <GrammarExample note="864 C2: softer than 'I hope you can help'.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">hoping</mark> you can help me with something.
+    </GrammarExample>
+    {politenessC2 && <GrammarUsagePointCard usagePoint={politenessC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Forgetting <em>am/is/are</em> altogether is one of the most common present continuous mistakes — some languages don't need an auxiliary here at all, but English always does.
+    </p>
+    <GrammarContrast bad={['She working now.', 'I am work at a hospital.']} good={['She is working now.', 'I am working at a hospital.']} />
+    <p>
+      Stative verbs — <em>like</em>, <em>know</em>, <em>want</em>, <em>believe</em>, <em>own</em>, <em>belong</em> — normally stay in the present simple, even when they feel like they're describing something happening "now". The continuous only appears with them deliberately, for the softening effect above, not by accident.
+    </p>
+    <GrammarContrast bad={['I am liking this song.', 'She is knowing the answer.']} good={['I like this song.', 'She knows the answer.']} />
+    <p>
+      And a permanent, unchanging fact takes the present simple, not the continuous — the continuous frames a situation as temporary, so using it for something that's always true sends the wrong signal.
+    </p>
+    <GrammarContrast bad={['I am living in Kyiv.']} good={['I live in Kyiv.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'present-present-simple',
+        name: 'present simple',
+        note: 'habits, routines and permanent facts, not what is happening right now.',
+      },
+      {
+        slug: 'future-present-continuous-for-future-use',
+        name: 'present continuous for future use',
+        note: "the same am/is/are + verb-ing form, but for a fixed arrangement (I'm meeting her at six).",
+      },
+      {
+        slug: 'future-future-with-be-going-to',
+        name: 'be going to',
+        note: 'another way to talk about the future — a plan or intention rather than a fixed arrangement.',
+      },
+      {
+        slug: 'past-past-continuous',
+        name: 'past continuous',
+        note: 'the same was/were + verb-ing shape, shifted one tense back into the past.',
+      },
+    ]}
+  />
+</GrammarShell>
