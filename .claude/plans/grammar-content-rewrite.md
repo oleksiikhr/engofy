@@ -826,12 +826,58 @@ dev-сервер + Playwright (7 details, 61 мітка, 0 карток, "When i
 відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
 скролу на 390px).
 
-### [ ] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
+### [x] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `prepositions-prepositions`.
+
+Гілки `changes` на момент виконання цього зрізу не існувало (ні локально, ні
+на remote) — увесь попередній контент зрізів 1-27 вже влитий у `main` через
+звичайні merged PR (#149, #152, #154), а не прямими комітами в `changes`, як
+описано в override вище. За підтвердженням користувача створено нову гілку
+`changes` з поточного `main`, і цей та наступні зрізи Фази 2 комітяться в неї
+далі за тим самим override-процесом.
+
+15 EGP-рядків (836-850): 12 чистих FORM (зростаючий діапазон простих і
+складних прийменників, 'just'/adverb-of-degree + preposition, preposition +
+-ing, stranding у wh-питаннях/непрямих питаннях/relative clauses) написані
+без картки; 3 FORM/USE (848 preposition + wh-word як формальна альтернатива
+stranding, 849/850 формальні прості/складні прийменники) — усі 3 вплетені
+інлайн, матч за `egpIndex`. У learner_explanation/examples усіх точок
+порожньо (не перевірялось окремим DB-запитом — факти взято за EGP can-do +
+прикладами з `assets/egp.json`, як і в усіх попередніх чисто-FORM зрізах).
+Приклади написані вручну (не скопійовані з EGP-корпусу) одним рядком у
+файлі. 9 секцій: preposition + noun phrase (базова форма); зростання
+діапазону простих прийменників (A2→B1: opposite/between/during →
+through/along/beside/within/via); складні (багатослівні) прийменники
+(A2→B2: near to/in front of/instead of → due to/thanks to → in spite
+of/apart from/in addition to); adverb of degree перед прийменником (just/
+right, quite/really); preposition + -ing як додаток; stranding наприкінці
+wh-питання/непрямого питання/relative clause (картка не потрібна — чистий
+FORM); формальна альтернатива preposition + which/whom/whose замість
+stranding (848, картка); формальні/літературні/бізнес-прийменники, прості
+(849) і складні (850) в одній секції, обидва з карткою за прецедентом
+DEGREE ADJECTIVES/FORMAL FORM+USE подвійних карток в одній секції; типові
+помилки (залежний прийменник після дієслова/прикметника не за словниковим
+перекладом — married to/depend on/interested in, прийменник часу — on
+Monday/at the airport, відкинутий прийменник без свого noun phrase у
+stranding). Content-мітка — прийменник (або комплексний прийменник як одна
+фраза), grammar — решта слотів формули (noun phrase, adverb, wh-word/
+relative pronoun, -ing complement, підмет+дієслово в stranding).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend `pnpm
+dev` на 8080 + `apps/web` `astro dev` на 4321, обидва були зупинені після
+перевірки) + Playwright (усі 9 details з правильними заголовками, 66 міток
+31 content/35 grammar з правильними кольорами `--color-word`/`--color-gram`,
+усі 3 usage-point картки на місцях `usage-point-848/849/850`, "When it's
+used" відсутній — усі 3 точки вже інлайн, 0 склеєних слів навколо
+`<mark>`/`<em>` через regex-перевірку `innerText`, без горизонтального
+скролу на 390px). Побічний ефект запуску backend dev-сервера — регенерація
+`src/metadata.ts` (несуттєве форматування) — відкинуто через `git checkout`
+перед комітом, до цього зрізу не стосується.
 
 ### [ ] 29. Present — present continuous (`present-present-continuous`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
