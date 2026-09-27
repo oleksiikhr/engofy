@@ -710,12 +710,41 @@ dev-сервер + Playwright (14 details, 273 мітки, 12 карток у п
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
+### [x] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-noun-phrases`.
+
+30 EGP-рядків (647-676): 6 FORM/USE / USE — усі 6 вплетені інлайн, матч за
+`egpIndex`; 24 чисті FORM (determiner + noun / uncountable / quantity
+phrases, adjective + noun, кілька прикметників, adverb + adjective, but між
+прикметниками, noun + noun, 's / plural ', of + 's, a friend of mine / of
+my father('s), prepositional / adjective phrase після іменника, indefinite
+pronoun + adjective / to-infinitive, relative clauses defining і
+non-defining, apposition, 's без іменника при повторі, little or no)
+написані без картки. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 12
+секцій: determiner + noun (+ uncountable, a lot of / too much / all of
+our); прикметники перед іменником (порядок opinion → size/age → colour,
+small but beautiful); very/really + adjective + such a / such (659, so vs
+such); noun + noun (перший іменник в однині, наголос); 's / plural ' /
+of + 's / the dentist's (662) / 's без повтору іменника; a colleague of
+mine / a friend of my father('s); prepositional + adjective phrases після
+іменника + something different / to drink; relative clauses + the best
+book I've ever read (661); apposition; The thing I… / What-cleft (668,
+675); nominalisation (674) + little or no; типові помилки (без артикля /
+a homework, nices / a car red / different something / a vegetables soup,
+the jacket of my sister / a my friend, a such / so good friends).
+Content-мітка — головний іменник (або слово, що його заміщує: the
+dentist's, something, What), grammar — решта слотів формули (determiner,
+прикметники, possessive 's, of-phrase, relative clause, апозиція, be).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 249 міток, 6 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
