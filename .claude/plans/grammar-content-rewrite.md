@@ -1024,12 +1024,44 @@ make, seems/appears).
 0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку `innerHTML`,
 без горизонтального скролу на 390px).
 
-### [ ] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
+### [x] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `questions-yes-no`.
+
+11 EGP-рядків (1032-1042): 9 чистих FORM (modal-first на двох зростаючих
+діапазонах A1/A2, be-first, do-support, auxiliary be + -ing, auxiliary have
++ -ed, негативні питання be/aux/modal на B1) написані без картки; 2 USE/
+FORM-USE — 1041 (seeking agreement, B1) і 1042 (emphasis з uncontracted not,
+C2) — обидва вплетені інлайн, матч за `egpIndex`. Значне тематичне
+перетинання з уже написаною `clauses-interrogatives` (та сама механіка
+be/aux/do/modal-first), яка вже мала `GrammarCompare`-посилання на цю
+сторінку з обіцянкою "how yes/no questions are used and answered, including
+short answers" — тому ця сторінка навмисно не повторює загальну механіку
+з нуля, а фокусується на yes/no-специфіці: власні FORM-факти за EGP
+1032-1042, секція коротких відповідей (не окремий EGP-рядок, а прямий
+наслідок форм вище — той самий підхід, що вже застосовувався в
+modality-will/would/future-simple, тут винесений у власну повноцінну
+секцію з таблицею замість короткої згадки) і дві USE-точки про негативні
+питання. 9 секцій: modal-first (1032+1034); be-first (1033); do-support
+(1035); continuous/perfect auxiliary (1036+1037); короткі відповіді
+(таблиця be/do/have/modal, узгодження підмета); негативні питання
+be/aux/modal разом (1038+1039+1040, з окремою згадкою винятку "aren't I"
+замість "amn't I"); seeking agreement (1041, картка); formal emphasis з
+uncontracted not (1042, картка); типові помилки (пропущений do-support,
+повторення повного дієслова замість aux у короткій відповіді, amn't I,
+зайве to після модального в запереченні). Content-мітка — слово, що
+рухається на початок питання (modal/be/do/have, або негативна стягнена
+форма), grammar — решта слотів формули.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 9 секцій + Practice розкрито, 2 картки в
+секціях `seeking-agreement`/`emphasis`, "When it's used" відсутній — обидві
+точки вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через DOM-перевірку
+сусідніх текстових вузлів, без горизонтального скролу на 390px).
 
 ### [ ] 34. Verbs — linking (`verbs-linking`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
