@@ -879,12 +879,43 @@ used" відсутній — усі 3 точки вже інлайн, 0 скле
 `src/metadata.ts` (несуттєве форматування) — відкинуто через `git checkout`
 перед комітом, до цього зрізу не стосується.
 
-### [ ] 29. Present — present continuous (`present-present-continuous`) — рівень A1
+### [x] 29. Present — present continuous (`present-present-continuous`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `present-present-continuous`.
+
+14 EGP-рядків (851-864): 3 чисті FORM (affirmative, negative, questions)
+написані без картки; 11 USE/FORM-USE — усі 11 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: EVENTS IN PROGRESS на A1/A2/B1,
+TEMPORARY SITUATIONS на A2/B1, WITH ADVERBS OF INDEFINITE FREQUENCY на
+A2/B2/C2). У learner_explanation/examples усіх точок не перевірялось окремим
+DB-запитом — факти взято за EGP can-do + прикладами з `assets/egp.json`, як і
+в усіх попередніх чисто-FORM/малих зрізах. Приклади написані вручну одним
+рядком у файлі. 8 секцій: форма (am/is/are + verb-ing, заперечення,
+питання/wh-питання); події в процесі зараз (зростаючий діапазон дієслів на
+трьох рівнях, картки 852/856/859); тимчасові ситуації (два рівні, картки
+857/860); тимчасові повторювані дії (858); always/constantly/permanently для
+скарги — зростаючий діапазон на трьох рівнях (картки 855/861/863);
+риторичні питання (862); пом'якшення звичайно-статичними дієсловами
+want/hope/wonder/ask (864, з протиставленням випадковому вжитку статичних
+дієслів like/know у типових помилках); типові помилки (пропущений
+am/is/are, випадковий continuous зі статичним дієсловом, continuous замість
+simple для постійного факту). Content-мітка — am/is/are (або злита
+контракція I'm/it's, за прецедентом I'll з modality-will), grammar — підмет
++ verb-ing (+ always/constantly, wh-word). "Compare with" веде на
+`present-present-simple`, `future-present-continuous-for-future-use`,
+`future-future-with-be-going-to`, `past-past-continuous` — жодна ще не
+написана вручну (майбутні зрізи плану), посилання коректні через generic
+fallback до того часу.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений з попередньої сесії) + Playwright (усі 8 details, 71 мітка, 11
+карток у правильних секціях, "When it's used" відсутній — усі 11 точок
+вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку
+`innerHTML`, повний скріншот сторінки перевірено вручну).
 
 ### [ ] 30. Present — present simple (`present-present-simple`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
