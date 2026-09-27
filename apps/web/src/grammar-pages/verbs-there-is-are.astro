@@ -1,0 +1,180 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 7 EGP rows (1095-1101: 'there is'/'there are' A1, + uncountable and + 'a
+// lot of' A2, negative B1, 'there' + modal verbs B1, 'there' + other verbs
+// with modal meaning B2) are plain FORM rows — no usage points, no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="There is / there are — the dummy subject 'there' that introduces something for the first time, with be agreeing with the noun phrase that follows it, not with 'there' itself, plus its negative, modal and 'has to be' forms."
+  handcrafted
+  sections={[
+    { id: 'form-basics', title: "There is a garden, there are two rooms: introducing what's there", open: true },
+    { id: 'uncountable-a-lot-of', title: "There's some money, there are a lot of shops", open: false },
+    { id: 'negative-questions', title: "There isn't, is there? negative and questions", open: false },
+    { id: 'modal-verbs', title: 'There will be, there might be: modal verbs', open: false },
+    { id: 'modal-meaning-verbs', title: "There has to be, there's going to be", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>There</em> is not the real subject of <em>there is / there are</em> — it doesn't refer to a place, and it carries no meaning of its own. It only fills the subject slot so that <em>be</em> can come first, letting you introduce something the listener doesn't know about yet. The noun phrase that follows <em>be</em> is the real information — and it, not <em>there</em>, decides whether <em>be</em> is singular or plural.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="There is a garden, there are two rooms: introducing what's there" id="form-basics" open>
+    <p>
+      Use <em>there is</em> / <em>there are</em> to say that something exists, or to mention it for the first time. <em>Be</em> agrees with the noun phrase right after it — a singular noun takes <em>is</em>, a plural noun takes <em>are</em> — even though <em>there</em> sits in the subject position.
+    </p>
+    <GrammarFormula label="There is / are" parts={['there', "is (singular) / are (plural)", 'noun phrase']} />
+    <GrammarExample note="there is + a singular noun phrase: A1.">
+      <mark data-role="content">There is</mark> <mark data-role="grammar">a nice garden</mark> behind my house.
+    </GrammarExample>
+    <GrammarExample note="there are + a plural noun phrase: A1.">
+      <mark data-role="content">There are</mark> <mark data-role="grammar">two bedrooms and a bathroom</mark> in my flat.
+    </GrammarExample>
+    <p>
+      Compare this with an ordinary sentence, where a real noun or pronoun is the subject and carries its own meaning: <em>The garden is behind my house</em> talks about a garden you already know about; <em>There is a garden behind my house</em> tells the listener a garden exists there for the first time. (<em>It</em> works the same way as an empty subject for weather, time and distance — <a href="/grammar/nouns-noun-phrases-grammatical-functions">noun phrases</a> — but <em>it</em> never introduces something new the way <em>there</em> does.)
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="There's some money, there are a lot of shops" id="uncountable-a-lot-of" open={false}>
+    <p>
+      An uncountable noun has no plural form, so it always takes <em>is</em>, never <em>are</em> — the same singular-only agreement it takes everywhere else.
+    </p>
+    <GrammarFormula label="There is + uncountable" parts={['there', 'is', 'uncountable noun']} />
+    <GrammarExample note="there is + uncountable noun: A2.">
+      <mark data-role="content">There is</mark> <mark data-role="grammar">some money</mark> in this envelope.
+    </GrammarExample>
+    <p>
+      <em>A lot of</em> can go with either <em>is</em> or <em>are</em> — the choice still depends on the noun that comes after <em>of</em>, not on <em>a lot</em> itself (the same rule <a href="/grammar/determiners-quantity">quantity words</a> already covers for <em>a lot of</em> in general).
+    </p>
+    <GrammarFormula label="There is/are + a lot of" parts={['there', 'is / are', "'a lot of'", 'noun']} />
+    <GrammarExample note="there are + a lot of + plural noun: A2.">
+      <mark data-role="content">There are</mark> a lot of <mark data-role="grammar">shops</mark> in this street.
+    </GrammarExample>
+    <GrammarExample note="there is + a lot of + uncountable noun: A2.">
+      <mark data-role="content">There is</mark> a lot of <mark data-role="grammar">traffic</mark> on this road today.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="There isn't, is there? negative and questions" id="negative-questions" open={false}>
+    <p>
+      <em>There</em> takes <em>be</em>'s ordinary negative and past forms — <em>isn't</em>, <em>aren't</em>, <em>wasn't</em>, <em>weren't</em> — with countable and uncountable nouns alike, and its ordinary questions and short answers, too.
+    </p>
+    <GrammarFormula label="Negative" parts={["there", "isn't / aren't / wasn't / weren't", 'noun phrase']} />
+    <GrammarExample note="there isn't + uncountable noun: B1.">
+      <mark data-role="content">There isn't</mark> <mark data-role="grammar">any noise</mark> in this part of town.
+    </GrammarExample>
+    <GrammarExample note="there weren't + plural noun, past: B1.">
+      <mark data-role="content">There weren't</mark> <mark data-role="grammar">any seats left</mark> when we arrived.
+    </GrammarExample>
+    <p>
+      <em>There is no</em> + noun works as an alternative to <em>there isn't any</em> + noun, with the same meaning: <em>There is no food left</em> = <em>There isn't any food left</em>.
+    </p>
+    <GrammarFormula label="Question" parts={['is / are / was / were', 'there', 'noun phrase']} />
+    <GrammarExample note="Is there…? + short answer.">
+      <mark data-role="grammar">Is</mark> <mark data-role="content">there</mark> <mark data-role="grammar">a pharmacy</mark> near here? — Yes, there is. / No, there isn't.
+    </GrammarExample>
+    <GrammarExample note="Are there…? + short answer.">
+      <mark data-role="grammar">Are</mark> <mark data-role="content">there</mark> <mark data-role="grammar">any tickets</mark> left? — Yes, there are. / No, there aren't.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="There will be, there might be: modal verbs" id="modal-verbs" open={false}>
+    <p>
+      A modal verb can slot in between <em>there</em> and <em>be</em>, the same way it slots in before any other main verb — turning the plain statement of existence into a prediction, a possibility, or something that depends on a condition.
+    </p>
+    <GrammarFormula label="There + modal + be" parts={['there', 'modal + be', 'noun phrase']} />
+    <GrammarExample note="there will be: B1, a prediction.">
+      <mark data-role="content">There will be</mark> <mark data-role="grammar">a strong wind</mark> tomorrow.
+    </GrammarExample>
+    <GrammarExample note="there wouldn't be: B1, an imagined situation.">
+      <mark data-role="content">There wouldn't be</mark> <mark data-role="grammar">so much traffic</mark> if people cycled more.
+    </GrammarExample>
+    <GrammarExample note="there might be: B1, a possibility.">
+      <mark data-role="content">There might be</mark> <mark data-role="grammar">a solution</mark> we haven't thought of yet.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="There has to be, there's going to be" id="modal-meaning-verbs" open={false}>
+    <p>
+      Verbs that carry a modal-like meaning — obligation, necessity, a plan already decided — can take the place of the modal itself, still followed by <em>be</em>.
+    </p>
+    <GrammarFormula label="There + modal-meaning verb + be" parts={['there', "has to / needs to / is going to", 'be', 'noun phrase']} />
+    <GrammarExample note="there has to be: B2, necessity.">
+      <mark data-role="content">There has to be</mark> <mark data-role="grammar">a mistake</mark> somewhere in these figures.
+    </GrammarExample>
+    <GrammarExample note="there needs to be: B2, necessity.">
+      <mark data-role="content">There needs to be</mark> <mark data-role="grammar">more parking</mark> near the station.
+    </GrammarExample>
+    <GrammarExample note="there is going to be: B2, a decided plan.">
+      <mark data-role="content">There is going to be</mark> <mark data-role="grammar">a big storm</mark> this weekend.
+    </GrammarExample>
+    <p>
+      <em>There is going to be</em> works the same way as <em>be going to</em> anywhere else — a plan or a prediction with present evidence, not a spontaneous decision.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't drop <em>there</em> and put the location first instead — English still needs the dummy subject even when the place is already named.
+    </p>
+    <GrammarContrast
+      bad={['In my house is a big garden.', 'In this street are a lot of shops.']}
+      good={['There is a big garden in my house.', 'There are a lot of shops in this street.']}
+    />
+    <p>
+      Make <em>be</em> agree with the noun phrase that follows it, not with <em>there</em> — a plural noun always needs <em>are</em>, even in fast, informal speech where <em>there's</em> gets used for everything.
+    </p>
+    <GrammarContrast
+      bad={['There is two bedrooms in my flat.', "There's a lot of problems with this plan."]}
+      good={['There are two bedrooms in my flat.', 'There are a lot of problems with this plan.']}
+    />
+    <p>
+      Don't confuse <em>there</em> with the empty subject <em>it</em> — <em>it</em> doesn't introduce something new.
+    </p>
+    <GrammarContrast bad={['It is a shop on the corner.']} good={['There is a shop on the corner.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-noun-phrases-grammatical-functions',
+        name: 'noun phrases',
+        note: "the empty subject 'it' for weather, time and distance — a different dummy subject that never introduces something new.",
+      },
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity words',
+        note: "a lot of, some, any — the same words that appear right after there is / there are.",
+      },
+      {
+        slug: 'future-future-with-be-going-to',
+        name: "'be going to'",
+        note: "there's going to be a storm — the general mechanics of a decided plan or prediction with present evidence.",
+      },
+      {
+        slug: 'modality-have-got-to',
+        name: "'have (got) to'",
+        note: "there has to be a reason — the same necessity meaning, here with 'there' instead of a personal subject.",
+      },
+    ]}
+  />
+</GrammarShell>
