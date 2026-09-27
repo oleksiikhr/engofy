@@ -829,7 +829,7 @@ dev-сервер + Playwright (7 details, 61 мітка, 0 карток, "When i
 ### [x] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `prepositions-prepositions`.
 
@@ -882,7 +882,7 @@ used" відсутній — усі 3 точки вже інлайн, 0 скле
 ### [x] 29. Present — present continuous (`present-present-continuous`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `present-present-continuous`.
 
@@ -920,7 +920,7 @@ fallback до того часу.
 ### [x] 30. Present — present simple (`present-present-simple`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `present-present-simple`.
 
@@ -959,7 +959,7 @@ regex-перевірку `innerHTML`, без горизонтального ск
 ### [x] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `pronouns-indefinite-thing-one-body-etc`.
 
@@ -995,7 +995,7 @@ regex-перевірку `innerHTML`).
 ### [x] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `pronouns-subject-object`.
 
@@ -1027,7 +1027,7 @@ make, seems/appears).
 ### [x] 33. Questions — yes/no (`questions-yes-no`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `questions-yes-no`.
 
@@ -1066,7 +1066,7 @@ uncontracted not (1042, картка); типові помилки (пропущ
 ### [x] 34. Verbs — linking (`verbs-linking`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-linking`.
 
@@ -1097,14 +1097,14 @@ used" відсутній, 0 карток, перевірка `innerText` піс�
 ### [x] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-patterns-with-to-and-ing`.
 
 ### [x] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-prepositional`.
 
@@ -1141,7 +1141,7 @@ apps/web вже були запущені з попередньої сесії) 
 ### [x] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-there-is-are`.
 
@@ -1181,7 +1181,7 @@ apps/web вже були запущені з попередньої сесії) 
 ### [x] 38. Verbs — types (`verbs-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
-- PR: — (не потрібен)
+- PR: https://github.com/oleksiikhr/engofy/pull/155
 
 Див. «Спільний процес» вище. Slug: `verbs-types`.
 
