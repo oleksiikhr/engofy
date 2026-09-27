@@ -771,12 +771,31 @@ last Monday). Content-мітка — noun phrase у своїй функції (�
 dev-сервер + Playwright (6 details, 65 міток, 0 карток, "When it's used"
 відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
 
-### [ ] 26. Nouns — plural (`nouns-plural`) — рівень A1
+### [x] 26. Nouns — plural (`nouns-plural`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-plural`.
+
+6 EGP-рядків (684-689), усі чисті FORM (A1-B1), usage points немає —
+сторінка без карток, "When it's used" не рендериться. 7 секцій: -s (після
+числа / some / a lot of, загальне значення, вимова /s/ /z/ /ɪz/, у noun +
+noun плюралізується лише останній); -es після s / ss / sh / ch / x / z і
+частини -o (potatoes vs photos / pianos); consonant + y → -ies, vowel + y →
+-s (days); нерегулярні (men, women, people, children, feet, teeth, mice,
+fish / sheep, -f/-fe → -ves); plural-only (clothes, jeans, glasses, shorts
++ are / were / them, a pair of); збірні іменники (staff / company / crew
+з однинним або множинним дієсловом, узгодженість у межах речення); типові
+помилки (two hour, computers games, boxs / citys / daies, childs / peoples /
+tooths, jeans is / a trouser, informations / advices). Content-мітка —
+іменник у множині (або збірний іменник), grammar — решта слотів формули
+(число / some / a lot of / my / the, are / were / has / have, them / they).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (8 details, 53 мітки, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
+скролу на 390px).
 
 ### [ ] 27. Nouns — types (`nouns-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
