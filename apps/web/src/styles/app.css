@@ -688,6 +688,14 @@ body {
   --tone-wash: var(--color-danger-wash);
   --on-tone: var(--color-paper);
 }
+/* Muted, neutral — a bare token's fallback card (reader-popup.ts), so it
+   doesn't read as a full word (amber) or grammar (blue) explanation. */
+.tone-slate {
+  --tone: var(--color-border-strong);
+  --tone-ink: var(--color-ink-soft);
+  --tone-wash: var(--color-paper-soft);
+  --on-tone: var(--color-ink);
+}
 :where(.tag, .alert),
 .tone-brand {
   --tone: var(--color-brand);
@@ -1585,6 +1593,31 @@ body {
   font-size: 0.9rem;
   font-style: italic;
 }
+/* Sibling usage-point pills below the grammar explanation (Reader popup) —
+   the matched point renders first, kept visible without scrolling the row. */
+.usage-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  max-height: 5.5rem;
+  overflow-y: auto;
+}
+.usage-picker__pill {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-paper-soft);
+  color: var(--color-ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.usage-picker__pill[aria-pressed="true"] {
+  border-color: var(--tone);
+  background: var(--tone-wash);
+  color: var(--tone-ink);
+}
 .lex-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1838,6 +1871,19 @@ body {
   box-shadow: inset 0 0.14em 0 0 var(--tense-future);
 }
 
+/* A token with no word/phrase span still opens a light role popup (reader-
+   popup.ts's fallback); restrained on purpose so it doesn't read as the full
+   dictionary highlight [data-word-definition-id]/[data-phrase-id] get. */
+[data-tok][data-pos-label] {
+  cursor: pointer;
+}
+[data-tok][data-pos-label]:hover,
+[data-tok][data-pos-label]:focus-visible {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-border-strong);
+}
+
 /* Analyze: each token becomes a small column — the word, its POS tag, and for
    an irregular verb its forms. The word stays first so the token's baseline is
    the word's, and the column widens to the longest row (no overlap). */
@@ -1869,6 +1915,17 @@ body {
 }
 :root[data-reader-modes~="analyze"] [data-grammar-usage-point-id]:not([data-known]) {
   box-shadow: inset 0 -0.14em 0 0 var(--color-blue);
+}
+.lex-popup__practice {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-brand-strong);
+  text-decoration: none;
+}
+.lex-popup__practice:hover {
+  text-decoration: underline;
 }
 .lex-popup__contrast {
   display: none;

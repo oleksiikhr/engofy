@@ -8,6 +8,7 @@ import { GrammarCategoryFactory } from './grammar-category.factory.js';
 import { GrammarConstructionFactory } from './grammar-construction.factory.js';
 import { GrammarMatchFactory } from './grammar-match.factory.js';
 import { GrammarUsagePointFactory } from './grammar-usage-point.factory.js';
+import { GrammarUsagePointExerciseFactory } from './grammar-usage-point-exercise.factory.js';
 import { LearningCardFactory } from './learning-card.factory.js';
 import { LearningDispositionFactory } from './learning-disposition.factory.js';
 import { PhraseFactory } from './phrase.factory.js';
@@ -19,6 +20,7 @@ import { PostReadFactory } from './post-read.factory.js';
 import { ReviewLogFactory } from './review-log.factory.js';
 import { SentenceFactory } from './sentence.factory.js';
 import { SentenceTokenFactory } from './sentence-token.factory.js';
+import { StreakFreezeFactory } from './streak-freeze.factory.js';
 import { SubscriptionFactory } from './subscription.factory.js';
 import { TelegramUpdateFactory } from './telegram-update.factory.js';
 import { UserFactory } from './user.factory.js';
@@ -38,6 +40,7 @@ export function factories(em: EntityManager) {
     grammarConstruction: new GrammarConstructionFactory(em),
     grammarMatch: new GrammarMatchFactory(em),
     grammarUsagePoint: new GrammarUsagePointFactory(em),
+    grammarUsagePointExercise: new GrammarUsagePointExerciseFactory(em),
     learningCard: new LearningCardFactory(em),
     learningDisposition: new LearningDispositionFactory(em),
     phrase: new PhraseFactory(em),
@@ -49,6 +52,7 @@ export function factories(em: EntityManager) {
     reviewLog: new ReviewLogFactory(em),
     sentence: new SentenceFactory(em),
     sentenceToken: new SentenceTokenFactory(em),
+    streakFreeze: new StreakFreezeFactory(em),
     subscription: new SubscriptionFactory(em),
     telegramUpdate: new TelegramUpdateFactory(em),
     user: new UserFactory(em),

@@ -214,6 +214,7 @@ describe('ProfileController', () => {
         currentPeriodEnd: null,
         cardsUsed: 0,
         cardLimit: 100,
+        dailyNewCardLimit: 12,
       });
     });
 
@@ -238,6 +239,7 @@ describe('ProfileController', () => {
         active: true,
         cardsUsed: 0,
         cardLimit: null,
+        dailyNewCardLimit: 12,
       });
       expect(DateTime.fromISO(res.body.currentPeriodEnd).toMillis()).toBe(
         periodEnd.toMillis(),
@@ -318,6 +320,107 @@ describe('ProfileController', () => {
         .set('Cookie', cookie)
         .send({ dailyGoal })
         .expect(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('PATCH /profile/daily-new-card-limit', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('patch', '/profile/daily-new-card-limit')
+        .send({ dailyNewCardLimit: 40 })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('rejects a free user with 403', async () => {
+      const cookie = await login(suite.orm.em);
+
+      await suite
+        .request('patch', '/profile/daily-new-card-limit')
+        .set('Cookie', cookie)
+        .send({ dailyNewCardLimit: 40 })
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('updates the limit for a premium user and reflects it on GET /profile/subscription', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      suite.factories.subscription.makeOne({
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+      });
+      await suite.orm.em.flush();
+
+      const patchRes = await suite
+        .request('patch', '/profile/daily-new-card-limit')
+        .set('Cookie', cookie)
+        .send({ dailyNewCardLimit: 40 })
+        .expect(HttpStatus.OK);
+
+      expect(patchRes.body).toEqual({ dailyNewCardLimit: 40 });
+
+      const getRes = await suite
+        .request('get', '/profile/subscription')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(getRes.body.dailyNewCardLimit).toBe(40);
+    });
+
+    it.each([0, -1, 1.5, 101, 'forty'])(
+      'rejects limit %s',
+      async (dailyNewCardLimit) => {
+        const { cookie, userId } = await loginAs(suite.orm.em);
+        suite.factories.subscription.makeOne({
+          userId,
+          plan: SubscriptionPlan.Premium,
+          status: SubscriptionStatus.Active,
+          currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+        });
+        await suite.orm.em.flush();
+
+        await suite
+          .request('patch', '/profile/daily-new-card-limit')
+          .set('Cookie', cookie)
+          .send({ dailyNewCardLimit })
+          .expect(HttpStatus.BAD_REQUEST);
+      },
+    );
+
+    it('ignores a stored override once premium lapses', async () => {
+      const { cookie, userId } = await loginAs(suite.orm.em);
+      const subscription = suite.factories.subscription.makeOne({
+        userId,
+        plan: SubscriptionPlan.Premium,
+        status: SubscriptionStatus.Active,
+        currentPeriodEnd: DateTime.now().plus({ days: 20 }),
+      });
+      await suite.orm.em.flush();
+
+      await suite
+        .request('patch', '/profile/daily-new-card-limit')
+        .set('Cookie', cookie)
+        .send({ dailyNewCardLimit: 40 })
+        .expect(HttpStatus.OK);
+
+      subscription.currentPeriodEnd = DateTime.now().minus({ days: 1 });
+      await suite.orm.em.flush();
+
+      const getRes = await suite
+        .request('get', '/profile/subscription')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(getRes.body.plan).toBe('free');
+      expect(getRes.body.dailyNewCardLimit).toBe(12);
+
+      // Setting it again requires premium again — the stored 40 is dormant,
+      // not gone.
+      await suite
+        .request('patch', '/profile/daily-new-card-limit')
+        .set('Cookie', cookie)
+        .send({ dailyNewCardLimit: 40 })
+        .expect(HttpStatus.FORBIDDEN);
     });
   });
 

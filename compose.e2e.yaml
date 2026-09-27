@@ -1,0 +1,104 @@
+# Isolated e2e stack: `backend-e2e` gets its own DB (`engofy-e2e`) and Redis
+# index (16, reserved in compose.yaml's redis service), layered on the shared
+# Postgres/Redis/Mailhog/Spotlight from compose.yaml via `include` rather than
+# a second set of containers. Runs alongside the normal dev stack without
+# touching its state — see .claude/plans/e2e-isolated-stack.md.
+#
+# Bring up/down with `make e2e-up` / `make e2e-down` (Makefile), not
+# `docker compose -f compose.e2e.yaml up/down` directly — plain `down` would
+# also tear down the shared dev Postgres/Redis/Mailhog/Spotlight from the
+# included compose.yaml.
+#
+# `name:` is repeated (not inherited from the included file) because
+# `include` does not propagate the included file's top-level `name:` — without
+# this, running from a worktree whose directory isn't literally `engofy`
+# would default the project name to the worktree dirname and stand up a
+# second, disconnected Postgres/Redis instead of reusing the shared one.
+name: engofy
+
+include:
+  - compose.yaml
+
+services:
+  backend-e2e:
+    build:
+      context: .
+      target: base
+    working_dir: /app
+    # Dev image, hot reload via bind mount — same command as `make watch`,
+    # plus an install since the image only has the base pnpm/corepack setup
+    # baked in (the bind mount below replaces /app's contents at runtime).
+    command: sh -c "pnpm i --frozen-lockfile && NODE_ENV=development pnpm exec nest start --type-check --watch"
+    volumes:
+      - .:/app
+      # Named volume, not the host node_modules: avoids native-binary
+      # mismatches between the host OS/arch and the Linux container.
+      - backend_e2e_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: "8080"
+      MIKRO_ORM_HOST: postgres
+      MIKRO_ORM_PORT: "5432"
+      MIKRO_ORM_USER: engofy
+      MIKRO_ORM_PASSWORD: engofy
+      MIKRO_ORM_DB_NAME: engofy-e2e
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_DB: "16" # reserved e2e index — see compose.yaml's redis service
+      MAILHOG_HOST: mailhog
+      MAILHOG_PORT: "1025"
+    ports:
+      - "${E2E_BACKEND_PORT:-8180}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/_healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+  web-e2e:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: base
+    working_dir: /app
+    # Same shape as `backend-e2e`: dev image, hot reload via bind mount, full
+    # workspace install on boot (the image only has the base pnpm/corepack
+    # setup baked in).
+    command: sh -c "pnpm i --frozen-lockfile && pnpm --filter @engofy/web dev"
+    volumes:
+      - .:/app
+      # Two named volumes, not the host node_modules: pnpm workspaces put
+      # hoisted deps under the root node_modules and per-package symlinks
+      # under apps/web/node_modules — both need to survive container
+      # restarts and avoid native-binary mismatches with the host OS/arch.
+      - web_e2e_node_modules:/app/node_modules
+      - web_e2e_web_node_modules:/app/apps/web/node_modules
+    environment:
+      NODE_ENV: development
+      # astro.config.mjs points both the dev `/api` proxy and SSR's
+      # `src/lib/api.ts` fetches at this — the backend-e2e container's
+      # internal port (8080), not its host-mapped E2E_BACKEND_PORT.
+      API_ORIGIN: http://backend-e2e:8080
+    ports:
+      - "${E2E_WEB_PORT:-3100}:4321"
+    depends_on:
+      backend-e2e:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4321/"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+volumes:
+  backend_e2e_node_modules:
+  web_e2e_node_modules:
+  web_e2e_web_node_modules:

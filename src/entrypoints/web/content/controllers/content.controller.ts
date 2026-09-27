@@ -46,6 +46,7 @@ import {
   PostsSitemapPageResponseDto,
 } from '../dto/posts-sitemap-response.dto.js';
 import { ReportLabelBodyDto } from '../dto/report-label-body.dto.js';
+import { UsagePointExercisesResponseDto } from '../dto/usage-point-exercises-response.dto.js';
 
 // Guest-readable content surface (PLAN.md §2, §4): the posts archive, a single
 // post with its inline analysis, and the grammar reference. Served under
@@ -64,7 +65,7 @@ export class ContentController {
   constructor(private readonly post: PostService) {}
 
   // The `/posts` archive: published posts, newest first, keyset-paginated —
-  // CEFR and topic multi-selects + "unread only" (posts-list-page §1). `isRead` and
+  // a CEFR multi-select + "unread only" (posts-list-page §1). `isRead` and
   // `unreadOnly` make the response vary by session, so it overrides the
   // class-level public cache policy like `posts/:slugId` does.
   @Public()
@@ -76,7 +77,6 @@ export class ContentController {
   ): Promise<PostsListResponseDto> {
     const view = await this.post.getPostsList(actor?.id ?? null, {
       cefrLevels: query.cefr,
-      topics: query.topic,
       term: query.term,
       unreadOnly: query.unreadOnly,
       cursor: query.cursor,
@@ -241,6 +241,27 @@ export class ContentController {
     }
     return toGrammarConstructionResponse(view);
   }
+
+  // The reusable exercise pool for one usage point (PLAN.md grammar-usage-
+  // -point-exercises, slice 5) — the exercises section under each usage point
+  // on `/grammar/{slug}`. `:slug` isn't used to look anything up (usagePointId
+  // is already globally unique); it's kept in the path for URL readability,
+  // matching the page it's fetched from. Not user-specific: no override of
+  // the class-level public cache policy.
+  @Public()
+  @Get('grammar/:slug/usage-points/:usagePointId/exercises')
+  async usagePointExercises(
+    @Param('usagePointId') usagePointId: string,
+  ): Promise<UsagePointExercisesResponseDto> {
+    const view = await this.post.getUsagePointExercises(usagePointId);
+    return {
+      items: view.items.map((item) => ({
+        id: item.id,
+        type: item.type,
+        payload: item.payload,
+      })),
+    };
+  }
 }
 
 function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
@@ -249,7 +270,6 @@ function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
     slug: item.slug,
     title: item.title,
     cefrLevel: item.cefrLevel,
-    topic: item.topic,
     publishedAt: item.publishedAt,
     excerpt: item.excerpt,
     attributionText: item.attributionText,
@@ -268,6 +288,7 @@ function toPostDetailResponse(view: PostDetailView): PostDetailResponseDto {
     shortId: view.shortId,
     slug: view.slug,
     title: view.title,
+    metaDescription: view.metaDescription,
     cefrLevel: view.cefrLevel,
     publishedAt: view.publishedAt,
     attributionText: view.attributionText,
@@ -319,6 +340,7 @@ function toAnnotationsDto(
       cefrLevel: entry.cefrLevel,
       usagePoints: entry.usagePoints.map((point) => ({
         grammarUsagePointId: point.grammarUsagePointId,
+        egpIndex: point.egpIndex,
         cefrLevel: point.cefrLevel,
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
@@ -347,6 +369,7 @@ function toAnnotationsDto(
         pastSimple: token.irregular.pastSimple,
         pastParticiple: token.irregular.pastParticiple,
       },
+      ...(token.roleFallback ? { roleFallback: token.roleFallback } : {}),
     })),
   };
 }
@@ -381,6 +404,7 @@ function toGrammarConstructionResponse(
     cefrLevel: view.cefrLevel,
     usagePoints: view.usagePoints.map((point) => ({
       grammarUsagePointId: point.grammarUsagePointId,
+      egpIndex: point.egpIndex,
       cefrLevel: point.cefrLevel,
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,

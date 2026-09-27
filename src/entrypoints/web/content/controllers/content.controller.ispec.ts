@@ -128,6 +128,7 @@ async function seedGrammar(em: EntityManager): Promise<SeededGrammar> {
   });
   const point = factories(em).grammarUsagePoint.makeOne({
     constructionId: construction.id,
+    egpIndex: 42,
     cefrLevel: CefrLevel.A1,
     guideword: 'USE: HABITS AND GENERAL FACTS',
     canDoStatement: 'Can describe routines.',
@@ -559,6 +560,7 @@ describe('ContentController', () => {
     });
     expect(detail.body.usagePoints).toHaveLength(1);
     expect(detail.body.usagePoints[0]).toMatchObject({
+      egpIndex: 42,
       explanation: 'We use the present simple for routines.',
       examples: ['I get up at seven.'],
       state: 'new',
@@ -718,5 +720,42 @@ describe('ContentController', () => {
     await suite
       .request('get', '/content/grammar/no-such-slug')
       .expect(HttpStatus.NOT_FOUND);
+  });
+
+  it('serves the exercise pool for a usage point, publicly cached', async () => {
+    const { slug, grammarUsagePointId } = await seedGrammar(suite.orm.em);
+    const exercise = suite.factories.grammarUsagePointExercise.makeOne({
+      usagePointId: grammarUsagePointId,
+      type: ExerciseType.FillBlank,
+      payload: { prompt: 'She ___ to work every day.', answer: 'goes' },
+    });
+    await suite.orm.em.flush();
+
+    const res = await suite
+      .request(
+        'get',
+        `/content/grammar/${slug}/usage-points/${grammarUsagePointId}/exercises`,
+      )
+      .expect(HttpStatus.OK);
+    expect(res.headers['cache-control']).toBe('public');
+    expect(res.body.items).toEqual([
+      {
+        id: exercise.id,
+        type: 'fill_blank',
+        payload: { prompt: 'She ___ to work every day.', answer: 'goes' },
+      },
+    ]);
+  });
+
+  it('returns an empty pool for a usage point with no seeded exercises', async () => {
+    const { slug, grammarUsagePointId } = await seedGrammar(suite.orm.em);
+
+    const res = await suite
+      .request(
+        'get',
+        `/content/grammar/${slug}/usage-points/${grammarUsagePointId}/exercises`,
+      )
+      .expect(HttpStatus.OK);
+    expect(res.body.items).toEqual([]);
   });
 });

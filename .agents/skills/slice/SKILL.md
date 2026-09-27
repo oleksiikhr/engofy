@@ -94,10 +94,13 @@ with `Branch`, `Base`, `PR` fields.
     once, on its first slice only — later slices of the same plan reuse whatever was decided here, per
     the rule above). If yes: `git worktree add -b <branch> <path> <base>`, `<path>` =
     `../<repo-dirname>-<slug>` — named after the plan slug, not the branch, since every later slice
-    reuses this same directory. A fresh worktree has no `node_modules` (not shared between worktrees) —
-    run `pnpm i` (or `make sync`, which also re-runs pending migrations) inside it before any
-    `pnpm`/`make` command; see README's Troubleshooting section for other first-run gotchas (env files,
-    git auth). If no: `git checkout -b <branch> <base>` in place.
+    reuses this same directory. Before `pnpm i`/`make sync`, isolate this worktree's backend/`apps/web`
+    ports and dev/test Postgres DB name and Redis DB index: count existing worktrees via `git worktree
+    list --porcelain` to pick a free `OFFSET` (0-7), then run `make ports OFFSET=<N>` inside the new
+    worktree. A fresh worktree has no `node_modules` (not shared between worktrees) — run `pnpm i`
+    (or `make sync`, which also re-runs pending migrations) inside it before any `pnpm`/`make` command;
+    see README's Troubleshooting section for other first-run gotchas (env files, git auth). If no:
+    `git checkout -b <branch> <base>` in place.
 
 ## Step 4 — Implement the slice
 
@@ -195,3 +198,6 @@ This skill does **not**:
 - Delete branches or worktrees — the `cleanup` skill's job, after the whole stack merges.
 - Invent a check, e2e step, or contract exception that isn't backed by the plan, the diff, or this
   repo's own documented conventions.
+- Invent port-offset or per-worktree environment isolation beyond `make ports OFFSET=<N>` — that's the
+  one mechanism this repo provides for running multiple worktrees concurrently; use it, don't build an
+  alternative.

@@ -64,6 +64,7 @@ describe('DictionaryController phrases/:phrase', () => {
       phraseText: `at loose ends ${uuidv7().slice(0, 6)}`,
       definition: 'having nothing particular to do',
       cefrLevel: CefrLevel.C1,
+      translations: { uk: { translation: 'нічим особливим не зайнятий' } },
     });
     await em.flush();
 
@@ -79,6 +80,7 @@ describe('DictionaryController phrases/:phrase', () => {
       phraseId: phrase.id,
       phraseText: phrase.phraseText,
       definition: 'having nothing particular to do',
+      translations: { uk: { translation: 'нічим особливим не зайнятий' } },
       state: 'new',
       cardId: null,
       posts: [],

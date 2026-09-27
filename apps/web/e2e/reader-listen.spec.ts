@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { blockScripts } from './block-scripts';
 import { ReaderPage } from './pages/reader-page';
 
 // Read-aloud: a play button per paragraph, and "Read the sentence" in the
@@ -196,7 +197,7 @@ test.describe('reader read-aloud', () => {
         const page = await context.newPage();
         await stubSpeech(page);
         if (!scripts) {
-          await page.route('**/_astro/**', (route) => route.abort());
+          await blockScripts(page);
         }
         await page.goto(`/posts/${READER_SLUG}`);
         if (scripts) {

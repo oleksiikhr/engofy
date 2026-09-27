@@ -115,6 +115,7 @@ function toPhraseDictionaryDetailDto(
     type: view.type,
     definition: view.definition,
     example: view.example,
+    translations: view.translations,
     cefrLevel: view.cefrLevel,
     state: view.state,
     cardId: view.cardId,

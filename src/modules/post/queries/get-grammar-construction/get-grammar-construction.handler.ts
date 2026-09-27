@@ -67,6 +67,7 @@ export class GetGrammarConstructionHandler
       const state = stateByPoint.get(point.id) ?? EffectiveState.New;
       return {
         grammarUsagePointId: point.id,
+        egpIndex: point.egpIndex ?? null,
         cefrLevel: point.cefrLevel,
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,

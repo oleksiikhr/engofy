@@ -3,6 +3,10 @@ import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 
 export interface ConstructionUsagePointView {
   grammarUsagePointId: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. The page anchors each point at `#usage-point-
+  // -{egpIndex}` so the Reader popup's "Practice" link can deep-link here.
+  egpIndex: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;

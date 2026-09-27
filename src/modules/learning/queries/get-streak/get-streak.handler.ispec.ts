@@ -42,4 +42,39 @@ describe('GetStreakHandler', () => {
 
     expect(await suite.query(new GetStreakQuery(userId))).toBe(1);
   });
+
+  it('bridges a gap covered by a StreakFreeze row', async () => {
+    const userId = (await suite.factories.user.createOne()).id;
+    const em = suite.orm.em;
+
+    const card = factories(em).learningCard.makeOne({
+      userId,
+      wordDefinitionId: makeWordDefinition(factories(em)).id,
+      due: DateTime.now(),
+      stability: 1,
+      difficulty: 5,
+      elapsedDays: 0,
+      scheduledDays: 0,
+      reps: 1,
+      lapses: 0,
+      state: LearningCardState.Learning,
+    });
+    factories(em).reviewLog.makeOne({
+      cardId: card.id,
+      rating: ReviewRating.Good,
+      reviewedAt: DateTime.now().minus({ days: 2 }),
+      elapsedDays: 0,
+      scheduledDays: 1,
+    });
+    factories(em).streakFreeze.makeOne({
+      userId,
+      coveredDate: DateTime.now()
+        .minus({ days: 1 })
+        .toUTC()
+        .toISODate() as string,
+    });
+    await em.flush();
+
+    expect(await suite.query(new GetStreakQuery(userId))).toBe(2);
+  });
 });

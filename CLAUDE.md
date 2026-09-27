@@ -3,6 +3,14 @@
 NestJS backend (fastify, MikroORM/Postgres, pg-boss for queues). These rules are
 project-wide and override generic defaults.
 
+## No production yet
+
+This project has no production deployment and no production data. When redesigning schema,
+entities, or pipeline stages, do not propose or ask about backward compatibility, data migrations,
+or backfills for existing rows — there is nothing to preserve. Prefer the cleanest shape for the new
+design over one that eases a transition. This changes the moment production exists; until then, skip
+the question entirely rather than asking about it.
+
 ## apps/web: no layout shift after load
 
 Content that jumps after first paint hurts SEO (Cumulative Layout Shift is a Core Web Vital) and reads
@@ -24,8 +32,11 @@ what is already on screen. Pick one:
 
 Reserve the space (`visibility: hidden`, fixed `min-height`) rather than `display: none` → `block`
 when only the text arrives late. When adding such an element, add an e2e check like the "does not
-shift when scripts run" test in `e2e/reader-guest.spec.ts`: block `**/_astro/**`, seed the storage,
-and compare the position of the content below with scripts on and off.
+shift when scripts run" test in `e2e/reader-guest.spec.ts`: block scripts with `e2e/block-scripts.ts`'s
+`blockScripts()` (filters by resource type, not a `**/_astro/**` URL glob — dev and a production build
+serve scripts from different paths, and a production build's CSS lands in the same `_astro/` directory
+as its JS, so a glob either blocks nothing or blocks styling too), seed the storage, and compare the
+position of the content below with scripts on and off.
 
 ## Skills
 

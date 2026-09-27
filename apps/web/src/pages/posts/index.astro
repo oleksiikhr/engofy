@@ -4,7 +4,6 @@ import { ApiError, apiGet, isBadRequest } from '../../lib/api';
 import {
   CEFR_LEVELS,
   levelHintHtml,
-  POST_TOPICS,
   POSTS_ERROR_HTML,
   POSTS_INVALID_HTML,
   parsePostsQuery,
@@ -141,23 +140,6 @@ try {
       }
     </div>
 
-    <fieldset class="posts-topics">
-      <legend class="visually-hidden">Topic</legend>
-      {
-        POST_TOPICS.map((topic) => (
-          <label class="pill">
-            <input
-              type="checkbox"
-              name="topic"
-              value={topic.value}
-              checked={query.topic.includes(topic.value)}
-            />
-            <span>{topic.label}</span>
-          </label>
-        ))
-      }
-    </fieldset>
-
     <noscript><button class="btn" type="submit">Apply</button></noscript>
   </form>
 
@@ -191,8 +173,7 @@ try {
     justify-content: space-between;
     gap: 0.75rem 1.5rem;
   }
-  .posts-levels,
-  .posts-topics {
+  .posts-levels {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -201,11 +182,6 @@ try {
     margin: 0;
     padding: 0;
     min-width: 0;
-  }
-  .posts-topics .pill span {
-    height: 2.125rem;
-    font-size: 0.8rem;
-    font-weight: 700;
   }
   .posts-unread {
     display: flex;

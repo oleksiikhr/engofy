@@ -164,6 +164,40 @@ describe('GetProfileHandler', () => {
     expect(profile.cefr.B1).toBe(0);
   });
 
+  it('bridges a gap covered by a StreakFreeze row into the streak', async () => {
+    const em = suite.orm.em;
+    const userId = (await suite.factories.user.createOne()).id;
+
+    const word = factories(em).word.makeOne({ lemma: `w-${uuidv7()}` });
+    await em.flush();
+    const definition = factories(em).wordDefinition.makeOne({
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+      cefrLevel: CefrLevel.B1,
+    });
+    await em.flush();
+
+    const card = await suite.command(
+      new AddCardCommand(userId, { wordDefinitionId: definition.id }),
+    );
+    await suite.command(
+      new ReviewCardCommand(userId, card.id, ReviewRating.Good),
+    );
+    factories(em).streakFreeze.makeOne({
+      userId,
+      coveredDate: DateTime.now()
+        .toUTC()
+        .minus({ days: 1 })
+        .toISODate() as string,
+    });
+    await em.flush();
+    em.clear();
+
+    const profile = await suite.query(new GetProfileQuery(userId));
+
+    expect(profile.streak).toBe(2);
+  });
+
   it('returns every distinct review day across all cards, sorted ascending', async () => {
     const em = suite.orm.em;
     const userId = (await suite.factories.user.createOne()).id;

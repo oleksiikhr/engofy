@@ -28,6 +28,7 @@ import { GetPostSuggestionsHandler } from './queries/get-post-suggestions/get-po
 import { GetPostsListHandler } from './queries/get-posts-list/get-posts-list.handler.js';
 import { GetPostsSitemapIndexHandler } from './queries/get-posts-sitemap-index/get-posts-sitemap-index.handler.js';
 import { GetPostsSitemapPageHandler } from './queries/get-posts-sitemap-page/get-posts-sitemap-page.handler.js';
+import { GetUsagePointExercisesHandler } from './queries/get-usage-point-exercises/get-usage-point-exercises.handler.js';
 
 const commandHandlers = [
   IngestPostHandler,
@@ -54,6 +55,7 @@ const queryHandlers = [
   GetPostPipelineStatusHandler,
   GetGrammarReferenceHandler,
   GetGrammarConstructionHandler,
+  GetUsagePointExercisesHandler,
 ];
 
 @Module({

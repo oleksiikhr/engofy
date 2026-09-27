@@ -9,11 +9,14 @@ import {
 import { OutboxSenderService } from '../../../../core/queue/outbox-sender.service.js';
 import { QueueName } from '../../../../core/queue/queue-names.enum.js';
 import {
+  buildComplexitySystemPrompt,
   buildComplexityUserText,
-  COMPLEXITY_SYSTEM_PROMPT,
+  type ComplexityAssessment,
   complexityToolSchema,
+  complexityToolSchemaWithTitle,
   indexComplexityLevels,
 } from '../../domain/complexity-prompt.js';
+import { generateSlug } from '../../domain/generate-slug.js';
 import { Post } from '../../entities/post.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
@@ -27,8 +30,11 @@ export interface PostAiComplexityJobData {
 }
 
 // ai_complexity stage (PLAN.md §5): one AI call scores the whole post and
-// every sentence on the CEFR scale and picks the post's topic. Reads the spaCy `sentences` rows, so it
-// runs after spacy_parse (enqueued by SpacyParsePostHandler on completion).
+// every sentence on the CEFR scale and writes a meta description — plus, when
+// the post reached this stage with no title (no explicit title, no leading H1
+// at ingest), a generated title too, so `Post.title` is never left null.
+// Reads the spaCy `sentences` rows, so it runs after spacy_parse (enqueued by
+// SpacyParsePostHandler on completion).
 // Idempotent via the stage-level PostPipelineRun row (§12).
 @CommandHandler(AssessComplexityCommand)
 export class AssessComplexityHandler
@@ -66,14 +72,20 @@ export class AssessComplexityHandler
       );
     }
 
-    const assessment = await this.ai.completeStructured({
-      system: COMPLEXITY_SYSTEM_PROMPT,
+    // No explicit title and no leading H1 at ingest (IngestPostHandler) — this
+    // stage is also where a title gets generated, never left null.
+    const needsTitle = post.title == null;
+    const assessment = await this.ai.completeStructured<ComplexityAssessment>({
+      system: buildComplexitySystemPrompt(needsTitle),
       userText: buildComplexityUserText(sentences.map((s) => s.rawText)),
       tool: {
         name: 'report_complexity',
-        description:
-          'Report the overall and per-sentence CEFR level of the passage, its topic and the new-vocabulary ratio.',
-        schema: complexityToolSchema,
+        description: needsTitle
+          ? 'Report the overall and per-sentence CEFR level of the passage, the new-vocabulary ratio, a meta description and a title.'
+          : 'Report the overall and per-sentence CEFR level of the passage, the new-vocabulary ratio and a meta description.',
+        schema: needsTitle
+          ? complexityToolSchemaWithTitle
+          : complexityToolSchema,
       },
     });
 
@@ -82,13 +94,16 @@ export class AssessComplexityHandler
       sentence.cefrLevel = levels[i];
     });
     post.cefrLevel = assessment.overall;
-    post.topic = assessment.topic;
+    post.metaDescription = assessment.metaDescription;
+    if (needsTitle && assessment.title) {
+      post.title = assessment.title;
+      post.slug = generateSlug(assessment.title);
+    }
 
     this.logger.log(
       {
         postId,
         overall: assessment.overall,
-        topic: assessment.topic,
         newVocabRatio: assessment.newVocabRatio,
         sentences: sentences.length,
       },

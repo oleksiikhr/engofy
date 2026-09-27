@@ -2,12 +2,14 @@ import type { EffectiveState } from '../../../learning/domain/resolve-effective-
 import type {
   IrregularVerbForms,
   TokenTense,
+  VerbGroupTense,
 } from '../../domain/analyze-token.js';
 import type {
   GrammarTranslations,
   LexiconTranslations,
 } from '../../domain/content-translations.js';
 import type { Doc } from '../../domain/node-tree.types.js';
+import type { WordRoleFallback } from '../../domain/word-role-fallback.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type { ExerciseSource } from '../../enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../enums/exercise-type.enum.js';
@@ -44,6 +46,10 @@ export interface PhraseAnnotationView {
 
 export interface GrammarUsagePointView {
   grammarUsagePointId: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. The Reader popup's "Practice" link needs it to build
+  // `/grammar/{slug}#usage-point-{egpIndex}` — null hides the button.
+  egpIndex: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
@@ -81,7 +87,12 @@ export interface GrammarMatchView {
 // One spaCy token placed on the doc (same block/unit/char coordinates as a
 // GrammarMatchView). Punctuation and whitespace tokens are left out. `pos` is
 // the raw spaCy UPOS tag; `tense` is set on finite verbs and `will`;
-// `irregular` on a verb in an irregular past form.
+// `irregular` on a verb in an irregular past form; `verbGroup` carries the
+// same tense+aspect to every token of the verb's aux chain (e.g. "had" and
+// "drawn" both read as Past Perfect), verbGroupId scoped per sentence.
+// `roleFallback` is set only when the token falls outside every `word`/
+// `phrase` span — a generic POS + typical-role description for a click-popup
+// with no dictionary entry to show (PLAN.md, slice 2/3).
 export interface TokenView {
   blockIndex: number;
   itemIndex: number | null;
@@ -90,6 +101,8 @@ export interface TokenView {
   pos: string;
   tense: TokenTense | null;
   irregular: IrregularVerbForms | null;
+  verbGroup: VerbGroupTense | null;
+  roleFallback?: WordRoleFallback;
 }
 
 export interface PostExerciseView {
@@ -106,6 +119,9 @@ export interface PostDetailView {
   shortId: string;
   slug: string | null;
   title: string | null;
+  // AI-written summary (~155 chars); null only in the brief window before
+  // ai_complexity has run — impossible in practice once a post is published.
+  metaDescription: string | null;
   cefrLevel: CefrLevel | null;
   // ISO-8601.
   publishedAt: string;

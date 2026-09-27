@@ -12,5 +12,6 @@ e2e/.auth/
 /playwright/.cache/
 # env
 .env
+.env.local
 .env.production
 .env.*.local

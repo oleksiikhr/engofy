@@ -2,7 +2,13 @@
 // from data the post page already has (exercises, lexicon, this post's due
 // cards). Nothing here needs an extra API call.
 import { entryTerm, type LexiconData } from './reader-lexicon';
-import type { Block, Doc, PostDetail, PracticeItem } from './types';
+import type {
+  Block,
+  Doc,
+  ExerciseType,
+  PostDetail,
+  PracticeItem,
+} from './types';
 
 export interface ChooseStep {
   kind: 'choose';
@@ -106,9 +112,14 @@ const isStrings = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((v) => typeof v === 'string');
 
 // A spaCy drill (multiple_choice, fill_blank, find_error, reorder) as a step.
-function toDrill(
-  exercise: PostDetail['exercises'][number],
-): QuickCheckStep | null {
+// Takes just `type`/`payload` (not the full `PostExercise`) so a usage
+// point's own reusable exercise pool — same payload shapes, no post/source/
+// blockIndex — can share this mapping (grammar-usage-point-exercises plan,
+// slice 5).
+export function toDrill(exercise: {
+  type: ExerciseType;
+  payload: Record<string, unknown>;
+}): QuickCheckStep | null {
   const p = exercise.payload;
   if (exercise.type === 'multiple_choice') {
     const answerIndex = Number(p.answerIndex ?? -1);

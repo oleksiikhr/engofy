@@ -1,0 +1,88 @@
+# Pre-release check against the real production images (root Dockerfile /
+# apps/web/Dockerfile `runtime` target) — the ones actually used to deploy —
+# against the same isolated e2e data (`engofy-e2e` DB, Redis index 16) as
+# compose.e2e.yaml. No hot reload, no bind mounts, slower (real image
+# builds). Reach for `make e2e-full` (compose.e2e.yaml, dev images) day to
+# day; use `make e2e-prod-full` only when the change itself could only break
+# in a real build — editing a Dockerfile, production build config, or
+# anything else the dev-image stack structurally can't catch. See
+# .claude/plans/e2e-isolated-stack.md.
+#
+# Bring up/down with `make e2e-prod-up` / `make e2e-prod-down`, not
+# `docker compose -f compose.e2e-prod.yaml up/down` directly — plain `down`
+# would also tear down the shared dev Postgres/Redis/Mailhog/Spotlight from
+# the included compose.yaml.
+#
+# `name:` is repeated for the same reason as compose.e2e.yaml — `include`
+# does not propagate the included file's top-level `name:`.
+name: engofy
+
+include:
+  - compose.yaml
+
+services:
+  backend-e2e-prod:
+    build:
+      context: .
+      target: runtime
+    # NODE_ENV=production makes ConfigModule ignore .env files entirely
+    # (src/app.module.ts) — every value the app needs must be a real env var
+    # here, not inherited from a bind-mounted .env like compose.e2e.yaml's
+    # dev image gets for free.
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "8080"
+      LOG_LEVEL: debug
+      # Required in production (src/main.ts throws without it) — also the
+      # CORS allowed origin, so it must match web-e2e-prod's host port.
+      PUBLIC_URL: http://localhost:${E2E_WEB_PORT:-3100}
+      MIKRO_ORM_HOST: postgres
+      MIKRO_ORM_PORT: "5432"
+      MIKRO_ORM_USER: engofy
+      MIKRO_ORM_PASSWORD: engofy
+      MIKRO_ORM_DB_NAME: engofy-e2e
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_DB: "16" # reserved e2e index — see compose.yaml's redis service
+      MAIL_FROM_EMAIL: Engofy <noreply@engofy.com>
+      # No RESEND_API_KEY here — mailer.provider.ts refuses to boot in
+      # production without a real transport, so opt into the MailHog sink.
+      MAIL_USE_MAILHOG: "true"
+      MAILHOG_HOST: mailhog
+      MAILHOG_PORT: "1025"
+    ports:
+      - "${E2E_BACKEND_PORT:-8180}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/_healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+  web-e2e-prod:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: runtime
+    environment:
+      # astro.config.mjs points both the dev `/api` proxy and SSR's fetches
+      # at this — backend-e2e-prod's internal port (8080), not its
+      # host-mapped E2E_BACKEND_PORT.
+      API_ORIGIN: http://backend-e2e-prod:8080
+    ports:
+      - "${E2E_WEB_PORT:-3100}:4321"
+    depends_on:
+      backend-e2e-prod:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4321/"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s

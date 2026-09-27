@@ -1,10 +1,11 @@
 ---
 // One usage point's card: badge/guideword, explanation, examples, learner
-// actions. Shared by GrammarUsagePoints (the generic bottom list) and
-// handcrafted pages, which drop it inline inside the GrammarSection its rule
-// belongs to instead of leaving it stranded in the bottom list.
+// actions, exercises. Shared by GrammarUsagePoints (the generic bottom list)
+// and handcrafted pages, which drop it inline inside the GrammarSection its
+// rule belongs to instead of leaving it stranded in the bottom list.
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
+import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
 import GrammarContrast from './GrammarContrast.astro';
 
 interface Props {
@@ -12,9 +13,14 @@ interface Props {
 }
 
 const { usagePoint: up } = Astro.props;
+// Deep-link target for the Reader popup's "Practice" button
+// (`lib/reader-lexicon.ts`'s `practiceHref`); null for a usage point added
+// from a non-EGP source, which has no anchor.
+const anchorId =
+  up.egpIndex == null ? undefined : `usage-point-${up.egpIndex}`;
 ---
 
-<div class="usage-item card" data-state={up.state}>
+<div class="usage-item card" data-state={up.state} id={anchorId}>
   <div class="usage-item__head">
     <span class="badge">{up.cefrLevel}</span>
     <span class="usage-item__guide">{up.guideword}</span>
@@ -36,6 +42,7 @@ const { usagePoint: up } = Astro.props;
       up.assumedKnown,
     )}
   />
+  <Fragment set:html={usagePointExercisesHtml(up.exercises)} />
 </div>
 
 <style>
@@ -73,6 +80,26 @@ const { usagePoint: up } = Astro.props;
     margin: 0 0 0.5rem;
     font-size: 0.85rem;
     color: var(--color-ink-faint);
+  }
+  .upe {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .upe__title {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+  .upe__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .upe__item {
+    padding: 1rem;
   }
 </style>
 
@@ -113,3 +140,9 @@ const { usagePoint: up } = Astro.props;
     color: var(--color-warning-ink);
   }
 </style>
+
+<script>
+  import { initUsagePointExercises } from '../../lib/usage-point-exercises-client';
+
+  initUsagePointExercises(document);
+</script>

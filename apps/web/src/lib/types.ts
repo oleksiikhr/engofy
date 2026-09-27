@@ -4,24 +4,11 @@
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 // --- posts archive (/posts) ---
-export type PostTopic =
-  | 'daily_life'
-  | 'food'
-  | 'travel'
-  | 'work'
-  | 'technology'
-  | 'health'
-  | 'nature'
-  | 'culture'
-  | 'society'
-  | 'science';
-
 export interface PostsListItem {
   shortId: string;
   slug: string | null;
   title: string | null;
   cefrLevel: CefrLevel | null;
-  topic: PostTopic | null;
   publishedAt: string;
   excerpt: string;
   sourceLink: string | null;
@@ -53,6 +40,16 @@ export interface StreakResponse {
   // since the start of the current UTC day.
   dailyGoal: number;
   reviewedToday: number;
+}
+export interface StreakFreezeStatus {
+  // Remaining freezes this calendar month (0 for Free/guest).
+  balance: number;
+  // Whether POST /learning/streak/freeze would succeed right now.
+  applicable: boolean;
+}
+export interface StreakFreezeResult {
+  streak: number;
+  balance: number;
 }
 
 // --- post detail (node tree + annotations) ---
@@ -148,6 +145,9 @@ export interface PhraseAnnotation {
 }
 export interface GrammarUsagePointRef {
   grammarUsagePointId: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source. Absent from an API still on the previous release.
+  egpIndex?: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
@@ -176,6 +176,13 @@ export interface GrammarMatch {
   state: EffectiveState;
 }
 export type TokenTense = 'past' | 'present' | 'future';
+// Generic POS + typical-role description for a token with no `word`/`phrase`
+// span (no dictionary entry to show in the click popup) — reader-lexicon.ts's
+// lightweight fallback popup.
+export interface TokenRoleFallback {
+  posLabel: string;
+  roleHint: string;
+}
 // A content token (no punctuation) of the post's spaCy layer, in the same
 // block/unit/char coordinates as a GrammarMatch.
 export interface ReaderToken {
@@ -191,6 +198,9 @@ export interface ReaderToken {
     pastSimple: string[];
     pastParticiple: string[];
   } | null;
+  // Absent from an API still on the previous release, and for a token
+  // already covered by a word/phrase span.
+  roleFallback?: TokenRoleFallback;
 }
 export type ExerciseType =
   | 'fill_blank'
@@ -211,6 +221,7 @@ export interface PostDetail {
   shortId: string;
   slug: string | null;
   title: string | null;
+  metaDescription: string | null;
   cefrLevel: CefrLevel | null;
   publishedAt: string;
   sourceLink: string | null;
@@ -255,10 +266,22 @@ export interface GrammarRefGroup {
 export interface GrammarReference {
   groups: GrammarRefGroup[];
 }
+// One reusable practice exercise from the usage point's bank (grammar-usage-
+// -point-exercises plan, slice 2/3) — the same `payload` shapes as
+// `PostExercise`'s spaCy drills (fill_blank / find_error / multiple_choice /
+// reorder), just not tied to a post.
+export interface UsagePointExercise {
+  id: string;
+  type: ExerciseType;
+  payload: Record<string, unknown>;
+}
 export interface GrammarConstructionUsagePoint extends GrammarUsagePointRef {
   state: EffectiveState;
   // Untouched but at or below the learner's own level.
   assumedKnown: boolean;
+  // Fetched separately per point and merged in by the page — empty until
+  // seeded (rollout is gradual, one usage point at a time).
+  exercises: UsagePointExercise[];
 }
 export interface GrammarLevelProgress {
   cefrLevel: CefrLevel;
@@ -312,6 +335,7 @@ export interface WordDictionarySense {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this sense — needed by
@@ -349,6 +373,7 @@ export interface PhraseDictionaryDetail {
   type: string | null;
   definition: string | null;
   example: string | null;
+  translations: LexiconTranslations;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this phrase — needed by
@@ -430,6 +455,7 @@ export interface ProfileSubscription {
   currentPeriodEnd: string | null;
   cardsUsed: number;
   cardLimit: number | null;
+  dailyNewCardLimit: number;
 }
 
 // --- daily session (home) ---

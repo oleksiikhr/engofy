@@ -1,6 +1,5 @@
 import type { CursorPage } from '../../../../core/http/dto/cursor-page.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
-import type { PostTopic } from '../../../../modules/post/enums/post-topic.enum.js';
 
 export class PostsListItemDto {
   readonly shortId!: string;
@@ -10,8 +9,6 @@ export class PostsListItemDto {
   readonly title!: string | null;
 
   readonly cefrLevel!: CefrLevel | null;
-
-  readonly topic!: PostTopic | null;
 
   // ISO-8601.
   readonly publishedAt!: string;

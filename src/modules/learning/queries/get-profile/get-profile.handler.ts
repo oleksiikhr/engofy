@@ -12,6 +12,7 @@ import { dailyStreakFromUtcDays } from '../../domain/daily-streak.js';
 import { aggregateMasteryScore } from '../../domain/mastery.js';
 import { LearningCard } from '../../entities/learning-card.entity.js';
 import { UserSkillProgress } from '../../entities/user-skill-progress.entity.js';
+import { StreakFreezeService } from '../../services/streak-freeze.service.js';
 import { GetProfileQuery } from './get-profile.query.js';
 import type {
   ProfileCategoryView,
@@ -24,7 +25,10 @@ import type {
 // streak, and the learner's card count broken down by CEFR level.
 @QueryHandler(GetProfileQuery)
 export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly streakFreeze: StreakFreezeService,
+  ) {}
 
   async execute({ userId }: GetProfileQuery): Promise<ProfileView> {
     const [categories, constructions, usagePoints, progress, allCards] =
@@ -54,13 +58,14 @@ export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
     // learning.
     const activeCards = allCards.filter((card) => !card.archivedAt);
 
-    const [activityDays, cefr] = await Promise.all([
+    const [activityDays, frozenDays, cefr] = await Promise.all([
       this.loadActivityDays(allCards.map((card) => card.id)),
+      this.streakFreeze.loadFrozenDays(userId),
       this.computeCefrBreakdown(activeCards, usagePoints),
     ]);
 
     return {
-      streak: dailyStreakFromUtcDays(activityDays, DateTime.now()),
+      streak: dailyStreakFromUtcDays(activityDays, DateTime.now(), frozenDays),
       activityDays,
       cefr,
       categories: buildSkillTree(

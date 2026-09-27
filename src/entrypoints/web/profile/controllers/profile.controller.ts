@@ -15,6 +15,7 @@ import { AuthService } from '../../../../modules/auth/auth.service.js';
 import { CancelAccountDeletionByTokenDto } from '../../../../modules/auth/commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.dto.js';
 import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-level/set-cefr-level.dto.js';
 import { SetDailyGoalDto } from '../../../../modules/auth/commands/set-daily-goal/set-daily-goal.dto.js';
+import { SetDailyNewCardLimitDto } from '../../../../modules/auth/commands/set-daily-new-card-limit/set-daily-new-card-limit.dto.js';
 import type { AccountDeletionView } from '../../../../modules/auth/types/account-deletion-view.type.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
@@ -23,6 +24,7 @@ import { LearningService } from '../../../../modules/learning/learning.service.j
 import { AccountDeletionResponseDto } from '../dto/account-deletion-response.dto.js';
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
 import { DailyGoalResponseDto } from '../dto/daily-goal-response.dto.js';
+import { DailyNewCardLimitResponseDto } from '../dto/daily-new-card-limit-response.dto.js';
 import { ProfileHubResponseDto } from '../dto/profile-hub-response.dto.js';
 import { ProfileProgressResponseDto } from '../dto/profile-progress-response.dto.js';
 import { ProfileSubscriptionResponseDto } from '../dto/profile-subscription-response.dto.js';
@@ -98,9 +100,10 @@ export class ProfileController {
   async subscription(
     @CurrentUser() actor: UserActor,
   ): Promise<ProfileSubscriptionResponseDto> {
-    const [subscription, usage] = await Promise.all([
+    const [subscription, usage, dailyNewCardLimit] = await Promise.all([
       this.billing.getActiveSubscription(actor.id),
       this.learning.getCardUsage(actor.id),
+      this.learning.getDailyNewCardLimit(actor.id),
     ]);
     return {
       plan: subscription?.plan ?? SubscriptionPlan.Free,
@@ -110,6 +113,7 @@ export class ProfileController {
         : null,
       cardsUsed: usage.used,
       cardLimit: usage.limit,
+      dailyNewCardLimit,
     };
   }
 
@@ -135,6 +139,22 @@ export class ProfileController {
   ): Promise<DailyGoalResponseDto> {
     const dailyGoal = await this.auth.setDailyGoal(actor.id, dto.dailyGoal);
     return { dailyGoal };
+  }
+
+  // Premium-only override of how many New cards the reader/practice queue
+  // introduce per day (`DAILY_NEW_CARD_LIMIT` for everyone else).
+  @Patch('daily-new-card-limit')
+  @HttpCode(HttpStatus.OK)
+  async setDailyNewCardLimit(
+    @CurrentUser() actor: UserActor,
+    @Body() dto: SetDailyNewCardLimitDto,
+  ): Promise<DailyNewCardLimitResponseDto> {
+    await this.billing.assertPremium(actor.id);
+    const dailyNewCardLimit = await this.auth.setDailyNewCardLimit(
+      actor.id,
+      dto.dailyNewCardLimit,
+    );
+    return { dailyNewCardLimit };
   }
 
   // Starts the deletion grace period: mails a cancel link, ends premium now.

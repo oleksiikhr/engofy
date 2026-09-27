@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
+import { blockScripts } from './block-scripts';
 import { ReaderPage } from './pages/reader-page';
 
 // Guest part of the reader's info row: the level question (stored in a cookie so the
@@ -245,7 +246,7 @@ test.describe('reader guest strip', () => {
         });
         const page = await context.newPage();
         if (!scripts) {
-          await page.route('**/_astro/**', (route) => route.abort());
+          await blockScripts(page);
         }
         await page.goto(`/posts/${READER_SLUG}`);
         await expect(page.locator('[data-nudge]')).toBeVisible();

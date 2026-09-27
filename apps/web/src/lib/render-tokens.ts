@@ -137,5 +137,11 @@ function openTag(token: ReaderToken, esc: (value: string) => string): string {
     const { base, pastSimple, pastParticiple } = token.irregular;
     attrs += ` data-irregular="${esc([base, pastSimple[0], pastParticiple[0]].join(' – '))}"`;
   }
+  // A token with no word/phrase span still opens a click popup, off this
+  // fallback (reader-popup.ts's `targetFor`) — tabindex/role go straight on
+  // the token span since it has no other wrapper to carry them.
+  if (token.roleFallback) {
+    attrs += ` data-pos-label="${esc(token.roleFallback.posLabel)}" data-role-hint="${esc(token.roleFallback.roleHint)}" tabindex="0" role="button" aria-haspopup="dialog"`;
+  }
   return `<span ${attrs}>`;
 }

@@ -85,8 +85,9 @@ export class ReaderPage {
     return this.toolbar.getByRole('button', { name, exact: true });
   }
 
-  // One section of the popup: 'word' | 'phrase' | 'grammar'.
-  popupSection(kind: 'word' | 'phrase' | 'grammar'): Locator {
+  // One section of the popup: 'word' | 'phrase' | 'grammar' | 'token' (a bare
+  // token's role-fallback card, no dictionary entry).
+  popupSection(kind: 'word' | 'phrase' | 'grammar' | 'token'): Locator {
     return this.popup.locator(`[data-lex-kind="${kind}"]`);
   }
 

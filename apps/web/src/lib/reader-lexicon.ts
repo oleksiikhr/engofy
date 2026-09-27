@@ -11,6 +11,7 @@ import type {
   EffectiveState,
   GrammarTranslations,
   LexiconTranslations,
+  TokenTense,
   TranslationLang,
 } from './types';
 
@@ -77,10 +78,30 @@ export interface PhraseLexiconEntry extends LexiconEntryBase {
 }
 export type LexiconEntry = WordLexiconEntry | PhraseLexiconEntry;
 
+// Another usage point of the same construction, offered as a pill next to the
+// matched one — clicking it swaps the guideword/explanation/example shown
+// above the pill row (reader-popup.ts's pill click handler).
+export interface GrammarSiblingUsagePoint {
+  id: string;
+  // 1-based row number in assets/egp.json; null for a usage point added from
+  // a non-EGP source — that pill's "Practice" link is hidden.
+  egpIndex: number | null;
+  guideword: string;
+  canDoStatement: string;
+  explanation: string | null;
+  translations: GrammarTranslations;
+  examples: string[];
+  matched: boolean;
+}
+
 // A grammar usage point with the construction it belongs to.
 export interface GrammarLexiconEntry {
   id: string;
   construction: string;
+  // The construction's `/grammar/{slug}` page, for the "Practice" link.
+  constructionSlug: string;
+  // This entry's own egpIndex (see `GrammarSiblingUsagePoint`).
+  egpIndex: number | null;
   cefrLevel: CefrLevel;
   guideword: string;
   canDoStatement: string;
@@ -90,6 +111,10 @@ export interface GrammarLexiconEntry {
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
   state: EffectiveState;
+  // This point first, then its construction's other usage points — a
+  // construction can have dozens (EGP "adverbs as modifiers" has 31), so the
+  // matched one must stay visible without scrolling the pill row.
+  siblings: GrammarSiblingUsagePoint[];
 }
 
 // The entries of a post, keyed by wordDefinitionId / phraseId /
@@ -98,6 +123,16 @@ export interface LexiconData {
   words: Record<string, WordLexiconEntry>;
   phrases: Record<string, PhraseLexiconEntry>;
   grammar: Record<string, GrammarLexiconEntry>;
+}
+
+// A token with no word/phrase span read straight off its `data-tok`
+// attributes (render-tokens.ts) rather than looked up in `LexiconData` — it
+// has no id to key a dictionary or a save/report action against.
+export interface TokenFallback {
+  term: string;
+  posLabel: string;
+  roleHint: string;
+  tense: TokenTense | null;
 }
 
 export function entryTerm(entry: LexiconEntry): string {
@@ -251,6 +286,35 @@ function lexiconSectionHtml(
 </section>`;
 }
 
+// `/grammar/{slug}#usage-point-{egpIndex}` — the "Practice" link's target for
+// a usage point; null egpIndex (added from a non-EGP source) has no anchor.
+function practiceHref(
+  constructionSlug: string,
+  egpIndex: number | null,
+): string {
+  return egpIndex === null
+    ? ''
+    : `/grammar/${encodeURIComponent(constructionSlug)}#usage-point-${egpIndex}`;
+}
+
+// Pills for a construction's other usage points, matched one first —
+// clicking a pill swaps the guideword/explanation/example shown above the
+// row, via the plain DOM update in reader-popup.ts's popup click handler.
+function usagePickerHtml(entry: GrammarLexiconEntry, lang: PopupLang): string {
+  const pills = entry.siblings
+    .map((point) => {
+      const guideword = guidewordLabel(point.guideword);
+      const translated =
+        lang === 'en' ? null : point.translations[lang]?.explanation;
+      const detail = translated ?? point.explanation ?? point.canDoStatement;
+      const example = shortExample(point.examples[0] ?? '');
+      const href = practiceHref(entry.constructionSlug, point.egpIndex);
+      return `<button type="button" class="usage-picker__pill" data-usage-pill aria-pressed="${point.matched}" data-guideword="${esc(guideword)}" data-detail="${esc(detail)}" data-example="${esc(example)}" data-practice-href="${esc(href)}">${esc(guideword)}</button>`;
+    })
+    .join('');
+  return `<div class="usage-picker" role="tablist" aria-label="Other cases of ${esc(constructionLabel(entry.construction))}">${pills}</div>`;
+}
+
 function grammarSectionHtml(
   entry: GrammarLexiconEntry,
   slugId: string,
@@ -264,6 +328,13 @@ function grammarSectionHtml(
   const explanation = translated
     ? `<p class="lex-popup__def" lang="${esc(lang)}">${esc(translated)}</p>`
     : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;
+  // A construction with only this one usage point has no "other cases" to
+  // switch between.
+  const picker = entry.siblings.length > 1 ? usagePickerHtml(entry, lang) : '';
+  // Hidden (not omitted) when the matched point has no egpIndex, so the pill
+  // click handler can still reveal it for a sibling that does have one.
+  const href = practiceHref(entry.constructionSlug, entry.egpIndex);
+  const practiceLink = `<a class="lex-popup__practice" data-practice-link href="${esc(href || '#')}" ${href ? '' : 'hidden'}>Practice this →</a>`;
   return `<section class="lex-popup__section tone-blue" data-lex-kind="grammar" data-lex-id="${esc(entry.id)}">
   ${topRowHtml('Grammar', toggle)}
   <div class="lex-popup__head">
@@ -273,22 +344,55 @@ function grammarSectionHtml(
   ${guideword ? `<p class="lex-popup__sub">${esc(guideword)}</p>` : ''}
   ${explanation}
   ${entry.examples[0] ? exampleHtml(entry.examples[0]) : ''}
+  ${picker}
+  ${practiceLink}
   ${entry.contrast ? `<p class="lex-popup__contrast"><b>Why this, not another form?</b> ${esc(entry.contrast)}</p>` : ''}
   ${footerHtml({ kind: 'grammar', id: entry.id }, entry.state, slugId, demo)}
+</section>`;
+}
+
+const TENSE_LABEL: Record<TokenTense, string> = {
+  past: 'Past tense',
+  present: 'Present tense',
+  future: 'Future tense',
+};
+
+function upperFirst(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// A generic POS + typical-role card for a token with no dictionary entry —
+// no save/report actions (nothing to save) and no language toggle (the text
+// isn't translated).
+function tokenFallbackHtml(fallback: TokenFallback): string {
+  return `<section class="lex-popup__section tone-slate" data-lex-kind="token">
+  ${topRowHtml(`Word · ${fallback.posLabel}`, '')}
+  <div class="lex-popup__head">
+    <span class="lex-popup__term">${esc(fallback.term)}</span>
+    <button type="button" class="lex-popup__speak" data-speak="${esc(fallback.term)}" aria-label="Pronounce ${esc(fallback.term)}">${SPEAK_ICON}</button>
+  </div>
+  ${fallback.tense ? `<p class="lex-popup__sub">${esc(TENSE_LABEL[fallback.tense])}</p>` : ''}
+  <p class="lex-popup__def">${esc(upperFirst(fallback.roleHint))}</p>
 </section>`;
 }
 
 // The popup body: the lexical section on top, the grammar section below it
 // (a thin divider between them) when a label carries both. The language
 // switch sits in the first section's top row. `demo` swaps the save and
-// report rows for a sign-in note.
+// report rows for a sign-in note. `fallback` is mutually exclusive with
+// lexical/grammar (reader-popup.ts's `targetFor` only falls back to it when
+// neither matched).
 export function readerPopupHtml(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
+  fallback: TokenFallback | null,
   slugId: string,
   lang: PopupLang,
   demo = false,
 ): string {
+  if (fallback) {
+    return tokenFallbackHtml(fallback);
+  }
   const langs = availableLangs(lexical, grammar);
   const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
   return [

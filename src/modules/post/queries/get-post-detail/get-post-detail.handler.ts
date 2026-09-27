@@ -126,6 +126,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       shortId: post.shortId,
       slug: post.slug ?? null,
       title: post.title ?? null,
+      metaDescription: post.metaDescription ?? null,
       cefrLevel: post.cefrLevel ?? null,
       publishedAt: post.publishedAt.toISO() ?? post.publishedAt.toString(),
       attributionText: post.source.attributionText,
@@ -509,6 +510,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
         cefrLevel: constructionPoints[0]?.cefrLevel ?? null,
         usagePoints: constructionPoints.map((point) => ({
           grammarUsagePointId: point.id,
+          egpIndex: point.egpIndex ?? null,
           cefrLevel: point.cefrLevel,
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,

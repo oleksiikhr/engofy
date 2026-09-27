@@ -38,6 +38,8 @@ import { GetPostsSitemapIndexQuery } from './queries/get-posts-sitemap-index/get
 import type { PostsSitemapIndexView } from './queries/get-posts-sitemap-index/posts-sitemap-index-view.js';
 import { GetPostsSitemapPageQuery } from './queries/get-posts-sitemap-page/get-posts-sitemap-page.query.js';
 import type { PostsSitemapPageView } from './queries/get-posts-sitemap-page/posts-sitemap-page-view.js';
+import { GetUsagePointExercisesQuery } from './queries/get-usage-point-exercises/get-usage-point-exercises.query.js';
+import type { UsagePointExercisesView } from './queries/get-usage-point-exercises/usage-point-exercises-view.js';
 import type { IngestedPostView } from './types/ingested-post-view.type.js';
 
 @Injectable()
@@ -96,6 +98,12 @@ export class PostService {
     userId: string | null = null,
   ): Promise<GrammarConstructionView | null> {
     return this.queryBus.execute(new GetGrammarConstructionQuery(slug, userId));
+  }
+
+  getUsagePointExercises(
+    usagePointId: string,
+  ): Promise<UsagePointExercisesView> {
+    return this.queryBus.execute(new GetUsagePointExercisesQuery(usagePointId));
   }
 
   async ingest(dto: IngestPostDto): Promise<IngestedPostView> {

@@ -13,7 +13,7 @@ import { ReaderPage } from './pages/reader-page';
 // the "reported" usage point (the seeded user marked it Known) on "war ended".
 
 const READER_SLUG = 'the-cartographer-at-dawn-E2Eread1';
-const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:4321';
+const BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:3100';
 
 test.describe('reader page (guest)', () => {
   test('renders the article body with sparse labels on new words and phrases', async ({
@@ -397,6 +397,56 @@ test.describe('reader page (guest)', () => {
     await expect(section.locator('.lex-state--learning')).toBeVisible();
   });
 
+  test('switches to a sibling usage point via the pill row', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    const section = reader.popupSection('grammar');
+    const picker = section.locator('.usage-picker');
+    const matchedPill = picker.getByRole('button', { name: 'Earlier past' });
+    const siblingPill = picker.getByRole('button', { name: 'Reported' });
+    await expect(matchedPill).toHaveAttribute('aria-pressed', 'true');
+    await expect(siblingPill).toHaveAttribute('aria-pressed', 'false');
+
+    await siblingPill.click();
+
+    await expect(matchedPill).toHaveAttribute('aria-pressed', 'false');
+    await expect(siblingPill).toHaveAttribute('aria-pressed', 'true');
+    await expect(section.locator('.lex-popup__sub')).toHaveText('Reported');
+    await expect(section.locator('.lex-popup__def')).toContainText(
+      'reported speech',
+    );
+    // The fixture's "reported" usage point has no enrichment example yet.
+    await expect(section.locator('.lex-popup__example span')).toHaveText('');
+  });
+
+  test('the Practice link deep-links to the matched usage point and hides for one with no egpIndex', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    await reader.grammarLabel('had drawn').click();
+    const section = reader.popupSection('grammar');
+    const practiceLink = section.locator('[data-practice-link]');
+    // The fixture's matched point ("Earlier past") has egpIndex 90012.
+    await expect(practiceLink).toBeVisible();
+    await expect(practiceLink).toHaveAttribute(
+      'href',
+      '/grammar/e2e-past-perfect#usage-point-90012',
+    );
+
+    // The sibling ("Reported") has no egpIndex — switching to it hides the link.
+    await section
+      .locator('.usage-picker')
+      .getByRole('button', { name: 'Reported' })
+      .click();
+    await expect(practiceLink).toBeHidden();
+  });
+
   test('shows lexical and grammar sections when the labels overlap', async ({
     page,
   }) => {
@@ -514,6 +564,47 @@ test.describe('reader page (guest)', () => {
     await expect(
       reader.toolbar.getByRole('switch', { name: 'Function words' }),
     ).toHaveCount(0);
+  });
+
+  test('opens a light role popup for a function word with no dictionary entry', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const the = reader.token('the').first();
+    await expect(the).toHaveAttribute('data-pos-label', 'definite article');
+    await the.click();
+    await expect(reader.popup).toBeVisible();
+    const section = reader.popupSection('token');
+    await expect(section).toContainText('Word · definite article');
+    await expect(section.locator('.lex-popup__term')).toHaveText('the');
+    await expect(section.locator('.lex-popup__def')).toHaveText(
+      'Points to one specific, already-known thing',
+    );
+    // Not a real dictionary entry: nothing to save or report.
+    await expect(
+      section.getByRole('button', { name: 'Add to deck' }),
+    ).toHaveCount(0);
+    await expect(section.locator('.lex-report')).toHaveCount(0);
+
+    await page.keyboard.press('Escape');
+    await expect(reader.popup).toBeHidden();
+  });
+
+  test('a function word opens its role popup from the keyboard too', async ({
+    page,
+  }) => {
+    const reader = new ReaderPage(page);
+    await reader.goto(READER_SLUG);
+
+    const twice = reader.token('twice').first();
+    await expect(twice).toHaveAttribute('tabindex', '0');
+    await twice.focus();
+    await page.keyboard.press('Enter');
+    const section = reader.popupSection('token');
+    await expect(section).toContainText('Word · adverb');
+    await expect(section.locator('.lex-popup__term')).toHaveText('twice');
   });
 
   test('a stored mode is in place before hydration and hydrating moves nothing', async ({

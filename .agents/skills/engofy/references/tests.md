@@ -7,8 +7,18 @@
 | Suffix | Project | Runs against | Built with | Use for |
 |---|---|---|---|---|
 | `*.spec.ts` | `unit` (parallel, isolated) | nothing — no DB, no DI | plain construction / `vi.spyOn` / `vi.stubGlobal` | pure functions, `domain/*`, helpers, template renderers |
-| `*.ispec.ts` (under `src/` and `test/`) | `integration` (**serial** — `maxWorkers:1`, `fileParallelism:false`, `isolate:false`) | **real** Postgres + Redis + pg-boss | `createIntegrationSuite({ imports: [XModule] }, { builderHook })` | every handler; every DB-touching service; wiring (ETag interceptor, error filter, outbox) |
-| web `*.ispec.ts` under `test/http/web` | `integration` | full Fastify app + supertest | `createWebE2ESuite(...)` | web request/response, filter/pipe stack |
+| `*.ispec.ts` | `integration` (**serial** — `maxWorkers:1`, `fileParallelism:false`, `isolate:false`) | **real** Postgres + Redis + pg-boss | `createIntegrationSuite({ imports: [XModule] }, { builderHook })` | every handler; every DB-touching service; wiring (ETag interceptor, error filter, outbox) |
+| web `*.controller.ispec.ts` | `integration` | full Fastify app + supertest | `createWebE2ESuite(...)` | every web controller: request/response, filter/pipe stack, auth (`loginAs` seeds a session cookie) |
+
+**Tests are colocated with the source they test, everywhere** — `card-limit.service.ts` →
+`card-limit.service.ispec.ts` in the *same directory*; `profile.controller.ts` →
+`profile.controller.ispec.ts` next to it under `src/entrypoints/web/...`. **Every** web
+controller already has one of these (`auth`, `billing`, `content`, `dictionary`, `home`,
+`internal/health`, `learning`, `profile`). `test/` holds only shared infra — factories,
+fakes, suite/lifecycle helpers — plus a lone `test/factories/factories.ispec.ts`. When
+looking for "does X have a test", check next to `X`'s own file first; don't assume `test/`
+and stop there if it comes up empty. `test/http/web/setup/*` is the `createWebE2ESuite` /
+`createWebApp` helper code itself, not a place test files live.
 
 There is **no dedicated e2e project.** `test/e2e/` holds only `seed-web-e2e.ts`
 (a fixture seeder for the out-of-tree `apps/web` Playwright suite). Browser e2e is

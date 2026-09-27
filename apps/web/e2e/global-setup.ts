@@ -5,8 +5,13 @@ import { fileURLToPath } from 'node:url';
 
 // Playwright global setup for the Slice 8b page suite.
 //
-// 1. Seeds the local *dev* database with deterministic fixtures by shelling
-//    out to the Nest repo's seed script (same swc-node loader the CLI uses).
+// 1. Seeds the isolated e2e database (`engofy-e2e` — compose.e2e.yaml's
+//    `backend-e2e`) with deterministic fixtures by shelling out to the Nest
+//    repo's seed script (same swc-node loader the CLI uses). Defaults
+//    MIKRO_ORM_DB_NAME so running this (or `pnpm --dir apps/web test:e2e`)
+//    without the isolated stack's own env still targets `engofy-e2e`, never
+//    the shared dev DB — override only matters for a future non-default
+//    isolated DB name.
 // 2. Writes a Playwright storageState carrying the fixed session cookie for
 //    the seeded e2e user, so authed-page specs can `test.use({ storageState })`.
 //
@@ -31,11 +36,15 @@ export default function globalSetup(): void {
     {
       cwd: repoRoot,
       stdio: 'inherit',
-      env: { ...process.env, NODE_ENV: process.env.NODE_ENV ?? 'development' },
+      env: {
+        ...process.env,
+        NODE_ENV: process.env.NODE_ENV ?? 'development',
+        MIKRO_ORM_DB_NAME: process.env.MIKRO_ORM_DB_NAME ?? 'engofy-e2e',
+      },
     },
   );
 
-  const base = new URL(process.env.WEB_BASE_URL ?? 'http://localhost:4321');
+  const base = new URL(process.env.WEB_BASE_URL ?? 'http://localhost:3100');
   writeState(STATE_PATH, base, SESSION_TOKEN);
   writeState(DECK_STATE_PATH, base, DECK_SESSION_TOKEN);
   writeState(DELETION_STATE_PATH, base, DELETION_SESSION_TOKEN);

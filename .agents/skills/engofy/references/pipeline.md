@@ -35,6 +35,14 @@ flowchart LR
   `posts.status = failed`; a `Failed` branch run row alone keeps it polling,
   since pg-boss may still retry that stage. Reference:
   `commands/publish-post/publish-post.handler.ts`.
+- `ai_complexity` also writes `posts.meta_description` (AI-written, ~155 chars)
+  and, only when the post reached this stage with `title` still null (no
+  explicit title, no leading H1 at ingest — `derive-title-from-heading.ts`),
+  an AI-generated `title` + its `slug` — so `Post.title` is never left null
+  past this stage. One `completeStructured` tool schema for each case
+  (`complexityToolSchema` / `complexityToolSchemaWithTitle`), same AI call as
+  the CEFR/topic assessment. Reference: `domain/complexity-prompt.ts`,
+  `assess-complexity.handler.ts`.
 - `ai_grammar` **also gates on the annotation branch** (F3, same mechanism as
   D6): after writing `grammar_matches` it runs a second phase that paints the
   construction slug onto `post_parts.body` (`domain/apply-grammar-constructs.ts`

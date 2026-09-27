@@ -76,4 +76,12 @@ describe('dailyStreakFromUtcDays', () => {
   it('is 0 when the most recent day is two days old', () => {
     expect(dailyStreakFromUtcDays([day(2), day(3)], NOW)).toBe(0);
   });
+
+  it('bridges a gap covered by a frozen day', () => {
+    expect(dailyStreakFromUtcDays([day(0), day(2)], NOW, [day(1)])).toBe(3);
+  });
+
+  it('a lone frozen day counts on its own, with no reviews at all', () => {
+    expect(dailyStreakFromUtcDays([], NOW, [day(1)])).toBe(1);
+  });
 });
