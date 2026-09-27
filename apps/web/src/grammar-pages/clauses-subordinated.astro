@@ -1,0 +1,409 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CefrLevel, CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// 16 of this construction's 17 EGP rows are USE/FORM-USE; several guidewords
+// overlap (REASON vs 'BECAUSE', REASONS; two NON-FINITE WITH '-ING' rows at B1
+// and B2), so each point is matched by level + guideword. The one FORM row
+// (non-finite clause after if, C1) is written in full without a card.
+const point = (level: CefrLevel, text: string) =>
+  con.usagePoints.find((p) => p.cefrLevel === level && p.guideword.includes(text));
+
+const becausePoint = point('A1', 'BECAUSE');
+const reasonPoint = point('B1', 'REASON');
+const timePoint = point('A2', 'TIME');
+const beforeAfterIngPoint = point('B1', 'NON-FINITE WITH');
+const ifPoint = point('A2', 'CONDITIONS');
+const unlessPoint = point('B2', 'CONDITIONS');
+const toPurposePoint = point('A2', 'PURPOSE');
+const soThatPoint = point('B1', 'PURPOSE, RESULT');
+const contrastPoint = point('B1', 'CONTRAST');
+const althoughReducedPoint = point('C2', 'ALTHOUGH');
+const afterHavingPoint = point('B2', 'NON-FINITE WITH');
+const ingClausePoint = point('B2', "'-ING' CLAUSE");
+const notIngPoint = point('C1', "'NOT'");
+const edClausePoint = point('C1', 'FOCUS');
+const inversionPoint = point('C1', 'INVERSION');
+const wereToPoint = point('C2', "'WERE'");
+const inlineUsagePointIds = [
+  becausePoint,
+  reasonPoint,
+  timePoint,
+  beforeAfterIngPoint,
+  ifPoint,
+  unlessPoint,
+  toPurposePoint,
+  soThatPoint,
+  contrastPoint,
+  althoughReducedPoint,
+  afterHavingPoint,
+  ingClausePoint,
+  notIngPoint,
+  edClausePoint,
+  inversionPoint,
+  wereToPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to attach a dependent clause to a main clause with because, when, if, so that, although and more — where it goes, when it takes a comma, and how it shrinks to an -ing, -ed or to-infinitive form, up to the formal inverted Should you... / Had I... / Were I to... conditions."
+  handcrafted
+  sections={[
+    { id: 'main-and-sub', title: 'Main clause + subordinate clause', open: true },
+    { id: 'reason', title: 'Reason: because, as, since', open: false },
+    { id: 'time', title: 'Time: when, while, before, after', open: false },
+    { id: 'condition', title: 'Condition: if, unless, provided', open: false },
+    { id: 'purpose', title: 'Purpose: to, so that, in order that', open: false },
+    { id: 'contrast', title: 'Contrast: although, even though, while', open: false },
+    { id: 'participle', title: 'Clauses with -ing and -ed', open: false },
+    { id: 'inversion', title: 'Formal inversion: Should you... / Had I... / Were I...', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A subordinate clause adds a reason, a time, a condition, a purpose or a
+      contrast to a main clause — but it can't stand on its own. The word that
+      introduces it (because, when, if, so that, although) tells the reader
+      exactly how the two ideas are connected.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Main clause + subordinate clause" id="main-and-sub" open>
+    <p>
+      The main clause is a complete sentence by itself. The subordinate clause
+      starts with a conjunction and depends on the main clause for its
+      meaning — "because she is friendly" alone leaves the reader waiting for
+      the rest.
+    </p>
+    <GrammarFormula label="Subordinate clause after" parts={['main clause', 'because', 'subject', 'verb']} />
+    <GrammarExample note="The main clause comes first; because introduces the reason, with its own subject and verb.">
+      I like my flat <mark data-role="content">because</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> quiet.
+    </GrammarExample>
+    <GrammarExample note="Same pattern — the reason explains the feeling in the main clause.">
+      We love our teacher <mark data-role="content">because</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">is</mark> very patient.
+    </GrammarExample>
+    {becausePoint && <GrammarUsagePointCard usagePoint={becausePoint} />}
+    <p>
+      Many subordinate clauses can also come <em>before</em> the main clause.
+      Then a comma separates the two. When the subordinate clause comes after,
+      there is usually no comma.
+    </p>
+    <GrammarFormula label="Subordinate clause first" parts={['when / if / although …,', 'main clause']} />
+    <GrammarExample note="Subordinate clause first — a comma marks where the main clause begins.">
+      <mark data-role="content">When</mark> I got home, <mark data-role="grammar">I</mark> <mark data-role="grammar">made</mark> dinner.
+    </GrammarExample>
+    <GrammarExample note="The same two clauses the other way round — no comma needed.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">made</mark> dinner <mark data-role="content">when</mark> I got home.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Reason: because, as, since" id="reason" open={false}>
+    <p>
+      Because is the everyday way to give a reason. As and since mean the same
+      thing but sound a little more formal, and they often introduce a reason
+      the reader already knows or can easily accept — common in emails and
+      letters.
+    </p>
+    <GrammarFormula label="Reason" parts={['main clause', 'because / as / since', 'subject', 'verb']} />
+    <GrammarExample note="As gives a polite, matter-of-fact reason for the request.">
+      I can't come to class next week, <mark data-role="content">as</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> travelling to Italy.
+    </GrammarExample>
+    <GrammarExample note="Since works the same way here — the reason is simply stated, not argued.">
+      We need a new printer, <mark data-role="content">since</mark> <mark data-role="grammar">the old one</mark> <mark data-role="grammar">doesn't</mark> work any more.
+    </GrammarExample>
+    {reasonPoint && <GrammarUsagePointCard usagePoint={reasonPoint} />}
+    <p>
+      To answer the question <em>Why?</em> directly, use because — as and
+      since don't work alone as an answer.
+    </p>
+    <GrammarContrast
+      bad={['Why are you late? — As the bus was late.']}
+      good={['Why are you late? — Because the bus was late.']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Time: when, while, before, after" id="time" open={false}>
+    <p>
+      Time conjunctions — when, while, before, after, until, as soon as — place
+      the main clause in time relative to the subordinate one. The clause can
+      go before or after the main clause.
+    </p>
+    <GrammarFormula label="Time clause" parts={['when / while / before / after', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="When marks the moment the main-clause event happened.">
+      <mark data-role="content">When</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">bought</mark> my laptop, the price was very high.
+    </GrammarExample>
+    <GrammarExample note="While shows two actions happening at the same time.">
+      We watched the film <mark data-role="content">while</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">were eating</mark> pizza.
+    </GrammarExample>
+    {timePoint && <GrammarUsagePointCard usagePoint={timePoint} />}
+    <p>
+      With a future meaning, the time clause uses the present tense, not
+      will — the main clause already carries the future.
+    </p>
+    <GrammarContrast
+      bad={['I will call you when I will arrive.']}
+      good={['I will call you when I arrive.']}
+    />
+    <p>
+      After before and after, the subject and verb can be replaced by an -ing
+      form when both clauses share the same subject.
+    </p>
+    <GrammarFormula label="Before / after + -ing" parts={['before / after', '-ing,', 'main clause']} />
+    <GrammarExample note="The person reading is the same person going to bed, so no second subject is needed.">
+      I usually read for an hour <mark data-role="content">before</mark> <mark data-role="grammar">going</mark> to bed.
+    </GrammarExample>
+    <GrammarExample note="After + -ing at the front, followed by a comma and the main clause.">
+      <mark data-role="content">After</mark> <mark data-role="grammar">having</mark> breakfast, I started my homework.
+    </GrammarExample>
+    {beforeAfterIngPoint && <GrammarUsagePointCard usagePoint={beforeAfterIngPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Condition: if, unless, provided" id="condition" open={false}>
+    <p>
+      If introduces a condition — the main clause only happens when the
+      condition is true. The if-clause can go first (with a comma) or after
+      the main clause. The full range of tense patterns is on the page
+      about <em>Conditionals</em> — here the focus is the clause itself.
+    </p>
+    <GrammarFormula label="If" parts={['if', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="The if-clause comes first, so a comma follows it.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">want</mark> to come, just tell me.
+    </GrammarExample>
+    <GrammarExample note="The condition after the main clause — no comma.">
+      I'll visit you on Friday <mark data-role="content">if</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">is</mark> OK with you.
+    </GrammarExample>
+    {ifPoint && <GrammarUsagePointCard usagePoint={ifPoint} />}
+    <p>
+      Unless means <em>if … not</em>. Provided (that) and as long as
+      mean <em>only if</em> — they set a strict condition.
+    </p>
+    <GrammarFormula label="Unless / provided" parts={['main clause', 'unless / provided (that)', 'subject', 'verb']} />
+    <GrammarExample note="Unless = if you don't get stuck in traffic.">
+      Driving to work is faster <mark data-role="content">unless</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">get</mark> stuck in traffic.
+    </GrammarExample>
+    <GrammarExample note="Provided makes the swim depend entirely on the weather.">
+      <mark data-role="content">Provided</mark> <mark data-role="grammar">the weather</mark> <mark data-role="grammar">is</mark> fine, we can go swimming.
+    </GrammarExample>
+    {unlessPoint && <GrammarUsagePointCard usagePoint={unlessPoint} />}
+    <p>
+      In formal writing, if can be followed by just a past participle, with
+      the subject and be left out — <em>if (it is) needed</em>, <em>if (they
+      are) compared</em>.
+    </p>
+    <GrammarFormula label="If + -ed form" parts={['if', '-ed form']} />
+    <GrammarExample note="If needed = if it is needed; the subject and be are understood.">
+      Please ask for further help <mark data-role="content">if</mark> <mark data-role="grammar">needed</mark>.
+    </GrammarExample>
+    <GrammarExample note="If compared = if they are compared.">
+      Taxis here are cheap <mark data-role="content">if</mark> <mark data-role="grammar">compared</mark> with London taxis.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Purpose: to, so that, in order that" id="purpose" open={false}>
+    <p>
+      The simplest way to say <em>why someone does something</em> is a
+      to-infinitive clause — no subject, no conjunction. It can come before or
+      after the main clause.
+    </p>
+    <GrammarFormula label="To + infinitive" parts={['to', 'verb,', 'main clause']} />
+    <GrammarExample note="To introduces the purpose of the directions that follow.">
+      <mark data-role="content">To</mark> <mark data-role="grammar">get</mark> to my house, turn left at the bookshop.
+    </GrammarExample>
+    <GrammarExample note="Purpose after the main clause — no comma.">
+      I went to the shop <mark data-role="content">to</mark> <mark data-role="grammar">buy</mark> some bread.
+    </GrammarExample>
+    {toPurposePoint && <GrammarUsagePointCard usagePoint={toPurposePoint} />}
+    <p>
+      When the purpose has its own subject — often a different person, or a
+      modal like can/could — use so (that) or, more formally, in order that.
+    </p>
+    <GrammarFormula label="So that" parts={['main clause', 'so (that) / in order that', 'subject', 'can / could / will']} />
+    <GrammarExample note="So that brings in a new subject (I) and the modal can.">
+      Could you send me the exercises <mark data-role="content">so that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">can</mark> catch up?
+    </GrammarExample>
+    <GrammarExample note="In order that is the formal version of the same idea.">
+      Please bring your camera <mark data-role="content">in order that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">can</mark> take some photos.
+    </GrammarExample>
+    {soThatPoint && <GrammarUsagePointCard usagePoint={soThatPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Contrast: although, even though, while" id="contrast" open={false}>
+    <p>
+      Although, though and even though introduce a fact that makes the main
+      clause surprising. Even though is the strongest. While can contrast two
+      situations side by side.
+    </p>
+    <GrammarFormula label="Contrast" parts={['although / even though / while', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="Although sets up the fact that makes the main clause unexpected.">
+      <mark data-role="content">Although</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">was</mark> famous, I didn't like him.
+    </GrammarExample>
+    <GrammarExample note="Even though adds extra force to the contrast.">
+      <mark data-role="content">Even though</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> busy, I'll be glad to come to the dinner.
+    </GrammarExample>
+    <GrammarExample note="While compares two situations — one holiday with parents, one with friends.">
+      A holiday with your parents can be boring, <mark data-role="content">while</mark> <mark data-role="grammar">a trip with friends</mark> <mark data-role="grammar">is</mark> usually fun.
+    </GrammarExample>
+    {contrastPoint && <GrammarUsagePointCard usagePoint={contrastPoint} />}
+    <p>
+      In advanced writing, although and though can drop the subject and be,
+      leaving just an adjective or -ed form.
+    </p>
+    <GrammarFormula label="Although + -ed / adjective" parts={['although / though', '-ed form / adjective']} />
+    <GrammarExample note="Although committed = although she is committed.">
+      <mark data-role="content">Although</mark> <mark data-role="grammar">committed</mark> to her job, she has an active social life.
+    </GrammarExample>
+    <GrammarExample note="Though disappointed sits in the middle of the sentence, between commas.">
+      Jack, <mark data-role="content">though</mark> <mark data-role="grammar">disappointed</mark>, accepts the result.
+    </GrammarExample>
+    {althoughReducedPoint && <GrammarUsagePointCard usagePoint={althoughReducedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Clauses with -ing and -ed" id="participle" open={false}>
+    <p>
+      A subordinate clause can shrink to a participle with no conjunction and
+      no subject — the subject is taken from the main clause. This is typical
+      of written and more formal English.
+    </p>
+    <p>
+      After having + -ed makes it clear that the first action was finished
+      before the second. After being + -ed is the passive version.
+    </p>
+    <GrammarFormula label="After having / being + -ed" parts={['after', 'having / being', '-ed form,', 'main clause']} />
+    <GrammarExample note="Having worked is finished before you feel tired.">
+      <mark data-role="content">After</mark> <mark data-role="grammar">having worked</mark> for many hours, you'll probably be tired.
+    </GrammarExample>
+    <GrammarExample note="Being given is passive — someone gives you the pass.">
+      <mark data-role="content">After</mark> <mark data-role="grammar">being given</mark> a pass, you can take as many photos as you like.
+    </GrammarExample>
+    {afterHavingPoint && <GrammarUsagePointCard usagePoint={afterHavingPoint} />}
+    <p>
+      An -ing clause at the front gives background — a reason or the way
+      something was done. Having + -ed stresses that it happened first.
+    </p>
+    <GrammarFormula label="-ing clause" parts={['-ing', '…,', 'main clause']} />
+    <GrammarExample note="Having no choice explains why I sat down.">
+      <mark data-role="content">Having</mark> no choice, <mark data-role="grammar">I</mark> <mark data-role="grammar">sat</mark> down to wait for the rain to stop.
+    </GrammarExample>
+    <GrammarExample note="Using his best smile describes how Paul asked.">
+      <mark data-role="content">Using</mark> his best smile, <mark data-role="grammar">Paul</mark> <mark data-role="grammar">asked</mark> if he could sit down.
+    </GrammarExample>
+    {ingClausePoint && <GrammarUsagePointCard usagePoint={ingClausePoint} />}
+    <p>
+      To make the -ing clause negative, put not in front of it.
+    </p>
+    <GrammarFormula label="Not + -ing" parts={['not', '-ing,', 'main clause']} />
+    <GrammarExample note="Not knowing = because I didn't know.">
+      <mark data-role="content">Not</mark> <mark data-role="grammar">knowing</mark> the area well, I took a long time to find the hotel.
+    </GrammarExample>
+    {notIngPoint && <GrammarUsagePointCard usagePoint={notIngPoint} />}
+    <p>
+      A clause starting with an -ed form — based on, compared to, given — puts
+      the focus on the information the main clause builds on. It's common in
+      reports and formal letters.
+    </p>
+    <GrammarFormula label="-ed clause" parts={['-ed form', '…,', 'main clause']} />
+    <GrammarExample note="Based on points to the evidence behind the recommendation.">
+      <mark data-role="content">Based</mark> on the results above, <mark data-role="grammar">I</mark> <mark data-role="grammar">recommend</mark> some changes.
+    </GrammarExample>
+    <GrammarExample note="Compared to sets up the comparison the main clause comments on.">
+      <mark data-role="content">Compared</mark> to my last job, <mark data-role="grammar">this one</mark> <mark data-role="grammar">has</mark> clear advantages.
+    </GrammarExample>
+    {edClausePoint && <GrammarUsagePointCard usagePoint={edClausePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Formal inversion: Should you... / Had I... / Were I..." id="inversion" open={false}>
+    <p>
+      In formal English, a condition can drop if and move should, had or were
+      in front of the subject — the same word order as a question. The
+      meaning stays conditional.
+    </p>
+    <GrammarFormula label="Inverted condition" parts={['should / had / were', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="Should you need = if you need; a standard phrase in formal emails.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">need</mark> any further help, please contact me.
+    </GrammarExample>
+    <GrammarExample note="Had we known = if we had known — a past condition that didn't happen.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">known</mark> earlier, we would have brought more money.
+    </GrammarExample>
+    <GrammarExample note="Were I able = if I were able — an imagined situation.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">able</mark> to travel in time, I would visit ancient Greece.
+    </GrammarExample>
+    {inversionPoint && <GrammarUsagePointCard usagePoint={inversionPoint} />}
+    <p>
+      Were + subject + to-infinitive presents a condition as a remote,
+      hypothetical possibility — very formal.
+    </p>
+    <GrammarFormula label="Were + subject + to" parts={['were', 'subject', 'to', 'verb,', 'main clause']} />
+    <GrammarExample note="Were I to choose = if I chose; the choice is only imagined.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">to choose</mark> one of them, I would pick the last one.
+    </GrammarExample>
+    <GrammarExample note="A polite, formal way to offer further help.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to need</mark> more information, please let me know.
+    </GrammarExample>
+    {wereToPoint && <GrammarUsagePointCard usagePoint={wereToPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      A subordinate clause on its own is not a sentence — it needs a main
+      clause. Although and but both mark contrast, so using them together
+      doubles it: pick one.
+    </p>
+    <GrammarContrast
+      bad={['I stayed at home. Because it was raining.', 'Although it was cold, but we went out.']}
+      good={['I stayed at home because it was raining.', 'Although it was cold, we went out.']}
+    />
+    <p>
+      An -ing or -ed clause takes its subject from the main clause. If the
+      main clause starts with a different subject, the sentence says something
+      absurd.
+    </p>
+    <GrammarContrast
+      bad={['Walking home, the rain started.']}
+      good={['Walking home, I got caught in the rain.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'conjunctions-subordinating',
+        name: 'subordinating conjunctions',
+        note: 'the words themselves — because, although, unless, as long as — and the differences in meaning between them.',
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditionals',
+        note: 'the full tense patterns of if-clauses: zero, first, second, third and mixed.',
+      },
+      {
+        slug: 'clauses-coordinated',
+        name: 'coordinated clauses',
+        note: 'joining two equal main clauses with and, but, or — neither depends on the other.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'a different kind of dependent clause — one that describes a noun with who, which, that.',
+      },
+    ]}
+  />
+</GrammarShell>

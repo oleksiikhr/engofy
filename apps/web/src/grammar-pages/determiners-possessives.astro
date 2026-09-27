@@ -1,0 +1,361 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// The only USE row (324, generic 'their') is inlined, matched by EGP index.
+// The other 12 rows are plain FORM rows (my/your…, its, their, 's, s',
+// all of my, a friend of my father's, one's, ellipted 's, 's + 's) and are
+// written in full without a card.
+const genericTheirPoint = con.usagePoints.find((p) => p.egpIndex === 324);
+
+const inlineUsagePointIds = [genericTheirPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="My, your, his, her, its, our, their and 's: choosing the word by the owner, everyone… their, all of my friends, parents' vs parent's, a friend of my father's, and one's."
+  handcrafted
+  sections={[
+    { id: 'my-your', title: 'My, your, his, her, our, their', open: true },
+    { id: 'owner', title: 'His, her, its, their: look at the owner', open: false },
+    { id: 'generic-their', title: 'Everyone has their…', open: false },
+    { id: 'all-of-my', title: 'All of my friends', open: false },
+    { id: 'apostrophe-s', title: "Tom's bag: noun + 's", open: false },
+    { id: 'plural-apostrophe', title: "Parents', people's, James's", open: false },
+    { id: 'of-mine', title: "A friend of my father's", open: false },
+    { id: 'no-noun', title: "It was my father's: 's without a noun", open: false },
+    { id: 'ones', title: "One's: people in general", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Possessive determiners — my, your, his, her, its, our, their — and a
+      noun + 's go before a noun to say who it belongs to or who it is
+      connected with: <em>my sister</em>, <em>their car</em>, <em>Linda's party</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="My, your, his, her, our, their" id="my-your" open>
+    <p>
+      Each person has its own possessive word. It goes directly before the
+      noun and never changes its form — the same word for one thing or many,
+      for a man's thing or a woman's thing.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Owner</th><th>Possessive</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>I</th><td><code>my</code></td><td>my bag, my friends</td></tr>
+        <tr><th>you</th><td><code>your</code></td><td>your phone, your parents</td></tr>
+        <tr><th>he</th><td><code>his</code></td><td>his sister</td></tr>
+        <tr><th>she</th><td><code>her</code></td><td>her brother</td></tr>
+        <tr><th>it</th><td><code>its</code></td><td>its screen, its size</td></tr>
+        <tr><th>we</th><td><code>our</code></td><td>our house</td></tr>
+        <tr><th>they</th><td><code>their</code></td><td>their car, their faces</td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Possessive" parts={['my / your / his / her / its / our / their', 'noun']} />
+    <GrammarExample note="My + a singular noun: the family the writer lives with.">
+      I live with <mark data-role="content">my</mark> <mark data-role="grammar">family</mark>.
+    </GrammarExample>
+    <GrammarExample note="My stays the same before a plural noun — there is no 'mys'.">
+      I like <mark data-role="content">my</mark> <mark data-role="grammar">teachers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Our: the house belongs to the speaker's family, a group that includes the speaker.">
+      <mark data-role="content">Our</mark> <mark data-role="grammar">house</mark> has four rooms.
+    </GrammarExample>
+    <GrammarExample note="Their: the faces belong to several people (they).">
+      I couldn't see <mark data-role="content">their</mark> <mark data-role="grammar">faces</mark>.
+    </GrammarExample>
+    <p>
+      The possessive takes the place of the article: <em>my car</em>, never <em>the my car</em> or <em>a my car</em>.
+      An adjective can come between the possessive and the
+      noun: <em>my new car</em>, <em>their little daughter</em>.
+    </p>
+    <GrammarFormula label="With an adjective" parts={['my / your / his …', 'adjective', 'noun']} />
+    <GrammarExample note="The adjective (old) goes after the possessive, before the noun.">
+      This is <mark data-role="content">my</mark> <mark data-role="grammar">old</mark> <mark data-role="grammar">school</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="His, her, its, their: look at the owner" id="owner" open={false}>
+    <p>
+      The possessive word agrees with the owner, not with the thing owned.
+      Ask who it belongs to: a man → his, a woman → her, a thing or an
+      animal → its, more than one → their. The noun after it doesn't matter.
+    </p>
+    <GrammarExample note="Her: the owner is a woman (my mother). Boyfriend is male, but that doesn't change the word.">
+      I live with my mother and <mark data-role="content">her</mark> <mark data-role="grammar">boyfriend</mark>.
+    </GrammarExample>
+    <GrammarExample note="His: the owner is Tom. Sister is female, but the word is still his.">
+      Tom is at the cinema with <mark data-role="content">his</mark> <mark data-role="grammar">sister</mark>.
+    </GrammarExample>
+    <p>
+      Its is for things, places, animals and organisations — anything you
+      call <em>it</em>.
+    </p>
+    <GrammarExample note="Its: the owner is the city (it), not a person.">
+      Verona is a great city, with <mark data-role="content">its</mark> <mark data-role="grammar">old buildings</mark> and churches.
+    </GrammarExample>
+    <GrammarExample note="Its: the size of the school.">
+      We chose this school because of <mark data-role="content">its</mark> <mark data-role="grammar">size</mark>.
+    </GrammarExample>
+    <p>
+      Their is for more than one owner — people or things.
+    </p>
+    <GrammarExample note="Their: the car belongs to the people (they) at the zoo.">
+      When they returned to <mark data-role="content">their</mark> <mark data-role="grammar">car</mark>, someone was stealing a suitcase.
+    </GrammarExample>
+    <p>
+      English has no single word for "one's own" that works for every
+      person. If the owner is the subject of the sentence, use the
+      possessive that matches it: <em>I love my job</em>, <em>she loves her job</em>, <em>they love their job</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Everyone has their…" id="generic-their" open={false}>
+    <p>
+      After everyone, everybody, someone, anyone, nobody, each person and
+      similar words, English uses their — even though the verb is singular
+      (<em>everyone has</em>). It avoids choosing between his and her when
+      the person could be anyone.
+    </p>
+    <GrammarFormula label="Generic their" parts={['everyone / someone / each student …', 'singular verb', 'their', 'noun']} />
+    <GrammarExample note="Everyone takes a singular verb (has), but the possessive is their.">
+      <mark data-role="grammar">Everyone</mark> <mark data-role="grammar">has</mark> <mark data-role="content">their</mark> <mark data-role="grammar">own opinion</mark>.
+    </GrammarExample>
+    <GrammarExample note="The person could be a man or a woman, so their, not his or her.">
+      <mark data-role="grammar">Someone</mark> <mark data-role="grammar">left</mark> <mark data-role="content">their</mark> <mark data-role="grammar">umbrella</mark> on the bus.
+    </GrammarExample>
+    <p>
+      Their also refers to a company, team or organisation, when you think
+      of it as the people in it.
+    </p>
+    <GrammarExample note="IBM is one company, but it's seen as the people who work there: they ordered… their product.">
+      <mark data-role="grammar">IBM</mark> ordered 10,000 copies which show <mark data-role="content">their</mark> <mark data-role="grammar">new product</mark>.
+    </GrammarExample>
+    {genericTheirPoint && <GrammarUsagePointCard usagePoint={genericTheirPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="All of my friends" id="all-of-my" open={false}>
+    <p>
+      To talk about a part or all of the things you own, put a quantity
+      word + of before the possessive: all of, some of, most of, many of,
+      one of, none of.
+    </p>
+    <GrammarFormula label="Quantity + of" parts={['all / some / most / one …', 'of', 'my / your / their …', 'noun']} />
+    <GrammarExample note="All of + my + noun: every one of the friends.">
+      <mark data-role="grammar">All</mark> <mark data-role="grammar">of</mark> <mark data-role="content">my</mark> <mark data-role="grammar">friends</mark> were there.
+    </GrammarExample>
+    <GrammarExample note="Some of + my + noun: only part of the clothes.">
+      <mark data-role="grammar">Some</mark> <mark data-role="grammar">of</mark> <mark data-role="content">my</mark> <mark data-role="grammar">clothes</mark> are too small for me.
+    </GrammarExample>
+    <GrammarExample note="One of + your + plural noun: one from a group of several.">
+      Can I borrow <mark data-role="grammar">one</mark> <mark data-role="grammar">of</mark> <mark data-role="content">your</mark> <mark data-role="grammar">pens</mark>?
+    </GrammarExample>
+    <p>
+      Of is needed here: say <em>some of my friends</em>, not <em>some my friends</em>.
+      After <em>one of</em> the noun is always plural: <em>one of my friends</em>, not <em>one of my friend</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Tom's bag: noun + 's" id="apostrophe-s" open={false}>
+    <p>
+      To say that something belongs to a person named by a noun, add 's to
+      that noun and put it before the thing: <em>Linda's party</em>, <em>my sister's jacket</em>.
+      The owner comes first, the thing second.
+    </p>
+    <GrammarFormula label="Noun + 's" parts={["name / singular noun + 's", 'noun']} />
+    <GrammarExample note="A name + 's: the party belongs to Linda.">
+      I'll wear them at <mark data-role="content">Linda's</mark> <mark data-role="grammar">party</mark>.
+    </GrammarExample>
+    <GrammarExample note="A singular noun + 's: the jacket belongs to my sister. My goes with sister, not with jacket.">
+      It's my <mark data-role="content">sister's</mark> <mark data-role="grammar">jacket</mark>.
+    </GrammarExample>
+    <p>
+      The noun + 's replaces the article before the thing: <em>Tom's car</em>, not <em>the Tom's car</em>.
+    </p>
+    <p>
+      Use 's mostly with people and animals. For things, use of instead: <em>the end of the film</em>,
+      not <em>the film's end</em>; <em>the door of the car</em> or <em>the car door</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Parents', people's, James's" id="plural-apostrophe" open={false}>
+    <p>
+      Where the apostrophe goes depends on how the owner noun ends. A plural
+      noun that already ends in -s takes only an apostrophe after the s.
+    </p>
+    <GrammarFormula label="Plural in -s" parts={["plural noun + '", 'noun']} />
+    <GrammarExample note="Parents' = the house of both parents. Parent's would be one parent.">
+      I spent the rest of my holiday in my <mark data-role="content">parents'</mark> <mark data-role="grammar">house</mark>.
+    </GrammarExample>
+    <GrammarExample note="Animals' = of many animals: a plural owner.">
+      If you want to study <mark data-role="content">animals'</mark> <mark data-role="grammar">behaviour</mark>, don't change their environment.
+    </GrammarExample>
+    <p>
+      Irregular plurals that don't end in -s — people, children, men, women
+      — take a normal 's.
+    </p>
+    <GrammarFormula label="Irregular plural" parts={["people / children / men / women + 's", 'noun']} />
+    <GrammarExample note="Children is already plural, so it takes 's like a singular noun.">
+      It's too far from the <mark data-role="content">children's</mark> <mark data-role="grammar">school</mark>.
+    </GrammarExample>
+    <GrammarExample note="People's attention: the attention of other people.">
+      I like wearing clothes that attract <mark data-role="content">people's</mark> <mark data-role="grammar">attention</mark>.
+    </GrammarExample>
+    <p>
+      A singular noun or name that ends in -s can take either 's or just an
+      apostrophe: <em>James's car</em> or <em>James' car</em>. Both are
+      correct; 's is more common for names. Nouns like series, which look
+      plural but are singular, usually take only the apostrophe.
+    </p>
+    <GrammarFormula label="Singular in -s" parts={["James's / James' / series'", 'noun']} />
+    <GrammarExample note="Series is singular here (one TV series) and ends in s, so it takes just an apostrophe.">
+      The programme should keep some of the <mark data-role="content">series'</mark> <mark data-role="grammar">characters</mark> the same.
+    </GrammarExample>
+    <GrammarExample note="A name ending in s: 's is the more common choice.">
+      We had dinner at <mark data-role="content">Charles's</mark> <mark data-role="grammar">flat</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A friend of my father's" id="of-mine" open={false}>
+    <p>
+      English can't put a or this next to a possessive — not <em>a my friend</em>.
+      To say "one of my father's friends", use a + noun + of + noun's.
+      The same pattern with a possessive pronoun gives <em>a friend of mine</em>.
+    </p>
+    <GrammarFormula label="Of + 's" parts={['a / this / some', 'noun', 'of', "noun's / mine / yours …"]} />
+    <GrammarExample note="A friend of my father's = one of my father's friends.">
+      The owner is <mark data-role="grammar">a</mark> <mark data-role="grammar">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="content">my father's</mark>, so he can give us a discount.
+    </GrammarExample>
+    <GrammarExample note="Some + plural noun + of + name's.">
+      <mark data-role="grammar">Some</mark> <mark data-role="grammar">colleagues</mark> <mark data-role="grammar">of</mark> <mark data-role="content">Anna's</mark> are coming to the party.
+    </GrammarExample>
+    <p>
+      Possessive pronouns (mine, yours, his, hers, ours, theirs) are covered
+      on their own page — see the links below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It was my father's: 's without a noun" id="no-noun" open={false}>
+    <p>
+      When the noun has just been mentioned or is obvious, you can leave it
+      out after 's. The 's form then stands alone, like a possessive
+      pronoun.
+    </p>
+    <GrammarFormula label="No noun" parts={["… noun's", '(noun left out)']} />
+    <GrammarExample note="My father's = my father's voice. Voice was mentioned just before.">
+      I heard a familiar voice; it was <mark data-role="content">my father's</mark>.
+    </GrammarExample>
+    <GrammarExample note="My friend's = my friend's bank account.">
+      My bank account was empty and so was <mark data-role="content">my friend's</mark>.
+    </GrammarExample>
+    <p>
+      Places named after a person or shop often drop the noun too: <em>at the doctor's</em>, <em>at my aunt's</em> (= at my
+      aunt's house).
+    </p>
+    <GrammarExample note="At Emily's = at Emily's house or flat; the noun is obvious.">
+      We're having dinner at <mark data-role="content">Emily's</mark> tonight.
+    </GrammarExample>
+    <p>
+      Two 's forms can also follow each other in one noun phrase: each owner
+      belongs to the next.
+    </p>
+    <GrammarFormula label="'s + 's" parts={["noun + 's", "noun + 's", 'noun']} />
+    <GrammarExample note="Emily's grandmother's house = the house of Emily's grandmother.">
+      They spent two weeks at <mark data-role="content">Emily's</mark> <mark data-role="content">grandmother's</mark> <mark data-role="grammar">house</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="One's: people in general" id="ones" open={false}>
+    <p>
+      One's is the possessive of the formal pronoun one, which means "any
+      person, people in general". It belongs to formal writing; in everyday
+      English, people say <em>your</em> in the same meaning.
+    </p>
+    <GrammarFormula label="Formal, general" parts={["one's", 'noun']} />
+    <GrammarExample note="One's life = the life of any person, not a particular one.">
+      Tourism can affect <mark data-role="content">one's</mark> <mark data-role="grammar">life</mark> in many ways.
+    </GrammarExample>
+    <GrammarExample note="One's ability: a general statement about people.">
+      Success depends on <mark data-role="content">one's</mark> <mark data-role="grammar">ability</mark> to communicate.
+    </GrammarExample>
+    <p>
+      Informal equivalent: <em>Tourism can affect your life in many ways.</em> Keep
+      to one choice in a sentence — <em>one … one's</em> or <em>you … your</em>, not a mix.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      The possessive replaces the article — they are never used together.
+    </p>
+    <GrammarContrast
+      bad={['The my car is outside.', 'She is a my friend.']}
+      good={['My car is outside.', 'She is a friend of mine.']}
+    />
+    <p>
+      His / her depends on the owner, not on the thing owned.
+    </p>
+    <GrammarContrast
+      bad={['Anna is visiting his brother.', 'Tom loves her mother.']}
+      good={['Anna is visiting her brother.', 'Tom loves his mother.']}
+    />
+    <p>
+      Its (possessive) has no apostrophe. It's always means it is or it has.
+    </p>
+    <GrammarContrast
+      bad={["The dog is eating it's dinner.", "The company changed it's name."]}
+      good={['The dog is eating its dinner.', 'The company changed its name.']}
+    />
+    <p>
+      For people, use 's rather than of. And put the apostrophe in the right
+      place: parent's = one parent, parents' = both; children's, not
+      childrens'.
+    </p>
+    <GrammarContrast
+      bad={['This is the car of my brother.', "The childrens' room is upstairs."]}
+      good={["This is my brother's car.", "The children's room is upstairs."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-possessive',
+        name: 'possessive pronouns',
+        note: "mine, yours, hers… — used without a noun: This bag is mine. A friend of mine.",
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'a / an and the — a possessive replaces them, so never the my car.',
+      },
+      {
+        slug: 'pronouns-generic-use',
+        name: 'generic pronouns',
+        note: "they, you and one for people in general — the pronouns behind generic their and one's.",
+      },
+    ]}
+  />
+</GrammarShell>

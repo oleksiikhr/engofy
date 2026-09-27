@@ -377,110 +377,454 @@ not only/nor), grammar-мітка — auxiliary/subject у прикладах і
 
 Див. «Спільний процес» вище. Slug: `clauses-declarative`.
 
-### [ ] 13. Clauses — interrogatives (`clauses-interrogatives`) — рівень A1
+### [x] 13. Clauses — interrogatives (`clauses-interrogatives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-interrogatives`.
 
-### [ ] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
+11 EGP-рядків (203-213), усі чисті FORM — жодного usage point, отже
+жодної картки, "When it's used" не рендериться. Рядок 212 (WHICH/WHOSE)
+у EGP без can-do і прикладів — приклади написані вручну. 10 секцій: be
+на початку; допоміжні be/have; do/does/did; модальні; wh- (об'єкт);
+wh- як підмет без do (з парою Who did you call? / Who called you?);
+which/whose + іменник; заперечні питання + why don't we/you як
+пропозиція; прислівники в середній позиції (ever/still/usually, також
+у заперечних — B2); типові помилки. Content-мітка — дієслово, що
+виходить перед підметом (у секціях wh-subject/which-whose/adverb —
+відповідно дієслово, which/whose, прислівник), grammar — решта слотів.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 97 міток і 49 `<em>` — 0 злиплих
+сусідніх слів).
+
+### [x] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-subordinated`.
 
-### [ ] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
+17 EGP-рядків (240-256), 16 FORM/USE — усі 16 вплетені інлайн; єдиний
+чистий FORM (250, non-finite після if, C1) написаний без картки в секції
+умов. Guideword-и перетинаються (REASON vs 'BECAUSE', REASONS; два
+NON-FINITE WITH '-ING' на B1 і B2; CONDITIONS на A2 і B2), тому usage
+points матчаться за `cefrLevel` + підрядком guideword. 9 секцій: головна
++ підрядна (позиція і правило коми); reason (because/as/since); time
+(+ present замість will, + before/after + -ing); condition (if,
+unless/provided, if + -ed); purpose (to-inf, so that/in order that);
+contrast (although/even though/while + although + -ed/adj); -ing/-ed
+клаузи (after having/being, -ing, not + -ing, based on/compared to);
+формальна інверсія (Should/Had/Were + Were + to); типові помилки
+(фрагмент, although...but, dangling participle). Content-мітка — сполучник/
+вступне слово клаузи, grammar — підмет/дієслово. Кома у формулі
+приліплена до попереднього слота (`'verb,'`), а не окремим чипом.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 100 міток, 16 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих сусідніх слів навколо
+`<mark>`/`<em>`).
+
+### [x] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `conjunctions-coordinating`.
 
-### [ ] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
+19 EGP-рядків: 11 FORM/USE — усі 11 вплетені інлайн; 8 чистих FORM
+(word/phrase/clause/sentence + and/but/or, complex adding so/then, plus з
+іменниками, either...or на B1 і C1) написані без картки. Guideword-и
+повторюються між рівнями ('BOTH … AND' B1/B2, 'NEITHER' B2/C2, 'YET'
+C1/'AND YET' C2, два 'NOT ONLY' на C1 — з/без INVERSION), тому матчинг за
+`cefrLevel` + підрядком guideword (+ exclude для NOT ONLY). 9 секцій: що
+можуть з'єднувати and/but/or (+ на початку речення); списки; контраст
+(but/yet/and yet); so/then/plus; both...and (іменники → фрази);
+either...or + neither...nor (+ узгодження дієслова з найближчим
+підметом); not only...but also (+ фронтування з інверсією, крос-посилання
+на `clauses-coordinated`); Neither/Nor на початку речення з інверсією;
+типові помилки (подвійне заперечення з neither...nor, both...or,
+not only без інверсії). Відмежовано від `clauses-coordinated`: там —
+з'єднання клауз, тут — самі сполучники і що вони з'єднують. Content-мітка
+— сполучник, grammar — з'єднані елементи / auxiliary+subject в інверсії.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 98 міток, 11 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
+
+### [x] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `conjunctions-subordinating`.
 
-### [ ] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
+7 EGP-рядків: 2 FORM/USE — обидва вплетені інлайн (FOCUS whatever/
+wherever на початку речення, C1; 'IN THAT', C2); 5 чистих FORM (because
+A1, прості сполучники A2/B1/B2, складені B2) написані без картки. У
+learner_explanation/examples обох точок порожньо — факти перевірено
+за EGP can-do + прикладами. Відмежовано від `clauses-subordinated` (та
+організована за значенням клаузи — reason/time/condition…, тут — самі
+слова і пари, які плутають, як і обіцяє її GrammarCompare). 12 секцій:
+because vs because of (+ due to the fact that); if vs when; while/as/
+since з двома значеннями; before/after/until/once/as soon as; although/
+though/whereas (+ though-прислівник у кінці, despite the fact that); so
+vs so that/in order that; unless/provided/as long as/except that;
+whether vs if; as if/as though; -ever на початку речення; in that;
+типові помилки (despite/because of + клауза, unless + not, will після
+when, on if). Content-мітка — сполучник, grammar — підмет/дієслово
+підрядної клаузи (+ look/talks перед as if, прикметник після however).
+**Нова пастка**: не лише `</em>`/`<mark>` між тегами — перенос рядка
+одразу перед `<em>` посеред прози теж з'їдається (`not\n<em>as` →
+`notas`); `<em>` завжди на тому ж рядку, що попереднє слово. Контракції
+не розбивати між двома `<mark>` (`you</mark> <mark>'ve` дає зайвий
+пробіл) — писати повну форму.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 118 міток, 2 картки в секціях
+`ever`/`in-that`, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>` — перевірка за символом до/після кожного тегу).
+
+### [x] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-demonstratives`.
 
-### [ ] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
+20 EGP-рядків: 15 USE — усі 15 вплетені інлайн; 5 чистих FORM (this +
+singular A1, this + uncountable / that / these / those A2) написані без
+картки в першій секції (таблиця near/far × singular/plural). Guideword-и
+тут неконсистентні ('THIS', POINTING A1 / 'THIS' POINTING| і голий
+POINTING на A2 для того самого правила, 'THESE' POINTING||), тому usage
+points матчаться за `egpIndex`, а не підрядком guideword. У
+learner_explanation/examples усіх точок порожньо — факти перевірено за
+EGP can-do + прикладами. 9 секцій: чотири слова (узгодження з числом,
+uncountable, замість артикля); near (this/these, «місце, де я є»); far
+(that/those, those days, точка зору мовця); вже згадане; час (this + time
+word = майбутнє/минуле за часом дієслова, that night в розповіді, без
+прийменника); storytelling this (C2); this + noun + of + his (C2);
+емоційна дистанція that/those (C2); типові помилки (this shoes / these
+informations, the this / this my, in this afternoon). Займенникове
+вживання (This is my brother) — лише крос-посилання на
+`pronouns-demonstratives` (зріз 63). Content-мітка — демонстратив,
+grammar — іменник (+ there was, of + possessive).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 60 міток, 15 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-possessives`.
 
-### [ ] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
+13 EGP-рядків (318-330): 1 USE (324 GENERIC 'THEIR', B2) — вплетений
+інлайн, матч за `egpIndex`; 12 чистих FORM написані без картки. У
+learner_explanation/examples точки порожньо — факти перевірено за EGP
+can-do + прикладами з `assets/egp.json`. 10 секцій: таблиця my…their
+(+ заміна артикля, прикметник між); his/her/its/their за власником, а не
+за іменником (+ немає слова «свій»); generic their (everyone has their,
+компанія = they); all/some/one of + my; noun + 's (+ 's для людей, of для
+речей); parents'/people's/James's/series'; a friend of my father's;
+'s без іменника (+ at the doctor's) разом з 's + 's; one's (формальне,
+vs your); типові помилки (the my / a my, his↔her, it's↔its, the car of my
+brother, childrens'). Content-мітка — присвійне слово / noun+'s, grammar —
+іменник-власність (+ quantity + of, everyone + дієслово). Присвійні
+займенники (mine) — лише крос-посилання на `pronouns-possessive`.
+Підтверджено обидві відомі пастки: перенос рядка одразу після `</em>`
+теж з'їдається (`</em>\n(= at` → `</em>(= at`), не лише перед `<em>`.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 78 міток, 1 картка в секції
+`generic-their`, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-quantity`.
 
-### [ ] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
+22 EGP-рядки (331-352): 3 USE — 341 (a little / a bit of, B1), 351
+(HYPERBOLE, C1), 352 (MANY A, C2) — усі 3 вплетені інлайн, матч за
+`egpIndex`; 19 чистих FORM написані без картки. У learner_explanation/
+examples усіх точок порожньо — факти перевірено за EGP can-do + прикладами з
+`assets/egp.json`. 10 секцій: таблиця «яке слово з яким іменником»
+(singular / plural / uncountable / обидва); some/any/no (+ some в
+пропозиціях, more); much/many (заперечення, питання, how much/many,
+so/too much/many); a lot of/lots of/plenty of/loads of + гіпербола millions/
+tons of (картка 351); a few/a little/a bit of (картка 341) + very/so/too
+few/little; a/one/each/every/both/either/neither; all/most/several/enough +
+almost/nearly all/every; quantity + of + the/my (опціональний of після
+all/both/half, each of/none of замість every/no, either/neither of + plural/
+pronoun); many a/many an (картка 352); типові помилки (much↔many,
+informations, every students, some my / the most people / most of people,
+подвійне заперечення з no/neither, little↔a little). Content-мітка —
+quantity-слово, grammar — іменник (+ of/the/my, so/too/very/almost/nearly).
+Займенникове вживання (Some were late) — лише крос-посилання на
+`pronouns-quantity`.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 144 мітки, 3 картки в секціях
+`a-lot-of`/`few-little`/`many-a`, "When it's used" відсутній, 0 злиплих
+слів навколо `<mark>`/`<em>`).
+
+### [x] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `future-future-simple-with-will-and-shall`.
 
-### [ ] 21. Modality — will (`modality-will`) — рівень A1
+16 EGP-рядків (382-397): 11 USE — усі 11 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: PLANS AND INTENTIONS WITH 'WILL' на
+A1 і A2, PREDICTIONS will B1 / shall C2); 5 чистих FORM (affirmative will,
+affirmative shall, negative will, questions, negative shall) написані без
+картки. У learner_explanation/examples усіх точок порожньо — факти
+перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій: will
++ base verb + таблиця 'll; won't; питання (+ short answers, Shall I в
+питаннях); рішення/наміри/обіцянки + Will you…? про плани (картки 383,
+388, з відмежуванням від going to); прогнози (+ probably/definitely до
+won't, картка 393); fixed plans з датою/часом (392); requests + willingness
+(389, 391, won't = відмова лише згадано); Shall I…? / Shall we…? (387,
+390); формальне I/we shall + shall not + shall always/never + shall-
+прогнози (394, 396, 397); типові помилки (will to/comes/going, will після
+when/until, Will I…? замість Shall I…?, Yes I'll / willn't). Відмежовано
+від `modality-will`/`modality-shall` (зрізи 21 і далі — там habitual/
+willfulness/Will you please/advice/commands): тут will/shall лише як
+майбутній час. Content-мітка — will/'ll/won't/shall, grammar — підмет +
+base verb (+ probably/always/never, час/дата). Контракції (I'll, It'll)
+розмічені однією content-міткою на все слово, не розбиті на дві.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 128 міток, 11 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 21. Modality — will (`modality-will`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `modality-will`.
 
-### [ ] 22. Modality — would (`modality-would`) — рівень A1
+13 EGP-рядків (603-615): 10 USE — усі 10 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: PLANS AND INTENTIONS A1/A2, REQUESTS
+A2/B2); 3 чисті FORM (affirmative, negative, questions) написані без картки
+в одній секції форми. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій:
+форма (will/'ll, won't, питання, short answers, will can't + modal →
+be able to); plans/intentions + Will you…? про плани (604, 608); if +
+present, will в головному реченні (605); прогнози + question tags won't
+you? / will it? (612); fixed plans (611); willingness/offers (609) + won't
+= відмова, у т.ч. для речей (The car won't start — без картки, поза EGP);
+requests Will you…? (610) + Will you please… / Will you be quiet! як
+команда (613); habitual/typical will + often/usually (614, відсилка на
+would для минулих звичок); stressed WILL для несхвалення + Boys will be
+boys (615); типові помилки (will to/comes/please to, will в if-clause,
+will can/will must, Yes I'll / willn't). Відмежовано від
+`future-future-simple-with-will-and-shall` (там — will/shall як час, Shall
+I/we): тут майбутнє показано коротко з крос-посиланням, фокус на модальних
+значеннях. Content-мітка — will/'ll/won't (контракції однією міткою),
+grammar — підмет + base verb (+ if-clause, please, often/usually, час/дата).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 130 міток, 10 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 22. Modality — would (`modality-would`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `modality-would`.
 
-### [ ] 23. Negation — negation (`negation-negation`) — рівень A1
+23 EGP-рядки (616-638): 13 USE — усі 13 вплетені інлайн, матч за
+`egpIndex` (перетин guideword-ів: WISHES AND PREFERENCES з 'like' A1 / з
+іншими дієсловами A2, IMAGINED SITUATIONS теперішні A2 / минулі B1); 10
+чистих FORM (affirmative with like, affirmative, negative, questions with
+like, would have + -ed, wouldn't have + -ed, questions, adverbs B1/C1/C2)
+написані без картки. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 12
+секцій: форма (would/'d, wouldn't, питання, Wouldn't that…?, tag wouldn't
+it?, short answers, 'd = would vs had); would like/love/prefer (618, 624,
+I like vs I'd like); Would you like to…? + written I would like to invite
+you (617; FORM 621 тут же); imagined situations + It would be nice to / if
+you came (622, 623); if + past, would + If I were you (625, will vs would);
+would have + pp, if + had + pp (631; FORM 626/627); polite requests Would
+you…? / Would you mind -ing / if + past / Would it be possible (633, No,
+not at all); I'd say/advise/recommend (632); future in the past + reported
+speech (630, 634); wouldn't = past refusal + would = past habit (635, 636,
+не для станів → used to); adverbs (B1 really/probably/definitely + C1/C2
+strongly/easily/significantly, probably wouldn't); типові помилки (would
+to/comes/like go, would в if-clause, I like vs I'd like, Yes I'd / would of
+/ would для станів). Content-мітка — would/'d/wouldn't/would have
+(контракції однією міткою), grammar — підмет + base verb/participle (+
+like/love/prefer, to-infinitive, if-clause, mind, adverb, reporting verb).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 219 міток, 13 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 23. Negation — negation (`negation-negation`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `negation-negation`.
 
-### [ ] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
+31 EGP-рядок (1175-1205): 12 USE / FORM/USE — усі 12 вплетені інлайн, матч
+за `egpIndex`; 19 чистих FORM (not після be / be-have aux present+past /
+модальних, don't/doesn't/didn't, imperatives, negative questions + tags,
+no / any / much / many, indefinite pronouns A2+B1, ever/never/yet/still, I
+don't think, not + non-finite/ellipted clause, neither of / none of, none
+substitution, not all / not every) написані без картки. У
+learner_explanation/examples усіх точок порожньо — факти перевірено за EGP
+can-do + прикладами з `assets/egp.json`. 13 секцій: not після be / aux /
+modal; don't/doesn't/didn't + base verb; Don't + verb + Don't you (ever/
+dare) (1203); negative questions + tags + seeking agreement (1188, answer
+about the facts); no vs not … any, much/many, anything vs nothing/nobody;
+none of / neither of + positive verb, none alone, not all / not every;
+never/ever/yet/still; I don't think + positive clause; not + phrase,
+hedging not necessarily/really/actually (1199), formal few vs a few (1200);
+strong negatives do not/cannot (1192), whatsoever (1201), in the least
+(1205), not a single (1202); neither … nor (1194) + Neither/Nor + inversion
+(1204); Never have I (1193), Not only (1198); типові помилки (подвійне
+заперечення, she don't / doesn't lives / didn't went / I no like, don't +
+be/modal, I think it isn't, Anybody didn't, Never I have). Content-мітка —
+негативне слово (not/n't-форма, no, nothing, nobody, never, none of,
+neither/nor, few, whatsoever, in the least, not a single; ever/yet/still у
+секції прислівників), grammar — решта слотів формули (підмет, aux/verb,
+any/much/many + noun, прислівник-hedge, inverted aux + subject).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (14 details, 273 мітки, 12 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-noun-phrases`.
 
-### [ ] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
+30 EGP-рядків (647-676): 6 FORM/USE / USE — усі 6 вплетені інлайн, матч за
+`egpIndex`; 24 чисті FORM (determiner + noun / uncountable / quantity
+phrases, adjective + noun, кілька прикметників, adverb + adjective, but між
+прикметниками, noun + noun, 's / plural ', of + 's, a friend of mine / of
+my father('s), prepositional / adjective phrase після іменника, indefinite
+pronoun + adjective / to-infinitive, relative clauses defining і
+non-defining, apposition, 's без іменника при повторі, little or no)
+написані без картки. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 12
+секцій: determiner + noun (+ uncountable, a lot of / too much / all of
+our); прикметники перед іменником (порядок opinion → size/age → colour,
+small but beautiful); very/really + adjective + such a / such (659, so vs
+such); noun + noun (перший іменник в однині, наголос); 's / plural ' /
+of + 's / the dentist's (662) / 's без повтору іменника; a colleague of
+mine / a friend of my father('s); prepositional + adjective phrases після
+іменника + something different / to drink; relative clauses + the best
+book I've ever read (661); apposition; The thing I… / What-cleft (668,
+675); nominalisation (674) + little or no; типові помилки (без артикля /
+a homework, nices / a car red / different something / a vegetables soup,
+the jacket of my sister / a my friend, a such / so good friends).
+Content-мітка — головний іменник (або слово, що його заміщує: the
+dentist's, something, What), grammar — решта слотів формули (determiner,
+прикметники, possessive 's, of-phrase, relative clause, апозиція, be).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 249 міток, 6 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
+
+### [x] 25. Nouns — noun phrases - grammatical functions (`nouns-noun-phrases-grammatical-functions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-noun-phrases-grammatical-functions`.
 
-### [ ] 26. Nouns — plural (`nouns-plural`) — рівень A1
+5 EGP-рядків (698-702), усі чисті FORM (A1), usage points немає — сторінка
+без карток, "When it's used" не рендериться. 6 секцій за функцією noun
+phrase у реченні: підмет (узгодження дієслова, обов'язковий підмет → it);
+додаток (одразу після дієслова, два додатки person + thing, порядок слів
+замість відмінків); після прийменника (+ об'єктна форма займенника: for
+her); після be (He is a student, it's Mohamad, a / an для професій) і
+there is / are з узгодженням; часові noun phrases без прийменника (next /
+last / this / every + time noun, today / tomorrow / yesterday + morning /
+afternoon / evening, tonight); типові помилки (пропущений / подвійний
+підмет, My friends is, He is student, visit to, with I, in next week / on
+last Monday). Content-мітка — noun phrase у своїй функції (або часовий
+іменник), grammar — решта слотів формули (дієслово, be, прийменник,
+підмет, next/last/this/every).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (6 details, 65 міток, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
+
+### [x] 26. Nouns — plural (`nouns-plural`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-plural`.
 
-### [ ] 27. Nouns — types (`nouns-types`) — рівень A1
+6 EGP-рядків (684-689), усі чисті FORM (A1-B1), usage points немає —
+сторінка без карток, "When it's used" не рендериться. 7 секцій: -s (після
+числа / some / a lot of, загальне значення, вимова /s/ /z/ /ɪz/, у noun +
+noun плюралізується лише останній); -es після s / ss / sh / ch / x / z і
+частини -o (potatoes vs photos / pianos); consonant + y → -ies, vowel + y →
+-s (days); нерегулярні (men, women, people, children, feet, teeth, mice,
+fish / sheep, -f/-fe → -ves); plural-only (clothes, jeans, glasses, shorts
++ are / were / them, a pair of); збірні іменники (staff / company / crew
+з однинним або множинним дієсловом, узгодженість у межах речення); типові
+помилки (two hour, computers games, boxs / citys / daies, childs / peoples /
+tooths, jeans is / a trouser, informations / advices). Content-мітка —
+іменник у множині (або збірний іменник), grammar — решта слотів формули
+(число / some / a lot of / my / the, are / were / has / have, them / they).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (8 details, 53 мітки, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
+скролу на 390px).
+
+### [x] 27. Nouns — types (`nouns-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `nouns-types`.
+
+7 EGP-рядків (677-683), усі чисті FORM (A1-C1), usage points немає —
+сторінка без карток, "When it's used" не рендериться. 6 секцій: common
+nouns (determiner + noun, конкретні й абстрактні — design / damage, B1
+681); proper nouns (велика літера для людей, міст/країн, днів/місяців,
+мов/національностей, без артикля; сезони — з малої); compound nouns
+(noun / verb-ing / adjective + головний іменник, одним словом / двома /
+через дефіс, наголос на першому, множина лише на останньому); -ing як
+noun у позиції додатка (like / prefer / go / practise + -ing, після
+прийменника, A2 680); -ing як підмет + однинне дієслово (B2 682) і
+абстрактні -ing (teaching / advertising / learning, C1 683); типові
+помилки (monday / english з малої, the London / The Monika, stop bus /
+shoes shop, I like swim / Drive in a city / go to swimming, Reading
+books are). Content-мітка — іменник цього типу (для compound — головний
+іменник, однослівний compound — цілком; для -ing — сама -ing форма),
+grammar — решта слотів формули (determiner, прийменник, перша частина
+compound, like / go / practise, is / has / seems).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (7 details, 61 мітка, 0 карток, "When it's used"
+відсутній, 0 злиплих слів навколо `<mark>`/`<em>`, без горизонтального
+скролу на 390px).
 
 ### [ ] 28. Prepositions — prepositions (`prepositions-prepositions`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)

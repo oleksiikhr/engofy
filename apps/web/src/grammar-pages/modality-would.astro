@@ -1,0 +1,481 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 13 USE rows are inlined, matched by EGP index: two guidewords overlap
+// (WISHES AND PREFERENCES with 'like' on A1 and with other verbs on A2,
+// IMAGINED SITUATIONS in the present on A2 and in the past on B1). The other
+// 10 rows (affirmative, negative, questions, would have + -ed, adverbs) are
+// plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const likePoint = point(618);
+const preferencesPoint = point(624);
+const invitationsPoint = point(617);
+const imaginedPoint = point(622);
+const suggestionsPoint = point(623);
+const ifPoint = point(625);
+const imaginedPastPoint = point(631);
+const requestsPoint = point(633);
+const indirectnessPoint = point(632);
+const futureInPastPoint = point(630);
+const reportedPoint = point(634);
+const willingnessPoint = point(635);
+const habitsPoint = point(636);
+
+const inlineUsagePointIds = [
+  likePoint,
+  preferencesPoint,
+  invitationsPoint,
+  imaginedPoint,
+  suggestionsPoint,
+  ifPoint,
+  imaginedPastPoint,
+  requestsPoint,
+  indirectnessPoint,
+  futureInPastPoint,
+  reportedPoint,
+  willingnessPoint,
+  habitsPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The modal verb would: forms (would, 'd, wouldn't, Would you…?), would like / love / prefer, invitations, imagined situations and suggestions, if-sentences, would have, polite requests, less direct opinions, the past of will, past refusals and habits, and adverbs with would."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Would, 'd, wouldn't, Would…?", open: true },
+    { id: 'like', title: "I'd like… / I'd prefer…: wishes and preferences", open: false },
+    { id: 'invitations', title: 'Would you like to…? Invitations and offers', open: false },
+    { id: 'imagined', title: 'It would look awesome: imagined situations and suggestions', open: false },
+    { id: 'if', title: 'If I had the chance, I would…: if-sentences', open: false },
+    { id: 'would-have', title: "I wouldn't have known: imagined past", open: false },
+    { id: 'requests', title: 'Would you…? Would you mind…? Polite requests', open: false },
+    { id: 'indirect', title: "I'd say… / I'd recommend…: softer opinions", open: false },
+    { id: 'past-of-will', title: 'She said she would come: the past of will', open: false },
+    { id: 'past-habits', title: "He wouldn't wait / They would go: past refusals and habits", open: false },
+    { id: 'adverbs', title: 'Would really, would probably: adverbs with would', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Would is a modal verb: it never changes its form and is followed by the base form of a verb. It makes things softer and more polite (<em>I'd like a coffee</em>, <em>Would you help me?</em>), talks about situations you only imagine (<em>It would be fun</em>), and works as the past of will (<em>She said she would come</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Would, 'd, wouldn't, Would…?" id="form" open>
+    <p>
+      Would is the same for every subject — no -s, no to after it. The verb after it is the base form. In speech, would is usually shortened to 'd: <em>I'd</em>, <em>you'd</em>, <em>she'd</em>, <em>we'd</em>, <em>they'd</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "would / 'd", 'base verb']} />
+    <GrammarExample note="I'd = I would: the normal spoken form.">
+      <mark data-role="content">I'd</mark> <mark data-role="grammar">love</mark> to have a pen-friend in Japan.
+    </GrammarExample>
+    <GrammarExample note="The full form would + prefer.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">prefer</mark> Sunday afternoon.
+    </GrammarExample>
+    <p>
+      The negative is would not, or the short form wouldn't.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "would not / wouldn't", 'base verb']} />
+    <GrammarExample note="Wouldn't + believe: a common way to say something is surprising.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">believe</mark> how much they cost!
+    </GrammarExample>
+    <GrammarExample note="Would not: the full form.">
+      I think <mark data-role="grammar">we</mark> <mark data-role="content">would not</mark> <mark data-role="grammar">need</mark> much money.
+    </GrammarExample>
+    <p>
+      For a question, put would before the subject. Wouldn't…? at the start, or a tag like <em>…, wouldn't it?</em> at the end, asks the listener to agree.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'would', 'subject', 'base verb']} />
+    <GrammarExample note="A yes/no question: Would + you + let.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">let</mark> me know what you think?
+    </GrammarExample>
+    <GrammarExample note="Wouldn't + that + be: the speaker expects the answer yes.">
+      <mark data-role="content">Wouldn't</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">be</mark> wonderful?
+    </GrammarExample>
+    <GrammarExample note="Positive sentence → wouldn't it? in the tag.">
+      I think <mark data-role="grammar">it</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> fantastic, <mark data-role="content">wouldn't</mark> <mark data-role="grammar">it</mark>?
+    </GrammarExample>
+    <p>
+      Short answers repeat would: <em>Yes, I would</em> / <em>No, I wouldn't</em> — not <em>Yes, I'd</em>. Be careful: 'd can also mean had (<em>I'd seen it</em> = I had seen it). After 'd, a base verb means would; a past participle means had.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'd like… / I'd prefer…: wishes and preferences" id="like" open={false}>
+    <p>
+      Would like means want, but it is softer and more polite. It is followed by a noun or by to + verb. In speech it is almost always I'd like.
+    </p>
+    <GrammarFormula label="Would like" parts={['subject', "would / 'd", 'like', 'to + verb / noun']} />
+    <GrammarExample note="Would like + to + eat: what the writer wants.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to eat</mark> some Spanish food.
+    </GrammarExample>
+    <GrammarExample note="I'd like + to come: a polite way to say what you want to do.">
+      If possible, <mark data-role="content">I'd</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to come</mark> to see you on Tuesday afternoon.
+    </GrammarExample>
+    <GrammarExample note="I'd like + noun: ordering in a café or shop.">
+      <mark data-role="content">I'd</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">a cup of coffee</mark>, please.
+    </GrammarExample>
+    {likePoint && <GrammarUsagePointCard usagePoint={likePoint} />}
+    <p>
+      Other verbs of liking work the same way: would love (stronger than would like), would prefer (to choose one thing over another), would hate.
+    </p>
+    <GrammarFormula label="Love / prefer" parts={['subject', "would / 'd", 'love / prefer', 'to + verb / noun']} />
+    <GrammarExample note="I'd love to: a very happy yes.">
+      Bring your new CD! <mark data-role="content">I'd</mark> <mark data-role="grammar">love</mark> <mark data-role="grammar">to hear</mark> it!
+    </GrammarExample>
+    <GrammarExample note="Would prefer: choosing Sunday instead of another day.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">prefer</mark> <mark data-role="grammar">to go</mark> on Sunday, because on Sunday I have no school.
+    </GrammarExample>
+    <GrammarExample note="I'd prefer + to see: choosing tomorrow instead of today.">
+      <mark data-role="content">I'd</mark> <mark data-role="grammar">prefer</mark> <mark data-role="grammar">to see</mark> it tomorrow.
+    </GrammarExample>
+    {preferencesPoint && <GrammarUsagePointCard usagePoint={preferencesPoint} />}
+    <p>
+      Compare: <em>I like tennis</em> is true in general. <em>I'd like to play tennis</em> is what you want now or soon.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Would you like to…? Invitations and offers" id="invitations" open={false}>
+    <p>
+      Would you like…? is the usual polite way to invite someone or offer something. With a verb, use to + verb; with a thing, just the noun.
+    </p>
+    <GrammarFormula label="Question" parts={['would', 'you', 'like', 'to + verb / noun']} />
+    <GrammarExample note="Inviting a friend to play tennis.">
+      Sarah, <mark data-role="content">would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to play</mark> tennis this evening?
+    </GrammarExample>
+    <GrammarExample note="An invitation after telling a plan.">
+      I'm going to a concert on Saturday. <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to go</mark> with me?
+    </GrammarExample>
+    <GrammarExample note="An offer of a thing: like + noun.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">some tea</mark>?
+    </GrammarExample>
+    <p>
+      Answer with <em>Yes, I'd love to</em> / <em>Yes, please</em> or <em>I'm sorry, I can't</em> — not <em>Yes, I would like</em> on its own. In letters and emails, invitations often start with I would like to invite you…
+    </p>
+    <GrammarFormula label="Written invitation" parts={['I', 'would', 'like', 'to invite', 'you', 'to…']} />
+    <GrammarExample note="A formal invitation with day and time.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to invite</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to</mark> dinner at my house on Saturday at 7.30 pm.
+    </GrammarExample>
+    <GrammarExample note="An invitation to the neighbours.">
+      Dear Neighbours, <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">like</mark> <mark data-role="grammar">to invite</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to</mark> my home for dinner.
+    </GrammarExample>
+    {invitationsPoint && <GrammarUsagePointCard usagePoint={invitationsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It would look awesome: imagined situations and suggestions" id="imagined" open={false}>
+    <p>
+      Would talks about a situation you imagine — something that is not real now, or not decided yet. Will says what you expect to happen; would says what could happen if things were different.
+    </p>
+    <GrammarFormula label="Imagined situation" parts={['subject', "would / 'd", 'base verb']} />
+    <GrammarExample note="The room isn't blue yet — the speaker imagines it.">
+      I was thinking of painting my bedroom blue. <mark data-role="grammar">It</mark> <mark data-role="content">would</mark> <mark data-role="grammar">look</mark> awesome.
+    </GrammarExample>
+    <GrammarExample note="Imagining what a place would be like.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> fun there.
+    </GrammarExample>
+    <GrammarExample note="Wouldn't: imagining a negative result.">
+      <mark data-role="grammar">A bigger flat</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">cost</mark> much more.
+    </GrammarExample>
+    {imaginedPoint && <GrammarUsagePointCard usagePoint={imaginedPoint} />}
+    <p>
+      It would be + adjective makes a polite suggestion: it says what would be good, instead of telling the person what to do. After it, use to + verb or if + past simple.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['it', 'would', 'be', 'adjective', 'to + verb / if + past']} />
+    <GrammarExample note="It would be nice + to bring: a gentle suggestion.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">nice</mark> <mark data-role="grammar">to bring</mark> your new computer game.
+    </GrammarExample>
+    <GrammarExample note="If + past simple (came) — the time is still the future.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> very <mark data-role="grammar">good</mark> <mark data-role="grammar">if you came</mark> with me.
+    </GrammarExample>
+    <GrammarExample note="Suggesting a time: if you arrived.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">perfect</mark> <mark data-role="grammar">if you arrived</mark> at 7.20.
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="If I had the chance, I would…: if-sentences" id="if" open={false}>
+    <p>
+      For an imagined situation and its result, put would in the main clause and the past simple in the if-clause. The past form doesn't mean past time — it shows the situation is unreal or unlikely.
+    </p>
+    <GrammarFormula label="If-sentence" parts={['if + past simple', 'subject', "would / 'd", 'base verb']} />
+    <GrammarExample note="If + had (unreal now), then would + go.">
+      It's your decision, but <mark data-role="grammar">if I had the chance</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">go</mark> with my friends.
+    </GrammarExample>
+    <GrammarExample note="If + decided, then you'd + have.">
+      <mark data-role="grammar">If you decided to go to the country school</mark>, <mark data-role="content">you'd</mark> probably <mark data-role="grammar">have</mark> more attention.
+    </GrammarExample>
+    <p>
+      If I were you, I would… is the classic way to give advice. Use were for every subject here.
+    </p>
+    <GrammarFormula label="Advice" parts={['if I were you', 'I', "would / wouldn't", 'base verb']} />
+    <GrammarExample note="Advice with wouldn't.">
+      <mark data-role="grammar">If I were you</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">watch</mark> TV all the time.
+    </GrammarExample>
+    <GrammarExample note="An imagined choice: were able to, then wouldn't move.">
+      <mark data-role="grammar">If I were able to move</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">move</mark>, because I think this street is perfect.
+    </GrammarExample>
+    {ifPoint && <GrammarUsagePointCard usagePoint={ifPoint} />}
+    <p>
+      Compare: <em>If it rains, I'll stay home</em> (a real possibility — will) and <em>If I won the lottery, I'd buy a house</em> (imagined — would).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I wouldn't have known: imagined past" id="would-have" open={false}>
+    <p>
+      To imagine the past differently — something that could have happened but didn't — use would have + past participle.
+    </p>
+    <GrammarFormula label="Past affirmative" parts={['subject', "would have / 'd have", 'past participle']} />
+    <GrammarExample note="The answer didn't come — the writer imagines its effect.">
+      <mark data-role="grammar">That answer</mark> <mark data-role="content">would have</mark> <mark data-role="grammar">changed</mark> my life.
+    </GrammarExample>
+    <GrammarExample note="Would have after I didn't think: what the writer expected.">
+      I didn't think <mark data-role="grammar">my friend Janis</mark> <mark data-role="content">would have</mark> <mark data-role="grammar">done</mark> that.
+    </GrammarExample>
+    <GrammarFormula label="Past negative" parts={['subject', "would not have / wouldn't have", 'past participle']} />
+    <GrammarExample note="You helped, so the writer got the result.">
+      Without your help, <mark data-role="grammar">I</mark> <mark data-role="content">wouldn't have</mark> <mark data-role="grammar">got</mark> this result.
+    </GrammarExample>
+    <GrammarExample note="The full form would not have.">
+      Without that day, <mark data-role="grammar">she</mark> <mark data-role="content">would not have</mark> <mark data-role="grammar">met</mark> George.
+    </GrammarExample>
+    <p>
+      In a full if-sentence about the past, the if-clause uses the past perfect (had + past participle).
+    </p>
+    <GrammarFormula label="Past if-sentence" parts={['if + had + past participle', 'subject', "would (not) have", 'past participle']} />
+    <GrammarExample note="You did help — this imagines the opposite.">
+      <mark data-role="grammar">If you hadn't helped me</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">wouldn't have</mark> <mark data-role="grammar">known</mark> how to do that homework.
+    </GrammarExample>
+    <GrammarExample note="Past advice: If I were in your shoes + would have chosen.">
+      <mark data-role="grammar">If I were in your shoes</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">would have</mark> <mark data-role="grammar">chosen</mark> the school in the centre of town.
+    </GrammarExample>
+    <GrammarExample note="The shoes were comfortable, so the writer danced all night.">
+      <mark data-role="grammar">If I had worn uncomfortable shoes</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">wouldn't have</mark> <mark data-role="grammar">danced</mark> all the time.
+    </GrammarExample>
+    {imaginedPastPoint && <GrammarUsagePointCard usagePoint={imaginedPastPoint} />}
+    <p>
+      In speech, would have sounds like <em>would've</em> or <em>I'd've</em>. In writing, don't spell it <em>would of</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Would you…? Would you mind…? Polite requests" id="requests" open={false}>
+    <p>
+      Would you + verb asks someone to do something. It is more polite than <em>Will you…?</em> or <em>Can you…?</em>, and good for people you don't know well.
+    </p>
+    <GrammarFormula label="Request" parts={['would', 'you', '(please)', 'base verb']} />
+    <GrammarExample note="A polite request in a letter.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">tell</mark> me about your room in your next letter, please?
+    </GrammarExample>
+    <GrammarExample note="Would you please…? before the actual request.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">please</mark> <mark data-role="grammar">do</mark> me a favour?
+    </GrammarExample>
+    <p>
+      Would you mind + -ing is even more polite. Would you mind if + past simple asks for permission. Would it be possible…? is a formal way to ask for something to happen.
+    </p>
+    <GrammarFormula label="Would you mind" parts={['would', 'you', 'mind', '-ing / if + past']} />
+    <GrammarExample note="Mind + -ing: bringing, not to bring.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">mind</mark> <mark data-role="grammar">bringing</mark> a salad?
+    </GrammarExample>
+    <GrammarExample note="Mind if + met (past form): asking to change a plan.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">mind</mark> <mark data-role="grammar">if we met</mark> at 5 o'clock instead of 4?
+    </GrammarExample>
+    <GrammarExample note="Would it be possible + for you + to meet.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">be possible</mark> for you to meet me later that day, around 7?
+    </GrammarExample>
+    {requestsPoint && <GrammarUsagePointCard usagePoint={requestsPoint} />}
+    <p>
+      Careful with the answer to Would you mind…? — it means "Is it a problem for you?", so the polite yes is <em>No, not at all</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'd say… / I'd recommend…: softer opinions" id="indirect" open={false}>
+    <p>
+      With verbs like say, advise, recommend, imagine and think, would makes an opinion or advice sound less direct and more polite — as if you are only offering it.
+    </p>
+    <GrammarFormula label="Softer opinion" parts={['I', "would / 'd", 'say / advise / recommend', '…']} />
+    <GrammarExample note="I'd advise you to…: friendly advice.">
+      <mark data-role="content">I'd</mark> <mark data-role="grammar">advise</mark> you to go with your friends — I bet you'll have so much fun!
+    </GrammarExample>
+    <GrammarExample note="I'd recommend: a suggestion, not an order.">
+      If you want my opinion, <mark data-role="content">I'd</mark> <mark data-role="grammar">recommend</mark> the countryside.
+    </GrammarExample>
+    <GrammarExample note="I'd say: introducing a conclusion politely.">
+      Finally, <mark data-role="content">I'd</mark> <mark data-role="grammar">say</mark> that you should talk with your parents.
+    </GrammarExample>
+    <GrammarExample note="The full form would say, common in writing.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">say</mark> that it is better to choose the large school.
+    </GrammarExample>
+    {indirectnessPoint && <GrammarUsagePointCard usagePoint={indirectnessPoint} />}
+    <p>
+      Compare: <em>You should go</em> (direct) and <em>I'd say you should go</em> (softer). <em>I imagine…</em> and <em>I'd imagine…</em> mean almost the same, but the second sounds less certain.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She said she would come: the past of will" id="past-of-will" open={false}>
+    <p>
+      Looking back from a moment in the past, would talks about what was still in the future then. It often follows thought, knew, was sure, hoped.
+    </p>
+    <GrammarFormula label="Future in the past" parts={['thought / knew…', 'subject', 'would', 'base verb']} />
+    <GrammarExample note="At the time of seeing them, the party was still in the future.">
+      When I saw them, <mark data-role="grammar">I thought</mark> <mark data-role="grammar">they</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> great for tonight's party.
+    </GrammarExample>
+    <GrammarExample note="An expectation before the film — it turned out wrong.">
+      <mark data-role="grammar">We thought</mark> that <mark data-role="grammar">the film</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> horrible because of the title.
+    </GrammarExample>
+    <GrammarExample note="A question about the future, asked in the past.">
+      <mark data-role="grammar">She asked me</mark> if <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">play</mark> the game with her on Saturday.
+    </GrammarExample>
+    {futureInPastPoint && <GrammarUsagePointCard usagePoint={futureInPastPoint} />}
+    <p>
+      In reported speech, will in the original words usually becomes would after said, told, promised.
+    </p>
+    <GrammarFormula label="Reported speech" parts={['said / told…', '(that)', 'subject', 'would', 'base verb']} />
+    <GrammarExample note="Her words: “I will come on the 21st.”">
+      <mark data-role="grammar">She said</mark> that <mark data-role="grammar">she</mark> <mark data-role="content">would</mark> <mark data-role="grammar">come</mark> on the 21st of June.
+    </GrammarExample>
+    <GrammarExample note="His words: “You will like it.”">
+      <mark data-role="grammar">He told me</mark> <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">like</mark> it, and he was right!
+    </GrammarExample>
+    <GrammarExample note="A promise, reported: “I'll call you.”">
+      <mark data-role="grammar">He promised</mark> <mark data-role="grammar">he</mark> <mark data-role="content">would</mark> <mark data-role="grammar">call</mark> me.
+    </GrammarExample>
+    {reportedPoint && <GrammarUsagePointCard usagePoint={reportedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="He wouldn't wait / They would go: past refusals and habits" id="past-habits" open={false}>
+    <p>
+      Wouldn't is the past of won't in the sense of refusing: someone didn't want to do something, or something didn't work.
+    </p>
+    <GrammarFormula label="Past refusal" parts={['subject', "wouldn't / would not", 'base verb']} />
+    <GrammarExample note="The driver refused to wait.">
+      We had to leave without you because <mark data-role="grammar">the bus driver</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">wait</mark>.
+    </GrammarExample>
+    <GrammarExample note="The parents refused to allow it.">
+      It was all I wanted, but <mark data-role="grammar">my parents</mark> <mark data-role="content">would not</mark> <mark data-role="grammar">allow</mark> me to buy it.
+    </GrammarExample>
+    <GrammarExample note="A thing that 'refused': the door didn't open.">
+      <mark data-role="grammar">The door</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">open</mark>.
+    </GrammarExample>
+    {willingnessPoint && <GrammarUsagePointCard usagePoint={willingnessPoint} />}
+    <p>
+      Would + verb also describes actions that happened again and again in the past — typical of stories and memories. It needs a past time context first.
+    </p>
+    <GrammarFormula label="Past habit" parts={['subject', "would / 'd", 'base verb']} />
+    <GrammarExample note="A repeated action at last year's job.">
+      I worked very hard. <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">spend</mark> a lot of hours at work.
+    </GrammarExample>
+    <GrammarExample note="A repeated action in a story: every night.">
+      At night <mark data-role="grammar">they</mark> <mark data-role="content">would</mark> <mark data-role="grammar">go</mark> to the rocky seaside and light a fire.
+    </GrammarExample>
+    {habitsPoint && <GrammarUsagePointCard usagePoint={habitsPoint} />}
+    <p>
+      Would works only for repeated actions, not for past states: <em>We used to live in Kyiv</em>, not <em>We would live in Kyiv</em>. Used to works for both.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Would really, would probably: adverbs with would" id="adverbs" open={false}>
+    <p>
+      Adverbs like really, probably, certainly, definitely usually go between would and the main verb. They make an opinion stronger or weaker.
+    </p>
+    <GrammarFormula label="With an adverb" parts={['subject', 'would', 'adverb', 'base verb']} />
+    <GrammarExample note="Would really + enjoy: a strong opinion.">
+      I think that <mark data-role="grammar">you</mark> <mark data-role="content">would</mark> <mark data-role="grammar">really</mark> <mark data-role="grammar">enjoy</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Would probably + be: a less certain opinion.">
+      In my opinion, <mark data-role="grammar">it</mark> <mark data-role="content">would</mark> <mark data-role="grammar">probably</mark> <mark data-role="grammar">be</mark> the best idea to choose the biggest school.
+    </GrammarExample>
+    <GrammarExample note="Would definitely + choose.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">definitely</mark> <mark data-role="grammar">choose</mark> to live by the sea!
+    </GrammarExample>
+    <p>
+      In more formal writing, a wider range is common: strongly, easily, gladly, undoubtedly, significantly.
+    </p>
+    <GrammarExample note="Would strongly recommend: formal advice in a report.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">strongly</mark> <mark data-role="grammar">recommend</mark> the following changes.
+    </GrammarExample>
+    <GrammarExample note="Would easily fit: a confident prediction in a reference letter.">
+      I believe that <mark data-role="grammar">Nascha</mark> <mark data-role="content">would</mark> <mark data-role="grammar">easily</mark> <mark data-role="grammar">fit</mark> into a family with small children.
+    </GrammarExample>
+    <GrammarExample note="Would significantly increase: a formal proposal.">
+      <mark data-role="grammar">Family activities</mark> <mark data-role="content">would</mark> <mark data-role="grammar">significantly</mark> <mark data-role="grammar">increase</mark> membership.
+    </GrammarExample>
+    <p>
+      With the negative, probably and definitely usually go before wouldn't: <em>She probably wouldn't agree.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After would, the verb is the bare base form — no to, no -s. After would like / love / prefer, the next verb takes to.
+    </p>
+    <GrammarContrast
+      bad={['I would to go with you.', 'She would comes if she could.', 'I would like go to the cinema.']}
+      good={['I would go with you.', 'She would come if she could.', 'I would like to go to the cinema.']}
+    />
+    <p>
+      Don't use would in the if-clause. Use the past simple (or had + past participle for the past).
+    </p>
+    <GrammarContrast
+      bad={['If I would have more time, I would travel.', "If you would have helped me, I wouldn't have failed."]}
+      good={['If I had more time, I would travel.', "If you had helped me, I wouldn't have failed."]}
+    />
+    <p>
+      I like and I'd like are different: the first is in general, the second is a wish now.
+    </p>
+    <GrammarContrast
+      bad={['I like a coffee, please.', 'Do you like to come to my party?']}
+      good={["I'd like a coffee, please.", 'Would you like to come to my party?']}
+    />
+    <p>
+      Short answers use the full would; would have is never would of; would is for past actions, not past states.
+    </p>
+    <GrammarContrast
+      bad={["Would you help me? — Yes, I'd.", 'I would of called you.', 'When I was a child, we would live near the sea.']}
+      good={['Would you help me? — Yes, I would.', 'I would have called you.', 'When I was a child, we used to live near the sea.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-will',
+        name: 'will',
+        note: "the present form: Will you…?, won't for refusal, and will for present habits.",
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditional clauses',
+        note: 'if-sentences in full: real, unreal and past conditions.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'how will, can, is… change when you report what someone said.',
+      },
+      {
+        slug: 'modality-used-to',
+        name: 'used to',
+        note: 'past habits and past states (would works only for habits).',
+      },
+    ]}
+  />
+</GrammarShell>

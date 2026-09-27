@@ -1,0 +1,278 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 11 of this construction's EGP rows are plain FORM (no usage point), so
+// nothing is inlined and the generic "When it's used" block has nothing to
+// show — every rule is written in full below anyway, per "FORM-факти без
+// usage point — це нормально".
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to turn a statement into a question: move be, have, do or a modal in front of the subject, add a wh- word for open questions, drop do when who or what is the subject, and build negative questions with isn't, don't and didn't."
+  handcrafted
+  sections={[
+    { id: 'be', title: 'Questions with be', open: true },
+    { id: 'auxiliary', title: 'Auxiliary be and have', open: false },
+    { id: 'do', title: 'Ordinary verbs: do, does, did', open: false },
+    { id: 'modal', title: 'With a modal verb', open: false },
+    { id: 'wh-object', title: 'Wh- questions', open: false },
+    { id: 'wh-subject', title: 'When who or what is the subject', open: false },
+    { id: 'which-whose', title: 'Which and whose', open: false },
+    { id: 'negative', title: 'Negative questions', open: false },
+    { id: 'adverb', title: 'Adding ever, still, usually', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      An interrogative clause asks something instead of stating it. English
+      marks this by word order: one small verb moves in front of the subject.
+      The only question is which verb that is. Every section below answers it
+      for a different kind of sentence.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Questions with be" id="be" open>
+    <p>
+      When the only verb in the sentence is <em>be</em>, it moves in front of
+      the subject. Nothing else is added. <em>You are OK</em> becomes{' '}
+      <em>Are you OK?</em>
+    </p>
+    <GrammarFormula label="Be first" parts={['am / is / are / was / were', 'subject', 'complement']} />
+    <GrammarExample note="Are has swapped places with you. That swap is all it takes to make the question.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> OK?
+    </GrammarExample>
+    <GrammarExample note="The same with is and a longer subject: all of she comes after is.">
+      <mark data-role="content">Is</mark> <mark data-role="grammar">your sister</mark> at home?
+    </GrammarExample>
+    <GrammarExample note="A question word can go in front, and be still comes before the subject.">
+      How <mark data-role="content">are</mark> <mark data-role="grammar">you</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Auxiliary be and have" id="auxiliary" open={false}>
+    <p>
+      In a continuous form (<em>are going</em>) or a perfect form (<em>have
+      bought</em>), only the auxiliary moves to the front. The rest of the
+      verb stays after the subject.
+    </p>
+    <GrammarFormula label="Auxiliary first" parts={['be / have', 'subject', 'verb (-ing / past participle)']} />
+    <GrammarExample note="Are moves to the front; going stays behind you.">
+      <mark data-role="content">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">going</mark> to the new art class?
+    </GrammarExample>
+    <GrammarExample note="Have got works the same way: have goes first, got stays after the subject.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">got</mark> a new dress for the party?
+    </GrammarExample>
+    <GrammarExample note="In a perfect form, has moves and the past participle stays.">
+      <mark data-role="content">Has</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">finished</mark> his homework?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Ordinary verbs: do, does, did" id="do" open={false}>
+    <p>
+      An ordinary verb like <em>like</em>, <em>remember</em> or <em>buy</em>{' '}
+      can't move in front of the subject. English adds <em>do</em> to do that
+      job instead. <em>Do</em> also takes the tense and the <em>-s</em>, so the
+      main verb goes back to its base form.
+    </p>
+    <GrammarFormula label="Do-support" parts={['do / does / did', 'subject', 'verb (base form)']} />
+    <GrammarExample note="Do comes first; remember stays in its base form.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">remember</mark> Julie?
+    </GrammarExample>
+    <GrammarExample note="Does takes the -s for he / she / it, so it's live, not lives.">
+      <mark data-role="content">Does</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">live</mark> near here?
+    </GrammarExample>
+    <GrammarExample note="Did takes the past tense, so it's buy, not bought.">
+      <mark data-role="content">Did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">buy</mark> a new mobile phone?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="With a modal verb" id="modal" open={false}>
+    <p>
+      A modal verb (<em>can</em>, <em>will</em>, <em>would</em>,{' '}
+      <em>shall</em> …) behaves like <em>be</em>. It moves in front of the
+      subject by itself, with no <em>do</em>, and the main verb stays in its
+      base form.
+    </p>
+    <GrammarFormula label="Modal first" parts={['modal', 'subject', 'verb (base form)']} />
+    <GrammarExample note="Can moves in front of I; come stays in its base form.">
+      <mark data-role="content">Can</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">come</mark> tomorrow to collect it?
+    </GrammarExample>
+    <GrammarExample note="Would you like …? is the standard polite way to offer or invite.">
+      <mark data-role="content">Would</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> to come with me?
+    </GrammarExample>
+    <GrammarExample note="Shall we …? makes a suggestion about something to do together.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark> at 7.30?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Wh- questions" id="wh-object" open={false}>
+    <p>
+      A yes/no question can only be answered with <em>yes</em> or{' '}
+      <em>no</em>. To ask for information, put a wh- word (<em>what</em>,{' '}
+      <em>where</em>, <em>when</em>, <em>why</em>, <em>who</em>,{' '}
+      <em>how</em>) at the very start. After it comes the same question order
+      as above: be, auxiliary, do or modal, then the subject.
+    </p>
+    <GrammarFormula label="Wh- question" parts={['wh- word', 'be / auxiliary / do / modal', 'subject', '(verb)']} />
+    <GrammarExample note="Where, then did, then you: the question order is the same as in Did you go?">
+      <mark data-role="grammar">Where</mark> <mark data-role="content">did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark>?
+    </GrammarExample>
+    <GrammarExample note="With a perfect form, have moves in front of you, just as in a yes/no question.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">bought</mark>?
+    </GrammarExample>
+    <GrammarExample note="A modal works the same way after the wh- word.">
+      <mark data-role="grammar">When</mark> <mark data-role="content">can</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="When who or what is the subject" id="wh-subject" open={false}>
+    <p>
+      In every question above, the wh- word asks about the object or some
+      other part of the sentence, and the subject is a separate word (you, we,
+      she). When <em>who</em> or <em>what</em> is itself the subject, there's
+      nothing to swap with. The clause keeps statement order and uses no{' '}
+      <em>do</em>: the wh- word goes in the subject slot, and the verb follows
+      in its normal tense.
+    </p>
+    <GrammarFormula label="Wh- subject" parts={['who / what', 'verb']} />
+    <GrammarExample note="What is the subject here, the thing that happened, so it's happened with no did.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">happened</mark>?
+    </GrammarExample>
+    <GrammarExample note="Who is the subject, so the verb takes the normal -s: knows, not does … know.">
+      <mark data-role="grammar">Who</mark> <mark data-role="content">knows</mark>?
+    </GrammarExample>
+    <p>Compare the two kinds of question built from the same idea:</p>
+    <GrammarExample note="Who is the object here (you called someone), so did comes in: question order.">
+      <mark data-role="grammar">Who</mark> <mark data-role="content">did</mark> <mark data-role="grammar">you</mark> call?
+    </GrammarExample>
+    <GrammarExample note="Who is the subject here (someone called you), so there's no did.">
+      <mark data-role="grammar">Who</mark> <mark data-role="content">called</mark> you?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Which and whose" id="which-whose" open={false}>
+    <p>
+      <em>Which</em> (a choice from a known set) and <em>whose</em> (who
+      something belongs to) usually come with a noun straight after them. The
+      whole phrase, like <em>which bus</em> or <em>whose bag</em>, then works
+      like a single wh- word, and all the rules above apply to it.
+    </p>
+    <GrammarFormula label="Which / whose" parts={['which / whose + noun', 'be / auxiliary / do / modal', 'subject', '(verb)']} />
+    <GrammarExample note="Which bus is the object, so do comes before you: normal question order.">
+      <mark data-role="content">Which</mark> <mark data-role="grammar">bus</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> take to work?
+    </GrammarExample>
+    <GrammarExample note="With be, whose bag comes first and is comes next.">
+      <mark data-role="content">Whose</mark> <mark data-role="grammar">bag</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">this</mark>?
+    </GrammarExample>
+    <GrammarExample note="Which team is the subject here, so there's no did, as with who and what above.">
+      <mark data-role="content">Which</mark> <mark data-role="grammar">team</mark> <mark data-role="grammar">won</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Negative questions" id="negative" open={false}>
+    <p>
+      To make a question negative, attach <em>n't</em> to the verb that moved
+      to the front: <em>isn't</em>, <em>don't</em>, <em>didn't</em>,{' '}
+      <em>couldn't</em>. A negative yes/no question usually expects the answer{' '}
+      <em>yes</em>, or shows surprise.
+    </p>
+    <GrammarFormula label="Negative" parts={["be / auxiliary / do / modal + n't", 'subject', '(verb)']} />
+    <GrammarExample note="The speaker expects you to agree: yes, it is great.">
+      <mark data-role="content">Isn't</mark> <mark data-role="grammar">it</mark> great?
+    </GrammarExample>
+    <GrammarExample note="Surprise: the speaker thought everyone liked pizza.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark> pizza?
+    </GrammarExample>
+    <GrammarExample note="The speaker is sure they did, and is checking.">
+      I bought one. <mark data-role="content">Didn't</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">tell</mark> you?
+    </GrammarExample>
+    <p>
+      A wh- word can go in front of a negative question too. The most common
+      is <em>why</em>. <em>Why don't we …?</em> and <em>Why don't you …?</em>{' '}
+      are often friendly suggestions, not real questions.
+    </p>
+    <GrammarExample note="A suggestion. It means about the same as Let's watch a film.">
+      <mark data-role="grammar">Why</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">watch</mark> a film?
+    </GrammarExample>
+    <GrammarExample note="A real question about the past, and often a mild complaint.">
+      <mark data-role="grammar">Why</mark> <mark data-role="content">didn't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> with me?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Adding ever, still, usually" id="adverb" open={false}>
+    <p>
+      Adverbs like <em>ever</em>, <em>still</em>, <em>usually</em> and{' '}
+      <em>always</em> go in the middle of the question, after the subject and
+      before the main verb. They don't go before the verb at the front. The
+      same position works in negative questions.
+    </p>
+    <GrammarFormula label="Mid position" parts={['be / auxiliary / do / modal', 'subject', 'adverb', 'verb']} />
+    <GrammarExample note="Ever sits between you and been, not before have.">
+      <mark data-role="grammar">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">ever</mark> <mark data-role="grammar">been</mark> to Marseille?
+    </GrammarExample>
+    <GrammarExample note="In a wh- question the adverb goes in the same place: after you, before read.">
+      What kind of books <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="content">usually</mark> <mark data-role="grammar">read</mark>?
+    </GrammarExample>
+    <GrammarExample note="Still also goes between the subject and the verb.">
+      <mark data-role="grammar">Do</mark> <mark data-role="grammar">you</mark> <mark data-role="content">still</mark> <mark data-role="grammar">remember</mark> my best friend?
+    </GrammarExample>
+    <GrammarExample note="In a negative question n't stays on the front verb, and ever still goes after the subject.">
+      Why <mark data-role="grammar">don't</mark> <mark data-role="grammar">you</mark> <mark data-role="content">ever</mark> <mark data-role="grammar">listen</mark> to me?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      Four mistakes are the most common. The first is leaving a wh- question
+      in statement order. The second is putting the tense on both{' '}
+      <em>do</em> and the main verb. The third is adding <em>did</em> when{' '}
+      <em>who</em> is the subject. The fourth is leaving <em>n't</em> after
+      the subject instead of attaching it to the front verb.
+    </p>
+    <GrammarContrast
+      bad={['Where you went yesterday?', 'Does she lives near here?', 'Who did call you?', "Why you don't come with us?"]}
+      good={['Where did you go yesterday?', 'Does she live near here?', 'Who called you?', "Why don't you come with us?"]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-declarative',
+        name: 'declarative clauses',
+        note: 'the statement order (subject before verb) that a question changes.',
+      },
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'how yes/no questions are used and answered, including short answers.',
+      },
+      {
+        slug: 'questions-wh',
+        name: 'wh- questions',
+        note: 'the full set of wh- words and what each one asks about.',
+      },
+      {
+        slug: 'questions-tags',
+        name: 'question tags',
+        note: "turning a statement into a question by adding a short tag like isn't it? at the end.",
+      },
+    ]}
+  />
+</GrammarShell>

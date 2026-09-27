@@ -1,0 +1,245 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 6 EGP rows (684-689: -s, -es, -ies, irregular plurals, plural-only
+// nouns, collective nouns) are plain FORM rows — no usage points, so no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to make English nouns plural: add -s, -es after s/sh/ch/x/z/o, change consonant + y to -ies, learn the irregular ones (children, people, teeth), and use plural-only and collective nouns with the right verb."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Games, minutes, trees: add -s', open: true },
+    { id: 'es', title: 'Classes, dishes, boxes: add -es', open: false },
+    { id: 'ies', title: 'Hobbies, parties: consonant + y → -ies', open: false },
+    { id: 'irregular', title: 'Children, people, teeth: irregular plurals', open: false },
+    { id: 'plural-only', title: 'Clothes, jeans, glasses: plural-only nouns', open: false },
+    { id: 'collective', title: 'The staff is / the staff are: collective nouns', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      A plural noun means more than one: <em>one game</em>, <em>two games</em>. Most nouns just add <em>-s</em>. A few spelling rules cover the rest (<em>classes</em>, <em>hobbies</em>), a small group of everyday nouns change completely (<em>children</em>, <em>teeth</em>), and some nouns exist only in the plural (<em>clothes</em>, <em>jeans</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Games, minutes, trees: add -s" id="form" open>
+    <p>
+      To make a countable noun plural, add <em>-s</em>. Use the plural after numbers above one, after <em>some</em>, <em>a lot of</em>, <em>many</em>, and when you talk about things in general.
+    </p>
+    <GrammarFormula label="Plural" parts={['two / some / a lot of', 'noun + -s']} />
+    <GrammarExample note="Five + minute → minutes.">
+      You have to walk just <mark data-role="grammar">5</mark> <mark data-role="content">minutes</mark> down the road.
+    </GrammarExample>
+    <GrammarExample note="A lot of + flower → flowers; tree → trees.">
+      There are <mark data-role="grammar">a lot of</mark> <mark data-role="content">flowers</mark> and nice <mark data-role="content">trees</mark>.
+    </GrammarExample>
+    <GrammarExample note="Games in general: no number, no article.">
+      We play computer <mark data-role="content">games</mark>.
+    </GrammarExample>
+    <p>
+      The <em>-s</em> has three sounds: /s/ after p, t, k, f (<em>books</em>, <em>cats</em>), /z/ after most other sounds (<em>games</em>, <em>trees</em>), and an extra syllable /ɪz/ after s, z, sh, ch, x (<em>classes</em>, <em>boxes</em> — next section).
+    </p>
+    <p>
+      In noun + noun, only the last noun becomes plural: <em>computer games</em>, not <em>computers games</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Classes, dishes, boxes: add -es" id="es" open={false}>
+    <p>
+      When a noun ends in <em>-s</em>, <em>-ss</em>, <em>-sh</em>, <em>-ch</em>, <em>-x</em> or <em>-z</em>, add <em>-es</em>. The ending is an extra syllable, so it needs the extra <em>e</em>: <em>class</em> → <em>classes</em> (two syllables).
+    </p>
+    <GrammarFormula label="-es" parts={['noun ending in s / sh / ch / x / z', '-es']} />
+    <GrammarExample note="Class → classes.">
+      The art <mark data-role="content">classes</mark> after school are on Tuesdays.
+    </GrammarExample>
+    <GrammarExample note="Five + dress → dresses.">
+      Then I bought <mark data-role="grammar">five</mark> different <mark data-role="content">dresses</mark>.
+    </GrammarExample>
+    <GrammarExample note="Some + sandwich → sandwiches; brush → brushes.">
+      Bring <mark data-role="grammar">some</mark> <mark data-role="content">sandwiches</mark> and drinks, and <mark data-role="grammar">some</mark> paint <mark data-role="content">brushes</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two + box → boxes.">
+      I bought a box of chocolates and <mark data-role="grammar">2</mark> <mark data-role="content">boxes</mark> of pens.
+    </GrammarExample>
+    <p>
+      Some common nouns ending in <em>-o</em> also take <em>-es</em>: <em>potatoes</em>, <em>tomatoes</em>, <em>heroes</em>. Many others, especially short or borrowed words, take just <em>-s</em>: <em>photos</em>, <em>pianos</em>, <em>radios</em>, <em>videos</em>, <em>zoos</em>.
+    </p>
+    <GrammarExample note="Potato → potatoes; dish → dishes.">
+      Usually it is meat and <mark data-role="content">potatoes</mark> or special <mark data-role="content">dishes</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Hobbies, parties: consonant + y → -ies" id="ies" open={false}>
+    <p>
+      When a noun ends in a consonant + <em>y</em>, change the <em>y</em> to <em>i</em> and add <em>-es</em>: <em>hobby</em> → <em>hobbies</em>, <em>city</em> → <em>cities</em>.
+    </p>
+    <GrammarFormula label="-ies" parts={['consonant + y', 'y → i', '-es']} />
+    <GrammarExample note="A lot of + hobby → hobbies.">
+      I have <mark data-role="grammar">a lot of</mark> <mark data-role="content">hobbies</mark>.
+    </GrammarExample>
+    <GrammarExample note="Lots of + activity → activities.">
+      There were <mark data-role="grammar">lots of</mark> <mark data-role="content">activities</mark> to do.
+    </GrammarExample>
+    <GrammarExample note="A lot of + party → parties.">
+      I bought some new clothes because I have <mark data-role="grammar">a lot of</mark> <mark data-role="content">parties</mark> this month.
+    </GrammarExample>
+    <p>
+      When a <em>vowel</em> comes before the <em>y</em> (<em>ay</em>, <em>ey</em>, <em>oy</em>), just add <em>-s</em>: <em>days</em>, <em>keys</em>, <em>boys</em>.
+    </p>
+    <GrammarExample note="Vowel + y: day → days, not daies.">
+      I stayed there for <mark data-role="grammar">three</mark> <mark data-role="content">days</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Children, people, teeth: irregular plurals" id="irregular" open={false}>
+    <p>
+      A small group of very common nouns don't add <em>-s</em> at all. They change the vowel or the ending, so they have to be learned one by one.
+    </p>
+    <GrammarFormula label="Irregular" parts={['singular', 'new plural form']} />
+    <ul>
+      <li><em>man</em> → <em>men</em>, <em>woman</em> → <em>women</em>, <em>person</em> → <em>people</em>, <em>child</em> → <em>children</em></li>
+      <li><em>foot</em> → <em>feet</em>, <em>tooth</em> → <em>teeth</em>, <em>mouse</em> → <em>mice</em></li>
+      <li>same form for one and many: <em>fish</em>, <em>sheep</em></li>
+      <li><em>-f</em> / <em>-fe</em> → <em>-ves</em>: <em>knife</em> → <em>knives</em>, <em>wife</em> → <em>wives</em>, <em>half</em> → <em>halves</em>, <em>life</em> → <em>lives</em></li>
+    </ul>
+    <GrammarExample note="My + child → children.">
+      I bought some clothes for <mark data-role="grammar">my</mark> <mark data-role="content">children</mark>.
+    </GrammarExample>
+    <GrammarExample note="Nice + tooth → teeth.">
+      She has a beautiful round face and nice <mark data-role="content">teeth</mark>.
+    </GrammarExample>
+    <GrammarExample note="Mouse → mice, with a plural verb.">
+      The floor has many holes and I think <mark data-role="grammar">there are</mark> <mark data-role="content">mice</mark>.
+    </GrammarExample>
+    <GrammarExample note="Person → people; one person, a lot of people.">
+      <mark data-role="grammar">A lot of</mark> <mark data-role="content">people</mark> <mark data-role="grammar">were</mark> at the party.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Clothes, jeans, glasses: plural-only nouns" id="plural-only" open={false}>
+    <p>
+      Some nouns exist only in the plural. Many are things made of two matching parts: <em>jeans</em>, <em>trousers</em>, <em>shorts</em>, <em>glasses</em>, <em>scissors</em>. <em>Clothes</em> is also always plural. They take a plural verb (<em>are</em>, <em>were</em>) and <em>they</em> / <em>them</em>, never <em>a</em>.
+    </p>
+    <GrammarFormula label="Plural only" parts={['the / my / some', 'plural-only noun', 'are / were']} />
+    <GrammarExample note="The clothes + are.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">clothes</mark> <mark data-role="grammar">are</mark> very cheap in this shop.
+    </GrammarExample>
+    <GrammarExample note="The jeans + were.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">jeans</mark> <mark data-role="grammar">were</mark> expensive, but the other things were very cheap.
+    </GrammarExample>
+    <GrammarExample note="My glasses → them, not it.">
+      I left <mark data-role="grammar">my</mark> <mark data-role="content">glasses</mark> in your house. I need <mark data-role="grammar">them</mark>, because I can't see anything.
+    </GrammarExample>
+    <GrammarExample note="Some shorts, not a short.">
+      Please wear <mark data-role="grammar">some</mark> <mark data-role="content">shorts</mark> and a shirt.
+    </GrammarExample>
+    <p>
+      To count them, use <em>a pair of</em>: <em>a pair of jeans</em>, <em>two pairs of glasses</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The staff is / the staff are: collective nouns" id="collective" open={false}>
+    <p>
+      A collective noun names a group of people: <em>staff</em>, <em>team</em>, <em>family</em>, <em>company</em>, <em>crew</em>, <em>class</em>, <em>government</em>. It is singular in form. Usually it takes a singular verb, because you see the group as one unit.
+    </p>
+    <GrammarFormula label="One unit" parts={['collective noun', 'is / has / singular verb']} />
+    <GrammarExample note="The company as one organisation: has.">
+      A TV <mark data-role="content">company</mark> <mark data-role="grammar">has</mark> decided to make a film in my school.
+    </GrammarExample>
+    <GrammarExample note="The staff as one group: is.">
+      The <mark data-role="content">staff</mark> <mark data-role="grammar">is</mark> friendly and polite with guests.
+    </GrammarExample>
+    <p>
+      When you think of the separate people in the group, a plural verb is also correct, especially in British English. Pronouns then follow: <em>they</em>, not <em>it</em>.
+    </p>
+    <GrammarFormula label="The people in it" parts={['collective noun', 'are / have / plural verb']} />
+    <GrammarExample note="Each member of staff starts work: have.">
+      After the spring break the whole <mark data-role="content">staff</mark> <mark data-role="grammar">have</mark> to start work at 7.15.
+    </GrammarExample>
+    <GrammarExample note="The crew as people with feelings: were, they.">
+      The <mark data-role="content">crew</mark> <mark data-role="grammar">were</mark> very interested, and <mark data-role="grammar">they</mark> were amazed at the colours.
+    </GrammarExample>
+    <p>
+      Either choice is fine, but keep it the same within one sentence: <em>The team is ready and it…</em> or <em>The team are ready and they…</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Use the plural after a number above one, and pluralise only the last noun in noun + noun.
+    </p>
+    <GrammarContrast
+      bad={['I waited two hour.', 'I like computers games.']}
+      good={['I waited two hours.', 'I like computer games.']}
+    />
+    <p>
+      Check the spelling rule: <em>-es</em> after s / sh / ch / x, <em>-ies</em> only after a consonant.
+    </p>
+    <GrammarContrast
+      bad={['two boxs', 'three citys', 'five daies']}
+      good={['two boxes', 'three cities', 'five days']}
+    />
+    <p>
+      Irregular plurals never take an extra <em>-s</em>.
+    </p>
+    <GrammarContrast
+      bad={['My childs are at school.', 'Many peoples came.', 'I brush my tooths.']}
+      good={['My children are at school.', 'Many people came.', 'I brush my teeth.']}
+    />
+    <p>
+      Plural-only nouns take a plural verb and no <em>a</em>.
+    </p>
+    <GrammarContrast
+      bad={['My jeans is new.', 'I need a new trouser.']}
+      good={['My jeans are new.', 'I need new trousers. / I need a new pair of trousers.']}
+    />
+    <p>
+      Uncountable nouns have no plural at all.
+    </p>
+    <GrammarContrast
+      bad={['Thank you for the informations.', 'He gave me some advices.']}
+      good={['Thank you for the information.', 'He gave me some advice.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-uncountable',
+        name: 'uncountable nouns',
+        note: 'information, advice, furniture — nouns with no plural form.',
+      },
+      {
+        slug: 'nouns-types',
+        name: 'types of nouns',
+        note: 'countable vs uncountable, common vs proper.',
+      },
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity words',
+        note: 'many, a lot of, some — which go with plural nouns.',
+      },
+      {
+        slug: 'verbs-there-is-are',
+        name: 'there is / there are',
+        note: 'there are + a plural noun.',
+      },
+    ]}
+  />
+</GrammarShell>

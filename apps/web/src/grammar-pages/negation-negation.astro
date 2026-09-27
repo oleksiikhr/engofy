@@ -1,0 +1,572 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 12 USE / FORM/USE rows are inlined, matched by EGP index. The other 19
+// rows (not after be / auxiliaries / modals, don't / didn't, imperatives,
+// negative questions, no / any / much / many, indefinite pronouns, ever /
+// never / yet / still, I don't think, not + non-finite clause, neither of /
+// none of, none as a substitute, not all / not every) are plain FORM rows,
+// written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const warningPoint = point(1203);
+const agreementPoint = point(1188);
+const hedgingPoint = point(1199);
+const fewPoint = point(1200);
+const notEmphasisPoint = point(1192);
+const whatsoeverPoint = point(1201);
+const inTheLeastPoint = point(1205);
+const notAPoint = point(1202);
+const neitherNorPoint = point(1194);
+const neitherInvertedPoint = point(1204);
+const neverInvertedPoint = point(1193);
+const notOnlyPoint = point(1198);
+
+const inlineUsagePointIds = [
+  warningPoint,
+  agreementPoint,
+  hedgingPoint,
+  fewPoint,
+  notEmphasisPoint,
+  whatsoeverPoint,
+  inTheLeastPoint,
+  notAPoint,
+  neitherNorPoint,
+  neitherInvertedPoint,
+  neverInvertedPoint,
+  notOnlyPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to make English sentences negative: not after be, auxiliaries and modals, don't / doesn't / didn't, negative imperatives, negative questions and tags, no / any / nothing / nobody, none of and neither of, never / yet / still, I don't think, softer negatives, emphatic negatives, neither … nor, and inversion after never and not only."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Isn't, can't, haven't: not after be and auxiliaries", open: true },
+    { id: 'do', title: "Don't, doesn't, didn't + verb", open: false },
+    { id: 'imperatives', title: "Don't be late! Negative commands", open: false },
+    { id: 'questions', title: "Don't you…? Aren't you…? Negative questions and tags", open: false },
+    { id: 'no-any', title: 'No money, not any, nothing, nobody', open: false },
+    { id: 'none-neither', title: 'None of, neither of, not all, not every', open: false },
+    { id: 'adverbs', title: 'Never, ever, yet, still', open: false },
+    { id: 'think', title: "I don't think it will…", open: false },
+    { id: 'softer', title: 'Not necessarily, not really, few: softer negatives', open: false },
+    { id: 'emphasis', title: 'Do not, whatsoever, in the least, not a single: strong negatives', open: false },
+    { id: 'neither-nor', title: 'Neither … nor, Neither did I', open: false },
+    { id: 'inversion', title: 'Never have I…, Not only was it…: inversion', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      To make an English sentence negative, put not after the first auxiliary verb (<em>is not</em>, <em>can't</em>, <em>haven't</em>). If there is no auxiliary, add do: <em>I don't know</em>, <em>She didn't come</em>. Use only one negative word in a clause: <em>I don't have any money</em> or <em>I have no money</em> — never both.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Isn't, can't, haven't: not after be and auxiliaries" id="form" open>
+    <p>
+      With the verb be, put not straight after it. In speech and informal writing, use the short forms: <em>I'm not</em>, <em>isn't</em>, <em>aren't</em>, <em>wasn't</em>, <em>weren't</em>.
+    </p>
+    <GrammarFormula label="Be" parts={['subject', 'am / is / are', "not / n't", 'noun / adjective']} />
+    <GrammarExample note="The full form: is not.">
+      <mark data-role="grammar">My college</mark> <mark data-role="grammar">is</mark> <mark data-role="content">not</mark> <mark data-role="grammar">very big</mark>.
+    </GrammarExample>
+    <GrammarExample note="I'm not: there is no short form amn't.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">not</mark> <mark data-role="grammar">a good swimmer</mark>.
+    </GrammarExample>
+    <GrammarExample note="Isn't = is not: the normal spoken form.">
+      <mark data-role="grammar">This place</mark> <mark data-role="content">isn't</mark> <mark data-role="grammar">big</mark>.
+    </GrammarExample>
+    <p>
+      The same rule works for the auxiliaries be and have in continuous and perfect tenses: not goes after the auxiliary, before the -ing form or past participle.
+    </p>
+    <GrammarFormula label="Auxiliary" parts={['subject', 'be / have', "not / n't", '-ing / past participle']} />
+    <GrammarExample note="Present continuous: is not + working.">
+      <mark data-role="grammar">The gas</mark> <mark data-role="grammar">is</mark> <mark data-role="content">not</mark> <mark data-role="grammar">working</mark>.
+    </GrammarExample>
+    <GrammarExample note="Present perfect: haven't + tidied.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">haven't</mark> <mark data-role="grammar">tidied</mark> my room since I bought this mobile.
+    </GrammarExample>
+    <GrammarExample note="Past continuous: wasn't + going.">
+      It was raining for seventy-two hours and <mark data-role="grammar">it</mark> <mark data-role="content">wasn't</mark> <mark data-role="grammar">going</mark> to stop.
+    </GrammarExample>
+    <GrammarExample note="Past perfect: hadn't + expected.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">hadn't</mark> <mark data-role="grammar">expected</mark> to receive a letter from her.
+    </GrammarExample>
+    <p>
+      Modal verbs work the same way: <em>can't</em> (cannot — written as one word), <em>couldn't</em>, <em>won't</em> (will not), <em>wouldn't</em>, <em>shouldn't</em>, <em>mustn't</em>.
+    </p>
+    <GrammarFormula label="Modal" parts={['subject', "modal + not / n't", 'base verb']} />
+    <GrammarExample note="Can't + go.">
+      In winter, <mark data-role="grammar">we</mark> <mark data-role="content">can't</mark> <mark data-role="grammar">go</mark> visiting because it is too cold.
+    </GrammarExample>
+    <GrammarExample note="Won't = will not.">
+      Sorry, but <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">be</mark> in town on Wednesday.
+    </GrammarExample>
+    <GrammarExample note="Shouldn't + wear: advice not to do something.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">shouldn't</mark> <mark data-role="grammar">wear</mark> formal clothes.
+    </GrammarExample>
+    <p>
+      In British English, have got also makes its negative with not after have: <em>I haven't got any money</em>, <em>We have not got hot water</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Don't, doesn't, didn't + verb" id="do" open={false}>
+    <p>
+      In the present simple and past simple there is no auxiliary, so add one: do. Use don't with I / you / we / they, doesn't with he / she / it, and didn't for everyone in the past. The main verb goes back to its base form — the -s or -ed moves onto do.
+    </p>
+    <GrammarFormula label="Present" parts={['subject', "don't / doesn't", 'base verb']} />
+    <GrammarExample note="Don't + have.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">have</mark> a dining room, so we eat in the living room.
+    </GrammarExample>
+    <GrammarExample note="Don't + like.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">like</mark> the other lessons.
+    </GrammarExample>
+    <GrammarExample note="He / she / it → doesn't + base verb (not doesn't lives).">
+      <mark data-role="grammar">My brother</mark> <mark data-role="content">doesn't</mark> <mark data-role="grammar">live</mark> with us any more.
+    </GrammarExample>
+    <GrammarFormula label="Past" parts={['subject', "didn't", 'base verb']} />
+    <GrammarExample note="Didn't + come (not didn't came).">
+      It was very sad that <mark data-role="grammar">you</mark> <mark data-role="content">didn't</mark> <mark data-role="grammar">come</mark> to my birthday party.
+    </GrammarExample>
+    <GrammarExample note="Didn't + spend.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">didn't</mark> <mark data-role="grammar">spend</mark> a lot of money: only £143.
+    </GrammarExample>
+    <p>
+      Don't add do when there is already an auxiliary or a modal: <em>I can't swim</em>, not <em>I don't can swim</em>. The verb be never takes do either — except in commands (<em>Don't be late</em>, next section).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Don't be late! Negative commands" id="imperatives" open={false}>
+    <p>
+      To tell someone not to do something, put don't before the base verb. There is no subject. This works for be too.
+    </p>
+    <GrammarFormula label="Imperative" parts={["don't", 'base verb']} />
+    <GrammarExample note="Don't + forget: a reminder.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">forget</mark> your electric guitar.
+    </GrammarExample>
+    <GrammarExample note="Don't + be: the only time be takes do.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">be</mark> late.
+    </GrammarExample>
+    <GrammarExample note="Don't + bring: telling a guest not to bring anything.">
+      Come at 5 pm. <mark data-role="content">Don't</mark> <mark data-role="grammar">bring</mark> anything.
+    </GrammarExample>
+    <p>
+      Adding you after don't makes the command a strong warning or an angry telling-off. It is spoken and emotional — often with ever, or with the fixed phrase Don't you dare.
+    </p>
+    <GrammarFormula label="Warning" parts={["don't", 'you', '(ever / dare)', 'base verb']} />
+    <GrammarExample note="Don't you + ever + do: never do this again.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">ever</mark> <mark data-role="grammar">do</mark> that again!
+    </GrammarExample>
+    <GrammarExample note="Don't you dare: a complete sentence on its own.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">dare</mark>!
+    </GrammarExample>
+    <GrammarExample note="Don't you dare + forget: a playful but strong order.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">dare</mark> <mark data-role="grammar">forget</mark> me — I want letters from you!
+    </GrammarExample>
+    {warningPoint && <GrammarUsagePointCard usagePoint={warningPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Don't you…? Aren't you…? Negative questions and tags" id="questions" open={false}>
+    <p>
+      A negative question starts with the short negative form: <em>Don't you…?</em>, <em>Isn't it…?</em>, <em>Can't you…?</em>. The n't stays attached to the auxiliary, before the subject.
+    </p>
+    <GrammarFormula label="Negative question" parts={["auxiliary + n't", 'subject', 'verb / adjective']} />
+    <GrammarExample note="Can't you + go: suggesting another way.">
+      <mark data-role="content">Can't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark> with your parents some time and with your friends later?
+    </GrammarExample>
+    <GrammarExample note="Aren't you + excited: the speaker expects yes.">
+      <mark data-role="content">Aren't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">excited</mark> about it?
+    </GrammarExample>
+    <p>
+      A question tag goes at the end of a sentence. After a positive sentence, the tag is negative.
+    </p>
+    <GrammarFormula label="Question tag" parts={['positive sentence', "auxiliary + n't", 'pronoun?']} />
+    <GrammarExample note="You're … → aren't you?">
+      <mark data-role="grammar">You're</mark> free on Saturday, <mark data-role="content">aren't</mark> <mark data-role="grammar">you</mark>?
+    </GrammarExample>
+    <GrammarExample note="It would … → wouldn't it?">
+      I think <mark data-role="grammar">it would</mark> be fantastic, <mark data-role="content">wouldn't</mark> <mark data-role="grammar">it</mark>?
+    </GrammarExample>
+    <p>
+      Both forms are rarely real questions. The speaker already thinks the answer is yes and wants the listener to agree, or wants to check something they believe is true.
+    </p>
+    <GrammarExample note="Isn't it + marvellous: sharing excitement.">
+      <mark data-role="content">Isn't</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">marvellous</mark>?
+    </GrammarExample>
+    <GrammarExample note="Don't you think…? — a very common way to ask for agreement.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">think</mark> it's fantastic?
+    </GrammarExample>
+    <GrammarExample note="You love … → don't you? Checking what you believe.">
+      <mark data-role="grammar">You love</mark> books, <mark data-role="content">don't</mark> <mark data-role="grammar">you</mark>?
+    </GrammarExample>
+    {agreementPoint && <GrammarUsagePointCard usagePoint={agreementPoint} />}
+    <p>
+      Answer about the facts, not the question: <em>Aren't you tired? — Yes, I am</em> (I am tired) / <em>No, I'm not</em> (I'm not tired).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="No money, not any, nothing, nobody" id="no-any" open={false}>
+    <p>
+      There are two ways to say zero: a negative verb + any, or a positive verb + no. They mean the same; no is a little stronger. Never use both in one clause.
+    </p>
+    <GrammarFormula label="Not … any" parts={["don't / haven't / didn't…", 'any', 'noun']} />
+    <GrammarExample note="Didn't have + any + plural noun.">
+      I bought them because <mark data-role="grammar">I</mark> <mark data-role="content">didn't</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">any</mark> <mark data-role="grammar">shirts</mark>.
+    </GrammarExample>
+    <GrammarFormula label="No" parts={['positive verb', 'no', 'noun']} />
+    <GrammarExample note="Have + no + money: the verb is positive.">
+      Now <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> <mark data-role="content">no</mark> <mark data-role="grammar">money</mark> because the clothes cost £250.
+    </GrammarExample>
+    <GrammarExample note="Had + no + clothes.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">had</mark> <mark data-role="content">no</mark> <mark data-role="grammar">clothes</mark> to wear at John's party, so I went shopping.
+    </GrammarExample>
+    <p>
+      Much and many are common in negative sentences: much with uncountable nouns, many with plurals. In positive sentences, a lot of is more natural.
+    </p>
+    <GrammarFormula label="Not much / many" parts={['negative verb', 'much / many', 'noun']} />
+    <GrammarExample note="Haven't got + many + plural noun.">
+      Here <mark data-role="grammar">I</mark> <mark data-role="content">haven't</mark> <mark data-role="grammar">got</mark> <mark data-role="grammar">many</mark> <mark data-role="grammar">things</mark> to do.
+    </GrammarExample>
+    <GrammarExample note="Don't have + much + uncountable noun.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">much</mark> <mark data-role="grammar">time</mark>.
+    </GrammarExample>
+    <p>
+      The same two patterns work with pronouns: not … anything / anyone / anybody, or nothing / no one / nobody with a positive verb. Any, much and many can also stand alone as pronouns: <em>I haven't got any</em>, <em>I don't have many</em>.
+    </p>
+    <GrammarFormula label="Pronoun" parts={['negative verb', 'anything / anyone']} />
+    <GrammarExample note="Haven't seen + anything.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">haven't</mark> <mark data-role="grammar">seen</mark> <mark data-role="grammar">anything</mark> yet.
+    </GrammarExample>
+    <GrammarExample note="Didn't tell + anyone.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">didn't</mark> <mark data-role="grammar">tell</mark> <mark data-role="grammar">anyone</mark> about this story at first.
+    </GrammarExample>
+    <GrammarFormula label="Pronoun" parts={['positive verb', 'nothing / nobody / no one']} />
+    <GrammarExample note="Had + nothing: the verb had is positive.">
+      <mark data-role="grammar">I</mark> said <mark data-role="grammar">I</mark> <mark data-role="grammar">had</mark> <mark data-role="content">nothing</mark>, but he didn't believe me.
+    </GrammarExample>
+    <GrammarExample note="Nobody as the subject: the verb is positive.">
+      <mark data-role="content">Nobody</mark> <mark data-role="grammar">came</mark> to the meeting.
+    </GrammarExample>
+    <p>
+      When the negative word is the subject, you must use nobody / nothing / no — <em>Anybody didn't come</em> is wrong; say <em>Nobody came</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="None of, neither of, not all, not every" id="none-neither" open={false}>
+    <p>
+      None of (zero from a group of three or more) and neither of (zero from two) are already negative, so the verb after them is positive. They are followed by a pronoun (us, them) or by the / my + noun.
+    </p>
+    <GrammarFormula label="None / neither of" parts={['none of / neither of', 'us / them / the + noun', 'positive verb']} />
+    <GrammarExample note="Neither of + us + is: two people, neither one.">
+      <mark data-role="content">Neither of</mark> <mark data-role="grammar">us</mark> <mark data-role="grammar">is</mark> responsible in this case.
+    </GrammarExample>
+    <GrammarExample note="None of + my friends + are: a group, zero of them.">
+      <mark data-role="content">None of</mark> <mark data-role="grammar">my friends</mark> <mark data-role="grammar">are</mark> interested, so there is no one I can talk to.
+    </GrammarExample>
+    <GrammarExample note="None of + them + spoke: positive past verb.">
+      We met a French group, and as <mark data-role="content">none of</mark> <mark data-role="grammar">them</mark> <mark data-role="grammar">spoke</mark> English, we stayed with them to translate.
+    </GrammarExample>
+    <p>
+      Neither of + noun takes a singular verb in careful English (<em>neither of us is</em>); with none of, both is and are are fine. None can also stand alone, replacing a noun that was already mentioned.
+    </p>
+    <GrammarFormula label="None alone" parts={['… none']} />
+    <GrammarExample note="None = no special requirements.">
+      I am glad to tell you that <mark data-role="grammar">there are</mark> <mark data-role="content">none</mark> this year.
+    </GrammarExample>
+    <GrammarExample note="A one-word answer to a question.">
+      Problems when using English? <mark data-role="content">None</mark>.
+    </GrammarExample>
+    <p>
+      Not all / not every / not everyone means some, but not 100% — it is different from none. Put not at the very start of the phrase.
+    </p>
+    <GrammarFormula label="Not all" parts={['not', 'all / every / everyone / everything', '(noun)', 'verb']} />
+    <GrammarExample note="Not everyone = some people don't.">
+      <mark data-role="content">Not</mark> <mark data-role="grammar">everyone</mark> <mark data-role="grammar">likes</mark> sports or music.
+    </GrammarExample>
+    <GrammarExample note="Not everything = some things weren't.">
+      <mark data-role="content">Not</mark> <mark data-role="grammar">everything</mark> <mark data-role="grammar">was</mark> as good as we expected.
+    </GrammarExample>
+    <GrammarExample note="Not every + singular noun.">
+      <mark data-role="content">Not</mark> <mark data-role="grammar">every</mark> <mark data-role="grammar">cyclist</mark> <mark data-role="grammar">is</mark> a danger to the public.
+    </GrammarExample>
+    <GrammarExample note="Not all + plural noun.">
+      <mark data-role="content">Not</mark> <mark data-role="grammar">all</mark> <mark data-role="grammar">students</mark> <mark data-role="grammar">can attend</mark> the centre, as it is not always open.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Never, ever, yet, still" id="adverbs" open={false}>
+    <p>
+      Never means not ever, so it is used with a positive verb. Ever is used after a negative word (not, nobody, nothing). Yet goes at the end of a negative sentence: the thing hasn't happened, but you expect it. Still goes before the negative auxiliary: the situation hasn't changed.
+    </p>
+    <GrammarFormula label="Never" parts={['subject', 'never', 'positive verb']} />
+    <GrammarExample note="Never + rained: not didn't never rain.">
+      I stayed there for two weeks and <mark data-role="grammar">it</mark> <mark data-role="content">never</mark> <mark data-role="grammar">rained</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Ever" parts={['negative word', '… ever', 'verb']} />
+    <GrammarExample note="Nobody + will ever + know.">
+      <mark data-role="grammar">Nobody</mark> <mark data-role="grammar">will</mark> <mark data-role="content">ever</mark> <mark data-role="grammar">know</mark> who that man was.
+    </GrammarExample>
+    <GrammarFormula label="Yet" parts={["subject + haven't / hasn't", 'past participle', 'yet']} />
+    <GrammarExample note="Not yet, but soon.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">haven't</mark> <mark data-role="grammar">decided</mark> <mark data-role="content">yet</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Still" parts={['subject', 'still', "don't / can't / haven't…", 'verb']} />
+    <GrammarExample note="Still + don't: still comes before the negative.">
+      But <mark data-role="grammar">I</mark> <mark data-role="content">still</mark> <mark data-role="grammar">don't</mark> <mark data-role="grammar">believe</mark> her.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I don't think it will…" id="think" open={false}>
+    <p>
+      With think, believe, suppose and expect, English puts the negative on the thinking verb, not in the clause after it. <em>I don't think it's true</em> is the normal way to say it; <em>I think it isn't true</em> sounds unnatural.
+    </p>
+    <GrammarFormula label="Negative thinking" parts={['I', "don't", 'think / believe', '(that) + positive clause']} />
+    <GrammarExample note="Don't think + it'll help (not I think it won't help).">
+      But <mark data-role="grammar">I</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">think</mark> <mark data-role="grammar">it'll help you</mark>.
+    </GrammarExample>
+    <GrammarExample note="Don't think + I'll live.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">think</mark> <mark data-role="grammar">I'll live here forever</mark>, because I plan to move.
+    </GrammarExample>
+    <GrammarExample note="Don't believe + that … will be returned.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">believe</mark> <mark data-role="grammar">that the suitcase will be returned</mark> to me.
+    </GrammarExample>
+    <p>
+      Short answers use so / not: <em>Will it rain? — I don't think so</em> or <em>I hope not</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Not necessarily, not really, few: softer negatives" id="softer" open={false}>
+    <p>
+      Not can also go before a phrase that has no main verb of its own: an -ing form, a to-infinitive, an adjective, or a phrase left short because the rest is clear.
+    </p>
+    <GrammarFormula label="Not + phrase" parts={['not', '-ing / to + verb / adjective / phrase']} />
+    <GrammarExample note="For + not + being: not before an -ing form.">
+      I would like to apologise for <mark data-role="content">not</mark> <mark data-role="grammar">being</mark> able to attend on Friday.
+    </GrammarExample>
+    <GrammarExample note="Quiet and + not + crowded: not before an adjective.">
+      It will be quiet and <mark data-role="content">not</mark> <mark data-role="grammar">crowded</mark>.
+    </GrammarExample>
+    <GrammarExample note="And + not + to the small school: the verb go is left out.">
+      It will be better for you to go to a large school and <mark data-role="content">not</mark> <mark data-role="grammar">to the small school</mark>.
+    </GrammarExample>
+    <GrammarExample note="Not this time: a short phrase instead of a full sentence.">
+      Every time a small envelope arrived, I ripped it open as fast as I could. <mark data-role="content">Not</mark> <mark data-role="grammar">this time</mark>.
+    </GrammarExample>
+    <p>
+      To make a negative less direct, put an adverb like necessarily, really or actually after not. It is common in essays and polite disagreement.
+    </p>
+    <GrammarFormula label="Hedging" parts={['be / auxiliary', 'not', 'necessarily / really / actually', '…']} />
+    <GrammarExample note="Not necessarily = maybe not; it depends.">
+      <mark data-role="grammar">This</mark> <mark data-role="grammar">is</mark> <mark data-role="content">not</mark> <mark data-role="grammar">necessarily</mark> the way the older generation would see it.
+    </GrammarExample>
+    <GrammarExample note="Not really: a gentle way to say no.">
+      Organising the entertainment <mark data-role="grammar">is</mark> <mark data-role="content">not</mark> <mark data-role="grammar">really</mark> my thing.
+    </GrammarExample>
+    <GrammarExample note="Do not actually think: a careful personal opinion.">
+      Personally, <mark data-role="grammar">I</mark> <mark data-role="grammar">do</mark> <mark data-role="content">not</mark> <mark data-role="grammar">actually</mark> <mark data-role="grammar">think</mark> that this relationship will change.
+    </GrammarExample>
+    {hedgingPoint && <GrammarUsagePointCard usagePoint={hedgingPoint} />}
+    <p>
+      In formal writing, few (without a) means not many people. It is negative in meaning: <em>few managed</em> = most people didn't manage. Compare a few, which is positive: <em>a few managed</em> = some did.
+    </p>
+    <GrammarFormula label="Few" parts={['(very) few', '(people / of + noun)', 'verb']} />
+    <GrammarExample note="Few = hardly any of them.">
+      They were sent to Britain to improve their English, but <mark data-role="content">few</mark> <mark data-role="grammar">had</mark> any real contact with the language.
+    </GrammarExample>
+    <GrammarExample note="Very few = almost nobody.">
+      Most people can speak a bit of English, but <mark data-role="content">very few</mark> <mark data-role="grammar">speak</mark> it correctly.
+    </GrammarExample>
+    <GrammarExample note="Everyone tried, but few succeeded.">
+      Everyone tried to conquer them, but <mark data-role="content">few</mark> <mark data-role="grammar">managed</mark>.
+    </GrammarExample>
+    {fewPoint && <GrammarUsagePointCard usagePoint={fewPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Do not, whatsoever, in the least, not a single: strong negatives" id="emphasis" open={false}>
+    <p>
+      The full forms do not, cannot, will not are stronger than don't, can't, won't. Use them in formal writing, in rules and instructions, and in speech when you want to stress the not.
+    </p>
+    <GrammarFormula label="Full form" parts={['do / can / will…', 'not', 'base verb']} />
+    <GrammarExample note="Do not: a firm instruction.">
+      <mark data-role="grammar">Do</mark> <mark data-role="content">not</mark> <mark data-role="grammar">take on</mark> too many tasks at a time.
+    </GrammarExample>
+    <GrammarExample note="Cannot: formal, and one word.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">cannot</mark> <mark data-role="grammar">agree</mark> with you, Mr Brown.
+    </GrammarExample>
+    <GrammarExample note="Will not: a strong statement in an essay.">
+      <mark data-role="grammar">Keeping them in zoos</mark> <mark data-role="grammar">will</mark> <mark data-role="content">not</mark> <mark data-role="grammar">help</mark> them.
+    </GrammarExample>
+    {notEmphasisPoint && <GrammarUsagePointCard usagePoint={notEmphasisPoint} />}
+    <p>
+      Whatsoever after no + noun or nothing means not even a little. It is fairly formal.
+    </p>
+    <GrammarFormula label="Whatsoever" parts={['no + noun / nothing', 'whatsoever']} />
+    <GrammarExample note="No + experience + whatsoever.">
+      Waiting tables would be boring, and <mark data-role="grammar">we</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">no experience</mark> <mark data-role="content">whatsoever</mark>.
+    </GrammarExample>
+    <GrammarExample note="No + effect + whatsoever: formal, in a contract.">
+      There shall be <mark data-role="grammar">no effect</mark> <mark data-role="content">whatsoever</mark> on their rights.
+    </GrammarExample>
+    {whatsoeverPoint && <GrammarUsagePointCard usagePoint={whatsoeverPoint} />}
+    <p>
+      In the least after a negative verb, or before an adjective, means not at all.
+    </p>
+    <GrammarFormula label="In the least" parts={['negative verb', '(adjective)', 'in the least']} />
+    <GrammarExample note="Does not discourage her + in the least.">
+      She has lost her little brother, but <mark data-role="grammar">that</mark> <mark data-role="grammar">does not discourage</mark> her <mark data-role="content">in the least</mark>.
+    </GrammarExample>
+    <GrammarExample note="Is not + in the least + interested.">
+      <mark data-role="grammar">The director</mark> <mark data-role="grammar">is not</mark> <mark data-role="content">in the least</mark> <mark data-role="grammar">interested</mark> in quality.
+    </GrammarExample>
+    <GrammarExample note="Doesn't matter + in the least.">
+      What others say <mark data-role="grammar">doesn't matter</mark> <mark data-role="content">in the least</mark>.
+    </GrammarExample>
+    {inTheLeastPoint && <GrammarUsagePointCard usagePoint={inTheLeastPoint} />}
+    <p>
+      Not a (single) + noun at the start of a sentence means not even one. It is literary and dramatic, often followed by a passive.
+    </p>
+    <GrammarFormula label="Not a single" parts={['not a (single)', 'noun', 'verb']} />
+    <GrammarExample note="Not a single + noise + could be heard.">
+      <mark data-role="content">Not a single</mark> <mark data-role="grammar">noise</mark> <mark data-role="grammar">could be heard</mark> from any of the rooms.
+    </GrammarExample>
+    <GrammarExample note="Not a single + member + would have imagined.">
+      <mark data-role="content">Not a single</mark> <mark data-role="grammar">member</mark> of the group <mark data-role="grammar">would have imagined</mark> that the coach would break down.
+    </GrammarExample>
+    {notAPoint && <GrammarUsagePointCard usagePoint={notAPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Neither … nor, Neither did I" id="neither-nor" open={false}>
+    <p>
+      Neither … nor joins two words, phrases or clauses and makes both negative: not this and not that. The verb stays positive.
+    </p>
+    <GrammarFormula label="Neither … nor" parts={['neither', 'A', 'nor', 'B']} />
+    <GrammarExample note="Neither + you + nor + I: two subjects.">
+      <mark data-role="content">Neither</mark> <mark data-role="grammar">you</mark> <mark data-role="content">nor</mark> <mark data-role="grammar">I</mark> would like that.
+    </GrammarExample>
+    <GrammarExample note="Neither + eat + nor + drink: two verbs after can.">
+      We can <mark data-role="content">neither</mark> <mark data-role="grammar">eat</mark> <mark data-role="content">nor</mark> <mark data-role="grammar">drink</mark> during the lessons.
+    </GrammarExample>
+    <GrammarExample note="Neither + climbed + nor + surfed: two past participles.">
+      I have <mark data-role="content">neither</mark> <mark data-role="grammar">climbed</mark> <mark data-role="content">nor</mark> <mark data-role="grammar">surfed</mark> before, so that would be exciting for me.
+    </GrammarExample>
+    {neitherNorPoint && <GrammarUsagePointCard usagePoint={neitherNorPoint} />}
+    <p>
+      To add a second negative point after a negative sentence, start with Neither or Nor, then put the auxiliary before the subject (like a question). In conversation this gives <em>Neither do I</em> / <em>Nor can I</em>; in writing it adds another negative fact.
+    </p>
+    <GrammarFormula label="Adding a negative" parts={['Neither / Nor', 'auxiliary', 'subject', 'verb']} />
+    <GrammarExample note="Nor + is + it: a second thing that is not possible.">
+      It is not possible to have a conversation without shouting. <mark data-role="content">Nor</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">possible</mark> to watch television in peace.
+    </GrammarExample>
+    <GrammarExample note="Neither + did + I + oppose.">
+      At first, I didn't pay attention to all her magazines. <mark data-role="content">Neither</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">oppose</mark> her need to get new clothes every month.
+    </GrammarExample>
+    <GrammarExample note="Short reply: Neither + do + I (= I don't either).">
+      I don't like horror films. — <mark data-role="content">Neither</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">I</mark>.
+    </GrammarExample>
+    {neitherInvertedPoint && <GrammarUsagePointCard usagePoint={neitherInvertedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Never have I…, Not only was it…: inversion" id="inversion" open={false}>
+    <p>
+      For strong emphasis, especially in writing, you can move never to the start of the sentence. Then the auxiliary comes before the subject, like in a question.
+    </p>
+    <GrammarFormula label="Never inversion" parts={['Never', 'have / had / did…', 'subject', 'verb']} />
+    <GrammarExample note="Never + have + I + seen (= I have never seen).">
+      <mark data-role="content">Never</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">seen</mark> such a realistic and impressive film.
+    </GrammarExample>
+    <GrammarExample note="Never + had + I + thought (= I had never thought).">
+      <mark data-role="content">Never</mark> <mark data-role="grammar">had</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">thought</mark> that my parents would do this to me.
+    </GrammarExample>
+    {neverInvertedPoint && <GrammarUsagePointCard usagePoint={neverInvertedPoint} />}
+    <p>
+      Not only at the start works the same way: auxiliary (or do / does / did) before the subject. The second part often has but … also.
+    </p>
+    <GrammarFormula label="Not only" parts={['Not only', 'auxiliary / do', 'subject', 'verb', '(but) … also']} />
+    <GrammarExample note="Not only + was + it; but it was also.">
+      <mark data-role="content">Not only</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">it</mark> in a wonderful location, <mark data-role="grammar">but</mark> it was <mark data-role="grammar">also</mark> very easy to reach.
+    </GrammarExample>
+    <GrammarExample note="Not only + do + they + have; they also.">
+      <mark data-role="content">Not only</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">have</mark> the biggest turnover, they <mark data-role="grammar">also</mark> managed to increase it every year.
+    </GrammarExample>
+    {notOnlyPoint && <GrammarUsagePointCard usagePoint={notOnlyPoint} />}
+    <p>
+      Without inversion the meaning is the same, just less emphatic: <em>I have never seen…</em>, <em>It was not only in a wonderful location, but…</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Standard English uses one negative per clause. Two negatives (not + nothing, don't + never) are a mistake.
+    </p>
+    <GrammarContrast
+      bad={["I don't have nothing.", "I didn't see nobody.", "We don't never go out."]}
+      good={["I don't have anything. / I have nothing.", "I didn't see anybody. / I saw nobody.", 'We never go out.']}
+    />
+    <p>
+      After don't / doesn't / didn't, the verb is the base form. Use doesn't with he / she / it, and never put no or not straight before a main verb.
+    </p>
+    <GrammarContrast
+      bad={["She don't like coffee.", "He doesn't lives here.", "I didn't went to school.", 'I no like it.']}
+      good={["She doesn't like coffee.", "He doesn't live here.", "I didn't go to school.", "I don't like it."]}
+    />
+    <p>
+      Don't add do to be or to modal verbs.
+    </p>
+    <GrammarContrast
+      bad={["I don't be hungry.", "I don't can swim.", "He doesn't must go."]}
+      good={["I'm not hungry.", "I can't swim.", "He mustn't go. / He doesn't have to go."]}
+    />
+    <p>
+      Put the negative on think; a negative subject needs no / nobody, not any; after never at the start, invert.
+    </p>
+    <GrammarContrast
+      bad={["I think it isn't a good idea.", "Anybody didn't come.", 'Never I have seen such a film.']}
+      good={["I don't think it's a good idea.", 'Nobody came.', 'Never have I seen such a film.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'questions-tags',
+        name: 'question tags',
+        note: "…, aren't you? / …, is it? — how to choose the right tag.",
+      },
+      {
+        slug: 'pronouns-indefinite-thing-one-body-etc',
+        name: 'indefinite pronouns',
+        note: 'anything, nothing, nobody, someone — the whole set.',
+      },
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity words',
+        note: 'no, any, much, many, few and neither with nouns.',
+      },
+      {
+        slug: 'focus-focus',
+        name: 'focus',
+        note: 'other ways to put words at the front for emphasis.',
+      },
+    ]}
+  />
+</GrammarShell>

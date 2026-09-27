@@ -1,0 +1,227 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 5 EGP rows (698-702: subject, object, complement of a preposition,
+// complement of be, time adjunct) are plain FORM rows — no usage points, so
+// no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Where a noun phrase goes in an English sentence: as the subject, as the object, after a preposition, after be and there is, and as a time expression like next week with no preposition."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'My friends are from Poland: the subject', open: true },
+    { id: 'object', title: 'I love my house: the object', open: false },
+    { id: 'preposition', title: 'In my house, for dinner: after a preposition', open: false },
+    { id: 'be', title: 'He is a student, there is a garden: after be', open: false },
+    { id: 'time', title: 'Next week, tomorrow morning: time without a preposition', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      A noun phrase (<em>my friends</em>, <em>a big garden</em>, <em>next week</em>) can do different jobs in a sentence. Its place tells you its job: before the verb it is the subject, after the verb it is the object, after a preposition or after <em>be</em> it completes them, and some time phrases stand on their own with no preposition at all.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="My friends are from Poland: the subject" id="form" open>
+    <p>
+      The subject is who or what the sentence is about. In a statement it comes first, before the verb. The verb agrees with it: a singular subject takes <em>is</em> / <em>lives</em>, a plural one takes <em>are</em> / <em>live</em>.
+    </p>
+    <GrammarFormula label="Subject" parts={['noun phrase', 'verb', '…']} />
+    <GrammarExample note="Singular subject (his name) + is.">
+      <mark data-role="content">His name</mark> <mark data-role="grammar">is</mark> Stanislav.
+    </GrammarExample>
+    <GrammarExample note="Plural subject (my friends) + are.">
+      <mark data-role="content">My friends</mark> <mark data-role="grammar">are</mark> from Poland and Hungary.
+    </GrammarExample>
+    <GrammarExample note="The subject can be long; the verb agrees with the head noun, class.">
+      <mark data-role="content">The English class at my college</mark> <mark data-role="grammar">starts</mark> at nine.
+    </GrammarExample>
+    <p>
+      English always needs a subject. If there is no noun phrase, use a pronoun such as <em>it</em>, <em>he</em> or <em>they</em> in its place.
+    </p>
+    <GrammarExample note="It replaces the noun phrase my house.">
+      I like <mark data-role="content">my house</mark>. <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> very comfortable.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I love my house: the object" id="object" open={false}>
+    <p>
+      The object is the person or thing the verb acts on. It comes straight after the verb, with no preposition in between.
+    </p>
+    <GrammarFormula label="Object" parts={['subject', 'verb', 'noun phrase']} />
+    <GrammarExample note="Love + my house.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">love</mark> <mark data-role="content">my house</mark>.
+    </GrammarExample>
+    <GrammarExample note="Visit + my family.">
+      When I have time, <mark data-role="grammar">I</mark> <mark data-role="grammar">visit</mark> <mark data-role="content">my family</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two clauses, two objects: a new phone, the old one.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">bought</mark> <mark data-role="content">a new phone</mark>, so <mark data-role="grammar">she</mark> <mark data-role="grammar">sold</mark> <mark data-role="content">the old one</mark>.
+    </GrammarExample>
+    <p>
+      Some verbs take two objects: the person first, then the thing.
+    </p>
+    <GrammarFormula label="Two objects" parts={['subject', 'verb', 'person', 'thing']} />
+    <GrammarExample note="Gave + my sister + a present.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">gave</mark> <mark data-role="content">my sister</mark> <mark data-role="content">a present</mark>.
+    </GrammarExample>
+    <p>
+      Word order does the work that case endings do in many languages: the noun phrase before the verb is the subject, the one after it is the object. Swap them and the meaning changes.
+    </p>
+    <GrammarContrast
+      good={['The dog bit my brother. (the dog did it)', 'My brother bit the dog. (my brother did it)']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="In my house, for dinner: after a preposition" id="preposition" open={false}>
+    <p>
+      A preposition (<em>in</em>, <em>for</em>, <em>with</em>, <em>at</em>, <em>to</em>) never stands alone: a noun phrase follows it and completes it. Together they make a prepositional phrase.
+    </p>
+    <GrammarFormula label="After a preposition" parts={['preposition', 'noun phrase']} />
+    <GrammarExample note="In + my house.">
+      I like everything <mark data-role="grammar">in</mark> <mark data-role="content">my house</mark>.
+    </GrammarExample>
+    <GrammarExample note="To + my house; for + dinner.">
+      Come <mark data-role="grammar">to</mark> <mark data-role="content">my house</mark> <mark data-role="grammar">for</mark> <mark data-role="content">dinner</mark> on Saturday.
+    </GrammarExample>
+    <GrammarExample note="With + my friends; at + the weekend.">
+      I play football <mark data-role="grammar">with</mark> <mark data-role="content">my friends</mark> <mark data-role="grammar">at</mark> <mark data-role="content">the weekend</mark>.
+    </GrammarExample>
+    <p>
+      A pronoun after a preposition takes its object form: <em>with me</em>, <em>for him</em>, <em>to them</em> — not <em>with I</em>.
+    </p>
+    <GrammarExample note="For + her, not for she.">
+      This present is <mark data-role="grammar">for</mark> <mark data-role="content">her</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="He is a student, there is a garden: after be" id="be" open={false}>
+    <p>
+      After <em>be</em>, a noun phrase says who or what the subject is. It is not an object — it describes the subject, so it refers to the same person or thing.
+    </p>
+    <GrammarFormula label="After be" parts={['subject', 'be', 'noun phrase']} />
+    <GrammarExample note="He = a student.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">is</mark> <mark data-role="content">a student at B6 College</mark>.
+    </GrammarExample>
+    <GrammarExample note="Introducing yourself: it's + name.">
+      Hi Rie, <mark data-role="grammar">it's</mark> <mark data-role="content">Mohamad</mark>.
+    </GrammarExample>
+    <GrammarExample note="Plural subject, plural noun phrase: good friends.">
+      <mark data-role="grammar">Anna and Tom</mark> <mark data-role="grammar">are</mark> <mark data-role="content">my best friends</mark>.
+    </GrammarExample>
+    <p>
+      With a singular job or role, keep the a / an: <em>She is a doctor</em>, not <em>She is doctor</em>.
+    </p>
+    <p>
+      <em>There is</em> / <em>there are</em> introduces something new. The noun phrase comes after <em>be</em>, and <em>be</em> agrees with it.
+    </p>
+    <GrammarFormula label="There is / are" parts={['there', 'is / are', 'noun phrase']} />
+    <GrammarExample note="There is + a singular noun phrase.">
+      <mark data-role="grammar">There</mark> <mark data-role="grammar">is</mark> <mark data-role="content">a big garden</mark> behind the house.
+    </GrammarExample>
+    <GrammarExample note="There are + a plural noun phrase.">
+      <mark data-role="grammar">There</mark> <mark data-role="grammar">are</mark> <mark data-role="content">two supermarkets</mark> near my flat.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Next week, tomorrow morning: time without a preposition" id="time" open={false}>
+    <p>
+      Most time phrases need a preposition: <em>on Monday</em>, <em>in May</em>, <em>at 6 o'clock</em>. But a noun phrase that starts with <em>next</em>, <em>last</em>, <em>this</em> or <em>every</em> works on its own — it answers "when?" with no preposition.
+    </p>
+    <GrammarFormula label="Time noun phrase" parts={['next / last / this / every', 'time noun']} />
+    <GrammarExample note="Next + week: not in next week.">
+      I will write to you again <mark data-role="grammar">next</mark> <mark data-role="content">week</mark>.
+    </GrammarExample>
+    <GrammarExample note="Last + Saturday: not on last Saturday.">
+      We went to the cinema <mark data-role="grammar">last</mark> <mark data-role="content">Saturday</mark>.
+    </GrammarExample>
+    <GrammarExample note="This + evening; every + day.">
+      I'm busy <mark data-role="grammar">this</mark> <mark data-role="content">evening</mark>, but I go running <mark data-role="grammar">every</mark> <mark data-role="content">day</mark>.
+    </GrammarExample>
+    <p>
+      <em>Today</em>, <em>tomorrow</em> and <em>yesterday</em> also take no preposition, and they can combine with <em>morning</em>, <em>afternoon</em> and <em>evening</em> (but <em>tonight</em>, not <em>today night</em>).
+    </p>
+    <GrammarFormula label="Tomorrow morning" parts={['today / tomorrow / yesterday', 'morning / afternoon / evening']} />
+    <GrammarExample note="Tomorrow + morning.">
+      If not, I will see you <mark data-role="grammar">tomorrow</mark> <mark data-role="content">morning</mark>.
+    </GrammarExample>
+    <GrammarExample note="Tomorrow and today on their own.">
+      I can see her <mark data-role="content">tomorrow</mark> because I have a job interview <mark data-role="content">today</mark>.
+    </GrammarExample>
+    <GrammarExample note="Yesterday + afternoon.">
+      She called me <mark data-role="grammar">yesterday</mark> <mark data-role="content">afternoon</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't leave out the subject, and don't say it twice.
+    </p>
+    <GrammarContrast
+      bad={['Is very nice, my house.', 'My brother he is tall.']}
+      good={['My house is very nice.', 'My brother is tall.']}
+    />
+    <p>
+      The verb agrees with the subject; after <em>be</em>, a singular job needs a / an.
+    </p>
+    <GrammarContrast
+      bad={['My friends is from Poland.', 'He is student.']}
+      good={['My friends are from Poland.', 'He is a student.']}
+    />
+    <p>
+      No preposition between the verb and its object, and the object form of a pronoun after a preposition.
+    </p>
+    <GrammarContrast
+      bad={['I visit to my family.', 'Come with I.']}
+      good={['I visit my family.', 'Come with me.']}
+    />
+    <p>
+      No preposition before next, last, this or every.
+    </p>
+    <GrammarContrast
+      bad={['I will see you in next week.', 'We met on last Monday.']}
+      good={['I will see you next week.', 'We met last Monday.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'what goes inside a noun phrase — determiners, adjectives, words after the noun.',
+      },
+      {
+        slug: 'clauses-declarative',
+        name: 'statements',
+        note: 'subject + verb + object word order in a whole sentence.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'I / me, she / her — which form goes in which slot.',
+      },
+      {
+        slug: 'prepositions-prepositions',
+        name: 'prepositions',
+        note: 'in, on, at and the rest, before a noun phrase.',
+      },
+    ]}
+  />
+</GrammarShell>

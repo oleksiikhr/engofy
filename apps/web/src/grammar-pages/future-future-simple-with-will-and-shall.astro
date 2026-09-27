@@ -1,0 +1,404 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 11 USE rows are inlined, matched by EGP index: two guidewords repeat
+// across levels (PLANS AND INTENTIONS WITH 'WILL' on A1 and A2, PREDICTIONS
+// with will B1 / shall C2). The other 5 rows (affirmative will, affirmative
+// shall, negative will, questions, negative shall) are plain FORM rows,
+// written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const intentionsPoint = point(383);
+const askingPlansPoint = point(388);
+const predictionsPoint = point(393);
+const fixedPlansPoint = point(392);
+const requestsPoint = point(389);
+const willingnessPoint = point(391);
+const offersPoint = point(387);
+const suggestionsPoint = point(390);
+const shallPlansPoint = point(394);
+const shallLongTermPoint = point(396);
+const shallPredictionsPoint = point(397);
+
+const inlineUsagePointIds = [
+  intentionsPoint,
+  askingPlansPoint,
+  predictionsPoint,
+  fixedPlansPoint,
+  requestsPoint,
+  willingnessPoint,
+  offersPoint,
+  suggestionsPoint,
+  shallPlansPoint,
+  shallLongTermPoint,
+  shallPredictionsPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Will and shall for the future: will + verb, 'll, won't, Will you…?, decisions and promises, predictions, timetabled plans, requests, Shall I…? offers, Shall we…? suggestions, and formal shall."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Will + verb, I'll", open: true },
+    { id: 'negative', title: "Won't: the negative", open: false },
+    { id: 'questions', title: 'Will you…? Questions', open: false },
+    { id: 'intentions', title: "I'll do it: decisions and intentions", open: false },
+    { id: 'predictions', title: 'It will rain: predictions', open: false },
+    { id: 'fixed-plans', title: 'The course will start on…: fixed plans', open: false },
+    { id: 'requests', title: 'Will you help me? Requests and willingness', open: false },
+    { id: 'shall-questions', title: 'Shall I…? Shall we…?', open: false },
+    { id: 'shall-statements', title: 'I shall, we shall: formal future', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Will + the base form of a verb is the most common way to talk about the
+      future in English: <em>I will call you</em>, <em>It'll be cold</em>, <em>Will you come?</em> Shall does the same job with I and we — mostly in questions like <em>Shall I help?</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Will + verb, I'll" id="form" open>
+    <p>
+      Put will before the base form of the verb — the verb with no to, no -s,
+      no -ed. Will itself never changes: the same word for I, you, he, she,
+      we and they.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'will', 'base verb']} />
+    <GrammarExample note="Will + see: the base form, with no to.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">see</mark> you soon.
+    </GrammarExample>
+    <GrammarExample note="He will + start — not he wills, not he will starts.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">will</mark> <mark data-role="grammar">start</mark> his new job in May.
+    </GrammarExample>
+    <GrammarExample note="They will + be: be is the base form of am / is / are.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> here at six.
+    </GrammarExample>
+    <p>
+      In speaking and informal writing, will is usually shortened to 'll and
+      joined to the subject.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Full form</th><th>Short form</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>I will</td><td><code>I'll</code></td></tr>
+        <tr><td>you will</td><td><code>you'll</code></td></tr>
+        <tr><td>he / she / it will</td><td><code>he'll / she'll / it'll</code></td></tr>
+        <tr><td>we will</td><td><code>we'll</code></td></tr>
+        <tr><td>they will</td><td><code>they'll</code></td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="I'll = I will. The short form is normal in a message to a friend.">
+      <mark data-role="content">I'll</mark> <mark data-role="grammar">come</mark> at seven o'clock.
+    </GrammarExample>
+    <GrammarExample note="It'll = it will. 'll also joins nouns in speech: The bus'll be late.">
+      <mark data-role="content">It'll</mark> <mark data-role="grammar">be</mark> fun!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Won't: the negative" id="negative" open={false}>
+    <p>
+      Add not after will. The short form of will not is won't — one word, not <em>willn't</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "will not / won't", 'base verb']} />
+    <GrammarExample note="Will not + be able to: the full form, a little more formal or emphatic.">
+      Without my boots, <mark data-role="grammar">I</mark> <mark data-role="content">will not</mark> <mark data-role="grammar">be</mark> able to play.
+    </GrammarExample>
+    <GrammarExample note="Won't = will not. The normal choice in speech and messages.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">be</mark> at home before seven.
+    </GrammarExample>
+    <GrammarExample note="Won't + take: the verb after it is still the base form.">
+      Don't worry, <mark data-role="grammar">it</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">take</mark> long.
+    </GrammarExample>
+    <p>
+      To say you are not sure something will happen, English usually puts the
+      negative in <em>think</em>: <em>I don't think it will rain</em> is more natural than <em>I think it won't rain</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will you…? Questions" id="questions" open={false}>
+    <p>
+      For a question, put will before the subject. Short answers repeat will: <em>Yes, I will</em> / <em>No, I won't</em> — not <em>Yes, I'll</em>.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'will', 'subject', 'base verb']} />
+    <GrammarExample note="Will + you + come: a yes/no question about the future.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark>?
+    </GrammarExample>
+    <GrammarExample note="A wh- word goes first, then will + subject + verb.">
+      <mark data-role="grammar">What time</mark> <mark data-role="content">will</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">arrive</mark>?
+    </GrammarExample>
+    <GrammarExample note="A negative question: won't + subject. Here it expresses surprise.">
+      <mark data-role="content">Won't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">need</mark> a coat?
+    </GrammarExample>
+    <p>
+      With I and we, questions often use shall instead of will — see <em>Shall I…? Shall we…?</em> below.
+    </p>
+    <GrammarExample note="Shall I: asking what the speaker should do.">
+      What <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">bring</mark> to the party?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I'll do it: decisions and intentions" id="intentions" open={false}>
+    <p>
+      Use will to say what you intend to do, especially when you decide it at
+      the moment of speaking — an offer, a promise, a quick decision.
+    </p>
+    <GrammarFormula label="Intention" parts={['I / we', "will / 'll", 'base verb']} />
+    <GrammarExample note="A decision made now, while writing: I'll bring…">
+      <mark data-role="content">I'll</mark> <mark data-role="grammar">bring</mark> a football with me.
+    </GrammarExample>
+    <GrammarExample note="An intention for tomorrow, with try.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">try</mark> to come and see you tomorrow.
+    </GrammarExample>
+    <GrammarExample note="A promise: will is the usual verb for promising.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">tell</mark> anyone, I promise.
+    </GrammarExample>
+    {intentionsPoint && <GrammarUsagePointCard usagePoint={intentionsPoint} />}
+    <p>
+      A plan you made earlier is often said with <em>going to</em> or the present continuous instead: <em>I'm going to visit my aunt on Saturday</em> (already decided). Will sounds like a decision being made now: <em>Oh, it's raining — I'll take the car.</em>
+    </p>
+    <p>
+      Will you + verb asks about someone's plans.
+    </p>
+    <GrammarFormula label="Asking about plans" parts={['will', 'you', 'base verb']} />
+    <GrammarExample note="Asking how the person plans to travel.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> by train?
+    </GrammarExample>
+    <GrammarExample note="Asking about their plans for the evening.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> at the party tonight?
+    </GrammarExample>
+    {askingPlansPoint && <GrammarUsagePointCard usagePoint={askingPlansPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It will rain: predictions" id="predictions" open={false}>
+    <p>
+      Use will to say what you think or know will happen. Predictions often
+      come with <em>I think</em>, <em>I'm sure</em>, <em>probably</em>, <em>definitely</em> or <em>maybe</em>.
+    </p>
+    <GrammarFormula label="Prediction" parts={['subject', 'will', 'base verb']} />
+    <GrammarExample note="A prediction about the future climate.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> hotter because of global warming.
+    </GrammarExample>
+    <GrammarExample note="I'm sure + will: a confident prediction.">
+      I'm sure <mark data-role="grammar">you</mark> <mark data-role="content">will</mark> <mark data-role="grammar">love</mark> the city.
+    </GrammarExample>
+    <GrammarExample note="A negative prediction about the writer's own life.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">live</mark> here next year, because I'm moving to Lima.
+    </GrammarExample>
+    <p>
+      Probably and definitely go after will but before won't.
+    </p>
+    <GrammarFormula label="With probably" parts={['subject', 'will', 'probably / definitely', 'base verb']} />
+    <GrammarExample note="Will + probably + be.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">will</mark> <mark data-role="grammar">probably</mark> <mark data-role="grammar">be</mark> late.
+    </GrammarExample>
+    <GrammarExample note="Probably comes before won't.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">probably</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">come</mark>.
+    </GrammarExample>
+    {predictionsPoint && <GrammarUsagePointCard usagePoint={predictionsPoint} />}
+    <p>
+      When you can already see the evidence, <em>going to</em> is more natural: <em>Look at those clouds — it's going to rain.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The course will start on…: fixed plans" id="fixed-plans" open={false}>
+    <p>
+      Will also describes plans that are fixed and official, often with a
+      date or a time: schedules, programmes, announcements. It sounds neutral
+      and a little formal.
+    </p>
+    <GrammarFormula label="Fixed plan" parts={['subject', 'will', 'base verb', 'time / date']} />
+    <GrammarExample note="A timetable: a start time and an end time.">
+      <mark data-role="grammar">The work</mark> <mark data-role="content">will</mark> <mark data-role="grammar">start</mark> <mark data-role="grammar">at 8 a.m.</mark> and finish at 2 p.m.
+    </GrammarExample>
+    <GrammarExample note="An announcement with a date.">
+      <mark data-role="grammar">The new shop</mark> <mark data-role="content">will</mark> <mark data-role="grammar">open</mark> <mark data-role="grammar">on 1 June</mark>.
+    </GrammarExample>
+    <GrammarExample note="Won't + be able to: a fixed plan that has to change.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">be</mark> able to get there <mark data-role="grammar">at the time we agreed</mark>.
+    </GrammarExample>
+    {fixedPlansPoint && <GrammarUsagePointCard usagePoint={fixedPlansPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Will you help me? Requests and willingness" id="requests" open={false}>
+    <p>
+      Will you + verb can ask someone to do something. It is direct — fine
+      with friends and family; with strangers, <em>Could you…?</em> or <em>Would you…?</em> is more polite.
+    </p>
+    <GrammarFormula label="Request" parts={['will', 'you', 'base verb', '(for me)']} />
+    <GrammarExample note="Asking a friend to post a parcel.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">send</mark> it <mark data-role="grammar">for me</mark>?
+    </GrammarExample>
+    <GrammarExample note="An invitation that is also a request.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> to my house tomorrow at six?
+    </GrammarExample>
+    {requestsPoint && <GrammarUsagePointCard usagePoint={requestsPoint} />}
+    <p>
+      In a statement, will can say that someone is willing — happy and ready —
+      to do something for you.
+    </p>
+    <GrammarFormula label="Willingness" parts={['subject', 'will', 'base verb']} />
+    <GrammarExample note="The mother is willing to drive: she agreed to do it.">
+      <mark data-role="grammar">My mother</mark> <mark data-role="content">will</mark> <mark data-role="grammar">drive</mark> us there.
+    </GrammarExample>
+    <GrammarExample note="The sister is ready to help too.">
+      And <mark data-role="grammar">my sister</mark> <mark data-role="content">will</mark> <mark data-role="grammar">help</mark> us too.
+    </GrammarExample>
+    <p>
+      The negative won't can mean refusing: <em>He won't listen to me</em> = he refuses to listen.
+      This and other modal meanings of will are covered on the <em>will</em> page linked below.
+    </p>
+    {willingnessPoint && <GrammarUsagePointCard usagePoint={willingnessPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Shall I…? Shall we…?" id="shall-questions" open={false}>
+    <p>
+      Shall is used almost only with I and we. Its most common use today is in
+      two questions: <em>Shall I…?</em> to offer help, and <em>Shall we…?</em> to suggest
+      doing something together.
+    </p>
+    <GrammarFormula label="Offer" parts={['shall', 'I', 'base verb']} />
+    <GrammarExample note="Shall I: offering to do something for the other person.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wait</mark> for you?
+    </GrammarExample>
+    <GrammarExample note="An offer to buy something.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">buy</mark> you one?
+    </GrammarExample>
+    {offersPoint && <GrammarUsagePointCard usagePoint={offersPoint} />}
+    <GrammarFormula label="Suggestion" parts={['shall', 'we', 'base verb']} />
+    <GrammarExample note="Shall we: suggesting doing something together.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">go</mark> there together?
+    </GrammarExample>
+    <GrammarExample note="A wh- word + shall we asks for a joint decision.">
+      <mark data-role="grammar">Where</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark>?
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+    <p>
+      For offers and suggestions, will doesn't work in the same way: <em>Will I open the window?</em> asks
+      about the future, not "Do you want me to open it?". American English often uses <em>Should I…?</em> and <em>Let's…</em> instead.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I shall, we shall: formal future" id="shall-statements" open={false}>
+    <p>
+      In statements, I shall / we shall means the same as I will / we will. It
+      is formal and mostly British — typical of letters, reports and
+      speeches. In everyday English, people say <em>I'll</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['I / we', 'shall', 'base verb']} />
+    <GrammarExample note="Shall with we: a plan in a formal message.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">have</mark> a meeting about this next week.
+    </GrammarExample>
+    <GrammarExample note="Shall with I: an intention, in a promise.">
+      I promise that <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">finish</mark> all the work and give it to you tomorrow.
+    </GrammarExample>
+    {shallPlansPoint && <GrammarUsagePointCard usagePoint={shallPlansPoint} />}
+    <p>
+      The negative is shall not; the short form shan't exists but sounds old-fashioned.
+    </p>
+    <GrammarFormula label="Negative" parts={['I / we', 'shall not', 'base verb']} />
+    <GrammarExample note="Shall not in formal writing.">
+      However, <mark data-role="grammar">we</mark> <mark data-role="content">shall not</mark> <mark data-role="grammar">forget</mark> the legal consequences.
+    </GrammarExample>
+    <p>
+      With always or never, shall expresses a long-term intention — something
+      you intend to keep doing for the rest of your life.
+    </p>
+    <GrammarFormula label="Long-term" parts={['I / we', 'shall', 'always / never', 'base verb']} />
+    <GrammarExample note="Shall always: a lasting intention.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">always</mark> <mark data-role="grammar">remember</mark> it as the city of lights.
+    </GrammarExample>
+    <GrammarExample note="Shall never: a lasting decision.">
+      This way, <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">never</mark> <mark data-role="grammar">lose</mark> hope.
+    </GrammarExample>
+    {shallLongTermPoint && <GrammarUsagePointCard usagePoint={shallLongTermPoint} />}
+    <p>
+      Shall can also make predictions with I and we, again in formal English.
+    </p>
+    <GrammarExample note="A formal hope about the future.">
+      I hope <mark data-role="grammar">we</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">meet</mark> in November.
+    </GrammarExample>
+    <GrammarExample note="Shall + probably: a formal prediction.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">probably</mark> <mark data-role="grammar">have</mark> several more years to live here.
+    </GrammarExample>
+    {shallPredictionsPoint && <GrammarUsagePointCard usagePoint={shallPredictionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After will, the verb is the bare base form — no to, no -s, no -ing.
+    </p>
+    <GrammarContrast
+      bad={['I will to call you tomorrow.', 'She will comes later.', 'We will going to the beach.']}
+      good={['I will call you tomorrow.', 'She will come later.', 'We will go to the beach.']}
+    />
+    <p>
+      After time words like when, after, before, as soon as and until, use
+      the present simple, not will — even though the meaning is future.
+    </p>
+    <GrammarContrast
+      bad={['I will call you when I will arrive.', 'Wait here until I will come back.']}
+      good={['I will call you when I arrive.', 'Wait here until I come back.']}
+    />
+    <p>
+      To offer help or make a suggestion, use shall, not will.
+    </p>
+    <GrammarContrast
+      bad={['Will I carry your bag?', 'Will we go to the cinema?']}
+      good={['Shall I carry your bag?', 'Shall we go to the cinema?']}
+    />
+    <p>
+      Short answers use the full will; the negative short form is won't, not willn't.
+    </p>
+    <GrammarContrast
+      bad={["Will you come? — Yes, I'll.", "I willn't be late."]}
+      good={['Will you come? — Yes, I will.', "I won't be late."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-with-be-going-to',
+        name: 'be going to',
+        note: "plans made earlier and predictions from what you can see: I'm going to visit Rome. It's going to rain.",
+      },
+      {
+        slug: 'future-present-continuous-for-future-use',
+        name: 'present continuous for the future',
+        note: "arrangements with a time and place: I'm meeting Tom at six.",
+      },
+      {
+        slug: 'modality-will',
+        name: 'will (modal)',
+        note: "will beyond the future: habits (He'll sit there for hours), refusals, Will you please…",
+      },
+      {
+        slug: 'modality-shall',
+        name: 'shall (modal)',
+        note: 'shall for advice (What shall I do?) and for rules in very formal texts.',
+      },
+    ]}
+  />
+</GrammarShell>
