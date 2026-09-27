@@ -212,12 +212,31 @@ whitespace-only текстовий вузол між тегами, якщо ві
 `adjectives-combining` з 1 незакладеним usage point), скрипт-перевірка на злиплі слова
 (`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всіх 3 рендерах — чисто.
 
-### [ ] 6. Adjectives — superlatives (`adjectives-superlatives`) — рівень A1
+### [x] 6. Adjectives — superlatives (`adjectives-superlatives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adjectives-superlatives`.
+
+5 секцій: -est/the most патерни + неправильні форми (best/worst/furthest) +
+spelling; the + superlative + noun (+ prepositional phrase); ellipsis та one
+of the; by far / possible-ever postmodifiers / slightest-faintest ідіома;
+типова помилка (superlative для двох речей, подвійне маркування -est+most).
+Усі 9 EGP usage points (58,59,60,69,70,74,77,78,79) вплетені інлайн — жоден
+не лишився в generic-блоці знизу; "COMPLEX NOUN PHRASES" (A2+B1, той самий
+guideword) відрендерені разом як два картки, за прецедентом
+DEGREE ADJECTIVES з adjectives-position. Під час рев'ю виявлено і виправлено
+ще один випадок відомого Astro-бага з переносом рядка між текстом і `<em>`
+(«...instead. And\n<em>-est</em>» → склеїлось у «And-est» без пробілу) — це
+трапляється не тільки з `<mark>` у прикладах, а з будь-яким інлайн-тегом,
+розбитим переносом рядка на межі тегу.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 5 секцій
+розкрито, усі приклади й usage-point картки на місці), скрипт-перевірка на
+злиплі слова (`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всьому `.con-body`
+— чисто після виправлення.
 
 ### [ ] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
