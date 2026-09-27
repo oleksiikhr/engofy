@@ -426,12 +426,32 @@ dev-сервер + Playwright (10 details, 100 міток, 16 карток у п
 секціях, "When it's used" відсутній, 0 злиплих сусідніх слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
+### [x] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `conjunctions-coordinating`.
+
+19 EGP-рядків: 11 FORM/USE — усі 11 вплетені інлайн; 8 чистих FORM
+(word/phrase/clause/sentence + and/but/or, complex adding so/then, plus з
+іменниками, either...or на B1 і C1) написані без картки. Guideword-и
+повторюються між рівнями ('BOTH … AND' B1/B2, 'NEITHER' B2/C2, 'YET'
+C1/'AND YET' C2, два 'NOT ONLY' на C1 — з/без INVERSION), тому матчинг за
+`cefrLevel` + підрядком guideword (+ exclude для NOT ONLY). 9 секцій: що
+можуть з'єднувати and/but/or (+ на початку речення); списки; контраст
+(but/yet/and yet); so/then/plus; both...and (іменники → фрази);
+either...or + neither...nor (+ узгодження дієслова з найближчим
+підметом); not only...but also (+ фронтування з інверсією, крос-посилання
+на `clauses-coordinated`); Neither/Nor на початку речення з інверсією;
+типові помилки (подвійне заперечення з neither...nor, both...or,
+not only без інверсії). Відмежовано від `clauses-coordinated`: там —
+з'єднання клауз, тут — самі сполучники і що вони з'єднують. Content-мітка
+— сполучник, grammar — з'єднані елементи / auxiliary+subject в інверсії.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 98 міток, 11 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо `<mark>`/`<em>`).
 
 ### [ ] 16. Conjunctions — subordinating (`conjunctions-subordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
