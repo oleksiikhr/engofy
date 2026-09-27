@@ -1,0 +1,360 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 10 USE rows are inlined, matched by EGP index: two guidewords repeat
+// across levels (PLANS AND INTENTIONS on A1 and A2, REQUESTS on A2 and B2).
+// The other 3 rows (affirmative, negative, questions) are plain FORM rows,
+// written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const intentionsPoint = point(604);
+const askingPlansPoint = point(608);
+const ifPoint = point(605);
+const predictionsPoint = point(612);
+const fixedPlansPoint = point(611);
+const willingnessPoint = point(609);
+const requestsPoint = point(610);
+const pleasePoint = point(613);
+const habitsPoint = point(614);
+const disapprovalPoint = point(615);
+
+const inlineUsagePointIds = [
+  intentionsPoint,
+  askingPlansPoint,
+  ifPoint,
+  predictionsPoint,
+  fixedPlansPoint,
+  willingnessPoint,
+  requestsPoint,
+  pleasePoint,
+  habitsPoint,
+  disapprovalPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The modal verb will: forms (will, 'll, won't, Will you…?), plans and intentions, if-sentences, predictions, fixed plans, willingness and refusal, requests and commands, habits, and disapproval."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Will, 'll, won't, Will…?", open: true },
+    { id: 'intentions', title: "I'll see you tomorrow: plans and intentions", open: false },
+    { id: 'if', title: 'If…, I will…: possible situations', open: false },
+    { id: 'predictions', title: "It'll be bigger: predictions", open: false },
+    { id: 'fixed-plans', title: 'He will visit us on Thursday: fixed plans', open: false },
+    { id: 'willingness', title: "She'll drive us / It won't start: willingness and refusal", open: false },
+    { id: 'requests', title: 'Will you…? Will you please…? Requests and commands', open: false },
+    { id: 'habits', title: "She'll often knock: habits and typical behaviour", open: false },
+    { id: 'disapproval', title: 'He WILL leave his socks there: disapproval', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Will is a modal verb: it never changes its form and is always followed by the base form of a verb. It talks about the future, but it also does other jobs — it shows that someone is willing or refuses, makes requests and commands, and describes habits: <em>I'll help you</em>, <em>The door won't open</em>, <em>Will you be quiet!</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Will, 'll, won't, Will…?" id="form" open>
+    <p>
+      Will is the same for every subject — no -s, no to after it, no past or -ing form. The verb after it is the base form. In speech, will is usually shortened to 'll.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "will / 'll", 'base verb']} />
+    <GrammarExample note="Will + be: the full form, common in writing.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> at your house at 7.30.
+    </GrammarExample>
+    <GrammarExample note="I'll = I will — the normal form in speech and messages.">
+      <mark data-role="content">I'll</mark> <mark data-role="grammar">come</mark> to see you tomorrow morning.
+    </GrammarExample>
+    <p>
+      The negative is will not, or the short form won't — not <em>willn't</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "will not / won't", 'base verb']} />
+    <GrammarExample note="Won't + need: the usual spoken negative.">
+      Don't worry, <mark data-role="grammar">you</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">need</mark> anything apart from some pencils.
+    </GrammarExample>
+    <GrammarExample note="Will not: the full form, a little more formal or emphatic.">
+      I hope <mark data-role="grammar">it</mark> <mark data-role="content">will not</mark> <mark data-role="grammar">be</mark> boring!
+    </GrammarExample>
+    <p>
+      For a question, put will before the subject. A wh- word goes first.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'will', 'subject', 'base verb']} />
+    <GrammarExample note="A yes/no question: Will + you + be.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> at home?
+    </GrammarExample>
+    <GrammarExample note="What time + will + you + be.">
+      <mark data-role="grammar">What time</mark> <mark data-role="content">will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> here?
+    </GrammarExample>
+    <p>
+      Short answers repeat will: <em>Yes, I will</em> / <em>No, I won't</em>. Because will has no infinitive or -ing form, it can't follow another modal: say <em>I will be able to</em>, not <em>I will can</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'll see you tomorrow: plans and intentions" id="intentions" open={false}>
+    <p>
+      Use will to say what you intend to do — especially something you decide or promise while you are speaking.
+    </p>
+    <GrammarFormula label="Intention" parts={['subject', "will / 'll", 'base verb']} />
+    <GrammarExample note="An intention for the party: I will bring…">
+      <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">bring</mark> some music to the dinner.
+    </GrammarExample>
+    <GrammarExample note="A fixed phrase at the end of a message or a meeting.">
+      <mark data-role="content">I'll</mark> <mark data-role="grammar">see</mark> you tomorrow.
+    </GrammarExample>
+    <GrammarExample note="A decision made now, on the phone.">
+      OK, <mark data-role="content">I'll</mark> <mark data-role="grammar">call</mark> you back in five minutes.
+    </GrammarExample>
+    {intentionsPoint && <GrammarUsagePointCard usagePoint={intentionsPoint} />}
+    <p>
+      Will you + verb asks about the other person's plans.
+    </p>
+    <GrammarFormula label="Asking about plans" parts={['will', 'you', 'base verb']} />
+    <GrammarExample note="Asking how the person plans to travel.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> by bus?
+    </GrammarExample>
+    <GrammarExample note="Asking who is coming with them.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> with any friends?
+    </GrammarExample>
+    {askingPlansPoint && <GrammarUsagePointCard usagePoint={askingPlansPoint} />}
+    <p>
+      A plan made earlier usually sounds more natural with <em>going to</em>: <em>I'm going to visit my aunt on Saturday.</em> More on will for the future is on the <em>future simple</em> page linked below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="If…, I will…: possible situations" id="if" open={false}>
+    <p>
+      To talk about a possible future situation and its result, put will in the main clause. The if-clause uses the present simple, not will — even though it is about the future.
+    </p>
+    <GrammarFormula label="If-sentence" parts={['if + present simple', 'subject', 'will', 'base verb']} />
+    <GrammarExample note="If + need (present), then will + use.">
+      <mark data-role="grammar">If I need a camera</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">use</mark> my mobile phone.
+    </GrammarExample>
+    <GrammarExample note="If + can (present), then she will + fetch.">
+      And <mark data-role="grammar">if my mum can</mark>, <mark data-role="grammar">she</mark> <mark data-role="content">will</mark> <mark data-role="grammar">fetch</mark> you.
+    </GrammarExample>
+    <GrammarExample note="If + help (present), then I will + be.">
+      <mark data-role="grammar">If you can help me</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> very happy.
+    </GrammarExample>
+    <p>
+      The main clause can also come first, with no comma: <em>I'll be very happy if you can help me.</em>
+    </p>
+    {ifPoint && <GrammarUsagePointCard usagePoint={ifPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It'll be bigger: predictions" id="predictions" open={false}>
+    <p>
+      Use will to say what you think or know will happen. Predictions often come with <em>I think</em>, <em>I'm sure</em>, <em>probably</em> or <em>soon</em>.
+    </p>
+    <GrammarFormula label="Prediction" parts={['subject', "will / 'll", 'base verb']} />
+    <GrammarExample note="I think + will: a prediction about the writer's town.">
+      I think that in 20 years' time <mark data-role="grammar">it</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> bigger than it is now.
+    </GrammarExample>
+    <GrammarExample note="It'll = it will: a prediction about life after school.">
+      As soon as you finish school, <mark data-role="content">it'll</mark> <mark data-role="grammar">be</mark> harder to meet your old friends.
+    </GrammarExample>
+    <GrammarExample note="Won't: a negative prediction.">
+      Take a taxi — <mark data-role="grammar">you</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">find</mark> a bus at this time.
+    </GrammarExample>
+    <p>
+      A question tag after a prediction uses won't (after a positive sentence) or will (after a negative one). It asks the listener to agree.
+    </p>
+    <GrammarFormula label="Question tag" parts={["subject + 'll + verb", "won't", 'subject', '?']} />
+    <GrammarExample note="Positive sentence → won't you? in the tag.">
+      Without much sport, <mark data-role="content">you'll</mark> soon <mark data-role="grammar">put</mark> on weight, <mark data-role="content">won't</mark> <mark data-role="grammar">you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Negative sentence → will it? in the tag.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">rain</mark> tomorrow, <mark data-role="content">will</mark> <mark data-role="grammar">it</mark>?
+    </GrammarExample>
+    {predictionsPoint && <GrammarUsagePointCard usagePoint={predictionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="He will visit us on Thursday: fixed plans" id="fixed-plans" open={false}>
+    <p>
+      Will also describes plans that are already fixed — timetables, programmes, official visits — often with a day, date or time. It sounds neutral and businesslike.
+    </p>
+    <GrammarFormula label="Fixed plan" parts={['subject', 'will', 'base verb', 'time / date']} />
+    <GrammarExample note="An official visit with a day.">
+      <mark data-role="grammar">Mr Miller, the Sales Director,</mark> <mark data-role="content">will</mark> <mark data-role="grammar">visit</mark> us <mark data-role="grammar">next Thursday</mark>.
+    </GrammarExample>
+    <GrammarExample note="A timetable: the time is part of the plan.">
+      <mark data-role="grammar">The train</mark> <mark data-role="content">will</mark> <mark data-role="grammar">leave</mark> <mark data-role="grammar">at 9.15</mark> from platform 4.
+    </GrammarExample>
+    <GrammarExample note="Won't be able to: a fixed plan you can't keep.">
+      I'm sorry, but <mark data-role="grammar">I</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">be</mark> able to attend your class <mark data-role="grammar">tomorrow</mark>.
+    </GrammarExample>
+    {fixedPlansPoint && <GrammarUsagePointCard usagePoint={fixedPlansPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="She'll drive us / It won't start: willingness and refusal" id="willingness" open={false}>
+    <p>
+      Will can mean that someone is willing — happy and ready — to do something. With I, it is an offer.
+    </p>
+    <GrammarFormula label="Willingness" parts={['subject', "will / 'll", 'base verb']} />
+    <GrammarExample note="The mother is willing to drive them — she agreed to it.">
+      <mark data-role="grammar">My mother</mark> <mark data-role="content">will</mark> <mark data-role="grammar">get</mark> us there, and <mark data-role="grammar">she</mark> <mark data-role="content">will</mark> <mark data-role="grammar">bring</mark> us back after.
+    </GrammarExample>
+    <GrammarExample note="I'll: an offer made in reply to a problem.">
+      That bag looks heavy — <mark data-role="content">I'll</mark> <mark data-role="grammar">carry</mark> it.
+    </GrammarExample>
+    <GrammarExample note="An offer to a group: will + go.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">will</mark> <mark data-role="grammar">go</mark> first if nobody else wants to.
+    </GrammarExample>
+    {willingnessPoint && <GrammarUsagePointCard usagePoint={willingnessPoint} />}
+    <p>
+      The opposite, won't, means refusing: the person doesn't want to do it. With things — a car, a door, a computer — won't means it doesn't work, as if it refused.
+    </p>
+    <GrammarFormula label="Refusal" parts={['subject', "won't", 'base verb']} />
+    <GrammarExample note="He won't = he refuses to.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">listen</mark> to me.
+    </GrammarExample>
+    <GrammarExample note="A thing that 'refuses': the car doesn't start.">
+      <mark data-role="grammar">The car</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">start</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Will you…? Will you please…? Requests and commands" id="requests" open={false}>
+    <p>
+      Will you + verb asks someone to do something. It is direct: fine with friends and family, but with strangers <em>Could you…?</em> or <em>Would you…?</em> is more polite.
+    </p>
+    <GrammarFormula label="Request" parts={['will', 'you', 'base verb']} />
+    <GrammarExample note="Asking a friend to come along.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> with me?
+    </GrammarExample>
+    <GrammarExample note="Will you be able to: a request about the future.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> able to visit some museums with me?
+    </GrammarExample>
+    {requestsPoint && <GrammarUsagePointCard usagePoint={requestsPoint} />}
+    <p>
+      Will you please + verb is common in formal letters and emails. It sounds firm — closer to an instruction than a question — so it often ends with a full stop, not a question mark.
+    </p>
+    <GrammarFormula label="Formal request" parts={['will', 'you', 'please', 'base verb']} />
+    <GrammarExample note="A firm request in a formal email.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">please</mark> <mark data-role="grammar">send</mark> me his name, address and telephone number.
+    </GrammarExample>
+    <GrammarExample note="Please can also go at the end.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">inform</mark> me about the exact payment, <mark data-role="grammar">please</mark>?
+    </GrammarExample>
+    <p>
+      Said with falling intonation, often with an exclamation mark, Will you…! is an angry command, not a question.
+    </p>
+    <GrammarExample note="A teacher's command: Pay attention!">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">pay</mark> attention!
+    </GrammarExample>
+    <GrammarExample note="An irritated command to be quiet.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> quiet!
+    </GrammarExample>
+    {pleasePoint && <GrammarUsagePointCard usagePoint={pleasePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="She'll often knock: habits and typical behaviour" id="habits" open={false}>
+    <p>
+      Will can describe what someone usually does, or what something typically does — not in the future, but in general. Adverbs like often, usually, sometimes and always are common here.
+    </p>
+    <GrammarFormula label="Habit" parts={['subject', 'will', '(often / usually)', 'base verb']} />
+    <GrammarExample note="A typical action of a person: will + often + knock.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">will</mark> <mark data-role="grammar">often</mark> <mark data-role="grammar">knock</mark> on the door to see how you are.
+    </GrammarExample>
+    <GrammarExample note="A typical feature of a dish, not a future event.">
+      <mark data-role="grammar">A traditional dish</mark> <mark data-role="content">will</mark> <mark data-role="grammar">usually</mark> <mark data-role="grammar">contain</mark> some kind of sauce made of hot pepper.
+    </GrammarExample>
+    <GrammarExample note="Won't usually: what normally isn't possible.">
+      Go to beautiful places that <mark data-role="grammar">you</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">usually</mark> <mark data-role="grammar">be</mark> able to reach by car.
+    </GrammarExample>
+    {habitsPoint && <GrammarUsagePointCard usagePoint={habitsPoint} />}
+    <p>
+      The meaning is close to the present simple (<em>She often knocks on the door</em>); will makes it sound more like typical behaviour you can expect. For habits in the past, use <em>would</em>: <em>My grandfather would sit there for hours.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="He WILL leave his socks there: disapproval" id="disapproval" open={false}>
+    <p>
+      Will can describe behaviour that is typical of someone and that the speaker finds annoying. In speech, will is stressed and not shortened.
+    </p>
+    <GrammarFormula label="Disapproval" parts={['subject', 'WILL (stressed)', 'base verb']} />
+    <GrammarExample note="Stressed will: he always does it, and it annoys the speaker.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">will</mark> <mark data-role="grammar">leave</mark> his socks on the floor!
+    </GrammarExample>
+    <GrammarExample note="What children will do: their typical, unpredictable behaviour.">
+      Indeed, no one can imagine what <mark data-role="grammar">children</mark> <mark data-role="content">will</mark> <mark data-role="grammar">do</mark>!
+    </GrammarExample>
+    <GrammarExample note="A fixed saying: that's how boys typically behave.">
+      <mark data-role="grammar">Boys</mark> <mark data-role="content">will</mark> <mark data-role="grammar">be</mark> boys.
+    </GrammarExample>
+    {disapprovalPoint && <GrammarUsagePointCard usagePoint={disapprovalPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After will, the verb is the bare base form — no to, no -s, no -ing.
+    </p>
+    <GrammarContrast
+      bad={['I will to help you.', 'She will comes tomorrow.', 'Will you please to send me the form?']}
+      good={['I will help you.', 'She will come tomorrow.', 'Will you please send me the form?']}
+    />
+    <p>
+      In the if-clause, use the present simple, not will.
+    </p>
+    <GrammarContrast
+      bad={['If it will rain, we will stay at home.', 'If you will need help, call me.']}
+      good={['If it rains, we will stay at home.', 'If you need help, call me.']}
+    />
+    <p>
+      Will can't stand before another modal. Use the phrase that replaces it: be able to for can, have to for must.
+    </p>
+    <GrammarContrast
+      bad={['I will can come tomorrow.', 'You will must wait.']}
+      good={['I will be able to come tomorrow.', 'You will have to wait.']}
+    />
+    <p>
+      Short answers use the full will; the negative is won't, not willn't.
+    </p>
+    <GrammarContrast
+      bad={["Will you help me? — Yes, I'll.", "The door willn't open."]}
+      good={['Will you help me? — Yes, I will.', "The door won't open."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'future simple (will and shall)',
+        note: "will as a future tense in detail: 'll, won't, Shall I…?, Shall we…?",
+      },
+      {
+        slug: 'modality-would',
+        name: 'would',
+        note: 'more polite requests (Would you…?) and past habits (He would sit there for hours).',
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditional clauses',
+        note: 'if-sentences in full: real, unreal and past conditions.',
+      },
+      {
+        slug: 'questions-tags',
+        name: 'question tags',
+        note: "…, won't you? / …, will it? and tags with other verbs.",
+      },
+    ]}
+  />
+</GrammarShell>
