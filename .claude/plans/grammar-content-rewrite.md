@@ -264,12 +264,32 @@ guideword `FORM: ADVERB + ADVERB` повторюється тричі — зго
 used" відсутній — обидва usage points вже інлайн), перевірка на злиплі
 слова через `innerText` після розкриття всіх `<details>` — чисто.
 
-### [ ] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
+### [x] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverbs-and-adverb-phrases-types-and-meanings`.
+
+15 EGP-рядків (111-125), лише 1 класифікований як USE (FORM/USE: MODIFYING
+CLAUSES, STANCE, B1) — решта чисті FORM-рядки без картки, за правилом
+«FORM-факти без usage point — це нормально». 6 секцій за темою «що модифікує
+цей тип адверба», а не за рівнем: degree-адверби + adjectives; degree-адверби
++ інші адверби (короткий, з крос-посиланням на `adverbs-adverb-phrases-form`,
+щоб не дублювати вже написану механіку combine/enough/prepositional phrase);
+адверби напряму модифікують дієслово (degree/frequency vs manner); degree-
+адверби модифікують noun phrases/pronouns/determiners/comparatives (B2-C1);
+адверби модифікують цілий clause (place-complement, time/sequencing, stance
+з карткою); типова помилка (adjective замість -ly adverb при модифікації
+дієслова). Приклади написані вручну (не скопійовані з EGP-корпусу) одним
+рядком у файлі, щоб уникнути Astro-бага з переносом рядка між тегами.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 6 секцій
+розкрито, картка usage point на місці, contrast-блок і compare-посилання на
+місці), скрипт-перевірка на злиплі слова (`</mark>\S`/`\S<mark`/`</em>\S`/
+`\S<em`) по всьому `.con-body` — жодного справжнього збою (лише пунктуація
+після тегу).
 
 ### [ ] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
