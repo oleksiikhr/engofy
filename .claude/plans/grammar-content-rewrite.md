@@ -1094,7 +1094,7 @@ phrases-grammatical-functions` (noun phrase після be), `verbs-types`
 used" відсутній, 0 карток, перевірка `innerText` після розкриття всіх
 `<details>` — жодного склеєного слова навколо `<mark>`/`<em>`).
 
-### [ ] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
+### [x] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
