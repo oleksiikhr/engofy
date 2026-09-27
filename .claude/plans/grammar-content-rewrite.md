@@ -956,12 +956,41 @@ be-дієслово на `present-present-continuous`; grammar — решта с
 усі 14 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
 regex-перевірку `innerHTML`, без горизонтального скролу на 390px).
 
-### [ ] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
+### [x] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `pronouns-indefinite-thing-one-body-etc`.
+
+17 EGP-рядків (982-998): 9 чистих FORM (об'єкт/додаток прийменника на
+зростаючих діапазонах A1→B2, підмет з дієсловом однини на зростаючих
+діапазонах A1→B2, negative + 'anything', pronoun + 'else') написані без
+картки; 8 FORM/USE або USE — усі 8 вплетені інлайн, матч за `egpIndex`
+(987 + adjective, 988 + to-infinitive, 990 vague 'something', 993
+premodifiers-intensifying, 995 relative clause focus, 996 vague ширший
+діапазон, 997 'anything' focus, 998 'anything' ellipsis). 9 секцій: форма
+(об'єкт/додаток і підмет, обидва як одна прогресія по рівнях, з
+крос-посиланням на `determiners-quantity` за логікою some-/any-/no-);
+'anything' після заперечення (з крос-посиланням на `negation-negation`);
+'else' після займенника; уточнення прикметником/to-інфінітивом (987+988
+разом, спільна тема); vague-вирази 'or something'/'or something like that'
+(990+996 разом, та сама тема на різних рівнях); інтенсифікатори
+absolutely/nearly (993); складні підмети для фокусу — pronoun + relative
+clause (995) та 'anything' + post-modifier (997) в одній секції, спільна
+тема; ellipsis 'anything you need, ask...' (998); типові помилки (everybody
++ однина дієслова, подвійне заперечення nothing/anything, some- в
+стверджувальному реченні замість any-). Content-мітка — сам займенник
+(everything/someone/anything тощо) або найближчий модифікатор, що ілюструє
+секцію (else/adjective/intensifier); grammar — решта слотів формули
+(дієслово, прийменник, релятивний займенник).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 9 секцій + Practice розкрито, 8 карток у
+правильних секціях одразу після прикладу, "When it's used" відсутній —
+усі 8 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
+regex-перевірку `innerHTML`).
 
 ### [ ] 32. Pronouns — subject/ object (`pronouns-subject-object`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
