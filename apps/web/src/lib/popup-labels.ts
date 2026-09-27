@@ -1,3 +1,5 @@
+import type { TokenVerbGroup } from './types';
+
 // Display text for the reader popup: the stored values are machine-shaped
 // (enum slugs, ALL CAPS EGP guidewords with a `USE:` prefix, multi-sentence
 // corpus examples) and are turned into learner-facing labels here.
@@ -51,6 +53,22 @@ function splitSegments(text: string): string[] {
     .split('|')
     .map((segment) => segment.trim())
     .filter(Boolean);
+}
+
+const ASPECT_LABEL: Record<TokenVerbGroup['aspect'], string> = {
+  simple: 'simple',
+  continuous: 'continuous',
+  perfect: 'perfect',
+  perfectContinuous: 'perfect continuous',
+};
+
+// "Past perfect", "Present continuous", 'Future ("going to")' — the verb
+// group's tense+aspect, shared by every token of its aux chain.
+export function tenseAspectLabel(group: TokenVerbGroup): string {
+  if (group.isGoingToFuture) {
+    return 'Future ("going to")';
+  }
+  return upperFirst(`${group.tense} ${ASPECT_LABEL[group.aspect]}`);
 }
 
 // The first one or two sentences of an example — the corpus examples run to a

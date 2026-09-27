@@ -1626,6 +1626,10 @@ body {
   --pos-adj-ink: var(--color-success-ink);
   --pos-adv: var(--color-pink);
   --pos-adv-ink: var(--color-pink-ink);
+  /* Every function word (pron/det/adp/cconj/sconj/part/num/interj) shares one
+     muted group instead of 8 separate hues. */
+  --pos-function: var(--color-border-strong);
+  --pos-function-ink: var(--color-ink-soft);
   /* Tense is a line above the word, in hues the base highlight (amber and
      blue wash) never uses. */
   --tense-past: var(--color-pink);
@@ -1795,6 +1799,10 @@ body {
 :root[data-reader-modes~="pos"] [data-tok][data-pos-group="adv"] {
   color: var(--pos-adv-ink);
   border-bottom: 2px solid var(--pos-adv);
+}
+:root[data-reader-modes~="pos"] [data-tok][data-pos-group="function"] {
+  color: var(--pos-function-ink);
+  border-bottom: 2px dotted var(--pos-function);
 }
 :root[data-reader-modes~="tense"] [data-tok][data-tense="past"] {
   box-shadow: inset 0 0.14em 0 0 var(--tense-past);

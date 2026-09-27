@@ -176,6 +176,20 @@ export interface GrammarMatch {
   state: EffectiveState;
 }
 export type TokenTense = 'past' | 'present' | 'future';
+export type VerbAspect =
+  | 'simple'
+  | 'continuous'
+  | 'perfect'
+  | 'perfectContinuous';
+// Same tense+aspect shared by every member of one verb's aux chain (e.g. "had"
+// and "drawn" both read as Past Perfect) — render-tokens.ts paints the whole
+// group with it instead of just the finite token.
+export interface TokenVerbGroup {
+  verbGroupId: string;
+  tense: TokenTense;
+  aspect: VerbAspect;
+  isGoingToFuture: boolean;
+}
 // Generic POS + typical-role description for a token with no `word`/`phrase`
 // span (no dictionary entry to show in the click popup) — reader-lexicon.ts's
 // lightweight fallback popup.
@@ -198,6 +212,9 @@ export interface ReaderToken {
     pastSimple: string[];
     pastParticiple: string[];
   } | null;
+  // Absent from an API still on the previous release, and for a non-verb
+  // token or a clause with no determinable tense.
+  verbGroup?: TokenVerbGroup | null;
   // Absent from an API still on the previous release, and for a token
   // already covered by a word/phrase span.
   roleFallback?: TokenRoleFallback;

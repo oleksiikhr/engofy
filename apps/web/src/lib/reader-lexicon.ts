@@ -11,7 +11,6 @@ import type {
   EffectiveState,
   GrammarTranslations,
   LexiconTranslations,
-  TokenTense,
   TranslationLang,
 } from './types';
 
@@ -127,12 +126,15 @@ export interface LexiconData {
 
 // A token with no word/phrase span read straight off its `data-tok`
 // attributes (render-tokens.ts) rather than looked up in `LexiconData` — it
-// has no id to key a dictionary or a save/report action against.
+// has no id to key a dictionary or a save/report action against. `tenseLabel`
+// is the pre-rendered "Past perfect" style text (render-tokens.ts's
+// `data-tense-label`, built from the token's verb group) — null for a
+// non-verb token.
 export interface TokenFallback {
   term: string;
   posLabel: string;
   roleHint: string;
-  tense: TokenTense | null;
+  tenseLabel: string | null;
 }
 
 export function entryTerm(entry: LexiconEntry): string {
@@ -351,12 +353,6 @@ function grammarSectionHtml(
 </section>`;
 }
 
-const TENSE_LABEL: Record<TokenTense, string> = {
-  past: 'Past tense',
-  present: 'Present tense',
-  future: 'Future tense',
-};
-
 function upperFirst(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
@@ -371,7 +367,7 @@ function tokenFallbackHtml(fallback: TokenFallback): string {
     <span class="lex-popup__term">${esc(fallback.term)}</span>
     <button type="button" class="lex-popup__speak" data-speak="${esc(fallback.term)}" aria-label="Pronounce ${esc(fallback.term)}">${SPEAK_ICON}</button>
   </div>
-  ${fallback.tense ? `<p class="lex-popup__sub">${esc(TENSE_LABEL[fallback.tense])}</p>` : ''}
+  ${fallback.tenseLabel ? `<p class="lex-popup__sub">${esc(fallback.tenseLabel)}</p>` : ''}
   <p class="lex-popup__def">${esc(upperFirst(fallback.roleHint))}</p>
 </section>`;
 }

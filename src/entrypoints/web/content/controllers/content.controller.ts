@@ -369,6 +369,12 @@ function toAnnotationsDto(
         pastSimple: token.irregular.pastSimple,
         pastParticiple: token.irregular.pastParticiple,
       },
+      verbGroup: token.verbGroup && {
+        verbGroupId: token.verbGroup.verbGroupId,
+        tense: token.verbGroup.tense,
+        aspect: token.verbGroup.aspect,
+        isGoingToFuture: token.verbGroup.isGoingToFuture,
+      },
       ...(token.roleFallback ? { roleFallback: token.roleFallback } : {}),
     })),
   };

@@ -108,6 +108,84 @@ async function seedPublishedPost(em: EntityManager): Promise<SeededPost> {
   };
 }
 
+// "She had drawn it.": an aux chain ("had" + "drawn") sharing one verb group.
+async function seedPostWithVerbGroupTokens(
+  em: EntityManager,
+): Promise<{ shortId: string; slug: string }> {
+  const source = {
+    format: PostSourceFormat.Text,
+    type: PostSourceType.Original,
+    rawText: 'She had drawn it.',
+    attributionText: 'Original content',
+  };
+  const post = factories(em).post.makeOne({
+    source,
+    title: 'Verb Groups',
+    slug: 'verb-groups',
+    status: PostStatus.Published,
+  });
+  const part = factories(em).postPart.makeOne({
+    postId: post.id,
+    blockIndex: 0,
+    kind: PostPartKind.Paragraph,
+    body: {
+      type: 'paragraph',
+      children: [{ type: 'text', text: 'She had drawn it.' }],
+    },
+  });
+  const sentence = factories(em).sentence.makeOne({
+    postId: post.id,
+    postPartId: part.id,
+    unitIndex: 0,
+    position: 0,
+    rawText: 'She had drawn it.',
+    charStart: 0,
+    charEnd: 17,
+  });
+  // "drawn" (position 2) is the aux-chain head; "She"/"had"/"it" all point
+  // headPosition at it, "had" as its `aux` child.
+  const tokenRows: [
+    string,
+    number,
+    number,
+    string,
+    string,
+    string,
+    number | null,
+    Record<string, string>,
+  ][] = [
+    ['She', 0, 3, 'PRON', 'PRP', 'nsubj', 2, {}],
+    ['had', 4, 7, 'AUX', 'VBD', 'aux', 2, { Tense: 'Past', VerbForm: 'Fin' }],
+    ['drawn', 8, 13, 'VERB', 'VBN', 'ROOT', null, {}],
+    ['it', 14, 16, 'PRON', 'PRP', 'obj', 2, {}],
+    ['.', 16, 17, 'PUNCT', '.', 'punct', 2, {}],
+  ];
+  const lemmas: Record<string, string> = { had: 'have', drawn: 'draw' };
+  tokenRows.forEach(
+    (
+      [text, charStart, charEnd, pos, tag, dep, headPosition, morph],
+      position,
+    ) => {
+      factories(em).sentenceToken.makeOne({
+        sentenceId: sentence.id,
+        position,
+        text,
+        charStart,
+        charEnd,
+        lemma: lemmas[text] ?? text.toLowerCase(),
+        pos,
+        tag,
+        dep,
+        headPosition,
+        morph,
+      });
+    },
+  );
+
+  await em.flush();
+  return { shortId: post.shortId, slug: 'verb-groups' };
+}
+
 interface SeededGrammar {
   slug: string;
   grammarUsagePointId: string;
@@ -377,6 +455,33 @@ describe('ContentController', () => {
     expect(res.body.sidebar).toBeUndefined();
     expect(res.body.annotations.grammarMatches).toEqual([]);
     expect(res.body.annotations.tokens).toEqual([]);
+  });
+
+  it('gives every member of a verb-group aux chain the same tense+aspect', async () => {
+    const { shortId, slug } = await seedPostWithVerbGroupTokens(suite.orm.em);
+
+    const res = await suite
+      .request('get', `/content/posts/${slug}-${shortId}`)
+      .expect(HttpStatus.OK);
+
+    const tokens = res.body.annotations.tokens as Array<{
+      charStart: number;
+      verbGroup: {
+        verbGroupId: string;
+        tense: string;
+        aspect: string;
+        isGoingToFuture: boolean;
+      } | null;
+    }>;
+    const had = tokens.find((t) => t.charStart === 4);
+    const drawn = tokens.find((t) => t.charStart === 8);
+    expect(had?.verbGroup).toEqual({
+      verbGroupId: expect.any(String),
+      tense: 'past',
+      aspect: 'perfect',
+      isGoingToFuture: false,
+    });
+    expect(drawn?.verbGroup).toEqual(had?.verbGroup);
   });
 
   it('marks the post-detail response Cache-Control: private (it varies per session, unlike the other content routes)', async () => {
