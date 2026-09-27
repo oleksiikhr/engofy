@@ -1,0 +1,410 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CefrLevel, CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// Both USE rows are inlined: FOCUS (whatever/wherever at the start, C1) and
+// 'IN THAT' (C2). The 5 plain FORM rows — because (A1), the simple
+// conjunctions at A2/B1/B2 and the complex multi-word ones at B2 — are
+// written in full without a card, grouped by the pairs learners confuse.
+const point = (level: CefrLevel, text: string) =>
+  con.usagePoints.find((p) => p.cefrLevel === level && p.guideword.includes(text));
+
+const focusPoint = point('C1', 'FOCUS');
+const inThatPoint = point('C2', "'IN THAT'");
+const inlineUsagePointIds = [focusPoint, inThatPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The subordinating conjunctions because, if, when, while, since, until, although, whereas, unless, whether, as if and more — what each one means, and how to choose between the pairs that look alike."
+  handcrafted
+  sections={[
+    { id: 'because', title: 'Because and because of', open: true },
+    { id: 'if-when', title: 'If or when?', open: false },
+    { id: 'two-meanings', title: 'While, as, since: two meanings each', open: false },
+    { id: 'time', title: 'Before, after, until, once, as soon as', open: false },
+    { id: 'contrast', title: 'Although, though, whereas', open: false },
+    { id: 'purpose-result', title: 'So or so that?', open: false },
+    { id: 'condition', title: 'Unless, provided, as long as, except that', open: false },
+    { id: 'whether', title: 'Whether or if?', open: false },
+    { id: 'as-if', title: 'As if, as though', open: false },
+    { id: 'ever', title: 'Whatever, wherever, however... at the start', open: false },
+    { id: 'in-that', title: 'In that', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A subordinating conjunction starts a clause that can't stand on its own
+      and links it to a main clause. Each one carries a meaning — because a
+      reason, until an end point, unless a condition — so choosing the right
+      word matters more than the word order around it. This page goes through
+      them one by one, especially the pairs that are easy to mix up.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Because and because of" id="because" open>
+    <p>
+      Because is the first subordinating conjunction most learners use. It
+      introduces a reason, and the clause after it has its own subject and
+      verb.
+    </p>
+    <GrammarFormula label="Because" parts={['main clause', 'because', 'subject', 'verb']} />
+    <GrammarExample note="Because answers the question 'why?' — the clause after it has a subject (it) and a verb (was).">
+      We stayed at home <mark data-role="content">because</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> cold.
+    </GrammarExample>
+    <GrammarExample note="The because-clause can come first; then a comma separates it from the main clause.">
+      <mark data-role="content">Because</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> tired, I went to bed early.
+    </GrammarExample>
+    <p>
+      Because of is different: it is a preposition, so it is followed by a
+      noun, not by a clause.
+    </p>
+    <GrammarFormula label="Because of" parts={['because of', 'noun']} />
+    <GrammarExample note="No subject and verb after because of — just a noun phrase.">
+      We stayed at home <mark data-role="content">because of</mark> <mark data-role="grammar">the cold</mark>.
+    </GrammarExample>
+    <p>
+      In formal writing, due to the fact that is a longer way of saying
+      because. It is correct, but because is almost always clearer.
+    </p>
+    <GrammarExample note="Due to the fact that + subject + verb: a formal, wordier because.">
+      The flight was cancelled <mark data-role="content">due to the fact that</mark> <mark data-role="grammar">the pilot</mark> <mark data-role="grammar">was</mark> ill.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="If or when?" id="if-when" open={false}>
+    <p>
+      If and when can look interchangeable, but they say different things about
+      how sure you are. When means you expect it to happen; if means it might
+      or might not happen.
+    </p>
+    <GrammarFormula label="If / when" parts={['if / when', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="When: I'm certain I'll get home — the question is only the time.">
+      <mark data-role="content">When</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">get</mark> home, I'll call you.
+    </GrammarExample>
+    <GrammarExample note="If: maybe I'll see him, maybe not.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">see</mark> Tom, I'll tell him.
+    </GrammarExample>
+    <p>
+      In both cases the verb after if or when stays in the present, even though
+      the meaning is future — not <em>when I will get home</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="While, as, since: two meanings each" id="two-meanings" open={false}>
+    <p>
+      While, as and since each have a time meaning and a second, different
+      meaning. The rest of the sentence usually makes it clear which one is
+      intended.
+    </p>
+    <GrammarFormula label="Double-meaning conjunctions" parts={['while / as / since', 'subject', 'verb,', 'main clause']} />
+    <p>
+      While means "during the time that" — two things happening at once. It
+      can also mean "but, on the other hand", comparing two facts.
+    </p>
+    <GrammarExample note="While = during that time: the phone rang in the middle of my cooking.">
+      <mark data-role="content">While</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was cooking</mark>, the phone rang.
+    </GrammarExample>
+    <GrammarExample note="While = on the other hand: two people, two different preferences.">
+      <mark data-role="content">While</mark> <mark data-role="grammar">my brother</mark> <mark data-role="grammar">loves</mark> sport, I prefer books.
+    </GrammarExample>
+    <p>
+      As can mean "at the moment when" or "because". As a reason, it is a
+      little more formal than because and often gives a reason the listener
+      already knows.
+    </p>
+    <GrammarExample note="As = at the same moment: I was leaving when she arrived.">
+      <mark data-role="content">As</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was leaving</mark>, she arrived.
+    </GrammarExample>
+    <GrammarExample note="As = because: a simple, accepted reason.">
+      <mark data-role="content">As</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> late, we took a taxi.
+    </GrammarExample>
+    <p>
+      Since can mean "from that time until now" — then the main clause is
+      usually in the present perfect. It can also mean "because".
+    </p>
+    <GrammarExample note="Since = from that point in time; the main clause uses have lived.">
+      I've lived here <mark data-role="content">since</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> ten.
+    </GrammarExample>
+    <GrammarExample note="Since = because: there's no time meaning here.">
+      <mark data-role="content">Since</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> here, you can help me.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Before, after, until, once, as soon as" id="time" open={false}>
+    <p>
+      Before and after put two events in order. Until marks the point where
+      something stops. Once and as soon as mean "immediately after" — as soon
+      as stresses the speed even more.
+    </p>
+    <GrammarFormula label="Time" parts={['main clause', 'before / after / until / once / as soon as', 'subject', 'verb']} />
+    <GrammarExample note="Before: first you wash your hands, then you eat.">
+      Wash your hands <mark data-role="content">before</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">eat</mark>.
+    </GrammarExample>
+    <GrammarExample note="After: the film ended first, then we went for a pizza.">
+      We went for a pizza <mark data-role="content">after</mark> <mark data-role="grammar">the film</mark> <mark data-role="grammar">ended</mark>.
+    </GrammarExample>
+    <GrammarExample note="Until: keep waiting, and stop at the moment I come back.">
+      Wait here <mark data-role="content">until</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">come</mark> back.
+    </GrammarExample>
+    <GrammarExample note="Once: the moment you have finished, not before.">
+      <mark data-role="content">Once</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">have finished</mark>, you can go home.
+    </GrammarExample>
+    <GrammarExample note="As soon as: immediately, with no delay.">
+      Call me <mark data-role="content">as soon as</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">arrive</mark>.
+    </GrammarExample>
+    <p>
+      Like if and when, these conjunctions take the present (or present
+      perfect) when the meaning is future — use <em>as soon as you arrive</em>,
+      not <em>as soon as you will arrive</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Although, though, whereas" id="contrast" open={false}>
+    <p>
+      Although introduces something that makes the main clause surprising.
+      Though means the same and is more common in speech; even though makes the
+      contrast stronger.
+    </p>
+    <GrammarFormula label="Although / though" parts={['although / though', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="Although: the rain would normally stop us — but it didn't.">
+      <mark data-role="content">Although</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was raining</mark>, we went for a walk.
+    </GrammarExample>
+    <GrammarExample note="Though works the same way and sounds more relaxed.">
+      I enjoyed the film, <mark data-role="content">though</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> a bit long.
+    </GrammarExample>
+    <p>
+      At the very end of a sentence, though is an adverb meaning "however", as
+      in <em>The food was good. The service was slow, though.</em> Although can't
+      be used this way.
+    </p>
+    <p>
+      Whereas doesn't express surprise; it simply sets two different facts side
+      by side for comparison. It is common in writing.
+    </p>
+    <GrammarFormula label="Whereas" parts={['clause,', 'whereas', 'subject', 'verb']} />
+    <GrammarExample note="Whereas compares two people — nothing unexpected, just a difference.">
+      My sister is tall, <mark data-role="content">whereas</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> quite short.
+    </GrammarExample>
+    <p>
+      Despite the fact that means the same as although but is more formal.
+      Despite on its own is a preposition and needs a noun or -ing form, not a
+      clause.
+    </p>
+    <GrammarFormula label="Despite the fact that" parts={['despite the fact that', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="Despite the fact that + a full clause: a formal although.">
+      <mark data-role="content">Despite the fact that</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">had</mark> no experience, he got the job.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="So or so that?" id="purpose-result" open={false}>
+    <p>
+      So introduces a result: the first clause happened, and this is what
+      followed from it. There is usually a comma before it.
+    </p>
+    <GrammarFormula label="So (result)" parts={['cause,', 'so', 'subject', 'verb']} />
+    <GrammarExample note="The missed bus came first; being late is the result.">
+      I missed the bus, <mark data-role="content">so</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> late for work.
+    </GrammarExample>
+    <p>
+      So that introduces a purpose: why someone does something, the result they
+      want. The verb after it is often can, could, will or would. In formal
+      writing, in order that has the same meaning.
+    </p>
+    <GrammarFormula label="So that (purpose)" parts={['action', 'so (that) / in order that', 'subject', 'can / could / will / would']} />
+    <GrammarExample note="So that: leaving early was the plan, catching the train the aim.">
+      I left early <mark data-role="content">so that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">could</mark> catch the first train.
+    </GrammarExample>
+    <GrammarExample note="In order that: the same purpose meaning, in an official tone.">
+      Please arrive early <mark data-role="content">in order that</mark> <mark data-role="grammar">the meeting</mark> <mark data-role="grammar">can</mark> start on time.
+    </GrammarExample>
+    <p>
+      In informal speech, that is often dropped: <em>Speak louder so I can hear
+      you.</em> The modal verb (can) shows that this is still purpose, not
+      result.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Unless, provided, as long as, except that" id="condition" open={false}>
+    <p>
+      Unless means "if ... not". The clause after it is positive — the
+      negative meaning is already inside unless.
+    </p>
+    <GrammarFormula label="Unless" parts={['main clause', 'unless', 'subject', 'positive verb']} />
+    <GrammarExample note="Unless you study = if you don't study.">
+      You won't pass <mark data-role="content">unless</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">study</mark>.
+    </GrammarExample>
+    <p>
+      Provided (that) and as long as mean "only if": the main clause is true
+      on this one condition. Provided is more formal; as long as is common in
+      conversation.
+    </p>
+    <GrammarFormula label="Only if" parts={['main clause', 'provided (that) / as long as', 'subject', 'verb']} />
+    <GrammarExample note="Provided: you can borrow the car, but only with this condition.">
+      You can borrow the car <mark data-role="content">provided</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">drive</mark> carefully.
+    </GrammarExample>
+    <GrammarExample note="As long as: the same idea, more informal.">
+      I don't mind <mark data-role="content">as long as</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> home by midnight.
+    </GrammarExample>
+    <p>
+      Except (that) is not a condition: it introduces the one fact that
+      doesn't fit an otherwise true statement.
+    </p>
+    <GrammarExample note="Except that: everything was perfect apart from this one thing.">
+      The holiday was perfect, <mark data-role="content">except that</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">rained</mark> on the last day.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Whether or if?" id="whether" open={false}>
+    <p>
+      Whether introduces a yes/no question inside a sentence. In many cases if
+      works too.
+    </p>
+    <GrammarFormula label="Whether" parts={['main clause', 'whether / if', 'subject', 'verb']} />
+    <GrammarExample note="Both whether and if are fine here: is she coming, yes or no?">
+      I don't know <mark data-role="content">whether</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">is coming</mark>.
+    </GrammarExample>
+    <p>
+      Only whether is possible after a preposition, directly before or not,
+      and before a to-infinitive.
+    </p>
+    <GrammarExample note="After the preposition on: only whether.">
+      It depends on <mark data-role="content">whether</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">have</mark> enough money.
+    </GrammarExample>
+    <GrammarExample note="Before a to-infinitive: only whether.">
+      I can't decide <mark data-role="content">whether</mark> <mark data-role="grammar">to go</mark>.
+    </GrammarExample>
+    <p>
+      Whether ... or can also start a sentence and mean "it makes no difference
+      which": <em>Whether you like it or not, the meeting is at eight.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="As if, as though" id="as-if" open={false}>
+    <p>
+      As if and as though compare what you see or hear with an idea of what
+      might be true. They mean the same thing and usually follow look, seem,
+      sound, feel or act.
+    </p>
+    <GrammarFormula label="As if / as though" parts={['look / seem / sound', 'as if / as though', 'subject', 'verb']} />
+    <GrammarExample note="As if: from how he looks, he probably hasn't slept.">
+      He <mark data-role="grammar">looks</mark> <mark data-role="content">as if</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">hasn't slept</mark> for days.
+    </GrammarExample>
+    <GrammarExample note="As though after a normal verb: she talks like someone who knows everything.">
+      She <mark data-role="grammar">talks</mark> <mark data-role="content">as though</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">knows</mark> everything.
+    </GrammarExample>
+    <p>
+      When the comparison is clearly not true, a past form is used, and formal
+      English prefers were: <em>He acts as if he were the boss.</em> In
+      informal speech, like often replaces as if.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Whatever, wherever, however... at the start" id="ever" open={false}>
+    <p>
+      Whatever, wherever, whoever, whenever and however mean "it doesn't matter
+      what / where / who / when / how". Put at the start of the sentence, the
+      clause stresses that the main clause is true in every case.
+    </p>
+    <GrammarFormula label="-ever clause first" parts={['whatever / wherever / whoever …', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="Whatever: no matter which option you pick, the result is the same.">
+      <mark data-role="content">Whatever</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">choose</mark>, you'll have to share it.
+    </GrammarExample>
+    <GrammarExample note="Wherever: in every place you go, you see the same thing.">
+      <mark data-role="content">Wherever</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark> in the city, there are tourists.
+    </GrammarExample>
+    <GrammarExample note="Whoever: the person isn't known yet, but the requirement holds for anyone.">
+      <mark data-role="content">Whoever</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">appoint</mark>, they will need to start in May.
+    </GrammarExample>
+    <p>
+      However in this meaning is followed directly by an adjective or adverb.
+    </p>
+    <GrammarFormula label="However + adjective / adverb" parts={['however', 'adjective / adverb', 'subject', 'verb,', 'main clause']} />
+    <GrammarExample note="However hard = no matter how hard.">
+      <mark data-role="content">However</mark> <mark data-role="grammar">hard</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">try</mark>, I can't remember his name.
+    </GrammarExample>
+    {focusPoint && <GrammarUsagePointCard usagePoint={focusPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="In that" id="in-that" open={false}>
+    <p>
+      In that means "because" or "in the sense that". It explains exactly in
+      what way the main clause is true — often after a general judgement. It
+      is formal and typical of essays and reports.
+    </p>
+    <GrammarFormula label="In that" parts={['general statement', 'in that', 'subject', 'verb']} />
+    <GrammarExample note="Ideal is general; in that says precisely what makes it ideal.">
+      The job is ideal <mark data-role="content">in that</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">lets</mark> me work from home.
+    </GrammarExample>
+    <GrammarExample note="In that explains in which way professional sport is damaging.">
+      Professional sport can be harmful <mark data-role="content">in that</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">involves</mark> extremely hard training.
+    </GrammarExample>
+    {inThatPoint && <GrammarUsagePointCard usagePoint={inThatPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Despite and because of are prepositions, not conjunctions — they can't
+      introduce a clause with its own subject and verb. Use although / because,
+      or keep the preposition and follow it with a noun.
+    </p>
+    <GrammarContrast
+      bad={['Despite it was raining, we went out.', 'Because of it was late, we took a taxi.']}
+      good={['Although it was raining, we went out.', 'Because it was late, we took a taxi.']}
+    />
+    <p>
+      Unless already means "if not", so the verb after it stays positive.
+    </p>
+    <GrammarContrast
+      bad={["Unless you don't hurry, you'll miss the bus."]}
+      good={["Unless you hurry, you'll miss the bus."]}
+    />
+    <p>
+      After if, when, until, as soon as and similar conjunctions, use the
+      present for the future. And after a preposition, only whether is
+      possible.
+    </p>
+    <GrammarContrast
+      bad={["I'll call you when I will get home.", 'It depends on if we have time.']}
+      good={["I'll call you when I get home.", 'It depends on whether we have time.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinate clauses',
+        note: 'the same conjunctions from the clause side: clause order and commas, tenses in time and if-clauses, -ing / -ed clauses, formal inversion.',
+      },
+      {
+        slug: 'conjunctions-coordinating',
+        name: 'coordinating conjunctions',
+        note: 'and, but, or, so, yet — they join two equal parts instead of making one depend on the other.',
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditionals',
+        note: 'the full tense patterns after if and unless: zero, first, second, third and mixed.',
+      },
+    ]}
+  />
+</GrammarShell>
