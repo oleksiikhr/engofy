@@ -95,10 +95,10 @@ word/phrase entry немає. `reader-lexicon.ts` рендерить легки�
 лексичних. CSS: стриманий "clickable"-афорданс для звичайного слова, щоб не
 виглядало як повний словниковий хайлайт.
 
-### [ ] 4. apps/web: узгодження Word types / Tenses / Analyze
+### [x] 4. apps/web: узгодження Word types / Tenses / Analyze
 - Branch: `reader-token-analysis-unify-04-unify-modes`
-- Base: `reader-token-analysis-unify-03-click-every-word`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/150
 
 `render-tokens.ts` `POS_GROUP` отримує п'яту, візуально приглушену групу
 "function word". Тулбар "Tenses" показує tense+aspect і фарбує всю verb-групу

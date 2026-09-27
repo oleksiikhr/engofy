@@ -251,13 +251,13 @@ const isRead = post.isRead ?? false;
         {
           hasTokens && (
             <>
-              <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false" title="Underline nouns, verbs, adjectives and adverbs in different colours">
+              <button type="button" class="reader-toolbar__btn tone-green" data-mode="pos" aria-pressed="false" title="Underline nouns, verbs, adjectives, adverbs and function words in different colours">
                 <b aria-hidden="true">Aa</b>Word types
               </button>
-              <button type="button" class="reader-toolbar__btn tone-blue" data-mode="tense" aria-pressed="false" title="Mark past, present and future verbs with a coloured line above">
+              <button type="button" class="reader-toolbar__btn tone-blue" data-mode="tense" aria-pressed="false" title="Mark a verb's tense with a coloured line above — the whole verb (e.g. had drawn) lines up together; turn on Analyze for the exact tense and aspect">
                 <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l2.5 2.5" /></svg>Tenses
               </button>
-              <button type="button" class="reader-toolbar__btn tone-pink" data-mode="analyze" aria-pressed="false" title="Label every word with its type and explain each grammar pattern">
+              <button type="button" class="reader-toolbar__btn tone-pink" data-mode="analyze" aria-pressed="false" title="Label every word with its type (verbs show tense and aspect) and explain each grammar pattern">
                 <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="M20 20l-5.5-5.5" /></svg>Analyze
               </button>
             </>
@@ -287,14 +287,16 @@ const isRead = post.isRead ?? false;
           <span class="reader-legend__item tone-brand" data-pos-group="verb">verb</span>
           <span class="reader-legend__item tone-green" data-pos-group="adj">adjective</span>
           <span class="reader-legend__item tone-pink" data-pos-group="adv">adverb</span>
+          <span class="reader-legend__item tone-slate" data-pos-group="function">function word</span>
         </div>
         <p class="reader-legend" data-legend="tense">
           <span class="reader-legend__item tone-pink" data-tense="past">past</span>
           <span class="reader-legend__item tone-green" data-tense="present">present</span>
           <span class="reader-legend__item tone-brand" data-tense="future">future</span>
+          <span>— turn on Analyze to see the exact aspect (simple, continuous, perfect)</span>
         </p>
         <p class="reader-legend" data-legend="analyze">
-          Tap a highlighted construction to see why it fits. Irregular verbs show their forms.
+          Tap a highlighted construction to see why it fits. Verbs show their tense and aspect; irregular verbs show their forms.
         </p>
       </div>
 

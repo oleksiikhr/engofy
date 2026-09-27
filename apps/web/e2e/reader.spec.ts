@@ -539,6 +539,18 @@ test.describe('reader page (guest)', () => {
     const both = await ended.evaluate((el) => getComputedStyle(el).boxShadow);
     expect(both).not.toBe('none');
 
+    // The whole verb group shares one tense: "had" and "drawn" (Past Perfect)
+    // both paint the line, not just the finite "had".
+    await expect(reader.token('had')).toHaveAttribute('data-tense', 'past');
+    await expect(reader.token('drawn')).toHaveAttribute('data-tense', 'past');
+    const hadShadow = await reader
+      .token('had')
+      .evaluate((el) => getComputedStyle(el).boxShadow);
+    const drawnShadow = await reader
+      .token('drawn')
+      .evaluate((el) => getComputedStyle(el).boxShadow);
+    expect(drawnShadow).toBe(hadShadow);
+
     // The article's own text is untouched by the wrapping.
     await expect(reader.analysis).toContainText(
       'By the time the war ended, she had drawn every coastline twice.',
@@ -551,7 +563,7 @@ test.describe('reader page (guest)', () => {
     );
   });
 
-  test('function words are never coloured and there is no Function words switch', async ({
+  test('function words get one muted colour, not a separate Function words switch', async ({
     page,
   }) => {
     const reader = new ReaderPage(page);
@@ -559,8 +571,9 @@ test.describe('reader page (guest)', () => {
     await reader.modeToggle('Word types').click();
 
     const the = reader.token('the').first();
-    await expect(the).not.toHaveAttribute('data-pos-group', /.*/);
-    await expect(the).toHaveCSS('border-bottom-width', '0px');
+    await expect(the).toHaveAttribute('data-pos-group', 'function');
+    await expect(the).not.toHaveCSS('border-bottom-width', '0px');
+    await expect(the).toHaveCSS('border-bottom-style', 'dotted');
     await expect(
       reader.toolbar.getByRole('switch', { name: 'Function words' }),
     ).toHaveCount(0);
@@ -680,6 +693,17 @@ test.describe('reader page (guest)', () => {
       (el) => getComputedStyle(el, '::before').content,
     );
     expect(flag).toContain('drew');
+
+    // A verb group's Analyze tag is its tense+aspect ("had drawn" is Past
+    // Perfect), shared by every member — not the bare "aux"/"verb" POS tag.
+    const drawnTag = await drawn.evaluate(
+      (el) => getComputedStyle(el, '::after').content,
+    );
+    expect(drawnTag).toBe('"past perf"');
+    const hadTag = await reader
+      .token('had')
+      .evaluate((el) => getComputedStyle(el, '::after').content);
+    expect(hadTag).toBe('"past perf"');
 
     await reader.grammarLabel('had').first().click();
     await expect(reader.popupSection('grammar')).toBeVisible();
