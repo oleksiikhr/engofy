@@ -238,12 +238,31 @@ DEGREE ADJECTIVES з adjectives-position. Під час рев'ю виявлен
 злиплі слова (`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всьому `.con-body`
 — чисто після виправлення.
 
-### [ ] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
+### [x] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverb-phrases-form`.
+
+Лише 2 EGP-рядки класифіковані як USE/FORM-USE (146 `ADVERB + 'ENOUGH'`, 147
+`ADVERBS + PREPOSITIONAL PHRASES, HIGHLIGHT`, обидва C1) — решта (141-145,
+148) чисті FORM-рядки без usage point, написані повноцінно (формула +
+приклад) без картки, за правилом «FORM-факти без usage point — це
+нормально». 5 секцій: very + адверб (A1) разом з тим самим патерном
+adverb+adverb, що зростає в діапазоні на A2/B1/C1 (один і той самий
+guideword `FORM: ADVERB + ADVERB` повторюється тричі — згорнуто в одну
+секцію за прецедентом DEGREE ADJECTIVES з adjectives-position, а не
+розбито на 3 підрозділи); порівняльна форма адверба (B2, very тут не
+працює — much/far/a lot/even); enough і прийменникова фраза після адверба
+(C1, обидва usage points вплетені інлайн); поєднання модифікатора до і
+після одночасно (C2); типова помилка (very + comparative, порядок enough).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер + Playwright
+(усі 5 секцій розкрито, обидві usage-point картки на місці, "When it's
+used" відсутній — обидва usage points вже інлайн), перевірка на злиплі
+слова через `innerText` після розкриття всіх `<details>` — чисто.
 
 ### [ ] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
