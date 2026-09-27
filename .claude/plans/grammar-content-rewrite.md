@@ -1101,12 +1101,42 @@ used" відсутній, 0 карток, перевірка `innerText` піс�
 
 Див. «Спільний процес» вище. Slug: `verbs-patterns-with-to-and-ing`.
 
-### [ ] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
+### [x] 36. Verbs — prepositional (`verbs-prepositional`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `verbs-prepositional`.
+
+4 EGP-рядки (1048-1051), усі чисті FORM (обмежений і зростаючий діапазон
+verb + preposition + object на A1/B1, stranded preposition на B2, adverb
+між дієсловом і прийменником на B2) — сторінка без карток, "When it's
+used" не рендериться. 6 секцій: verb + preposition + object базовий
+діапазон (listen to/look after/look for); ширший діапазон на B1 (look
+at/deal with, + проза про depend on/believe in/care about/apologise
+for/agree with/consist of); stranded preposition у relative clause й
+після adjective + to-infinitive (з крос-посиланням на
+`prepositions-prepositions` за загальною механікою stranding, щоб не
+дублювати); adverb між дієсловом і прийменником (look carefully at/deal
+properly with); look forward to / be used to + -ing, де `to` — фіксований
+прийменник, а не інфінітивний маркер (виконує обіцянку крос-посилання,
+дане раніше з `verbs-patterns-with-to-and-ing`); типові помилки (пропущений
+прийменник калькою з рідної мови, пропущений прийменник після
+фронтованого об'єкта, інфінітив замість -ing після look forward
+to/be used to). Content-мітка — прийменник (фіксований для цього
+дієслова), grammar — решта слотів формули (підмет, дієслово, adverb,
+об'єкт). Крос-посилання вперед на ще не написані `modality-used-to`
+(зріз 78) і `verbs-phrasal` (зріз 74) — за прецедентом forward-посилань
+на ще не написані сторінки з попередніх зрізів.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (7 details,
+41 мітка/28 `<em>`, 0 карток очікувано, "When it's used" відсутній, 0
+злиплих слів навколо `<mark>`/`<em>` через перевірку сусідніх текстових
+вузлів, без горизонтального скролу на 390px). Побічний ефект живого
+рендеру — регенерація `src/metadata.ts` — відкинуто через `git checkout`
+перед комітом, до цього зрізу не стосується.
 
 ### [ ] 37. Verbs — there is/are (`verbs-there-is-are`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
