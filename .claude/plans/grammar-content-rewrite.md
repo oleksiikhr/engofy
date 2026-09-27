@@ -399,12 +399,32 @@ which/whose + іменник; заперечні питання + why don't we/y
 dev-сервер + Playwright (11 details, 97 міток і 49 `<em>` — 0 злиплих
 сусідніх слів).
 
-### [ ] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
+### [x] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-subordinated`.
+
+17 EGP-рядків (240-256), 16 FORM/USE — усі 16 вплетені інлайн; єдиний
+чистий FORM (250, non-finite після if, C1) написаний без картки в секції
+умов. Guideword-и перетинаються (REASON vs 'BECAUSE', REASONS; два
+NON-FINITE WITH '-ING' на B1 і B2; CONDITIONS на A2 і B2), тому usage
+points матчаться за `cefrLevel` + підрядком guideword. 9 секцій: головна
++ підрядна (позиція і правило коми); reason (because/as/since); time
+(+ present замість will, + before/after + -ing); condition (if,
+unless/provided, if + -ed); purpose (to-inf, so that/in order that);
+contrast (although/even though/while + although + -ed/adj); -ing/-ed
+клаузи (after having/being, -ing, not + -ing, based on/compared to);
+формальна інверсія (Should/Had/Were + Were + to); типові помилки
+(фрагмент, although...but, dangling participle). Content-мітка — сполучник/
+вступне слово клаузи, grammar — підмет/дієслово. Кома у формулі
+приліплена до попереднього слота (`'verb,'`), а не окремим чипом.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 100 міток, 16 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих сусідніх слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 15. Conjunctions — coordinating (`conjunctions-coordinating`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
