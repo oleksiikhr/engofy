@@ -1,0 +1,182 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// 6 of this construction's 7 EGP rows are plain FORM (no usage point) —
+// written in full below anyway, per "FORM-факти без usage point — це
+// нормально". The one FORM/USE row (emphatic do) is matched by guideword and
+// inlined right next to the pattern it refines.
+const emphasisPoint = con.usagePoints.find((p) =>
+  p.guideword.includes("AUXILIARY 'DO'"),
+);
+const inlineUsagePointIds = [emphasisPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The default clause type for making a statement: subject before verb, with no inversion. How to build it affirmative and negative with be, ordinary verbs, have, and modals, plus the do that appears only to add emphasis."
+  handcrafted
+  sections={[
+    { id: 'statement', title: 'Subject before verb', open: true },
+    { id: 'negative-be', title: 'Negative with be', open: false },
+    { id: 'negative-do', title: "Negative with an ordinary verb: don't", open: false },
+    { id: 'negative-have', title: 'Negative with have', open: false },
+    { id: 'modal', title: 'With a modal verb', open: false },
+    { id: 'emphasis', title: 'Do, for emphasis', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A declarative clause makes a statement rather than asking a question or
+      giving an order — it's the default shape of an English sentence, and
+      every other clause type is built by changing something about it.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Subject before verb" id="statement" open>
+    <p>
+      The one fact that defines a declarative clause: the subject comes
+      immediately before the verb, with nothing swapped around. A question
+      built from the same words moves part of the verb group in front of the
+      subject instead — this order is what marks a clause as a statement.
+    </p>
+    <GrammarFormula label="Statement order" parts={['subject', 'verb', '(object / complement)']} />
+    <GrammarExample note="Subject, then verb, then what follows it — no auxiliary moves in front of I.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">study</mark> English at college.
+    </GrammarExample>
+    <GrammarExample note="Be works the same way here: subject first, then the verb itself.">
+      <mark data-role="grammar">My friend</mark> <mark data-role="content">is</mark> a nurse.
+    </GrammarExample>
+    <GrammarExample note="The subject-verb order holds even with a continuous form.">
+      <mark data-role="grammar">I</mark>'m <mark data-role="content">living</mark> in Manchester.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Negative with be" id="negative-be" open={false}>
+    <p>
+      When the verb is <em>be</em>, <em>not</em> (or its contraction) slots in
+      right after it — nothing else changes about the order above.
+    </p>
+    <GrammarFormula label="Be + not" parts={['subject', 'be + not', 'complement']} />
+    <GrammarExample note="Not sits directly after is, with nothing between them.">
+      <mark data-role="grammar">My college</mark> <mark data-role="content">is not</mark> very big.
+    </GrammarExample>
+    <GrammarExample note="The contracted form is just as common — isn't in place of is not.">
+      This place <mark data-role="content">isn't</mark> big.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Negative with an ordinary verb: don't" id="negative-do" open={false}>
+    <p>
+      An ordinary (non-<em>be</em>) verb can't take <em>not</em> directly —
+      English inserts the auxiliary <em>do</em> to carry it instead, and the
+      main verb drops back to its base form.
+    </p>
+    <GrammarFormula label="Do-support negation" parts={['subject', "don't / doesn't", 'verb (base form)']} />
+    <GrammarExample note="Don't carries not; like stays in its base form, not likes.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">like</mark> maths.
+    </GrammarExample>
+    <GrammarExample note="Doesn't is the third-person singular form of the same pattern.">
+      She <mark data-role="content">doesn't</mark> <mark data-role="grammar">know</mark> the answer.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Negative with have" id="negative-have" open={false}>
+    <p>
+      <em>Have</em>, used as an auxiliary (for possession or as part of a
+      perfect form), takes <em>not</em> directly, the same way <em>be</em>{' '}
+      does — no <em>do</em> needed.
+    </p>
+    <GrammarFormula label="Have + not" parts={['subject', "haven't / hadn't (got)", '...']} />
+    <GrammarExample note="Haven't carries the negation straight onto the perfect form.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">haven't</mark> eaten Italian food for a long time.
+    </GrammarExample>
+    <GrammarExample note="Got is optional here — haven't got any money works the same as don't have any money.">
+      … now I <mark data-role="content">haven't got</mark> any money.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="With a modal verb" id="modal" open={false}>
+    <p>
+      A modal verb (<em>can</em>, <em>will</em>, <em>could</em>, <em>won't</em>
+      …) sits in the same slot as <em>be</em> above: it comes right after the
+      subject, and <em>not</em> attaches directly to it, again with no{' '}
+      <em>do</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'modal', 'verb (base form)']} />
+    <GrammarExample note="Can sits right after I, before the base-form verb go.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">can</mark> <mark data-role="grammar">go</mark> to see her tomorrow.
+    </GrammarExample>
+    <GrammarFormula label="Negative" parts={['subject', 'modal + not', 'verb (base form)']} />
+    <GrammarExample note="Won't is will + not, fused into one word, right after the subject.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">won't</mark> <mark data-role="grammar">have to bring</mark> anything.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Do, for emphasis" id="emphasis" open={false}>
+    <p>
+      An affirmative clause can also take <em>do</em> — not to carry a
+      negation this time, but purely to stress that the statement is true,
+      often correcting or confirming something.
+    </p>
+    <GrammarFormula label="Emphatic do" parts={['subject', 'do / does / did', 'verb (base form)']} />
+    <GrammarExample note="Do adds no meaning of its own here beyond insisting the statement is true.">
+      Yes, <mark data-role="grammar">I</mark> <mark data-role="content">do</mark> <mark data-role="grammar">have</mark> a favorite restaurant.
+    </GrammarExample>
+    <GrammarExample note="Did carries the emphasis back into the past, on top of the ordinary past tense meaning.">
+      After all, <mark data-role="grammar">you</mark> <mark data-role="content">did</mark> <mark data-role="grammar">say</mark> that you wanted to go somewhere with your friends.
+    </GrammarExample>
+    {emphasisPoint && <GrammarUsagePointCard usagePoint={emphasisPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      Two slips show up most often: putting <em>not</em> straight after an
+      ordinary verb instead of bringing in <em>do</em>, and stacking{' '}
+      <em>don't</em> in front of a modal that already carries its own
+      negative form.
+    </p>
+    <GrammarContrast
+      bad={['She not like tea.', "I don't can swim."]}
+      good={["She doesn't like tea.", "I can't swim."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'the inverted order — auxiliary before subject — that a declarative clause deliberately avoids.',
+      },
+      {
+        slug: 'negation-negation',
+        name: 'negation',
+        note: 'the fuller picture of English negation beyond just the declarative clause.',
+      },
+      {
+        slug: 'clauses-coordinated',
+        name: 'coordinated clauses',
+        note: 'joining two or more declarative clauses like these together with and, but or or.',
+      },
+    ]}
+  />
+</GrammarShell>
