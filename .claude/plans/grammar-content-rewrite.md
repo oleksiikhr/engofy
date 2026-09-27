@@ -486,12 +486,35 @@ dev-сервер + Playwright (13 details, 118 міток, 2 картки в с�
 `ever`/`in-that`, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>` — перевірка за символом до/після кожного тегу).
 
-### [ ] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
+### [x] 17. Determiners — demonstratives (`determiners-demonstratives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-demonstratives`.
+
+20 EGP-рядків: 15 USE — усі 15 вплетені інлайн; 5 чистих FORM (this +
+singular A1, this + uncountable / that / these / those A2) написані без
+картки в першій секції (таблиця near/far × singular/plural). Guideword-и
+тут неконсистентні ('THIS', POINTING A1 / 'THIS' POINTING| і голий
+POINTING на A2 для того самого правила, 'THESE' POINTING||), тому usage
+points матчаться за `egpIndex`, а не підрядком guideword. У
+learner_explanation/examples усіх точок порожньо — факти перевірено за
+EGP can-do + прикладами. 9 секцій: чотири слова (узгодження з числом,
+uncountable, замість артикля); near (this/these, «місце, де я є»); far
+(that/those, those days, точка зору мовця); вже згадане; час (this + time
+word = майбутнє/минуле за часом дієслова, that night в розповіді, без
+прийменника); storytelling this (C2); this + noun + of + his (C2);
+емоційна дистанція that/those (C2); типові помилки (this shoes / these
+informations, the this / this my, in this afternoon). Займенникове
+вживання (This is my brother) — лише крос-посилання на
+`pronouns-demonstratives` (зріз 63). Content-мітка — демонстратив,
+grammar — іменник (+ there was, of + possessive).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (10 details, 60 міток, 15 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
