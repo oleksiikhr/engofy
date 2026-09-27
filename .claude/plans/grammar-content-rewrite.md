@@ -291,12 +291,29 @@ CLAUSES, STANCE, B1) — решта чисті FORM-рядки без картк
 `\S<em`) по всьому `.con-body` — жодного справжнього збою (лише пунктуація
 після тегу).
 
-### [ ] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
+### [x] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverbs-as-modifiers`.
+
+31 EGP-рядків (80-110), усі класифіковані як USE — найбільша з побудованих
+досі конструкцій, кожна точка отримала inline-картку. 11 функціональних
+секцій (time, place, frequency, degree+adjectives, degree+verbs, manner,
+linking, focus/sequencing/organising, certainty, stance, distancing) + типова
+помилка (false friend "actually" ≠ "зараз/наразі"). На відміну від
+`adverbs-adverbs-and-adverb-phrases-types-and-meanings` (що модифікує кожен
+тип адверба), ця сторінка групує за функцією самого адверба; крос-посилання
+в обидва боки, дублікатів EGP-рядків нема (різні `egp_index`). Приклади
+написані вручну одним рядком у файлі.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок — зловив незекранований
+апостроф у `parts={['...what's more...']}`, виправлено на подвійні лапки),
+`lint:check` (чисто), `build` (успішно), живий рендер через dev-сервер +
+Playwright (усі 13 секцій розкрито, усі 31 картки на місцях з правильними
+рівнем/guideword, скрипт-перевірка на злиплі слова навколо `<mark>`/`<em>` —
+0 збігів).
 
 ### [ ] 10. Adverbs — position (`adverbs-position`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
