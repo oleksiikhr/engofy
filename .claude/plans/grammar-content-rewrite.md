@@ -917,12 +917,44 @@ fallback до того часу.
 вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через regex-перевірку
 `innerHTML`, повний скріншот сторінки перевірено вручну).
 
-### [ ] 30. Present — present simple (`present-present-simple`) — рівень A1
+### [x] 30. Present — present simple (`present-present-simple`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `present-present-simple`.
+
+24 EGP-рядки (865-888): 10 чистих FORM (affirmative/negative/questions на
+двох зростаючих діапазонах, indirect questions, 'really'-інтенсифікатор,
+adverbs of indefinite frequency, formal-інверсія not only...but also)
+написані без картки; 14 USE/FORM-USE — усі 14 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: FORM: AFFIRMATIVE/NEGATIVE/QUESTIONS на
+A1/A2/B1, USE: MENTAL PROCESS VERBS на A2/B1, USE: SPEECH ACT VERBS на B1/B2,
+USE: REPORTING VERBS на B1/C1). 12 секцій: форма (affirmative + -s,
+negative, questions + wh-, indirect questions, really, adverbs of frequency
+з крос-посиланням на `adverbs-position`); habits/general facts (868, головне
+значення); if-clauses (869, з крос-посиланням на `clauses-subordinated` за
+повним діапазоном умовних речень); instructions/directions (875);
+suggestions "why don't...?" (877); mental process verbs (876/880, зростаючий
+діапазон); reporting + speech-act verbs разом в одній секції як пара
+споріднених формальних груп (881/888 reporting, 882/884 speech-act);
+tag questions "don't you think?" (878); historic present для переказу
+сюжету/історії (885, з крос-посиланням на `past-past-simple`); негативні
+питання для persuasion (886) і opinion (887); formal-інверсія "Not only
+do...but also" (883, чистий FORM, з крос-посиланнями на
+`conjunctions-coordinating` і `clauses-coordinated`); типові помилки
+(пропущене -s, подвійне маркування -s з do/does, continuous замість simple
+для тимчасової дії). Content-мітка — фінітна форма дієслова, що несе
+present-simple маркування (base(+s)/do-does/don't-doesn't), або специфічне
+дієслово секції (think/apologise/demonstrates тощо) — той самий слот, що й
+be-дієслово на `present-present-continuous`; grammar — решта слотів формули.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений з попередньої сесії) + Playwright (усі 12 секцій + Practice
+розкрито, 14 карток у правильних секціях, "When it's used" відсутній —
+усі 14 точок вже інлайн, 0 злиплих слів навколо `<mark>`/`<em>` через
+regex-перевірку `innerHTML`, без горизонтального скролу на 390px).
 
 ### [ ] 31. Pronouns — indefinite - thing, -one, -body etc (`pronouns-indefinite-thing-one-body-etc`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
