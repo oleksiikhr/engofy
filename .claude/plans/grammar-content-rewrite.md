@@ -342,12 +342,33 @@ fronted never/hardly (обидві картки), типова помилка (�
 злиплих слів навколо `<mark>` через DOM (сусідні text-вузли) — 36 міток, 0
 збігів.
 
-### [ ] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
+### [x] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-coordinated`.
+
+10 EGP-рядків (169-178), 6 класифіковані як (FORM/)USE — instructions
+(A2)/narrative (B1) чейнінг кількох клауз, neither...nor (B2), not
+only...but (also) без (B2) і з (C1) інверсією, negative clause + nor (C2)
+— усі 6 вплетені інлайн; решта 4 чисті FORM-рядки (and/but/or, ellipted
+subject, either...or, combining clauses of the same type) написані
+повноцінно без картки. 8 секцій: базове з'єднання двох клауз; еліпсис
+підмета; чейнінг (instructions/narrative); правило "лише той самий тип
+клаузи" (finite vs -ing/to-inf) з контраст-блоком; either...or +
+neither...nor як парні сполучники; not only...but (also) звичайний і
+фронтований з інверсією; negative clause + nor (з крос-посиланням на
+`adverbs-position` за тим самим патерном інверсії never/hardly); типова
+помилка. Content-мітка — цільовий сполучник (and/but/or/either/neither/
+not only/nor), grammar-мітка — auxiliary/subject у прикладах інверсії
+(за прецедентом NEVER/HARDLY з `adverbs-position`).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер + Playwright
+(усі 8 секцій розкрито, усі 6 usage-point карток на місцях з правильними
+рівнем/guideword, "When it's used" відсутній — усі USE вже інлайн,
+перевірка на злиплі слова навколо `<mark>` через `innerText` — 0 збігів).
 
 ### [ ] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
