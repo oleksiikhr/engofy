@@ -1,0 +1,326 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 24 EGP rows (865-888): 10 pure FORM (affirmative/negative/questions at two
+// growing ranges, indirect questions, 'really', adverbs of indefinite
+// frequency, the not only...but also inversion) written without a card; 14
+// USE/FORM-USE — all 14 inlined, matched by egpIndex (several guidewords
+// repeat across levels: FORM: AFFIRMATIVE/NEGATIVE/QUESTIONS at A1/A2/B1,
+// USE: MENTAL PROCESS VERBS at A2/B1, USE: SPEECH ACT VERBS at B1/B2, USE:
+// REPORTING VERBS at B1/C1).
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const habitsA1 = point(868);
+const ifClausesA2 = point(869);
+const instructionsA2 = point(875);
+const mentalA2 = point(876);
+const suggestionsA2 = point(877);
+const tagQuestionsB1 = point(878);
+const mentalB1 = point(880);
+const reportingB1 = point(881);
+const speechActB1 = point(882);
+const speechActB2 = point(884);
+const storiesB2 = point(885);
+const persuasionC1 = point(886);
+const opinionC1 = point(887);
+const reportingC1 = point(888);
+
+const inlineUsagePointIds = [
+  habitsA1,
+  ifClausesA2,
+  instructionsA2,
+  mentalA2,
+  suggestionsA2,
+  tagQuestionsB1,
+  mentalB1,
+  reportingB1,
+  speechActB1,
+  speechActB2,
+  storiesB2,
+  persuasionC1,
+  opinionC1,
+  reportingC1,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Present simple in English: form (base verb, -s for he/she/it, do/does questions and negatives) and when to use it — habits, routines, general facts, instructions, mental-process and reporting verbs, and the historic present."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'habits', title: 'Habits, routines and general facts', open: false },
+    { id: 'if-clauses', title: "After 'if': real and imagined situations", open: false },
+    { id: 'instructions', title: 'Giving instructions and directions', open: false },
+    { id: 'suggestions', title: "Suggestions with 'why don't...?'", open: false },
+    { id: 'mental-process', title: 'Saying what you think', open: false },
+    { id: 'reporting-speech-act', title: 'Reporting and responding in writing', open: false },
+    { id: 'tag-questions', title: "'Don't you think?': looking for agreement", open: false },
+    { id: 'historic-present', title: 'The historic present: telling a story', open: false },
+    { id: 'negative-questions', title: 'Negative questions: persuasion and opinion', open: false },
+    { id: 'inversion', title: "Formal fronting: 'Not only do... but also...'", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The present simple is the base form of the verb — with <em>-s</em> added for <em>he/she/it</em> — built with <em>do/does</em> for negatives and questions. It's the tense for things that are true in general, not just happening right now, so it's the first tense most learners meet and one of the most overloaded: the same short form covers habits, facts, instructions, formal reporting and even telling a vivid story about the past.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form" id="form" open>
+    <GrammarFormula label="Affirmative" parts={['subject', 'base verb (+s for he/she/it)']} />
+    <GrammarExample note="865 A1: a limited range of regular and irregular verbs.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">learn</mark> <mark data-role="grammar">new words every day at college</mark>.
+    </GrammarExample>
+    <GrammarExample note="865 A1: -s for the he/she/it form.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">plays</mark> <mark data-role="grammar">tennis on Saturdays</mark>.
+    </GrammarExample>
+    <GrammarExample note="870 A2: a wider range of verbs, including -es after -ch/-sh/-s/-x/-o and consonant+y → -ies.">
+      <mark data-role="grammar">The journey</mark> <mark data-role="content">takes</mark> <mark data-role="grammar">about half an hour from here</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Negative" parts={['subject', "don't/doesn't", 'base verb']} />
+    <GrammarExample note="866 A1: a limited range of verbs.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't like</mark> <mark data-role="grammar">meat or fish</mark>.
+    </GrammarExample>
+    <GrammarExample note="872 A2: a wider range of verbs, doesn't for he/she/it.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">doesn't cost</mark> <mark data-role="grammar">very much</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Question" parts={['Do/Does', 'subject', 'base verb']} />
+    <GrammarFormula label="Wh- question" parts={['wh-word', 'do/does', 'subject', 'base verb']} />
+    <GrammarExample note="873 A2: yes/no question with 'you'.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">a mobile phone</mark>?
+    </GrammarExample>
+    <GrammarExample note="879 B1: wh- question with a wider range of subjects.">
+      <mark data-role="grammar">Where</mark> <mark data-role="content">do</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">want to spend their holidays</mark>?
+    </GrammarExample>
+    <GrammarExample note="879 B1: does for a third-person subject.">
+      <mark data-role="grammar">How</mark> <mark data-role="content">does</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">know my name</mark>?
+    </GrammarExample>
+    <GrammarFormula label="Indirect question" parts={['Do you know', 'wh-word', 'subject', 'verb']} />
+    <GrammarExample note="871 A2: an indirect wh- question inside 'Do you know'.">
+      <mark data-role="grammar">Do you know</mark> <mark data-role="grammar">how</mark> <mark data-role="grammar">to get to</mark> <mark data-role="grammar">my house</mark>?
+    </GrammarExample>
+    <GrammarFormula label="With 'really'" parts={['subject', 'really', 'verb']} />
+    <GrammarExample note="867 A1: 'really' as an intensifier before the verb.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">really</mark> <mark data-role="content">want</mark> <mark data-role="grammar">to see you</mark>.
+    </GrammarExample>
+    <GrammarFormula label="With an adverb of indefinite frequency" parts={['subject', 'adverb', 'verb']} />
+    <GrammarExample note="874 A2: mid position, between subject and verb.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">always</mark> <mark data-role="content">make</mark> <mark data-role="grammar">special things for their celebrations</mark>.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/adverbs-position">adverbs — position</a> for the full set of mid-position rules (before the verb, after <em>be</em>, after an auxiliary).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Habits, routines and general facts" id="habits">
+    <p>
+      This is the core meaning of the present simple: something that happens repeatedly, or something that's simply true, independent of whether it's happening at this exact moment. No time expression is required — the tense itself carries the "in general" meaning.
+    </p>
+    <GrammarFormula label="Habit or general fact" parts={['subject', 'base verb (+s for he/she/it)']} />
+    <GrammarExample note="868 A1: a repeated event/habit.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">work</mark> <mark data-role="grammar">in a supermarket</mark>.
+    </GrammarExample>
+    <GrammarExample note="868 A1: a general fact.">
+      <mark data-role="grammar">The sun</mark> <mark data-role="content">rises</mark> <mark data-role="grammar">in the east</mark>.
+    </GrammarExample>
+    {habitsA1 && <GrammarUsagePointCard usagePoint={habitsA1} />}
+  </GrammarSection>
+
+  <GrammarSection title="After 'if': real and imagined situations" id="if-clauses">
+    <p>
+      The present simple is the tense that goes inside an <em>if</em>-clause about the future, even though the main clause talks about a later time with <em>will</em>. Using <em>will</em> in the <em>if</em>-clause itself is one of the most common present simple mistakes.
+    </p>
+    <GrammarFormula label="Condition" parts={['If', 'subject', 'present simple verb']} />
+    <GrammarExample note="869 A2: real condition, will in the main clause.">
+      <mark data-role="grammar">If you</mark> <mark data-role="content">want</mark> <mark data-role="grammar">some help, I will be free next week</mark>.
+    </GrammarExample>
+    <GrammarExample note="869 A2: imagined condition, contrasted in the same sentence.">
+      <mark data-role="grammar">If you</mark> <mark data-role="content">go</mark> <mark data-role="grammar">with friends, you will have more fun</mark>.
+    </GrammarExample>
+    {ifClausesA2 && <GrammarUsagePointCard usagePoint={ifClausesA2} />}
+    <p>
+      See <a href="/grammar/clauses-subordinated">clauses — subordinated</a> for the full range of condition types (unless, provided that, if + past for unreal conditions).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Giving instructions and directions" id="instructions">
+    <p>
+      Step-by-step instructions and directions are usually given with <em>you</em> and the present simple, one action per clause, often chained with <em>and</em> or <em>then</em> — a plain, neutral way of walking someone through a process.
+    </p>
+    <GrammarFormula label="Instruction" parts={['you', 'base verb', 'complement']} />
+    <GrammarExample note="875 A2: a chain of directions.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">turn</mark> <mark data-role="grammar">right, and my house is on your left</mark>.
+    </GrammarExample>
+    <GrammarExample note="875 A2: giving directions from a fixed starting point.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">leave</mark> <mark data-role="grammar">the bus at the station and walk for a few minutes</mark>.
+    </GrammarExample>
+    {instructionsA2 && <GrammarUsagePointCard usagePoint={instructionsA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Suggestions with 'why don't...?'" id="suggestions">
+    <p>
+      Two fixed openers, <em>Why don't you...?</em> and <em>Why don't we...?</em>, use the present simple question form to make a suggestion rather than to ask for information — nobody expects a literal reason "why not".
+    </p>
+    <GrammarFormula label="Suggestion" parts={['Why', "don't", 'you/we', 'base verb']} />
+    <GrammarExample note="877 A2: suggesting an action for the listener.">
+      <mark data-role="grammar">Why</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">wear your black suit</mark>?
+    </GrammarExample>
+    <GrammarExample note="877 A2: suggesting a shared action with 'we'.">
+      <mark data-role="grammar">Why</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">go to a disco when the film ends</mark>?
+    </GrammarExample>
+    {suggestionsA2 && <GrammarUsagePointCard usagePoint={suggestionsA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Saying what you think" id="mental-process">
+    <p>
+      Verbs that describe a mental state rather than a physical action — <em>think</em>, <em>hope</em>, <em>know</em>, later <em>remember</em>, <em>understand</em>, <em>believe</em> — stay in the present simple even when the thought is happening right now, because a state isn't something you can be "in the middle of" the way an action is.
+    </p>
+    <GrammarFormula label="Mental process verb" parts={['subject', 'mental process verb', 'object/that-clause']} />
+    <GrammarExample note="876 A2: a limited range — think, hope, know.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">think</mark> <mark data-role="grammar">my bag is in your kitchen</mark>.
+    </GrammarExample>
+    {mentalA2 && <GrammarUsagePointCard usagePoint={mentalA2} />}
+    <GrammarExample note="880 B1: a wider range — remember, understand, believe.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">don't remember</mark> <mark data-role="grammar">the title, but the book is very boring</mark>.
+    </GrammarExample>
+    {mentalB1 && <GrammarUsagePointCard usagePoint={mentalB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Reporting and responding in writing" id="reporting-speech-act">
+    <p>
+      Two related verb groups take the present simple in the same way: reporting verbs, which summarise what a text, chart or person says (<em>say</em>, <em>show</em>, later <em>demonstrate</em>, <em>illustrate</em>), and speech-act verbs, which perform the act of agreeing, suggesting or advising as you write it (<em>suggest</em>, <em>apologise</em>, <em>recommend</em>, later <em>agree</em>, <em>accept</em>, <em>advise</em>). In both cases the writing itself is the event, but the present simple treats it as a general, ongoing fact rather than something happening moment-to-moment.
+    </p>
+    <GrammarFormula label="Reporting verb" parts={['subject', 'reporting verb', 'object/that-clause']} />
+    <GrammarExample note="881 B1: a limited range — say, show.">
+      <mark data-role="grammar">The chart</mark> <mark data-role="content">shows</mark> <mark data-role="grammar">how a pretty woman solves her problems</mark>.
+    </GrammarExample>
+    {reportingB1 && <GrammarUsagePointCard usagePoint={reportingB1} />}
+    <GrammarExample note="888 C1: a wide range, especially in academic writing — demonstrate, illustrate.">
+      <mark data-role="grammar">This chart</mark> <mark data-role="content">illustrates</mark> <mark data-role="grammar">the trend in profit across three factories</mark>.
+    </GrammarExample>
+    {reportingC1 && <GrammarUsagePointCard usagePoint={reportingC1} />}
+    <GrammarFormula label="Speech-act verb" parts={['subject', 'speech-act verb', 'object/that-clause']} />
+    <GrammarExample note="882 B1: a limited range — suggest, apologise, recommend.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">apologise</mark> <mark data-role="grammar">for missing your class</mark>.
+    </GrammarExample>
+    {speechActB1 && <GrammarUsagePointCard usagePoint={speechActB1} />}
+    <GrammarExample note="884 B2: a wide range — (dis)agree, accept, advise.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">disagree</mark> <mark data-role="grammar">with the new numbering system</mark>.
+    </GrammarExample>
+    {speechActB2 && <GrammarUsagePointCard usagePoint={speechActB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="'Don't you think?': looking for agreement" id="tag-questions">
+    <p>
+      Adding <em>don't you think</em> or <em>don't you agree</em> after a statement turns it into a soft appeal for agreement, rather than a real question — the speaker already has an opinion and is inviting the listener to share it.
+    </p>
+    <GrammarFormula label="Negative tag" parts={['statement', "don't you think/agree?"]} />
+    <GrammarExample note="878 B1: inviting agreement, not asking for new information.">
+      <mark data-role="grammar">It's a bit strange</mark>, <mark data-role="content">don't you think</mark>?
+    </GrammarExample>
+    {tagQuestionsB1 && <GrammarUsagePointCard usagePoint={tagQuestionsB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="The historic present: telling a story" id="historic-present">
+    <p>
+      Summarising the plot of a book or film, or retelling a piece of history, can switch into the present simple even though the events are set in the past — this "historic present" makes the summary feel immediate and dramatic, a common device in reviews and commentaries.
+    </p>
+    <GrammarFormula label="Historic present" parts={['subject', 'base verb (+s for he/she/it)']} />
+    <GrammarExample note="885 B2: summarising the plot of a book.">
+      <mark data-role="grammar">The plot</mark> <mark data-role="content">takes place</mark> <mark data-role="grammar">in Vienna after the Second World War</mark>.
+    </GrammarExample>
+    <GrammarExample note="885 B2: a scene described as if it's unfolding now.">
+      <mark data-role="grammar">A man</mark> <mark data-role="content">is sleeping</mark> <mark data-role="grammar">on the train. He dreams of a colleague who lost his job</mark>.
+    </GrammarExample>
+    {storiesB2 && <GrammarUsagePointCard usagePoint={storiesB2} />}
+    <p>
+      Compare with <a href="/grammar/past-past-simple">past simple</a> — the ordinary, neutral tense for narrating something that actually happened in the past.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Negative questions: persuasion and opinion" id="negative-questions">
+    <p>
+      A negative question with the present simple can do more than ask something — it can push the listener towards agreeing (persuasion), or check that an opinion is shared (a milder, conversational check).
+    </p>
+    <GrammarFormula label="Negative question" parts={["Don't/Doesn't", 'subject', 'base verb']} />
+    <GrammarExample note="886 C1: a persuasion strategy, arguing for a product.">
+      <mark data-role="grammar">Don't you</mark> <mark data-role="content">just hate</mark> <mark data-role="grammar">taking the bus to school every morning</mark>?
+    </GrammarExample>
+    {persuasionC1 && <GrammarUsagePointCard usagePoint={persuasionC1} />}
+    <GrammarExample note="887 C1: checking that an opinion is shared.">
+      <mark data-role="grammar">Doesn't it</mark> <mark data-role="content">sound</mark> <mark data-role="grammar">fascinating</mark>?
+    </GrammarExample>
+    {opinionC1 && <GrammarUsagePointCard usagePoint={opinionC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Formal fronting: 'Not only do... but also...'" id="inversion">
+    <p>
+      Fronting <em>not only</em> at the start of a clause forces subject-auxiliary inversion, borrowing the present simple's own question-form <em>do/does</em> even in a statement — a formal, emphatic pattern found in writing more than speech.
+    </p>
+    <GrammarFormula label="Fronted 'not only'" parts={['Not only', 'do/does', 'subject', 'base verb', '(but) also', 'subject', 'verb']} />
+    <GrammarExample note="883 B2: 'do' after the fronted 'not only'.">
+      <mark data-role="content">Not only do</mark> <mark data-role="grammar">they save you filing time</mark>, <mark data-role="grammar">but they also save office space</mark>.
+    </GrammarExample>
+    <GrammarExample note="883 B2: 'does' for a third-person subject.">
+      <mark data-role="content">Not only does it</mark> <mark data-role="grammar">look nice</mark>, <mark data-role="grammar">but it's also full of places to visit</mark>.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/conjunctions-coordinating">conjunctions — coordinating</a> and <a href="/grammar/clauses-coordinated">clauses — coordinated</a> for the same <em>not only... but also</em> pattern from the conjunction's own side, including the version without inversion.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Forgetting the <em>-s</em> on a third-person singular subject is the single most common present simple mistake — many languages mark the subject on the verb differently, or not at all.
+    </p>
+    <GrammarContrast bad={['She like tennis.', 'He go to work every day.']} good={['She likes tennis.', 'He goes to work every day.']} />
+    <p>
+      In negatives and questions, the base verb loses its <em>-s</em> once <em>do/does</em> is carrying it — the ending doesn't appear twice.
+    </p>
+    <GrammarContrast bad={["She doesn't likes tennis.", 'Does he goes to work?']} good={["She doesn't like tennis.", 'Does he go to work?']} />
+    <p>
+      And a temporary action already in progress right now needs the present continuous, not the present simple — using the present simple for it suggests a permanent habit instead of a one-off happening.
+    </p>
+    <GrammarContrast bad={['I read a book right now.']} good={["I'm reading a book right now."]} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'present-present-continuous',
+        name: 'present continuous',
+        note: 'what is happening right now or around now, not a habit or a general fact.',
+      },
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'the same base-verb shape, but for something that actually happened and finished in the past.',
+      },
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect simple',
+        note: 'a past action or state connected to now, rather than a fact true in general.',
+      },
+    ]}
+  />
+</GrammarShell>
