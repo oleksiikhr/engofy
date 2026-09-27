@@ -1,0 +1,208 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// Only one EGP row for this construction is USE/FORM-USE-classified: stance
+// adverbs modifying a whole clause (FORM/USE: MODIFYING CLAUSES, STANCE).
+// Every other row is a plain FORM row (no usage point) — this page is mostly
+// about what kind of word a given adverb TYPE can modify, not gameified
+// usage points, per the "FORM-факти без usage point" rule.
+const stancePoint = con.usagePoints.find((p) => p.guideword.includes('STANCE'));
+const inlineUsagePointIds = stancePoint ? [stancePoint.grammarUsagePointId] : [];
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The types of adverb in English — degree, manner, time, place and stance — and what each one can modify: adjectives, other adverbs, verbs, noun phrases, pronouns, determiners, comparatives and whole clauses."
+  handcrafted
+  sections={[
+    { id: 'adjectives', title: 'Degree adverbs modifying adjectives', open: true },
+    { id: 'other-adverbs', title: 'Degree adverbs modifying other adverbs', open: false },
+    { id: 'verbs', title: 'Adverbs modifying verbs: degree, frequency and manner', open: false },
+    { id: 'wider-range', title: 'Degree adverbs modifying noun phrases, pronouns, determiners and comparatives', open: false },
+    { id: 'clauses', title: 'Adverbs modifying a whole clause', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Adverbs come in several types, grouped by what they mean rather than
+      how they're formed: degree adverbs say how much of a quality there is,
+      manner adverbs say how something is done, time and place adverbs say
+      when and where, and stance adverbs show the speaker's attitude to a
+      whole sentence. Each type has its own set of things it can modify, and
+      that range widens steadily as you move up the levels.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Degree adverbs modifying adjectives" id="adjectives" open>
+    <p>
+      A degree adverb says how strong a quality is. <em>Very</em> is the
+      first one most learners meet, and it only works with adjectives that
+      can be scaled up or down — hot, tired, expensive — not ones that
+      already describe an extreme, like boiling or exhausted.
+    </p>
+    <GrammarFormula label="Basic" parts={['very', 'adjective']} />
+    <GrammarExample note="Very strengthens hot, a gradable adjective.">
+      The soup is <mark data-role="grammar">very</mark> <mark data-role="content">hot</mark>.
+    </GrammarExample>
+    <p>
+      Other degree adverbs join <em>very</em> as you progress — <em>really</em>, <em>so</em>, <em>quite</em>, <em>too</em> — each adding its own shade
+      of meaning rather than just a stronger version of "very".
+    </p>
+    <GrammarFormula label="Wider range" parts={['so / really / quite / too', 'adjective']} />
+    <GrammarExample note="Really is a slightly less formal, conversational alternative to very.">
+      This exercise is <mark data-role="grammar">really</mark> <mark data-role="content">difficult</mark>.
+    </GrammarExample>
+    <GrammarExample note="Too has a different meaning from very — it says there's more of the quality than wanted or needed.">
+      The coffee was <mark data-role="grammar">too</mark> <mark data-role="content">hot</mark> to drink.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Degree adverbs modifying other adverbs" id="other-adverbs" open={false}>
+    <p>
+      The same degree adverbs can intensify another adverb instead of an
+      adjective. At the earliest level this only reaches a narrow set of
+      time adverbs; by the upper-intermediate levels it reaches almost any
+      adverb type, including ones of manner. See <a href="/grammar/adverbs-adverb-phrases-form">adverb phrases: form</a> for the full mechanics of this
+      pattern, including how it combines with <em>enough</em> and a
+      following phrase — this section only tracks which adverb types the
+      pattern reaches at each level.
+    </p>
+    <GrammarFormula label="Time adverb" parts={['very', 'time adverb']} />
+    <GrammarExample note="At A1, very only reaches a narrow set of time adverbs like early and soon.">
+      We arrived <mark data-role="grammar">very</mark> <mark data-role="content">early</mark> this morning.
+    </GrammarExample>
+    <GrammarFormula label="Any adverb, wider range" parts={['degree adverb', 'adverb']} />
+    <GrammarExample note="By B1 the pattern reaches manner adverbs too, and by C1 it covers almost any adverb type.">
+      She sang <mark data-role="grammar">really</mark> <mark data-role="content">beautifully</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Adverbs modifying verbs: degree, frequency and manner" id="verbs" open={false}>
+    <p>
+      An adverb can also modify a verb directly, with no intensifier in
+      front of it. At the earliest level this covers degree adverbs like <em>really</em> and frequency adverbs like <em>always</em>; manner adverbs —
+      saying how an action is done — join in soon after, starting with a
+      small, common set and growing steadily through the intermediate
+      levels.
+    </p>
+    <GrammarFormula label="Degree or frequency adverb" parts={['adverb', 'verb']} />
+    <GrammarExample note="No intensifier layer here — really is itself the adverb, sitting directly in front of the verb it modifies.">
+      I <mark data-role="content">really</mark> <mark data-role="grammar">enjoy</mark> this song.
+    </GrammarExample>
+    <GrammarExample note="A frequency adverb like always works the same way — one adverb, modifying the verb directly.">
+      We <mark data-role="content">always</mark> <mark data-role="grammar">eat</mark> breakfast together.
+    </GrammarExample>
+    <GrammarFormula label="Manner adverb" parts={['verb', 'manner adverb']} />
+    <GrammarExample note="A small set of manner adverbs at first — quickly, easily, carefully — with the range widening through B1.">
+      She <mark data-role="grammar">answered</mark> <mark data-role="content">carefully</mark>.
+    </GrammarExample>
+    <GrammarExample note="By B1, an increasing range of manner adverbs works the same way.">
+      He <mark data-role="grammar">explained</mark> the plan <mark data-role="content">clearly</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection
+    title="Degree adverbs modifying noun phrases, pronouns, determiners and comparatives"
+    id="wider-range"
+    open={false}
+  >
+    <p>
+      By the upper-intermediate levels, the same small set of degree
+      adverbs — <em>quite</em>, <em>rather</em>, <em>almost</em>, <em>absolutely</em> — reaches well beyond adjectives and adverbs: whole noun
+      phrases, pronouns, and determiners. At C1, a related set — <em>slightly</em>, <em>a bit</em>, <em>much</em> — modifies a comparative form
+      instead.
+    </p>
+    <GrammarFormula label="Noun phrase" parts={['quite / rather', 'noun phrase']} />
+    <GrammarExample note="Quite modifies the whole noun phrase a long meeting, not just one word inside it.">
+      It was <mark data-role="grammar">quite</mark> <mark data-role="content">a long meeting</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Pronoun" parts={['almost / absolutely', 'pronoun']} />
+    <GrammarExample note="Almost modifies the pronoun anything directly.">
+      You can find <mark data-role="grammar">almost</mark> <mark data-role="content">anything</mark> here.
+    </GrammarExample>
+    <GrammarFormula label="Determiner" parts={['almost', 'determiner']} />
+    <GrammarExample note="Almost modifies every, a determiner, rather than a following noun or adjective.">
+      <mark data-role="grammar">Almost</mark> <mark data-role="content">every</mark> shop was closed.
+    </GrammarExample>
+    <GrammarFormula label="Comparative" parts={['slightly / a bit / much', 'comparative']} />
+    <GrammarExample note="The same degree-word pattern from earlier sections, now modifying a comparative form instead.">
+      This route is <mark data-role="grammar">slightly</mark> <mark data-role="content">quicker</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Adverbs modifying a whole clause" id="clauses" open={false}>
+    <p>
+      Some adverbs don't modify a single word at all — they attach to a
+      whole clause. A place adverb can complete a linking verb on its own;
+      a time or sequencing adverb sets the scene for the clause that
+      follows it; and a stance adverb, usually first in the sentence,
+      shows what the speaker thinks about the whole statement rather than
+      describing any one word in it.
+    </p>
+    <GrammarFormula label="Place adverb as complement" parts={['subject + be', 'place adverb']} />
+    <GrammarExample note="Here completes the verb be on its own, the way an adjective would.">
+      I'll <mark data-role="grammar">be</mark> <mark data-role="content">there</mark> by six.
+    </GrammarExample>
+    <GrammarFormula label="Time or sequencing adverb" parts={['time/sequencing adverb', 'clause']} />
+    <GrammarExample note="Yesterday sets the scene for the whole clause that follows, not just one word in it.">
+      <mark data-role="content">Yesterday</mark>, we went to the market.
+    </GrammarExample>
+    <GrammarExample note="A sequencing adverb like first orders a series of clauses rather than modifying a single word.">
+      <mark data-role="content">First</mark>, mix the flour and sugar.
+    </GrammarExample>
+    <GrammarFormula label="Stance adverb" parts={['stance adverb', 'clause']} />
+    <GrammarExample note="Luckily comments on the whole statement — the speaker's attitude, not a fact about being hurt.">
+      <mark data-role="content">Luckily</mark>, nobody was hurt.
+    </GrammarExample>
+    {stancePoint && <GrammarUsagePointCard usagePoint={stancePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      To modify a verb, most manner adverbs need their <em>-ly</em> form —
+      the adjective on its own doesn't work there, even though it's the
+      form learners often reach for first.
+    </p>
+    <GrammarContrast
+      bad={['She sings beautiful.', 'He drove very careful through the fog.']}
+      good={['She sings beautifully.', 'He drove very carefully through the fog.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adverbs-adverb-phrases-form',
+        name: 'adverb phrases: form',
+        note: 'the mechanics of combining an adverb with very, enough, or a following phrase.',
+      },
+      {
+        slug: 'adverbs-adverbs-as-modifiers',
+        name: 'adverbs as modifiers',
+        note: 'adverbs used to modify a noun or a whole sentence, beyond the types covered here.',
+      },
+      {
+        slug: 'adverbs-position',
+        name: 'adverb position',
+        note: 'where each of these adverb types sits in the sentence.',
+      },
+    ]}
+  />
+</GrammarShell>
