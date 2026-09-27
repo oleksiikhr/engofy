@@ -544,12 +544,36 @@ dev-сервер + Playwright (11 details, 78 міток, 1 картка в се
 `generic-their`, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
+### [x] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-quantity`.
+
+22 EGP-рядки (331-352): 3 USE — 341 (a little / a bit of, B1), 351
+(HYPERBOLE, C1), 352 (MANY A, C2) — усі 3 вплетені інлайн, матч за
+`egpIndex`; 19 чистих FORM написані без картки. У learner_explanation/
+examples усіх точок порожньо — факти перевірено за EGP can-do + прикладами з
+`assets/egp.json`. 10 секцій: таблиця «яке слово з яким іменником»
+(singular / plural / uncountable / обидва); some/any/no (+ some в
+пропозиціях, more); much/many (заперечення, питання, how much/many,
+so/too much/many); a lot of/lots of/plenty of/loads of + гіпербола millions/
+tons of (картка 351); a few/a little/a bit of (картка 341) + very/so/too
+few/little; a/one/each/every/both/either/neither; all/most/several/enough +
+almost/nearly all/every; quantity + of + the/my (опціональний of після
+all/both/half, each of/none of замість every/no, either/neither of + plural/
+pronoun); many a/many an (картка 352); типові помилки (much↔many,
+informations, every students, some my / the most people / most of people,
+подвійне заперечення з no/neither, little↔a little). Content-мітка —
+quantity-слово, grammar — іменник (+ of/the/my, so/too/very/almost/nearly).
+Займенникове вживання (Some were late) — лише крос-посилання на
+`pronouns-quantity`.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 144 мітки, 3 картки в секціях
+`a-lot-of`/`few-little`/`many-a`, "When it's used" відсутній, 0 злиплих
+слів навколо `<mark>`/`<em>`).
 
 ### [ ] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
