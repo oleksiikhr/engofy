@@ -607,12 +607,37 @@ dev-сервер + Playwright (11 details, 128 міток, 11 карток у п
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 21. Modality — will (`modality-will`) — рівень A1
+### [x] 21. Modality — will (`modality-will`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `modality-will`.
+
+13 EGP-рядків (603-615): 10 USE — усі 10 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: PLANS AND INTENTIONS A1/A2, REQUESTS
+A2/B2); 3 чисті FORM (affirmative, negative, questions) написані без картки
+в одній секції форми. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій:
+форма (will/'ll, won't, питання, short answers, will can't + modal →
+be able to); plans/intentions + Will you…? про плани (604, 608); if +
+present, will в головному реченні (605); прогнози + question tags won't
+you? / will it? (612); fixed plans (611); willingness/offers (609) + won't
+= відмова, у т.ч. для речей (The car won't start — без картки, поза EGP);
+requests Will you…? (610) + Will you please… / Will you be quiet! як
+команда (613); habitual/typical will + often/usually (614, відсилка на
+would для минулих звичок); stressed WILL для несхвалення + Boys will be
+boys (615); типові помилки (will to/comes/please to, will в if-clause,
+will can/will must, Yes I'll / willn't). Відмежовано від
+`future-future-simple-with-will-and-shall` (там — will/shall як час, Shall
+I/we): тут майбутнє показано коротко з крос-посиланням, фокус на модальних
+значеннях. Content-мітка — will/'ll/won't (контракції однією міткою),
+grammar — підмет + base verb (+ if-clause, please, often/usually, час/дата).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 130 міток, 10 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 22. Modality — would (`modality-would`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
