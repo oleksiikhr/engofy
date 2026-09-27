@@ -1178,12 +1178,44 @@ apps/web вже були запущені з попередньої сесії) 
 злиплих слів навколо `<mark>`/`<em>` через regex-перевірку `innerText`,
 скріншот усієї сторінки перевірено вручну).
 
-### [ ] 38. Verbs — types (`verbs-types`) — рівень A1
+### [x] 38. Verbs — types (`verbs-types`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `verbs-types`.
+
+10 EGP-рядків (1066-1075), усі чисті FORM — usage points немає, сторінка без
+карток, "When it's used" не рендериться, немає ні CEFR-бейджа, ні
+level-progress у шапці (той самий патерн, що й на `verbs-linking`/
+`nouns-plural`/`verbs-there-is-are`). Це оглядова сторінка про 5 ролей
+дієслова, на яку вже посилався наперед `verbs-linking` ("where linking
+verbs fit among action, auxiliary and modal verbs"). 6 секцій: main verbs
+(regular/irregular, з крос-посиланням на `present-present-simple`/
+`past-past-simple`); linking verbs (be + зростаючий діапазон look/feel/
+seem/become, з крос-посиланням на вже написану `verbs-linking` за повним
+діапазоном); auxiliary verbs (be/have/do, жодного власного значення,
+з крос-посиланням на `present-present-continuous` і `questions-yes-no`
+за do-support); modal verbs (can/will/would на обмеженому і зростаючому
+діапазоні, з крос-посиланням на `modality-can`/`modality-will`/
+`modality-would` і `future-future-simple-with-will-and-shall` за
+розмежуванням will-як-час vs will-як-модальність); semi-modal verbs
+(have (got) to/used to/ought to/dare/need, форвард-посилання на ще не
+написані `modality-have-got-to`/`modality-used-to`/`modality-ought`/
+`modality-dare`/`modality-need`, за прецедентом форвард-посилань з
+попередніх зрізів); типові помилки (пропущений допоміжний be/have/do,
+модальне дієслово з to або -s, подвійний модаль will can). Content-мітка —
+дієслово, що виконує роль секції (main verb / linking verb / auxiliary /
+modal / semi-modal), grammar — решта слотів формули (підмет, додаток,
+доповнення, головне дієслово після auxiliary/modal).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (backend і
+apps/web вже були запущені з попередньої сесії) + Playwright (усі 6
+секцій + Practice розкрито, "When it's used" відсутній, 0 карток, 36
+міток/37 `<em>`, перевірка на злиплі слова через `innerHTML`-regex —
+жодного справжнього збігу, лише навмисні "/"-розділювачі типу
+`will</em>/<em>shall`, повний скріншот сторінки перевірено вручну).
 
 ### [ ] 39. Adjectives — comparatives (`adjectives-comparatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
