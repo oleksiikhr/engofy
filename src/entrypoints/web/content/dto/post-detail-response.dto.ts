@@ -152,6 +152,19 @@ export class PostWordRoleFallbackDto {
   readonly roleHint!: string;
 }
 
+export class PostVerbGroupDto {
+  // Unique among the groups on this response, not just within one sentence.
+  readonly verbGroupId!: string;
+
+  readonly tense!: 'past' | 'present' | 'future';
+
+  readonly aspect!: 'simple' | 'continuous' | 'perfect' | 'perfectContinuous';
+
+  // "be going to VERB" — a fixed future phrase distinct from the tense+aspect
+  // grid, taught to A1 readers as its own construction.
+  readonly isGoingToFuture!: boolean;
+}
+
 export class PostTokenDto {
   // Index within Doc.children.
   readonly blockIndex!: number;
@@ -172,6 +185,12 @@ export class PostTokenDto {
 
   // Set on a verb in an irregular past form.
   readonly irregular!: PostIrregularVerbDto | null;
+
+  // Same tense+aspect shared by every member of this token's verb-group aux
+  // chain (e.g. "had" and "drawn" both read as Past Perfect); null for a
+  // non-verb token or a clause with no determinable tense. Absent from an API
+  // still on the previous release.
+  readonly verbGroup?: PostVerbGroupDto | null;
 
   // Generic POS + typical-role description for a token with no `word`/
   // `phrase` span (no dictionary entry to show in the click popup).
