@@ -1,0 +1,243 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// 12 of this construction's 15 EGP rows are plain FORM (no usage point) —
+// written in full below anyway, per "FORM-факти без usage point — це
+// нормально". The 3 USE/FORM-USE rows are matched by guideword and inlined
+// right next to the pattern they refine: a sentence adverb linking back to a
+// previous statement (front position), inversion after a fronted negative
+// adverb (never/hardly), and hedging in mid position (distancing).
+const sentenceAdverbPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('SENTENCE ADVERB'),
+);
+const neverPoint = con.usagePoints.find((p) => p.guideword.includes("'NEVER'"));
+const hardlyPoint = con.usagePoints.find((p) => p.guideword.includes("'HARDLY'"));
+const distancingPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('DISTANCING'),
+);
+const inlineUsagePointIds = [
+  sentenceAdverbPoint,
+  distancingPoint,
+  neverPoint,
+  hardlyPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Where an English adverb goes: front position to open a sentence or link it to the one before, mid position between the subject and the main verb, end position after the verb, and directly before the adjective it strengthens — plus the special word order that fronting never or hardly triggers."
+  handcrafted
+  sections={[
+    { id: 'front', title: 'Front position', open: true },
+    { id: 'mid', title: 'Mid position', open: false },
+    { id: 'end', title: 'End position', open: false },
+    { id: 'degree-adjective', title: 'Degree adverbs before an adjective', open: false },
+    { id: 'inversion', title: "Fronting for emphasis: never and hardly", open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      An adverb can move around the clause more freely than almost any other
+      word class, but each job it does has a home position — front, mid or
+      end — and most adverbs are picky about which one they'll accept.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Front position" id="front" open>
+    <p>
+      Placing an adverb right at the start of the clause is the simplest
+      option, and the first one learners meet.
+    </p>
+    <GrammarFormula label="Limited range" parts={['adverb', 'clause']} />
+    <GrammarExample note="Sometimes opens the sentence instead of sitting inside it.">
+      <mark data-role="content">Sometimes</mark> we walk to work instead of driving.
+    </GrammarExample>
+    <GrammarExample note="Maybe, fronted, softens the whole suggestion that follows.">
+      <mark data-role="content">Maybe</mark> you left it at the office.
+    </GrammarExample>
+    <p>
+      The range widens steadily: more adverbs join the front slot, often
+      ones that contrast with or build on the previous sentence.
+    </p>
+    <GrammarFormula label="Wider range" parts={['adverb', 'clause']} />
+    <GrammarExample note="However fronts the clause to signal a contrast with what came before.">
+      I'd love to help. <mark data-role="content">However</mark>, I'm busy all week.
+    </GrammarExample>
+    <GrammarExample note="Just, fronted, narrows the claim down to one small exception.">
+      <mark data-role="content">Just</mark> wait here — I'll be back in a minute.
+    </GrammarExample>
+    <p>
+      A further group sits in the exact same front slot but does a different
+      job: instead of saying when, how or how much, it comments on the whole
+      idea and links it back to something already said.
+    </p>
+    <GrammarFormula label="Sentence adverb, linking back" parts={['sentence adverb', 'clause']} />
+    <GrammarExample note="Actually doesn't describe an action — it signals a correction or a shift in the conversation.">
+      <mark data-role="content">Actually</mark>, I'd rather stay home tonight.
+    </GrammarExample>
+    <GrammarExample note="Unfortunately comments on the whole event, not on how it happened.">
+      <mark data-role="content">Unfortunately</mark>, the concert was cancelled.
+    </GrammarExample>
+    {sentenceAdverbPoint && <GrammarUsagePointCard usagePoint={sentenceAdverbPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Mid position" id="mid" open={false}>
+    <p>
+      Between the subject and the main verb is the default home for
+      frequency adverbs and a handful of other very common ones.
+    </p>
+    <GrammarFormula label="Before a main verb" parts={['subject', 'adverb', 'verb']} />
+    <GrammarExample note="Always sits between the subject and the verb it describes, never before it or after the object.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">always</mark> <mark data-role="grammar">cycle</mark> to work.
+    </GrammarExample>
+    <p><em>Really</em> takes the exact same slot, right before the verb.</p>
+    <GrammarFormula label="With 'really'" parts={['subject', 'really', 'verb']} />
+    <GrammarExample note="Really strengthens enjoy, sitting in the same mid-clause spot as always above.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">really</mark> <mark data-role="grammar">enjoy</mark> this course.
+    </GrammarExample>
+    <p>
+      Once a modal, auxiliary or <em>be</em> is present, the same mid slot
+      moves to just after it instead — and more adverbs join the group.
+    </p>
+    <GrammarFormula
+      label="After be / auxiliary / modal"
+      parts={['subject', 'be / auxiliary / modal', 'adverb', 'verb']}
+    />
+    <GrammarExample note="Also sits right after the modal can, before the main verb visit.">
+      We <mark data-role="grammar">can</mark> <mark data-role="content">also</mark> <mark data-role="grammar">visit</mark> the museum tomorrow.
+    </GrammarExample>
+    <GrammarExample note="Finally sits right after has, before the main verb finished.">
+      She <mark data-role="grammar">has</mark> <mark data-role="content">finally</mark> <mark data-role="grammar">finished</mark> the report.
+    </GrammarExample>
+    <p>
+      At the highest level, the same mid slot can also hedge a claim —
+      distancing the writer from something they're reporting rather than
+      saying how often it happens.
+    </p>
+    <GrammarFormula label="Distancing (advanced)" parts={['subject', 'distancing adverb', 'verb phrase']} />
+    <GrammarExample note="Apparently, tucked into the same mid slot, signals the writer isn't vouching for the claim.">
+      <mark data-role="grammar">The new policy</mark> <mark data-role="content">apparently</mark> fixes the problem completely.
+    </GrammarExample>
+    {distancingPoint && <GrammarUsagePointCard usagePoint={distancingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="End position" id="end" open={false}>
+    <p>
+      A third position — after the verb, and after any object — is the usual
+      home for several other adverb types, each answering a different
+      question about the action.
+    </p>
+    <GrammarFormula label="Time" parts={['clause', 'time adverb']} />
+    <GrammarExample note="Soon closes the sentence, answering when.">
+      We'll finish the report <mark data-role="content">soon</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Place" parts={['clause', 'place adverb']} />
+    <GrammarExample note="Outside closes the sentence, answering where.">
+      The kids are playing <mark data-role="content">outside</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Manner" parts={['clause', 'manner adverb']} />
+    <GrammarExample note="Quickly closes the sentence, answering how.">
+      She solved the puzzle <mark data-role="content">quickly</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Degree" parts={['clause', 'degree adverb / phrase']} />
+    <GrammarExample note="A lot closes the sentence, answering how much.">
+      I miss my family <mark data-role="content">a lot</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Degree adverbs before an adjective" id="degree-adjective" open={false}>
+    <p>
+      A separate position rule applies when a degree adverb strengthens an
+      adjective instead of a verb: it always sits immediately in front of
+      that adjective, with nothing in between.
+    </p>
+    <GrammarFormula label="Degree adverb + adjective" parts={['degree adverb', 'adjective']} />
+    <GrammarExample note="Very sits directly before hot, not anywhere else in the clause.">
+      This coffee is <mark data-role="content">very</mark> <mark data-role="grammar">hot</mark>.
+    </GrammarExample>
+    <GrammarExample note="Quite, from the wider A2 range, keeps the same fixed position.">
+      The exam was <mark data-role="content">quite</mark> <mark data-role="grammar">difficult</mark>.
+    </GrammarExample>
+    <p>
+      The word order itself never changes as more intensifiers join the
+      group at higher levels — only the range of available adverbs grows.
+      For the fuller list and what each one adds in meaning, see <em>Modifying adjectives</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Fronting for emphasis: never and hardly" id="inversion" open={false}>
+    <p>
+      At advanced levels, a small set of negative-idea adverbs can leave
+      their usual mid position and move to the front for dramatic emphasis —
+      but the move comes with a price: the subject and the auxiliary or
+      modal swap places too, exactly as in a question.
+    </p>
+    <GrammarFormula label="With 'never'" parts={['never', 'auxiliary', 'subject', 'verb']} />
+    <GrammarExample note="Have and I swap order once never is fronted, just like in a question.">
+      <mark data-role="content">Never</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">seen</mark> such a beautiful sunset.
+    </GrammarExample>
+    {neverPoint && <GrammarUsagePointCard usagePoint={neverPoint} />}
+    <p>
+      <em>Hardly</em> works the same way and is even more formal — mostly
+      found in writing, rarely in speech.
+    </p>
+    <GrammarFormula label="With 'hardly'" parts={['hardly', 'auxiliary', 'subject', 'verb']} />
+    <GrammarExample note="Had and she swap order once hardly is fronted.">
+      <mark data-role="content">Hardly</mark> <mark data-role="grammar">had</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">sat down</mark> when the phone rang.
+    </GrammarExample>
+    {hardlyPoint && <GrammarUsagePointCard usagePoint={hardlyPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      Frequency adverbs are the most common position mistake: learners often
+      place them next to the subject at the front, or after the verb, when
+      the usual slot is between the two. Fronting <em>never</em> creates a
+      second, less obvious trap: forgetting to invert the subject and
+      auxiliary that fronting requires.
+    </p>
+    <GrammarContrast
+      bad={['I go always to school by bus.', 'Never I have felt so proud.']}
+      good={['I always go to school by bus.', 'Never have I felt so proud.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adverbs-adverbs-as-modifiers',
+        name: 'adverbs as modifiers',
+        note: 'what each type of adverb actually means and does, rather than where it goes in the clause.',
+      },
+      {
+        slug: 'adverbs-adverb-phrases-form',
+        name: 'adverb phrases',
+        note: 'building an adverb phrase — very, enough, or a prepositional phrase attached to the adverb itself.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'the fuller list of degree adverbs and what each one adds, from the adjective side.',
+      },
+    ]}
+  />
+</GrammarShell>

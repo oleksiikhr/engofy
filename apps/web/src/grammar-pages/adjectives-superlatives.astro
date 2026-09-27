@@ -1,0 +1,255 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// The EGP data for this construction has 9 USE/FORM-USE records, all
+// prepositional/postmodifying refinements of "the + superlative + noun"
+// rather than a separate topic — matched by guideword and inlined right next
+// to the pattern they refine, so nothing is left stranded in the generic
+// list at the bottom. "COMPLEX NOUN PHRASES" recurs at two levels (A2 and
+// B1, "a limited range" vs "an increasing range" of the same pattern), so
+// both cards render together, same as adjectives-position's repeated
+// DEGREE ADJECTIVES points.
+const complexNounPhrasePoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('COMPLEX NOUN PHRASES'),
+);
+const inNounPoint = con.usagePoints.find((p) =>
+  p.guideword.includes("WITH 'IN'"),
+);
+const ofNounPoint = con.usagePoints.find((p) =>
+  p.guideword.includes("WITH 'OF'"),
+);
+const bestPresentPerfectPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('PRESENT PERFECT'),
+);
+const byFarPoint = con.usagePoints.find((p) => p.guideword.includes('BY FAR'));
+// The EGP source data misspells "postmodifier" as "POSTMODFIER" throughout —
+// matching the literal guideword text, not a typo of ours.
+const postmodifierPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('POSTMODFIER'),
+);
+const slightestPoint = con.usagePoints.find((p) =>
+  p.guideword.includes('SLIGHTEST'),
+);
+const inlineUsagePointIds = [
+  ...complexNounPhrasePoints,
+  ...(inNounPoint ? [inNounPoint] : []),
+  ...(ofNounPoint ? [ofNounPoint] : []),
+  ...(bestPresentPerfectPoint ? [bestPresentPerfectPoint] : []),
+  ...(byFarPoint ? [byFarPoint] : []),
+  ...postmodifierPoints,
+  ...(slightestPoint ? [slightestPoint] : []),
+].map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to form and use English superlative adjectives: the -est/the most patterns, irregulars like best and worst, one of the + plural noun, and stronger forms like by far, possible and the slightest."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Two patterns: -est and the most', open: true },
+    { id: 'with-a-noun', title: 'The + superlative + noun', open: false },
+    { id: 'one-of-the', title: 'Leaving out the noun, and one of the', open: false },
+    { id: 'going-further', title: 'Making it stronger — or narrower', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A superlative picks out the one thing at the top (or bottom) of a group
+      of three or more — <em>the tallest building</em>, <em>the most
+      expensive meal</em>, <em>my best friend</em>. English builds it in one
+      of two ways depending on the adjective, and almost always adds <em>the</em> in front.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Two patterns: -est and the most" id="form" open>
+    <p>
+      For most adjectives of one syllable, add <em>-est</em> directly onto the
+      adjective. Longer adjectives — two syllables or more — use <em>the most</em> in front instead of an ending.
+    </p>
+    <GrammarFormula label="Short adjectives" parts={['the', 'adjective + -est']} />
+    <GrammarExample note="Highest is high with -est added directly onto it.">
+      Everest is <mark data-role="grammar">the</mark> <mark data-role="content">highest</mark> mountain in the world.
+    </GrammarExample>
+    <GrammarFormula label="Longer adjectives" parts={['the', 'most + adjective']} />
+    <GrammarExample note="Expensive is too long for -est, so most does the work instead.">
+      This is <mark data-role="grammar">the</mark> <mark data-role="content">most expensive</mark> restaurant in town.
+    </GrammarExample>
+    <p>
+      A handful of very common adjectives don't take either ending — they
+      change completely.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Adjective</th><th>Superlative</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>good</td>
+          <td>the best</td>
+          <td>This is the best coffee I've had in years.</td>
+        </tr>
+        <tr>
+          <td>bad</td>
+          <td>the worst</td>
+          <td>That was the worst film I've ever seen.</td>
+        </tr>
+        <tr>
+          <td>far</td>
+          <td>the furthest / the farthest</td>
+          <td>Mars is the furthest planet we've sent a robot to.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <em>Best</em> shows up everywhere from the very first lessons — <em>my
+      best friend</em> is one of the first superlatives most learners meet,
+      long before the spelling rules below.
+    </p>
+    <p>
+      Spelling follows the same rules as <em>-er</em> comparatives: double the
+      final consonant after a single short vowel (<em>big</em> → <em>biggest</em>), change a final <em>-y</em> to <em>-i</em> (<em>easy</em> → <em>easiest</em>), and drop a silent <em>-e</em> before adding the ending (<em>large</em> → <em>largest</em>).
+    </p>
+    <GrammarExample note="Big doubles its final consonant before -est.">
+      This is <mark data-role="grammar">the</mark> <mark data-role="content">biggest</mark> box we have.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The + superlative + noun" id="with-a-noun" open={false}>
+    <p>
+      Most of the time, a superlative sits right in front of the noun it
+      describes, marking out the one thing that stands above — or below —
+      everything else in its group.
+    </p>
+    <GrammarFormula label="Basic pattern" parts={['the', 'superlative adjective', 'noun']} />
+    <GrammarExample note="The + latest + technology names one unique thing.">
+      This phone has <mark data-role="grammar">the</mark> <mark data-role="content">latest</mark> <mark data-role="grammar">technology</mark>.
+    </GrammarExample>
+    <GrammarFormula label="With a determiner instead of the" parts={['my / your / our / their', 'superlative adjective', 'noun']} />
+    <GrammarExample note="A possessive — or any other determiner — replaces the without changing the pattern.">
+      I gave the painting job to <mark data-role="grammar">my</mark> <mark data-role="content">youngest</mark> <mark data-role="grammar">brother</mark>.
+    </GrammarExample>
+    <p>
+      Add a prepositional phrase after the noun, and the superlative narrows
+      the group down to one specific place, time or set.
+    </p>
+    <GrammarFormula label="Superlative + noun + prepositional phrase" parts={['the', 'superlative adjective', 'noun', 'in / of', 'noun phrase']} />
+    <GrammarExample note="In + a place narrows the group down to that place.">
+      This is <mark data-role="grammar">the</mark> <mark data-role="content">biggest</mark> <mark data-role="grammar">room</mark> <mark data-role="grammar">in</mark> <mark data-role="grammar">the house</mark>.
+    </GrammarExample>
+    {inNounPoint && <GrammarUsagePointCard usagePoint={inNounPoint} />}
+    <GrammarExample note="Of + a group narrows it down to one member of that group.">
+      That was <mark data-role="grammar">the</mark> <mark data-role="content">best</mark> <mark data-role="grammar">part</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the trip</mark>.
+    </GrammarExample>
+    {ofNounPoint && <GrammarUsagePointCard usagePoint={ofNounPoint} />}
+    {complexNounPhrasePoints.map((p) => <GrammarUsagePointCard usagePoint={p} />)}
+  </GrammarSection>
+
+  <GrammarSection title="Leaving out the noun, and one of the" id="one-of-the" open={false}>
+    <p>
+      The noun after a superlative can disappear once it's already clear from
+      context, and there's a special pattern — <em>one of the</em> — for
+      picking one item from the top of a group rather than naming the single
+      top item itself.
+    </p>
+    <GrammarFormula label="Ellipsis — noun dropped" parts={['the', 'superlative adjective']} />
+    <GrammarExample note="Game is understood from the sentence before, so it's dropped here.">
+      I tried every game at the party, but this one was <mark data-role="grammar">the</mark> <mark data-role="content">best</mark>.
+    </GrammarExample>
+    <GrammarFormula label="One of the + plural noun" parts={['one of', 'the', 'superlative adjective', 'plural noun']} />
+    <GrammarExample note="One of the always takes a plural noun, even though it points to a single item.">
+      That was <mark data-role="grammar">one of</mark> <mark data-role="grammar">the</mark> <mark data-role="content">best</mark> <mark data-role="grammar">days</mark> of my year.
+    </GrammarExample>
+    <p>
+      <em>The best</em> (or <em>worst</em>) can also introduce a <em>to</em>-infinitive explaining what makes it the best, or team up with the present
+      perfect to talk about a unique experience nothing else has matched.
+    </p>
+    <GrammarFormula label="The best/worst + noun + to-infinitive" parts={['the', 'best / worst', 'noun', 'to', 'verb']} />
+    <GrammarExample note="To visit explains what makes summer the best time.">
+      Summer is <mark data-role="grammar">the</mark> <mark data-role="content">best</mark> <mark data-role="grammar">time</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">visit</mark> Poland.
+    </GrammarExample>
+    <GrammarFormula label="The best + noun + present perfect" parts={['the', 'best', 'noun', 'present perfect clause']} />
+    <GrammarExample note="Have ever had frames this as the best in my whole life so far, not just recently.">
+      That was <mark data-role="grammar">the</mark> <mark data-role="content">best</mark> <mark data-role="grammar">present</mark> <mark data-role="grammar">I have ever had</mark>.
+    </GrammarExample>
+    {bestPresentPerfectPoint && <GrammarUsagePointCard usagePoint={bestPresentPerfectPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Making it stronger — or narrower" id="going-further" open={false}>
+    <p>
+      A superlative can be pushed even further with <em>by far</em>,
+      sharpened with a postmodifier like <em>possible</em> or <em>ever</em>,
+      or — in one very specific idiom — swapped for <em>slightest</em> or <em>faintest</em> to mean almost none at all.
+    </p>
+    <GrammarFormula label="By far + superlative" parts={['by far', 'the', 'superlative adjective']} />
+    <GrammarExample note="By far says the top of the scale is obviously true, with no close competition.">
+      This is <mark data-role="grammar">by far</mark> <mark data-role="grammar">the</mark> <mark data-role="content">most beautiful</mark> forest I've ever visited.
+    </GrammarExample>
+    {byFarPoint && <GrammarUsagePointCard usagePoint={byFarPoint} />}
+    <GrammarFormula label="Superlative + noun + possible/ever" parts={['the', 'superlative adjective', 'noun', 'possible / ever']} />
+    <GrammarExample note="Possible after the noun says nothing could be better than this.">
+      We want to present ourselves in <mark data-role="grammar">the</mark> <mark data-role="content">best</mark> <mark data-role="grammar">way</mark> <mark data-role="grammar">possible</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Superlative + possible + noun" parts={['the', 'superlative adjective', 'possible', 'noun']} />
+    <GrammarExample note="Possible can also sit before the noun instead of after it, with the same meaning.">
+      We need <mark data-role="grammar">the</mark> <mark data-role="content">highest</mark> <mark data-role="grammar">possible</mark> <mark data-role="grammar">level</mark> of quality.
+    </GrammarExample>
+    {postmodifierPoints.map((p) => <GrammarUsagePointCard usagePoint={p} />)}
+    <p>
+      A small, fixed idiom uses <em>slightest</em> or <em>faintest</em> instead
+      of an ordinary superlative, almost always after a negative, to mean not
+      even the smallest amount.
+    </p>
+    <GrammarFormula label="Negative + the slightest/faintest + noun" parts={['not', 'the', 'slightest / faintest', 'noun']} />
+    <GrammarExample note="Not... the faintest idea is a fixed way of saying I have no idea at all.">
+      I haven't got <mark data-role="grammar">the</mark> <mark data-role="content">faintest</mark> <mark data-role="grammar">idea</mark> where he went.
+    </GrammarExample>
+    {slightestPoint && <GrammarUsagePointCard usagePoint={slightestPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      A superlative compares one thing against a group of <em>three or more</em> — for only two things, use the comparative instead. And <em>-est</em> and <em>most</em> never combine: an adjective takes one or the other, never both.
+    </p>
+    <GrammarContrast
+      bad={['China is the biggest of the two countries.', 'This is the most cheapest hotel in town.']}
+      good={['China is the bigger of the two countries.', 'This is the cheapest hotel in town.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-comparatives',
+        name: 'comparatives',
+        note: 'comparing exactly two things instead of picking the top of a group.',
+      },
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'how the whole the + superlative + noun phrase fits into a sentence.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: "the best film I've ever seen — the reduced relative clause superlatives often pull in.",
+      },
+    ]}
+  />
+</GrammarShell>

@@ -212,49 +212,165 @@ whitespace-only текстовий вузол між тегами, якщо ві
 `adjectives-combining` з 1 незакладеним usage point), скрипт-перевірка на злиплі слова
 (`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всіх 3 рендерах — чисто.
 
-### [ ] 6. Adjectives — superlatives (`adjectives-superlatives`) — рівень A1
+### [x] 6. Adjectives — superlatives (`adjectives-superlatives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adjectives-superlatives`.
 
-### [ ] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
+5 секцій: -est/the most патерни + неправильні форми (best/worst/furthest) +
+spelling; the + superlative + noun (+ prepositional phrase); ellipsis та one
+of the; by far / possible-ever postmodifiers / slightest-faintest ідіома;
+типова помилка (superlative для двох речей, подвійне маркування -est+most).
+Усі 9 EGP usage points (58,59,60,69,70,74,77,78,79) вплетені інлайн — жоден
+не лишився в generic-блоці знизу; "COMPLEX NOUN PHRASES" (A2+B1, той самий
+guideword) відрендерені разом як два картки, за прецедентом
+DEGREE ADJECTIVES з adjectives-position. Під час рев'ю виявлено і виправлено
+ще один випадок відомого Astro-бага з переносом рядка між текстом і `<em>`
+(«...instead. And\n<em>-est</em>» → склеїлось у «And-est» без пробілу) — це
+трапляється не тільки з `<mark>` у прикладах, а з будь-яким інлайн-тегом,
+розбитим переносом рядка на межі тегу.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 5 секцій
+розкрито, усі приклади й usage-point картки на місці), скрипт-перевірка на
+злиплі слова (`</mark>\S`/`\S<mark`/`</em>\S`/`\S<em`) по всьому `.con-body`
+— чисто після виправлення.
+
+### [x] 7. Adverbs — adverb phrases - form (`adverbs-adverb-phrases-form`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverb-phrases-form`.
 
-### [ ] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
+Лише 2 EGP-рядки класифіковані як USE/FORM-USE (146 `ADVERB + 'ENOUGH'`, 147
+`ADVERBS + PREPOSITIONAL PHRASES, HIGHLIGHT`, обидва C1) — решта (141-145,
+148) чисті FORM-рядки без usage point, написані повноцінно (формула +
+приклад) без картки, за правилом «FORM-факти без usage point — це
+нормально». 5 секцій: very + адверб (A1) разом з тим самим патерном
+adverb+adverb, що зростає в діапазоні на A2/B1/C1 (один і той самий
+guideword `FORM: ADVERB + ADVERB` повторюється тричі — згорнуто в одну
+секцію за прецедентом DEGREE ADJECTIVES з adjectives-position, а не
+розбито на 3 підрозділи); порівняльна форма адверба (B2, very тут не
+працює — much/far/a lot/even); enough і прийменникова фраза після адверба
+(C1, обидва usage points вплетені інлайн); поєднання модифікатора до і
+після одночасно (C2); типова помилка (very + comparative, порядок enough).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер + Playwright
+(усі 5 секцій розкрито, обидві usage-point картки на місці, "When it's
+used" відсутній — обидва usage points вже інлайн), перевірка на злиплі
+слова через `innerText` після розкриття всіх `<details>` — чисто.
+
+### [x] 8. Adverbs — adverbs and adverb phrases: types and meanings (`adverbs-adverbs-and-adverb-phrases-types-and-meanings`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverbs-and-adverb-phrases-types-and-meanings`.
 
-### [ ] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
+15 EGP-рядків (111-125), лише 1 класифікований як USE (FORM/USE: MODIFYING
+CLAUSES, STANCE, B1) — решта чисті FORM-рядки без картки, за правилом
+«FORM-факти без usage point — це нормально». 6 секцій за темою «що модифікує
+цей тип адверба», а не за рівнем: degree-адверби + adjectives; degree-адверби
++ інші адверби (короткий, з крос-посиланням на `adverbs-adverb-phrases-form`,
+щоб не дублювати вже написану механіку combine/enough/prepositional phrase);
+адверби напряму модифікують дієслово (degree/frequency vs manner); degree-
+адверби модифікують noun phrases/pronouns/determiners/comparatives (B2-C1);
+адверби модифікують цілий clause (place-complement, time/sequencing, stance
+з карткою); типова помилка (adjective замість -ly adverb при модифікації
+дієслова). Приклади написані вручну (не скопійовані з EGP-корпусу) одним
+рядком у файлі, щоб уникнути Astro-бага з переносом рядка між тегами.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 6 секцій
+розкрито, картка usage point на місці, contrast-блок і compare-посилання на
+місці), скрипт-перевірка на злиплі слова (`</mark>\S`/`\S<mark`/`</em>\S`/
+`\S<em`) по всьому `.con-body` — жодного справжнього збою (лише пунктуація
+після тегу).
+
+### [x] 9. Adverbs — adverbs as modifiers (`adverbs-adverbs-as-modifiers`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-adverbs-as-modifiers`.
 
-### [ ] 10. Adverbs — position (`adverbs-position`) — рівень A1
+31 EGP-рядків (80-110), усі класифіковані як USE — найбільша з побудованих
+досі конструкцій, кожна точка отримала inline-картку. 11 функціональних
+секцій (time, place, frequency, degree+adjectives, degree+verbs, manner,
+linking, focus/sequencing/organising, certainty, stance, distancing) + типова
+помилка (false friend "actually" ≠ "зараз/наразі"). На відміну від
+`adverbs-adverbs-and-adverb-phrases-types-and-meanings` (що модифікує кожен
+тип адверба), ця сторінка групує за функцією самого адверба; крос-посилання
+в обидва боки, дублікатів EGP-рядків нема (різні `egp_index`). Приклади
+написані вручну одним рядком у файлі.
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок — зловив незекранований
+апостроф у `parts={['...what's more...']}`, виправлено на подвійні лапки),
+`lint:check` (чисто), `build` (успішно), живий рендер через dev-сервер +
+Playwright (усі 13 секцій розкрито, усі 31 картки на місцях з правильними
+рівнем/guideword, скрипт-перевірка на злиплі слова навколо `<mark>`/`<em>` —
+0 збігів).
+
+### [x] 10. Adverbs — position (`adverbs-position`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `adverbs-position`.
 
-### [ ] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
+15 EGP-рядків (126-140), лише 3 класифіковані як USE/FORM-USE (138 NEVER-
+inversion B2, 139 HARDLY-inversion C2, 140 mid-position distancing C2) — усі
+3 вплетені інлайн, решта 12 чисті FORM-рядки без картки. 6 секцій за
+позицією в реченні, а не за типом адверба: front position (просте
+фронтування + sentence-адверби, що лінкують до попереднього речення, з
+карткою), mid position (перед дієсловом, з really, після be/auxiliary/modal,
++ advanced distancing use з карткою), end position (time/place/manner/degree
+разом), degree-адверби перед прикметником (коротко, з крос-посиланням на
+`adjectives-modifying` за повним списком інтенсифікаторів — уникнення
+дублювання того самого патерну "very + adjective"), inversion після
+fronted never/hardly (обидві картки), типова помилка (позиція frequency-
+адверба + забута інверсія після never).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check` (чисто),
+`build` (успішно), живий рендер через dev-сервер + Playwright (усі 6 секцій
+розкрито, усі 3 usage-point картки на місцях, CEFR-бейдж у шапці як і на
+інших уже написаних сторінках з високорівневими usage points), перевірка
+злиплих слів навколо `<mark>` через DOM (сусідні text-вузли) — 36 міток, 0
+збігів.
+
+### [x] 11. Clauses — coordinated (`clauses-coordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-coordinated`.
 
-### [ ] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
+10 EGP-рядків (169-178), 6 класифіковані як (FORM/)USE — instructions
+(A2)/narrative (B1) чейнінг кількох клауз, neither...nor (B2), not
+only...but (also) без (B2) і з (C1) інверсією, negative clause + nor (C2)
+— усі 6 вплетені інлайн; решта 4 чисті FORM-рядки (and/but/or, ellipted
+subject, either...or, combining clauses of the same type) написані
+повноцінно без картки. 8 секцій: базове з'єднання двох клауз; еліпсис
+підмета; чейнінг (instructions/narrative); правило "лише той самий тип
+клаузи" (finite vs -ing/to-inf) з контраст-блоком; either...or +
+neither...nor як парні сполучники; not only...but (also) звичайний і
+фронтований з інверсією; negative clause + nor (з крос-посиланням на
+`adverbs-position` за тим самим патерном інверсії never/hardly); типова
+помилка. Content-мітка — цільовий сполучник (and/but/or/either/neither/
+not only/nor), grammar-мітка — auxiliary/subject у прикладах інверсії
+(за прецедентом NEVER/HARDLY з `adverbs-position`).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер + Playwright
+(усі 8 секцій розкрито, усі 6 usage-point карток на місцях з правильними
+рівнем/guideword, "When it's used" відсутній — усі USE вже інлайн,
+перевірка на злиплі слова навколо `<mark>` через `innerText` — 0 збігів).
+
+### [x] 12. Clauses — declarative (`clauses-declarative`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
