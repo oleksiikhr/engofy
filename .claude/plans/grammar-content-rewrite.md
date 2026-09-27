@@ -674,12 +674,41 @@ dev-сервер + Playwright (13 details, 219 міток, 13 карток у п
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 23. Negation — negation (`negation-negation`) — рівень A1
+### [x] 23. Negation — negation (`negation-negation`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `negation-negation`.
+
+31 EGP-рядок (1175-1205): 12 USE / FORM/USE — усі 12 вплетені інлайн, матч
+за `egpIndex`; 19 чистих FORM (not після be / be-have aux present+past /
+модальних, don't/doesn't/didn't, imperatives, negative questions + tags,
+no / any / much / many, indefinite pronouns A2+B1, ever/never/yet/still, I
+don't think, not + non-finite/ellipted clause, neither of / none of, none
+substitution, not all / not every) написані без картки. У
+learner_explanation/examples усіх точок порожньо — факти перевірено за EGP
+can-do + прикладами з `assets/egp.json`. 13 секцій: not після be / aux /
+modal; don't/doesn't/didn't + base verb; Don't + verb + Don't you (ever/
+dare) (1203); negative questions + tags + seeking agreement (1188, answer
+about the facts); no vs not … any, much/many, anything vs nothing/nobody;
+none of / neither of + positive verb, none alone, not all / not every;
+never/ever/yet/still; I don't think + positive clause; not + phrase,
+hedging not necessarily/really/actually (1199), formal few vs a few (1200);
+strong negatives do not/cannot (1192), whatsoever (1201), in the least
+(1205), not a single (1202); neither … nor (1194) + Neither/Nor + inversion
+(1204); Never have I (1193), Not only (1198); типові помилки (подвійне
+заперечення, she don't / doesn't lives / didn't went / I no like, don't +
+be/modal, I think it isn't, Anybody didn't, Never I have). Content-мітка —
+негативне слово (not/n't-форма, no, nothing, nobody, never, none of,
+neither/nor, few, whatsoever, in the least, not a single; ever/yet/still у
+секції прислівників), grammar — решта слотів формули (підмет, aux/verb,
+any/much/many + noun, прислівник-hedge, inverted aux + subject).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (14 details, 273 мітки, 12 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 24. Nouns — noun phrases (`nouns-noun-phrases`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
