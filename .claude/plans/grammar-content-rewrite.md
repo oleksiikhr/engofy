@@ -639,12 +639,40 @@ dev-сервер + Playwright (11 details, 130 міток, 10 карток у п
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 22. Modality — would (`modality-would`) — рівень A1
+### [x] 22. Modality — would (`modality-would`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `modality-would`.
+
+23 EGP-рядки (616-638): 13 USE — усі 13 вплетені інлайн, матч за
+`egpIndex` (перетин guideword-ів: WISHES AND PREFERENCES з 'like' A1 / з
+іншими дієсловами A2, IMAGINED SITUATIONS теперішні A2 / минулі B1); 10
+чистих FORM (affirmative with like, affirmative, negative, questions with
+like, would have + -ed, wouldn't have + -ed, questions, adverbs B1/C1/C2)
+написані без картки. У learner_explanation/examples усіх точок порожньо —
+факти перевірено за EGP can-do + прикладами з `assets/egp.json`. 12
+секцій: форма (would/'d, wouldn't, питання, Wouldn't that…?, tag wouldn't
+it?, short answers, 'd = would vs had); would like/love/prefer (618, 624,
+I like vs I'd like); Would you like to…? + written I would like to invite
+you (617; FORM 621 тут же); imagined situations + It would be nice to / if
+you came (622, 623); if + past, would + If I were you (625, will vs would);
+would have + pp, if + had + pp (631; FORM 626/627); polite requests Would
+you…? / Would you mind -ing / if + past / Would it be possible (633, No,
+not at all); I'd say/advise/recommend (632); future in the past + reported
+speech (630, 634); wouldn't = past refusal + would = past habit (635, 636,
+не для станів → used to); adverbs (B1 really/probably/definitely + C1/C2
+strongly/easily/significantly, probably wouldn't); типові помилки (would
+to/comes/like go, would в if-clause, I like vs I'd like, Yes I'd / would of
+/ would для станів). Content-мітка — would/'d/wouldn't/would have
+(контракції однією міткою), grammar — підмет + base verb/participle (+
+like/love/prefer, to-infinitive, if-clause, mind, adverb, reporting verb).
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (13 details, 219 міток, 13 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 23. Negation — negation (`negation-negation`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
