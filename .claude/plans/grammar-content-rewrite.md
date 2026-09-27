@@ -575,12 +575,37 @@ dev-сервер + Playwright (11 details, 144 мітки, 3 картки в с�
 `a-lot-of`/`few-little`/`many-a`, "When it's used" відсутній, 0 злиплих
 слів навколо `<mark>`/`<em>`).
 
-### [ ] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
+### [x] 20. Future — future simple (with will and shall) (`future-future-simple-with-will-and-shall`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `future-future-simple-with-will-and-shall`.
+
+16 EGP-рядків (382-397): 11 USE — усі 11 вплетені інлайн, матч за
+`egpIndex` (guideword-и повторюються: PLANS AND INTENTIONS WITH 'WILL' на
+A1 і A2, PREDICTIONS will B1 / shall C2); 5 чистих FORM (affirmative will,
+affirmative shall, negative will, questions, negative shall) написані без
+картки. У learner_explanation/examples усіх точок порожньо — факти
+перевірено за EGP can-do + прикладами з `assets/egp.json`. 10 секцій: will
++ base verb + таблиця 'll; won't; питання (+ short answers, Shall I в
+питаннях); рішення/наміри/обіцянки + Will you…? про плани (картки 383,
+388, з відмежуванням від going to); прогнози (+ probably/definitely до
+won't, картка 393); fixed plans з датою/часом (392); requests + willingness
+(389, 391, won't = відмова лише згадано); Shall I…? / Shall we…? (387,
+390); формальне I/we shall + shall not + shall always/never + shall-
+прогнози (394, 396, 397); типові помилки (will to/comes/going, will після
+when/until, Will I…? замість Shall I…?, Yes I'll / willn't). Відмежовано
+від `modality-will`/`modality-shall` (зрізи 21 і далі — там habitual/
+willfulness/Will you please/advice/commands): тут will/shall лише як
+майбутній час. Content-мітка — will/'ll/won't/shall, grammar — підмет +
+base verb (+ probably/always/never, час/дата). Контракції (I'll, It'll)
+розмічені однією content-міткою на все слово, не розбиті на дві.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 128 міток, 11 карток у правильних
+секціях, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 21. Modality — will (`modality-will`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
