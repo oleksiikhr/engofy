@@ -516,12 +516,33 @@ dev-сервер + Playwright (10 details, 60 міток, 15 карток у п�
 секціях, "When it's used" відсутній, 0 злиплих слів навколо
 `<mark>`/`<em>`).
 
-### [ ] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
+### [x] 18. Determiners — possessives (`determiners-possessives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `determiners-possessives`.
+
+13 EGP-рядків (318-330): 1 USE (324 GENERIC 'THEIR', B2) — вплетений
+інлайн, матч за `egpIndex`; 12 чистих FORM написані без картки. У
+learner_explanation/examples точки порожньо — факти перевірено за EGP
+can-do + прикладами з `assets/egp.json`. 10 секцій: таблиця my…their
+(+ заміна артикля, прикметник між); his/her/its/their за власником, а не
+за іменником (+ немає слова «свій»); generic their (everyone has their,
+компанія = they); all/some/one of + my; noun + 's (+ 's для людей, of для
+речей); parents'/people's/James's/series'; a friend of my father's;
+'s без іменника (+ at the doctor's) разом з 's + 's; one's (формальне,
+vs your); типові помилки (the my / a my, his↔her, it's↔its, the car of my
+brother, childrens'). Content-мітка — присвійне слово / noun+'s, grammar —
+іменник-власність (+ quantity + of, everyone + дієслово). Присвійні
+займенники (mine) — лише крос-посилання на `pronouns-possessive`.
+Підтверджено обидві відомі пастки: перенос рядка одразу після `</em>`
+теж з'їдається (`</em>\n(= at` → `</em>(= at`), не лише перед `<em>`.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 78 міток, 1 картка в секції
+`generic-their`, "When it's used" відсутній, 0 злиплих слів навколо
+`<mark>`/`<em>`).
 
 ### [ ] 19. Determiners — quantity (`determiners-quantity`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
