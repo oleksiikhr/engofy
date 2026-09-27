@@ -1,0 +1,360 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 15 USE rows are inlined. They're matched by EGP index rather than
+// guideword: the EGP guidewords here are inconsistent ('THIS' POINTING at
+// A1, 'THIS' POINTING| and a bare POINTING at A2 for the same rule), so a
+// substring match would pick the wrong card. The 5 plain FORM rows (this +
+// singular / uncountable noun, that, these, those) are written in full
+// without a card in the first section.
+const point = (egpIndex: number) =>
+  con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const nearPoints = [point(299), point(302), point(303), point(309)];
+const farPoints = [point(306), point(313)];
+const mentionedPoints = [point(304), point(310), point(307), point(312)];
+const futurePoint = point(300);
+const pastPoint = point(314);
+const narrativePoint = point(315);
+const possessivePoint = point(316);
+const distancePoint = point(317);
+
+const inlineUsagePointIds = [
+  ...nearPoints,
+  ...farPoints,
+  ...mentionedPoints,
+  futurePoint,
+  pastPoint,
+  narrativePoint,
+  possessivePoint,
+  distancePoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="This, that, these and those before a noun: near or far, singular or plural, something just mentioned, time phrases like this weekend and that day, and the storytelling this."
+  handcrafted
+  sections={[
+    { id: 'four-words', title: 'This, that, these, those', open: true },
+    { id: 'near', title: 'Near: this and these', open: false },
+    { id: 'far', title: 'Far: that and those', open: false },
+    { id: 'mentioned', title: 'Something already mentioned', open: false },
+    { id: 'time', title: 'This weekend, that day', open: false },
+    { id: 'story', title: 'There was this man...', open: false },
+    { id: 'of-his', title: 'This habit of his', open: false },
+    { id: 'distance', title: 'That sort of thing: disapproval', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      This, that, these and those go before a noun, in place of <em>the</em>,
+      and do two jobs at once: they show which thing you mean, and whether it
+      is near you or further away — in space, in time, or in your feelings.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="This, that, these, those" id="four-words" open>
+    <p>
+      Two questions decide which word to use: is the thing near or far, and
+      is the noun singular or plural?
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th></th><th>Singular / uncountable</th><th>Plural</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Near</th>
+          <td><code>this</code> — this bag, this water</td>
+          <td><code>these</code> — these bags</td>
+        </tr>
+        <tr>
+          <th>Far</th>
+          <td><code>that</code> — that bag, that music</td>
+          <td><code>those</code> — those bags</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      This and that go with a singular noun. They also go with an uncountable
+      noun — information, water, music, advice — because an uncountable noun
+      takes a singular verb.
+    </p>
+    <GrammarFormula label="Singular" parts={['this / that', 'singular or uncountable noun']} />
+    <GrammarExample note="This + a singular noun: one bag, close to the speaker.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">bag</mark> is very heavy.
+    </GrammarExample>
+    <GrammarExample note="This + an uncountable noun: information has no plural, so it takes this, not these.">
+      Thank you for <mark data-role="content">this</mark> <mark data-role="grammar">information</mark>.
+    </GrammarExample>
+    <GrammarExample note="That + a singular noun: one car, further away.">
+      Whose is <mark data-role="content">that</mark> <mark data-role="grammar">car</mark> outside?
+    </GrammarExample>
+    <p>
+      These and those go with a plural noun. The verb after the noun is
+      plural too.
+    </p>
+    <GrammarFormula label="Plural" parts={['these / those', 'plural noun']} />
+    <GrammarExample note="These + a plural noun, followed by a plural verb (are).">
+      <mark data-role="content">These</mark> <mark data-role="grammar">shoes</mark> are too small.
+    </GrammarExample>
+    <GrammarExample note="Those + a plural noun: several houses, over there.">
+      <mark data-role="content">Those</mark> <mark data-role="grammar">houses</mark> are very old.
+    </GrammarExample>
+    <p>
+      A demonstrative replaces the article: say <em>this book</em>,
+      never <em>the this book</em> or <em>this the book</em>. An adjective can
+      come between the demonstrative and the noun: <em>this old book</em>, <em>those red flowers</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Near: this and these" id="near" open={false}>
+    <p>
+      This and these point to things close to you — things you can touch,
+      hold or see right next to you. This also means the place you are in
+      right now: this city, this school, this area.
+    </p>
+    <GrammarFormula label="Near" parts={['this / these', 'noun']} />
+    <GrammarExample note="The speaker is in the café, so it's this place.">
+      I really like <mark data-role="content">this</mark> <mark data-role="grammar">café</mark> — the coffee is great.
+    </GrammarExample>
+    <GrammarExample note="This town = the town where the writer lives now.">
+      There isn't much to do in <mark data-role="content">this</mark> <mark data-role="grammar">town</mark> at night.
+    </GrammarExample>
+    <p>
+      It also points to the thing you are holding, using or writing right
+      now — the letter you're writing, the number you're giving, the book in
+      your hand.
+    </p>
+    <GrammarExample note="The letter the writer is writing at this moment.">
+      I'm writing <mark data-role="content">this</mark> <mark data-role="grammar">email</mark> to ask about the job.
+    </GrammarExample>
+    <GrammarExample note="These: the flowers are in the speaker's hands.">
+      <mark data-role="content">These</mark> <mark data-role="grammar">flowers</mark> are for you.
+    </GrammarExample>
+    {nearPoints.map((p) => p && <GrammarUsagePointCard usagePoint={p} />)}
+  </GrammarSection>
+
+  <GrammarSection title="Far: that and those" id="far" open={false}>
+    <p>
+      That and those point to things further away from you — across the
+      room, across the street, or somewhere you can see but not reach.
+    </p>
+    <GrammarFormula label="Far" parts={['that / those', 'noun']} />
+    <GrammarExample note="That: the man is across the room, not next to the speaker.">
+      Who's <mark data-role="content">that</mark> <mark data-role="grammar">man</mark> by the door?
+    </GrammarExample>
+    <GrammarExample note="Those: the mountains are far away in the distance.">
+      Can you see <mark data-role="content">those</mark> <mark data-role="grammar">mountains</mark>?
+    </GrammarExample>
+    <p>
+      The same idea works with time: this is now, that is some other time,
+      usually in the past.
+    </p>
+    <GrammarExample note="Those days: a time long ago, far from now.">
+      In <mark data-role="content">those</mark> <mark data-role="grammar">days</mark> nobody had a mobile phone.
+    </GrammarExample>
+    <p>
+      Near and far is about how the speaker sees it. Two people can talk
+      about the same thing with different words: <em>I like this jacket,</em> says
+      the person wearing it; <em>I like that jacket,</em> says the friend looking
+      at it.
+    </p>
+    {farPoints.map((p) => p && <GrammarUsagePointCard usagePoint={p} />)}
+  </GrammarSection>
+
+  <GrammarSection title="Something already mentioned" id="mentioned" open={false}>
+    <p>
+      A demonstrative can point back to something you have just talked
+      about. It works like <em>the</em>, but it makes the link to what was
+      said before stronger.
+    </p>
+    <GrammarFormula label="Pointing back" parts={['earlier sentence.', 'this / that / these / those', 'noun']} />
+    <p>
+      This and these point back to something that matters right now — the
+      problem you are dealing with, the things you are describing.
+    </p>
+    <GrammarExample note="This problem = the leaking tap from the first sentence, still a problem now.">
+      The kitchen tap is leaking. Can you do something about <mark data-role="content">this</mark> <mark data-role="grammar">problem</mark>?
+    </GrammarExample>
+    <GrammarExample note="These places = the museum and the castle just listed.">
+      You can visit the museum and the castle. <mark data-role="content">These</mark> <mark data-role="grammar">places</mark> are very old.
+    </GrammarExample>
+    <p>
+      That and those are more usual when the thing is further back —
+      something in the past or something the other person said.
+    </p>
+    <GrammarExample note="That shop = the shop from the story about yesterday.">
+      I bought a jacket at a shop near the station. <mark data-role="content">That</mark> <mark data-role="grammar">shop</mark> is really cheap.
+    </GrammarExample>
+    <GrammarExample note="Those clothes = the jumpers and trousers already mentioned.">
+      I bought some jumpers and trousers. I needed <mark data-role="content">those</mark> <mark data-role="grammar">clothes</mark> for my trip.
+    </GrammarExample>
+    {mentionedPoints.map((p) => p && <GrammarUsagePointCard usagePoint={p} />)}
+  </GrammarSection>
+
+  <GrammarSection title="This weekend, that day" id="time" open={false}>
+    <p>
+      With time words — morning, evening, week, weekend, summer, year — this
+      means the one we are in now, or the nearest one. It often refers to the
+      future: the time that is coming.
+    </p>
+    <GrammarFormula label="Time" parts={['this', 'morning / week / summer …']} />
+    <GrammarExample note="This weekend = the weekend that is coming.">
+      What are you doing <mark data-role="content">this</mark> <mark data-role="grammar">weekend</mark>?
+    </GrammarExample>
+    <GrammarExample note="This evening = later today.">
+      I'll call you <mark data-role="content">this</mark> <mark data-role="grammar">evening</mark>.
+    </GrammarExample>
+    {futurePoint && <GrammarUsagePointCard usagePoint={futurePoint} />}
+    <p>
+      With a past verb, the same phrase refers to a time that has already
+      passed today, this week, or this year. The verb tense tells you which
+      meaning is intended.
+    </p>
+    <GrammarExample note="Received is past: this morning = earlier today.">
+      I received your letter <mark data-role="content">this</mark> <mark data-role="grammar">morning</mark>.
+    </GrammarExample>
+    <GrammarExample note="Moved is past: this summer = the summer that just ended.">
+      We moved house <mark data-role="content">this</mark> <mark data-role="grammar">summer</mark>.
+    </GrammarExample>
+    {pastPoint && <GrammarUsagePointCard usagePoint={pastPoint} />}
+    <p>
+      That + time word refers to a time in a story, already mentioned — not
+      today, but a day or night you are describing.
+    </p>
+    <GrammarFormula label="Story time" parts={['that', 'day / night / year …']} />
+    <GrammarExample note="That night = the night of the party, not tonight.">
+      We went to a party on Saturday. <mark data-role="content">That</mark> <mark data-role="grammar">night</mark> I didn't sleep at all.
+    </GrammarExample>
+    <p>
+      No preposition goes before this or that + time word: <em>this morning</em>,
+      not <em>in this morning</em>; <em>this Friday</em>, not <em>on this Friday</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="There was this man..." id="story" open={false}>
+    <p>
+      In an informal story or joke, this can introduce a person or thing
+      for the first time — where you would expect <em>a</em>. It makes the
+      story feel immediate, as if the listener can see it too.
+    </p>
+    <GrammarFormula label="Storytelling" parts={['there is / was', 'this', 'noun']} />
+    <GrammarExample note="The man is new to the story, but this makes him vivid instead of just 'a man'.">
+      <mark data-role="grammar">There was</mark> <mark data-role="content">this</mark> <mark data-role="grammar">old man</mark> who lived alone by the sea.
+    </GrammarExample>
+    <GrammarExample note="Informal speech: the girl hasn't been mentioned before.">
+      In our class <mark data-role="grammar">there was</mark> <mark data-role="content">this</mark> <mark data-role="grammar">girl</mark> who could speak five languages.
+    </GrammarExample>
+    <p>
+      This use is spoken and informal. In formal writing, use <em>a</em> for
+      something mentioned for the first time.
+    </p>
+    {narrativePoint && <GrammarUsagePointCard usagePoint={narrativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="This habit of his" id="of-his" open={false}>
+    <p>
+      English can't put a demonstrative and a possessive side by side — not <em>this his habit</em>.
+      Instead, the possessive moves after the noun
+      with of: this + noun + of + mine / yours / his / hers / ours / theirs.
+      The pattern highlights a quality, often in an admiring way.
+    </p>
+    <GrammarFormula label="This … of his" parts={['this / that', 'noun', 'of', 'mine / his / theirs …']} />
+    <GrammarExample note="This + characteristic + of + his: a quality of this particular person.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">calm</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">his</mark> helps him in every difficult situation.
+    </GrammarExample>
+    <GrammarExample note="The pattern works with that and a plural possessive too.">
+      <mark data-role="content">That</mark> <mark data-role="grammar">talent</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">theirs</mark> has made the whole town proud.
+    </GrammarExample>
+    {possessivePoint && <GrammarUsagePointCard usagePoint={possessivePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="That sort of thing: disapproval" id="distance" open={false}>
+    <p>
+      Because that and those mean "far from me", they can also show
+      emotional distance: the speaker doesn't want to be close to the thing
+      and often disapproves of it.
+    </p>
+    <GrammarFormula label="Distance" parts={['that / those', 'noun']} />
+    <GrammarExample note="That sort of behaviour: the speaker clearly disapproves.">
+      I wouldn't put up with <mark data-role="content">that</mark> <mark data-role="grammar">sort of behaviour</mark>.
+    </GrammarExample>
+    <GrammarExample note="Those so-called experts: the speaker doesn't trust them.">
+      <mark data-role="content">Those</mark> <mark data-role="grammar">so-called experts</mark> were wrong again.
+    </GrammarExample>
+    <p>
+      Compare <em>this idea</em> (neutral, the idea we're discussing) with <em>that idea of yours</em> —
+      said in the wrong tone, the second one
+      can sound dismissive.
+    </p>
+    {distancePoint && <GrammarUsagePointCard usagePoint={distancePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      The demonstrative must match the noun: this / that with singular and
+      uncountable nouns, these / those with plural nouns. Uncountable nouns
+      like information, advice and furniture never take these / those.
+    </p>
+    <GrammarContrast
+      bad={['I like this shoes.', 'Thank you for these informations.']}
+      good={['I like these shoes.', 'Thank you for this information.']}
+    />
+    <p>
+      A demonstrative takes the place of the article or possessive — they
+      can't be used together.
+    </p>
+    <GrammarContrast
+      bad={['The this book is mine.', 'I love this my new phone.']}
+      good={['This book is mine.', 'I love this new phone of mine.']}
+    />
+    <p>
+      With time words, no preposition goes before this.
+    </p>
+    <GrammarContrast
+      bad={["I'm busy in this afternoon.", 'We are leaving on this Friday.']}
+      good={["I'm busy this afternoon.", 'We are leaving this Friday.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-demonstratives',
+        name: 'demonstrative pronouns',
+        note: 'the same four words without a noun: This is my brother. Is that yours?',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'a / an and the — the other way to show whether the listener knows which thing you mean.',
+      },
+      {
+        slug: 'determiners-possessives',
+        name: 'possessive determiners',
+        note: 'my, your, his… — why they combine with this only as this + noun + of mine.',
+      },
+    ]}
+  />
+</GrammarShell>
