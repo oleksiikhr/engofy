@@ -174,6 +174,10 @@ seed: ## Seed grammar and word reference data
 	pnpm cli words import-frequency
 	pnpm cli grammar import-usage-point-exercises
 
+.PHONY: dev-seed
+dev-seed: ## Seed deterministic reader-page fixtures (posts/tokens) on the dev DB for manual QA
+	pnpm cli post dev-seed
+
 # ------------------------------------------------------------------------------
 # Worktree isolation
 # ------------------------------------------------------------------------------
