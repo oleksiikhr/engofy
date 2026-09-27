@@ -1,5 +1,4 @@
 import { CefrLevel } from '../enums/cefr-level.enum.js';
-import { PostTopic } from '../enums/post-topic.enum.js';
 import {
   buildComplexitySystemPrompt,
   buildComplexityUserText,
@@ -30,7 +29,6 @@ describe('indexComplexityLevels', () => {
     sentences: ComplexityAssessment['sentences'],
   ): ComplexityAssessment => ({
     overall: CefrLevel.B1,
-    topic: PostTopic.DailyLife,
     metaDescription: 'A short summary.',
     newVocabRatio: 0.1,
     sentences,

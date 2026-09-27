@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
-import { PostTopic } from '../enums/post-topic.enum.js';
 
 // `needsTitle`: the post had neither an explicit title nor a leading H1 at
 // ingest (deriveTitleFromHeading), so this stage is also the one place a
@@ -17,7 +16,6 @@ You are given the passage as a numbered list of sentences, one per line, in the 
 
 Assess:
 - "overall": the CEFR level (A1, A2, B1, B2, C1, C2) of the passage taken as a whole — the level a learner needs to comfortably read it.
-- "topic": the single subject that best describes what the passage is about, one of: ${Object.values(PostTopic).join(', ')}.
 - "sentences": the CEFR level of EACH sentence on its own. Every index in the input must appear exactly once.
 - "newVocabRatio": your estimate, between 0 and 1, of the fraction of running words in the passage that a learner AT THE "overall" LEVEL would not already know.
 - "metaDescription": a natural, human-readable summary of the passage in English, 120–155 characters, suitable as an HTML meta description / social-share preview. Describe what the passage says, don't just restate its title.${titleField}
@@ -27,7 +25,6 @@ Judge on vocabulary frequency, grammatical structures, sentence length and idiom
 
 const complexityBaseFields = {
   overall: z.enum(CefrLevel),
-  topic: z.enum(PostTopic),
   newVocabRatio: z.number().min(0).max(1),
   metaDescription: z.string().min(1),
   sentences: z.array(

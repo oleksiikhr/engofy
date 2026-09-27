@@ -30,11 +30,11 @@ export interface PostAiComplexityJobData {
 }
 
 // ai_complexity stage (PLAN.md §5): one AI call scores the whole post and
-// every sentence on the CEFR scale, picks the post's topic, and writes a
-// meta description — plus, when the post reached this stage with no title
-// (no explicit title, no leading H1 at ingest), a generated title too, so
-// `Post.title` is never left null. Reads the spaCy `sentences` rows, so it
-// runs after spacy_parse (enqueued by SpacyParsePostHandler on completion).
+// every sentence on the CEFR scale and writes a meta description — plus, when
+// the post reached this stage with no title (no explicit title, no leading H1
+// at ingest), a generated title too, so `Post.title` is never left null.
+// Reads the spaCy `sentences` rows, so it runs after spacy_parse (enqueued by
+// SpacyParsePostHandler on completion).
 // Idempotent via the stage-level PostPipelineRun row (§12).
 @CommandHandler(AssessComplexityCommand)
 export class AssessComplexityHandler
@@ -81,8 +81,8 @@ export class AssessComplexityHandler
       tool: {
         name: 'report_complexity',
         description: needsTitle
-          ? 'Report the overall and per-sentence CEFR level of the passage, its topic, the new-vocabulary ratio, a meta description and a title.'
-          : 'Report the overall and per-sentence CEFR level of the passage, its topic, the new-vocabulary ratio and a meta description.',
+          ? 'Report the overall and per-sentence CEFR level of the passage, the new-vocabulary ratio, a meta description and a title.'
+          : 'Report the overall and per-sentence CEFR level of the passage, the new-vocabulary ratio and a meta description.',
         schema: needsTitle
           ? complexityToolSchemaWithTitle
           : complexityToolSchema,
@@ -94,7 +94,6 @@ export class AssessComplexityHandler
       sentence.cefrLevel = levels[i];
     });
     post.cefrLevel = assessment.overall;
-    post.topic = assessment.topic;
     post.metaDescription = assessment.metaDescription;
     if (needsTitle && assessment.title) {
       post.title = assessment.title;
@@ -105,7 +104,6 @@ export class AssessComplexityHandler
       {
         postId,
         overall: assessment.overall,
-        topic: assessment.topic,
         newVocabRatio: assessment.newVocabRatio,
         sentences: sentences.length,
       },

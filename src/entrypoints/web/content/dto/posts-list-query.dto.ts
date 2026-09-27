@@ -2,7 +2,6 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 import { queryParam } from '../../../../core/validation/coerce-query.js';
 import { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
-import { PostTopic } from '../../../../modules/post/enums/post-topic.enum.js';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
@@ -22,21 +21,6 @@ const PostsListQuerySchema = z.object({
       .optional()
       .describe(
         'Comma-separated CEFR levels to filter by (e.g. `A1,A2`). Omit for every level.',
-      ),
-  ),
-  topic: queryParam(
-    z
-      .string()
-      .transform((value) =>
-        value
-          .split(',')
-          .map((topic) => topic.trim())
-          .filter(Boolean),
-      )
-      .pipe(z.array(z.enum(PostTopic)).min(1))
-      .optional()
-      .describe(
-        'Comma-separated topics to filter by (e.g. `food,travel`). Omit for every topic.',
       ),
   ),
   unreadOnly: queryParam(

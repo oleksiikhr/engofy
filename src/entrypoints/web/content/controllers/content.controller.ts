@@ -65,7 +65,7 @@ export class ContentController {
   constructor(private readonly post: PostService) {}
 
   // The `/posts` archive: published posts, newest first, keyset-paginated —
-  // CEFR and topic multi-selects + "unread only" (posts-list-page §1). `isRead` and
+  // a CEFR multi-select + "unread only" (posts-list-page §1). `isRead` and
   // `unreadOnly` make the response vary by session, so it overrides the
   // class-level public cache policy like `posts/:slugId` does.
   @Public()
@@ -77,7 +77,6 @@ export class ContentController {
   ): Promise<PostsListResponseDto> {
     const view = await this.post.getPostsList(actor?.id ?? null, {
       cefrLevels: query.cefr,
-      topics: query.topic,
       term: query.term,
       unreadOnly: query.unreadOnly,
       cursor: query.cursor,
@@ -271,7 +270,6 @@ function toPostsListItemDto(item: PostsListItemView): PostsListItemDto {
     slug: item.slug,
     title: item.title,
     cefrLevel: item.cefrLevel,
-    topic: item.topic,
     publishedAt: item.publishedAt,
     excerpt: item.excerpt,
     attributionText: item.attributionText,
