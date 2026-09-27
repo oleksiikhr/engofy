@@ -1,0 +1,363 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CefrLevel, CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 11 USE/FORM-USE rows are inlined; the 8 plain FORM rows (word/phrase/
+// clause/sentence + and/but/or, complex adding with so/then, plus with nouns,
+// either...or at B1 and C1) are written in full without a card. Guidewords
+// repeat across levels ('BOTH … AND' at B1 and B2, 'NEITHER' at B2 and C2,
+// 'YET' at C1 and C2), so each point is matched by level + guideword.
+const point = (level: CefrLevel, text: string, exclude?: string) =>
+  con.usagePoints.find(
+    (p) =>
+      p.cefrLevel === level &&
+      p.guideword.includes(text) &&
+      (exclude === undefined || !p.guideword.includes(exclude)),
+  );
+
+const listingPoint = point('A1', 'LISTING');
+const butPoint = point('A1', "'BUT'");
+const yetPoint = point('C1', "'YET'");
+const andYetPoint = point('C2', "'AND YET'");
+const plusPoint = point('B1', "'PLUS'");
+const bothNounsPoint = point('B1', "'BOTH");
+const bothPhrasesPoint = point('B2', "'BOTH");
+const neitherNorPoint = point('B2', "'NEITHER");
+const notOnlyPoint = point('C1', "'NOT ONLY", 'INVERSION');
+const notOnlyInversionPoint = point('C1', 'INVERSION');
+const frontedNeitherPoint = point('C2', "'NEITHER'");
+const inlineUsagePointIds = [
+  listingPoint,
+  butPoint,
+  yetPoint,
+  andYetPoint,
+  plusPoint,
+  bothNounsPoint,
+  bothPhrasesPoint,
+  neitherNorPoint,
+  notOnlyPoint,
+  notOnlyInversionPoint,
+  frontedNeitherPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The coordinating conjunctions and, but, or, so, yet and plus, and the pairs both...and, either...or, neither...nor and not only...but also — what each one means, what it can join, and the inversion the most emphatic ones need."
+  handcrafted
+  sections={[
+    { id: 'what-joins', title: 'And, but, or: what they can join', open: true },
+    { id: 'listing', title: 'Lists: and / or before the last item', open: false },
+    { id: 'contrast', title: 'Contrast: but, yet, and yet', open: false },
+    { id: 'adding', title: 'Adding more: so, then, plus', open: false },
+    { id: 'both-and', title: 'Both...and', open: false },
+    { id: 'either-neither', title: 'Either...or and neither...nor', open: false },
+    { id: 'not-only', title: 'Not only...but also', open: false },
+    { id: 'fronted-neither', title: 'Neither / Nor at the start of a sentence', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A coordinating conjunction joins two things of equal rank — two words,
+      two phrases, two clauses or two sentences. And adds, but contrasts, or
+      offers a choice; the paired forms (both...and, either...or,
+      neither...nor, not only...but also) do the same job with extra emphasis.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="And, but, or: what they can join" id="what-joins" open>
+    <p>
+      And, but and or can join any two parts of a sentence, as long as both
+      sides are the same kind of thing: a word with a word, a phrase with a
+      phrase, a clause with a clause.
+    </p>
+    <GrammarFormula label="Same type on both sides" parts={['word / phrase / clause', 'and / but / or', 'same type']} />
+    <GrammarExample note="Two nouns joined by and.">
+      I have a <mark data-role="grammar">cat</mark> <mark data-role="content">and</mark> a <mark data-role="grammar">dog</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two adjectives joined by or — a choice between them.">
+      Do you want it <mark data-role="grammar">hot</mark> <mark data-role="content">or</mark> <mark data-role="grammar">cold</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two prepositional phrases joined by and.">
+      She works <mark data-role="grammar">in the morning</mark> <mark data-role="content">and</mark> <mark data-role="grammar">in the evening</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two full clauses, each with its own subject and verb, joined by but.">
+      <mark data-role="grammar">I called him</mark>, <mark data-role="content">but</mark> <mark data-role="grammar">he didn't answer</mark>.
+    </GrammarExample>
+    <p>
+      They can also start a new sentence that links back to the one before.
+      This is normal in speech, emails and stories; in formal essays it is
+      used more sparingly, for effect.
+    </p>
+    <GrammarExample note="But opens the second sentence and points back to the first.">
+      I wanted to come to the party. <mark data-role="content">But</mark> my car broke down.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Lists: and / or before the last item" id="listing" open={false}>
+    <p>
+      In a list of three or more items, the items are separated by commas, and
+      the conjunction appears only once — before the last item. And adds all
+      the items together; or offers them as alternatives.
+    </p>
+    <GrammarFormula label="List" parts={['item,', 'item', 'and / or', 'item']} />
+    <GrammarExample note="And before the last item: we need all three.">
+      We need <mark data-role="grammar">eggs</mark>, <mark data-role="grammar">milk</mark> <mark data-role="content">and</mark> <mark data-role="grammar">bread</mark>.
+    </GrammarExample>
+    <GrammarExample note="Or before the last item: pick one of the three.">
+      Would you like <mark data-role="grammar">tea</mark>, <mark data-role="grammar">coffee</mark> <mark data-role="content">or</mark> <mark data-role="grammar">juice</mark>?
+    </GrammarExample>
+    {listingPoint && <GrammarUsagePointCard usagePoint={listingPoint} />}
+    <p>
+      A comma before the final and/or (<em>eggs, milk, and bread</em>) is also
+      correct — it is common in American English and in some style guides.
+      Either way is fine; just be consistent.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Contrast: but, yet, and yet" id="contrast" open={false}>
+    <p>
+      But joins two ideas that pull in different directions — often the second
+      is something the listener wouldn't expect after the first.
+    </p>
+    <GrammarFormula label="But" parts={['X', 'but', 'unexpected Y']} />
+    <GrammarExample note="Small usually sounds negative; but introduces the positive side.">
+      My flat is <mark data-role="grammar">very small</mark>, <mark data-role="content">but</mark> <mark data-role="grammar">it's easy to clean</mark>.
+    </GrammarExample>
+    {butPoint && <GrammarUsagePointCard usagePoint={butPoint} />}
+    <p>
+      Yet means the same as but, with a stronger sense of surprise, and sounds
+      more formal. It joins adjectives, phrases and clauses; and yet is a
+      common variant inside a sentence.
+    </p>
+    <GrammarFormula label="Yet" parts={['X', '(and) yet', 'surprising Y']} />
+    <GrammarExample note="Two adjectives that you wouldn't expect to go together.">
+      The plan was <mark data-role="grammar">simple</mark> <mark data-role="content">yet</mark> <mark data-role="grammar">effective</mark>.
+    </GrammarExample>
+    <GrammarExample note="And yet joins two clauses: the second is surprising after the first.">
+      <mark data-role="grammar">He trained for months</mark>, <mark data-role="content">and yet</mark> <mark data-role="grammar">he lost in the first round</mark>.
+    </GrammarExample>
+    {yetPoint && <GrammarUsagePointCard usagePoint={yetPoint} />}
+    <p>
+      And yet can also open a new sentence. This gives the surprising fact its
+      own full stop and extra weight — typical of storytelling and formal
+      argument.
+    </p>
+    <GrammarExample note="The new sentence starts with And yet to stress how unexpected it is.">
+      Everyone told her it was impossible. <mark data-role="content">And yet</mark> she did it.
+    </GrammarExample>
+    {andYetPoint && <GrammarUsagePointCard usagePoint={andYetPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Adding more: so, then, plus" id="adding" open={false}>
+    <p>
+      To build longer strings of clauses — for example, telling what happened
+      step by step — mix and, but and or with so (a result) and then (the next
+      step in time).
+    </p>
+    <GrammarFormula label="A longer chain" parts={['clause,', 'so', 'clause,', 'and then', 'clause']} />
+    <GrammarExample note="So gives the result of the first clause; and then adds the next event.">
+      It was late, <mark data-role="content">so</mark> we took a taxi, <mark data-role="content">and then</mark> we went straight to bed.
+    </GrammarExample>
+    <p>
+      Plus means "and" or "added to". Between nouns it is common with numbers
+      and prices.
+    </p>
+    <GrammarFormula label="Plus with nouns" parts={['noun', 'plus', 'noun']} />
+    <GrammarExample note="Plus between two numbers, as in maths.">
+      <mark data-role="grammar">Two</mark> <mark data-role="content">plus</mark> <mark data-role="grammar">two</mark> is four.
+    </GrammarExample>
+    <GrammarExample note="Plus adds an extra cost to the main one.">
+      The ticket costs <mark data-role="grammar">£20</mark>, <mark data-role="content">plus</mark> <mark data-role="grammar">£3</mark> for booking.
+    </GrammarExample>
+    <p>
+      Plus can also join clauses or start a new sentence (often followed by a
+      comma) to add one more point — usually a positive one that strengthens
+      your argument. This use is informal.
+    </p>
+    <GrammarFormula label="Plus with clauses" parts={['sentence.', 'Plus,', 'extra point']} />
+    <GrammarExample note="Plus adds a second advantage on top of the first.">
+      The flat is close to my office. <mark data-role="content">Plus</mark>, it's really cheap.
+    </GrammarExample>
+    {plusPoint && <GrammarUsagePointCard usagePoint={plusPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Both...and" id="both-and" open={false}>
+    <p>
+      Both...and joins two items and stresses that the statement is true of
+      each of them, not just one. Both goes directly before the first item,
+      and before the second.
+    </p>
+    <GrammarFormula label="Both...and with nouns" parts={['both', 'noun', 'and', 'noun']} />
+    <GrammarExample note="Two noun phrases together; the verb is plural because there are two subjects.">
+      <mark data-role="content">Both</mark> <mark data-role="grammar">my sister</mark> <mark data-role="content">and</mark> <mark data-role="grammar">my brother</mark> live abroad.
+    </GrammarExample>
+    <GrammarExample note="Both...and after the verb, joining two objects.">
+      The city has <mark data-role="content">both</mark> <mark data-role="grammar">beautiful beaches</mark> <mark data-role="content">and</mark> <mark data-role="grammar">great museums</mark>.
+    </GrammarExample>
+    {bothNounsPoint && <GrammarUsagePointCard usagePoint={bothNounsPoint} />}
+    <p>
+      At a higher level, the two items can be longer: two verb phrases,
+      two prepositional phrases, or two clauses. Both sides still have the
+      same form.
+    </p>
+    <GrammarFormula label="Both...and with phrases" parts={['both', 'phrase', 'and', 'phrase']} />
+    <GrammarExample note="Two verb phrases after the modal can.">
+      Television can <mark data-role="content">both</mark> <mark data-role="grammar">entertain</mark> <mark data-role="content">and</mark> <mark data-role="grammar">educate</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two prepositional phrases.">
+      The band is popular <mark data-role="content">both</mark> <mark data-role="grammar">at home</mark> <mark data-role="content">and</mark> <mark data-role="grammar">abroad</mark>.
+    </GrammarExample>
+    {bothPhrasesPoint && <GrammarUsagePointCard usagePoint={bothPhrasesPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Either...or and neither...nor" id="either-neither" open={false}>
+    <p>
+      Either...or offers exactly two options: one or the other. Like
+      both...and, either goes directly before the first option and or before
+      the second, and the two options have the same form.
+    </p>
+    <GrammarFormula label="Either...or" parts={['either', 'X', 'or', 'Y']} />
+    <GrammarExample note="Two phrases: we'll go on one day or the other.">
+      We can go <mark data-role="content">either</mark> <mark data-role="grammar">on Saturday</mark> <mark data-role="content">or</mark> <mark data-role="grammar">on Sunday</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two nouns: one of these drinks, not both.">
+      You can have <mark data-role="content">either</mark> <mark data-role="grammar">tea</mark> <mark data-role="content">or</mark> <mark data-role="grammar">coffee</mark>.
+    </GrammarExample>
+    <p>
+      With two full clauses, either...or often sets up a firm choice or a
+      warning: if the first thing doesn't happen, the second will.
+    </p>
+    <GrammarExample note="Two complete clauses; the second says what happens if the first doesn't.">
+      <mark data-role="content">Either</mark> <mark data-role="grammar">we find a sponsor by March</mark>, <mark data-role="content">or</mark> <mark data-role="grammar">the project will have to wait another year</mark>.
+    </GrammarExample>
+    <p>
+      Neither...nor is the negative version: not X and not Y. It already
+      contains the negative, so the verb stays positive.
+    </p>
+    <GrammarFormula label="Neither...nor" parts={['neither', 'X', 'nor', 'Y']} />
+    <GrammarExample note="Neither...nor with two nouns: not the bus and not the train.">
+      <mark data-role="content">Neither</mark> <mark data-role="grammar">the bus</mark> <mark data-role="content">nor</mark> <mark data-role="grammar">the train</mark> was on time.
+    </GrammarExample>
+    <GrammarExample note="Neither...nor with two verbs; the verbs themselves are positive.">
+      We can <mark data-role="content">neither</mark> <mark data-role="grammar">eat</mark> <mark data-role="content">nor</mark> <mark data-role="grammar">drink</mark> during the lesson.
+    </GrammarExample>
+    {neitherNorPoint && <GrammarUsagePointCard usagePoint={neitherNorPoint} />}
+    <p>
+      When either...or or neither...nor joins two subjects, the verb agrees
+      with the one closer to it: <em>Neither the teacher nor the students were
+      ready.</em> / <em>Neither the students nor the teacher was ready.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Not only...but also" id="not-only" open={false}>
+    <p>
+      Not only...but also adds a second item and presents it as even more
+      important or surprising than the first. It is more emphatic than and,
+      and common in formal writing.
+    </p>
+    <GrammarFormula label="Not only...but also" parts={['not only', 'X', 'but also', 'Y']} />
+    <GrammarExample note="Two noun phrases; the second adds something extra.">
+      This book is <mark data-role="content">not only</mark> <mark data-role="grammar">a guide</mark> <mark data-role="content">but also</mark> <mark data-role="grammar">a workbook</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two verb phrases after the modal would.">
+      Moving offices would <mark data-role="content">not only</mark> <mark data-role="grammar">save money</mark> <mark data-role="content">but also</mark> <mark data-role="grammar">give us more space</mark>.
+    </GrammarExample>
+    {notOnlyPoint && <GrammarUsagePointCard usagePoint={notOnlyPoint} />}
+    <p>
+      For even stronger focus, not only can move to the very front of the
+      sentence. Then the auxiliary comes before the subject, as in a question,
+      and also usually moves after the subject of the second clause.
+    </p>
+    <GrammarFormula label="Fronted, with inversion" parts={['Not only', 'auxiliary', 'subject', 'verb', ', but', 'subject', 'also', 'verb']} />
+    <GrammarExample note="Does comes before the hotel after fronted Not only; also follows it in the second clause.">
+      <mark data-role="content">Not only</mark> <mark data-role="grammar">does</mark> <mark data-role="grammar">the hotel</mark> <mark data-role="grammar">have</mark> a pool, <mark data-role="content">but</mark> <mark data-role="grammar">it</mark> <mark data-role="content">also</mark> <mark data-role="grammar">has</mark> a private beach.
+    </GrammarExample>
+    {notOnlyInversionPoint && <GrammarUsagePointCard usagePoint={notOnlyInversionPoint} />}
+    <p>
+      See <em>Coordinated clauses</em> for the same pattern when it joins two
+      full main clauses.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Neither / Nor at the start of a sentence" id="fronted-neither" open={false}>
+    <p>
+      After a negative sentence, a new sentence can start with Neither or Nor
+      to add one more negative point. The auxiliary (or be) comes before the
+      subject, just like after fronted not only. This is formal and typical of
+      written argument.
+    </p>
+    <GrammarFormula label="Neither / Nor + inversion" parts={['negative sentence.', 'Neither / Nor', 'auxiliary / be', 'subject']} />
+    <GrammarExample note="Nor adds a second negative point; was comes before the food.">
+      The hotel wasn't clean. <mark data-role="content">Nor</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">the food</mark> any good.
+    </GrammarExample>
+    <GrammarExample note="Neither works the same way; with a main verb, do/does/did is added.">
+      I don't remember locking the door. <mark data-role="content">Neither</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">I</mark> remember turning off the lights.
+    </GrammarExample>
+    {frontedNeitherPoint && <GrammarUsagePointCard usagePoint={frontedNeitherPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Neither...nor is already negative, so adding not or don't makes a double
+      negative. Each pair also has fixed partners: both goes with and, either
+      with or, neither with nor — don't mix them.
+    </p>
+    <GrammarContrast
+      bad={[
+        "I don't like neither tea nor coffee.",
+        'She speaks both English or French.',
+      ]}
+      good={[
+        'I like neither tea nor coffee.',
+        'She speaks both English and French.',
+      ]}
+    />
+    <p>
+      After fronted not only, neither or nor, the auxiliary must come before
+      the subject — leaving normal word order is a frequent slip.
+    </p>
+    <GrammarContrast
+      bad={['Not only she speaks French, but she also speaks Spanish.']}
+      good={['Not only does she speak French, but she also speaks Spanish.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-coordinated',
+        name: 'coordinated clauses',
+        note: 'the same conjunctions seen from the clause side: joining two full main clauses, dropping the repeated subject, chaining clauses.',
+      },
+      {
+        slug: 'conjunctions-subordinating',
+        name: 'subordinating conjunctions',
+        note: 'because, although, when, if — they make one clause depend on the other instead of joining equals.',
+      },
+      {
+        slug: 'discourse-markers-discourse-markers-in-writing',
+        name: 'discourse markers in writing',
+        note: 'however, in addition, therefore — linking words that connect sentences but are not conjunctions.',
+      },
+    ]}
+  />
+</GrammarShell>
