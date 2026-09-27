@@ -1,0 +1,171 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// This construction's EGP data has only 2 USE/FORM-USE records — both C1
+// postmodifiers of the adverb, refinements of the "adding detail after the
+// adverb" pattern rather than a separate topic — matched by guideword and
+// inlined right next to the pattern they refine, same as the superlatives
+// and modifying-adjectives pages. Every other EGP row here is a plain FORM
+// row (no usage point), so most of the page has no card to inline at all.
+const enoughPoint = con.usagePoints.find((p) => p.guideword.includes('ENOUGH'));
+const prepPhrasePoint = con.usagePoints.find((p) =>
+  p.guideword.includes('PREPOSITIONAL PHRASES'),
+);
+const inlineUsagePointIds = [
+  ...(enoughPoint ? [enoughPoint] : []),
+  ...(prepPhrasePoint ? [prepPhrasePoint] : []),
+].map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to build an adverb phrase in English: intensifying one adverb with very or really, modifying a comparative adverb, adding enough or a prepositional phrase after it, and stacking modifiers before and after at once."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Very and other simple intensifiers', open: true },
+    { id: 'comparative', title: 'Modifying a comparative adverb', open: false },
+    { id: 'after', title: 'Adding enough, or a phrase, after the adverb', open: false },
+    { id: 'combining', title: 'Combining modifiers before and after', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      An adverb phrase is an adverb plus whatever modifies it — usually a
+      word placed right in front to say how much of it there is, sometimes a
+      word or phrase placed after instead. The pattern starts simple and
+      keeps adding options as you move up the levels.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Very and other simple intensifiers" id="form" open>
+    <p>
+      Most adverbs of time, manner and degree can be made stronger by
+      putting an intensifying word straight in front of them. <em>Very</em> is the plainest and most common one; the range of adverbs it — and
+      later, other intensifiers — can combine with just keeps growing as you
+      progress.
+    </p>
+    <GrammarFormula label="Basic" parts={['very', 'adverb']} />
+    <GrammarExample note="Very strengthens early, an adverb of time.">
+      The train arrived <mark data-role="grammar">very</mark> <mark data-role="content">early</mark> this morning.
+    </GrammarExample>
+    <GrammarExample note="Very much is a fixed pair — very strengthens much, an adverb of degree.">
+      I agree with you <mark data-role="grammar">very</mark> <mark data-role="content">much</mark>.
+    </GrammarExample>
+    <p>
+      Other intensifiers join <em>very</em> as you progress — <em>really</em>, <em>quite</em>, <em>almost</em>, <em>just</em> — and they reach a wider
+      range of adverbs too, not only ones of time and degree.
+    </p>
+    <GrammarFormula label="Wider range" parts={['really / quite / almost / just', 'adverb']} />
+    <GrammarExample note="Really strengthens well, an adverb of manner.">
+      We get along <mark data-role="grammar">really</mark> <mark data-role="content">well</mark> as neighbours.
+    </GrammarExample>
+    <GrammarExample note="Just narrows yesterday down to one exact, recent moment.">
+      The results came out <mark data-role="grammar">just</mark> <mark data-role="content">yesterday</mark>.
+    </GrammarExample>
+    <p>
+      By the higher levels, almost any two adverbs of manner or degree can
+      combine this way, including more formal ones.
+    </p>
+    <GrammarExample note="Extremely strengthens rapidly, an adverb of manner.">
+      Prices can drop <mark data-role="grammar">extremely</mark> <mark data-role="content">rapidly</mark> once a product goes out of fashion.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Modifying a comparative adverb" id="comparative" open={false}>
+    <p>
+      An adverb can also be intensified in its comparative form — but <em>very</em> doesn't work here. Comparatives need a different set of
+      intensifiers: <em>much</em>, <em>far</em>, <em>a lot</em> or <em>even</em>.
+    </p>
+    <GrammarFormula label="Comparative adverb" parts={['much / far / a lot / even', 'comparative adverb']} />
+    <GrammarExample note="Much strengthens more quickly, the comparative of quickly.">
+      You can get to work <mark data-role="grammar">much</mark> <mark data-role="content">more quickly</mark> by bike than by car in this city.
+    </GrammarExample>
+    <GrammarExample note="Even adds surprise — the increase goes beyond what was already expected.">
+      Profits are expected to rise <mark data-role="grammar">even</mark> <mark data-role="content">more sharply</mark> next year.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Adding enough, or a phrase, after the adverb" id="after" open={false}>
+    <p>
+      Two more ways to add detail come <em>after</em> the adverb instead of
+      before it: <em>enough</em>, and a prepositional phrase that highlights
+      exactly who or what the adverb applies to.
+    </p>
+    <GrammarFormula label="Adverb + enough" parts={['adverb', 'enough']} />
+    <GrammarExample note="Enough comes after surprisingly, not before it.">
+      <mark data-role="content">Surprisingly</mark> <mark data-role="grammar">enough</mark>, the repair only took an hour.
+    </GrammarExample>
+    {enoughPoint && <GrammarUsagePointCard usagePoint={enoughPoint} />}
+    <GrammarFormula label="Adverb + prepositional phrase" parts={['adverb', 'preposition phrase']} />
+    <GrammarExample note="For you highlights exactly who the luck applies to.">
+      <mark data-role="content">Luckily</mark> <mark data-role="grammar">for you</mark>, the shop was still open.
+    </GrammarExample>
+    {prepPhrasePoint && <GrammarUsagePointCard usagePoint={prepPhrasePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Combining modifiers before and after" id="combining" open={false}>
+    <p>
+      At the highest level, an adverb can take a modifier before it and a
+      complement after it at the same time — stacking the "before" pattern
+      from the top of this page onto the "after" pattern from the section
+      above, both on one adverb.
+    </p>
+    <GrammarFormula label="Modifier + adverb + complement" parts={['modifier', 'adverb', 'complement']} />
+    <GrammarExample note="Almost modifies exclusively before it; for their own interests completes it after.">
+      They worked <mark data-role="grammar">almost</mark> <mark data-role="content">exclusively</mark> <mark data-role="grammar">for their own interests</mark>.
+    </GrammarExample>
+    <GrammarExample note="So strengthens completely before it; with the mood completes it after.">
+      The music fit <mark data-role="grammar">so</mark> <mark data-role="content">completely</mark> <mark data-role="grammar">with the mood</mark> that nobody noticed it start.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      <em>Very</em> doesn't combine with a comparative adverb — only with a
+      plain one; a comparative needs <em>much</em>, <em>far</em> or <em>a
+      lot</em> instead. And <em>enough</em> is the one intensifier here that
+      goes after the adverb, not before it.
+    </p>
+    <GrammarContrast
+      bad={['She finished very quicker than everyone else.', 'Enough surprisingly, nobody complained.']}
+      good={['She finished much quicker than everyone else.', 'Surprisingly enough, nobody complained.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adverbs-adverbs-and-adverb-phrases-types-and-meanings',
+        name: 'adverb types and meanings',
+        note: 'what these adverbs actually mean and where they belong grammatically.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'the same very/really/quite intensifiers, but for a single adjective instead of an adverb.',
+      },
+      {
+        slug: 'adverbs-position',
+        name: 'adverb position',
+        note: 'where an adverb sits in the sentence, once it has already been intensified.',
+      },
+    ]}
+  />
+</GrammarShell>
