@@ -1063,12 +1063,36 @@ uncontracted not (1042, картка); типові помилки (пропущ
 точки вже інлайн, 0 склеєних слів навколо `<mark>`/`<em>` через DOM-перевірку
 сусідніх текстових вузлів, без горизонтального скролу на 390px).
 
-### [ ] 34. Verbs — linking (`verbs-linking`) — рівень A1
+### [x] 34. Verbs — linking (`verbs-linking`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `verbs-linking`.
+
+3 EGP-рядки (1102-1104), усі чисті FORM ('be' + complement A1, зростаючий
+діапазон лінкінг-дієслів A2, широкий діапазон B2) — usage points немає,
+сторінка без карток, "When it's used" не рендериться. 5 секцій: 'be' +
+complement (adjective / noun / phrase, "nothing happens to the subject");
+senses (look/feel/sound/taste/smell + adjective, з поясненням, що ті самі
+дієслова бувають і дієсловами дії з іншим значенням — look at/smell/taste
+щось); change (become/get/turn/grow + adjective/noun); staying/seeming
+(remain/stay/appear/seem); типові помилки (пропущений be перед прикметником,
+adjective не adverb після linking-дієслова, узгодження дієслова з підметом).
+Content-мітка — сам linking-дієслово (той самий слот, що й модальне
+дієслово в modality-will/would), grammar — підмет + доповнення (adjective/
+noun/phrase). Крос-посилання на `adjectives-position` (predicative після
+linking verbs — уже його власний FORM-рядок), `adverbs-adverbs-as-modifiers`
+(контраст: adverb модифікує дієслово дії, не linking verb), `nouns-noun-
+phrases-grammatical-functions` (noun phrase після be), `verbs-types`
+(ще не написана сторінка — forward-посилання за прецедентом попередніх
+зрізів).
+
+Перевірено: `pnpm --dir apps/web run type` (0 помилок), `lint:check`
+(чисто), `build` (успішно), живий рендер через dev-сервер (вже був
+запущений) + Playwright (усі 5 секцій + Practice розкрито, "When it's
+used" відсутній, 0 карток, перевірка `innerText` після розкриття всіх
+`<details>` — жодного склеєного слова навколо `<mark>`/`<em>`).
 
 ### [ ] 35. Verbs — patterns_with to and -ing (`verbs-patterns-with-to-and-ing`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
