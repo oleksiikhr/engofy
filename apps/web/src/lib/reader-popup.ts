@@ -21,7 +21,7 @@ import {
 } from './reader-lexicon';
 import { speakSentenceAt } from './reader-listen';
 import { speak, speechSupported } from './speech';
-import type { EffectiveState, TokenTense } from './types';
+import type { EffectiveState } from './types';
 
 // Client controller for the reader's anchored popup. One popup element,
 // absolutely positioned in document coordinates next to the clicked span
@@ -111,19 +111,14 @@ function formTarget(form: HTMLFormElement): LexiconTarget | null {
   return null;
 }
 
-function isTense(value: string | null): value is TokenTense {
-  return value === 'past' || value === 'present' || value === 'future';
-}
-
 // Read straight off the span's own attributes (render-tokens.ts) — a bare
 // token has no id to look up in `LexiconData`.
 function tokenFallback(span: Element): TokenFallback {
-  const tense = span.getAttribute('data-tense');
   return {
     term: span.textContent ?? '',
     posLabel: span.getAttribute('data-pos-label') ?? '',
     roleHint: span.getAttribute('data-role-hint') ?? '',
-    tense: isTense(tense) ? tense : null,
+    tenseLabel: span.getAttribute('data-tense-label'),
   };
 }
 

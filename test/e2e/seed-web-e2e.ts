@@ -551,7 +551,11 @@ async function seed(orm: MikroORM): Promise<void> {
     charStart: 0,
     charEnd: grammarSentenceText.length,
   });
-  // [text, charStart, charEnd, lemma, pos, tag, morph]
+  // [text, charStart, charEnd, lemma, pos, tag, morph, dep, headPosition]:
+  // "had" is "drawn"'s `aux` child (position 9) so detectVerbGroups reads
+  // "had drawn" as one Past Perfect group, not a lone finite "had" — the
+  // reader's tense+aspect layer (analyze-token.ts) needs a real aux-chain
+  // link, not just two independently-tensed tokens.
   const grammarTokens: [
     string,
     number,
@@ -560,6 +564,8 @@ async function seed(orm: MikroORM): Promise<void> {
     string,
     string,
     object,
+    string?,
+    number?,
   ][] = [
     ['By', 0, 2, 'by', 'ADP', 'IN', {}],
     ['the', 3, 6, 'the', 'DET', 'DT', {}],
@@ -569,7 +575,17 @@ async function seed(orm: MikroORM): Promise<void> {
     ['ended', 20, 25, 'end', 'VERB', 'VBD', { Tense: 'Past', VerbForm: 'Fin' }],
     [',', 25, 26, ',', 'PUNCT', ',', {}],
     ['she', 27, 30, 'she', 'PRON', 'PRP', {}],
-    ['had', 31, 34, 'have', 'AUX', 'VBD', { Tense: 'Past', VerbForm: 'Fin' }],
+    [
+      'had',
+      31,
+      34,
+      'have',
+      'AUX',
+      'VBD',
+      { Tense: 'Past', VerbForm: 'Fin' },
+      'aux',
+      9,
+    ],
     [
       'drawn',
       35,
@@ -585,7 +601,10 @@ async function seed(orm: MikroORM): Promise<void> {
     ['.', 62, 63, '.', 'PUNCT', '.', {}],
   ];
   grammarTokens.forEach(
-    ([text, charStart, charEnd, lemma, pos, tag, morph], position) => {
+    (
+      [text, charStart, charEnd, lemma, pos, tag, morph, dep, headPosition],
+      position,
+    ) => {
       factories(em).sentenceToken.makeOne({
         sentenceId: grammarSentence.id,
         position,
@@ -595,7 +614,8 @@ async function seed(orm: MikroORM): Promise<void> {
         lemma,
         pos,
         tag,
-        dep: 'dep',
+        dep: dep ?? 'dep',
+        headPosition: headPosition ?? null,
         morph: morph as Record<string, string>,
       });
     },
