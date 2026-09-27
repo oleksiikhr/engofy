@@ -1,0 +1,248 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 7 EGP rows (677-683: common nouns A1/B1, proper nouns, compound nouns,
+// -ing forms as object / subject / abstract nouns) are plain FORM rows — no
+// usage points, so no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The main types of English nouns: common nouns for everyday things and ideas, proper nouns with a capital letter for names, compound nouns like bus stop and bedroom, and -ing forms used as nouns (I love swimming, Driving is stressful)."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'House, friend, idea: common nouns', open: true },
+    { id: 'proper', title: 'Monika, London, Monday: proper nouns', open: false },
+    { id: 'compound', title: 'Bus stop, bedroom, ice-cream: compound nouns', open: false },
+    { id: 'ing-object', title: 'I love swimming: -ing forms as nouns', open: false },
+    { id: 'ing-subject', title: 'Driving is stressful: -ing form as subject', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      A noun names a person, place, thing, activity or idea. Most nouns are <em>common nouns</em> (<em>house</em>, <em>friend</em>). Names are <em>proper nouns</em> and start with a capital letter (<em>Monika</em>, <em>Poland</em>). Two words can join into one <em>compound noun</em> (<em>bus stop</em>), and a verb with <em>-ing</em> can work as a noun (<em>I like swimming</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="House, friend, idea: common nouns" id="form" open>
+    <p>
+      A common noun is the general word for a person, place or thing: <em>friend</em>, <em>city</em>, <em>car</em>. It starts with a small letter (except at the start of a sentence) and usually comes after a word like <em>a</em>, <em>the</em>, <em>my</em> or <em>this</em>.
+    </p>
+    <GrammarFormula label="Common noun" parts={['a / the / my / this', 'common noun']} />
+    <GrammarExample note="My + house: a place.">
+      <mark data-role="grammar">My</mark> <mark data-role="content">house</mark> is in Ilford.
+    </GrammarExample>
+    <GrammarExample note="My + friend: a person.">
+      <mark data-role="grammar">My</mark> <mark data-role="content">friend</mark> is called Jessica.
+    </GrammarExample>
+    <GrammarExample note="The + bus, a + ticket: things.">
+      I took <mark data-role="grammar">the</mark> <mark data-role="content">bus</mark> and bought <mark data-role="grammar">a</mark> <mark data-role="content">ticket</mark>.
+    </GrammarExample>
+    <p>
+      Many common nouns name things you can't see or touch: feelings, ideas, events. These <em>abstract nouns</em> work in exactly the same way.
+    </p>
+    <GrammarExample note="Your + design, the + rest: abstract nouns.">
+      You just have to send me <mark data-role="grammar">your</mark> <mark data-role="content">design</mark> and I'll do <mark data-role="grammar">the</mark> <mark data-role="content">rest</mark>.
+    </GrammarExample>
+    <GrammarExample note="The + damage: something you can't touch.">
+      Nobody will repair <mark data-role="grammar">the</mark> <mark data-role="content">damage</mark>.
+    </GrammarExample>
+    <p>
+      Common nouns are either countable (<em>a friend</em>, <em>two friends</em>) or uncountable (<em>money</em>, <em>information</em>) — see the related pages below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Monika, London, Monday: proper nouns" id="proper" open={false}>
+    <p>
+      A proper noun is the name of one specific person, place or thing. It always starts with a capital letter, even in the middle of a sentence, and usually has no <em>a</em> or <em>the</em>.
+    </p>
+    <GrammarFormula label="Proper noun" parts={['Capital letter', 'name']} />
+    <p>
+      In English, capitals are used for more kinds of names than in many other languages:
+    </p>
+    <ul>
+      <li>people and pets: <em>Monika</em>, <em>Mr Brown</em></li>
+      <li>cities, countries, streets, buildings: <em>London</em>, <em>Poland</em>, <em>Oxford Street</em>, <em>Gloscat College</em></li>
+      <li>days, months, holidays: <em>Monday</em>, <em>July</em>, <em>Christmas</em></li>
+      <li>languages and nationalities: <em>English</em>, <em>Ukrainian</em>, <em>a Polish girl</em></li>
+    </ul>
+    <GrammarExample note="A person's name and a country: capital letters, no article.">
+      My friend is called <mark data-role="content">Monika</mark>, she comes <mark data-role="grammar">from</mark> <mark data-role="content">Poland</mark>.
+    </GrammarExample>
+    <GrammarExample note="Days of the week: always a capital.">
+      I want to see you <mark data-role="grammar">on</mark> <mark data-role="content">Saturday</mark> and <mark data-role="content">Sunday</mark>.
+    </GrammarExample>
+    <GrammarExample note="A city and an area of the city.">
+      <mark data-role="grammar">In</mark> <mark data-role="content">Leicester</mark> I live in an area called <mark data-role="content">Hamilton</mark>.
+    </GrammarExample>
+    <GrammarExample note="A language: capital letter, even as a school subject.">
+      I study <mark data-role="content">English</mark> <mark data-role="grammar">in</mark> <mark data-role="content">September</mark>.
+    </GrammarExample>
+    <p>
+      Seasons are common nouns, so they stay small: <em>in summer</em>, <em>in winter</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Bus stop, bedroom, ice-cream: compound nouns" id="compound" open={false}>
+    <p>
+      A compound noun is two words that together name one thing. The <em>last</em> word is the main noun: a <em>bus stop</em> is a kind of stop. The first word says what kind — it can be a noun, a verb with <em>-ing</em>, or an adjective.
+    </p>
+    <GrammarFormula label="Compound noun" parts={['noun / verb-ing / adjective', 'main noun']} />
+    <GrammarExample note="Noun + noun: bus + stop.">
+      My house is next to the <mark data-role="grammar">bus</mark> <mark data-role="content">stop</mark>.
+    </GrammarExample>
+    <GrammarExample note="Noun + noun: city + centre.">
+      My home is in Belfast, near the <mark data-role="grammar">city</mark> <mark data-role="content">centre</mark>.
+    </GrammarExample>
+    <GrammarExample note="Verb-ing + noun: a pool for swimming.">
+      She likes to go to the <mark data-role="grammar">swimming</mark> <mark data-role="content">pool</mark> and to the gym.
+    </GrammarExample>
+    <GrammarExample note="Verb-ing + noun: living + room.">
+      There are seven rooms: three bedrooms, a <mark data-role="grammar">living</mark> <mark data-role="content">room</mark>, a kitchen and two bathrooms.
+    </GrammarExample>
+    <p>
+      Compound nouns are written in three ways, and you just have to learn each one:
+    </p>
+    <ul>
+      <li>one word: <em>bedroom</em>, <em>bathroom</em>, <em>supermarket</em>, <em>football</em>, <em>weekend</em></li>
+      <li>two words: <em>bus stop</em>, <em>post office</em>, <em>table tennis</em>, <em>swimming pool</em></li>
+      <li>with a hyphen: <em>ice-cream</em>, <em>ice-hockey</em>, <em>T-shirt</em></li>
+    </ul>
+    <GrammarExample note="One-word compound: super + market.">
+      There's a <mark data-role="content">supermarket</mark> and a post office.
+    </GrammarExample>
+    <GrammarExample note="Hyphenated and two-word compounds.">
+      He likes sports like <mark data-role="content">ice-hockey</mark> and <mark data-role="grammar">table</mark> <mark data-role="content">tennis</mark>.
+    </GrammarExample>
+    <p>
+      In speech, the stress is usually on the first word: <em>BUS stop</em>, <em>SWIMming pool</em>. In the plural, only the main noun changes: <em>two bus stops</em>, <em>three bedrooms</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I love swimming: -ing forms as nouns" id="ing-object" open={false}>
+    <p>
+      To name an activity, use the verb with <em>-ing</em> as a noun. It often comes after verbs of liking (<em>like</em>, <em>love</em>, <em>prefer</em>, <em>enjoy</em>, <em>hate</em>), after <em>go</em> for free-time activities, and after prepositions.
+    </p>
+    <GrammarFormula label="-ing as object" parts={['like / love / prefer / go / practise', 'verb-ing']} />
+    <GrammarExample note="Prefer + dancing: the activity.">
+      I <mark data-role="grammar">prefer</mark> <mark data-role="content">dancing</mark>, but on Saturday I'd like to go to a jazz concert.
+    </GrammarExample>
+    <GrammarExample note="Go + shopping, like + swimming.">
+      In my free time I <mark data-role="grammar">go</mark> <mark data-role="content">shopping</mark> and I <mark data-role="grammar">like</mark> <mark data-role="content">swimming</mark>.
+    </GrammarExample>
+    <GrammarExample note="Practise + two -ing nouns.">
+      I <mark data-role="grammar">practised</mark> <mark data-role="content">windsurfing</mark> and scuba <mark data-role="content">diving</mark>.
+    </GrammarExample>
+    <GrammarExample note="After a preposition: for + thinking.">
+      People say they don't have time <mark data-role="grammar">for</mark> <mark data-role="content">thinking</mark> about their health.
+    </GrammarExample>
+    <p>
+      The <em>-ing</em> noun can have its own object or words after it, just like the verb: <em>swimming from the beach</em>, <em>reading books</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Driving is stressful: -ing form as subject" id="ing-subject" open={false}>
+    <p>
+      An <em>-ing</em> noun can also be the subject at the start of a sentence. The whole <em>-ing</em> phrase counts as one thing, so the verb after it is singular: <em>is</em>, <em>has</em>, <em>seems</em>.
+    </p>
+    <GrammarFormula label="-ing as subject" parts={['verb-ing (+ words)', 'is / has / singular verb']} />
+    <GrammarExample note="Driving in a city + is.">
+      Also, think about stress. <mark data-role="content">Driving</mark> in a city <mark data-role="grammar">is</mark> stressful.
+    </GrammarExample>
+    <GrammarExample note="Working late + is.">
+      <mark data-role="content">Working</mark> late <mark data-role="grammar">is</mark> not the solution.
+    </GrammarExample>
+    <GrammarExample note="Climbing + is: the name of a hobby.">
+      <mark data-role="content">Climbing</mark> <mark data-role="grammar">is</mark> our favourite hobby.
+    </GrammarExample>
+    <p>
+      Some <em>-ing</em> nouns name a whole job, field or idea rather than one action: <em>teaching</em>, <em>advertising</em>, <em>learning</em>, <em>marketing</em>.
+    </p>
+    <GrammarExample note="Learning English + has: the whole process.">
+      <mark data-role="content">Learning</mark> English <mark data-role="grammar">has</mark> its rewards too.
+    </GrammarExample>
+    <GrammarExample note="Teaching as a profession + is.">
+      <mark data-role="content">Teaching</mark> <mark data-role="grammar">is</mark> challenging and demanding.
+    </GrammarExample>
+    <GrammarExample note="Advertising as a field + seems.">
+      <mark data-role="content">Advertising</mark> <mark data-role="grammar">seems</mark> to be very important for a new product.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Days, months, languages and nationalities always take a capital letter.
+    </p>
+    <GrammarContrast
+      bad={['See you on monday.', 'I speak english and ukrainian.', 'My birthday is in july.']}
+      good={['See you on Monday.', 'I speak English and Ukrainian.', 'My birthday is in July.']}
+    />
+    <p>
+      Names of people, cities and most countries have no <em>the</em>.
+    </p>
+    <GrammarContrast
+      bad={['I live in the London.', 'The Monika is my friend.']}
+      good={['I live in London.', 'Monika is my friend.']}
+    />
+    <p>
+      In a compound noun, the main noun comes last, and only it becomes plural.
+    </p>
+    <GrammarContrast
+      bad={['I waited at the stop bus.', 'There is a new shoes shop.']}
+      good={['I waited at the bus stop.', 'There is a new shoe shop.']}
+    />
+    <p>
+      Use the <em>-ing</em> form, not the bare verb, when the activity is a noun — and no <em>to</em> after <em>go</em>.
+    </p>
+    <GrammarContrast
+      bad={['I like swim.', 'Drive in a city is stressful.', 'We go to swimming on Sunday.']}
+      good={['I like swimming.', 'Driving in a city is stressful.', 'We go swimming on Sunday.']}
+    />
+    <p>
+      An <em>-ing</em> subject takes a singular verb, even with a plural noun after it.
+    </p>
+    <GrammarContrast
+      bad={['Reading books are my hobby.']}
+      good={['Reading books is my hobby.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-plural',
+        name: 'plural nouns',
+        note: 'games, boxes, children — how countable nouns become plural.',
+      },
+      {
+        slug: 'nouns-uncountable',
+        name: 'uncountable nouns',
+        note: 'money, information, advice — common nouns with no plural.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'a / the with common nouns, no article with most names.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'verb + -ing / to',
+        note: 'which verbs take an -ing form after them.',
+      },
+    ]}
+  />
+</GrammarShell>
