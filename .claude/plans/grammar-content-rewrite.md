@@ -377,12 +377,27 @@ not only/nor), grammar-мітка — auxiliary/subject у прикладах і
 
 Див. «Спільний процес» вище. Slug: `clauses-declarative`.
 
-### [ ] 13. Clauses — interrogatives (`clauses-interrogatives`) — рівень A1
+### [x] 13. Clauses — interrogatives (`clauses-interrogatives`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
 Див. «Спільний процес» вище. Slug: `clauses-interrogatives`.
+
+11 EGP-рядків (203-213), усі чисті FORM — жодного usage point, отже
+жодної картки, "When it's used" не рендериться. Рядок 212 (WHICH/WHOSE)
+у EGP без can-do і прикладів — приклади написані вручну. 10 секцій: be
+на початку; допоміжні be/have; do/does/did; модальні; wh- (об'єкт);
+wh- як підмет без do (з парою Who did you call? / Who called you?);
+which/whose + іменник; заперечні питання + why don't we/you як
+пропозиція; прислівники в середній позиції (ever/still/usually, також
+у заперечних — B2); типові помилки. Content-мітка — дієслово, що
+виходить перед підметом (у секціях wh-subject/which-whose/adverb —
+відповідно дієслово, which/whose, прислівник), grammar — решта слотів.
+
+Перевірено: `type` (0 помилок), `lint:check`, `build`, живий рендер через
+dev-сервер + Playwright (11 details, 97 міток і 49 `<em>` — 0 злиплих
+сусідніх слів).
 
 ### [ ] 14. Clauses — subordinated (`clauses-subordinated`) — рівень A1
 - Branch: (немає — коміт прямо в `changes`)
