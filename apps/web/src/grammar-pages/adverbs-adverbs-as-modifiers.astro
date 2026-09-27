@@ -1,0 +1,408 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 31 EGP rows for this construction are USE-classified — one functional
+// category of adverb (time, place, frequency, degree, manner, linking,
+// focus/sequencing/organising, certainty, stance, distancing) at each level
+// it reaches. Every point gets an inline card, grouped by category rather
+// than one-off, per the "usage points вплітаються в секцію" rule.
+const timePoints = con.usagePoints.filter((p) => p.guideword.includes('TIME'));
+const placePoints = con.usagePoints.filter((p) => p.guideword.includes('PLACE'));
+const frequencyPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('FREQUENCY'),
+);
+const degreeAdjectivePoints = con.usagePoints.filter(
+  (p) =>
+    p.guideword.includes("VERY' WITH ADJECTIVES") ||
+    p.guideword.includes('DEGREE, WITH ADJECTIVES') ||
+    p.guideword.includes('REALLY REALLY'),
+);
+const degreeVerbPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('DEGREE WITH VERBS'),
+);
+const mannerPoints = con.usagePoints.filter((p) => p.guideword.includes('MANNER'));
+const linkingPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('LINKING'),
+);
+const focusSequencingPoints = con.usagePoints.filter(
+  (p) =>
+    p.guideword.includes('FOCUS') ||
+    p.guideword.includes('SEQUENCING') ||
+    p.guideword.includes('ORGANISING'),
+);
+const certaintyPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('CERTAINTY'),
+);
+const stancePoints = con.usagePoints.filter((p) => p.guideword.includes('STANCE'));
+const distancingPoints = con.usagePoints.filter((p) =>
+  p.guideword.includes('DISTANCING'),
+);
+
+const inlineUsagePointIds = [
+  ...timePoints,
+  ...placePoints,
+  ...frequencyPoints,
+  ...degreeAdjectivePoints,
+  ...degreeVerbPoints,
+  ...mannerPoints,
+  ...linkingPoints,
+  ...focusSequencingPoints,
+  ...certaintyPoints,
+  ...stancePoints,
+  ...distancingPoints,
+].map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The jobs an English adverb can do beyond describing a verb: saying when, where or how often something happens, strengthening an adjective or verb, describing manner, linking clauses, focusing attention, ordering a text, showing certainty or attitude, and distancing the writer from a claim."
+  handcrafted
+  sections={[
+    { id: 'time', title: 'Time adverbs', open: true },
+    { id: 'place', title: 'Place adverbs', open: false },
+    { id: 'frequency', title: 'Frequency adverbs', open: false },
+    { id: 'degree-adjectives', title: 'Degree adverbs with adjectives', open: false },
+    { id: 'degree-verbs', title: 'Degree adverbs with verbs', open: false },
+    { id: 'manner', title: 'Manner adverbs', open: false },
+    { id: 'linking', title: 'Linking adverbs', open: false },
+    { id: 'focus-sequencing', title: 'Focus, sequencing and organising adverbs', open: false },
+    { id: 'certainty', title: 'Certainty adverbs', open: false },
+    { id: 'stance', title: 'Stance adverbs', open: false },
+    { id: 'distancing', title: 'Distancing adverbs', open: false },
+    { id: 'common-mistake', title: 'A common mistake', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      An adverb modifies more than just a verb. Grouped by the job it does
+      rather than the word it changes, adverbs say when, where or how often
+      something happens; strengthen an adjective, verb or another adverb;
+      describe manner; link ideas together; focus attention; order a text;
+      show how sure the speaker is; reveal an attitude; or quietly distance
+      the writer from a claim. Each job starts with a small, fixed set of
+      words and widens steadily as you move up the levels.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Time adverbs" id="time" open>
+    <p>
+      A time adverb says when something happens. At the very first level it
+      only appears inside one fixed sign-off phrase, not as a free-standing
+      word yet.
+    </p>
+    <GrammarFormula label="Sign-off phrase" parts={['See you / Get well', 'soon']} />
+    <GrammarExample note="Soon only shows up here, closing a message — not yet a general-purpose time adverb.">
+      Take care. <mark data-role="grammar">See you</mark> <mark data-role="content">soon</mark>.
+    </GrammarExample>
+    {timePoints[0] && <GrammarUsagePointCard usagePoint={timePoints[0]} />}
+    <p>
+      From the next level, time adverbs work freely, slotting into almost
+      any clause that needs a time reference.
+    </p>
+    <GrammarFormula label="Free-standing" parts={['time adverb', 'clause']} />
+    <GrammarExample note="Yesterday opens the sentence, setting when the whole clause happened.">
+      <mark data-role="content">Yesterday</mark> I went shopping.
+    </GrammarExample>
+    {timePoints[1] && <GrammarUsagePointCard usagePoint={timePoints[1]} />}
+    <p>
+      The range keeps widening: a growing set of precise timing words joins
+      in by the intermediate levels, and by the upper-intermediate levels it
+      reaches a wide vocabulary of adverbs and adverb phrases.
+    </p>
+    <GrammarExample note="Immediately sits mid-clause, right in front of the verb it times.">
+      I <mark data-role="content">immediately</mark> called her to check.
+    </GrammarExample>
+    {timePoints[2] && <GrammarUsagePointCard usagePoint={timePoints[2]} />}
+    <GrammarExample note="Instantly, a more precise word than the earlier immediately, still sits in the same mid-clause spot.">
+      She <mark data-role="content">instantly</mark> recognised the voice.
+    </GrammarExample>
+    {timePoints[3] && <GrammarUsagePointCard usagePoint={timePoints[3]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Place adverbs" id="place" open={false}>
+    <p>
+      A place adverb says where. At first only two very common words do this
+      job; a wider, more precise set joins them later.
+    </p>
+    <GrammarFormula label="Limited range" parts={['subject + verb', 'here / there']} />
+    <GrammarExample note="There tells you where I lived, with no preposition needed in front of it.">
+      I was born <mark data-role="grammar">there</mark> and lived <mark data-role="content">there</mark> for twenty years.
+    </GrammarExample>
+    {placePoints[0] && <GrammarUsagePointCard usagePoint={placePoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['subject + verb', 'place adverb']} />
+    <GrammarExample note="Downstairs works the same way as there, just a more specific place.">
+      He went <mark data-role="content">downstairs</mark>.
+    </GrammarExample>
+    {placePoints[1] && <GrammarUsagePointCard usagePoint={placePoints[1]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Frequency adverbs" id="frequency" open={false}>
+    <p>
+      A frequency adverb says how often. It usually sits mid-clause, right
+      before the main verb or right after <em>be</em>.
+    </p>
+    <GrammarFormula label="Limited range" parts={['subject', 'always / sometimes', 'verb']} />
+    <GrammarExample note="Always sits between the subject and the verb it modifies.">
+      I <mark data-role="content">always</mark> <mark data-role="grammar">see</mark> Safora because she lives near my home.
+    </GrammarExample>
+    {frequencyPoints[0] && <GrammarUsagePointCard usagePoint={frequencyPoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['subject', 'frequency adverb', 'verb']} />
+    <GrammarExample note="Never is a stronger, more specific frequency word in the same mid-clause slot.">
+      You <mark data-role="content">never</mark> <mark data-role="grammar">remember</mark> anything!
+    </GrammarExample>
+    {frequencyPoints[1] && <GrammarUsagePointCard usagePoint={frequencyPoints[1]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Degree adverbs with adjectives" id="degree-adjectives" open={false}>
+    <p>
+      A degree adverb makes an adjective stronger. <em>Very</em> is the first
+      one most learners meet; see
+      <a href="/grammar/adverbs-adverbs-and-adverb-phrases-types-and-meanings">adverbs and adverb phrases: types and meanings</a> for the fuller
+      set of degree words and what else they can modify besides an
+      adjective. This section tracks how far this one job — degree +
+      adjective — reaches by level.
+    </p>
+    <GrammarFormula label="'Very'" parts={['very', 'adjective']} />
+    <GrammarExample note="Very strengthens good, the first degree pattern most learners meet.">
+      He's a <mark data-role="grammar">very</mark> <mark data-role="content">good</mark> man.
+    </GrammarExample>
+    {degreeAdjectivePoints[0] && (
+      <GrammarUsagePointCard usagePoint={degreeAdjectivePoints[0]} />
+    )}
+    <GrammarFormula label="Wider set" parts={['so / quite / too', 'adjective']} />
+    <GrammarExample note="So adds its own shade of meaning rather than just a stronger version of very.">
+      It was <mark data-role="grammar">so</mark> <mark data-role="content">beautiful</mark>.
+    </GrammarExample>
+    {degreeAdjectivePoints[1] && (
+      <GrammarUsagePointCard usagePoint={degreeAdjectivePoints[1]} />
+    )}
+    <p>
+      Doubling an intensifier — <em>really really</em> — is its own small
+      pattern at the intermediate level, used with both adjectives and
+      verbs for extra emphasis.
+    </p>
+    <GrammarFormula label="Doubled, for emphasis" parts={['really really', 'adjective']} />
+    <GrammarExample note="Doubling really pushes the emphasis further than a single really would.">
+      I think it is <mark data-role="grammar">really really</mark> <mark data-role="content">boring</mark>.
+    </GrammarExample>
+    {degreeAdjectivePoints[2] && (
+      <GrammarUsagePointCard usagePoint={degreeAdjectivePoints[2]} />
+    )}
+    <GrammarFormula label="Wide range" parts={['degree adverb', 'adjective']} />
+    <GrammarExample note="Extremely is one of a wide range of precise degree words available by this level.">
+      It is <mark data-role="grammar">extremely</mark> <mark data-role="content">important</mark> that the project is finished on time.
+    </GrammarExample>
+    {degreeAdjectivePoints[3] && (
+      <GrammarUsagePointCard usagePoint={degreeAdjectivePoints[3]} />
+    )}
+  </GrammarSection>
+
+  <GrammarSection title="Degree adverbs with verbs" id="degree-verbs" open={false}>
+    <p>
+      A degree adverb can also intensify a verb, usually one that expresses
+      a preference or feeling. Early on it sits before the verb; a phrase
+      like <em>very much</em> or <em>a lot</em> instead follows it.
+    </p>
+    <GrammarFormula label="Before the verb" parts={['really', 'verb']} />
+    <GrammarExample note="Really sits directly in front of like, intensifying it.">
+      I <mark data-role="content">really</mark> <mark data-role="grammar">like</mark> theatre and classical music.
+    </GrammarExample>
+    {degreeVerbPoints[0] && <GrammarUsagePointCard usagePoint={degreeVerbPoints[0]} />}
+    <GrammarFormula label="After the verb" parts={['verb', 'so much / a lot']} />
+    <GrammarExample note="A lot follows the verb it intensifies, rather than sitting in front of it.">
+      We danced <mark data-role="grammar">a lot</mark> that night.
+    </GrammarExample>
+    {degreeVerbPoints[1] && <GrammarUsagePointCard usagePoint={degreeVerbPoints[1]} />}
+    <GrammarExample note="A little is a softer degree phrase, also placed after the verb it modifies.">
+      I don't speak very well, but I can understand <mark data-role="grammar">a little</mark>.
+    </GrammarExample>
+    {degreeVerbPoints[2] && <GrammarUsagePointCard usagePoint={degreeVerbPoints[2]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Manner adverbs" id="manner" open={false}>
+    <p>
+      A manner adverb says how an action is done. It usually follows the
+      verb, or the verb's object if there is one.
+    </p>
+    <GrammarFormula label="Limited range" parts={['verb', 'manner adverb']} />
+    <GrammarExample note="Well describes how both players played.">
+      Both players played <mark data-role="content">well</mark>.
+    </GrammarExample>
+    {mannerPoints[0] && <GrammarUsagePointCard usagePoint={mannerPoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['verb', 'manner adverb']} />
+    <GrammarExample note="Easily is a more specific manner adverb, in the same post-verb slot.">
+      Wherever you go, you'll fit in <mark data-role="content">easily</mark>.
+    </GrammarExample>
+    {mannerPoints[1] && <GrammarUsagePointCard usagePoint={mannerPoints[1]} />}
+    <GrammarExample note="Urgently reaches a wider, more formal vocabulary of manner adverbs by this level.">
+      Volunteers are needed <mark data-role="content">urgently</mark>.
+    </GrammarExample>
+    {mannerPoints[2] && <GrammarUsagePointCard usagePoint={mannerPoints[2]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Linking adverbs" id="linking" open={false}>
+    <p>
+      A linking adverb shows how one clause or sentence relates to another —
+      usually sitting at the start of the second one.
+    </p>
+    <GrammarFormula label="Limited range" parts={['clause', 'also / so / however', 'clause']} />
+    <GrammarExample note="However contrasts this sentence with the one before it.">
+      I don't like green. <mark data-role="content">However</mark>, blue would work well.
+    </GrammarExample>
+    {linkingPoints[0] && <GrammarUsagePointCard usagePoint={linkingPoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['clause', 'therefore / furthermore', 'clause']} />
+    <GrammarExample note="Therefore is a more formal linking adverb, in the same sentence-initial slot.">
+      You don't like crowded cities. <mark data-role="content">Therefore</mark>, I suggest a small town.
+    </GrammarExample>
+    {linkingPoints[1] && <GrammarUsagePointCard usagePoint={linkingPoints[1]} />}
+  </GrammarSection>
+
+  <GrammarSection
+    title="Focus, sequencing and organising adverbs"
+    id="focus-sequencing"
+    open={false}
+  >
+    <p>
+      A focus adverb points at one part of the sentence rather than the
+      whole of it. A sequencing or organising adverb does a related job at
+      the level of a whole text: it orders the steps or points that follow.
+    </p>
+    <GrammarFormula label="Focus, limited range" parts={['clause', 'only / just', 'noun phrase']} />
+    <GrammarExample note="Only narrows the focus down to two hours, not the whole class.">
+      It's <mark data-role="content">only</mark> two hours.
+    </GrammarExample>
+    {focusSequencingPoints[0] && (
+      <GrammarUsagePointCard usagePoint={focusSequencingPoints[0]} />
+    )}
+    <GrammarFormula label="Sequencing, limited range" parts={['first / then / after that', 'clause']} />
+    <GrammarExample note="First orders this clause as the opening step of a sequence.">
+      <mark data-role="content">First</mark>, we had dinner at an expensive restaurant.
+    </GrammarExample>
+    {focusSequencingPoints[1] && (
+      <GrammarUsagePointCard usagePoint={focusSequencingPoints[1]} />
+    )}
+    <GrammarFormula label="Focus, increasing range" parts={['clause', 'particularly / especially', 'phrase']} />
+    <GrammarExample note="Especially narrows the earlier statement down to one specific case.">
+      I love nature programmes, <mark data-role="content">especially</mark> the Discovery Channel.
+    </GrammarExample>
+    {focusSequencingPoints[2] && (
+      <GrammarUsagePointCard usagePoint={focusSequencingPoints[2]} />
+    )}
+    <GrammarFormula label="Organising a text" parts={["firstly / secondly / what's more", 'clause']} />
+    <GrammarExample note="Firstly and secondly organise two points into a numbered structure across sentences.">
+      <mark data-role="content">Firstly</mark>, visit both schools. <mark data-role="content">Secondly</mark>, ask about class sizes.
+    </GrammarExample>
+    {focusSequencingPoints[3] && (
+      <GrammarUsagePointCard usagePoint={focusSequencingPoints[3]} />
+    )}
+  </GrammarSection>
+
+  <GrammarSection title="Certainty adverbs" id="certainty" open={false}>
+    <p>
+      A certainty adverb shows how sure the speaker is about what they're
+      saying.
+    </p>
+    <GrammarFormula label="Limited range" parts={['maybe / perhaps', 'clause']} />
+    <GrammarExample note="Perhaps softens the claim into a guess rather than a fact.">
+      <mark data-role="content">Perhaps</mark> I left it in your living room.
+    </GrammarExample>
+    {certaintyPoints[0] && <GrammarUsagePointCard usagePoint={certaintyPoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['clause', 'probably / certainly / definitely']} />
+    <GrammarExample note="Definitely, mid-clause here, shows much stronger certainty than perhaps.">
+      I will <mark data-role="content">definitely</mark> give you the bicycle by 5.30pm.
+    </GrammarExample>
+    {certaintyPoints[1] && <GrammarUsagePointCard usagePoint={certaintyPoints[1]} />}
+    <GrammarExample note="Undoubtedly reaches a wide, more formal range of certainty adverbs by this level.">
+      It was <mark data-role="content">undoubtedly</mark> an unforgettable experience.
+    </GrammarExample>
+    {certaintyPoints[2] && <GrammarUsagePointCard usagePoint={certaintyPoints[2]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Stance adverbs" id="stance" open={false}>
+    <p>
+      A stance adverb shows the speaker's attitude to a whole statement,
+      rather than describing a single word in it — often sitting first in
+      the sentence. See
+      <a href="/grammar/adverbs-adverbs-and-adverb-phrases-types-and-meanings">adverbs and adverb phrases: types and meanings</a> for one worked
+      example of this pattern; this section tracks how the vocabulary
+      widens by level.
+    </p>
+    <GrammarFormula label="Limited range" parts={['actually / unfortunately', 'clause']} />
+    <GrammarExample note="Unfortunately shows the speaker's disappointment about the whole statement that follows.">
+      <mark data-role="content">Unfortunately</mark>, my team lost.
+    </GrammarExample>
+    {stancePoints[0] && <GrammarUsagePointCard usagePoint={stancePoints[0]} />}
+    <GrammarFormula label="Increasing range" parts={['stance adverb', 'clause']} />
+    <GrammarExample note="Obviously, mid-clause here, comments on how the speaker sees the whole idea.">
+      It's <mark data-role="content">obviously</mark> more fun to travel with friends.
+    </GrammarExample>
+    {stancePoints[1] && <GrammarUsagePointCard usagePoint={stancePoints[1]} />}
+    <GrammarFormula label="Wide range, often clause-initial" parts={['stance adverb', 'clause']} />
+    <GrammarExample note="Apparently distances the speaker slightly from a claim they haven't personally checked.">
+      <mark data-role="content">Apparently</mark>, someone made a mistake with the details.
+    </GrammarExample>
+    {stancePoints[2] && <GrammarUsagePointCard usagePoint={stancePoints[2]} />}
+  </GrammarSection>
+
+  <GrammarSection title="Distancing adverbs" id="distancing" open={false}>
+    <p>
+      At the highest level, an adverb placed mid-clause can quietly
+      distance the writer from a claim — signalling that it comes from
+      someone else, not from the writer's own knowledge.
+    </p>
+    <GrammarFormula label="Mid-clause" parts={['subject', 'distancing adverb', 'verb phrase']} />
+    <GrammarExample note="Supposedly, mid-clause, marks this as someone else's claim, not a fact the writer vouches for.">
+      He joined the best university in the country, <mark data-role="content">supposedly</mark>, to study economics.
+    </GrammarExample>
+    {distancingPoints[0] && <GrammarUsagePointCard usagePoint={distancingPoints[0]} />}
+  </GrammarSection>
+
+  <GrammarSection title="A common mistake" id="common-mistake" open={false}>
+    <p>
+      In English, <em>actually</em> doesn't mean "now" or "at the moment" —
+      it means "in fact", usually correcting something or adding a
+      surprising detail. Many languages have a similar-looking word that
+      does mean "currently", which leads learners to reach for <em>actually</em> when they mean right now.
+    </p>
+    <GrammarContrast
+      bad={['Actually, I live in Berlin.', 'Actually, she is a teacher.']}
+      good={['At the moment, I live in Berlin.', 'Currently, she is a teacher.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adverbs-adverb-phrases-form',
+        name: 'adverb phrases: form',
+        note: 'the mechanics of combining an adverb with very, enough, or a following phrase.',
+      },
+      {
+        slug: 'adverbs-adverbs-and-adverb-phrases-types-and-meanings',
+        name: 'adverb types and meanings',
+        note: 'the same categories seen from the other side — what each type of adverb can modify.',
+      },
+      {
+        slug: 'adverbs-position',
+        name: 'adverb position',
+        note: 'where each of these adverb types sits in the sentence.',
+      },
+    ]}
+  />
+</GrammarShell>
