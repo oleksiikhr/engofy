@@ -66,82 +66,109 @@ FROM grammar_usage_points p JOIN grammar_constructions c ON c.id = p.constructio
 not shift".
 Картка без перекладу — без тумблера. Контент: ADJECTIVES (4 конструкції, 22 точки).
 
-### [ ] 2. Контент: ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (61)
+### [x] 2. Контент: ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (61)
 - Branch: `grammar-translations-and-practice-02-adverbs-conjunctions`
-- Base: `grammar-translations-and-practice-01-uk-explanation`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/159
 
 `adverbs-*` (37), `conjunctions-*` (13), `discourse-markers-*` (11).
 
-### [ ] 3. Контент: CLAUSES (74)
-- Branch: `grammar-translations-and-practice-03-clauses`
+### [ ] 3. Рідна мова як налаштування: `nativeLang` + тумблер `EN / native`
+- Branch: `grammar-translations-and-practice-03-native-lang`
 - Base: `grammar-translations-and-practice-02-adverbs-conjunctions`
+- PR: —
+
+Сайт планує кілька рідних мов (з яких вчать англійську); зараз UI перекладу захардкоджений на `uk`.
+Мова в перемикачі завжди одна — рідна мова користувача, тому тумблер лишається двопозиційним.
+Бекенд/дані вже мультимовні (`ContentLanguage`, `translations` JSONB за ключем мови) — не чіпати.
+
+- Розвести pref `popupLang` (`lib/prefs.ts`) на два: `nativeLang` (`TranslationLang`, поки лише
+  `'uk'`, дефолт `'uk'`; для залогіненого — поле акаунта не додавати, поки мова одна) і
+  `popupLang: 'en' | 'native'` (що показано). `bootScript()` ставить `<html data-popup-lang>` зі
+  значенням `en`/`native`; CSS показує переклад від `[data-popup-lang='native']`.
+- Підпис кнопки й `lang`-атрибут перекладу — від `nativeLang` (мапа `TranslationLang → label`,
+  `УКР` для `uk`), замість `LANG_LABEL` з `uk` у `lib/reader-lexicon.ts:212`.
+- Прибрати `uk` з назв: `ukExplanation` / `.usage-item__uk` / `[data-usage-lang='uk']` у
+  `GrammarUsagePointCard.astro`, `lib/grammar-lang-toggle.ts`, `lib/reader-popup.ts`,
+  `lib/reader-lexicon.ts` (`translations[lang]` → `translations[nativeLang]`),
+  `lib/dictionary-detail.ts` (`translations.uk` → `translations[nativeLang]`).
+- Серверний рендер (`GrammarUsagePointCard.astro`) віддає в HTML лише переклад `nativeLang`, не всі
+  мови з `translations`.
+- e2e: наявні тести тумблера (картки граматики + reader popup) і "does not shift" проходять з
+  перейменованими значеннями; старе значення `popup-lang=uk` у localStorage не мігрувати (прод
+  немає) — `bootScript()` просто його ігнорує.
+
+Не входить: переклад UI-оболонки, селектор рідної мови, `hreflang`/мовні префікси URL.
+
+### [ ] 4. Контент: CLAUSES (74)
+- Branch: `grammar-translations-and-practice-04-clauses`
+- Base: `grammar-translations-and-practice-03-adverbs-conjunctions`
 - PR: —
 
 `clauses-*` — 8 конструкцій.
 
-### [ ] 4. Контент: DETERMINERS, FOCUS, NEGATION, NOUNS, PREPOSITIONS (62)
-- Branch: `grammar-translations-and-practice-04-determiners-focus`
-- Base: `grammar-translations-and-practice-03-clauses`
+### [ ] 5. Контент: DETERMINERS, FOCUS, NEGATION, NOUNS, PREPOSITIONS (62)
+- Branch: `grammar-translations-and-practice-05-determiners-focus`
+- Base: `grammar-translations-and-practice-04-clauses`
 - PR: —
 
 `determiners-*` (26), `focus-focus` (15), `negation-negation` (12), `nouns-noun-phrases` (6),
 `prepositions-prepositions` (3).
 
-### [ ] 5. Контент: FUTURE, PASSIVES (58)
-- Branch: `grammar-translations-and-practice-05-future-passives`
-- Base: `grammar-translations-and-practice-04-determiners-focus`
+### [ ] 6. Контент: FUTURE, PASSIVES (58)
+- Branch: `grammar-translations-and-practice-06-future-passives`
+- Base: `grammar-translations-and-practice-05-determiners-focus`
 - PR: —
 
 `future-*` (43), `passives-*` (15).
 
-### [ ] 6. Контент: PAST, PRESENT (72)
-- Branch: `grammar-translations-and-practice-06-past-present`
-- Base: `grammar-translations-and-practice-05-future-passives`
+### [ ] 7. Контент: PAST, PRESENT (72)
+- Branch: `grammar-translations-and-practice-07-past-present`
+- Base: `grammar-translations-and-practice-06-future-passives`
 - PR: —
 
 `past-*` (47 з `egpIndex`), `present-*` (25).
 
-### [ ] 7. Контент: PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (63)
-- Branch: `grammar-translations-and-practice-07-pronouns-questions`
-- Base: `grammar-translations-and-practice-06-past-present`
+### [ ] 8. Контент: PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (63)
+- Branch: `grammar-translations-and-practice-08-pronouns-questions`
+- Base: `grammar-translations-and-practice-07-past-present`
 - PR: —
 
 `pronouns-*` (42), `questions-*` (10), `reported-speech-*` (5), `verbs-*` (6).
 
-### [ ] 8. Контент: MODALITY I (56)
-- Branch: `grammar-translations-and-practice-08-modality-1`
-- Base: `grammar-translations-and-practice-07-pronouns-questions`
+### [ ] 9. Контент: MODALITY I (56)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `grammar-translations-and-practice-08-pronouns-questions`
 - PR: —
 
 `modality-adjectives` (6), `-adverbs` (7), `-can` (13), `-could` (26), `-dare` (4).
 
-### [ ] 9. Контент: MODALITY II (56)
-- Branch: `grammar-translations-and-practice-09-modality-2`
-- Base: `grammar-translations-and-practice-08-modality-1`
+### [ ] 10. Контент: MODALITY II (56)
+- Branch: `grammar-translations-and-practice-10-modality-2`
+- Base: `grammar-translations-and-practice-09-modality-1`
 - PR: —
 
 `modality-expressions-with-be` (18), `-have-got-to` (5), `-may` (12), `-might` (9), `-must` (10),
 `-need` (2).
 
-### [ ] 10. Контент: MODALITY III (50)
-- Branch: `grammar-translations-and-practice-10-modality-3`
-- Base: `grammar-translations-and-practice-09-modality-2`
+### [ ] 11. Контент: MODALITY III (50)
+- Branch: `grammar-translations-and-practice-11-modality-3`
+- Base: `grammar-translations-and-practice-10-modality-2`
 - PR: —
 
 `modality-ought` (6), `-shall` (7), `-should` (12), `-used-to` (2), `-will` (10), `-would` (13).
 Після зрізу перевірити, що всі 575 точок з `egpIndex` покриті (парсер/тест на повноту).
 
-### [ ] 11. Переклад прози ручних сторінок (дослідницький)
-- Branch: `grammar-translations-and-practice-11-page-prose`
-- Base: `grammar-translations-and-practice-10-modality-3`
+### [ ] 12. Переклад прози ручних сторінок (дослідницький)
+- Branch: `grammar-translations-and-practice-12-page-prose`
+- Base: `grammar-translations-and-practice-11-modality-3`
 - PR: —
 
 Відкрите питання до користувача: чи перекладати прозу 90 ручних сторінок (i18n-підхід для
 `.astro`) і чи потрібен переклад `examples`/`canDoStatement`. Після відповідей — дописати зрізи.
 
-### [ ] 12. Аудит банку вправ і наповнення секції Practice (дослідницький)
-- Branch: `grammar-translations-and-practice-12-practice-audit`
+### [ ] 13. Аудит банку вправ і наповнення секції Practice (дослідницький)
+- Branch: `grammar-translations-and-practice-13-practice-audit`
 - Base: `main`
 - PR: —
 
