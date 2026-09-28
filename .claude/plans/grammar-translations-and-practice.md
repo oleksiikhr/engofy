@@ -82,10 +82,11 @@ not shift".
 Мова в перемикачі завжди одна — рідна мова користувача, тому тумблер лишається двопозиційним.
 Бекенд/дані вже мультимовні (`ContentLanguage`, `translations` JSONB за ключем мови) — не чіпати.
 
-- Розвести pref `popupLang` (`lib/prefs.ts`) на два: `nativeLang` (`TranslationLang`, поки лише
-  `'uk'`, дефолт `'uk'`; для залогіненого — поле акаунта не додавати, поки мова одна) і
-  `popupLang: 'en' | 'native'` (що показано). `bootScript()` ставить `<html data-popup-lang>` зі
-  значенням `en`/`native`; CSS показує переклад від `[data-popup-lang='native']`.
+- Розвести два поняття, які зараз злиті в `popupLang: 'en' | 'uk'` (`lib/prefs.ts`): рідна мова
+  (`TranslationLang`, одне місце-джерело `nativeLang()` — поки повертає `'uk'`; cookie/поле акаунта —
+  коли з'явиться друга мова) і що показано: `popupLang: 'en' | 'native'`. `bootScript()` ставить
+  `<html data-popup-lang>` зі значенням `en`/`native`; CSS показує переклад від
+  `[data-popup-lang='native']`.
 - Підпис кнопки й `lang`-атрибут перекладу — від `nativeLang` (мапа `TranslationLang → label`,
   `УКР` для `uk`), замість `LANG_LABEL` з `uk` у `lib/reader-lexicon.ts:212`.
 - Прибрати `uk` з назв: `ukExplanation` / `.usage-item__uk` / `[data-usage-lang='uk']` у
@@ -102,7 +103,7 @@ not shift".
 
 ### [ ] 4. Контент: CLAUSES (74)
 - Branch: `grammar-translations-and-practice-04-clauses`
-- Base: `grammar-translations-and-practice-03-adverbs-conjunctions`
+- Base: `grammar-translations-and-practice-03-native-lang`
 - PR: —
 
 `clauses-*` — 8 конструкцій.
