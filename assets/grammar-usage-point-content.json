@@ -1352,6 +1352,391 @@
       "explanation": "In that означає «тому що» або «в тому сенсі, що». Цей зворот пояснює, у чому саме правдива головна частина речення, часто після загальної оцінки: The job is ideal in that it lets me work from home. Це книжний зворот, типовий для есе та звітів."
     }
   },
+  "288": {
+    "explanation": "Use no article before a plural or uncountable noun when you talk about things in general: Dogs are friendly. Water is good for you. Some singular nouns, like school, breakfast and home, also often take no article.",
+    "examples": [
+      "I like cats.",
+      "Milk is good for children.",
+      "We go to school by bus."
+    ],
+    "uk": {
+      "explanation": "Перед іменником у множині або незлічуваним іменником артикль не ставимо, коли говоримо про речі загалом: Dogs are friendly. Water is good for you. Деякі іменники в однині, як-от school, breakfast і home, теж часто вживаються без артикля."
+    }
+  },
+  "289": {
+    "explanation": "Use the + adjective + noun to say exactly which one you mean: the red car, the best restaurant. The adjective tells the listener which thing, so we use the, not a.",
+    "examples": [
+      "Can you pass me the blue cup?",
+      "We stayed in the big hotel near the beach.",
+      "The new teacher is very kind."
+    ],
+    "uk": {
+      "explanation": "The + adjective + noun вживаємо, щоб точно сказати, про що саме йдеться: the red car, the best restaurant. Прикметник підказує слухачеві, яка саме це річ, тому ставимо the, а не a."
+    }
+  },
+  "293": {
+    "explanation": "When you talk about things in general, use a plural or uncountable noun with no article: People need friends. Life is short. Abstract nouns like life, nature, society and love take no article when they have a general meaning.",
+    "examples": [
+      "Money can't buy happiness.",
+      "Life in big cities is expensive.",
+      "Teenagers spend a lot of time online."
+    ],
+    "uk": {
+      "explanation": "Коли говоримо про речі загалом, вживаємо іменник у множині або незлічуваний іменник без артикля: People need friends. Life is short. Абстрактні іменники, як-от life, nature, society і love, у загальному значенні вживаються без артикля."
+    }
+  },
+  "294": {
+    "explanation": "Use another + singular noun to mean one more of the same kind: another coffee, another day. Another is one word (an + other), so don't put a or the before it.",
+    "examples": [
+      "Would you like another cup of tea?",
+      "Can I stay another night?",
+      "I need another pen — this one doesn't work."
+    ],
+    "uk": {
+      "explanation": "Another + іменник в однині означає ще один такий самий: another coffee, another day. Another — це одне слово (an + other), тому перед ним не ставимо a чи the."
+    }
+  },
+  "295": {
+    "explanation": "Another can also mean a different one, not the same one: Let's go to another café. We often use it when the first one was not good or not possible.",
+    "examples": [
+      "This shirt is too small. Can I try another one?",
+      "Let's meet on another day.",
+      "She moved to another city last year."
+    ],
+    "uk": {
+      "explanation": "Another також може означати інший, не той самий: Let's go to another café. Часто так кажемо, коли перший варіант не підійшов або був неможливий."
+    }
+  },
+  "296": {
+    "explanation": "Use the other + singular noun for the second of two things: one hand … the other hand. Use the other + plural noun for the rest of a group: the other students.",
+    "examples": [
+      "One sister lives here; the other sister lives in Spain.",
+      "The other students have already gone home.",
+      "I found one glove, but I can't find the other one."
+    ],
+    "uk": {
+      "explanation": "The other + іменник в однині означає другий із двох: one hand … the other hand. The other + іменник у множині означає решту групи: the other students."
+    }
+  },
+  "297": {
+    "explanation": "Use the + comparative …, the + comparative … to show that one change causes another: The more you practise, the better you get. Both parts start with the.",
+    "examples": [
+      "The more you read, the more you learn.",
+      "The less you sleep, the worse you feel.",
+      "The sooner we leave, the better."
+    ],
+    "uk": {
+      "explanation": "The + comparative …, the + comparative … показує, що одна зміна спричиняє іншу: The more you practise, the better you get. Обидві частини починаються з the."
+    }
+  },
+  "299": {
+    "explanation": "Use this + noun for the place where you are now: this city, this school. It shows the place is near you.",
+    "examples": [
+      "I like this city.",
+      "This school is very big.",
+      "Is there a bank in this street?"
+    ],
+    "uk": {
+      "explanation": "This + noun вживаємо для місця, де ви зараз: this city, this school. Це показує, що місце поруч із вами."
+    }
+  },
+  "300": {
+    "explanation": "Use this + a time word for the one that is coming next: this weekend, this evening. Don't put in or on before it.",
+    "examples": [
+      "What are you doing this weekend?",
+      "I'll call you this evening.",
+      "We're going to the cinema this Friday."
+    ],
+    "uk": {
+      "explanation": "This + слово часу означає найближчий час, що настає: this weekend, this evening. Перед ним не ставимо in чи on."
+    }
+  },
+  "302": {
+    "explanation": "Use this + noun for the place you are in or a thing close to you: this café, this bag. It shows the thing is near you, the speaker.",
+    "examples": [
+      "I really like this café.",
+      "There isn't much to do in this town.",
+      "This bag is very heavy."
+    ],
+    "uk": {
+      "explanation": "This + noun вживаємо для місця, де ви є, або речі поруч із вами: this café, this bag. Це показує, що річ близько до вас, до того, хто говорить."
+    }
+  },
+  "303": {
+    "explanation": "This + noun can also point to the thing you are holding, using or writing right now: this email, this photo. It shows the thing is close to you.",
+    "examples": [
+      "I'm writing this email to ask about the job.",
+      "Look at this photo of my grandmother.",
+      "This phone is new."
+    ],
+    "uk": {
+      "explanation": "This + noun також може вказувати на річ, яку ви зараз тримаєте, використовуєте чи пишете: this email, this photo. Це показує, що річ близько до вас."
+    }
+  },
+  "304": {
+    "explanation": "Use this + noun to point back to something you have just talked about that matters now: this problem, this idea. It links to what you said more strongly than the.",
+    "examples": [
+      "The tap is leaking. Can you fix this problem?",
+      "My friend found a new café. This café is near the park.",
+      "I have an idea. This idea could save us money."
+    ],
+    "uk": {
+      "explanation": "This + noun вказує назад на те, про що ви щойно говорили і що важливе зараз: this problem, this idea. Зв'язок зі сказаним тут сильніший, ніж із the."
+    }
+  },
+  "306": {
+    "explanation": "Use that + singular noun for something further away from you: that man, that building. It also works with time, for a time that is not now.",
+    "examples": [
+      "Who's that man by the door?",
+      "Look at that big house on the hill.",
+      "I remember that day very well."
+    ],
+    "uk": {
+      "explanation": "That + іменник в однині вживаємо для чогось далі від вас: that man, that building. Так само й з часом — про час, який не зараз."
+    }
+  },
+  "307": {
+    "explanation": "Use that + noun to point back to something mentioned before, often something in the past or something the other person said: that shop, that night.",
+    "examples": [
+      "I went to a new shop. That shop is really cheap.",
+      "We went to a party. That night I didn't sleep.",
+      "You told me about a film. Is that film good?"
+    ],
+    "uk": {
+      "explanation": "That + noun вказує назад на щось, що вже згадували, часто на щось у минулому або на те, що сказав співрозмовник: that shop, that night."
+    }
+  },
+  "309": {
+    "explanation": "Use these + plural noun for things near you: these shoes, these flowers. The verb after it is plural too.",
+    "examples": [
+      "These flowers are for you.",
+      "These shoes are too small.",
+      "I love these old photos."
+    ],
+    "uk": {
+      "explanation": "These + іменник у множині вживаємо для речей поруч із вами: these shoes, these flowers. Дієслово після нього теж у множині."
+    }
+  },
+  "310": {
+    "explanation": "Use these + plural noun to point back to things you have just talked about, or things that matter now: these places, these problems.",
+    "examples": [
+      "Visit the museum and castle. These places are very old.",
+      "I have two questions. These questions are about the test.",
+      "Thanks for the tips. These ideas really helped me."
+    ],
+    "uk": {
+      "explanation": "These + іменник у множині вказує назад на речі, про які ви щойно говорили, або на те, що важливе зараз: these places, these problems."
+    }
+  },
+  "312": {
+    "explanation": "Use those + plural noun to point back to things mentioned earlier, often further back in the past: those clothes, those days.",
+    "examples": [
+      "I bought some jumpers. I needed those clothes for my trip.",
+      "Do you remember those holidays in Italy?",
+      "Those photos you sent me were lovely."
+    ],
+    "uk": {
+      "explanation": "Those + іменник у множині вказує назад на речі, згадані раніше, часто на те, що далі в минулому: those clothes, those days."
+    }
+  },
+  "313": {
+    "explanation": "Use those + plural noun for things further away from you in space or time: those mountains, those days. The verb after it is plural.",
+    "examples": [
+      "Can you see those mountains?",
+      "Those houses across the road are very old.",
+      "In those days nobody had a mobile phone."
+    ],
+    "uk": {
+      "explanation": "Those + іменник у множині вживаємо для речей далі від вас у просторі чи часі: those mountains, those days. Дієслово після нього в множині."
+    }
+  },
+  "314": {
+    "explanation": "This + a time word can also mean a time that has already passed today, this week or this year. The past verb shows it is in the past: I saw him this morning.",
+    "examples": [
+      "I received your letter this morning.",
+      "We moved house this summer.",
+      "I met an old friend this afternoon."
+    ],
+    "uk": {
+      "explanation": "This + слово часу може також означати час, який уже минув сьогодні, цього тижня чи цього року. Дієслово в минулому часі показує, що це вже минуло: I saw him this morning."
+    }
+  },
+  "315": {
+    "explanation": "In an informal story or joke, this + noun can introduce a person or thing for the first time, where you would normally use a: There was this old man… It makes the story feel immediate, as if the listener can see it too. Avoid it in formal writing.",
+    "examples": [
+      "There was this old man who lived alone by the sea.",
+      "So this guy walks into a bar.",
+      "In our class there was this girl who spoke five languages."
+    ],
+    "uk": {
+      "explanation": "У неформальній історії чи анекдоті this + noun може вперше вводити людину чи річ там, де зазвичай було б a: There was this old man… Від цього розповідь звучить живо, ніби слухач сам це бачить. В офіційному письмі так не пишуть."
+    }
+  },
+  "316": {
+    "explanation": "To use this with a possessive, say this + noun + of + mine / yours / his / hers / ours / theirs, not this his. The pattern highlights someone's quality, often in an admiring way.",
+    "examples": [
+      "This calm of his helps him in difficult situations.",
+      "That talent of theirs made the whole town proud.",
+      "I love this garden of yours."
+    ],
+    "uk": {
+      "explanation": "Щоб поєднати this із присвійним займенником, кажемо this + noun + of + mine / yours / his / hers / ours / theirs, а не this his. Така конструкція підкреслює чиюсь рису, часто із захопленням."
+    }
+  },
+  "317": {
+    "explanation": "Because that and those mean far from me, they can also show emotional distance. The speaker keeps away from the thing and often disapproves of it: that sort of behaviour, those so-called experts.",
+    "examples": [
+      "I won't put up with that sort of behaviour.",
+      "Those so-called experts were wrong again.",
+      "I'm tired of that attitude of yours."
+    ],
+    "uk": {
+      "explanation": "Оскільки that і those означають «далеко від мене», вони можуть показувати й емоційну відстань. Мовець дистанціюється від чогось і часто це не схвалює: that sort of behaviour, those so-called experts."
+    }
+  },
+  "324": {
+    "explanation": "After everyone, someone, anyone, nobody or each person, use their, even though the verb is singular: Everyone has their own ideas. This avoids choosing between his and her.",
+    "examples": [
+      "Everyone has their own opinion.",
+      "Somebody left their umbrella on the bus.",
+      "Each student must bring their own lunch."
+    ],
+    "uk": {
+      "explanation": "Після everyone, someone, anyone, nobody чи each person вживаємо their, хоча дієслово в однині: Everyone has their own ideas. Так не треба вибирати між his і her."
+    }
+  },
+  "341": {
+    "explanation": "Use a little, a bit of or a little bit of before an uncountable noun to mean a small amount: a little time, a bit of money. A bit of and a little bit of are more informal and common in speech.",
+    "examples": [
+      "I had a bit of free time, so I called her.",
+      "Could I have a little milk, please?",
+      "I just watch a little bit of TV at night."
+    ],
+    "uk": {
+      "explanation": "A little, a bit of або a little bit of перед незлічуваним іменником означають невелику кількість: a little time, a bit of money. A bit of і a little bit of неформальніші й поширені в усному мовленні."
+    }
+  },
+  "351": {
+    "explanation": "In informal English, millions of, loads of and tons of can exaggerate an amount: loads of homework, tons of emails. They don't give a real number — they just mean a very large amount, often with feeling.",
+    "examples": [
+      "I've got loads of work to do this weekend.",
+      "She received tons of messages on her birthday.",
+      "There were millions of people at the beach."
+    ],
+    "uk": {
+      "explanation": "У неформальній англійській millions of, loads of і tons of можуть перебільшувати кількість: loads of homework, tons of emails. Вони не називають реального числа — просто означають дуже багато, часто з емоцією."
+    }
+  },
+  "352": {
+    "explanation": "In formal or literary English, many a / many an + singular noun means many, with extra emphasis: many a time. The verb after it is singular.",
+    "examples": [
+      "Many a traveller has been lost in these mountains.",
+      "I have climbed many a mountain in my life.",
+      "It has raised many an issue for the council."
+    ],
+    "uk": {
+      "explanation": "В офіційній чи літературній англійській many a / many an + іменник в однині означає «багато» з додатковим наголосом: many a time. Дієслово після цього в однині."
+    }
+  },
+  "659": {
+    "explanation": "For emphasis, use such a + adjective + singular noun, and such + adjective + plural or uncountable noun: such a nice day, such good friends. Such goes before a, not after it.",
+    "examples": [
+      "It was such a nice day.",
+      "They are such good friends.",
+      "I've never had such delicious food."
+    ],
+    "uk": {
+      "explanation": "Для підсилення вживаємо such a + adjective + іменник в однині та such + adjective + іменник у множині або незлічуваний: such a nice day, such good friends. Such стоїть перед a, а не після нього."
+    }
+  },
+  "661": {
+    "explanation": "After a superlative + noun (the best film, the funniest person), add a clause with the present perfect or past perfect to mean of all the ones I have ever…: the best film I've ever seen. Which / that is usually left out, and ever is common.",
+    "examples": [
+      "She's the funniest person I've ever met.",
+      "It's the best pizza I've ever had.",
+      "It was the worst trip we had ever taken."
+    ],
+    "uk": {
+      "explanation": "Після найвищого ступеня + іменник (the best film, the funniest person) додаємо речення в present perfect або past perfect зі значенням «з усіх, які я коли-небудь…»: the best film I've ever seen. Which / that зазвичай пропускають, а ever вживається часто."
+    }
+  },
+  "662": {
+    "explanation": "For shops, surgeries and people's homes, you can leave out the noun after 's, because everyone knows which place you mean: the dentist's, my grandma's.",
+    "examples": [
+      "I have to go to the dentist's.",
+      "We had dinner at my aunt's.",
+      "Can you get some bread from the baker's?"
+    ],
+    "uk": {
+      "explanation": "Коли йдеться про крамниці, кабінети лікарів і чиїсь домівки, іменник після 's можна пропустити, бо всі розуміють, про яке місце мова: the dentist's, my grandma's."
+    }
+  },
+  "668": {
+    "explanation": "Start with The thing + clause, then be, then the thing you want to highlight: The thing I enjoyed most was the music. It points the listener to one thing and gives it focus.",
+    "examples": [
+      "The thing I liked most was the swimming pool.",
+      "The thing I need now is a holiday.",
+      "The thing she hates is waiting."
+    ],
+    "uk": {
+      "explanation": "Почніть із The thing + clause, далі be, а потім те, що хочете виділити: The thing I enjoyed most was the music. Так увага слухача спрямовується на одну річ."
+    }
+  },
+  "674": {
+    "explanation": "In academic and business writing, a verb or adjective often becomes a noun (nominalisation): grow → growth, decide → a decision. The action becomes a noun phrase, which sounds more formal and objective.",
+    "examples": [
+      "There has been a sharp increase in prices.",
+      "The decision to close the factory surprised everyone.",
+      "Sales showed steady growth throughout the year."
+    ],
+    "uk": {
+      "explanation": "В академічному й діловому письмі дієслово чи прикметник часто перетворюють на іменник (номіналізація): grow → growth, decide → a decision. Дія стає іменниковою фразою, що звучить офіційніше й об'єктивніше."
+    }
+  },
+  "675": {
+    "explanation": "A what-clause can be a whole noun phrase at the start of a sentence, followed by is / was and the focus: What companies care about is money. It is more formal than The thing (that)…",
+    "examples": [
+      "What companies care about is money.",
+      "What I miss most is my mum's cooking.",
+      "What surprised me was the price."
+    ],
+    "uk": {
+      "explanation": "What-речення може бути цілою іменниковою фразою на початку речення, далі is / was і те, на чому наголос: What companies care about is money. Це офіційніше, ніж The thing (that)…"
+    }
+  },
+  "848": {
+    "explanation": "In formal writing, put the preposition before which, whom or whose instead of at the end of the clause: the person to whom I spoke. This avoids leaving the preposition at the end, but sounds more formal than everyday speech.",
+    "examples": [
+      "This is the club of which you are the secretary.",
+      "She is someone to whom I owe a lot.",
+      "It is a position in which I am very interested."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі прийменник ставлять перед which, whom чи whose, а не в кінці речення: the person to whom I spoke. Так прийменник не лишається в кінці, але це звучить офіційніше за повсякденну мову."
+    }
+  },
+  "849": {
+    "explanation": "Some one-word prepositions, like upon, amongst, amid, beneath and towards, are rare in everyday speech but common in formal, literary or business writing. They often replace a more common word: upon = on.",
+    "examples": [
+      "Please act upon the advice you were given.",
+      "A survey was carried out amongst the students.",
+      "The house stood beneath a tall old tree."
+    ],
+    "uk": {
+      "explanation": "Деякі однослівні прийменники, як-от upon, amongst, amid, beneath і towards, рідко звучать у повсякденному мовленні, але часто трапляються в офіційному, літературному чи діловому письмі. Часто вони замінюють звичніше слово: upon = on."
+    }
+  },
+  "850": {
+    "explanation": "Longer complex prepositions, like on account of, ahead of, with regard to and in accordance with, are typical of formal, literary or business writing. They often replace a shorter, more common word: on account of = because of.",
+    "examples": [
+      "The meeting was postponed on account of the strike.",
+      "The company launched the product ahead of its rivals.",
+      "We are writing with regard to your recent order."
+    ],
+    "uk": {
+      "explanation": "Довші складені прийменники, як-от on account of, ahead of, with regard to та in accordance with, типові для офіційного, літературного чи ділового письма. Часто вони замінюють коротше й звичніше слово: on account of = because of."
+    }
+  },
   "1107": {
     "explanation": "Use if + present simple for a real condition: something true now, true every time, or very likely. The main clause uses the present simple, can, or an imperative.",
     "examples": [
@@ -1724,6 +2109,303 @@
     ],
     "uk": {
       "explanation": "У довгому офіційному тексті можна послатися на вже написане, замість того щоб повторювати: as mentioned above, as mentioned earlier, as shown above. As described below і see below вказують на те, що буде далі. Після as немає підмета: зворот — це скорочення від «as I mentioned above»."
+    }
+  },
+  "1160": {
+    "explanation": "Put a phrase like in the morning or in my country at the start of a sentence to set the scene first. The rest keeps normal order: subject, then verb. A comma after the phrase is common.",
+    "examples": [
+      "In the morning, I go to the beach.",
+      "In my country, people eat a lot of rice.",
+      "After school, we play football in the park."
+    ],
+    "uk": {
+      "explanation": "Фразу на кшталт in the morning чи in my country можна поставити на початок речення, щоб спершу описати обставини. Решта речення має звичайний порядок: підмет, потім дієслово. Після такої фрази часто ставлять кому."
+    }
+  },
+  "1161": {
+    "explanation": "Put an adverb like suddenly, quickly, here or outside at the start to make it stand out. In stories, Suddenly warns that something unexpected is coming. The subject and verb still follow in normal order.",
+    "examples": [
+      "Suddenly, the door opened.",
+      "Outside, it was raining hard.",
+      "Quickly, I opened the letter and started to read."
+    ],
+    "uk": {
+      "explanation": "Прислівник на кшталт suddenly, quickly, here чи outside можна поставити на початок, щоб його виділити. В історіях Suddenly попереджає, що зараз станеться щось несподіване. Підмет і дієслово після нього стоять у звичайному порядку."
+    }
+  },
+  "1162": {
+    "explanation": "Use It is / It's + adjective + that + clause to give your opinion first and the news after: It's great that you got the job. This sounds more natural than starting with That… In speech, that is often dropped.",
+    "examples": [
+      "It's great that you have a new job!",
+      "It's important that you are happy.",
+      "It's sad that you have to move away."
+    ],
+    "uk": {
+      "explanation": "It is / It's + adjective + that + clause дає спершу вашу оцінку, а потім саму новину: It's great that you got the job. Це звучить природніше, ніж почати речення з That… В усному мовленні that часто пропускають."
+    }
+  },
+  "1163": {
+    "explanation": "Use The reason (that) … or The place (which) … + clause as the subject, then be, then the thing you want to highlight: The reason I am writing is to… That or which is optional. After the reason … is, use that or to, not because.",
+    "examples": [
+      "The reason I am writing is to ask about the course.",
+      "The place we liked most was the old harbour.",
+      "The reason I left is that the pay was low."
+    ],
+    "uk": {
+      "explanation": "The reason (that) … або The place (which) … + clause стає підметом, далі be, а потім те, що хочемо виділити: The reason I am writing is to… That чи which можна пропустити. Після the reason … is вживаємо that або to, а не because."
+    }
+  },
+  "1164": {
+    "explanation": "Start with The thing / fact / point / problem / reason + is (that) to show what kind of information is coming, then give it: The problem is I'm always late. That is optional; without it, a comma is common.",
+    "examples": [
+      "The problem is that I'm always late.",
+      "The point is, we don't have enough time.",
+      "The thing is, I don't really like parties."
+    ],
+    "uk": {
+      "explanation": "Почніть із The thing / fact / point / problem / reason + is (that), щоб показати, яка інформація буде далі, а потім назвіть її: The problem is I'm always late. That можна пропустити; без нього часто ставлять кому."
+    }
+  },
+  "1165": {
+    "explanation": "Fixed expressions like All in all, All things considered, At the end of the day or When it comes down to it can open a sentence and tell the reader how to take it — as a summary or as what really matters. Put a comma after them.",
+    "examples": [
+      "All in all, the trip was a great experience.",
+      "At the end of the day, it's your decision.",
+      "All things considered, I'd choose the third option."
+    ],
+    "uk": {
+      "explanation": "Сталі вирази на кшталт All in all, All things considered, At the end of the day чи When it comes down to it можуть відкривати речення й підказувати читачеві, як його сприймати — як підсумок чи як те, що зрештою найважливіше. Після них ставимо кому."
+    }
+  },
+  "1166": {
+    "explanation": "In reports, proposals and instructions, an imperative like Note, Notice, See or Consider can point the reader to something important. It isn't really an order — it's a signpost that says look at this.",
+    "examples": [
+      "Note the disadvantages of this plan.",
+      "Notice the difference in price between the two offers.",
+      "See the attached file for more details."
+    ],
+    "uk": {
+      "explanation": "У звітах, пропозиціях та інструкціях наказовий спосіб на кшталт Note, Notice, See чи Consider може звертати увагу читача на щось важливе. Це не зовсім наказ — це вказівник, що означає «зверніть на це увагу»."
+    }
+  },
+  "1167": {
+    "explanation": "Use What + subject + verb as the subject, then is / was, then the important new information: What we need is more time. The what-clause is not a question, so don't add do.",
+    "examples": [
+      "What we need is a strong campaign.",
+      "What I love about this city is the food.",
+      "What tourists want is to see famous places."
+    ],
+    "uk": {
+      "explanation": "What + subject + verb стає підметом, далі is / was, а потім важлива нова інформація: What we need is more time. What-речення тут не питання, тому do не додаємо."
+    }
+  },
+  "1168": {
+    "explanation": "A wh-clause can be a heading or title: Why I think this is a good idea, How we could save money. It tells the reader what the paragraph below will answer. It isn't a question: no auxiliary before the subject and no question mark.",
+    "examples": [
+      "Why you should choose this event",
+      "How we could benefit from the changes",
+      "What I learned in my first year"
+    ],
+    "uk": {
+      "explanation": "Wh-речення може бути заголовком: Why I think this is a good idea, How we could save money. Воно показує читачеві, на що відповість абзац нижче. Це не питання: допоміжного дієслова перед підметом і знака питання немає."
+    }
+  },
+  "1169": {
+    "explanation": "In formal, academic or business writing, a short -ed clause like Compared to…, Based on… or Faced with… can open the sentence and set the frame for the main clause. It has no subject of its own, so it describes the subject of the main clause.",
+    "examples": [
+      "Compared to other cities, Berlin is safe for cycling.",
+      "Based on this survey, we recommend longer opening hours.",
+      "Faced with rising costs, the company closed two shops."
+    ],
+    "uk": {
+      "explanation": "В офіційному, академічному чи діловому письмі коротке -ed речення на кшталт Compared to…, Based on… чи Faced with… може відкривати речення й задавати рамку для головного речення. Власного підмета в ньому немає, тож воно стосується підмета головного речення."
+    }
+  },
+  "1170": {
+    "explanation": "Not a + noun at the start means not even one and is strongly emphatic, almost literary. Follow it with a (usually passive) verb, or, when the noun is the object, with an auxiliary before the subject: Not a word did she say.",
+    "examples": [
+      "Not a word was spoken during the journey.",
+      "Not a sound could be heard in the house.",
+      "Not a scrap of remorse do they show."
+    ],
+    "uk": {
+      "explanation": "Not a + noun на початку речення означає «жодного» і звучить дуже емфатично, майже літературно. Після нього йде дієслово (зазвичай у пасиві) або, якщо іменник — додаток, допоміжне дієслово перед підметом: Not a word did she say."
+    }
+  },
+  "1171": {
+    "explanation": "A clause starting with How, Why or Where can be the subject of a sentence, often followed by be: Where he had gone was a mystery. It is formal and typical of essays. The verb after the clause is always singular.",
+    "examples": [
+      "How they influenced my life is hard to explain.",
+      "Where he had gone was a mystery.",
+      "Why people travel is an interesting question."
+    ],
+    "uk": {
+      "explanation": "Речення, що починається з How, Why чи Where, може бути підметом, часто з be після нього: Where he had gone was a mystery. Це офіційний стиль, типовий для есе. Дієслово після такого речення завжди в однині."
+    }
+  },
+  "1172": {
+    "explanation": "Add an adjective before the noun in The thing / fact / point / problem is (that) to show your judgement too: the sad thing, the only problem, the strange thing. It can be in the past (was) when you tell a story.",
+    "examples": [
+      "The only problem is that the rooms are small.",
+      "The strange thing was that nobody answered.",
+      "The sad fact is, many people can't afford it."
+    ],
+    "uk": {
+      "explanation": "Якщо додати прикметник перед іменником у The thing / fact / point / problem is (that), можна одразу показати й свою оцінку: the sad thing, the only problem, the strange thing. У розповіді вживається й минулий час (was)."
+    }
+  },
+  "1173": {
+    "explanation": "Use It is / It was + noun + who / that + clause to say this one and not anyone else: It was Paul who stole the money. Use who for people and that for things. Be stays singular, even with a plural noun.",
+    "examples": [
+      "It was Paul who stole the money.",
+      "It is this silence that I love most.",
+      "It was the students who complained."
+    ],
+    "uk": {
+      "explanation": "It is / It was + noun + who / that + clause означає «саме цей, а не хтось інший»: It was Paul who stole the money. Who вживаємо для людей, that — для речей. Be лишається в однині, навіть з іменником у множині."
+    }
+  },
+  "1174": {
+    "explanation": "For extra weight, you can put two fixed expressions one after another at the start of a sentence: All in all, taking everything into account, … Don't use more than two, or the sentence sounds like a speech.",
+    "examples": [
+      "All in all, taking everything into account, I'd choose the park.",
+      "But all of a sudden, out of nowhere, a dog appeared.",
+      "What is more, in my opinion, the price is too high."
+    ],
+    "uk": {
+      "explanation": "Для більшої ваги можна поставити на початку речення два сталі вирази поспіль: All in all, taking everything into account, … Більше двох не варто, інакше речення звучить як промова."
+    }
+  },
+  "1188": {
+    "explanation": "Use a negative question (Isn't it…?, Don't you…?) or a question tag (…, aren't you?) to ask the listener to agree, or to check something you think is true. The n't stays with the auxiliary.",
+    "examples": [
+      "Isn't it a beautiful day?",
+      "You're free on Saturday, aren't you?",
+      "Don't you think it's too expensive?"
+    ],
+    "uk": {
+      "explanation": "Заперечне питання (Isn't it…?, Don't you…?) або розділове питання (…, aren't you?) вживаємо, щоб попросити співрозмовника погодитися або перевірити те, що вважаємо правдою. N't лишається при допоміжному дієслові."
+    }
+  },
+  "1192": {
+    "explanation": "Use the full form not instead of n't to stress the negative, or in formal writing: I do not agree. In speech, you say not strongly to make it clear.",
+    "examples": [
+      "I do not want to hear that again.",
+      "This is not acceptable.",
+      "The results have not been published yet."
+    ],
+    "uk": {
+      "explanation": "Повну форму not замість n't вживаємо, щоб наголосити на запереченні, або в офіційному письмі: I do not agree. В усному мовленні not вимовляють з наголосом, щоб воно звучало чітко."
+    }
+  },
+  "1193": {
+    "explanation": "For strong focus, put never at the start, then the auxiliary before the subject, like a question: Never have I seen such a film. It is dramatic and fairly formal; the normal version is I have never seen…",
+    "examples": [
+      "Never have I seen such a beautiful place.",
+      "Never had I felt so tired.",
+      "Never did I think I would win."
+    ],
+    "uk": {
+      "explanation": "Для сильного наголосу never ставлять на початок, а потім допоміжне дієслово перед підметом, як у питанні: Never have I seen such a film. Це звучить драматично й досить офіційно; звичайний варіант — I have never seen…"
+    }
+  },
+  "1194": {
+    "explanation": "Use neither … nor to join two words, phrases or clauses and make both negative: not this and not that. The verb stays positive, because neither already makes the sentence negative.",
+    "examples": [
+      "Neither you nor I would like that.",
+      "We can neither eat nor drink during lessons.",
+      "The hotel was neither clean nor cheap."
+    ],
+    "uk": {
+      "explanation": "Neither … nor поєднує два слова, фрази чи речення й робить заперечними обидва: ні це, ні те. Дієслово лишається стверджувальним, бо neither уже робить речення заперечним."
+    }
+  },
+  "1198": {
+    "explanation": "For focus, put not only at the start, then an auxiliary (or do / does / did) before the subject: Not only did she win, but she also… The second part often has but … also.",
+    "examples": [
+      "Not only was the hotel cheap, but it was also clean.",
+      "Not only do they sell books, they also sell coffee.",
+      "Not only did he forget, he also lied."
+    ],
+    "uk": {
+      "explanation": "Щоб наголосити, not only ставлять на початок, а потім допоміжне дієслово (або do / does / did) перед підметом: Not only did she win, but she also… Друга частина часто містить but … also."
+    }
+  },
+  "1199": {
+    "explanation": "Put not before a stance adverb like necessarily, really, entirely or exactly to make a statement softer and less direct: That's not necessarily true. It sounds more polite than a plain negative.",
+    "examples": [
+      "This is not necessarily a bad idea.",
+      "Cooking is not really my thing.",
+      "I'm not entirely sure about the date."
+    ],
+    "uk": {
+      "explanation": "Not перед прислівником на кшталт necessarily, really, entirely чи exactly робить твердження м'якшим і менш прямим: That's not necessarily true. Це звучить ввічливіше, ніж просте заперечення."
+    }
+  },
+  "1200": {
+    "explanation": "In formal writing, especially reports and surveys, use (very) few + plural noun to mean not many people: Very few students agreed. Few without a has a negative meaning — almost none.",
+    "examples": [
+      "Very few people speak English correctly.",
+      "Few students answered the survey.",
+      "Very few employees use the gym."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі, особливо у звітах та опитуваннях, (very) few + іменник у множині означає «небагато людей»: Very few students agreed. Few без a має заперечне значення — майже ніхто."
+    }
+  },
+  "1201": {
+    "explanation": "Put whatsoever after no + noun, or after nothing / none, to mean not even a little: no interest whatsoever. It is strong and fairly formal.",
+    "examples": [
+      "We have no experience whatsoever.",
+      "There is nothing whatsoever to worry about.",
+      "He showed no interest whatsoever in the job."
+    ],
+    "uk": {
+      "explanation": "Whatsoever після no + noun або після nothing / none означає «анітрохи, зовсім»: no interest whatsoever. Звучить сильно й досить офіційно."
+    }
+  },
+  "1202": {
+    "explanation": "Not a (single) + noun at the start of a sentence means not even one. It is literary and dramatic, and is often followed by a passive: Not a single noise could be heard.",
+    "examples": [
+      "Not a single noise could be heard from the rooms.",
+      "Not a single person was told about the plan.",
+      "Not a word was said about the accident."
+    ],
+    "uk": {
+      "explanation": "Not a (single) + noun на початку речення означає «жодного». Це звучить літературно й драматично, і далі часто йде пасив: Not a single noise could be heard."
+    }
+  },
+  "1203": {
+    "explanation": "Add you after don't to make a command a strong warning or an angry telling-off: Don't you ever do that again! It is spoken and emotional, often with ever or in Don't you dare.",
+    "examples": [
+      "Don't you ever do that again!",
+      "Don't you dare touch my phone!",
+      "Don't you talk to me like that!"
+    ],
+    "uk": {
+      "explanation": "Якщо додати you після don't, наказ стає суворим попередженням або сердитим докором: Don't you ever do that again! Це усне й емоційне мовлення, часто з ever або у виразі Don't you dare."
+    }
+  },
+  "1204": {
+    "explanation": "To add another negative point after a negative sentence, start with Neither or Nor, then the auxiliary (do, be, can…) before the subject: I don't like it. — Neither does she. In writing, Nor is it… adds another negative fact.",
+    "examples": [
+      "I don't like horror films. — Neither do I.",
+      "We can't talk here. Nor is it possible to relax.",
+      "She didn't call, nor did she write."
+    ],
+    "uk": {
+      "explanation": "Щоб додати ще один заперечний пункт після заперечного речення, почніть із Neither або Nor, а далі допоміжне дієслово (do, be, can…) перед підметом: I don't like it. — Neither does she. На письмі Nor is it… додає ще один заперечний факт."
+    }
+  },
+  "1205": {
+    "explanation": "Use in the least after a negative verb, or before an adjective in a negative sentence, to mean not at all: I'm not in the least worried. It is emphatic.",
+    "examples": [
+      "She was not in the least interested.",
+      "It doesn't matter in the least.",
+      "I wasn't in the least surprised by the news."
+    ],
+    "uk": {
+      "explanation": "In the least після заперечного дієслова або перед прикметником у заперечному реченні означає «анітрохи»: I'm not in the least worried. Це емфатичний вираз."
     }
   }
 }
