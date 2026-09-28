@@ -646,12 +646,17 @@ must have; для заперечної дедукції наголошено can
 after if-clause, predictions + We shall see, common mistakes). Content — сам shall / shall not / shan't;
 передбачення третьою особою (EGP 576 "our town shall…") не використано — з I/we природніше.
 
-### [ ] 59. Modality — should (`modality-should`) — рівень A2
+### [x] 59. Modality — should (`modality-should`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-should`.
+19 EGP-рядків (577-595): 7 чистих FORM (577/578/579/583/584/590/591) без карток; 12 USE/FORM-USE
+вплетені за `egpIndex`. 12 секцій (form, advice, suggestions + shouldn't we?, ideal situations,
+likelihood, should have + -ed regrets, You should have seen it!, You shouldn't have!, ellipsis, should be
++ -ing з expectations/obligation, if…should + inversion Should you…, common mistakes). Content — сам
+should / shouldn't / should have / should be; контраст "should для правил → must" свідомо не додано
+(у табличках/інструкціях should для правил — нормальна англійська).
 
 ### [ ] 60. Nouns — uncountable (`nouns-uncountable`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
