@@ -604,12 +604,16 @@ obliged/forced, + that-clause hedging, not + adj + to vs adj + not + to) + commo
 infinitive after verbs/modals, I have to admit, strong suggestion, deductions, have to have + -ed,
 common mistakes). Content — сам have to / has to / 've got to / had to; subject/do/not/verb — grammar.
 
-### [ ] 55. Modality — may (`modality-may`) — рівень A2
+### [x] 55. Modality — may (`modality-may`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-may`.
+17 EGP-рядків (497-513): 5 чистих FORM (497/499/500/502/504) без карток; 12 USE вплетені за
+`egpIndex`. 13 секцій (form, possibility, adverbs, may well, may (not) have + -ed, permission, formal
+requests, as you may know, may … but, may as well, concession, hedging, common mistakes). Content —
+сам may / may not / may have / may well / may as well; EGP-приклад 499 "I knew I may not…" не
+використано (у минулому природніше might).
 
 ### [ ] 56. Modality — might (`modality-might`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
