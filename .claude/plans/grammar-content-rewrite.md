@@ -861,12 +861,15 @@ Content — `used to`/`use to`/`used not to`; did/didn't/never — `grammar`.
 get someone to do vs make, get someone doing, have someone do vs get to, common mistakes). Content — форма get/have + дієслівна
 форма після об'єкта (participle/to-inf/-ing/base); підмет, об'єкт, зворотний займенник — `grammar`.
 
-### [ ] 80. Past — past perfect continuous (`past-past-perfect-continuous`) — рівень B1
+### [x] 80. Past — past perfect continuous (`past-past-perfect-continuous`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `past-past-perfect-continuous`.
+9 EGP-рядків (755-763), 5 карток (756/757/758/759/762) inline; generic-блок не рендериться. 9 секцій (форма + 'd/hadn't/питання C2,
+background when/so, for/since + How long, результат (was tired because), after/when, relative clause, адверби had really been,
+порівняння з past continuous / past perfect simple (таблиця, state verbs, reported speech — без EGP-рядка), common mistakes).
+Content — `had been` + `-ing` (у питанні/з адвербом розділено: `had` … `been`); підмет, for/since-фраза, головна подія — `grammar`.
 
 ### [ ] 81. Past — past perfect simple (`past-past-perfect-simple`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
