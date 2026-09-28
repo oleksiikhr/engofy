@@ -615,12 +615,15 @@ requests, as you may know, may … but, may as well, concession, hedging, common
 сам may / may not / may have / may well / may as well; EGP-приклад 499 "I knew I may not…" не
 використано (у минулому природніше might).
 
-### [ ] 56. Modality — might (`modality-might`) — рівень A2
+### [x] 56. Modality — might (`modality-might`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-might`.
+15 EGP-рядків (514-528): 6 чистих FORM (514/516/519/522/523/528) без карток; 9 USE вплетені за
+`egpIndex`. 11 секцій (form + Might…?, weak possibility, reported speech, suggestions, might (not) have
++ -ed, as you might know, might … but, Might I suggest / Might it not be, might as well, try as I
+might, common mistakes). На відміну від `may`, тут `might as well` — FORM-рядок (без картки).
 
 ### [ ] 57. Modality — must (`modality-must`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
