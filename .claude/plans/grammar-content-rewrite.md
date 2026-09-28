@@ -791,12 +791,15 @@ generic-блок не рендериться. 12 секцій (say, say vs tell,
 requests + not to, direct speech before/after/middle з «» — vs “ ”, said John + adverb, citation, common mistakes).
 Content — дієслово-репортер (said/told/asked/wondered); слухач, that/if/wh-, підмет і дієслово reported clause — `grammar`.
 
-### [ ] 73. Verbs — patterns_that clauses (`verbs-patterns-that-clauses`) — рівень A2
+### [x] 73. Verbs — patterns_that clauses (`verbs-patterns-that-clauses`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `verbs-patterns-that-clauses`.
+5 EGP-рядків (1052-1056), усі чисті FORM — жодної картки, generic-блок не рендериться. 8 секцій (verb + that, без that,
+verb + person — tell/promise/remind/warn, ширший набір B1 таблицею за значенням, verb + to + person — say/explain to,
+I don't think — без EGP-рядка, I think so / I hope not — без EGP-рядка, common mistakes з комою перед що і explain me).
+Content — головне дієслово; that, слухач, підмет і дієслово підрядного — `grammar`. Скорочення (`you'll`, `it's`) — одна мітка.
 
 ### [ ] 74. Verbs — phrasal (`verbs-phrasal`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
