@@ -882,12 +882,15 @@ had planned…but, imagined past if / Had I known / had it not been for, wish/if
 common mistakes). Content — `had` + participle (в інверсії/питанні розділено: `Had` … participle); підмет, сполучники, головна
 клауза — `grammar`.
 
-### [ ] 82. Past — present perfect continuous (`past-present-perfect-continuous`) — рівень B1
+### [x] 82. Past — present perfect continuous (`past-present-perfect-continuous`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `past-present-perfect-continuous`.
+8 EGP-рядків (808-815), 4 картки (810/811/814/815) inline; generic-блок не рендериться. 8 секцій (форма + 's = has перед been,
+still going on з for/since + How long, repeated a lot/lately vs past simple, recent past з видимим результатом, адверби just/also/
+already, have been doing vs have done + state verbs (без EGP-рядка), інверсія Not only have I been… but C2, common mistakes).
+Content — `have/has been` + `-ing` (у питанні/з адвербом/в інверсії розділено: `have` … `been`); підмет, for/since-фраза, результат — `grammar`.
 
 ### [ ] 83. Pronouns — reciprocal (`pronouns-reciprocal`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
