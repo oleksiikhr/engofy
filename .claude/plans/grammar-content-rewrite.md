@@ -832,12 +832,14 @@ now→past, was going to — плани/ознаки + нездійснений 
 відмежування від due to = because of, common mistakes). Content — маркер (going to/would/about to/on the point of/due to);
 was/were, підмет, дієслово — `grammar`.
 
-### [ ] 77. Modality — ought (`modality-ought`) — рівень B1
+### [x] 77. Modality — ought (`modality-ought`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-ought`.
+11 EGP-рядків (556-566), 6 карток (557/559/560/561/562/563) inline; generic-блок не рендериться. 9 секцій (форма, advice, really,
+desired states + there ought to be, likelihood, ought to have + -ed, еліпсис as much as they ought to, C2-формальні ought not to /
+oughtn't / Ought we not to…?, common mistakes). Content — `ought to`/`ought to have`/`ought not to` (у питанні розділено: `ought` … `not to`).
 
 ### [ ] 78. Modality — used to (`modality-used-to`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
