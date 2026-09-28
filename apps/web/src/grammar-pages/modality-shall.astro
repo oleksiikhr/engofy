@@ -1,0 +1,282 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 7 USE rows are inlined, matched by EGP index. The other 3 rows
+// (affirmative, questions, negative) are plain FORM rows, written in full
+// without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const offersPoint = point(569);
+const suggestionsPoint = point(570);
+const plansPoint = point(571);
+const advicePoint = point(572);
+const commandsPoint = point(574);
+const conditionalPoint = point(575);
+const predictionsPoint = point(576);
+
+const inlineUsagePointIds = [
+  offersPoint,
+  suggestionsPoint,
+  plansPoint,
+  advicePoint,
+  commandsPoint,
+  conditionalPoint,
+  predictionsPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Shall: forms (shall, shall not, shan't, Shall I…?), Shall I…? offers, Shall we…? suggestions, What shall I do? for advice, I shall / we shall for formal plans and promises, shall in rules and contracts, shall after an if-clause, and formal predictions."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Shall, shall not, Shall I…?', open: true },
+    { id: 'offers', title: 'Shall I open the window?: offers', open: false },
+    { id: 'suggestions', title: 'Shall we go?: suggestions', open: false },
+    { id: 'advice', title: 'What shall I do?: asking for advice', open: false },
+    { id: 'plans', title: 'I shall be there: formal plans and promises', open: false },
+    { id: 'rules', title: 'The tenant shall pay…: rules and contracts', open: false },
+    { id: 'conditional', title: 'If…, we shall…: after an if-clause', open: false },
+    { id: 'predictions', title: 'We shall see: formal predictions', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Shall</em> is a modal verb used almost only with <em>I</em> and <em>we</em>. In everyday English you mostly meet it in questions: <em>Shall I help you?</em> (an offer), <em>Shall we go?</em> (a suggestion), <em>What shall I do?</em> (asking for advice). In statements, <em>I shall</em> / <em>we shall</em> is a formal way to say <em>I will</em> / <em>we will</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Shall, shall not, Shall I…?" id="form" open>
+    <p>
+      <em>Shall</em> is followed by the base verb, without <em>to</em>. In statements it usually goes with <em>I</em> or <em>we</em> and sounds formal — in speech, people normally say <em>I'll</em> / <em>we'll</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['I / we', 'shall', 'base verb']} />
+    <GrammarExample note="We + shall + start: a formal way to say we will start.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">start</mark> tomorrow at 2 o'clock.
+    </GrammarExample>
+    <GrammarExample note="I + shall + be: I will be free.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">be</mark> free on Sunday at 6 o'clock in the evening.
+    </GrammarExample>
+    <p>
+      For a question, put <em>shall</em> before <em>I</em> or <em>we</em>. A question word can come first: <em>What shall…?</em>, <em>Where shall…?</em>, <em>What time shall…?</em>
+    </p>
+    <GrammarFormula label="Question" parts={['(question word)', 'shall', 'I / we', 'base verb']} />
+    <GrammarExample note="Shall + we + meet: suggesting a time and place.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark> at half past four in front of my house?
+    </GrammarExample>
+    <GrammarExample note="Question word + shall + I: asking what to do.">
+      <mark data-role="grammar">What time</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">come</mark>? And <mark data-role="grammar">what</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">bring</mark> to the party?
+    </GrammarExample>
+    <p>
+      The negative is <em>shall not</em>, short form <em>shan't</em>. Both are rare and formal; <em>shan't</em> is mostly British. In everyday speech, people say <em>won't</em> instead. <em>Shall not</em> is most common in rules and official texts (see <em>Rules and contracts</em> below).
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "shall not / shan't", 'base verb']} />
+    <GrammarExample note="Shall not + be able: a formal letter.">
+      This is only in case <mark data-role="grammar">I</mark> <mark data-role="content">shall not</mark> <mark data-role="grammar">be</mark> able to pick you up at the airport.
+    </GrammarExample>
+    <GrammarExample note="Shan't + be: short form, British and fairly formal.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">shan't</mark> <mark data-role="grammar">be</mark> long — wait for me here.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Shall I open the window?: offers" id="offers" open={false}>
+    <p>
+      <em>Shall I…?</em> offers to do something for another person: "Do you want me to…?" It is friendly and very common.
+    </p>
+    <GrammarFormula label="Offer" parts={['shall', 'I', 'base verb']} />
+    <GrammarExample note="Offering to buy food for the party.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">go</mark> and buy some cake and crackers?
+    </GrammarExample>
+    <GrammarExample note="Offering to buy a ticket for a friend.">
+      The tickets cost €25. <mark data-role="content">Shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">buy</mark> you one?
+    </GrammarExample>
+    <GrammarExample note="A polite offer in a shop or at home.">
+      It's hot in here. <mark data-role="content">Shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">open</mark> the window?
+    </GrammarExample>
+    {offersPoint && <GrammarUsagePointCard usagePoint={offersPoint} />}
+    <p>
+      Typical answers: <em>Yes, please.</em> / <em>That would be great, thanks.</em> / <em>No, it's OK, thanks.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Shall we go?: suggestions" id="suggestions" open={false}>
+    <p>
+      <em>Shall we…?</em> suggests doing something together. It means the same as <em>Let's…</em>, but as a question it sounds a little softer — the other person can say no.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['shall', 'we', 'base verb']} />
+    <GrammarExample note="Suggesting going to a concert together.">
+      Tomorrow evening there's a concert in the park. <mark data-role="content">Shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">go</mark>?
+    </GrammarExample>
+    <GrammarExample note="Suggesting a place to eat.">
+      <mark data-role="content">Shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">go</mark> to a Korean restaurant after the film?
+    </GrammarExample>
+    <GrammarExample note="A question word + shall we: deciding something together.">
+      <mark data-role="grammar">Where</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark>?
+    </GrammarExample>
+    <p>
+      <em>Let's…, shall we?</em> — the question tag after <em>let's</em> is always <em>shall we</em>.
+    </p>
+    <GrammarFormula label="Let's + tag" parts={["let's", 'base verb', '…', 'shall', 'we']} />
+    <GrammarExample note="Let's… shall we?: a friendly suggestion.">
+      <mark data-role="grammar">Let's</mark> <mark data-role="grammar">have</mark> a break, <mark data-role="content">shall</mark> <mark data-role="grammar">we</mark>?
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="What shall I do?: asking for advice" id="advice" open={false}>
+    <p>
+      <em>What shall I…?</em> and similar questions ask someone for advice or instructions: "What do you think I should do?"
+    </p>
+    <GrammarFormula label="Advice" parts={['what / which / where…', 'shall', 'I', 'base verb']} />
+    <GrammarExample note="Asking for an idea for a present.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">buy</mark> for her wedding?
+    </GrammarExample>
+    <GrammarExample note="A student asking the teacher for instructions.">
+      I have to travel next week for health reasons. <mark data-role="grammar">What</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">do</mark> with next week's work?
+    </GrammarExample>
+    <GrammarExample note="Asking for help with a choice.">
+      <mark data-role="grammar">Which</mark> dress <mark data-role="content">shall</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wear</mark> tonight, the blue one or the black one?
+    </GrammarExample>
+    {advicePoint && <GrammarUsagePointCard usagePoint={advicePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I shall be there: formal plans and promises" id="plans" open={false}>
+    <p>
+      In statements, <em>I shall</em> / <em>we shall</em> talks about plans, intentions and promises. It means the same as <em>I will</em>, but sounds formal — it is common in letters and emails to a teacher, a company or an official.
+    </p>
+    <GrammarFormula label="Plan / promise" parts={['I / we', 'shall', 'base verb']} />
+    <GrammarExample note="A promise in a formal email.">
+      I promise that <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">cover</mark> all the work and give it to you tomorrow.
+    </GrammarExample>
+    <GrammarExample note="Reminding someone of a plan.">
+      Remember that <mark data-role="grammar">we</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">meet</mark> inside the café.
+    </GrammarExample>
+    <GrammarExample note="Shall be + -ing: a formal, arranged plan.">
+      I'm sorry I have to miss tomorrow's class. <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">be attending</mark> class the day after tomorrow.
+    </GrammarExample>
+    {plansPoint && <GrammarUsagePointCard usagePoint={plansPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The tenant shall pay…: rules and contracts" id="rules" open={false}>
+    <p>
+      In laws, contracts and official rules, <em>shall</em> (with any subject) gives an order or an obligation: "must". <em>Shall not</em> means "must not". This use is very formal — you won't hear it in conversation.
+    </p>
+    <GrammarFormula label="Rule" parts={['subject', 'shall / shall not', 'base verb']} />
+    <GrammarExample note="A contract: the tenant must pay.">
+      <mark data-role="grammar">The tenant</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">pay</mark> the rent on the first day of each month.
+    </GrammarExample>
+    <GrammarExample note="Insisting that the contract must be fulfilled.">
+      We need to insist that the agreement is binding and that <mark data-role="grammar">the contract</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">be</mark> fulfilled.
+    </GrammarExample>
+    <GrammarExample note="Shall not = must not, in an official rule.">
+      <mark data-role="grammar">Supplier contracts</mark> <mark data-role="content">shall not</mark> <mark data-role="grammar">be</mark> omitted.
+    </GrammarExample>
+    {commandsPoint && <GrammarUsagePointCard usagePoint={commandsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="If…, we shall…: after an if-clause" id="conditional" open={false}>
+    <p>
+      In formal writing, <em>shall</em> can replace <em>will</em> in the main clause of a first conditional — usually with <em>I</em> or <em>we</em>. It often sounds serious or official, like a warning.
+    </p>
+    <GrammarFormula label="Conditional" parts={['if', 'present simple', 'I / we', 'shall', 'base verb']} />
+    <GrammarExample note="A formal warning in a letter of complaint.">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">we do not receive</mark> a reply this time, <mark data-role="grammar">we</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">take</mark> the matter to court.
+    </GrammarExample>
+    <GrammarExample note="A serious result of a possible situation.">
+      <mark data-role="grammar">If</mark> things <mark data-role="grammar">get</mark> out of hand, <mark data-role="grammar">we</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">be</mark> doomed to live in chaos.
+    </GrammarExample>
+    {conditionalPoint && <GrammarUsagePointCard usagePoint={conditionalPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="We shall see: formal predictions" id="predictions" open={false}>
+    <p>
+      <em>Shall</em> can also say what you think will happen in the future — a formal alternative to <em>will</em>. It is most natural with <em>I</em> and <em>we</em>; with other subjects it sounds old-fashioned. <em>We shall see</em> ("we'll find out later") is a common fixed phrase.
+    </p>
+    <GrammarFormula label="Prediction" parts={['I / we', 'shall', '(probably / never…)', 'base verb']} />
+    <GrammarExample note="A prediction with an adverb between shall and the verb.">
+      Thanks to modern medicine, <mark data-role="grammar">we</mark> <mark data-role="content">shall</mark> probably <mark data-role="grammar">have</mark> several more years to live.
+    </GrammarExample>
+    <GrammarExample note="Shall never: a strong, emotional prediction.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">shall</mark> never <mark data-role="grammar">forget</mark> that summer.
+    </GrammarExample>
+    <GrammarExample note="We shall see: we don't know yet.">
+      Will the new plan work? <mark data-role="grammar">We</mark> <mark data-role="content">shall</mark> <mark data-role="grammar">see</mark>.
+    </GrammarExample>
+    {predictionsPoint && <GrammarUsagePointCard usagePoint={predictionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Shall</em> never changes: no <em>-s</em>, no <em>to</em> after it, and no <em>do</em> in questions.
+    </p>
+    <GrammarContrast
+      bad={['Shall I to help you?', 'Do we shall go?', 'I shall to call you tomorrow.']}
+      good={['Shall I help you?', 'Shall we go?', 'I shall call you tomorrow.']}
+    />
+    <p>
+      Offers and suggestions use <em>shall</em> with <em>I</em> or <em>we</em> only. To ask another person what they want, use <em>Would you like…?</em> or <em>Do you want…?</em>
+    </p>
+    <GrammarContrast
+      bad={['Shall you come with us?', 'Shall he carry your bag?']}
+      good={['Would you like to come with us?', 'Shall I ask him to carry your bag?']}
+    />
+    <p>
+      In everyday statements, <em>I shall</em> sounds very formal or old-fashioned. When you talk to friends, use <em>I'll</em> / <em>I will</em>. Keep <em>shall</em> for questions like <em>Shall I…?</em> and <em>Shall we…?</em>
+    </p>
+    <GrammarContrast
+      bad={["Hi Tom! I shall see you at the party tonight."]}
+      good={["Hi Tom! I'll see you at the party tonight."]}
+    />
+    <p>
+      The question tag after <em>let's</em> is <em>shall we</em>, not <em>will we</em> or <em>don't we</em>.
+    </p>
+    <GrammarContrast
+      bad={["Let's go to the beach, will we?", "Let's go to the beach, don't we?"]}
+      good={["Let's go to the beach, shall we?"]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'will and shall (future)',
+        note: 'I will / I shall — the same future meaning; will is the everyday choice.',
+      },
+      {
+        slug: 'clauses-imperatives',
+        name: "let's",
+        note: "Let's go! — a direct suggestion; Shall we go? asks the same thing more softly.",
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'What should I do? — asking for advice, the same as What shall I do?',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: 'You must… — obligation in everyday English; shall is the very formal version in rules.',
+      },
+    ]}
+  />
+</GrammarShell>
