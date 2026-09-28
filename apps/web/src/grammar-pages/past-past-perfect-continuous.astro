@@ -1,0 +1,320 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 9 EGP rows (755-763): all 5 USE and FORM/USE rows are inlined, matched by EGP
+// index. The other 4 are plain FORM rows (affirmative, negative, mid-position
+// adverbs, questions), written in full without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const backgroundPoint = point(756);
+const continuingPoint = point(757);
+const relativePoint = point(758);
+const timeConjunctionPoint = point(759);
+const resultsPoint = point(762);
+
+const inlineUsagePointIds = [backgroundPoint, continuingPoint, relativePoint, timeConjunctionPoint, resultsPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Past perfect continuous in English: form (had been + -ing, hadn't been, questions, adverbs like really and only) and when to use it — a longer action going on up to a moment in the past, how long with for and since, a past result (I was tired because I had been working), after a time conjunction or in a relative clause, and had been doing vs had done."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'I had been waiting: the form', open: true },
+    { id: 'background', title: 'I had been waiting for months when…', open: false },
+    { id: 'for-since', title: 'For a long time, since she was ten', open: false },
+    { id: 'results', title: 'I was tired: I had been working', open: false },
+    { id: 'after', title: 'After I had been waiting for an hour…', open: false },
+    { id: 'relative', title: 'The man who had been following me', open: false },
+    { id: 'adverbs', title: 'I had really been looking forward to it', open: false },
+    { id: 'vs-other-tenses', title: 'Had been doing, had done or was doing?', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The past perfect continuous is <em>had been</em> + a verb ending in <em>-ing</em>. It looks back from a moment in the past to an activity that was going on <strong>before</strong> that moment, often for a long time: <em>When I finally arrived, she had been waiting for two hours.</em> It is the present perfect continuous (<em>she has been waiting</em>) moved one step back into the past.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I had been waiting: the form" id="form" open>
+    <p>
+      The form is the same for every subject: <em>had been</em> + <em>-ing</em>. In speaking and informal writing, <em>had</em> is usually shortened to <em>'d</em>: <em>I'd been</em>, <em>she'd been</em>, <em>they'd been</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'had been', '-ing verb']} />
+    <GrammarExample note="Had been + working: the project went on for a year before that moment.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had been</mark> <mark data-role="content">working</mark> on the project for over a year.
+    </GrammarExample>
+    <GrammarExample note="Had been + waiting: the same form after we.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">had been</mark> <mark data-role="content">waiting</mark> for hours.
+    </GrammarExample>
+    <GrammarExample note="'d been: the short form of had been.">
+      I didn't need much money, because <mark data-role="grammar">I</mark><mark data-role="content">'d been</mark> <mark data-role="content">saving</mark> for a few months.
+    </GrammarExample>
+    <p>
+      For the negative, put <em>not</em> after <em>had</em>. The short form is <em>hadn't been</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "hadn't been", '-ing verb']} />
+    <GrammarExample note="Had not been: the full form.">
+      Laura realised that <mark data-role="grammar">she</mark> <mark data-role="content">had not been</mark> <mark data-role="content">studying</mark> very hard lately.
+    </GrammarExample>
+    <GrammarExample note="Hadn't been: the short form, common in speech.">
+      I called the engineer because <mark data-role="grammar">the heating</mark> <mark data-role="content">hadn't been</mark> <mark data-role="content">working</mark> for two days.
+    </GrammarExample>
+    <p>
+      For a question, put <em>had</em> before the subject, and <em>been</em> + <em>-ing</em> after it. Questions in this tense are not very common — you'll mostly meet them in stories and in formal English.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh-word)', 'had', 'subject', 'been', '-ing verb']} />
+    <GrammarExample note="What + had + he + been doing.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">had</mark> <mark data-role="grammar">he</mark> <mark data-role="content">been</mark> <mark data-role="content">doing</mark> that morning?
+    </GrammarExample>
+    <GrammarExample note="Why + had + she + been waiting.">
+      So <mark data-role="grammar">why</mark> <mark data-role="content">had</mark> <mark data-role="grammar">she</mark> <mark data-role="content">been</mark> <mark data-role="content">waiting</mark> for so long?
+    </GrammarExample>
+    <GrammarExample note="Yes/no question: no question word.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">they</mark> <mark data-role="content">been</mark> <mark data-role="content">drinking</mark> before the accident?
+    </GrammarExample>
+    <p>
+      Short answers use only <em>had</em>: <em>Had you been waiting long? — Yes, I had. / No, I hadn't.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I had been waiting for months when…" id="background" open={false}>
+    <p>
+      In a story, the main events are in the past simple. Use the past perfect continuous for a longer activity that was <strong>already going on</strong> when the main event happened — it started earlier and continued up to that moment.
+    </p>
+    <GrammarFormula label="Background" parts={['subject', 'had been', '-ing verb', 'when / so + main event']} />
+    <GrammarExample note="The waiting went on for months; then the letter came and I opened it.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had been</mark> <mark data-role="content">waiting</mark> for this letter for months, <mark data-role="grammar">so I opened it</mark> immediately.
+    </GrammarExample>
+    <GrammarExample note="Six hours of TV, then the main event: Mum switched it off.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had been</mark> <mark data-role="content">watching</mark> TV for six hours <mark data-role="grammar">when my mum suddenly switched it off</mark>.
+    </GrammarExample>
+    <GrammarExample note="The rain went on all day and stopped only when we got there.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">had been</mark> <mark data-role="content">raining</mark> all day, and <mark data-role="grammar">it stopped</mark> just as we arrived.
+    </GrammarExample>
+    {backgroundPoint && <GrammarUsagePointCard usagePoint={backgroundPoint} />}
+    <p>
+      Picture a timeline: the main event is a point, and the past perfect continuous is a line that runs up to that point from further back.
+    </p>
+    <GrammarContrast
+      good={[
+        'I was waiting for the bus when it started to rain. (in the middle of waiting)',
+        'I had been waiting for the bus for an hour when it finally came. (an hour, up to that moment)',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="For a long time, since she was ten" id="for-since" open={false}>
+    <p>
+      The past perfect continuous very often answers the question <em>how long?</em> — up to a point in the past. Use <em>for</em> + a period of time (<em>for a long time</em>, <em>for three years</em>) and <em>since</em> + a starting point (<em>since 2010</em>, <em>since she was ten</em>).
+    </p>
+    <GrammarFormula label="How long" parts={['subject', 'had been', '-ing verb', 'for + period / since + start']} />
+    <GrammarExample note="For + a long time: how long the letters went on.">
+      I knew him very well because <mark data-role="grammar">we</mark> <mark data-role="content">had been</mark> <mark data-role="content">exchanging</mark> letters <mark data-role="grammar">for a long time</mark>.
+    </GrammarExample>
+    <GrammarExample note="Since + she was ten: when it started.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">had been</mark> <mark data-role="content">going</mark> there <mark data-role="grammar">since she was ten years old</mark>.
+    </GrammarExample>
+    <GrammarExample note="Since + he was twelve: extra background about the character.">
+      He lit a cigarette — <mark data-role="grammar">he</mark> <mark data-role="content">had been</mark> <mark data-role="content">smoking</mark> <mark data-role="grammar">since he was twelve</mark> — and then suddenly the curtain moved.
+    </GrammarExample>
+    {continuingPoint && <GrammarUsagePointCard usagePoint={continuingPoint} />}
+    <p>
+      The question form is <em>How long had you been…?</em>
+    </p>
+    <GrammarExample note="How long + had + they + been + living.">
+      <mark data-role="grammar">How long</mark> <mark data-role="content">had</mark> <mark data-role="grammar">they</mark> <mark data-role="content">been</mark> <mark data-role="content">living</mark> there before they moved?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I was tired: I had been working" id="results" open={false}>
+    <p>
+      The activity may have <strong>just stopped</strong> before the past moment, but you can still see its result: you were tired, the streets were wet, your eyes were red. The past perfect continuous explains the reason for that situation.
+    </p>
+    <GrammarFormula label="Result" parts={['subject', 'had been', '-ing verb', 'so / because + result']} />
+    <GrammarExample note="The snow was the reason I couldn't go out.">
+      Unfortunately <mark data-role="grammar">it</mark> <mark data-role="content">had been</mark> <mark data-role="content">snowing</mark> for a long time, <mark data-role="grammar">so I was unable to go out</mark> for a walk.
+    </GrammarExample>
+    <GrammarExample note="The hard work had finished, but I was still tired.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">had been</mark> <mark data-role="content">working</mark> very hard all morning, <mark data-role="grammar">so by lunchtime I was exhausted</mark>.
+    </GrammarExample>
+    <GrammarExample note="Because + had been crying: we see the result — red eyes.">
+      <mark data-role="grammar">Her eyes were red because</mark> <mark data-role="grammar">she</mark><mark data-role="content">'d been</mark> <mark data-role="content">crying</mark>.
+    </GrammarExample>
+    {resultsPoint && <GrammarUsagePointCard usagePoint={resultsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="After I had been waiting for an hour…" id="after" open={false}>
+    <p>
+      After time conjunctions like <em>after</em>, <em>when</em>, <em>before</em> and <em>until</em>, the past perfect continuous describes the long activity that came first. The main clause, in the past simple, tells what happened next.
+    </p>
+    <GrammarFormula label="Time conjunction" parts={['after / when / until', 'subject', 'had been', '-ing verb', ', main clause']} />
+    <GrammarExample note="After + a whole day of sunbathing, then the restaurant.">
+      <mark data-role="grammar">After</mark> <mark data-role="grammar">we</mark> <mark data-role="content">had been</mark> <mark data-role="content">sunbathing</mark> on the beach all day, <mark data-role="grammar">we went to a cosy little restaurant</mark>.
+    </GrammarExample>
+    <GrammarExample note="After + an hour of waiting, then the decision.">
+      <mark data-role="grammar">After</mark> <mark data-role="grammar">I</mark> <mark data-role="content">had been</mark> <mark data-role="content">waiting</mark> for an hour, <mark data-role="grammar">I decided to go in on foot</mark>.
+    </GrammarExample>
+    <GrammarExample note="When + two years of learning, then the trip.">
+      <mark data-role="grammar">When</mark> <mark data-role="grammar">she</mark> <mark data-role="content">had been</mark> <mark data-role="content">learning</mark> Spanish for two years, <mark data-role="grammar">she went to Madrid</mark>.
+    </GrammarExample>
+    {timeConjunctionPoint && <GrammarUsagePointCard usagePoint={timeConjunctionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The man who had been following me" id="relative" open={false}>
+    <p>
+      A relative clause with <em>who</em>, <em>which</em> or <em>that</em> can use the past perfect continuous to add background about a person or thing: what they had been doing before the moment in the story.
+    </p>
+    <GrammarFormula label="Relative clause" parts={['noun', 'who / which / that', 'had been', '-ing verb']} />
+    <GrammarExample note="Who + had been following: it explains who this man was.">
+      After a few minutes the door opened and <mark data-role="grammar">the man</mark> <mark data-role="grammar">who</mark> <mark data-role="content">had been</mark> <mark data-role="content">following</mark> me came in.
+    </GrammarExample>
+    <GrammarExample note="Who + had been chasing: background about the two men.">
+      There were <mark data-role="grammar">two men</mark> <mark data-role="grammar">who</mark> <mark data-role="content">had been</mark> <mark data-role="content">chasing</mark> the murderer.
+    </GrammarExample>
+    <GrammarExample note="That + had been making: background about a thing.">
+      At last they repaired <mark data-role="grammar">the machine</mark> <mark data-role="grammar">that</mark> <mark data-role="content">had been</mark> <mark data-role="content">making</mark> that terrible noise.
+    </GrammarExample>
+    {relativePoint && <GrammarUsagePointCard usagePoint={relativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I had really been looking forward to it" id="adverbs" open={false}>
+    <p>
+      Adverbs like <em>really</em>, <em>only</em>, <em>just</em>, <em>always</em>, <em>never</em> and <em>already</em> usually go in the middle — after <em>had</em>, before <em>been</em>.
+    </p>
+    <GrammarFormula label="Adverb" parts={['subject', 'had', 'adverb', 'been', '-ing verb']} />
+    <GrammarExample note="Had + really + been: the adverb after had.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">really</mark> <mark data-role="content">been</mark> <mark data-role="content">looking</mark> forward to this holiday.
+    </GrammarExample>
+    <GrammarExample note="Had + only + been: only ten months, which is not long.">
+      When he died, <mark data-role="grammar">he</mark> <mark data-role="content">had</mark> <mark data-role="grammar">only</mark> <mark data-role="content">been</mark> <mark data-role="content">living</mark> in his new house for ten months.
+    </GrammarExample>
+    <GrammarExample note="'d + always + been: the short form works the same way.">
+      <mark data-role="grammar">She</mark><mark data-role="content">'d</mark> <mark data-role="grammar">always</mark> <mark data-role="content">been</mark> <mark data-role="content">hoping</mark> to go back to Italy.
+    </GrammarExample>
+    <p>
+      In the negative, <em>not</em> comes first: <em>hadn't really been</em>, <em>hadn't always been</em>. <em>Sorry, I hadn't really been listening.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Had been doing, had done or was doing?" id="vs-other-tenses" open={false}>
+    <p>
+      All three look at something before or around a past moment. The difference is what they focus on.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Tense</th><th>Focus</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>past continuous</td><td>in the middle, at that moment</td><td><em>When he called, I was cooking.</em></td></tr>
+        <tr><td>past perfect continuous</td><td>the activity and how long, up to that moment</td><td><em>I had been cooking for two hours when he called.</em></td></tr>
+        <tr><td>past perfect simple</td><td>finished, the result or how many</td><td><em>I had cooked three dishes when he called.</em></td></tr>
+      </tbody>
+    </table>
+    <p>
+      Use the past perfect <strong>simple</strong> when you count or say how much was completed. Use the <strong>continuous</strong> when the activity itself, or how long it went on, is what matters.
+    </p>
+    <GrammarContrast
+      good={[
+        'She had been writing letters all afternoon. (the activity, the time)',
+        'She had written ten letters by six o’clock. (how many, finished)',
+      ]}
+    />
+    <p>
+      State verbs — <em>know</em>, <em>be</em>, <em>own</em>, <em>believe</em>, <em>understand</em>, <em>like</em> — are not normally used in the continuous. Use the past perfect simple with them.
+    </p>
+    <GrammarContrast
+      bad={['I had been knowing her for years.', 'They had been owning the house since 1990.']}
+      good={['I had known her for years.', 'They had owned the house since 1990.']}
+    />
+    <p>
+      When you report something someone said, <em>has been doing</em> moves back to <em>had been doing</em>.
+    </p>
+    <GrammarContrast
+      good={[
+        '"I\'ve been waiting for ages," she said.',
+        'She said she had been waiting for ages.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget <em>been</em>. Without it, <em>had waiting</em> is not a correct form.
+    </p>
+    <GrammarContrast
+      bad={['We had waiting for hours.', 'She had be working all day.']}
+      good={['We had been waiting for hours.', 'She had been working all day.']}
+    />
+    <p>
+      When you look back from a past moment, use <em>had been</em>, not <em>have been</em>. <em>Have / has been</em> is for looking back from now.
+    </p>
+    <GrammarContrast
+      bad={['When I met him in 2015, he has been living in London for ten years.']}
+      good={['When I met him in 2015, he had been living in London for ten years.']}
+    />
+    <p>
+      In negatives, <em>not</em> goes after <em>had</em>, and there's no <em>did</em>.
+    </p>
+    <GrammarContrast
+      bad={["She didn't had been studying.", 'She had been not studying.']}
+      good={["She hadn't been studying.", 'She had not been studying.']}
+    />
+    <p>
+      Don't use the past perfect continuous when there's no earlier past moment to look back from. For a simple story in order, the past simple is enough.
+    </p>
+    <GrammarContrast
+      bad={['Yesterday I had been playing tennis with my brother.']}
+      good={['Yesterday I played tennis with my brother.', 'Yesterday I was tired because I had been playing tennis all morning.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-past-perfect-simple',
+        name: 'past perfect simple',
+        note: 'I had cooked three dishes — finished actions and how many, not how long.',
+      },
+      {
+        slug: 'past-present-perfect-continuous',
+        name: 'present perfect continuous',
+        note: "I've been waiting for an hour — looking back from now, not from the past.",
+      },
+      {
+        slug: 'past-past-continuous',
+        name: 'past continuous',
+        note: 'I was waiting when… — in the middle of an activity, without how long.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'The man who had been following me — who, which, that.',
+      },
+      {
+        slug: 'conjunctions-subordinating',
+        name: 'subordinating conjunctions',
+        note: 'After, when, until, because — linking the background to the main event.',
+      },
+    ]}
+  />
+</GrammarShell>
