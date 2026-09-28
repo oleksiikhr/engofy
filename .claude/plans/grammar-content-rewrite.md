@@ -729,12 +729,15 @@ mistakes). Content — сам присвійний займенник. Не ду
 pronoun, none, formal people, too many/very few, some of which, much has been said/Many are the…, common
 mistakes). Content — сам квантифікатор; `of`/займенник/дієслово — `grammar`. Не дублює `determiners-quantity` (там — перед іменником).
 
-### [ ] 67. Pronouns — reflexive (`pronouns-reflexive`) — рівень A2
+### [x] 67. Pronouns — reflexive (`pronouns-reflexive`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-reflexive`.
+14 EGP-рядків (908-921): 6 чистих FORM без карток, 8 USE/FORM-USE (909, 913 by + reflexive; 912, 919 emphasis;
+918 itself; 917 in itself; 920 yourselves polite; 921 as for myself) вплетені за `egpIndex` — generic-блок
+не рендериться. 8 секцій (таблиця форм, same person + buy myself a…, після прийменника + next to her, by
+myself/itself, emphasis, itself/in itself, formal, common mistakes з -ся калькою). Content — сам зворотний займенник.
 
 ### [ ] 68. Pronouns — substitution, one, ones, none (`pronouns-substitution-one-ones-none`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
