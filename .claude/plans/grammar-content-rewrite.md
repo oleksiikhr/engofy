@@ -871,12 +871,16 @@ background when/so, for/since + How long, результат (was tired because)
 порівняння з past continuous / past perfect simple (таблиця, state verbs, reported speech — без EGP-рядка), common mistakes).
 Content — `had been` + `-ing` (у питанні/з адвербом розділено: `had` … `been`); підмет, for/since-фраза, головна подія — `grammar`.
 
-### [ ] 81. Past — past perfect simple (`past-past-perfect-simple`) — рівень B1
+### [x] 81. Past — past perfect simple (`past-past-perfect-simple`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `past-past-perfect-simple`.
+20 EGP-рядків (764-783), 12 карток inline; generic-блок не рендериться. 11 секцій (форма + еліпсис, earlier past + by the time +
+таблиця "коли past perfect потрібен" без EGP-рядка, адверби B1/B2, because, relative, reported statements + questions, changed plans
+had planned…but, imagined past if / Had I known / had it not been for, wish/if only, інверсія never/no sooner…than/hardly…when,
+common mistakes). Content — `had` + participle (в інверсії/питанні розділено: `Had` … participle); підмет, сполучники, головна
+клауза — `grammar`.
 
 ### [ ] 82. Past — present perfect continuous (`past-present-perfect-continuous`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
