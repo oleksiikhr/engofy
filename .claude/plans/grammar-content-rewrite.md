@@ -531,12 +531,15 @@ grammar — subject + verb і фокусована частина.
 контраст із will + verb, polite questions, might/may be + -ing, common mistakes). Content — лише
 `-ing`-дієслово; subject/will/be/час — grammar (у контрастному прикладі will + verb content-мітки нема).
 
-### [ ] 48. Future — future with be going to (`future-future-with-be-going-to`) — рівень A2
+### [x] 48. Future — future with be going to (`future-future-with-be-going-to`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-with-be-going-to`.
+14 EGP-рядків (398-411): 7 FORM (affirmative, questions, negative, past, adverbs B1/C1/C2) без карток;
+7 USE вплетені за `egpIndex`. 9 секцій (form, negative, questions, plans + контраст із will, predictions
+з be / інші дієслова, adverbs mid-position + перед дієсловом, was going to…but, future in the past +
+reporting, common mistakes). Content — сам `going to` (як `will` на сторінці will); be/subject/verb/adverb — grammar.
 
 ### [ ] 49. Future — present continuous for future use (`future-present-continuous-for-future-use`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
