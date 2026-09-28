@@ -552,12 +552,15 @@ reporting, common mistakes). Content — сам `going to` (як `will` на с�
 I hope, time clauses, only when, suggest that, common mistakes). Content — -ing-дієслово / present
 simple дієслово; be/subject/час/when/that — grammar.
 
-### [ ] 50. Modality — adjectives (`modality-adjectives`) — рівень A2
+### [x] 50. Modality — adjectives (`modality-adjectives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-adjectives`.
+11 EGP-рядків (425-435): 5 чистих FORM (425/426/429/430/432) без карток; 6 FORM/USE вплетені за
+`egpIndex`. 9 секцій за шаблоном (I'm sure, it's important that, it + adj + to, + for + object,
+if possible, it is clear/seems obvious that, it is likely that, subject + be likely/sure to, adverb +
+adjective). Content — сам модальний прикметник; it/be/seem/that/for/to/adverb і клауза — grammar.
 
 ### [ ] 51. Modality — adverbs (`modality-adverbs`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
