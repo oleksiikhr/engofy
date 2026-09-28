@@ -1,0 +1,413 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// assets/egp.json lists every 'could' row twice (1206-1239 in pairs), so each
+// USE guideword has two identical usage points. The card shows the first of
+// each pair; both ids go into inlineUsagePointIds so the twin doesn't reappear
+// in the generic "When it's used" block. The 4 plain FORM rows (affirmative,
+// negative, questions, could have + -ed) are written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const inabilityPoint = point(1212);
+const requestsPoint = point(1214);
+const suggestionsPoint = point(1216);
+const abilityPoint = point(1218);
+const permissionPoint = point(1220);
+const possibilityPoint = point(1222);
+const moreSuggestionsPoint = point(1224);
+const pastPossibilityPoint = point(1228);
+const pastSpeculationPoint = point(1230);
+const regretPoint = point(1232);
+const reportedPoint = point(1234);
+const criticismPoint = point(1236);
+const negativeSpeculationPoint = point(1238);
+
+const inlineUsagePointIds = [
+  1212, 1214, 1216, 1218, 1220, 1222, 1224, 1228, 1230, 1232, 1234, 1236, 1238,
+]
+  .flatMap((egpIndex) => [point(egpIndex), point(egpIndex + 1)])
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The modal verb could: forms (could, couldn't, Could…?), past ability, polite requests and permission, suggestions, possibility, could have + past participle for past possibility, guesses, regret and criticism, and could in reported speech."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Could, couldn't, Could…?", open: true },
+    { id: 'ability', title: "I couldn't sleep / She could hear…: past ability", open: false },
+    { id: 'requests', title: 'Could you help me?: polite requests', open: false },
+    { id: 'permission', title: 'Could I…?: asking for permission', open: false },
+    { id: 'suggestions', title: 'We could…, You could…: suggestions', open: false },
+    { id: 'possibility', title: 'It could be fun: possibility', open: false },
+    { id: 'past-possibility', title: "She could have phoned: it was possible, but it didn't happen", open: false },
+    { id: 'past-guess', title: "A thief could have… / I couldn't have…: guessing about the past", open: false },
+    { id: 'regret', title: 'I could have listened more / You could have told me: regret and criticism', open: false },
+    { id: 'reported', title: 'She said she could…: reported speech', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Could is a modal verb: it never changes its form and is followed by the base form of a verb. It is the past of can (<em>I couldn't sleep</em>), a softer can for requests and suggestions (<em>Could you help me?</em>, <em>We could go by bus</em>), and a way to say something is possible (<em>It could rain</em>). With have + past participle it talks about the past that didn't happen (<em>You could have told me!</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Could, couldn't, Could…?" id="form" open>
+    <p>
+      Could is the same for every subject — no -s, no to after it. The verb after it is the base form.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'could', 'base verb']} />
+    <GrammarExample note="Two suggestions: could + come, could + meet.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">could</mark> <mark data-role="grammar">come</mark> by bus, and <mark data-role="grammar">we</mark> <mark data-role="content">could</mark> <mark data-role="grammar">meet</mark> at the bus station.
+    </GrammarExample>
+    <GrammarExample note="We could + go: an idea for what to do.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">could</mark> <mark data-role="grammar">go</mark> to the museum near the park.
+    </GrammarExample>
+    <p>
+      The negative is could not, or the short form couldn't.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "could not / couldn't", 'base verb']} />
+    <GrammarExample note="About a party: it wasn't possible for you to come.">
+      Too bad <mark data-role="grammar">you</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">come</mark>.
+    </GrammarExample>
+    <GrammarExample note="Couldn't + close: I tried, but it didn't work.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">close</mark> the window.
+    </GrammarExample>
+    <GrammarExample note="The full form could not.">
+      He was ill, so <mark data-role="grammar">he</mark> <mark data-role="content">could not</mark> <mark data-role="grammar">go</mark> to the game.
+    </GrammarExample>
+    <p>
+      For a question, put could before the subject.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'could', 'subject', 'base verb']} />
+    <GrammarExample note="Could + you + help: a polite request.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">help</mark> me?
+    </GrammarExample>
+    <GrammarExample note="Could + we + meet: suggesting a time.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark> on Friday afternoon?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I couldn't sleep / She could hear…: past ability" id="ability" open={false}>
+    <p>
+      Couldn't is the past of can't: something was not possible for you, or you were not able to do it.
+    </p>
+    <GrammarFormula label="Past inability" parts={['subject', "couldn't", 'base verb']} />
+    <GrammarExample note="About the key to an office: without it, work was impossible.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">work</mark> without it.
+    </GrammarExample>
+    <GrammarExample note="Couldn't + buy, then because: the reason.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">buy</mark> the T-shirt because it was too expensive, so I bought other things.
+    </GrammarExample>
+    <GrammarExample note="Couldn't + sleep: a very common way to talk about a bad night.">
+      It was so hot that <mark data-role="grammar">we</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">sleep</mark>.
+    </GrammarExample>
+    {inabilityPoint && <GrammarUsagePointCard usagePoint={inabilityPoint} />}
+    <p>
+      Could is the past of can for a general ability — something you were able to do at a time in your life. It is also common with verbs of the senses: could see, could hear, could smell.
+    </p>
+    <GrammarFormula label="Past ability" parts={['subject', 'could', 'base verb']} />
+    <GrammarExample note="Could + hear: a sense verb in a story.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">could</mark> <mark data-role="grammar">hear</mark> a man talking — he was giving her orders.
+    </GrammarExample>
+    <GrammarExample note="General ability at an age in the past.">
+      When I was five, <mark data-role="grammar">I</mark> <mark data-role="content">could</mark> <mark data-role="grammar">swim</mark>, but I couldn't ride a bike.
+    </GrammarExample>
+    <GrammarExample note="Could + see: something you were able to see from a place.">
+      From our window <mark data-role="grammar">we</mark> <mark data-role="content">could</mark> <mark data-role="grammar">see</mark> the sea.
+    </GrammarExample>
+    {abilityPoint && <GrammarUsagePointCard usagePoint={abilityPoint} />}
+    <p>
+      For one specific success in the past, don't use could — use was able to or managed to: <em>The door was locked, but we managed to get in.</em> Couldn't is fine for a specific failure: <em>We couldn't get in.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Could you help me?: polite requests" id="requests" open={false}>
+    <p>
+      Could you + verb asks someone to do something. It is more polite than <em>Can you…?</em> and works with friends, strangers and in emails. Here could is not past — the request is about now or the future.
+    </p>
+    <GrammarFormula label="Request" parts={['could', 'you', '(please)', 'base verb']} />
+    <GrammarExample note="Could you + help + me to paint.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">help</mark> me to paint my bedroom?
+    </GrammarExample>
+    <GrammarExample note="A reason first, then the request with please.">
+      I left my umbrella in your house yesterday. <mark data-role="content">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">bring</mark> it to school tomorrow, please?
+    </GrammarExample>
+    <GrammarExample note="Could you please…?: please can go before the verb too.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">please</mark> <mark data-role="grammar">send</mark> me the address?
+    </GrammarExample>
+    {requestsPoint && <GrammarUsagePointCard usagePoint={requestsPoint} />}
+    <p>
+      Answer with <em>Yes, of course</em>, <em>Sure</em> or <em>Sorry, I can't</em> — not <em>Yes, I could</em>. <em>Could you possibly…?</em> is even more polite.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Could I…?: asking for permission" id="permission" open={false}>
+    <p>
+      Could I + verb asks if you are allowed to do something. It is softer than <em>Can I…?</em> and good for asking a teacher, a parent or someone you don't know well.
+    </p>
+    <GrammarFormula label="Permission" parts={['could', 'I', 'base verb', '(please)']} />
+    <GrammarExample note="Asking a teacher: Could I + take.">
+      There is an important game tomorrow. <mark data-role="content">Could</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">take</mark> the class that I will miss on Saturday?
+    </GrammarExample>
+    <GrammarExample note="Asking a parent, with please at the end.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">play</mark> with it now, please?
+    </GrammarExample>
+    <GrammarExample note="Could I + have: asking for something in a shop or café.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> a glass of water, please?
+    </GrammarExample>
+    {permissionPoint && <GrammarUsagePointCard usagePoint={permissionPoint} />}
+    <p>
+      The answer uses can, not could: <em>Yes, you can</em> / <em>Yes, of course</em> / <em>I'm afraid you can't</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="We could…, You could…: suggestions" id="suggestions" open={false}>
+    <p>
+      We could + verb suggests something to do together; you could + verb gives someone an idea. It sounds friendly and open: it's one possible plan, not an order.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['we / you', 'could', 'base verb']} />
+    <GrammarExample note="We could + have: an idea for the evening.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">could</mark> <mark data-role="grammar">have</mark> dinner after that, if you want.
+    </GrammarExample>
+    <GrammarExample note="If you want…, you could…: an idea for a visitor.">
+      If you want to visit an interesting place near Paris, <mark data-role="grammar">you</mark> <mark data-role="content">could</mark> <mark data-role="grammar">go</mark> to Versailles.
+    </GrammarExample>
+    <GrammarExample note="Two options with or: could… or could….">
+      <mark data-role="grammar">We</mark> <mark data-role="content">could</mark> <mark data-role="grammar">take</mark> the bus, or <mark data-role="grammar">we</mark> <mark data-role="content">could</mark> <mark data-role="grammar">ask</mark> my parents to take us there.
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+    <p>
+      The same pattern works with any verb, and a question with could suggests a change politely.
+    </p>
+    <GrammarExample note="You could + become: advice about getting fit.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">could</mark> <mark data-role="grammar">become</mark> a member of a gym.
+    </GrammarExample>
+    <GrammarExample note="Could + meet … and have: a plan with two actions.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">could</mark> <mark data-role="grammar">meet</mark> in the nice café next to your house and have a coffee.
+    </GrammarExample>
+    <GrammarExample note="Could it be…?: suggesting a new time.">
+      I'm afraid that I need to change the time of our meeting. <mark data-role="content">Could</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">be</mark> at 5.30 pm?
+    </GrammarExample>
+    {moreSuggestionsPoint && <GrammarUsagePointCard usagePoint={moreSuggestionsPoint} />}
+    <p>
+      Compare: <em>You could take a taxi</em> (one idea — you choose) and <em>You should take a taxi</em> (my advice — I think it's the best choice).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It could be fun: possibility" id="possibility" open={false}>
+    <p>
+      Could + verb says that something is possible now or in the future, but you are not sure. It means almost the same as might or may.
+    </p>
+    <GrammarFormula label="Possibility" parts={['subject', 'could', 'base verb']} />
+    <GrammarExample note="Could be fun: maybe it is, if you try it.">
+      Believe me, <mark data-role="grammar">it</mark> <mark data-role="content">could</mark> <mark data-role="grammar">be</mark> really fun to have a talkative person as your friend.
+    </GrammarExample>
+    <GrammarExample note="A possible future event: take an umbrella just in case.">
+      Take an umbrella — <mark data-role="grammar">it</mark> <mark data-role="content">could</mark> <mark data-role="grammar">rain</mark> later.
+    </GrammarExample>
+    <GrammarExample note="A guess about the present: maybe that's where it is.">
+      <mark data-role="grammar">Your phone</mark> <mark data-role="content">could</mark> <mark data-role="grammar">be</mark> in the car.
+    </GrammarExample>
+    <p>
+      In a question, could asks whether something is possible — often with really, to show surprise.
+    </p>
+    <GrammarFormula label="Question" parts={['could', 'subject', '(really)', 'base verb']} />
+    <GrammarExample note="Could + this + happen: the writer can hardly believe it.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">this</mark> really <mark data-role="grammar">happen</mark>?
+    </GrammarExample>
+    <GrammarExample note="Could + he + be: a surprised question about where someone is.">
+      <mark data-role="content">Could</mark> <mark data-role="grammar">he</mark> really <mark data-role="grammar">be</mark> there, in that dark café?
+    </GrammarExample>
+    {possibilityPoint && <GrammarUsagePointCard usagePoint={possibilityPoint} />}
+    <p>
+      Careful with the negative: <em>It could rain</em> = maybe it will rain, but <em>It couldn't be true</em> = I'm sure it isn't true. For "maybe not", use might not: <em>It might not rain.</em> And for things that are generally possible, use can: <em>It can get very cold here in winter.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She could have phoned: it was possible, but it didn't happen" id="past-possibility" open={false}>
+    <p>
+      To talk about possibility in the past, use could have + past participle. In speech, could have sounds like <em>could've</em>. The negative is couldn't have.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'could have', 'past participle']} />
+    <GrammarFormula label="Negative" parts={['subject', "couldn't have", 'past participle']} />
+    <GrammarFormula label="Question" parts={['(wh- word)', 'could', 'subject', 'have', 'past participle']} />
+    <GrammarExample note="Could have been: it was possible, but it turned out funny instead.">
+      In fact <mark data-role="grammar">it</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">been</mark> dangerous, but it became funny.
+    </GrammarExample>
+    <GrammarExample note="A wh- question: what could + have happened.">
+      What <mark data-role="content">could have</mark> <mark data-role="grammar">happened</mark>?
+    </GrammarExample>
+    <GrammarExample note="Couldn't have picked anyone better: the teacher's choice was the best possible.">
+      <mark data-role="grammar">Our teacher</mark> <mark data-role="content">couldn't have</mark> <mark data-role="grammar">picked</mark> anyone better to do it.
+    </GrammarExample>
+    <p>
+      The most common meaning: something was possible in the past, but it didn't happen.
+    </p>
+    <GrammarExample note="Could have phoned … but she did not: a missed chance.">
+      Alice was disappointed that <mark data-role="grammar">her mother</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">phoned</mark> her, but she did not.
+    </GrammarExample>
+    <GrammarExample note="Passive: could have been + avoided.">
+      I think that <mark data-role="grammar">all these problems</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">been avoided</mark>.
+    </GrammarExample>
+    <GrammarExample note="Couldn't have bought: it wasn't possible, so they helped.">
+      The ticket was so expensive that <mark data-role="grammar">I</mark> <mark data-role="content">couldn't have</mark> <mark data-role="grammar">bought</mark> it myself.
+    </GrammarExample>
+    {pastPossibilityPoint && <GrammarUsagePointCard usagePoint={pastPossibilityPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A thief could have… / I couldn't have…: guessing about the past" id="past-guess" open={false}>
+    <p>
+      Could have + past participle also makes a guess about the past: you don't know what happened, but this is one possible explanation. It means the same as might have.
+    </p>
+    <GrammarFormula label="Past guess" parts={['subject', 'could have', 'past participle']} />
+    <GrammarExample note="A possible explanation for a noise in the house.">
+      I thought perhaps <mark data-role="grammar">a thief</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">entered</mark> my house.
+    </GrammarExample>
+    <GrammarExample note="Could have ruined: a danger the speaker imagines.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">ruined</mark> everything I had been preparing for four weeks.
+    </GrammarExample>
+    <GrammarExample note="A wh- question: guessing who.">
+      If he had attacked her, who <mark data-role="content">could have</mark> <mark data-role="grammar">saved</mark> her?
+    </GrammarExample>
+    {pastSpeculationPoint && <GrammarUsagePointCard usagePoint={pastSpeculationPoint} />}
+    <p>
+      Couldn't have + past participle is much stronger: you are sure something did not happen, because it's impossible or doesn't make sense. It is the opposite of must have.
+    </p>
+    <GrammarFormula label="Sure it didn't happen" parts={['subject', "couldn't have", 'past participle']} />
+    <GrammarExample note="Surely + couldn't have: the speaker refuses to believe it.">
+      I realised I hadn't brought the notebook back from the pub. Surely <mark data-role="grammar">I</mark> <mark data-role="content">couldn't have</mark> <mark data-role="grammar">left</mark> it on my seat.
+    </GrammarExample>
+    <GrammarExample note="Couldn't have … must have: impossible vs. the only explanation.">
+      <mark data-role="grammar">Her mother</mark> <mark data-role="content">couldn't have</mark> <mark data-role="grammar">hidden</mark> it there. She must have put it away and forgotten about it.
+    </GrammarExample>
+    {negativeSpeculationPoint && <GrammarUsagePointCard usagePoint={negativeSpeculationPoint} />}
+    <p>
+      From weakest to strongest: <em>He could have / might have missed the bus</em> (maybe) → <em>He must have missed the bus</em> (I'm sure he did) → <em>He couldn't have missed the bus</em> (I'm sure he didn't).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I could have listened more / You could have told me: regret and criticism" id="regret" open={false}>
+    <p>
+      About yourself, could have + past participle expresses regret: there was a better option, and you didn't take it. After wish, it says you wanted to do something but it wasn't possible.
+    </p>
+    <GrammarFormula label="Regret" parts={['I', 'could have', 'past participle']} />
+    <GrammarExample note="Looking back at work in a team: a better option I missed.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">listened</mark> more to my team members and learned from the experienced ones.
+    </GrammarExample>
+    <GrammarExample note="I wish I could have + stayed: it wasn't possible, and I'm sorry.">
+      I wish <mark data-role="grammar">I</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">stayed</mark>, especially to help the children.
+    </GrammarExample>
+    {regretPoint && <GrammarUsagePointCard usagePoint={regretPoint} />}
+    <p>
+      About someone else, the same form is criticism: they had a better option and didn't take it. It is close to should have, but sounds a little softer. In a complaint letter it's polite but clear.
+    </p>
+    <GrammarFormula label="Criticism" parts={['you / they', 'could have', 'past participle']} />
+    <GrammarExample note="A complaint: arranging entertainment was possible, but they didn't.">
+      Since your company chose a hotel that far from the city, I think that <mark data-role="grammar">you</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">arranged</mark> entertainment at the hotel.
+    </GrammarExample>
+    <GrammarExample note="For the money they paid, better service was expected.">
+      For the money they had paid, <mark data-role="grammar">you</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">given</mark> them a better service.
+    </GrammarExample>
+    <GrammarExample note="Spoken, with stress on could: the speaker is annoyed.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">could have</mark> <mark data-role="grammar">told</mark> me you weren't coming!
+    </GrammarExample>
+    {criticismPoint && <GrammarUsagePointCard usagePoint={criticismPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="She said she could…: reported speech" id="reported" open={false}>
+    <p>
+      When you report what someone said, can in the original words usually becomes could after said, told, asked.
+    </p>
+    <GrammarFormula label="Reported speech" parts={['said / told…', '(that)', 'subject', 'could', 'base verb']} />
+    <GrammarExample note="Her words: “I can put you up if you want.”">
+      <mark data-role="grammar">The woman said</mark> <mark data-role="grammar">she</mark> <mark data-role="content">could</mark> <mark data-role="grammar">put</mark> me up if I wanted.
+    </GrammarExample>
+    <GrammarExample note="My words: “I can't go, because I don't have money.”">
+      <mark data-role="grammar">I told them</mark> <mark data-role="grammar">I</mark> <mark data-role="content">couldn't</mark> <mark data-role="grammar">go</mark> because I didn't have money.
+    </GrammarExample>
+    <GrammarExample note="A reported question: “Can you help me?”">
+      <mark data-role="grammar">She asked</mark> if <mark data-role="grammar">I</mark> <mark data-role="content">could</mark> <mark data-role="grammar">help</mark> her.
+    </GrammarExample>
+    {reportedPoint && <GrammarUsagePointCard usagePoint={reportedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After could, the verb is the bare base form — no to, no -s, no past form.
+    </p>
+    <GrammarContrast
+      bad={['I could to swim when I was five.', 'She coulds help you.', "I couldn't went to the party."]}
+      good={['I could swim when I was five.', 'She could help you.', "I couldn't go to the party."]}
+    />
+    <p>
+      For one specific success in the past, use was able to or managed to, not could.
+    </p>
+    <GrammarContrast
+      bad={['The exam was hard, but I could pass it.']}
+      good={['The exam was hard, but I managed to pass it.', 'The exam was hard, but I was able to pass it.']}
+    />
+    <p>
+      Answer a request or a permission question with can or of course, not could.
+    </p>
+    <GrammarContrast
+      bad={['Could you help me? — Yes, I could.', 'Could I sit here? — Yes, you could.']}
+      good={['Could you help me? — Yes, of course.', 'Could I sit here? — Yes, you can.']}
+    />
+    <p>
+      For the past, use could have + past participle — never could of, and not could + past simple.
+    </p>
+    <GrammarContrast
+      bad={['You could of told me.', 'She could phoned me yesterday.']}
+      good={['You could have told me.', 'She could have phoned me yesterday.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: 'the present form: ability, permission, requests and general possibility.',
+      },
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'another way to say maybe — and might not for "maybe not".',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "must have for past guesses you're sure about — the opposite of couldn't have.",
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'advice and should have — a stronger criticism than could have.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'how can, will, is… change when you report what someone said.',
+      },
+    ]}
+  />
+</GrammarShell>
