@@ -240,5 +240,676 @@
     "uk": {
       "explanation": "The slightest і the faintest означають «навіть найменший», і зазвичай стоять після заперечення: I don't have the slightest idea. Вживаються з іменниками на кшталт idea, chance, doubt та interest."
     }
+  },
+  "80": {
+    "explanation": "Soon means 'in a short time'. At this level we use it in two fixed phrases at the end of a message or a talk: See you soon and Get well soon.",
+    "examples": [
+      "Thanks for dinner. See you soon!",
+      "Get well soon, Anna!",
+      "Bye for now. See you soon."
+    ],
+    "uk": {
+      "explanation": "Soon означає «скоро, незабаром». На цьому рівні вживаємо його у двох сталих фразах наприкінці листа чи розмови: See you soon і Get well soon."
+    }
+  },
+  "81": {
+    "explanation": "Use here for the place where you are, and there for a place that is not near you. They usually come after the verb or at the end of the sentence.",
+    "examples": [
+      "I live here with my family.",
+      "Put your coat there.",
+      "Come here, please."
+    ],
+    "uk": {
+      "explanation": "Here вживаємо про місце, де ви є, а there — про місце, яке не поруч із вами. Зазвичай вони стоять після дієслова або в кінці речення."
+    }
+  },
+  "82": {
+    "explanation": "Use always and sometimes to say how often something happens. Always means every time; sometimes means some of the time. Put them before the main verb, but after be: I always walk, she is always late.",
+    "examples": [
+      "I always drink coffee in the morning.",
+      "We sometimes play football after school.",
+      "She is always happy."
+    ],
+    "uk": {
+      "explanation": "Always і sometimes вживаємо, щоб сказати, як часто щось відбувається. Always означає «щоразу», sometimes — «час від часу». Ставимо їх перед основним дієсловом, але після be: I always walk, she is always late."
+    }
+  },
+  "83": {
+    "explanation": "Put very before an adjective to make it stronger: very + adjective. For example, very good, very cold, very big.",
+    "examples": [
+      "It's very cold today.",
+      "He's a very good man.",
+      "My room is very small."
+    ],
+    "uk": {
+      "explanation": "Very перед прикметником робить його сильнішим: very + adjective. Наприклад, very good, very cold, very big."
+    }
+  },
+  "84": {
+    "explanation": "Use really before like or love to make them stronger: I really like it. Very much goes at the end, after the thing you like: I like it very much.",
+    "examples": [
+      "I really like this song.",
+      "We love our new house very much.",
+      "She really loves chocolate."
+    ],
+    "uk": {
+      "explanation": "Really перед like чи love робить їх сильнішими: I really like it. Very much ставимо в кінці, після того, що вам подобається: I like it very much."
+    }
+  },
+  "85": {
+    "explanation": "Time adverbs such as yesterday, now, just and already say when something happens. Yesterday and now usually go at the start or end of the sentence. Just and already usually go before the main verb, often with the present perfect: I have just eaten.",
+    "examples": [
+      "Yesterday I went shopping with my sister.",
+      "I've just finished my homework.",
+      "She's already left the office."
+    ],
+    "uk": {
+      "explanation": "Прислівники часу, як-от yesterday, now, just і already, кажуть, коли щось відбувається. Yesterday і now зазвичай стоять на початку або в кінці речення. Just і already зазвичай ставимо перед основним дієсловом, часто з present perfect: I have just eaten."
+    }
+  },
+  "86": {
+    "explanation": "Adverbs like usually, often and never say how often something happens. They go before the main verb or after be. Words like daily and weekly usually go at the end.",
+    "examples": [
+      "I usually get up at seven.",
+      "You never remember anything!",
+      "We clean the flat weekly."
+    ],
+    "uk": {
+      "explanation": "Прислівники на кшталт usually, often і never кажуть, як часто щось відбувається. Вони стоять перед основним дієсловом або після be. Слова на кшталт daily і weekly зазвичай стоять у кінці."
+    }
+  },
+  "87": {
+    "explanation": "Put so, quite or too before an adjective to change how strong it is. So makes it stronger, quite makes it a little weaker than very, and too means more than you want: too hot to drink.",
+    "examples": [
+      "It was so beautiful!",
+      "The test was quite easy.",
+      "This coffee is too hot to drink."
+    ],
+    "uk": {
+      "explanation": "So, quite або too перед прикметником змінюють його силу. So робить його сильнішим, quite — трохи слабшим, ніж very, а too означає «більше, ніж треба»: too hot to drink."
+    }
+  },
+  "88": {
+    "explanation": "Use a lot or so much after a verb to say how much you do something. They usually go at the end, after the object if there is one: I miss you so much.",
+    "examples": [
+      "We danced a lot that night.",
+      "I miss my family so much.",
+      "Thank you so much for your help."
+    ],
+    "uk": {
+      "explanation": "A lot або so much після дієслова показують, наскільки сильно чи багато ви щось робите. Зазвичай вони стоять у кінці, після додатка, якщо він є: I miss you so much."
+    }
+  },
+  "89": {
+    "explanation": "A manner adverb says how someone does something. Many are adjective + -ly: slow → slowly, careful → carefully. Some are different, like well and fast. They usually go after the verb or after its object.",
+    "examples": [
+      "Both players played well.",
+      "Please speak slowly.",
+      "She opened the door carefully."
+    ],
+    "uk": {
+      "explanation": "Прислівник способу дії каже, як хтось щось робить. Багато з них утворюються як adjective + -ly: slow → slowly, careful → carefully. Деякі мають іншу форму, як-от well і fast. Зазвичай вони стоять після дієслова або після його додатка."
+    }
+  },
+  "90": {
+    "explanation": "Adverbs like also, so and however show how two ideas are connected. Also adds an idea, so gives a result, and however shows a contrast. However usually starts a new sentence, followed by a comma.",
+    "examples": [
+      "I don't like green. However, blue would work well.",
+      "It was raining, so we stayed at home.",
+      "I speak English, and I also speak a little French."
+    ],
+    "uk": {
+      "explanation": "Прислівники на кшталт also, so і however показують, як пов'язані дві думки. Also додає думку, so вказує на наслідок, а however — на протиставлення. However зазвичай починає нове речення, після нього кома."
+    }
+  },
+  "91": {
+    "explanation": "Only and just point to one part of the sentence and mean 'no more than this'. Put them before the word you want to focus on: It's only two hours.",
+    "examples": [
+      "It's only two hours by train.",
+      "I just want a cup of tea.",
+      "Only Tom knows the answer."
+    ],
+    "uk": {
+      "explanation": "Only і just вказують на одну частину речення й означають «не більше, ніж це». Ставимо їх перед словом, на яке хочемо звернути увагу: It's only two hours."
+    }
+  },
+  "92": {
+    "explanation": "Use first, then and after that to put actions or steps in order. They usually start the sentence or clause. First often has a comma after it: First, we had dinner.",
+    "examples": [
+      "First, we had dinner at a restaurant.",
+      "Then we went to the cinema.",
+      "After that, we took a taxi home."
+    ],
+    "uk": {
+      "explanation": "First, then і after that вживаємо, щоб упорядкувати дії або кроки. Зазвичай вони стоять на початку речення чи його частини. Після first часто ставимо кому: First, we had dinner."
+    }
+  },
+  "93": {
+    "explanation": "Use maybe or perhaps when you are not sure about something. They usually come at the start of the sentence. Maybe is more common in speaking; perhaps is a little more formal.",
+    "examples": [
+      "Perhaps I left it in your living room.",
+      "Maybe we can meet on Friday.",
+      "Maybe she's at home."
+    ],
+    "uk": {
+      "explanation": "Maybe або perhaps вживаємо, коли ви в чомусь не впевнені. Зазвичай вони стоять на початку речення. Maybe частіше звучить в усному мовленні, perhaps — трохи офіційніше."
+    }
+  },
+  "94": {
+    "explanation": "Words like actually, unfortunately and of course show what you think about what you are saying. Unfortunately introduces bad news, of course means everyone expects it, and actually means 'in fact'. They often start the sentence, followed by a comma.",
+    "examples": [
+      "Unfortunately, my team lost.",
+      "Of course, you can use my phone.",
+      "Actually, I don't like pizza very much."
+    ],
+    "uk": {
+      "explanation": "Слова на кшталт actually, unfortunately і of course показують ваше ставлення до того, що ви кажете. Unfortunately вводить погану новину, of course означає, що цього всі очікують, а actually — «насправді». Вони часто стоять на початку речення, після них кома."
+    }
+  },
+  "95": {
+    "explanation": "A wider range of time adverbs gives more exact information about when something happens: immediately, recently, lately, eventually, finally. Most of them go before the main verb or at the end of the clause.",
+    "examples": [
+      "I immediately called her to check.",
+      "Have you seen any good films recently?",
+      "We finally found the hotel after midnight."
+    ],
+    "uk": {
+      "explanation": "Ширший набір прислівників часу точніше показує, коли щось відбувається: immediately, recently, lately, eventually, finally. Більшість із них стоїть перед основним дієсловом або в кінці частини речення."
+    }
+  },
+  "96": {
+    "explanation": "More place adverbs say exactly where something is or where someone goes: upstairs, downstairs, abroad, nearby, far away. They usually come after the verb or after be.",
+    "examples": [
+      "He went downstairs to open the door.",
+      "My grandparents live far away.",
+      "Is there a bank nearby?"
+    ],
+    "uk": {
+      "explanation": "Більше прислівників місця точно кажуть, де щось є або куди хтось іде: upstairs, downstairs, abroad, nearby, far away. Зазвичай вони стоять після дієслова або після be."
+    }
+  },
+  "97": {
+    "explanation": "Put a little or a bit after a verb to say that you do something only to a small degree. A bit is more informal. They go after the verb, or after its object.",
+    "examples": [
+      "I can understand a little.",
+      "Can you move a bit to the left?",
+      "I relaxed a bit after the exam."
+    ],
+    "uk": {
+      "explanation": "A little або a bit після дієслова показують, що ви щось робите лише трохи. A bit — більш розмовний варіант. Вони стоять після дієслова або після його додатка."
+    }
+  },
+  "98": {
+    "explanation": "In informal speaking and writing, you can say really twice for extra emphasis. Really really goes before an adjective or a verb: really really good, I really really want it.",
+    "examples": [
+      "I think it is really really boring.",
+      "I really really want to see that concert.",
+      "The food was really really good."
+    ],
+    "uk": {
+      "explanation": "У неформальному мовленні й письмі really можна повторити двічі для більшого наголосу. Really really ставимо перед прикметником або дієсловом: really really good, I really really want it."
+    }
+  },
+  "99": {
+    "explanation": "A wider range of manner adverbs describes more exactly how something happens: easily, quietly, properly, hard, differently. They usually go after the verb, or after the object if there is one.",
+    "examples": [
+      "Wherever you go, you'll fit in easily.",
+      "He closed the door quietly.",
+      "She works very hard."
+    ],
+    "uk": {
+      "explanation": "Ширший набір прислівників способу дії точніше описує, як щось відбувається: easily, quietly, properly, hard, differently. Зазвичай вони стоять після дієслова або після додатка, якщо він є."
+    }
+  },
+  "100": {
+    "explanation": "Linking adverbs like therefore, furthermore and otherwise connect two sentences. Therefore gives a result, furthermore adds another point, and otherwise means 'if not'. They are common in writing and often start the second sentence, followed by a comma.",
+    "examples": [
+      "You don't like big cities. Therefore, I suggest a small town.",
+      "Take an umbrella. Otherwise, you'll get wet.",
+      "The hotel is cheap. Furthermore, it's close to the beach."
+    ],
+    "uk": {
+      "explanation": "Сполучні прислівники на кшталт therefore, furthermore і otherwise пов'язують два речення. Therefore вводить наслідок, furthermore додає ще один аргумент, а otherwise означає «інакше, якщо ні». Вони поширені в письмі й часто починають друге речення, після них кома."
+    }
+  },
+  "101": {
+    "explanation": "Use especially or particularly to point to one thing that is more important than the others. Put it just before the part you want to highlight: I love fruit, especially apples.",
+    "examples": [
+      "I love nature programmes, especially the Discovery Channel.",
+      "The city is busy, particularly in summer.",
+      "I especially liked the last song."
+    ],
+    "uk": {
+      "explanation": "Especially або particularly вживаємо, щоб виділити щось одне, важливіше за інше. Ставимо його безпосередньо перед тією частиною, яку хочемо підкреслити: I love fruit, especially apples."
+    }
+  },
+  "102": {
+    "explanation": "In writing, adverbs like firstly, secondly and finally organise your points in order. Each one starts a sentence and is followed by a comma. Finally introduces the last point.",
+    "examples": [
+      "Firstly, visit both schools.",
+      "Secondly, ask about class sizes.",
+      "Finally, talk to some of the parents."
+    ],
+    "uk": {
+      "explanation": "У письмі прислівники на кшталт firstly, secondly і finally впорядковують ваші думки. Кожен із них починає речення, після нього кома. Finally вводить останню думку."
+    }
+  },
+  "103": {
+    "explanation": "Adverbs like definitely, probably and certainly show how sure you are. Definitely and certainly mean you are sure; probably means you think it is likely. They usually go after will or be, but before won't and isn't.",
+    "examples": [
+      "I will definitely give you the bicycle by 5.30pm.",
+      "She'll probably be late again.",
+      "He probably won't come tonight."
+    ],
+    "uk": {
+      "explanation": "Прислівники на кшталт definitely, probably і certainly показують, наскільки ви впевнені. Definitely і certainly означають, що ви впевнені, а probably — що це, на вашу думку, ймовірно. Зазвичай вони стоять після will або be, але перед won't та isn't."
+    }
+  },
+  "104": {
+    "explanation": "More stance adverbs let you show your attitude: obviously, luckily, sadly, honestly, hopefully. Hopefully means 'I hope', and luckily introduces good news. They often start the sentence, followed by a comma, or go before the main verb.",
+    "examples": [
+      "It's obviously more fun to travel with friends.",
+      "Hopefully, the weather will be better tomorrow.",
+      "Sadly, the old cinema has closed."
+    ],
+    "uk": {
+      "explanation": "Більше оцінних прислівників дає змогу показати своє ставлення: obviously, luckily, sadly, honestly, hopefully. Hopefully означає «сподіваюся», а luckily вводить добру новину. Вони часто стоять на початку речення, після них кома, або перед основним дієсловом."
+    }
+  },
+  "105": {
+    "explanation": "At this level you can use a wide range of time adverbs and phrases to be precise about timing: instantly, previously, currently, shortly, in the meantime. Currently means 'now', previously means 'before', and shortly means 'soon'.",
+    "examples": [
+      "She instantly recognised the voice.",
+      "I'm currently working in a bank.",
+      "The film will start shortly."
+    ],
+    "uk": {
+      "explanation": "На цьому рівні можна вживати широкий набір прислівників і фраз часу, щоб точно передати час: instantly, previously, currently, shortly, in the meantime. Currently означає «зараз», previously — «раніше», а shortly — «незабаром»."
+    }
+  },
+  "106": {
+    "explanation": "A wide range of manner adverbs lets you describe exactly how something is done: urgently, smoothly, deliberately, efficiently. They usually go at the end of the clause, but can also come just before the main verb.",
+    "examples": [
+      "Volunteers are needed urgently.",
+      "The meeting went smoothly.",
+      "He deliberately ignored my message."
+    ],
+    "uk": {
+      "explanation": "Широкий набір прислівників способу дії дає змогу точно описати, як щось робиться: urgently, smoothly, deliberately, efficiently. Зазвичай вони стоять у кінці частини речення, але можуть стояти й безпосередньо перед основним дієсловом."
+    }
+  },
+  "107": {
+    "explanation": "A wide range of degree adverbs can make an adjective stronger or weaker: extremely, highly, deeply, incredibly, fairly, slightly. Some adverbs go with certain adjectives, like highly likely and deeply disappointed. Absolutely and utterly go with strong adjectives such as amazing or impossible.",
+    "examples": [
+      "It is extremely important that the project is finished on time.",
+      "I was deeply disappointed with the result.",
+      "The view from the top was absolutely amazing."
+    ],
+    "uk": {
+      "explanation": "Широкий набір прислівників ступеня може посилити або послабити прикметник: extremely, highly, deeply, incredibly, fairly, slightly. Деякі прислівники вживаються з певними прикметниками, як-от highly likely чи deeply disappointed. Absolutely і utterly поєднуються із сильними прикметниками, як-от amazing чи impossible."
+    }
+  },
+  "108": {
+    "explanation": "A wide range of certainty adverbs shows exactly how sure you are: undoubtedly, presumably, arguably, possibly. Undoubtedly means you are completely sure, and presumably means you think something is true but cannot be certain. They often go before the main verb or after be.",
+    "examples": [
+      "It was undoubtedly an unforgettable experience.",
+      "She is arguably the best player in the team.",
+      "Presumably, the train has been cancelled."
+    ],
+    "uk": {
+      "explanation": "Широкий набір прислівників упевненості точно показує, наскільки ви певні: undoubtedly, presumably, arguably, possibly. Undoubtedly означає, що ви цілком упевнені, а presumably — що ви вважаєте щось правдою, але не можете бути певні. Вони часто стоять перед основним дієсловом або після be."
+    }
+  },
+  "109": {
+    "explanation": "A wide range of stance adverbs lets you comment on your whole statement: apparently, admittedly, frankly, naturally, surprisingly. Apparently means you heard it from someone else; admittedly accepts a point against your own argument. They often come first in the clause, followed by a comma.",
+    "examples": [
+      "Apparently, someone made a mistake with the details.",
+      "Admittedly, the hotel was expensive, but it was worth it.",
+      "Frankly, I don't care what they think."
+    ],
+    "uk": {
+      "explanation": "Широкий набір оцінних прислівників дає змогу прокоментувати все висловлювання: apparently, admittedly, frankly, naturally, surprisingly. Apparently означає, що ви почули це від когось іншого, а admittedly визнає аргумент проти вашої ж думки. Вони часто стоять першими в частині речення, після них кома."
+    }
+  },
+  "110": {
+    "explanation": "Adverbs such as supposedly, allegedly and reportedly show that you are repeating what others say, not stating a fact you know yourself. They usually go in mid position, between the subject and the main verb or after be, and are common in news and formal writing.",
+    "examples": [
+      "The company allegedly hid the losses from investors.",
+      "He joined the university, supposedly, to study economics.",
+      "The singer is reportedly planning a world tour."
+    ],
+    "uk": {
+      "explanation": "Прислівники на кшталт supposedly, allegedly і reportedly показують, що ви переказуєте чужі слова, а не стверджуєте факт, який знаєте самі. Зазвичай вони стоять у середній позиції — між підметом і основним дієсловом або після be — і поширені в новинах та офіційних текстах."
+    }
+  },
+  "120": {
+    "explanation": "A stance adverb such as luckily, unfortunately or honestly can describe a whole sentence, not one word. It shows what you think or feel about the whole statement. It usually comes first, followed by a comma.",
+    "examples": [
+      "Luckily, nobody was hurt.",
+      "Unfortunately, the museum is closed on Mondays.",
+      "Honestly, I didn't like the film."
+    ],
+    "uk": {
+      "explanation": "Оцінний прислівник, як-от luckily, unfortunately чи honestly, може описувати ціле речення, а не одне слово. Він показує, що ви думаєте чи відчуваєте щодо всього висловлювання. Зазвичай стоїть на початку, після нього кома."
+    }
+  },
+  "138": {
+    "explanation": "For strong emphasis, put never at the start of the sentence. Then the auxiliary comes before the subject, as in a question: Never have I seen..., Never had she felt... This is mostly used in writing and stories.",
+    "examples": [
+      "Never have I seen such a beautiful sunset.",
+      "Never have I felt so proud.",
+      "Never had she been so tired."
+    ],
+    "uk": {
+      "explanation": "Для сильного наголосу never ставимо на початок речення. Тоді допоміжне дієслово стоїть перед підметом, як у питанні: Never have I seen..., Never had she felt... Так пишуть переважно в текстах та оповіданнях."
+    }
+  },
+  "139": {
+    "explanation": "Hardly can start a sentence for emphasis, followed by the auxiliary and then the subject: Hardly had she sat down when the phone rang. It means one thing happened almost immediately after another, with when introducing the second event. It is formal and mostly found in writing.",
+    "examples": [
+      "Hardly had she sat down when the phone rang.",
+      "Hardly had we arrived when it started to rain.",
+      "Hardly could I believe my eyes."
+    ],
+    "uk": {
+      "explanation": "Hardly може стояти на початку речення для наголосу, після нього — допоміжне дієслово, а потім підмет: Hardly had she sat down when the phone rang. Це означає, що одна подія сталася майже одразу після іншої, а when вводить другу подію. Це книжний стиль, переважно в письмі."
+    }
+  },
+  "140": {
+    "explanation": "To distance yourself from a claim, put an adverb like apparently, supposedly or allegedly in mid position. It goes after the subject and before the main verb, or after be, a modal or an auxiliary: The minister has reportedly resigned. The claim stays, but it is marked as someone else's.",
+    "examples": [
+      "The fire was allegedly started on purpose.",
+      "The new policy apparently fixes the problem completely.",
+      "The painting is supposedly worth millions."
+    ],
+    "uk": {
+      "explanation": "Щоб дистанціюватися від твердження, поставте прислівник на кшталт apparently, supposedly чи allegedly в середню позицію. Він стоїть після підмета й перед основним дієсловом або після be, модального чи допоміжного дієслова: The minister has reportedly resigned. Твердження лишається, але позначене як чуже."
+    }
+  },
+  "146": {
+    "explanation": "Put enough after a stance adverb such as surprisingly, funnily or interestingly to make it stronger. The pattern is adverb + enough, usually at the start of the sentence and followed by a comma. Enough comes after the adverb, never before it.",
+    "examples": [
+      "Surprisingly enough, the repair only took an hour.",
+      "Funnily enough, I was thinking about you this morning.",
+      "Interestingly enough, nobody asked about the price."
+    ],
+    "uk": {
+      "explanation": "Щоб підсилити оцінний прислівник, як-от surprisingly, funnily чи interestingly, після нього ставимо enough. Схема — adverb + enough, зазвичай на початку речення, після чого кома. Enough стоїть після прислівника, ніколи перед ним."
+    }
+  },
+  "147": {
+    "explanation": "An adverb can be followed by a prepositional phrase that shows exactly who or what it applies to: luckily for you, unfortunately for them, independently of the others. The pattern is adverb + preposition + noun phrase, and it highlights that piece of information.",
+    "examples": [
+      "Luckily for you, the shop was still open.",
+      "Unfortunately for the team, their best player was injured.",
+      "Each student worked independently of the others."
+    ],
+    "uk": {
+      "explanation": "Після прислівника може стояти прийменникова фраза, яка показує, кого чи чого саме він стосується: luckily for you, unfortunately for them, independently of the others. Схема — adverb + preposition + noun phrase, і вона виділяє цю інформацію."
+    }
+  },
+  "261": {
+    "explanation": "In a list, put commas between the items and use and or or only before the last one. And adds all the items together; or gives a choice.",
+    "examples": [
+      "We need eggs, milk and bread.",
+      "Would you like tea, coffee or juice?",
+      "I have a cat, a dog and a rabbit."
+    ],
+    "uk": {
+      "explanation": "У переліку ставимо коми між пунктами, а and чи or — лише перед останнім. And об'єднує всі пункти, or пропонує вибір."
+    }
+  },
+  "262": {
+    "explanation": "Use but to join two ideas that are different, when the second is a surprise after the first. When but joins two parts of a sentence, put a comma before it.",
+    "examples": [
+      "My flat is very small, but it's easy to clean.",
+      "I like tea, but I don't like coffee.",
+      "It's cold, but it's sunny."
+    ],
+    "uk": {
+      "explanation": "But вживаємо, щоб поєднати дві різні думки, коли друга несподівана після першої. Коли but поєднує дві частини речення, перед ним ставимо кому."
+    }
+  },
+  "265": {
+    "explanation": "Plus can add one more point, usually an advantage that makes your argument stronger. It often starts a new sentence with a comma after it: Plus, it's cheap. This use is informal.",
+    "examples": [
+      "The flat is close to my office. Plus, it's really cheap.",
+      "I love this café. Plus, the staff are really friendly.",
+      "It's a great job, plus I can work from home."
+    ],
+    "uk": {
+      "explanation": "Plus може додати ще один аргумент — зазвичай перевагу, яка підсилює вашу думку. Часто воно починає нове речення, після нього кома: Plus, it's cheap. Це неформальне вживання."
+    }
+  },
+  "267": {
+    "explanation": "Use both ... and to join two nouns and show that something is true for each of them. Put both before the first noun and and before the second. With two subjects, the verb is plural.",
+    "examples": [
+      "Both my sister and my brother live abroad.",
+      "She speaks both English and French.",
+      "The city has both beautiful beaches and great museums."
+    ],
+    "uk": {
+      "explanation": "Both ... and вживаємо, щоб поєднати два іменники й показати, що твердження стосується кожного з них. Both ставимо перед першим іменником, and — перед другим. Із двома підметами дієслово стоїть у множині."
+    }
+  },
+  "268": {
+    "explanation": "Neither ... nor means 'not X and not Y'. Put neither before the first item and nor before the second. It is already negative, so the verb stays positive: I like neither tea nor coffee.",
+    "examples": [
+      "Neither the bus nor the train was on time.",
+      "We can neither eat nor drink during the lesson.",
+      "He neither called nor sent a message."
+    ],
+    "uk": {
+      "explanation": "Neither ... nor означає «ні X, ні Y». Neither ставимо перед першим елементом, nor — перед другим. Конструкція вже заперечна, тому дієслово лишається стверджувальним: I like neither tea nor coffee."
+    }
+  },
+  "269": {
+    "explanation": "Both ... and can also join longer parts of a sentence: two verbs, two phrases or two clauses. The two parts after both and and have the same form. It stresses that both things are true.",
+    "examples": [
+      "Television can both entertain and educate.",
+      "The band is popular both at home and abroad.",
+      "The course is both useful for work and fun."
+    ],
+    "uk": {
+      "explanation": "Both ... and може поєднувати й довші частини речення: два дієслова, дві фрази або дві частини речення. Обидві частини після both і and мають однакову форму. Конструкція наголошує, що правдиве і те, і те."
+    }
+  },
+  "270": {
+    "explanation": "Yet means but, with a stronger sense of surprise, and sounds more formal. It joins adjectives, phrases or clauses: simple yet effective. And yet is common inside a sentence.",
+    "examples": [
+      "The plan was simple yet effective.",
+      "He trained for months, and yet he lost in the first round.",
+      "The room was small yet comfortable."
+    ],
+    "uk": {
+      "explanation": "Yet означає but, але з сильнішим відтінком несподіванки, і звучить офіційніше. Воно поєднує прикметники, фрази чи частини речення: simple yet effective. Усередині речення поширений варіант and yet."
+    }
+  },
+  "272": {
+    "explanation": "Not only ... but also adds a second point and presents it as even more important or surprising. Put not only before the first part and but also before the second; both parts have the same form. It is common in formal writing.",
+    "examples": [
+      "This book is not only a guide but also a workbook.",
+      "Moving offices would not only save money but also give us space.",
+      "She is not only talented but also very hard-working."
+    ],
+    "uk": {
+      "explanation": "Not only ... but also додає другий аргумент і подає його як ще важливіший або несподіваніший. Not only ставимо перед першою частиною, but also — перед другою; обидві частини мають однакову форму. Конструкція поширена в офіційному письмі."
+    }
+  },
+  "273": {
+    "explanation": "For stronger focus, put not only at the very start of the sentence. Then the auxiliary comes before the subject, as in a question: Not only does she speak French, but she also speaks Spanish. In the second clause, also usually goes after the subject.",
+    "examples": [
+      "Not only did we miss the bus, but we also got lost.",
+      "Not only is it cheap, but it's also fast.",
+      "Not only did he lose, but he also got injured."
+    ],
+    "uk": {
+      "explanation": "Для сильнішого наголосу not only ставимо на самий початок речення. Тоді допоміжне дієслово стоїть перед підметом, як у питанні: Not only does she speak French, but she also speaks Spanish. У другій частині also зазвичай стоїть після підмета."
+    }
+  },
+  "274": {
+    "explanation": "After a negative sentence, you can start a new sentence with Neither or Nor to add one more negative point. The auxiliary or be comes before the subject: Nor was the food any good. This is formal and typical of written arguments.",
+    "examples": [
+      "The hotel wasn't clean. Nor was the food any good.",
+      "The plan isn't cheap. Nor is it very practical.",
+      "She didn't apologise. Neither did she explain why."
+    ],
+    "uk": {
+      "explanation": "Після заперечного речення можна почати нове речення з Neither або Nor, щоб додати ще один заперечний аргумент. Допоміжне дієслово або be стоїть перед підметом: Nor was the food any good. Це офіційний стиль, типовий для письмової аргументації."
+    }
+  },
+  "275": {
+    "explanation": "And yet can start a new sentence to introduce a surprising contrast with what came before. Giving the surprising fact its own sentence adds extra weight. It is common in stories and formal arguments.",
+    "examples": [
+      "Everyone told her it was impossible. And yet she did it.",
+      "The evidence seems clear. And yet many experts remain unconvinced.",
+      "He had every advantage. And yet he failed."
+    ],
+    "uk": {
+      "explanation": "And yet може починати нове речення, щоб увести несподіване протиставлення до сказаного раніше. Коли несподіваний факт стоїть окремим реченням, він має більшу вагу. Це поширене в оповіданнях та офіційній аргументації."
+    }
+  },
+  "281": {
+    "explanation": "Whatever, wherever, whoever, whenever and however mean 'it doesn't matter what, where, who, when or how'. Put the clause at the start of the sentence to stress that the main clause is true in every case. However in this meaning is followed by an adjective or adverb: however hard I try.",
+    "examples": [
+      "Whatever you choose, you'll have to share it.",
+      "Wherever you go in the city, there are tourists.",
+      "However hard I try, I can't remember his name."
+    ],
+    "uk": {
+      "explanation": "Whatever, wherever, whoever, whenever і however означають «неважливо, що, де, хто, коли чи як». Цю частину ставимо на початок речення, щоб наголосити, що головна частина правдива в будь-якому разі. However у цьому значенні вживається з прикметником або прислівником: however hard I try."
+    }
+  },
+  "282": {
+    "explanation": "In that means 'because' or 'in the sense that'. It explains exactly in what way the main clause is true, often after a general judgement: The job is ideal in that it lets me work from home. It is formal and typical of essays and reports.",
+    "examples": [
+      "The job is ideal in that it lets me work from home.",
+      "Professional sport can be harmful in that it involves hard training.",
+      "The two cities differ in that one is much older."
+    ],
+    "uk": {
+      "explanation": "In that означає «тому що» або «в тому сенсі, що». Цей зворот пояснює, у чому саме правдива головна частина речення, часто після загальної оцінки: The job is ideal in that it lets me work from home. Це книжний зворот, типовий для есе та звітів."
+    }
+  },
+  "1132": {
+    "explanation": "Use as you know to remind the reader of something they already know before you say something new. It can start the sentence or go in the middle, between commas. It sounds polite and friendly.",
+    "examples": [
+      "As you know, my parents are leaving for Spain tomorrow.",
+      "I can't come because, as you know, I live in England now.",
+      "As you know, the shop closes early on Sundays."
+    ],
+    "uk": {
+      "explanation": "As you know вживаємо, щоб нагадати читачеві те, що він уже знає, перш ніж сказати щось нове. Зворот може стояти на початку речення або в середині, між комами. Звучить ввічливо й дружньо."
+    }
+  },
+  "1133": {
+    "explanation": "At the start of a sentence, So sums up what you have just said and moves on to what follows from it: a plan, a question or an apology. It is informal, good for emails to friends.",
+    "examples": [
+      "I'll be free at three. So, I'll come at half past.",
+      "So, what do you think?",
+      "I have a dentist appointment. So, I'm sorry, but I can't come."
+    ],
+    "uk": {
+      "explanation": "На початку речення So підсумовує щойно сказане й переходить до того, що з цього випливає: плану, питання чи вибачення. Це неформальний варіант, добрий для листів друзям."
+    }
+  },
+  "1134": {
+    "explanation": "When you have several reasons or steps, number them so the reader can follow. First of all or Firstly opens the list, Secondly and Thirdly continue it, and Finally or Lastly introduces the last point. Each one starts a sentence, followed by a comma.",
+    "examples": [
+      "First of all, I must thank you for your letter.",
+      "Secondly, we need good materials.",
+      "Lastly, don't forget to bring your passport."
+    ],
+    "uk": {
+      "explanation": "Коли у вас кілька причин або кроків, пронумеруйте їх, щоб читачеві було легко стежити. First of all або Firstly відкриває перелік, Secondly і Thirdly продовжують його, а Finally або Lastly вводить останній пункт. Кожен починає речення, після нього кома."
+    }
+  },
+  "1135": {
+    "explanation": "Discourse markers like however, on the other hand and in contrast start a sentence that says something different from the one before. On the one hand ... on the other hand compares two sides of a question. They are followed by a comma.",
+    "examples": [
+      "The hotel was expensive. However, the rooms were beautiful.",
+      "On the other hand, a small school is quieter.",
+      "My old flat was dark. In contrast, this one is very bright."
+    ],
+    "uk": {
+      "explanation": "Дискурсивні маркери на кшталт however, on the other hand і in contrast починають речення, яке каже щось відмінне від попереднього. On the one hand ... on the other hand зіставляє дві сторони питання. Після них ставимо кому."
+    }
+  },
+  "1136": {
+    "explanation": "Markers like in addition, moreover, what is more and besides add another point that supports the same idea. Moreover and in addition are more formal; what's more and besides are more personal. Each starts a new sentence, followed by a comma.",
+    "examples": [
+      "The flat is cheap. In addition, it's near the station.",
+      "Besides, you're 18 now — you aren't a baby any more.",
+      "Moreover, the staff are very friendly."
+    ],
+    "uk": {
+      "explanation": "Маркери на кшталт in addition, moreover, what is more і besides додають ще один аргумент на підтримку тієї ж думки. Moreover і in addition — офіційніші, what's more і besides — більш особисті. Кожен починає нове речення, після нього кома."
+    }
+  },
+  "1137": {
+    "explanation": "You see and the thing is introduce information the listener doesn't know yet, usually an explanation or the real reason for a problem. They are informal and sound like speech, so use them in messages to friends.",
+    "examples": [
+      "I'd love to come. The thing is, I have an exam.",
+      "You see, the park is the only green place near us.",
+      "The thing is, I've lost my keys again."
+    ],
+    "uk": {
+      "explanation": "You see і the thing is вводять інформацію, якої співрозмовник ще не знає, — зазвичай пояснення або справжню причину проблеми. Вони неформальні й звучать як усне мовлення, тож вживайте їх у повідомленнях друзям."
+    }
+  },
+  "1138": {
+    "explanation": "A stance adverb at the start of a sentence tells the reader how you feel about what follows: unfortunately for bad news, luckily for good news, surprisingly for something unexpected. Actually and in fact introduce the real situation. They are followed by a comma.",
+    "examples": [
+      "We missed the last bus. Luckily, a friend drove us home.",
+      "Surprisingly, the suitcase was Lucy's.",
+      "Actually, I don't have much time to watch TV."
+    ],
+    "uk": {
+      "explanation": "Оцінний прислівник на початку речення підказує читачеві, як ви ставитеся до того, що далі: unfortunately — погана новина, luckily — добра, surprisingly — щось несподіване. Actually та in fact вводять реальний стан речей. Після них ставимо кому."
+    }
+  },
+  "1139": {
+    "explanation": "Similarly, likewise and in the same way say that the next point is like the one before: the same idea in a new example. They start the sentence, followed by a comma, and are typical of essays and reports.",
+    "examples": [
+      "Prices rose in the city. Similarly, rents went up in the suburbs.",
+      "Children need sleep. Likewise, adults need regular rest.",
+      "Letters show feelings. In the same way, diaries do."
+    ],
+    "uk": {
+      "explanation": "Similarly, likewise та in the same way показують, що наступна думка схожа на попередню: та сама ідея на новому прикладі. Вони стоять на початку речення, після них кома, і типові для есе та звітів."
+    }
+  },
+  "1140": {
+    "explanation": "Formal texts often mark where they begin and end. To begin with and For a start introduce the first point of an argument. In conclusion and To sum up open the final paragraph, where you give your main point or final opinion.",
+    "examples": [
+      "To begin with, I want to thank you all for coming.",
+      "For a start, the tickets are far too expensive.",
+      "In conclusion, zoos are not cruel if animals are well cared for."
+    ],
+    "uk": {
+      "explanation": "Офіційні тексти часто позначають свій початок і кінець. To begin with та For a start вводять перший аргумент. In conclusion і To sum up відкривають останній абзац, де ви подаєте головну думку або остаточну позицію."
+    }
+  },
+  "1141": {
+    "explanation": "Markers like in summary, to sum up, in short and overall introduce a short summary of the main points. They start the sentence, followed by a comma. They are typical of the last part of essays and reports.",
+    "examples": [
+      "In summary, most students are willing to help.",
+      "To sum up, both options have clear advantages.",
+      "In short, the project was a success."
+    ],
+    "uk": {
+      "explanation": "Маркери на кшталт in summary, to sum up, in short та overall вводять короткий підсумок головних думок. Вони стоять на початку речення, після них кома. Вони типові для останньої частини есе та звітів."
+    }
+  },
+  "1142": {
+    "explanation": "In a long formal text, you can point back to something you have already written instead of repeating it: as mentioned above, as mentioned earlier, as shown above. As described below and see below point forward. There is no subject after as: the phrase is short for 'as I mentioned above'.",
+    "examples": [
+      "As mentioned above, we could negotiate better contracts.",
+      "As mentioned earlier, I have already asked for information.",
+      "As shown in the table below, sales have risen."
+    ],
+    "uk": {
+      "explanation": "У довгому офіційному тексті можна послатися на вже написане, замість того щоб повторювати: as mentioned above, as mentioned earlier, as shown above. As described below і see below вказують на те, що буде далі. Після as немає підмета: зворот — це скорочення від «as I mentioned above»."
+    }
   }
 }
