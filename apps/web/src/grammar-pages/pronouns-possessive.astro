@@ -1,0 +1,296 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 19 EGP rows (889-907): the only USE row (903, that … of yours) is inlined,
+// matched by EGP index. 895 is an empty "General comment". The other 17 are
+// plain FORM rows (each pronoun as subject / object / after be, of mine,
+// comparisons), written in full without a card.
+const { con, user } = Astro.props;
+
+const thatOfPoint = con.usagePoints.find((p) => p.egpIndex === 903);
+
+const inlineUsagePointIds = [thatOfPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Mine, yours, his, hers, ours and theirs instead of my / your… + noun: It's mine, I lost mine, Yours was very useful, as big as yours, a friend of mine, and that new car of his."
+  handcrafted
+  sections={[
+    { id: 'six-words', title: 'Mine, yours, his, hers, ours, theirs', open: true },
+    { id: 'after-verb', title: 'It’s mine. I lost mine: after a verb', open: false },
+    { id: 'subject', title: 'Mine was very old: at the start', open: false },
+    { id: 'compare', title: 'As big as yours, better than hers', open: false },
+    { id: 'of-mine', title: 'A friend of mine', open: false },
+    { id: 'that-of', title: 'That car of his: showing your feelings', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A possessive pronoun — <em>mine, yours, his, hers, ours, theirs</em> — says who something belongs to <em>and</em> takes the place of the noun: <em>This bag is mine</em> = this bag is my bag. Use it when the noun is already clear, so you don't have to say it twice.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Mine, yours, his, hers, ours, theirs" id="six-words" open>
+    <p>
+      Every possessive pronoun has a partner that goes before a noun (<em>my, your, her…</em>). The pronoun stands alone — never put a noun after it.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th></th><th>Before a noun</th><th>Alone</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>I</th><td>my phone</td><td><code>mine</code> — It's mine.</td></tr>
+        <tr><th>you</th><td>your phone</td><td><code>yours</code> — It's yours.</td></tr>
+        <tr><th>he</th><td>his phone</td><td><code>his</code> — It's his.</td></tr>
+        <tr><th>she</th><td>her phone</td><td><code>hers</code> — It's hers.</td></tr>
+        <tr><th>we</th><td>our phone</td><td><code>ours</code> — It's ours.</td></tr>
+        <tr><th>they</th><td>their phone</td><td><code>theirs</code> — It's theirs.</td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Alone" parts={['mine / yours / hers…', '(no noun after it)']} />
+    <GrammarExample note="Mine = my jacket.">
+      I bought a new jacket because <mark data-role="content">mine</mark> was very old.
+    </GrammarExample>
+    <GrammarExample note="Yours = your favourite meal.">
+      My favourite meal is spaghetti with garlic bread. What's <mark data-role="content">yours</mark>?
+    </GrammarExample>
+    <p>
+      Most of them simply add <em>-s</em> to the determiner: <em>your → yours, her → hers, our → ours, their → theirs</em>. Two are different: <em>my → mine</em>, and <em>his</em> stays <em>his</em>.
+    </p>
+    <p>
+      The form doesn't change for one thing or many: <em>This pen is mine. These pens are mine.</em> There is no everyday pronoun for <em>its</em> — repeat the noun instead: <em>The dog has its bowl, and the cat has its own bowl.</em>
+    </p>
+    <p>
+      Ukrainian <em>мій, твій, наш</em> work both before a noun and alone. English splits them: <em>my book</em>, but <em>The book is mine.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It’s mine. I lost mine: after a verb" id="after-verb">
+    <p>
+      The most common place for a possessive pronoun is after <em>be</em> — to say who owns something. It answers the question <em>Whose…?</em>
+    </p>
+    <GrammarFormula label="After be" parts={['noun / it', 'be', 'mine / yours / hers…']} />
+    <GrammarExample note="Saying who the owner is — here, not me.">
+      The phone <mark data-role="grammar">is</mark> not <mark data-role="content">mine</mark>.
+    </GrammarExample>
+    <GrammarExample note="A question and its answer.">
+      "Whose umbrella <mark data-role="grammar">is</mark> this? <mark data-role="grammar">Is</mark> it <mark data-role="content">yours</mark>?" — "No, it's <mark data-role="content">hers</mark>."
+    </GrammarExample>
+    <GrammarExample note="Hers = her suitcase.">
+      When she looked at the suitcase again, she realised that it <mark data-role="grammar">wasn't</mark> <mark data-role="content">hers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Theirs = their baby.">
+      She told him that the baby <mark data-role="grammar">was</mark> <mark data-role="content">theirs</mark>.
+    </GrammarExample>
+    <p>
+      It can also be the object of any verb.
+    </p>
+    <GrammarFormula label="Object" parts={['verb', 'mine / yours / ours…']} />
+    <GrammarExample note="Mine = my Maths book.">
+      Can you bring your Maths book? I've <mark data-role="grammar">lost</mark> <mark data-role="content">mine</mark>.
+    </GrammarExample>
+    <GrammarExample note="Yours = your present.">
+      It was my best present, although I also <mark data-role="grammar">loved</mark> <mark data-role="content">yours</mark>.
+    </GrammarExample>
+    <GrammarExample note="Hers = her identity card.">
+      The guard asked for my identity card, and Pat <mark data-role="grammar">gave</mark> <mark data-role="content">hers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Ours = our boards.">
+      Can we rent windsurf boards, or should we <mark data-role="grammar">bring</mark> <mark data-role="content">ours</mark>?
+    </GrammarExample>
+    <p>
+      And after a preposition — very often <em>like</em>, <em>from</em> or <em>about</em>.
+    </p>
+    <GrammarFormula label="After a preposition" parts={['like / from / about…', 'mine / yours / ours…']} />
+    <GrammarExample note="Like yours = the same as your phone.">
+      I bought a pink mobile. It's <mark data-role="grammar">like</mark> <mark data-role="content">yours</mark>.
+    </GrammarExample>
+    <GrammarExample note="From yours = from your house.">
+      To get to my house <mark data-role="grammar">from</mark> <mark data-role="content">yours</mark>, take the first road on the right.
+    </GrammarExample>
+    <GrammarExample note="Like ours = like our town.">
+      A road like this shouldn't go through a small town <mark data-role="grammar">like</mark> <mark data-role="content">ours</mark>.
+    </GrammarExample>
+    <GrammarExample note="His = his country.">
+      Teaching is looked down on in a poor country <mark data-role="grammar">like</mark> <mark data-role="content">his</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Mine was very old: at the start" id="subject">
+    <p>
+      A possessive pronoun can be the subject too. The verb agrees with the thing it replaces, not with the owner: <em>mine is</em> for one thing, <em>mine are</em> for several.
+    </p>
+    <GrammarFormula label="Subject" parts={['mine / yours / ours…', 'verb']} />
+    <GrammarExample note="Mine = my trousers — plural, so are.">
+      I bought new trousers because <mark data-role="content">mine</mark> <mark data-role="grammar">are</mark> too small for me.
+    </GrammarExample>
+    <GrammarExample note="Yours = your computer.">
+      We bought a new computer because <mark data-role="content">yours</mark> <mark data-role="grammar">is</mark> very old and sometimes stops working.
+    </GrammarExample>
+    <GrammarExample note="Yours = your information.">
+      I needed some extra information, and <mark data-role="content">yours</mark> <mark data-role="grammar">was</mark> very useful.
+    </GrammarExample>
+    <GrammarExample note="Ours = our garden.">
+      There are bigger gardens in this area, but <mark data-role="content">ours</mark> <mark data-role="grammar">is</mark> four times as big as the one we had before.
+    </GrammarExample>
+    <GrammarExample note="Hers = her bag.">
+      I put Sophie's pictures in my bag because <mark data-role="content">hers</mark> <mark data-role="grammar">was</mark> already packed.
+    </GrammarExample>
+    <p>
+      In formal and written English, <em>Ours / Theirs / His is a…</em> introduces a description of someone's company, life or situation. It sounds stronger than <em>Our company is…</em>.
+    </p>
+    <GrammarFormula label="Formal" parts={['ours / theirs / his', 'is / was', 'a / the + noun']} />
+    <GrammarExample note="Business English: ours = our store.">
+      <mark data-role="content">Ours</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">the only store</mark> in the area that opens at 7 am.
+    </GrammarExample>
+    <GrammarExample note="Literary: theirs = their relationship.">
+      <mark data-role="content">Theirs</mark> <mark data-role="grammar">had always been</mark> <mark data-role="grammar">a love-hate relationship</mark>.
+    </GrammarExample>
+    <GrammarExample note="His = his childhood.">
+      <mark data-role="content">His</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">not a happy childhood</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="As big as yours, better than hers" id="compare">
+    <p>
+      Comparisons are a natural place for a possessive pronoun: you name the noun once, then compare it with someone else's without repeating it.
+    </p>
+    <GrammarFormula label="Equal" parts={['(not) as', 'adjective', 'as', 'mine / yours…']} />
+    <GrammarExample note="Yours = your bedroom.">
+      My bedroom is <mark data-role="grammar">not as big as</mark> <mark data-role="content">yours</mark>, but it's lovely.
+    </GrammarExample>
+    <GrammarExample note="Mine = my friend.">
+      I hope you have a friend <mark data-role="grammar">as good as</mark> <mark data-role="content">mine</mark>!
+    </GrammarExample>
+    <GrammarExample note="Yours = your English.">
+      I hope my English becomes <mark data-role="grammar">as good as</mark> <mark data-role="content">yours</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Different" parts={['comparative', 'than', 'mine / hers / ours…']} />
+    <GrammarExample note="Hers = my mother's omelette.">
+      I told my mother that your Spanish omelette is <mark data-role="grammar">better than</mark> <mark data-role="content">hers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Ours = our lives.">
+      We worry that our grandchildren's lives will <mark data-role="grammar">not be as happy as</mark> <mark data-role="content">ours</mark>.
+    </GrammarExample>
+    <GrammarExample note="Different from ours = different from our world.">
+      Huxley created a new world which is <mark data-role="grammar">not so different from</mark> <mark data-role="content">ours</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A friend of mine" id="of-mine">
+    <p>
+      English can't put <em>a, some, this</em> or a number together with <em>my</em> — not <em>a my friend</em>. Instead, use noun + <em>of</em> + possessive pronoun. <em>A friend of mine</em> means "one of my friends".
+    </p>
+    <GrammarFormula label="One of several" parts={['a / some / two…', 'noun', 'of', 'mine / yours / ours…']} />
+    <GrammarExample note="A friend of mine = one of my friends.">
+      <mark data-role="grammar">A</mark> <mark data-role="grammar">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="content">mine</mark> gave me a present for my birthday.
+    </GrammarExample>
+    <GrammarExample note="Plural: some friends of mine.">
+      <mark data-role="grammar">Some</mark> <mark data-role="grammar">friends</mark> <mark data-role="grammar">of</mark> <mark data-role="content">mine</mark> were here with me too.
+    </GrammarExample>
+    <GrammarExample note="Of yours = one of your friends.">
+      Maybe you can take <mark data-role="grammar">a</mark> <mark data-role="grammar">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="content">yours</mark> with you.
+    </GrammarExample>
+    <GrammarExample note="Of ours = one of our classmates.">
+      Paul, <mark data-role="grammar">a</mark> <mark data-role="grammar">classmate</mark> <mark data-role="grammar">of</mark> <mark data-role="content">ours</mark>, will be the DJ.
+    </GrammarExample>
+    <GrammarExample note="Of hers = one of her admirers.">
+      I was <mark data-role="grammar">a</mark> <mark data-role="grammar">great admirer</mark> <mark data-role="grammar">of</mark> <mark data-role="content">hers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Of theirs = one of their friends.">
+      My parents invited the father of <mark data-role="grammar">a</mark> <mark data-role="grammar">friend</mark> <mark data-role="grammar">of</mark> <mark data-role="content">theirs</mark>.
+    </GrammarExample>
+    <p>
+      <em>A fan of his / a big fan of theirs</em> is a very common phrase for music and sport: <em>I'm a great fan of theirs.</em>
+    </p>
+    <p>
+      <em>A friend of mine</em> and <em>my friend</em> are not quite the same. <em>My friend</em> sounds like the listener knows who you mean; <em>a friend of mine</em> introduces one of your friends for the first time.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="That car of his: showing your feelings" id="that-of">
+    <p>
+      Put <em>this / that</em> in front instead of <em>a</em>, and the phrase shows a feeling about the thing or person — often annoyance, irony or humour, sometimes warmth. It is typical of stories and informal speech.
+    </p>
+    <GrammarFormula label="Attitude" parts={['that / this', '(adjective) noun', 'of', 'his / hers / yours…']} />
+    <GrammarExample note="Ironic: the speaker doesn't think much of the jeep.">
+      You can park <mark data-role="grammar">that</mark> <mark data-role="grammar">precious jeep</mark> <mark data-role="grammar">of</mark> <mark data-role="content">yours</mark> over there.
+    </GrammarExample>
+    <GrammarExample note="The speaker doesn't like the new girlfriend.">
+      I kept silent when I was introduced to <mark data-role="grammar">that</mark> <mark data-role="grammar">new girlfriend</mark> <mark data-role="grammar">of</mark> <mark data-role="content">his</mark>.
+    </GrammarExample>
+    <GrammarExample note="A familiar, slightly unpleasant voice.">
+      I could hear her mother coughing in <mark data-role="grammar">that</mark> <mark data-role="grammar">hoarse voice</mark> <mark data-role="grammar">of</mark> <mark data-role="content">hers</mark>.
+    </GrammarExample>
+    <GrammarExample note="Positive: this dream = something important to me.">
+      I want <mark data-role="grammar">this</mark> <mark data-role="grammar">dream</mark> <mark data-role="grammar">of</mark> <mark data-role="content">mine</mark> to come true.
+    </GrammarExample>
+    {thatOfPoint && <GrammarUsagePointCard usagePoint={thatOfPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      There is no <em>mines</em> — <em>mine</em> never takes <em>-s</em>, even for many things.
+    </p>
+    <GrammarContrast bad={['These books are mines.']} good={['These books are mine.']} />
+    <p>
+      Possessive pronouns have no apostrophe. <em>Your's, her's, their's</em> are always wrong.
+    </p>
+    <GrammarContrast bad={["Is this bag your's?", "The idea was their's."]} good={['Is this bag yours?', 'The idea was theirs.']} />
+    <p>
+      Don't put a noun after a possessive pronoun — use the determiner instead.
+    </p>
+    <GrammarContrast bad={['This is mine book.', 'Hers brother is a doctor.']} good={['This is my book.', 'Her brother is a doctor.']} />
+    <p>
+      Don't leave the noun out after <em>my, your, her…</em> — change to the pronoun.
+    </p>
+    <GrammarContrast bad={['This pen is my.', 'My phone is older than your.']} good={['This pen is mine.', 'My phone is older than yours.']} />
+    <p>
+      After <em>of</em>, use the possessive pronoun, not the object pronoun.
+    </p>
+    <GrammarContrast bad={['She is a friend of me.', 'A my friend lives in Lviv.']} good={['She is a friend of mine.', 'A friend of mine lives in Lviv.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'determiners-possessives',
+        name: 'possessive determiners',
+        note: 'my, your, her… before a noun, and noun + ’s: my bag, Tom’s bag.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'I / me, she / her — not mine / hers: a friend of mine, not a friend of me.',
+      },
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'noun + of + possessive pronoun inside a longer noun phrase.',
+      },
+      {
+        slug: 'adjectives-comparatives',
+        name: 'comparatives',
+        note: 'bigger than, as big as — often followed by mine / yours.',
+      },
+    ]}
+  />
+</GrammarShell>
