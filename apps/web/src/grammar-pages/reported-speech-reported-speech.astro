@@ -1,0 +1,398 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 17 EGP rows (1143-1159): 12 pure FORM rows without cards (say / tell +
+// that-clause, tense shift, yes/no and wh- questions, requests and commands
+// + negative, direct speech with the reporting clause at the start / end /
+// middle, inverted said John, reporting verb + adverb); the 5 FORM/USE rows —
+// 1152 (time words, future), 1159 (time words, past), 1148 (wonder), 1158
+// (was wondering / was thinking) and 1157 (says for a written source) — are
+// inlined, matched by EGP index. Content is the reporting verb (said, told,
+// asked, wondered); the listener, that / if / wh- word and the reported
+// clause's subject and verb are grammar.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const futureTimePoint = point(1152);
+const pastTimePoint = point(1159);
+const wonderPoint = point(1148);
+const wonderingPoint = point(1158);
+const citationPoint = point(1157);
+
+const inlineUsagePointIds = [futureTimePoint, pastTimePoint, wonderPoint, wonderingPoint, citationPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Reported speech in English — how to retell what someone said, asked or told you to do: She said (that) she was tired. He told me to wait. I asked if she was free. Say vs tell, the tense shift (is → was, will → would), time words (tomorrow → the next day), reported questions and requests, wonder, and direct speech with quotation marks."
+  handcrafted
+  sections={[
+    { id: 'say', title: 'She said (that)… Reported statements', open: true },
+    { id: 'tell', title: 'She told me (that)… Say or tell?', open: false },
+    { id: 'tense', title: '“I’m tired” → She said she was tired. The tense shift', open: false },
+    { id: 'time', title: 'tomorrow → the next day. Time words', open: false },
+    { id: 'yes-no', title: 'She asked me if I was free. Reported yes/no questions', open: false },
+    { id: 'wh', title: 'I asked where they were. Reported wh- questions', open: false },
+    { id: 'wonder', title: 'I wondered what she had written. Reported thoughts', open: false },
+    { id: 'requests', title: 'He told me to wait. Requests and commands', open: false },
+    { id: 'direct', title: '“Come with me,” he said. Direct speech', open: false },
+    { id: 'said-john', title: 'said John, she asked quietly. Stories', open: false },
+    { id: 'citation', title: 'The guidebook says that… Reporting a text', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Reported speech is how you retell someone's words without quoting them exactly: <em>“I’m tired.”</em> → <em>She said she was tired.</em> You use a reporting verb — <em>say, tell, ask, wonder</em> — and after it the words change to fit your point of view: <em>I</em> becomes <em>she</em>, and often the tense moves one step back into the past.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="She said (that)… Reported statements" id="say" open>
+    <p>
+      To report a statement, use <em>say</em> + a <em>that</em>-clause. Change the pronouns to match who is speaking now: the speaker's <em>I</em> becomes <em>he / she</em>, and their <em>we</em> may become <em>they</em> — or <em>we</em>, if it includes you.
+    </p>
+    <GrammarFormula label="Reported statement" parts={['subject', 'said', '(that)', 'subject', 'verb …']} />
+    <GrammarExample note="Mum: “I can take you there.” → I becomes she, you becomes us.">
+      My mother <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">can take</mark> us there.
+    </GrammarExample>
+    <GrammarExample note="Teacher: “You have to bring a notebook.” → you becomes we.">
+      The teacher <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">have to bring</mark> a notebook.
+    </GrammarExample>
+    <GrammarExample note="In speech, that is usually left out.">
+      He <mark data-role="content">said</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">was</mark> busy.
+    </GrammarExample>
+    <p>
+      Ukrainian puts a comma before <em>що</em>: <em>Він сказав, що зайнятий.</em> English has no comma before <em>that</em> — <em>He said that he was busy.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She told me (that)… Say or tell?" id="tell">
+    <p>
+      <em>Tell</em> needs a person right after it: <em>tell me, tell him, tell my friend</em>. <em>Say</em> doesn't take a person directly — if you want to name the listener, use <em>say to someone</em>, but usually people just leave the listener out.
+    </p>
+    <GrammarFormula label="tell" parts={['subject', 'told', 'person', '(that)', 'subject', 'verb …']} />
+    <GrammarFormula label="say" parts={['subject', 'said', '(to person)', '(that)', 'subject', 'verb …']} />
+    <GrammarExample note="told + me: the person comes straight after tell.">
+      My sister <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">this film</mark> <mark data-role="grammar">is</mark> very good.
+    </GrammarExample>
+    <GrammarExample note="Dad: “I’ll call.” → I becomes he.">
+      My father <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">will call</mark>.
+    </GrammarExample>
+    <GrammarExample note="Same meaning with say — no person after it.">
+      My sister <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">this film</mark> <mark data-role="grammar">is</mark> very good.
+    </GrammarExample>
+    <p>
+      Ukrainian <em>сказав мені</em> is <em>told me</em>, not <em>said me</em>. And fixed phrases keep their own verb: <em>tell the truth, tell a story, tell a joke</em>; <em>say hello, say sorry, say goodbye</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="“I’m tired” → She said she was tired. The tense shift" id="tense">
+    <p>
+      When the reporting verb is in the past (<em>said, told</em>), the verb in the reported part usually moves one step back into the past too. English grammar calls this backshift. Ukrainian doesn't do this — <em>Вона сказала, що вона втомлена</em> keeps the present tense of the original words.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>They said</th><th>You report</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>“I <strong>am</strong> tired.”</em></td><td><em>She said she <strong>was</strong> tired.</em></td></tr>
+        <tr><td><em>“I <strong>like</strong> it.”</em></td><td><em>He said he <strong>liked</strong> it.</em></td></tr>
+        <tr><td><em>“I<strong>’m dating</strong> John.”</em></td><td><em>She said she <strong>was dating</strong> John.</em></td></tr>
+        <tr><td><em>“I <strong>won</strong> / <strong>have won</strong>.”</em></td><td><em>She said she <strong>had won</strong>.</em></td></tr>
+        <tr><td><em>“I<strong>’ll</strong> help.”</em></td><td><em>He said he <strong>would</strong> help.</em></td></tr>
+        <tr><td><em>“I <strong>can</strong> swim.”</em></td><td><em>She said she <strong>could</strong> swim.</em></td></tr>
+        <tr><td><em>“I <strong>must / have to</strong> go.”</em></td><td><em>He said he <strong>had to</strong> go.</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="With tense shift" parts={['subject', 'said / told + person', '(that)', 'subject', 'verb one step back']} />
+    <GrammarExample note="“I’ve won the lottery!” → had won.">
+      She <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">had won</mark> the lottery.
+    </GrammarExample>
+    <GrammarExample note="“I’m dating John.” → was dating.">
+      Mary <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">was dating</mark> John.
+    </GrammarExample>
+    <GrammarExample note="“It’s my phone. I left it in a café.” → was, had left.">
+      He <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> his phone and <mark data-role="grammar">he</mark> <mark data-role="grammar">had left</mark> it in a café.
+    </GrammarExample>
+    <p>
+      The shift is not compulsory. If the words are still true now, you can keep the present: <em>My sister told me this film <strong>is</strong> very good</em> (it's still good). With the reporting verb in the present — <em>She says…</em> — nothing shifts.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="tomorrow → the next day. Time words" id="time">
+    <p>
+      Words like <em>tomorrow, yesterday, next week</em> point from the moment of speaking. When you report the words later, that moment has passed, so the time words change too.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>They said</th><th>You report later</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>today</em></td><td><em>that day</em></td></tr>
+        <tr><td><em>tomorrow</em></td><td><em>the next day / the following day</em></td></tr>
+        <tr><td><em>yesterday</em></td><td><em>the day before / the previous day</em></td></tr>
+        <tr><td><em>next week</em></td><td><em>the following week</em></td></tr>
+        <tr><td><em>last week</em></td><td><em>the week before / the previous week</em></td></tr>
+        <tr><td><em>now</em></td><td><em>then</em></td></tr>
+        <tr><td><em>here</em></td><td><em>there</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="About the future" parts={['subject', 'told + person / said', '(that)', 'the next day / the following day', 'subject', 'would + verb']} />
+    <GrammarExample note="“Come tomorrow morning.” → the next morning.">
+      At the airport they <mark data-role="content">told</mark> <mark data-role="grammar">him</mark> <mark data-role="grammar">to come</mark> <mark data-role="grammar">the next morning</mark>.
+    </GrammarExample>
+    <GrammarExample note="“Tomorrow we’ll return to Germany.” → the following day, would.">
+      Her husband <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the following day</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">would return</mark> to Germany.
+    </GrammarExample>
+    <GrammarExample note="No shift: next month is still in the future when you report it.">
+      The letter <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">is coming</mark> home <mark data-role="grammar">next month</mark>.
+    </GrammarExample>
+    {futureTimePoint && <GrammarUsagePointCard usagePoint={futureTimePoint} />}
+    <GrammarFormula label="About the past" parts={['subject', 'told + person / said', '(that)', 'the previous day / the day before', 'subject', 'had + past participle']} />
+    <GrammarExample note="“Yesterday we were at your house.” → the previous day, had been.">
+      We <mark data-role="content">told</mark> <mark data-role="grammar">her</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the previous day</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">had been</mark> at her house.
+    </GrammarExample>
+    <GrammarExample note="The telling itself was even earlier, so it's had told too.">
+      I <mark data-role="content">had told</mark> <mark data-role="grammar">my friends</mark> <mark data-role="grammar">the day before</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">expected</mark> to get an A.
+    </GrammarExample>
+    {pastTimePoint && <GrammarUsagePointCard usagePoint={pastTimePoint} />}
+    <p>
+      Keep <em>tomorrow</em> if it's still tomorrow: reporting on the same day, <em>She said she's coming tomorrow</em> is fine.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She asked me if I was free. Reported yes/no questions" id="yes-no">
+    <p>
+      To report a yes/no question, use <em>ask</em> + <em>if</em> or <em>whether</em>. The reported part is no longer a question: it takes statement order (subject before verb), no <em>do / did</em>, and no question mark.
+    </p>
+    <GrammarFormula label="Reported yes/no question" parts={['subject', 'asked', '(person)', 'if / whether', 'subject', 'verb …']} />
+    <GrammarExample note="“Do you want to have dinner together?” → if she wanted — no did.">
+      I <mark data-role="content">asked</mark> <mark data-role="grammar">her</mark> <mark data-role="grammar">if</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">wanted</mark> to have dinner together.
+    </GrammarExample>
+    <GrammarExample note="“Are you free on the first of June?” → if I was free.">
+      He <mark data-role="content">asked</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">if</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> free.
+    </GrammarExample>
+    <GrammarExample note="whether — a bit more formal, common in letters; or not can follow.">
+      I'm writing to <mark data-role="content">ask</mark> <mark data-role="grammar">whether</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> free next Saturday or not.
+    </GrammarExample>
+    <p>
+      <em>If</em> here is Ukrainian <em>чи</em>: <em>Він запитав, чи я вільний</em> → <em>He asked if I was free.</em> Never leave it out.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I asked where they were. Reported wh- questions" id="wh">
+    <p>
+      To report a wh- question, keep the wh- word and put statement order after it. The auxiliary <em>do / does / did</em> disappears, and <em>be</em> or a modal goes after the subject.
+    </p>
+    <GrammarFormula label="Reported wh- question" parts={['subject', 'asked', '(person)', 'wh- word', 'subject', 'verb …']} />
+    <GrammarExample note="“Why are you here?” → why she was — not why was she.">
+      I <mark data-role="content">asked</mark> <mark data-role="grammar">why</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">was</mark> here.
+    </GrammarExample>
+    <GrammarExample note="“Where are the football players?”">
+      He <mark data-role="content">asked</mark> <mark data-role="grammar">where</mark> <mark data-role="grammar">the football players</mark> <mark data-role="grammar">were</mark>.
+    </GrammarExample>
+    <GrammarExample note="“What sports can we play?” → could, after we.">
+      I phoned and <mark data-role="content">asked</mark> <mark data-role="grammar">what sports</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">could play</mark> in this club.
+    </GrammarExample>
+    <GrammarExample note="“When will it be on TV?” → when it would be.">
+      I <mark data-role="content">asked</mark> <mark data-role="grammar">when</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">would be</mark> on TV.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I wondered what she had written. Reported thoughts" id="wonder">
+    <p>
+      <em>Wonder</em> reports a question you ask yourself in your head (<em>цікаво, хотів би я знати</em>). It works like reported <em>ask</em>: <em>wonder</em> + wh- word or <em>if</em> + statement order.
+    </p>
+    <GrammarFormula label="wonder" parts={['subject', 'wondered', 'wh- word / if', 'subject', 'verb …']} />
+    <GrammarExample note="In my head: “What has she written?” → what she had written.">
+      I couldn't wait to read the letter: I <mark data-role="content">wondered</mark> <mark data-role="grammar">what</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">had written</mark>.
+    </GrammarExample>
+    <GrammarExample note="“Who is he?” → who he was.">
+      I really <mark data-role="content">wondered</mark> <mark data-role="grammar">who</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">was</mark>.
+    </GrammarExample>
+    {wonderPoint && <GrammarUsagePointCard usagePoint={wonderPoint} />}
+    <p>
+      The past continuous — <em>I was wondering, I was thinking</em> — describes the thinking as a process that went on for a while. After it, you can use a full clause or a wh- word + <em>to</em>-infinitive.
+    </p>
+    <GrammarFormula label="Thinking in progress" parts={['subject', 'was / were wondering / thinking', 'wh- word', 'subject + verb / to + verb']} />
+    <GrammarExample note="The wondering went on for a few minutes.">
+      We <mark data-role="content">were wondering</mark> <mark data-role="grammar">what</mark> <mark data-role="grammar">had happened</mark>, but then we realised there had been a power cut.
+    </GrammarExample>
+    <GrammarExample note="how + to reply — a non-finite clause.">
+      While he <mark data-role="content">was thinking</mark> <mark data-role="grammar">how</mark> <mark data-role="grammar">to reply</mark>, Jenny took his hand.
+    </GrammarExample>
+    {wonderingPoint && <GrammarUsagePointCard usagePoint={wonderingPoint} />}
+    <p>
+      <em>I was wondering if…</em> is also a very polite way to ask for something: <em>I was wondering if you could help me.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="He told me to wait. Requests and commands" id="requests">
+    <p>
+      To report what someone asked or told you to do, use <em>ask / tell</em> + person + <em>to</em>-infinitive. <em>Ask</em> is for a request (please…), <em>tell</em> for an order or instruction. There's no tense shift here — the <em>to</em>-infinitive never changes.
+    </p>
+    <GrammarFormula label="Request / command" parts={['subject', 'asked / told', 'person', 'to + verb']} />
+    <GrammarExample note="“Can you help me at work?” — a request → asked.">
+      Dad <mark data-role="content">asked</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">to help</mark> him at work.
+    </GrammarExample>
+    <GrammarExample note="“Go outside and wait for me.” — an instruction → told.">
+      He <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">to go</mark> outside and wait for him.
+    </GrammarExample>
+    <GrammarExample note="“Rest in bed for a few days.”">
+      My doctor <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">to rest</mark> in bed for a few days.
+    </GrammarExample>
+    <p>
+      For a negative request or command, put <em>not</em> before <em>to</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'asked / told', 'person', 'not to + verb']} />
+    <GrammarExample note="“Don’t be scared.” → not to be.">
+      She <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">not to be</mark> scared.
+    </GrammarExample>
+    <GrammarExample note="“Please don’t tell anyone.” → asked … not to tell.">
+      I <mark data-role="content">asked</mark> <mark data-role="grammar">Pat</mark> <mark data-role="grammar">not to tell</mark> anyone.
+    </GrammarExample>
+    <p>
+      Ukrainian says <em>попросив, щоб я допоміг</em> — with a clause. English uses the infinitive: <em>asked me to help</em>, not <em>asked that I help</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="“Come with me,” he said. Direct speech" id="direct">
+    <p>
+      Direct speech quotes the exact words. English puts them in quotation marks “ ”, and the reporting clause (<em>he said</em>) can go before, after or in the middle of the quote. A comma — or a colon at the start — separates it from the quote, and the tense doesn't shift.
+    </p>
+    <GrammarFormula label="Before the quote" parts={['subject', 'said / asked / thought', ',', '“quote”']} />
+    <GrammarExample note="The reporting clause first, then a comma or colon.">
+      He <mark data-role="content">answered</mark>, <mark data-role="grammar">“Come with me.”</mark>
+    </GrammarExample>
+    <GrammarExample note="Direct thought works the same way.">
+      Then I <mark data-role="content">thought</mark>: <mark data-role="grammar">“I can’t stay in prison.”</mark>
+    </GrammarExample>
+    <GrammarFormula label="After the quote" parts={['“quote,”', 'subject', 'said / asked / thought']} />
+    <GrammarExample note="The comma goes inside the quotation marks.">
+      <mark data-role="grammar">“Excuse me, sir, you forgot your phone,”</mark> she <mark data-role="content">said</mark>.
+    </GrammarExample>
+    <GrammarExample note="A question keeps its question mark; he asked starts with a small letter.">
+      <mark data-role="grammar">“What’s your name?”</mark> he <mark data-role="content">asked</mark>.
+    </GrammarExample>
+    <GrammarFormula label="In the middle" parts={['“first part,”', 'subject', 'said', ',', '“second part.”']} />
+    <GrammarExample note="The quote is split; commas on both sides of he said.">
+      <mark data-role="grammar">“Forgive me, sweetheart,”</mark> he <mark data-role="content">said</mark>, <mark data-role="grammar">“I will never leave you alone again.”</mark>
+    </GrammarExample>
+    <GrammarExample note="A thought split the same way.">
+      <mark data-role="grammar">“No problem,”</mark> I <mark data-role="content">thought</mark>, <mark data-role="grammar">“there is only one person.”</mark>
+    </GrammarExample>
+    <p>
+      Ukrainian uses « » and a dash: <em>«Ходімо зі мною», — сказав він.</em> In English there is no dash: <em>“Come with me,” he said.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="said John, she asked quietly. Stories" id="said-john">
+    <p>
+      In stories, when the quote comes first and the speaker is a name or a noun, the verb often goes before the subject: <em>said John, asked Peter</em>. With a pronoun, keep normal order — <em>he said</em>, never <em>said he</em> in modern English.
+    </p>
+    <GrammarFormula label="Inverted" parts={['“quote,”', 'said / asked', 'name / noun phrase']} />
+    <GrammarExample note="The name comes after said.">
+      <mark data-role="grammar">“I was astonished when I saw them,”</mark> <mark data-role="content">said</mark> <mark data-role="grammar">John</mark>.
+    </GrammarExample>
+    <GrammarExample note="A longer noun phrase works too.">
+      <mark data-role="grammar">“Would you mind lending me your newspaper?”</mark> <mark data-role="content">said</mark> <mark data-role="grammar">a quiet voice</mark>.
+    </GrammarExample>
+    <p>
+      Writers also add an adverb after the reporting verb to show how the words were said.
+    </p>
+    <GrammarFormula label="+ adverb" parts={['“quote,”', 'subject', 'said / asked', 'adverb']} />
+    <GrammarExample note="curiously — how she asked.">
+      <mark data-role="grammar">“Come on, what’s wrong?”</mark> Bella <mark data-role="content">asked</mark> <mark data-role="grammar">curiously</mark>.
+    </GrammarExample>
+    <GrammarExample note="forcefully — with strength, insisting.">
+      <mark data-role="grammar">“Is that a deal?”</mark> her husband <mark data-role="content">said</mark> <mark data-role="grammar">forcefully</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The guidebook says that… Reporting a text" id="citation">
+    <p>
+      When you report what a written text says — an advert, a letter, a guidebook, a sign — use the present simple: <em>says</em>, <em>tells us</em>. The text still says it now, so the verb in the reported part stays in the present too.
+    </p>
+    <GrammarFormula label="Citation" parts={['text / it', 'says / tells us', '(that)', 'subject', 'present verb …']} />
+    <GrammarExample note="The guidebook still says this today.">
+      The guidebook <mark data-role="content">says</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">can get</mark> there by train from London.
+    </GrammarExample>
+    <GrammarExample note="A typical opening in a formal letter answering an advert.">
+      Your advertisement <mark data-role="content">says</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are looking</mark> for people to help in a summer camp.
+    </GrammarExample>
+    <GrammarExample note="it = the advert; that is left out.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">says</mark> <mark data-role="grammar">the hotel</mark> <mark data-role="grammar">has</mark> a swimming pool.
+    </GrammarExample>
+    {citationPoint && <GrammarUsagePointCard usagePoint={citationPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Tell</em> needs a person after it; <em>say</em> doesn't take one directly.
+    </p>
+    <GrammarContrast bad={['She said me that she was tired.', 'He told that he was busy.']} good={['She told me that she was tired.', 'He said that he was busy.']} />
+    <p>
+      A reported question is not a question: statement order, no <em>do / did</em>, no question mark.
+    </p>
+    <GrammarContrast bad={['She asked me where did I live.', 'I asked him where was the station?']} good={['She asked me where I lived.', 'I asked him where the station was.']} />
+    <p>
+      Don't drop <em>if / whether</em> in a reported yes/no question (Ukrainian <em>чи</em>).
+    </p>
+    <GrammarContrast bad={['He asked me do I like shopping.']} good={['He asked me if I liked shopping.']} />
+    <p>
+      After a past reporting verb, move the tense back when the situation is over — Ukrainian keeps the original tense, English usually doesn't.
+    </p>
+    <GrammarContrast bad={['Yesterday she said she is ill, so she stayed at home.']} good={['Yesterday she said she was ill, so she stayed at home.']} />
+    <p>
+      Requests and commands take <em>to</em>-infinitive, and the negative is <em>not to</em>.
+    </p>
+    <GrammarContrast bad={['He asked me that I help him.', 'She told me don’t go.']} good={['He asked me to help him.', 'She told me not to go.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'questions-wh',
+        name: 'wh- questions',
+        note: 'Where does she live? — the direct question; reported, it becomes where she lived.',
+      },
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'Are you free? — the direct question behind asked if I was free.',
+      },
+      {
+        slug: 'verbs-patterns-that-clauses',
+        name: 'that-clauses',
+        note: 'think, know, hope, explain + that — more verbs that take the same clause as said that.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'verbs + to / -ing',
+        note: 'want someone to, ask someone to — the verb + object + to-infinitive pattern behind reported requests.',
+      },
+      {
+        slug: 'modality-would',
+        name: 'would',
+        note: 'will → would: the future seen from the past, as in He said he would call.',
+      },
+    ]}
+  />
+</GrammarShell>
