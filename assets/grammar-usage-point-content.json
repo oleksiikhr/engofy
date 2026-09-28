@@ -1638,6 +1638,479 @@
       "explanation": "В офіційній чи літературній англійській many a / many an + іменник в однині означає «багато» з додатковим наголосом: many a time. Дієслово після цього в однині."
     }
   },
+  "354": {
+    "explanation": "Use will be + -ing to say that an action will be in progress at a certain time in the future: This time tomorrow I'll be flying to Rome. The action starts before that time and goes on after it.",
+    "examples": [
+      "At eight tomorrow I'll be working.",
+      "This time next week we'll be lying on the beach.",
+      "Come after four — I'll be studying before then."
+    ],
+    "uk": {
+      "explanation": "Will be + -ing показує, що в певний момент у майбутньому дія вже триватиме: This time tomorrow I'll be flying to Rome. Дія почнеться раніше за цей момент і триватиме після нього."
+    }
+  },
+  "358": {
+    "explanation": "Will you be + -ing is a polite way to ask about someone's plans. It asks what is already planned, so it doesn't sound like a request or pressure.",
+    "examples": [
+      "Will you be staying for dinner?",
+      "How will you be paying, by card or in cash?",
+      "Will you be needing a taxi tomorrow?"
+    ],
+    "uk": {
+      "explanation": "Will you be + -ing — ввічливий спосіб запитати про чиїсь плани. Питання стосується того, що вже заплановано, тому не звучить як прохання чи тиск."
+    }
+  },
+  "359": {
+    "explanation": "Put might or may in place of will when you are not sure: might be + -ing means the action is possibly in progress at a time in the future.",
+    "examples": [
+      "I might be working from home next week.",
+      "Your boss may be calling later tonight.",
+      "Don't ring at nine — we might be having dinner."
+    ],
+    "uk": {
+      "explanation": "Якщо ви не впевнені, поставте might або may замість will: might be + -ing означає, що дія, можливо, триватиме в певний час у майбутньому."
+    }
+  },
+  "363": {
+    "explanation": "Use be about to + verb for something that will happen very soon, in the next moment. Add just to make it even closer: I'm just about to leave. Don't use it with a future time like tomorrow.",
+    "examples": [
+      "Hurry up — the film is about to start.",
+      "I'm just about to go out.",
+      "We're about to have lunch. Join us!"
+    ],
+    "uk": {
+      "explanation": "Be about to + verb означає, що щось станеться дуже скоро, ось-ось. Just робить це ще ближчим: I'm just about to leave. Не вживайте цю конструкцію з часом у майбутньому, як-от tomorrow."
+    }
+  },
+  "364": {
+    "explanation": "Be to + verb can tell someone what they must do, like an order from a teacher, a boss or an official notice. The negative are not to means must not.",
+    "examples": [
+      "You are to wait here until I come back.",
+      "All students are to bring their passports.",
+      "Children are not to use the pool alone."
+    ],
+    "uk": {
+      "explanation": "Be to + verb може означати, що людина мусить щось зробити, — як наказ від учителя, керівника чи в офіційному оголошенні. Заперечення are not to означає «не можна»."
+    }
+  },
+  "365": {
+    "explanation": "Use be due to + verb for something planned or expected at a set time, like trains, meetings or deadlines. In formal news style, be to + verb says something is officially arranged: The President is to visit Kyiv.",
+    "examples": [
+      "The train is due to arrive at 6.15.",
+      "The meeting is due to start at ten.",
+      "The city is to build two new bridges."
+    ],
+    "uk": {
+      "explanation": "Be due to + verb вживаємо для того, що заплановано чи очікується на певний час: потяги, зустрічі, дедлайни. В офіційному стилі новин be to + verb означає, що щось офіційно домовлено: The President is to visit Kyiv."
+    }
+  },
+  "366": {
+    "explanation": "Use was / were going to + verb to look forward from a moment in the past: it was a plan, or it looked certain then. Often the plan didn't happen, so but comes next.",
+    "examples": [
+      "I was going to call you, but my phone died.",
+      "We were going to meet at six.",
+      "She didn't know what was going to happen."
+    ],
+    "uk": {
+      "explanation": "Was / were going to + verb дивиться вперед із моменту в минулому: тоді це був план або здавалося неминучим. Часто план не здійснився, тож далі йде but."
+    }
+  },
+  "367": {
+    "explanation": "Use would + verb to say what someone thought or knew about the future at a moment in the past. It often comes after thought, knew, was sure or hoped.",
+    "examples": [
+      "I thought it would rain.",
+      "She knew he would be late.",
+      "We hoped the film would be good."
+    ],
+    "uk": {
+      "explanation": "Would + verb показує, що хтось думав чи знав про майбутнє в певний момент у минулому. Часто стоїть після thought, knew, was sure або hoped."
+    }
+  },
+  "368": {
+    "explanation": "Use was / were about to + verb for something that was going to happen very soon after a moment in the past. Just makes it even closer. Often when + past simple follows for what interrupted it.",
+    "examples": [
+      "I was about to leave when the phone rang.",
+      "We were just about to eat.",
+      "She was about to answer, but he stopped her."
+    ],
+    "uk": {
+      "explanation": "Was / were about to + verb — дія мала статися ось-ось після моменту в минулому. Just робить її ще ближчою. Часто далі йде when + past simple — те, що цю дію перервало."
+    }
+  },
+  "369": {
+    "explanation": "Was / were on the point of + -ing means the same as was about to, but it is a little more formal and dramatic. It often describes a big decision that almost happened.",
+    "examples": [
+      "I was on the point of leaving when he called.",
+      "She was on the point of giving up.",
+      "They were on the point of selling the house."
+    ],
+    "uk": {
+      "explanation": "Was / were on the point of + -ing означає те саме, що was about to, але звучить трохи офіційніше й драматичніше. Часто описує важливе рішення, яке ледь не було ухвалено."
+    }
+  },
+  "370": {
+    "explanation": "Use was / were due to + verb for something that was scheduled or expected at a fixed time, seen from a moment in the past. It is common in formal writing and news.",
+    "examples": [
+      "My plane was due to leave at eight.",
+      "The meeting was due to start an hour ago.",
+      "The factory was due to be built by the lake."
+    ],
+    "uk": {
+      "explanation": "Was / were due to + verb — те, що було заплановано чи очікувалося на певний час, якщо дивитися з моменту в минулому. Поширене в офіційному письмі та новинах."
+    }
+  },
+  "373": {
+    "explanation": "Use will have been + -ing to look back from a point in the future and say how long an activity will have lasted by then: By June I'll have been working here for a year.",
+    "examples": [
+      "By June I'll have been working here for a year.",
+      "In May we'll have been living here for ten years.",
+      "When we reach Lviv, we'll have been travelling for twelve hours."
+    ],
+    "uk": {
+      "explanation": "Will have been + -ing дивиться назад із певного моменту в майбутньому й показує, скільки часу дія триватиме до того моменту: By June I'll have been working here for a year."
+    }
+  },
+  "374": {
+    "explanation": "Will have been + -ing can also be a confident guess about an activity that has been going on up to now, not about the future. It sounds a little more formal than must have been + -ing.",
+    "examples": [
+      "You'll have been wondering why I called you here.",
+      "Don't phone them — they'll have been driving all night.",
+      "She'll have been studying hard for this exam."
+    ],
+    "uk": {
+      "explanation": "Will have been + -ing може бути й упевненим припущенням про дію, що тривала досі, а не про майбутнє. Звучить трохи офіційніше, ніж must have been + -ing."
+    }
+  },
+  "377": {
+    "explanation": "Use will have + past participle to say that something will be finished, or not finished, by a certain point in the future. It often comes with by Friday, by then or by the time.",
+    "examples": [
+      "By Friday I will have finished the report.",
+      "The match will have finished by six.",
+      "I won't have done my exams by June."
+    ],
+    "uk": {
+      "explanation": "Will have + past participle показує, що щось буде (або не буде) завершено до певного моменту в майбутньому. Часто вживається з by Friday, by then або by the time."
+    }
+  },
+  "379": {
+    "explanation": "Will have + past participle can be a confident guess about something that has already happened, often with you: As you will have heard… It sounds more formal than must have.",
+    "examples": [
+      "As you will have heard, the meeting is cancelled.",
+      "Many of you will have noticed the new signs.",
+      "Don't worry — Anna will have booked the tickets."
+    ],
+    "uk": {
+      "explanation": "Will have + past participle може бути впевненим припущенням про те, що вже сталося, часто з you: As you will have heard… Звучить офіційніше, ніж must have."
+    }
+  },
+  "380": {
+    "explanation": "In formal letters and emails, will have + past participle makes a statement about what you have just done sound softer and more modest: I hope I will have answered your questions.",
+    "examples": [
+      "I hope I will have reassured you.",
+      "I trust this will have answered your questions.",
+      "I hope this letter will have explained the situation."
+    ],
+    "uk": {
+      "explanation": "В офіційних листах та імейлах will have + past participle робить твердження про щойно зроблене м'якшим і скромнішим: I hope I will have answered your questions."
+    }
+  },
+  "383": {
+    "explanation": "Use will or 'll + verb to say what you intend to do, especially when you decide it at the moment of speaking. Will is the same for every subject.",
+    "examples": [
+      "I'll call you tonight.",
+      "I will bring a cake.",
+      "We'll see you at the party."
+    ],
+    "uk": {
+      "explanation": "Will або 'll + verb показує, що ви маєте намір зробити, особливо коли вирішуєте це просто зараз. Will однакове для будь-якого підмета."
+    }
+  },
+  "387": {
+    "explanation": "Use Shall I + verb to offer to do something for someone. The answer is often Yes, please or No, thanks.",
+    "examples": [
+      "Shall I open the window?",
+      "Shall I carry your bag?",
+      "Shall I wait for you?"
+    ],
+    "uk": {
+      "explanation": "Shall I + verb — так пропонують щось зробити для іншої людини. Відповідь часто Yes, please або No, thanks."
+    }
+  },
+  "388": {
+    "explanation": "Use Will you + verb to ask about someone's plans. Put will before the subject: Will you come by train?",
+    "examples": [
+      "Will you come to the party?",
+      "What time will you arrive?",
+      "Will you be at home tonight?"
+    ],
+    "uk": {
+      "explanation": "Will you + verb — так питають про чиїсь плани. Will ставимо перед підметом: Will you come by train?"
+    }
+  },
+  "389": {
+    "explanation": "Use Will you + verb to ask someone to do something. It is direct, so use it with friends and family; with strangers, Could you…? is more polite.",
+    "examples": [
+      "Will you send it for me?",
+      "Will you close the door, please?",
+      "Will you help me with this?"
+    ],
+    "uk": {
+      "explanation": "Will you + verb — так просять когось щось зробити. Звучить прямо, тож підходить для друзів і родини; з незнайомими ввічливіше Could you…?"
+    }
+  },
+  "390": {
+    "explanation": "Use Shall we + verb to suggest doing something together. You can also ask Where shall we…? or What shall we…?",
+    "examples": [
+      "Shall we go to the cinema?",
+      "Where shall we meet?",
+      "Shall we eat out tonight?"
+    ],
+    "uk": {
+      "explanation": "Shall we + verb — так пропонують зробити щось разом. Можна також спитати Where shall we…? або What shall we…?"
+    }
+  },
+  "391": {
+    "explanation": "Use will + verb to say that someone is happy and ready to do something for you. The negative won't can mean refusing: He won't listen.",
+    "examples": [
+      "My mother will drive us there.",
+      "Don't worry, I'll help you.",
+      "He won't listen to me."
+    ],
+    "uk": {
+      "explanation": "Will + verb показує, що хтось охоче готовий щось для вас зробити. Заперечення won't може означати відмову: He won't listen."
+    }
+  },
+  "392": {
+    "explanation": "Use will + verb for plans that are fixed and official, often with a date or a time: schedules, programmes and announcements. It sounds neutral and a little formal.",
+    "examples": [
+      "The new shop will open on 1 June.",
+      "The work will start at 8 a.m.",
+      "The concert will finish at eleven."
+    ],
+    "uk": {
+      "explanation": "Will + verb вживаємо для твердих, офіційних планів, часто з датою чи часом: розклади, програми, оголошення. Звучить нейтрально й трохи офіційно."
+    }
+  },
+  "393": {
+    "explanation": "Use will or 'll + verb to say what you think will happen. Predictions often come with I think, I'm sure or probably: She will probably be late.",
+    "examples": [
+      "I'm sure you'll love the city.",
+      "I think it will be cold tomorrow.",
+      "They probably won't come."
+    ],
+    "uk": {
+      "explanation": "Will або 'll + verb показує, що, на вашу думку, станеться. Прогнози часто йдуть з I think, I'm sure або probably: She will probably be late."
+    }
+  },
+  "394": {
+    "explanation": "In statements, I shall and we shall mean the same as I will and we will: a plan or an intention. It is formal and mostly British; in everyday English people say I'll.",
+    "examples": [
+      "We shall have a meeting about this next week.",
+      "I shall finish the work tomorrow.",
+      "We shall not forget your help."
+    ],
+    "uk": {
+      "explanation": "У ствердженнях I shall і we shall означають те саме, що I will і we will: план або намір. Це офіційний, переважно британський варіант; у повсякденному мовленні кажуть I'll."
+    }
+  },
+  "396": {
+    "explanation": "Use shall with always or never for a long-term intention, something you plan to keep doing all your life: I shall never forget it.",
+    "examples": [
+      "I shall always remember this city.",
+      "I shall never lose hope.",
+      "We shall always be grateful to you."
+    ],
+    "uk": {
+      "explanation": "Shall з always або never виражає довготривалий намір — те, чого ви плануєте дотримуватися все життя: I shall never forget it."
+    }
+  },
+  "397": {
+    "explanation": "With I and we, shall can also make predictions, usually in formal English: We shall probably need more time.",
+    "examples": [
+      "I hope we shall meet in November.",
+      "We shall probably have several more years here.",
+      "I think we shall see big changes soon."
+    ],
+    "uk": {
+      "explanation": "З I та we shall може також виражати прогнози, зазвичай в офіційній англійській: We shall probably need more time."
+    }
+  },
+  "400": {
+    "explanation": "Use am / is / are going to + verb for something you have already decided to do. For a question, put am, is or are before the subject: Are you going to come?",
+    "examples": [
+      "I'm going to visit my aunt on Saturday.",
+      "What are you going to wear?",
+      "We are going to take a taxi."
+    ],
+    "uk": {
+      "explanation": "Am / is / are going to + verb вживаємо для того, що ви вже вирішили зробити. У питанні am, is або are ставимо перед підметом: Are you going to come?"
+    }
+  },
+  "401": {
+    "explanation": "Use be going to be + adjective to say how something will be: It's going to be fantastic. It is natural when something you see or know now points to it.",
+    "examples": [
+      "It's going to be a nice day.",
+      "The party is going to be great.",
+      "Take a coat — you're going to be cold."
+    ],
+    "uk": {
+      "explanation": "Be going to be + adjective показує, яким щось буде: It's going to be fantastic. Це природно, коли на це вказує те, що ви бачите чи знаєте зараз."
+    }
+  },
+  "405": {
+    "explanation": "Use was / were going to + verb to look forward from a moment in the past: what was still in the future then. It is common in stories.",
+    "examples": [
+      "She didn't know what was going to happen.",
+      "We knew it was going to be a hot day.",
+      "I felt it was going to rain."
+    ],
+    "uk": {
+      "explanation": "Was / were going to + verb дивиться вперед із моменту в минулому: що тоді ще мало статися. Поширене в розповідях."
+    }
+  },
+  "406": {
+    "explanation": "Use am / is / are not going to + verb to say what you have decided not to do, or about a plan that stops you doing something. Short forms are normal: I'm not, he isn't.",
+    "examples": [
+      "I'm not going to go to school tomorrow.",
+      "She isn't going to buy that car.",
+      "I'm not going to be able to come."
+    ],
+    "uk": {
+      "explanation": "Am / is / are not going to + verb показує, чого ви вирішили не робити, або план, через який ви чогось не зможете. Скорочення звичайні: I'm not, he isn't."
+    }
+  },
+  "407": {
+    "explanation": "Use was / were going to + verb for a plan you had in the past. Often the plan did not happen or changed, so but comes next: We were going to meet, but…",
+    "examples": [
+      "We were going to meet at 11.30, but he was late.",
+      "I was going to call you, but I forgot.",
+      "They were going to get married last year."
+    ],
+    "uk": {
+      "explanation": "Was / were going to + verb — план, який у вас був у минулому. Часто він не здійснився або змінився, тож далі йде but: We were going to meet, but…"
+    }
+  },
+  "408": {
+    "explanation": "Use be going to with any verb to predict what will happen, especially when you can see signs of it now. I think or I'm sure often comes before it.",
+    "examples": [
+      "Look at those clouds — it's going to rain.",
+      "I think you're going to like it.",
+      "We're really going to miss you."
+    ],
+    "uk": {
+      "explanation": "Be going to можна вживати з будь-яким дієсловом, щоб передбачити, що станеться, особливо коли ознаки видно вже зараз. Перед ним часто стоїть I think або I'm sure."
+    }
+  },
+  "409": {
+    "explanation": "When you report what someone said, am / is / are going to usually becomes was / were going to: He said he was going to come.",
+    "examples": [
+      "He told me he was going to arrive tomorrow.",
+      "She said she was going to call.",
+      "They said it was going to be difficult."
+    ],
+    "uk": {
+      "explanation": "Коли ви переказуєте чиїсь слова, am / is / are going to зазвичай стає was / were going to: He said he was going to come."
+    }
+  },
+  "412": {
+    "explanation": "Use am / is / are + -ing for something you have already arranged, like meeting friends or going somewhere. A time word shows it is the future: I'm meeting Tom at six.",
+    "examples": [
+      "I'm meeting Tom at six.",
+      "We're having dinner with Anna on Friday.",
+      "She's coming to my house tomorrow."
+    ],
+    "uk": {
+      "explanation": "Am / is / are + -ing вживаємо для того, про що ви вже домовилися: зустріч із друзями, поїздка кудись. Слово часу показує, що йдеться про майбутнє: I'm meeting Tom at six."
+    }
+  },
+  "413": {
+    "explanation": "To ask about someone's plans, put am, is or are before the subject and use the -ing form: What are you doing tonight?",
+    "examples": [
+      "What are you doing tonight?",
+      "Are you coming to the party?",
+      "Where are you going this summer?"
+    ],
+    "uk": {
+      "explanation": "Щоб запитати про чиїсь плани, поставте am, is або are перед підметом і вживіть форму -ing: What are you doing tonight?"
+    }
+  },
+  "414": {
+    "explanation": "The present continuous works with many action verbs for plans that are fixed and arranged, often with other people: booked, agreed, in the calendar.",
+    "examples": [
+      "She is joining the course on Friday.",
+      "We're throwing a party on Saturday.",
+      "I'm seeing the doctor at ten tomorrow."
+    ],
+    "uk": {
+      "explanation": "Present continuous вживається з багатьма дієсловами дії для планів, які вже визначено й домовлено, часто з іншими людьми: заброньовано, погоджено, записано в календар."
+    }
+  },
+  "415": {
+    "explanation": "You can ask about many kinds of future plans with am / is / are + subject + -ing: Why are you moving? When is the festival starting?",
+    "examples": [
+      "Why are you moving to a new area?",
+      "When is the festival starting?",
+      "Are you visiting your parents at Christmas?"
+    ],
+    "uk": {
+      "explanation": "Про різні майбутні плани можна питати за схемою am / is / are + subject + -ing: Why are you moving? When is the festival starting?"
+    }
+  },
+  "416": {
+    "explanation": "Almost any action verb can go in the present continuous for an arrangement, if the event is planned and fixed. It isn't used for things nobody can arrange, like the weather.",
+    "examples": [
+      "I'm attending a conference in Berlin next week.",
+      "We're expecting a child very soon.",
+      "The company is launching a new product in May."
+    ],
+    "uk": {
+      "explanation": "Для домовленостей у present continuous можна вжити майже будь-яке дієслово дії, якщо подію заплановано й визначено. Для того, що від людей не залежить, як-от погода, так не кажуть."
+    }
+  },
+  "417": {
+    "explanation": "Use am / is / are + subject + -ing with a wide range of verbs to ask about arrangements, including at work or in formal situations: What materials are you providing?",
+    "examples": [
+      "What kind of materials are you providing?",
+      "Who is presenting at the meeting tomorrow?",
+      "Are you planning to visit Japan then?"
+    ],
+    "uk": {
+      "explanation": "Am / is / are + subject + -ing із широким колом дієслів допомагає питати про домовленості, зокрема на роботі чи в офіційних ситуаціях: What materials are you providing?"
+    }
+  },
+  "419": {
+    "explanation": "After I hope, you can use the present simple to talk about the future: I hope you enjoy it. Will is also correct, but the present simple is common in letters and messages.",
+    "examples": [
+      "I hope you enjoy your holiday.",
+      "I hope you come to visit me soon.",
+      "I hope it doesn't rain tomorrow."
+    ],
+    "uk": {
+      "explanation": "Після I hope можна вжити present simple, говорячи про майбутнє: I hope you enjoy it. Will теж правильно, але present simple поширеніший у листах і повідомленнях."
+    }
+  },
+  "420": {
+    "explanation": "Use the present simple for events on a timetable or programme, like trains, films or classes: The train leaves at 7.15. The time is set by someone else.",
+    "examples": [
+      "My train leaves at 7.15 tomorrow.",
+      "The film starts at eight.",
+      "The class finishes at 7 pm."
+    ],
+    "uk": {
+      "explanation": "Present simple вживаємо для подій за розкладом чи програмою — потягів, фільмів, занять: The train leaves at 7.15. Час визначив хтось інший."
+    }
+  },
+  "423": {
+    "explanation": "After suggest, recommend, insist and propose + that, the next verb is about what should happen. British English often uses the present simple; formal and American English use the base form for every subject.",
+    "examples": [
+      "I recommend that we go to the theatre.",
+      "We suggest that the manager takes a closer look.",
+      "They insist that he be present."
+    ],
+    "uk": {
+      "explanation": "Після suggest, recommend, insist і propose + that наступне дієслово говорить про те, що має статися. У британській англійській тут часто present simple; в офіційному стилі та в американській — базова форма для будь-якого підмета."
+    }
+  },
   "659": {
     "explanation": "For emphasis, use such a + adjective + singular noun, and such + adjective + plural or uncountable noun: such a nice day, such good friends. Such goes before a, not after it.",
     "examples": [
@@ -1702,6 +2175,171 @@
     ],
     "uk": {
       "explanation": "What-речення може бути цілою іменниковою фразою на початку речення, далі is / was і те, на чому наголос: What companies care about is money. Це офіційніше, ніж The thing (that)…"
+    }
+  },
+  "703": {
+    "explanation": "Use the passive (be + past participle) with by to add who did something to a thing you are already talking about: I love my phone. It is made by Sony.",
+    "examples": [
+      "It was written by Leo Tolstoy.",
+      "This car was bought by my uncle.",
+      "The picture was painted by a child."
+    ],
+    "uk": {
+      "explanation": "Пасив (be + past participle) із by додає, хто виконав дію, до того, про що вже йдеться: I love my phone. It is made by Sony."
+    }
+  },
+  "706": {
+    "explanation": "A passive with by can go inside a relative clause (which, that, who) to add more information about a noun: clothes which are made by famous brands.",
+    "examples": [
+      "I like clothes which are made by famous brands.",
+      "We visited a castle that was built by the king.",
+      "He met a girl who was loved by everyone."
+    ],
+    "uk": {
+      "explanation": "Пасив із by може стояти в підрядному означальному реченні (which, that, who), щоб додати інформацію про іменник: clothes which are made by famous brands."
+    }
+  },
+  "713": {
+    "explanation": "The end of a sentence is the place for new or important information. So a passive with by puts the focus on who did the action: This piece was composed by Mozart.",
+    "examples": [
+      "This song was written by my brother.",
+      "My school was chosen by the TV company.",
+      "The film was directed by a young woman."
+    ],
+    "uk": {
+      "explanation": "Кінець речення — місце для нової чи важливої інформації. Тому пасив із by наголошує на тому, хто виконав дію: This piece was composed by Mozart."
+    }
+  },
+  "714": {
+    "explanation": "The present continuous passive, am / is / are being + past participle, can talk about a future arrangement. A time word shows it is the future: The seminar is being held next week.",
+    "examples": [
+      "The seminar is being held in Kyiv next week.",
+      "The new sofa is being delivered on Friday.",
+      "We are being visited by the director tomorrow."
+    ],
+    "uk": {
+      "explanation": "Present continuous passive (am / is / are being + past participle) може означати майбутню домовленість. Слово часу показує, що йдеться про майбутнє: The seminar is being held next week."
+    }
+  },
+  "728": {
+    "explanation": "In essays and reports, use a modal + be + past participle to sum up or give your opinion without saying I or we: Something must be done about it.",
+    "examples": [
+      "Something must be done about the traffic.",
+      "A lot could be improved next year.",
+      "It can be seen that cycling is cheaper."
+    ],
+    "uk": {
+      "explanation": "В есе та звітах modal + be + past participle допомагає підсумувати чи висловити думку, не кажучи I чи we: Something must be done about it."
+    }
+  },
+  "729": {
+    "explanation": "Use will be + past participle to talk about something that will be done in the future. It is typical in announcements and formal letters.",
+    "examples": [
+      "The cinema will be renovated next year.",
+      "You will be booked into the Palace Hotel.",
+      "Your details won't be sent to anyone."
+    ],
+    "uk": {
+      "explanation": "Will be + past participle вживаємо для того, що буде зроблено в майбутньому. Типово для оголошень і офіційних листів."
+    }
+  },
+  "730": {
+    "explanation": "Start a sentence with being + past participle to give background or a reason for the main part: Being born in Mexico, she knows it well. It can also be the subject: Being invited by your boss feels good.",
+    "examples": [
+      "Being born in Mexico, she knows the country well.",
+      "Being badly paid, many workers leave.",
+      "Being invited by your boss makes you feel noticed."
+    ],
+    "uk": {
+      "explanation": "Речення можна почати з being + past participle, щоб дати передісторію чи причину для головної частини: Being born in Mexico, she knows it well. Така група може бути й підметом: Being invited by your boss feels good."
+    }
+  },
+  "731": {
+    "explanation": "Use isn't / aren't being + past participle for something that is not happening now, often a situation that is not going well: Students are not being educated equally.",
+    "examples": [
+      "Students are not being educated equally.",
+      "The store isn't being promoted enough.",
+      "The problem isn't being taken seriously."
+    ],
+    "uk": {
+      "explanation": "Isn't / aren't being + past participle описує те, чого зараз не відбувається, часто ситуацію, яка йде не так: Students are not being educated equally."
+    }
+  },
+  "732": {
+    "explanation": "In formal and academic writing, use it + passive + that to sum up or evaluate without I or we: It can be concluded that… It is an empty subject; the real information is in the that clause.",
+    "examples": [
+      "It can be concluded that the plan works.",
+      "It is often argued that zoos protect animals.",
+      "It has been found that sales are falling."
+    ],
+    "uk": {
+      "explanation": "В офіційному та академічному письмі it + passive + that дає змогу підсумувати чи оцінити без I чи we: It can be concluded that… It тут формальний підмет, а головна інформація — у частині з that."
+    }
+  },
+  "733": {
+    "explanation": "Use having been + past participle to give background that happened before the main part. Not goes before having, and after a preposition use the same form: for having been invited.",
+    "examples": [
+      "Having been taught well, we knew what to do.",
+      "Not having been given clear orders, he worked alone.",
+      "She came in without having been asked."
+    ],
+    "uk": {
+      "explanation": "Having been + past participle дає передісторію, що сталася раніше за головну частину. Not стоїть перед having, а після прийменника вживаємо ту саму форму: for having been invited."
+    }
+  },
+  "738": {
+    "explanation": "Use have + object + past participle when someone else does a job for you: I had my car serviced. It can also describe something bad done to you that you didn't arrange: I had my bag stolen.",
+    "examples": [
+      "I had my car serviced last week.",
+      "I need to have my hair cut.",
+      "She had her phone stolen on the bus."
+    ],
+    "uk": {
+      "explanation": "Have + object + past participle вживаємо, коли роботу за вас робить хтось інший: I had my car serviced. Так само можна описати щось погане, що з вами сталося з чужої вини: I had my bag stolen."
+    }
+  },
+  "739": {
+    "explanation": "Use get + person + to-infinitive to say that you persuade someone to do something. It's often not easy: I finally got my son to tidy his room.",
+    "examples": [
+      "I got my brother to help me.",
+      "How can we get them to visit more often?",
+      "She got her boss to agree."
+    ],
+    "uk": {
+      "explanation": "Get + person + to-infinitive означає, що ви вмовляєте когось щось зробити. Часто це нелегко: I finally got my son to tidy his room."
+    }
+  },
+  "740": {
+    "explanation": "Use get + object + past participle when you arrange for someone else to do something, like have something done but more informal. It often suggests effort: it took hours to get it repaired.",
+    "examples": [
+      "I'm going to get my hair cut tomorrow.",
+      "It took hours to get the bus repaired.",
+      "She always gets things done."
+    ],
+    "uk": {
+      "explanation": "Get + object + past participle означає, що ви організовуєте, щоб щось зробив хтось інший, — як have something done, але розмовніше. Часто натякає на зусилля: it took hours to get it repaired."
+    }
+  },
+  "741": {
+    "explanation": "Use get + object + -ing to say that you make someone or something start doing something, and it continues: Your letter got me thinking.",
+    "examples": [
+      "Your question got me thinking.",
+      "This band really gets people dancing.",
+      "We couldn't get the engine going."
+    ],
+    "uk": {
+      "explanation": "Get + object + -ing означає, що ви змушуєте когось чи щось почати щось робити, і це триває: Your letter got me thinking."
+    }
+  },
+  "742": {
+    "explanation": "Use have + person + base verb (no to) to say that you ask or tell someone to do something, usually because it's their job. It sounds formal or businesslike: I'll have my assistant call you.",
+    "examples": [
+      "I'll have my assistant call you tomorrow.",
+      "The teacher had us read the text aloud.",
+      "We'll have the porter carry your bags."
+    ],
+    "uk": {
+      "explanation": "Have + person + base verb (без to) означає, що ви просите чи доручаєте комусь щось зробити, зазвичай тому, що це його робота. Звучить офіційно чи по-діловому: I'll have my assistant call you."
     }
   },
   "848": {
