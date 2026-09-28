@@ -679,12 +679,15 @@ past), perfect, will + modals (+ summaries), infinitive, modal perfect, two obje
 таблиця всіх форм, common mistakes). Розмітка: `be`-частина (is being / has been / could have been) —
 `grammar`, лише past participle — `content`, бо саме він незмінний у всіх часах.
 
-### [ ] 62. Past — past continuous (`past-past-continuous`) — рівень A2
+### [x] 62. Past — past continuous (`past-past-continuous`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `past-past-continuous`.
+12 EGP-рядків (743-754): 6 чистих FORM без карток, 6 USE вплетені за `egpIndex`. 8 секцій (form +
+neg/questions, in progress, background when/while, reason because, mid-position adverbs A2/B1/B2 разом,
+always — repeated B1 + undesired C2 в одній секції, I was wondering if, common mistakes). Розмітка як у
+future continuous: `was/were` — `grammar`, `-ing` дієслово — `content`.
 
 ### [ ] 63. Pronouns — demonstratives (`pronouns-demonstratives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
