@@ -821,12 +821,16 @@ formal I look forward vs friendly I'm looking forward). 8 секцій (три �
 з формальними відповідниками, порядок — займенник після прийменника на відміну від phrasal, stranded preposition C1, два об'єкти C2 —
 let us in on, common mistakes). Content — дієслово+частка+прийменник (розділені мітки, коли об'єкт стоїть посередині); об'єкти — `grammar`.
 
-### [ ] 76. Future — future in the past (`future-future-in-the-past`) — рівень B1
+### [x] 76. Future — future in the past (`future-future-in-the-past`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-in-the-past`.
+5 EGP-рядків (366-370), усі USE — 5 карток, кожна у своїй секції; generic-блок не рендериться. 8 секцій (ідея + таблиця
+now→past, was going to — плани/ознаки + нездійснений план з but, would після thought/knew + would vs was going to,
+заперечення/питання без EGP-рядка, was (just) about to + when-переривання, on the point of + -ing, was due to + пасив і
+відмежування від due to = because of, common mistakes). Content — маркер (going to/would/about to/on the point of/due to);
+was/were, підмет, дієслово — `grammar`.
 
 ### [ ] 77. Modality — ought (`modality-ought`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
