@@ -1,0 +1,580 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 10 USE and FORM/USE rows are inlined, matched by EGP index. The other
+// 22 rows (every tense in affirmative/negative, infinitives, modal perfects,
+// two-object verbs, perfect -ing complements) are plain FORM rows, written in
+// full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const byInfoPoint = point(703);
+const byRelativePoint = point(706);
+const byFocusPoint = point(713);
+const continuousFuturePoint = point(714);
+const summaryPoint = point(728);
+const willPoint = point(729);
+const beingPoint = point(730);
+const continuousNegativePoint = point(731);
+const itPoint = point(732);
+const havingBeenPoint = point(733);
+
+const inlineUsagePointIds = [
+  byInfoPoint,
+  byRelativePoint,
+  byFocusPoint,
+  continuousFuturePoint,
+  summaryPoint,
+  willPoint,
+  beingPoint,
+  continuousNegativePoint,
+  itPoint,
+  havingBeenPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The passive: be + past participle (it is made, it was built), adding who did it with by, the passive in every tense (is being built, has been stolen, had been serviced), with will and modal verbs (will be renovated, can be improved, could have been avoided), the passive infinitive (to be shown), verbs with two objects (I was given a ticket), it can be seen that… in formal writing, and -ing forms (being born…, having been taught…)"
+  handcrafted
+  sections={[
+    { id: 'form', title: 'It is made, it was built: the basic form', open: true },
+    { id: 'by', title: 'Written by Tolstoy: adding who did it', open: false },
+    { id: 'continuous', title: 'It is being filmed: in progress', open: false },
+    { id: 'perfect', title: 'It has been stolen: perfect tenses', open: false },
+    { id: 'modals', title: 'It will be renovated, it can be improved', open: false },
+    { id: 'infinitive', title: 'It is going to be shown: to be + past participle', open: false },
+    { id: 'modal-perfect', title: 'It could have been avoided: the past with modals', open: false },
+    { id: 'two-objects', title: 'I was given a ticket: verbs with two objects', open: false },
+    { id: 'formal-it', title: 'It can be seen that…: summaries in writing', open: false },
+    { id: 'ing', title: 'Being born in Mexico…: -ing forms', open: false },
+    { id: 'summary', title: 'All forms at a glance', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      In an active sentence, the subject does the action: <em>Sony makes this phone.</em> In a passive sentence, the subject is the thing that the action happens to: <em>This phone is made by Sony.</em> We use the passive when the thing is more important than the person who did it, or when we don't know or don't care who did it: <em>My car was stolen.</em> The form is always <em>be</em> + past participle — only <em>be</em> changes for the tense.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="It is made, it was built: the basic form" id="form" open>
+    <p>
+      For the present simple passive, use <em>am / is / are</em> + the past participle (<em>made, called, painted</em>). <em>Be</em> agrees with the subject: <em>it is</em>, <em>they are</em>.
+    </p>
+    <GrammarFormula label="Present simple" parts={['subject', 'am / is / are', 'past participle']} />
+    <GrammarExample note="Is + called: this is its name.">
+      <mark data-role="grammar">The group</mark> <mark data-role="grammar">is</mark> <mark data-role="content">called</mark> "Playmo".
+    </GrammarExample>
+    <GrammarExample note="Is + made: what it is made of, not who makes it.">
+      The T-shirt was expensive because <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">made</mark> of cotton.
+    </GrammarExample>
+    <GrammarExample note="Is + situated: where a place is.">
+      <mark data-role="grammar">Our office</mark> <mark data-role="grammar">is</mark> <mark data-role="content">situated</mark> near the airport.
+    </GrammarExample>
+    <GrammarExample note="Plural subject → are.">
+      <mark data-role="grammar">The walls</mark> <mark data-role="grammar">are</mark> <mark data-role="content">painted</mark> dark blue, and the floor is wood.
+    </GrammarExample>
+    <p>
+      For the past simple passive, use <em>was / were</em> + past participle.
+    </p>
+    <GrammarFormula label="Past simple" parts={['subject', 'was / were', 'past participle']} />
+    <GrammarExample note="Was + built: we don't need to say who built it.">
+      <mark data-role="grammar">The bridge</mark> <mark data-role="grammar">was</mark> <mark data-role="content">built</mark> in 1880.
+    </GrammarExample>
+    <GrammarExample note="Was + invited: the important person here is I.">
+      On Saturday morning <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">invited</mark> to a sports competition.
+    </GrammarExample>
+    <GrammarExample note="Was + stolen: we don't know who stole it.">
+      Next day, I heard that <mark data-role="grammar">my neighbour's car</mark> <mark data-role="grammar">was</mark> <mark data-role="content">stolen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Were + interviewed: plural subject.">
+      <mark data-role="grammar">Some pupils</mark> <mark data-role="grammar">were</mark> <mark data-role="content">interviewed</mark> about their work in the garden.
+    </GrammarExample>
+    <p>
+      For the negative, put <em>not</em> after <em>be</em>: <em>isn't / aren't</em>, <em>wasn't / weren't</em>. For a question, put <em>be</em> before the subject. There is no <em>do / did</em> in the passive.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "isn't / aren't / wasn't / weren't", 'past participle']} />
+    <GrammarExample note="Isn't + accepted: present simple negative.">
+      The story is about a girl who <mark data-role="grammar">is not</mark> <mark data-role="content">accepted</mark> in her class.
+    </GrammarExample>
+    <GrammarExample note="Aren't + printed: plural subject.">
+      We should replace the printer, because <mark data-role="grammar">the pages</mark> <mark data-role="grammar">aren't</mark> <mark data-role="content">printed</mark> properly.
+    </GrammarExample>
+    <GrammarExample note="Wasn't + reduced: past simple negative.">
+      <mark data-role="grammar">The ticket price</mark> <mark data-role="grammar">was not</mark> <mark data-role="content">reduced</mark>, even though I showed my student ID.
+    </GrammarExample>
+    <GrammarExample note="Wasn't + allowed: the doctor didn't allow me.">
+      My back hurt so badly that <mark data-role="grammar">I</mark> <mark data-role="grammar">wasn't</mark> <mark data-role="content">allowed</mark> to work for two weeks.
+    </GrammarExample>
+    <GrammarFormula label="Question" parts={['(question word)', 'am / is / are / was / were', 'subject', 'past participle?']} />
+    <GrammarExample note="Is + it + made: yes/no question.">
+      <mark data-role="grammar">Is</mark> <mark data-role="grammar">it</mark> <mark data-role="content">made</mark> in China?
+    </GrammarExample>
+    <GrammarExample note="When + was + it + built: question word first.">
+      <mark data-role="grammar">When</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">the castle</mark> <mark data-role="content">built</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Written by Tolstoy: adding who did it" id="by" open={false}>
+    <p>
+      Usually a passive sentence doesn't say who did the action. When you do want to say it, add <em>by</em> + the person or thing. This is common when you are talking about something already mentioned and want to add a new fact about it.
+    </p>
+    <GrammarFormula label="With by" parts={['subject', 'be', 'past participle', 'by + who / what']} />
+    <GrammarExample note="By + my uncle: who bought it.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">bought</mark> <mark data-role="grammar">by my uncle</mark>.
+    </GrammarExample>
+    <GrammarExample note="By + a company: who makes the phone I'm talking about.">
+      I love my phone. <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">made</mark> <mark data-role="grammar">by Sony</mark>.
+    </GrammarExample>
+    <GrammarExample note="By + the author: new information about the book.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">written</mark> <mark data-role="grammar">by an excellent author</mark>, Leo Tolstoy.
+    </GrammarExample>
+    {byInfoPoint && <GrammarUsagePointCard usagePoint={byInfoPoint} />}
+    <p>
+      The end of an English sentence is the place for new or important information. So the passive with <em>by</em> puts the focus on who did it.
+    </p>
+    <GrammarExample note="The focus is on the TV company, and then why they chose us.">
+      <mark data-role="grammar">My school</mark> <mark data-role="grammar">was</mark> <mark data-role="content">chosen</mark> <mark data-role="grammar">by the TV company</mark> because it is one of the newest in town.
+    </GrammarExample>
+    <GrammarExample note="Not Beethoven, not Bach — Mozart.">
+      <mark data-role="grammar">This piece</mark> <mark data-role="grammar">was</mark> <mark data-role="content">composed</mark> <mark data-role="grammar">by Mozart</mark> when he was only eight.
+    </GrammarExample>
+    {byFocusPoint && <GrammarUsagePointCard usagePoint={byFocusPoint} />}
+    <p>
+      A passive with <em>by</em> also fits inside a relative clause (<em>which / that / who</em>…), to add more information about a noun.
+    </p>
+    <GrammarFormula label="In a relative clause" parts={['noun', 'which / that / who', 'be', 'past participle', 'by + who / what']} />
+    <GrammarExample note="Which clothes? The ones made by famous brands.">
+      I like wearing clothes <mark data-role="grammar">which</mark> <mark data-role="grammar">are</mark> <mark data-role="content">manufactured</mark> <mark data-role="grammar">by famous brands</mark>.
+    </GrammarExample>
+    <GrammarExample note="Extra information about the mountain.">
+      Special roads were built to the top of the mountain, <mark data-role="grammar">which</mark> <mark data-role="grammar">was</mark> <mark data-role="content">surrounded</mark> <mark data-role="grammar">by houses</mark>.
+    </GrammarExample>
+    {byRelativePoint && <GrammarUsagePointCard usagePoint={byRelativePoint} />}
+    <p>
+      Use <em>by</em> for the person or thing that does the action, and <em>with</em> for the tool used to do it.
+    </p>
+    <GrammarExample note="By = who did it; with = what they used.">
+      <mark data-role="grammar">The picture</mark> <mark data-role="grammar">was</mark> <mark data-role="content">painted</mark> <mark data-role="grammar">by a child</mark> with a small brush.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It is being filmed: in progress" id="continuous" open={false}>
+    <p>
+      For an action happening now or around now, use the present continuous passive: <em>am / is / are being</em> + past participle.
+    </p>
+    <GrammarFormula label="Present continuous" parts={['subject', 'am / is / are being', 'past participle']} />
+    <GrammarExample note="Is being filmed: it's happening now.">
+      Did you know that <mark data-role="grammar">the next Harry Potter movie</mark> <mark data-role="grammar">is being</mark> <mark data-role="content">filmed</mark> in my school?
+    </GrammarExample>
+    <GrammarExample note="Is being held: the exhibition is on at the moment.">
+      Let's visit Tokyo, where <mark data-role="grammar">an interesting history exhibition</mark> <mark data-role="grammar">is being</mark> <mark data-role="content">held</mark>.
+    </GrammarExample>
+    <GrammarExample note="Are being submerged: a change in progress.">
+      The ice is melting and <mark data-role="grammar">miles of coast</mark> <mark data-role="grammar">are being</mark> <mark data-role="content">submerged</mark>.
+    </GrammarExample>
+    <p>
+      The negative is <em>isn't / aren't being</em> + past participle. It often describes a situation that is not going well right now.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "isn't / aren't being", 'past participle']} />
+    <GrammarExample note="Aren't being educated: a problem right now.">
+      <mark data-role="grammar">Students</mark> <mark data-role="grammar">are not being</mark> <mark data-role="content">educated</mark> equally.
+    </GrammarExample>
+    <GrammarExample note="Isn't being promoted: an opinion about the current situation.">
+      In my opinion, <mark data-role="grammar">the store</mark> <mark data-role="grammar">is not being</mark> <mark data-role="content">promoted</mark> enough.
+    </GrammarExample>
+    <GrammarExample note="Aren't being used: a condition about the present.">
+      Mobile phones are dangerous for children as long as <mark data-role="grammar">they</mark> <mark data-role="grammar">are not being</mark> <mark data-role="content">used</mark> in a sensible way.
+    </GrammarExample>
+    {continuousNegativePoint && <GrammarUsagePointCard usagePoint={continuousNegativePoint} />}
+    <p>
+      Like the active present continuous (<em>I'm meeting him tomorrow</em>), the passive form can talk about a future arrangement. A time word shows it is the future.
+    </p>
+    <GrammarExample note="Next week: it is already planned.">
+      <mark data-role="grammar">The seminar</mark> <mark data-role="grammar">is being</mark> <mark data-role="content">held</mark> in Chennai next week.
+    </GrammarExample>
+    <GrammarExample note="On Thursday: an arrangement, with by for who is coming.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are being</mark> <mark data-role="content">visited</mark> <mark data-role="grammar">by our Sales Director</mark> on Thursday morning.
+    </GrammarExample>
+    {continuousFuturePoint && <GrammarUsagePointCard usagePoint={continuousFuturePoint} />}
+    <p>
+      For an action in progress at a time in the past, use <em>was / were being</em> + past participle.
+    </p>
+    <GrammarFormula label="Past continuous" parts={['subject', 'was / were being', 'past participle']} />
+    <GrammarExample note="Was being redecorated: work in progress at that time.">
+      The restaurant was closed because <mark data-role="grammar">it</mark> <mark data-role="grammar">was being</mark> <mark data-role="content">redecorated</mark>.
+    </GrammarExample>
+    <GrammarExample note="While + was being repaired: what we did during that time.">
+      We could stay at your house while <mark data-role="grammar">the car</mark> <mark data-role="grammar">was being</mark> <mark data-role="content">repaired</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It has been stolen: perfect tenses" id="perfect" open={false}>
+    <p>
+      The present perfect passive is <em>has / have been</em> + past participle. It is common in reports and formal letters, when the result matters now.
+    </p>
+    <GrammarFormula label="Present perfect" parts={['subject', "has / have (not) been", 'past participle']} />
+    <GrammarExample note="Have been asked: that's why I'm writing now.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">have been</mark> <mark data-role="content">asked</mark> to write a report about the accident.
+    </GrammarExample>
+    <GrammarExample note="Have been made: everything is ready.">
+      Here is some information about the arrangements <mark data-role="grammar">which</mark> <mark data-role="grammar">have been</mark> <mark data-role="content">made</mark> for your group.
+    </GrammarExample>
+    <GrammarExample note="Hasn't been found yet: still missing.">
+      This happened two years ago, and <mark data-role="grammar">the necklace</mark> <mark data-role="grammar">hasn't been</mark> <mark data-role="content">found</mark> yet.
+    </GrammarExample>
+    <GrammarExample note="Has not been used for twenty years: up to now.">
+      <mark data-role="grammar">The old house</mark> <mark data-role="grammar">has not been</mark> <mark data-role="content">used</mark> for twenty years.
+    </GrammarExample>
+    <p>
+      The past perfect passive is <em>had been</em> + past participle: it happened before another moment in the past.
+    </p>
+    <GrammarFormula label="Past perfect" parts={['subject', "had (not) been", 'past participle']} />
+    <GrammarExample note="Had been serviced: before we started the trip.">
+      <mark data-role="grammar">The car</mark> <mark data-role="grammar">had been</mark> <mark data-role="content">serviced</mark> and everything seemed to be all right.
+    </GrammarExample>
+    <GrammarExample note="Had been set up: he understood it later.">
+      When Lime walked in, he realised <mark data-role="grammar">he</mark> <mark data-role="grammar">had been</mark> <mark data-role="content">set up</mark>.
+    </GrammarExample>
+    <GrammarExample note="Hadn't been stolen: the truth was different.">
+      In fact, <mark data-role="grammar">it</mark> <mark data-role="grammar">hadn't been</mark> <mark data-role="content">stolen</mark> — a man had borrowed it because his car broke down.
+    </GrammarExample>
+    <GrammarExample note="Had not been informed: the reason for the wait.">
+      We waited for ages because <mark data-role="grammar">we</mark> <mark data-role="grammar">had not been</mark> <mark data-role="content">informed</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It will be renovated, it can be improved" id="modals" open={false}>
+    <p>
+      For the future, use <em>will be</em> + past participle. It is typical in announcements and formal letters.
+    </p>
+    <GrammarFormula label="Future" parts={['subject', "will (not) be", 'past participle']} />
+    <GrammarExample note="Will be renovated: news about the future.">
+      I am very happy to hear that <mark data-role="grammar">the cinema</mark> <mark data-role="grammar">will be</mark> <mark data-role="content">renovated</mark> next year.
+    </GrammarExample>
+    <GrammarExample note="Will be booked: information for a visitor.">
+      Just to let you know, <mark data-role="grammar">you</mark> <mark data-role="grammar">will be</mark> <mark data-role="content">booked</mark> into the Palace Hotel.
+    </GrammarExample>
+    <GrammarExample note="Won't be sent: a promise about the future.">
+      <mark data-role="grammar">Your details</mark> <mark data-role="grammar">won't be</mark> <mark data-role="content">sent</mark> to anyone else.
+    </GrammarExample>
+    {willPoint && <GrammarUsagePointCard usagePoint={willPoint} />}
+    <p>
+      Every modal verb works the same way: <em>can / could / should / must / might…</em> + <em>be</em> + past participle.
+    </p>
+    <GrammarFormula label="Modal" parts={['subject', 'can / should / must / could… be', 'past participle']} />
+    <GrammarExample note="Should be hired: advice for the city.">
+      <mark data-role="grammar">Architects</mark> <mark data-role="grammar">should be</mark> <mark data-role="content">hired</mark> to design parks where people could have a picnic.
+    </GrammarExample>
+    <GrammarExample note="Could be improved: a polite suggestion.">
+      I had a marvellous time, but there are a few things <mark data-role="grammar">that</mark> <mark data-role="grammar">could be</mark> <mark data-role="content">improved</mark> for next year's festival.
+    </GrammarExample>
+    <GrammarExample note="Can't be opened: not possible.">
+      <mark data-role="grammar">This window</mark> <mark data-role="grammar">can't be</mark> <mark data-role="content">opened</mark> — it's broken.
+    </GrammarExample>
+    <p>
+      In essays and reports, modal passives are useful to sum up or give your opinion without saying <em>I</em> or <em>we</em> every time.
+    </p>
+    <GrammarExample note="Must be done: a strong opinion about a problem.">
+      Our streets are not very clean, and I think <mark data-role="grammar">something</mark> <mark data-role="grammar">must be</mark> <mark data-role="content">done</mark> about it.
+    </GrammarExample>
+    <GrammarExample note="Can be seen: a conclusion at the end of an essay.">
+      In conclusion, <mark data-role="grammar">it</mark> <mark data-role="grammar">can be</mark> <mark data-role="content">seen</mark> that the bicycle is better for people who live in a small town.
+    </GrammarExample>
+    {summaryPoint && <GrammarUsagePointCard usagePoint={summaryPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It is going to be shown: to be + past participle" id="infinitive" open={false}>
+    <p>
+      After words that are followed by <em>to</em> + verb (<em>going to, have to, need to, want to</em>), the passive is <em>to be</em> + past participle.
+    </p>
+    <GrammarFormula label="Passive infinitive" parts={['going to / have to / need to / want to', 'be', 'past participle']} />
+    <GrammarExample note="Going to be shown: a plan for Friday.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is going to be</mark> <mark data-role="content">shown</mark> this Friday.
+    </GrammarExample>
+    <GrammarExample note="Had to be signed: it was necessary.">
+      They printed a form <mark data-role="grammar">which</mark> <mark data-role="grammar">had to be</mark> <mark data-role="content">signed</mark> by my parents, because I'm not over eighteen.
+    </GrammarExample>
+    <GrammarExample note="Wants to be informed: he wants someone to inform him.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">wants to be</mark> <mark data-role="content">informed</mark> about sales by the end of November.
+    </GrammarExample>
+    <GrammarExample note="Needs to be cleaned: someone needs to clean it.">
+      <mark data-role="grammar">The kitchen</mark> <mark data-role="grammar">needs to be</mark> <mark data-role="content">cleaned</mark>.
+    </GrammarExample>
+    <p>
+      At a higher level, <em>to be</em> + past participle follows many more words: verbs (<em>be supposed to, expect to</em>), adjectives (<em>ready to</em>) and nouns (<em>an experience to</em>). The negative is <em>not to be</em> + past participle.
+    </p>
+    <GrammarExample note="Is supposed to be given: what the advert promised.">
+      According to your advertisement, <mark data-role="grammar">some training</mark> <mark data-role="grammar">is supposed to be</mark> <mark data-role="content">given</mark>.
+    </GrammarExample>
+    <GrammarExample note="Ready to be printed: after an adjective.">
+      <mark data-role="grammar">My essay</mark> was <mark data-role="grammar">ready to be</mark> <mark data-role="content">printed</mark>.
+    </GrammarExample>
+    <GrammarExample note="Not to be missed: after a noun — you really must do it.">
+      Sleeping in a tent is <mark data-role="grammar">an experience</mark> <mark data-role="grammar">not to be</mark> <mark data-role="content">missed</mark>!
+    </GrammarExample>
+    <GrammarExample note="Might not be built: a modal before be.">
+      <mark data-role="grammar">Future homes</mark> <mark data-role="grammar">might not be</mark> <mark data-role="content">built</mark> out of bricks at all!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It could have been avoided: the past with modals" id="modal-perfect" open={false}>
+    <p>
+      To talk about the past with a modal verb, use <em>modal + have been</em> + past participle. <em>Could have been</em> — it was possible; <em>might have been</em> — maybe it happened; <em>should have been</em> — it was the right thing, but it didn't happen.
+    </p>
+    <GrammarFormula label="Modal perfect" parts={['subject', 'could / might / should (not) have been', 'past participle']} />
+    <GrammarExample note="Could have been avoided: it was possible, but nobody did it.">
+      I think that <mark data-role="grammar">all these problems</mark> <mark data-role="grammar">could have been</mark> <mark data-role="content">avoided</mark>.
+    </GrammarExample>
+    <GrammarExample note="Might have been stolen: I'm not sure what happened.">
+      I don't remember how I lost it — <mark data-role="grammar">it</mark> <mark data-role="grammar">might have been</mark> <mark data-role="content">stolen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Should have been given: it didn't happen, and that was wrong.">
+      They all played well and have talent: <mark data-role="grammar">they</mark> <mark data-role="grammar">should have been</mark> <mark data-role="content">given</mark> a chance!
+    </GrammarExample>
+    <GrammarExample note="Should not have been used: it happened, but it was wrong.">
+      <mark data-role="grammar">This word</mark> <mark data-role="grammar">should not have been</mark> <mark data-role="content">used</mark> in this kind of article.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I was given a ticket: verbs with two objects" id="two-objects" open={false}>
+    <p>
+      Some verbs have two objects — a person and a thing: <em>They gave <strong>me</strong> <strong>a ticket</strong>.</em> Common ones are <em>give, offer, send, show, tell, sell, teach</em>. In the passive, the person usually becomes the subject.
+    </p>
+    <GrammarFormula label="Person as subject" parts={['person', 'be', 'given / offered / sent…', 'thing']} />
+    <GrammarExample note="Active: They gave me a ticket.">
+      So <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">given</mark> <mark data-role="grammar">a ticket</mark> for the train from Berlin to Munich.
+    </GrammarExample>
+    <GrammarExample note="Active: They gave us another chance.">
+      We were lucky, because <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">given</mark> <mark data-role="grammar">another chance</mark>.
+    </GrammarExample>
+    <GrammarExample note="Any tense: have been + offered.">
+      I was happy to hear that <mark data-role="grammar">you</mark> <mark data-role="grammar">have been</mark> <mark data-role="content">offered</mark> <mark data-role="grammar">two jobs</mark>.
+    </GrammarExample>
+    <GrammarExample note="Was + offered: the singer got the contract.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">was</mark> <mark data-role="content">offered</mark> <mark data-role="grammar">a contract</mark> to record a single.
+    </GrammarExample>
+    <p>
+      The thing can also be the subject. Then the person comes after <em>to</em> (with <em>give, offer, send, sell, show</em>) or <em>for</em> (with <em>buy, make, book</em>). This is less common and a little more formal.
+    </p>
+    <GrammarFormula label="Thing as subject" parts={['thing', 'be', 'given / offered / sent…', 'to + person', '(by + who)']} />
+    <GrammarExample note="Your name + was given + to me.">
+      <mark data-role="grammar">Your name</mark> <mark data-role="grammar">was</mark> <mark data-role="content">given</mark> <mark data-role="grammar">to me</mark> <mark data-role="grammar">by a member of your club</mark>, whom I met last week.
+    </GrammarExample>
+    <GrammarExample note="An interview + has been offered + to me.">
+      Unfortunately, <mark data-role="grammar">an interview</mark> <mark data-role="grammar">has been</mark> <mark data-role="content">offered</mark> <mark data-role="grammar">to me</mark> at the same time as your class.
+    </GrammarExample>
+    <GrammarExample note="The person can also be left out.">
+      If <mark data-role="grammar">more training</mark> <mark data-role="grammar">is</mark> <mark data-role="content">given</mark> <mark data-role="grammar">to staff</mark>, they will be more interested in their work.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It can be seen that…: summaries in writing" id="formal-it" open={false}>
+    <p>
+      In formal and academic writing, <em>it</em> + passive + <em>that…</em> is a way to sum up or evaluate without <em>I</em> or <em>we</em>. <em>It</em> here is an "empty" subject — the real information is in the <em>that</em> clause.
+    </p>
+    <GrammarFormula label="Empty it" parts={['it', 'can / must / has been', 'seen / said / concluded / found', 'that …']} />
+    <GrammarExample note="It can be concluded that…: the final paragraph of a report.">
+      To sum up, <mark data-role="grammar">it</mark> <mark data-role="grammar">can be</mark> <mark data-role="content">concluded</mark> <mark data-role="grammar">that</mark> the report covers the main points about the Spanish school system.
+    </GrammarExample>
+    <GrammarExample note="It has been found that…: a result of research.">
+      In addition, <mark data-role="grammar">it</mark> <mark data-role="grammar">has been</mark> <mark data-role="content">found</mark> <mark data-role="grammar">that</mark> some products were difficult to find.
+    </GrammarExample>
+    <GrammarExample note="It could be said that…: a careful general statement.">
+      Today, <mark data-role="grammar">it</mark> <mark data-role="grammar">could be</mark> <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> nearly everyone lives in a digital world.
+    </GrammarExample>
+    <GrammarExample note="It is often argued that…: reporting other people's opinion.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> often <mark data-role="content">argued</mark> <mark data-role="grammar">that</mark> zoos protect rare animals.
+    </GrammarExample>
+    {itPoint && <GrammarUsagePointCard usagePoint={itPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Being born in Mexico…: -ing forms" id="ing" open={false}>
+    <p>
+      <em>Being</em> + past participle can start a sentence to give background or a reason for the main part. The subject of both parts is the same person.
+    </p>
+    <GrammarFormula label="Being + past participle" parts={['being', 'past participle', '…, main clause']} />
+    <GrammarExample note="= Because I was born and raised in Mexico, …">
+      <mark data-role="grammar">Being</mark> <mark data-role="content">born</mark> and <mark data-role="content">raised</mark> in Mexico, I believe she is the country's best representative.
+    </GrammarExample>
+    <GrammarExample note="= Because they are overworked and badly paid, …">
+      <mark data-role="grammar">Being</mark> <mark data-role="content">overworked</mark> and badly <mark data-role="content">paid</mark>, many women have to choose between their dreams and reality.
+    </GrammarExample>
+    <GrammarExample note="As the subject of the sentence: being invited makes you feel…">
+      <mark data-role="grammar">Being</mark> <mark data-role="content">invited</mark> <mark data-role="grammar">by your boss</mark> for an unexpected lunch makes you feel noticed.
+    </GrammarExample>
+    {beingPoint && <GrammarUsagePointCard usagePoint={beingPoint} />}
+    <p>
+      <em>Having been</em> + past participle shows that the background happened earlier. <em>Not</em> goes before <em>having</em>.
+    </p>
+    <GrammarFormula label="Having been + past participle" parts={['(not) having been', 'past participle', '…, main clause']} />
+    <GrammarExample note="= Because I was educated the hard way (earlier in my life), …">
+      <mark data-role="grammar">Having been</mark> <mark data-role="content">educated</mark> the hard way, I would insist on the best possible school education for them.
+    </GrammarExample>
+    <GrammarExample note="= Because we had been taught right from wrong, …">
+      <mark data-role="grammar">Having been</mark> <mark data-role="content">taught</mark> right from wrong, we had an idea about everything.
+    </GrammarExample>
+    <GrammarExample note="= Because he hadn't been given orders, …">
+      <mark data-role="grammar">Not having been</mark> <mark data-role="content">given</mark> clear orders, he decided to work on his own.
+    </GrammarExample>
+    {havingBeenPoint && <GrammarUsagePointCard usagePoint={havingBeenPoint} />}
+    <p>
+      After a preposition (<em>for, without, of</em>…), use the same <em>having been</em> + past participle.
+    </p>
+    <GrammarFormula label="After a preposition" parts={['for / without / of…', 'having been', 'past participle']} />
+    <GrammarExample note="For + having been invited: the reason for the present.">
+      Guests bring expensive presents as a thank-you <mark data-role="grammar">for having been</mark> <mark data-role="content">invited</mark>.
+    </GrammarExample>
+    <GrammarExample note="Without + having been asked: nobody asked her.">
+      She came into the room <mark data-role="grammar">without having been</mark> <mark data-role="content">asked</mark> to.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="All forms at a glance" id="summary" open={false}>
+    <p>
+      The past participle never changes. Only <em>be</em> shows the tense — in exactly the same form as in active sentences.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>Passive</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Present simple</td>
+          <td>It is made in China.</td>
+        </tr>
+        <tr>
+          <td>Past simple</td>
+          <td>It was built in 1880.</td>
+        </tr>
+        <tr>
+          <td>Present continuous</td>
+          <td>It is being repaired.</td>
+        </tr>
+        <tr>
+          <td>Past continuous</td>
+          <td>It was being repaired.</td>
+        </tr>
+        <tr>
+          <td>Present perfect</td>
+          <td>It has been repaired.</td>
+        </tr>
+        <tr>
+          <td>Past perfect</td>
+          <td>It had been repaired.</td>
+        </tr>
+        <tr>
+          <td>Future with will</td>
+          <td>It will be repaired.</td>
+        </tr>
+        <tr>
+          <td>Be going to</td>
+          <td>It is going to be repaired.</td>
+        </tr>
+        <tr>
+          <td>Modal</td>
+          <td>It can / must / should be repaired.</td>
+        </tr>
+        <tr>
+          <td>Modal perfect</td>
+          <td>It could / should have been repaired.</td>
+        </tr>
+        <tr>
+          <td>-ing form</td>
+          <td>Being repaired… / Having been repaired…</td>
+        </tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      The passive always needs <em>be</em>. Without it, the sentence looks like an active past simple.
+    </p>
+    <GrammarContrast
+      bad={['The bridge built in 1880.', 'My bike stolen last night.', 'The seminar being held next week.']}
+      good={['The bridge was built in 1880.', 'My bike was stolen last night.', 'The seminar is being held next week.']}
+    />
+    <p>
+      After <em>be</em>, use the past participle (third form), not the past simple. With irregular verbs they are often different.
+    </p>
+    <GrammarContrast
+      bad={['The book was wrote by Tolstoy.', 'My car was stole.', 'We were gave another chance.']}
+      good={['The book was written by Tolstoy.', 'My car was stolen.', 'We were given another chance.']}
+    />
+    <p>
+      Verbs with no object (<em>happen, die, arrive, appear</em>) can't be passive. And <em>born</em> is always passive: <em>I was born</em>, never <em>I born</em> or <em>I was borned</em>.
+    </p>
+    <GrammarContrast
+      bad={['The accident was happened on Monday.', 'He was died in 1990.', 'I born in Kyiv.']}
+      good={['The accident happened on Monday.', 'He died in 1990.', 'I was born in Kyiv.']}
+    />
+    <p>
+      <em>Be</em> agrees with the subject of the passive sentence, and there is no <em>do / did</em> in passive questions or negatives.
+    </p>
+    <GrammarContrast
+      bad={['The walls is painted blue.', 'Did the house build in 1990?', "The rooms don't cleaned every day."]}
+      good={['The walls are painted blue.', 'Was the house built in 1990?', "The rooms aren't cleaned every day."]}
+    />
+    <p>
+      Use <em>by</em> for the person who did it, and <em>with</em> for the tool.
+    </p>
+    <GrammarContrast
+      bad={['The letter was written with my grandmother.']}
+      good={['The letter was written by my grandmother with an old pen.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'passives-get-and-have',
+        name: 'get and have',
+        note: 'My phone got stolen / I had my hair cut — informal passive and arranging for someone to do something.',
+      },
+      {
+        slug: 'verbs-types',
+        name: 'verb types',
+        note: 'Only verbs with an object (transitive verbs) can be passive: happen, arrive, die cannot.',
+      },
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'Built, wrote, stole — the past simple; the passive needs the past participle: built, written, stolen.',
+      },
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect',
+        note: 'It has been found — the same have + past participle idea as the active I have found it.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'clothes which are made by… — a passive inside a which / that / who clause.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'I have been asked to… / It is said that… — the passive is common when reporting.',
+      },
+    ]}
+  />
+</GrammarShell>
