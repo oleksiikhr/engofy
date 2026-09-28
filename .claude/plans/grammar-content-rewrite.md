@@ -446,12 +446,15 @@ Slug: `verbs-types`. Деталі виконання — див. `archive/gramma
 модифікатори компаратива, згруповані за розміром різниці (much/a lot/even; a bit/slightly/not that
 much; bigger and bigger; no/not any), а не за рівнем.
 
-### [ ] 40. Clauses — comparatives (`clauses-comparatives`) — рівень A2
+### [x] 40. Clauses — comparatives (`clauses-comparatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `clauses-comparatives`.
+20 EGP-рядків (149-168): 14 чистих FORM без карток; 6 FORM/USE (151/152/153/154/161/167) вплетені
+за `egpIndex`. Збірна конструкція — 8 секцій згруповані за словом-зв'язкою (like, than + clause,
+as … as, the same as, rather than, superlative + clause, as if, too/enough/so … that), content-мітка —
+саме це слово, решта слотів — grammar (компаратив теж grammar, бо тема сторінки — зв'язка, не форма).
 
 ### [ ] 41. Clauses — conditional (`clauses-conditional`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
