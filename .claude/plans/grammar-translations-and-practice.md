@@ -101,10 +101,10 @@ not shift".
 
 Не входить: переклад UI-оболонки, селектор рідної мови, `hreflang`/мовні префікси URL.
 
-### [ ] 4. Контент: CLAUSES (74)
+### [x] 4. Контент: CLAUSES (74)
 - Branch: `grammar-translations-and-practice-04-clauses`
-- Base: `grammar-translations-and-practice-03-native-lang`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/161
 
 `clauses-*` — 8 конструкцій.
 
