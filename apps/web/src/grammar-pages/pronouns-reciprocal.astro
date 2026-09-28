@@ -1,0 +1,244 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 4 EGP rows (1004-1007): 1004 (each other), 1006 and 1007 (each … the
+// other(s)) are pure FORM rows without cards; only 1005 (one another, formal)
+// is a FORM/USE row, inlined and matched by EGP index.
+const { con, user } = Astro.props;
+
+const oneAnotherPoint = con.usagePoints.find((p) => p.egpIndex === 1005);
+
+const inlineUsagePointIds = [oneAnotherPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Each other and one another: we see each other every day, they get on well with each other, each other's names, meet one another, and each of them admires the other."
+  handcrafted
+  sections={[
+    { id: 'meaning', title: 'Each other: both ways', open: true },
+    { id: 'after-verb', title: 'We see each other: after a verb', open: false },
+    { id: 'after-preposition', title: 'Talk to each other: after a preposition', open: false },
+    { id: 'possessive', title: "Each other's names", open: false },
+    { id: 'one-another', title: 'One another: more formal', open: false },
+    { id: 'each-the-other', title: 'Each … the other(s)', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Each other</em> and <em>one another</em> show that two or more people do the same thing to each other: <em>Anna and Tom love each other</em> = Anna loves Tom, and Tom loves Anna. In Ukrainian it's <em>один одного, одне одному, один з одним</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Each other: both ways" id="meaning" open>
+    <p>
+      The action goes in both directions between the people in the subject. So the subject is always plural: <em>we, you, they, Anna and Tom, the players</em>.
+    </p>
+    <GrammarFormula label="Both ways" parts={['subject (two or more)', 'verb', 'each other']} />
+    <GrammarExample note="Tom helps Anna, and Anna helps Tom.">
+      <mark data-role="grammar">Anna and Tom</mark> always <mark data-role="grammar">help</mark> <mark data-role="content">each other</mark>.
+    </GrammarExample>
+    <p>
+      Compare it with a reflexive pronoun. <em>Themselves</em> means each person does the action to <em>himself or herself</em>; <em>each other</em> means each person does it to the <em>other</em> person.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th></th><th>Sentence</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>Reflexive</th><td>They blamed <code>themselves</code>.</td><td>Anna blamed Anna, Tom blamed Tom.</td></tr>
+        <tr><th>Reciprocal</th><td>They blamed <code>each other</code>.</td><td>Anna blamed Tom, Tom blamed Anna.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      <em>Each other</em> is always two words, and it never changes: no plural, no <em>each others</em> (except the possessive <em>each other's</em>, below).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="We see each other: after a verb" id="after-verb">
+    <p>
+      Put <em>each other</em> straight after the verb, as its object — in the same place as <em>him</em> or <em>them</em>.
+    </p>
+    <GrammarFormula label="Object" parts={['subject (two or more)', 'verb', 'each other']} />
+    <GrammarExample note="I see her, and she sees me.">
+      We go to the same school, so <mark data-role="grammar">we</mark> <mark data-role="grammar">see</mark> <mark data-role="content">each other</mark> every day.
+    </GrammarExample>
+    <GrammarExample note="Every student introduced a partner to the class.">
+      First, <mark data-role="grammar">we</mark> <mark data-role="grammar">had to introduce</mark> <mark data-role="content">each other</mark> by saying where we come from.
+    </GrammarExample>
+    <GrammarExample note="Present perfect with for: how long they have known each other.">
+      <mark data-role="grammar">My best friend and I</mark> <mark data-role="grammar">have known</mark> <mark data-role="content">each other</mark> for ten years.
+    </GrammarExample>
+    <GrammarExample note="Is he lying to her, or is she lying to him? Both.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">don't trust</mark> <mark data-role="content">each other</mark> any more.
+    </GrammarExample>
+    <p>
+      Verbs that often take <em>each other</em>: <em>see, know, love, hate, help, understand, trust, meet, miss, call, hug, kiss, visit, support, respect</em>.
+    </p>
+    <p>
+      With <em>meet, kiss, hug, fight, marry</em> you can often leave <em>each other</em> out — the meaning is already "both ways": <em>We met in 2019</em>, <em>They kissed</em>, <em>They got married</em>. Add it only if you want to stress it.
+    </p>
+    <p>
+      Unlike Ukrainian, English puts no preposition before <em>each other</em> after verbs like <em>help, call, phone, meet, love</em>: <em>допомагають одне одному</em> → <em>help each other</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Talk to each other: after a preposition" id="after-preposition">
+    <p>
+      Many verbs and adjectives need a preposition before their object. The preposition goes <em>before the whole</em> <em>each other</em> — English doesn't split it the way Ukrainian does (<em>один з одним</em>).
+    </p>
+    <GrammarFormula label="After a preposition" parts={['subject (two or more)', 'verb / adjective', 'to / with / about / at…', 'each other']} />
+    <GrammarExample note="Get on (well) with someone = be friendly with them.">
+      He said the coach is really nice and that <mark data-role="grammar">the players</mark> <mark data-role="grammar">get on</mark> well <mark data-role="grammar">with</mark> <mark data-role="content">each other</mark>.
+    </GrammarExample>
+    <GrammarExample note="Talk to each other — never talk each other.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">didn't use to talk</mark> <mark data-role="grammar">to</mark> <mark data-role="content">each other</mark>, but one day we started to talk.
+    </GrammarExample>
+    <GrammarExample note="Looked at = eyes on the other person, both at the same time.">
+      <mark data-role="grammar">The two girls</mark> <mark data-role="grammar">looked</mark> <mark data-role="grammar">at</mark> <mark data-role="content">each other</mark> and started laughing.
+    </GrammarExample>
+    <GrammarExample note="An adjective + preposition works the same way.">
+      <mark data-role="grammar">Our cats</mark> <mark data-role="grammar">are</mark> very <mark data-role="grammar">jealous</mark> <mark data-role="grammar">of</mark> <mark data-role="content">each other</mark>.
+    </GrammarExample>
+    <p>
+      Common phrases: <em>talk to, write to, listen to, look at, laugh at, agree with, argue with, get on with, fall in love with, depend on, care about, be kind to, be different from each other</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Each other's names" id="possessive">
+    <p>
+      To say that each person has something of the other's, add <em>'s</em>: <em>each other's</em>. The apostrophe comes before the <em>s</em>, as with any singular noun.
+    </p>
+    <GrammarFormula label="Possessive" parts={['subject (two or more)', 'verb', "each other's", 'noun']} />
+    <GrammarExample note="I know her name, and she knows mine.">
+      After an hour <mark data-role="grammar">we</mark> still <mark data-role="grammar">didn't know</mark> <mark data-role="content">each other's</mark> <mark data-role="grammar">names</mark>.
+    </GrammarExample>
+    <GrammarExample note="Each wears the clothes of the other.">
+      <mark data-role="grammar">My sister and I</mark> often <mark data-role="grammar">wear</mark> <mark data-role="content">each other's</mark> <mark data-role="grammar">clothes</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two families, each visiting the other's home.">
+      <mark data-role="grammar">Our families</mark> <mark data-role="grammar">spend</mark> the holidays at <mark data-role="content">each other's</mark> <mark data-role="grammar">houses</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="One another: more formal" id="one-another">
+    <p>
+      <em>One another</em> means exactly the same as <em>each other</em> and goes in the same places — after a verb or a preposition. It sounds more formal, so you meet it more in writing than in conversation.
+    </p>
+    <GrammarFormula label="Formal" parts={['subject (two or more)', 'verb (+ preposition)', 'one another']} />
+    <GrammarExample note="A proposal: a formal written text.">
+      I would like to create a studying space where <mark data-role="grammar">students, staff and visitors</mark> <mark data-role="grammar">can meet</mark> <mark data-role="content">one another</mark>.
+    </GrammarExample>
+    <GrammarExample note="A letter: since we last saw each other.">
+      Since <mark data-role="grammar">we</mark> last <mark data-role="grammar">saw</mark> <mark data-role="content">one another</mark>, many things have happened.
+    </GrammarExample>
+    <GrammarExample note="Say to one another = the dogs talking between them.">
+      Perhaps it will help me understand what <mark data-role="grammar">my two dogs</mark> <mark data-role="grammar">say</mark> <mark data-role="grammar">to</mark> <mark data-role="content">one another</mark>.
+    </GrammarExample>
+    <GrammarExample note="The possessive is one another's.">
+      <mark data-role="grammar">Members of the team</mark> should <mark data-role="grammar">respect</mark> <mark data-role="content">one another's</mark> <mark data-role="grammar">opinions</mark>.
+    </GrammarExample>
+    {oneAnotherPoint && <GrammarUsagePointCard usagePoint={oneAnotherPoint} />}
+    <p>
+      Some older grammar books say <em>each other</em> is for two people and <em>one another</em> for more than two. Modern English doesn't follow this rule — the dogs example above is about two. Choose by style: <em>each other</em> is the safe everyday choice.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Each … the other(s)" id="each-the-other">
+    <p>
+      In formal, advanced writing you can split the idea into two parts: <em>each</em> (+ noun, or <em>each of them</em>) as the subject, and <em>the other</em> (one more person or thing) or <em>the others</em> (all the rest) later in the sentence. The verb after <em>each</em> is singular.
+    </p>
+    <GrammarFormula label="After a preposition" parts={['Each (+ noun / of them)', 'singular verb …', 'to / from / with', 'the other / the others']} />
+    <GrammarExample note="Two people: each can help the other one.">
+      <mark data-role="content">Each person</mark> <mark data-role="grammar">could be</mark> a help <mark data-role="grammar">to</mark> <mark data-role="content">the other</mark>.
+    </GrammarExample>
+    <GrammarExample note="Many words: each one is different from all the rest.">
+      If you study them carefully, you realise that <mark data-role="content">each of them</mark> <mark data-role="grammar">differs</mark> <mark data-role="grammar">from</mark> <mark data-role="content">the others</mark> in tiny details.
+    </GrammarExample>
+    <GrammarExample note="Each individual = every person, taken one by one.">
+      Generally speaking, <mark data-role="content">each individual</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">different</mark> <mark data-role="grammar">from</mark> <mark data-role="content">the others</mark>.
+    </GrammarExample>
+    <p>
+      <em>The other(s)</em> can also be the object of the verb, or take <em>'s</em> before a noun.
+    </p>
+    <GrammarFormula label="As object" parts={['Each (+ noun / of them)', 'singular verb', "the other / the others / the other's + noun"]} />
+    <GrammarExample note="The other's intelligence = the intelligence of the other person.">
+      <mark data-role="content">Each of them</mark> <mark data-role="grammar">admires</mark> <mark data-role="content">the other's</mark> intelligence.
+    </GrammarExample>
+    <GrammarExample note="A family: every member helps and loves all the rest.">
+      My parents taught me the importance of family, <mark data-role="content">each one</mark> <mark data-role="grammar">helping</mark> <mark data-role="content">the others</mark>, <mark data-role="content">each one</mark> <mark data-role="grammar">loving</mark> <mark data-role="content">the others</mark>.
+    </GrammarExample>
+    <p>
+      The meaning is close to <em>each other</em> (<em>They admire each other's intelligence</em>), but <em>each … the other</em> looks at the people one at a time and sounds more literary.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Two people doing something to each other is <em>each other</em>, not a reflexive pronoun.
+    </p>
+    <GrammarContrast bad={['Anna and Tom love themselves.', 'We know ourselves since school.']} good={['Anna and Tom love each other.', "We've known each other since school."]} />
+    <p>
+      Don't add a preposition that the verb doesn't take — and don't drop one it needs.
+    </p>
+    <GrammarContrast bad={['They always help to each other.', 'We talked each other for hours.', 'They listened each other.']} good={['They always help each other.', 'We talked to each other for hours.', 'They listened to each other.']} />
+    <p>
+      The preposition goes before the whole phrase, not in the middle.
+    </p>
+    <GrammarContrast bad={['They argue each with other.']} good={['They argue with each other.']} />
+    <p>
+      The possessive is <em>each other's</em>, and the plain form has no <em>-s</em>.
+    </p>
+    <GrammarContrast bad={['We borrow each others books.', "They know each others' families."]} good={["We borrow each other's books.", "They know each other's families."]} />
+    <p>
+      <em>Each other</em> can't be the subject. Make the people the subject instead.
+    </p>
+    <GrammarContrast bad={['Each other helped with the homework.']} good={['We helped each other with the homework.']} />
+    <p>
+      After <em>each</em> as the subject, the verb is singular.
+    </p>
+    <GrammarContrast bad={['Each of them admire the other.']} good={['Each of them admires the other.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-reflexive',
+        name: 'reflexive pronouns',
+        note: 'myself, themselves — the same person does the action to himself or herself.',
+      },
+      {
+        slug: 'pronouns-quantity',
+        name: 'quantity pronouns',
+        note: 'each, both, all — each of them on its own, as in each … the other.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'him, her, them — the object position that each other also takes.',
+      },
+      {
+        slug: 'verbs-prepositional',
+        name: 'prepositional verbs',
+        note: 'talk to, look at, agree with — the preposition goes before each other.',
+      },
+    ]}
+  />
+</GrammarShell>
