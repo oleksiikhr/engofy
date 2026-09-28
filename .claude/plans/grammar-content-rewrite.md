@@ -811,12 +811,15 @@ Content — головне дієслово; that, слухач, підмет і
 відмежування від prepositional verbs — look after it, everyday vs formal — put off/postpone, common mistakes). Content —
 дієслово і частка (одна мітка поруч, дві — коли їх розділяє об'єкт); об'єкт — `grammar`.
 
-### [ ] 75. Verbs — phrasal-prepositional (`verbs-phrasal-prepositional`) — рівень A2
+### [x] 75. Verbs — phrasal-prepositional (`verbs-phrasal-prepositional`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `verbs-phrasal-prepositional`.
+5 EGP-рядків (1043-1047); єдина картка — 1043 `look forward to` (FORM/USE) у власній секції (to — прийменник → -ing/іменник,
+formal I look forward vs friendly I'm looking forward). 8 секцій (три слова = одне дієслово, look forward to, B1 таблиця, B2 таблиця
+з формальними відповідниками, порядок — займенник після прийменника на відміну від phrasal, stranded preposition C1, два об'єкти C2 —
+let us in on, common mistakes). Content — дієслово+частка+прийменник (розділені мітки, коли об'єкт стоїть посередині); об'єкти — `grammar`.
 
 ### [ ] 76. Future — future in the past (`future-future-in-the-past`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
