@@ -1,0 +1,314 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 12 EGP rows (970-981): 8 pure FORM rows without cards (one, ones,
+// premodified one / ones, which one, this / that one, these / those ones,
+// none); the 4 FORM/USE rows — 972 (the one + complement), 977 (the ones +
+// complement), 978 (new ones, general reference), 981 (The one(s) that…,
+// focus) — are inlined, matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const theOnePoint = point(972);
+const theOnesPoint = point(977);
+const generalOnesPoint = point(978);
+const focusPoint = point(981);
+
+const inlineUsagePointIds = [theOnePoint, theOnesPoint, generalOnesPoint, focusPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="One and ones instead of repeating a noun: I need a new one, the blue one, small ones, the one with silver gates, the ones we ordered, which one, this one, The one that impressed me… — and none as a pronoun."
+  handcrafted
+  sections={[
+    { id: 'one', title: 'A new one, the blue one', open: true },
+    { id: 'ones', title: 'New ones, the old ones', open: false },
+    { id: 'the-one-with', title: 'The one with silver gates, the ones we ordered', open: false },
+    { id: 'which-one', title: 'Which one, this one, those ones', open: false },
+    { id: 'focus', title: 'The one that…: for focus', open: false },
+    { id: 'none', title: 'None: not one, not any', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      English doesn't like to repeat a countable noun. Instead of <em>I bought a new pullover because my old pullover is too small</em>, say <em>my old one</em>. <em>One</em> replaces a singular noun, <em>ones</em> a plural noun: <em>the blue one, new ones, the one on the left</em>. <em>None</em> means "not one, not any".
+    </p>
+  </Fragment>
+
+  <GrammarSection title="A new one, the blue one" id="one" open>
+    <p>
+      Use <em>one</em> for a singular countable noun that you have already mentioned, or that is clear from the situation (you're both looking at phones in a shop). It usually comes after an adjective, and the adjective needs a determiner before it — <em>a, the, my, this, the other…</em>
+    </p>
+    <GrammarFormula label="Singular" parts={['a / the / my…', 'adjective', 'one']} />
+    <GrammarExample note="My old one = my old pullover.">
+      I bought a new pullover, because <mark data-role="grammar">my</mark> <mark data-role="grammar">old</mark> <mark data-role="content">one</mark> is too small.
+    </GrammarExample>
+    <GrammarExample note="A new one = a new present of this kind.">
+      I like my present very much because I needed <mark data-role="grammar">a</mark> <mark data-role="grammar">new</mark> <mark data-role="content">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="The blue one = the blue shirt, not the red one.">
+      I love blue, so I bought <mark data-role="grammar">the</mark> <mark data-role="grammar">blue</mark> <mark data-role="content">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="The old one = the old phone.">
+      It is easy to use and it is smaller than <mark data-role="grammar">the</mark> <mark data-role="grammar">old</mark> <mark data-role="content">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="The other one = the second of two.">
+      It's better than <mark data-role="grammar">the</mark> <mark data-role="grammar">other</mark> <mark data-role="content">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="My favourite one = my favourite present.">
+      I have lots of presents, but <mark data-role="grammar">my</mark> <mark data-role="grammar">favourite</mark> <mark data-role="content">one</mark> is a CD from Michael.
+    </GrammarExample>
+    <p>
+      Without an adjective, just say <em>one</em> — not <em>a one</em>. <em>I need a pen. Have you got one?</em>
+    </p>
+    <GrammarFormula label="No adjective" parts={['verb', 'one']} />
+    <GrammarExample note="One = a pen.">
+      I need a pen. <mark data-role="grammar">Have</mark> you <mark data-role="grammar">got</mark> <mark data-role="content">one</mark>?
+    </GrammarExample>
+    <p>
+      Ukrainian simply drops the noun and keeps the adjective: <em>Я купив синій. — Мій старий уже малий.</em> English can't do that with countable nouns — an adjective can't stand alone, so it needs <em>one</em> after it: <em>I bought the blue one</em>, not <em>I bought the blue</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="New ones, the old ones" id="ones">
+    <p>
+      For a plural noun, use <em>ones</em>. It works the same way: determiner (optional) + adjective + <em>ones</em>.
+    </p>
+    <GrammarFormula label="Plural" parts={['(the / my / some…)', 'adjective', 'ones']} />
+    <GrammarExample note="New ones = new pillows.">
+      My pillows are getting old and I need <mark data-role="grammar">new</mark> <mark data-role="content">ones</mark>.
+    </GrammarExample>
+    <GrammarExample note="The old ones = the old armchairs we already have.">
+      We also need new armchairs, because a lot of <mark data-role="grammar">the</mark> <mark data-role="grammar">old</mark> <mark data-role="content">ones</mark> are broken.
+    </GrammarExample>
+    <GrammarExample note="My old ones = my old T-shirts.">
+      I've bought five new T-shirts, because I don't like <mark data-role="grammar">my</mark> <mark data-role="grammar">old</mark> <mark data-role="content">ones</mark> anymore.
+    </GrammarExample>
+    <GrammarExample note="Some good ones = some good films.">
+      I like watching films on Friday nights — there are <mark data-role="grammar">some</mark> <mark data-role="grammar">good</mark> <mark data-role="content">ones</mark> on the first channel.
+    </GrammarExample>
+    <GrammarExample note="The funny ones, the science-fiction ones = those kinds of programmes.">
+      I've seen many programmes recently, but my favourites are <mark data-role="grammar">the</mark> <mark data-role="grammar">funny</mark> <mark data-role="content">ones</mark> and <mark data-role="grammar">the</mark> <mark data-role="grammar">science-fiction</mark> <mark data-role="content">ones</mark>.
+    </GrammarExample>
+    <p>
+      Without <em>the</em> or <em>my</em>, adjective + <em>ones</em> talks about that kind of thing in general — any new computers, small schools in general, not particular ones.
+    </p>
+    <GrammarFormula label="In general" parts={['adjective', 'ones']} />
+    <GrammarExample note="New ones = any new computers, not specific ones.">
+      Our computers are out of date and slow. I think we should replace them with <mark data-role="grammar">new</mark> <mark data-role="content">ones</mark>.
+    </GrammarExample>
+    <GrammarExample note="Small ones = small schools in general.">
+      Large schools are usually better than <mark data-role="grammar">small</mark> <mark data-role="content">ones</mark>, because they offer more interesting activities.
+    </GrammarExample>
+    <GrammarExample note="Small ones = small schools.">
+      To tell the truth, I prefer large schools to <mark data-role="grammar">small</mark> <mark data-role="content">ones</mark>.
+    </GrammarExample>
+    {generalOnesPoint && <GrammarUsagePointCard usagePoint={generalOnesPoint} />}
+    <p>
+      Without an adjective, don't use <em>ones</em> alone — use <em>some</em>: <em>I need batteries. Have you got some?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The one with silver gates, the ones we ordered" id="the-one-with">
+    <p>
+      To say <em>which</em> thing you mean, put a phrase or a clause after <em>the one / the ones</em>: a preposition phrase (<em>with…, on…, in…</em>) or a clause (<em>that we saw, I liked best</em>).
+    </p>
+    <GrammarFormula label="Which one" parts={['the (+ adjective)', 'one / ones', 'with… / on… / that… / I…']} />
+    <GrammarExample note="The one with silver gates = the house with silver gates.">
+      My house is No. 8 and it's <mark data-role="grammar">the</mark> <mark data-role="content">one</mark> <mark data-role="grammar">with silver gates</mark>.
+    </GrammarExample>
+    <GrammarExample note="The first one on the left = the first house.">
+      My house is <mark data-role="grammar">the</mark> <mark data-role="grammar">first</mark> <mark data-role="content">one</mark> <mark data-role="grammar">on the left</mark>.
+    </GrammarExample>
+    <GrammarExample note="The one that we saw = the film we saw.">
+      Do you remember <mark data-role="grammar">the</mark> <mark data-role="content">one</mark> <mark data-role="grammar">that we saw last week</mark>?
+    </GrammarExample>
+    <GrammarExample note="The one I liked best = the present I liked best. That can be left out.">
+      All my friends gave me a present, but <mark data-role="grammar">the</mark> <mark data-role="content">one</mark> <mark data-role="grammar">I liked best</mark> was John's.
+    </GrammarExample>
+    <GrammarExample note="The other one that I had = my old jacket.">
+      I bought a jacket because <mark data-role="grammar">the</mark> <mark data-role="grammar">other</mark> <mark data-role="content">one</mark> <mark data-role="grammar">that I had</mark> was too small.
+    </GrammarExample>
+    {theOnePoint && <GrammarUsagePointCard usagePoint={theOnePoint} />}
+    <p>
+      Plural: <em>the ones</em> + phrase or clause.
+    </p>
+    <GrammarExample note="The ones in England = weddings in England.">
+      Weddings in our country? Well, they're pretty different from <mark data-role="grammar">the</mark> <mark data-role="content">ones</mark> <mark data-role="grammar">in England</mark>.
+    </GrammarExample>
+    <GrammarExample note="The ones we ordered = the products we ordered.">
+      The products we received were not exactly <mark data-role="grammar">the</mark> <mark data-role="content">ones</mark> <mark data-role="grammar">we ordered</mark>.
+    </GrammarExample>
+    <GrammarExample note="The ones who… — for people, too.">
+      People like <mark data-role="grammar">the</mark> <mark data-role="content">ones</mark> <mark data-role="grammar">who did this</mark> should go to prison.
+    </GrammarExample>
+    {theOnesPoint && <GrammarUsagePointCard usagePoint={theOnesPoint} />}
+    <p>
+      In a shop or when pointing, this is how you choose: <em>"Which bag?" — "The one on the right." / "The big one." / "The one you showed me yesterday."</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Which one, this one, those ones" id="which-one">
+    <p>
+      <em>One</em> also comes after <em>which</em>, when you are choosing between two or more options — in direct and indirect questions.
+    </p>
+    <GrammarFormula label="Choosing" parts={['which', 'one', '(+ clause)']} />
+    <GrammarExample note="Which one = which of the holiday plans.">
+      If you ask me <mark data-role="grammar">which</mark> <mark data-role="content">one</mark> <mark data-role="grammar">I would choose</mark>, I would go camping first.
+    </GrammarExample>
+    <GrammarExample note="Which one is the best = which of the options.">
+      Write down the advantages of each option. This way you see <mark data-role="grammar">which</mark> <mark data-role="content">one</mark> <mark data-role="grammar">is the best</mark>.
+    </GrammarExample>
+    <p>
+      After <em>this / that</em>, <em>one</em> replaces a singular noun you can see or have just mentioned.
+    </p>
+    <GrammarFormula label="Pointing" parts={['this / that', 'one']} />
+    <GrammarExample note="This one = this desk.">
+      I'm thinking about buying a new desk because <mark data-role="grammar">this</mark> <mark data-role="content">one</mark> is very old.
+    </GrammarExample>
+    <GrammarExample note="That one = that Harry Potter film.">
+      It's my favourite Harry Potter film, so I'm going to buy <mark data-role="grammar">that</mark> <mark data-role="content">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="That one = that place.">
+      I choose <mark data-role="grammar">that</mark> <mark data-role="content">one</mark>, because it is a very good and quiet place.
+    </GrammarExample>
+    <p>
+      <em>These ones / those ones</em> exist too, mostly in speaking. In writing, <em>these / those</em> alone usually sound better.
+    </p>
+    <GrammarFormula label="Plural" parts={['these / those', '(ones)']} />
+    <GrammarExample note="These ones = these things we should do.">
+      There are a lot of things that should be done, but let's just start with <mark data-role="grammar">these</mark> <mark data-role="content">ones</mark>.
+    </GrammarExample>
+    <GrammarExample note="Informal: those ones = those shoes.">
+      "Do you like these shoes?" — "I prefer <mark data-role="grammar">those</mark> <mark data-role="content">ones</mark>."
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The one that…: for focus" id="focus">
+    <p>
+      In careful writing, <em>The one that… / The ones that…</em> at the start of a sentence builds up to the important information, which comes after <em>is / are</em>. Out of many possible things, you pick one and put it in focus.
+    </p>
+    <GrammarFormula label="Focus" parts={['The one(s) that', 'clause', 'is / are / was / were', 'the key information']} />
+    <GrammarExample note="Of all the festivals, this is the one that impressed me.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">one</mark> <mark data-role="grammar">that impressed me a lot</mark> <mark data-role="grammar">was</mark> the Chinese New Year Carnival in Hong Kong.
+    </GrammarExample>
+    <GrammarExample note="Of all the solutions, this is the one with lasting results.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">one</mark> <mark data-role="grammar">that I think will have permanent results</mark> <mark data-role="grammar">is</mark> raising the standard of living in these countries.
+    </GrammarExample>
+    <GrammarExample note="The ones that he preferred = the books he liked most.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">ones</mark> <mark data-role="grammar">that he preferred</mark> <mark data-role="grammar">were</mark> those where his imagination could fly away to other places and times.
+    </GrammarExample>
+    <GrammarExample note="The ones that… — about people.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">ones</mark> <mark data-role="grammar">that wear clothes made by their mothers</mark> never seem to ask for much attention.
+    </GrammarExample>
+    {focusPoint && <GrammarUsagePointCard usagePoint={focusPoint} />}
+    <p>
+      Compare: <em>The carnival impressed me a lot</em> (neutral) and <em>The one that impressed me a lot was the carnival</em> (the carnival is the answer the reader was waiting for).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="None: not one, not any" id="none">
+    <p>
+      <em>None</em> means "not one" or "not any". It replaces a whole noun phrase, and the verb stays positive: <em>I found none</em> = <em>I didn't find any</em>. It sounds stronger and a little more formal than <em>not any</em>.
+    </p>
+    <GrammarFormula label="Object" parts={['positive verb', 'none']} />
+    <GrammarExample note="None = no Coca-Cola at all.">
+      Then I looked for a Coca-Cola, but I <mark data-role="grammar">found</mark> <mark data-role="content">none</mark>.
+    </GrammarExample>
+    <GrammarExample note="There was none = there wasn't a social programme.">
+      We expected a social programme, but there <mark data-role="grammar">was</mark> <mark data-role="content">none</mark>.
+    </GrammarExample>
+    <GrammarExample note="None = not even one mountain.">
+      There are very few mountains. In fact, there <mark data-role="grammar">are</mark> <mark data-role="content">none</mark>.
+    </GrammarExample>
+    <p>
+      <em>None</em> can also be a one-word answer, typical in reports and lists.
+    </p>
+    <GrammarFormula label="Short answer" parts={['question / heading', 'None.']} />
+    <GrammarExample note="A one-word answer.">
+      <mark data-role="grammar">The result?</mark> <mark data-role="content">None</mark>!
+    </GrammarExample>
+    <GrammarExample note="In a list of costs.">
+      <mark data-role="grammar">Opportunity costs:</mark> <mark data-role="content">None</mark>.
+    </GrammarExample>
+    <p>
+      <em>None</em> is about things (or people) from a group you've mentioned. For "no person" in general, use <em>no one / nobody</em>: <em>No one came</em>, not <em>None came</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      An adjective can't stand alone for a countable noun — add <em>one / ones</em>.
+    </p>
+    <GrammarContrast bad={['I bought the blue.', 'The new are better than the old.']} good={['I bought the blue one.', 'The new ones are better than the old ones.']} />
+    <p>
+      <em>One / ones</em> only replace countable nouns. With uncountable nouns (<em>wine, music, bread, information</em>), just drop the noun.
+    </p>
+    <GrammarContrast bad={['I prefer red wine to white one.', 'I like classical music more than modern one.']} good={['I prefer red wine to white.', 'I like classical music more than modern.']} />
+    <p>
+      Without an adjective, don't say <em>a one</em> or <em>ones</em> alone.
+    </p>
+    <GrammarContrast bad={['I need a pen. Have you got a one?', 'I need batteries. Have you got ones?']} good={['I need a pen. Have you got one?', 'I need batteries. Have you got some?']} />
+    <p>
+      After a possessive with no adjective, use the possessive pronoun instead of <em>my one</em>.
+    </p>
+    <GrammarContrast bad={['This is your bag, and that is my one.']} good={['This is your bag, and that is mine.', 'This is your bag, and that is my old one.']} />
+    <p>
+      Match the number: <em>one</em> for one thing, <em>ones</em> for more.
+    </p>
+    <GrammarContrast bad={['My shoes are old. I need new one.']} good={['My shoes are old. I need new ones.']} />
+    <p>
+      <em>None</em> is already negative — don't add <em>not</em>.
+    </p>
+    <GrammarContrast bad={["I didn't find none."]} good={["I didn't find any.", 'I found none.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-demonstratives',
+        name: 'demonstrative pronouns',
+        note: 'this, that, these, those on their own — and this one, those ones.',
+      },
+      {
+        slug: 'pronouns-quantity',
+        name: 'quantity pronouns',
+        note: 'some, any, both, none of them — replacing a noun with a quantity word.',
+      },
+      {
+        slug: 'pronouns-possessive',
+        name: 'possessive pronouns',
+        note: 'mine, yours, ours — instead of my one, your one.',
+      },
+      {
+        slug: 'pronouns-indefinite-thing-one-body-etc',
+        name: 'indefinite pronouns',
+        note: 'someone, no one, everyone — one as part of a word, meaning "person".',
+      },
+      {
+        slug: 'focus-focus',
+        name: 'focus',
+        note: 'What I need is…, It was John who… — other ways to put information in focus.',
+      },
+    ]}
+  />
+</GrammarShell>
