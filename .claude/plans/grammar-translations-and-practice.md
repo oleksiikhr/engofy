@@ -60,9 +60,10 @@ FROM grammar_usage_points p JOIN grammar_constructions c ON c.id = p.constructio
 Бекенд: `translations` у `ConstructionUsagePointView`/`ConstructionUsagePointDto`
 (`readGrammarTranslations`). Сид: формат `assets/grammar-usage-point-content.json` (zod-парсер у
 `modules/post/domain/`, опис у `assets/README.md`), команда `grammar import-usage-point-content`
-(помилка на невідомий `egpIndex`), додана в `make seed`. Фронт: тумблер `УКР` у
-`GrammarUsagePointCard.astro` — глобальний pref `grammarLang` у `lib/prefs.ts` + `bootScript()`,
-показ перекладу через CSS від `<html data-grammar-lang>` (без layout shift), e2e "does not shift".
+(помилка на невідомий `egpIndex`), додана в `make seed`. Фронт: тумблер `EN/УКР` у
+`GrammarUsagePointCard.astro` — спільний з reader popup pref `popupLang` (`lib/prefs.ts`, доданий у
+`bootScript()`), показ перекладу через CSS від `<html data-popup-lang>` (без layout shift), e2e "does
+not shift".
 Картка без перекладу — без тумблера. Контент: ADJECTIVES (4 конструкції, 22 точки).
 
 ### [ ] 2. Контент: ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (61)

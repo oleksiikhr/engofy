@@ -1,0 +1,244 @@
+{
+  "12": {
+    "explanation": "In formal writing, you can put a list of adjectives before or after a noun, separated by commas, to make those qualities stand out. After the noun, the list sits between commas or dashes: adjective, adjective and adjective + noun, or noun – adjective, adjective and adjective –.",
+    "examples": [
+      "Tired, hungry and cold, the climbers finally reached the hut.",
+      "The old house – dark, empty and silent – waited for us.",
+      "Clever, funny, kind, she was loved by everyone."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі можна поставити перелік прикметників перед іменником або після нього, через кому, щоб ці якості виділялися. Після іменника перелік стоїть між комами або тире: adjective, adjective and adjective + noun або noun – adjective, adjective and adjective –."
+    }
+  },
+  "22": {
+    "explanation": "Put much before a comparative adjective to show a big difference. Add so to make it even stronger: so much bigger. This usually comes after be.",
+    "examples": [
+      "My new flat is much bigger than the old one.",
+      "The test was so much easier than I expected.",
+      "Life in the village is much quieter."
+    ],
+    "uk": {
+      "explanation": "Слово much перед прикметником у вищому ступені показує велику різницю. Якщо додати so, звучить ще сильніше: so much bigger. Зазвичай це стоїть після be."
+    }
+  },
+  "23": {
+    "explanation": "Put a bit or a little bit before a comparative adjective to show a small difference. It is informal and common in speaking, usually after be.",
+    "examples": [
+      "She's a bit older than me.",
+      "Today is a little bit warmer than yesterday.",
+      "The second lesson was a bit shorter."
+    ],
+    "uk": {
+      "explanation": "A bit або a little bit перед прикметником у вищому ступені показує невелику різницю. Це розмовний варіант, дуже поширений в усному мовленні, зазвичай після be."
+    }
+  },
+  "24": {
+    "explanation": "Repeat a comparative adjective with and between to show that something keeps changing: bigger and bigger, more and more expensive. We usually use it after get or become.",
+    "examples": [
+      "The days are getting longer and longer.",
+      "Flats in the city are becoming more and more expensive.",
+      "The music got louder and louder."
+    ],
+    "uk": {
+      "explanation": "Якщо повторити прикметник у вищому ступені через and, це показує, що щось постійно змінюється: bigger and bigger, more and more expensive. Зазвичай так кажемо після get або become."
+    }
+  },
+  "25": {
+    "explanation": "Put even before a comparative adjective when something was already good, bad, big and so on, and now it is more so. It often comes after be or get.",
+    "examples": [
+      "The first film was good, but the second was even better.",
+      "After the rain, the road got even worse.",
+      "Her new job is even more interesting."
+    ],
+    "uk": {
+      "explanation": "Even перед прикметником у вищому ступені ставимо, коли щось і так уже було добрим, поганим, великим тощо, а тепер ще більше. Часто стоїть після be або get."
+    }
+  },
+  "26": {
+    "explanation": "Put a lot before a comparative adjective to show a big difference. It means the same as much but sounds more informal, and it usually comes after be.",
+    "examples": [
+      "A bike is a lot cheaper than a car.",
+      "It would be a lot easier to go by train.",
+      "I feel a lot better today."
+    ],
+    "uk": {
+      "explanation": "A lot перед прикметником у вищому ступені показує велику різницю. Означає те саме, що much, але звучить невимушеніше, і зазвичай стоїть після be."
+    }
+  },
+  "27": {
+    "explanation": "When a comparative adjective comes before a noun, use much, not a lot, to make the difference bigger: a much better idea. The pattern is a/the + much + comparative + noun.",
+    "examples": [
+      "This is a much better plan than mine.",
+      "We need a much bigger table for the party.",
+      "They moved to a much quieter area."
+    ],
+    "uk": {
+      "explanation": "Коли прикметник у вищому ступені стоїть перед іменником, для підсилення вживаємо much, а не a lot: a much better idea. Схема: a/the + much + comparative + noun."
+    }
+  },
+  "28": {
+    "explanation": "Put slightly before a comparative adjective to show a very small difference. It is a little more formal than a bit, so it is common in writing.",
+    "examples": [
+      "The second-hand phone was only slightly cheaper.",
+      "This room is slightly larger than the other one.",
+      "Prices are slightly higher in summer."
+    ],
+    "uk": {
+      "explanation": "Slightly перед прикметником у вищому ступені показує зовсім невелику різницю. Звучить трохи офіційніше, ніж a bit, тому часто трапляється в письмі."
+    }
+  },
+  "29": {
+    "explanation": "Use no or not any before a comparative adjective to say that there is no difference at all, often when people expect one: no better, not any happier. No is a little more formal than not any.",
+    "examples": [
+      "The new system is no faster than the old one.",
+      "We are not any happier with more money.",
+      "The water was no higher than my knees."
+    ],
+    "uk": {
+      "explanation": "No або not any перед прикметником у вищому ступені кажуть, що різниці немає зовсім, часто тоді, коли її очікують: no better, not any happier. No звучить трохи офіційніше, ніж not any."
+    }
+  },
+  "30": {
+    "explanation": "Use not that much before a comparative adjective to say that the difference is smaller than people might think. It is common after be.",
+    "examples": [
+      "She's not that much older than me.",
+      "The hotel was not that much cheaper in winter.",
+      "My new laptop isn't that much faster."
+    ],
+    "uk": {
+      "explanation": "Not that much перед прикметником у вищому ступені каже, що різниця менша, ніж можна подумати. Часто стоїть після be."
+    }
+  },
+  "46": {
+    "explanation": "Adjectives like main and only go before a noun to pick out one thing from many. They cannot go after be: the main reason, not the reason is main.",
+    "examples": [
+      "The main reason is the price.",
+      "She is the only person I know here.",
+      "The only problem was the weather."
+    ],
+    "uk": {
+      "explanation": "Прикметники на кшталт main та only стоять перед іменником і виокремлюють одну річ з-поміж багатьох. Після be вони не вживаються: the main reason, а не the reason is main."
+    }
+  },
+  "53": {
+    "explanation": "Adjectives like real, absolute and complete can go before a noun to make it stronger: a real problem, a complete mess. In this meaning they only go before the noun, not after be.",
+    "examples": [
+      "Parking is a real problem in our town.",
+      "The party was a complete disaster.",
+      "He's an absolute genius with computers."
+    ],
+    "uk": {
+      "explanation": "Прикметники на кшталт real, absolute та complete можуть стояти перед іменником, щоб підсилити його: a real problem, a complete mess. У цьому значенні вони стоять лише перед іменником, а не після be."
+    }
+  },
+  "56": {
+    "explanation": "At an advanced level, you can use a wider range of adjectives before a noun to add strength or precision, such as major, utter, sheer, very and total: the very centre, sheer luck. Like real and complete, they go before the noun.",
+    "examples": [
+      "The hotel is in the very centre of the city.",
+      "It was sheer luck that we met.",
+      "The major problem is the lack of time."
+    ],
+    "uk": {
+      "explanation": "На просунутому рівні можна вживати ширше коло прикметників перед іменником, щоб додати сили чи точності, наприклад major, utter, sheer, very і total: the very centre, sheer luck. Як і real та complete, вони стоять перед іменником."
+    }
+  },
+  "58": {
+    "explanation": "To say that something is number one in a group or place, use the + superlative + noun + a phrase like in the world or of my life. The phrase after the noun shows the group.",
+    "examples": [
+      "It's the biggest zoo in the world.",
+      "Those were the happiest days of my life.",
+      "He's the tallest boy in our class."
+    ],
+    "uk": {
+      "explanation": "Щоб сказати, що щось перше в групі чи місці, вживаємо the + superlative + noun + фразу на кшталт in the world або of my life. Фраза після іменника показує, про яку групу йдеться."
+    }
+  },
+  "59": {
+    "explanation": "After a superlative, use in + the name of a place to show where something is the most: the biggest room in the house. Use in with places, not of.",
+    "examples": [
+      "It's the biggest room in the house.",
+      "This is the cheapest shop in town.",
+      "Everest is the highest mountain in the world."
+    ],
+    "uk": {
+      "explanation": "Після найвищого ступеня in + назва місця показує, де саме щось найбільше: the biggest room in the house. З місцями вживаємо in, а не of."
+    }
+  },
+  "60": {
+    "explanation": "After a superlative, use of + a group or period to pick one thing from it: the best of all, the best part of the trip. Use of with groups and times, and in with places.",
+    "examples": [
+      "It was the best project of all.",
+      "Surfing was the best part of the trip.",
+      "It's the shortest day of the year."
+    ],
+    "uk": {
+      "explanation": "Після найвищого ступеня of + група чи період вибирає з них одне: the best of all, the best part of the trip. Of вживаємо з групами й періодами часу, а in — з місцями."
+    }
+  },
+  "69": {
+    "explanation": "Use the + superlative + noun + in/of phrase to talk about something unique, now with longer adjectives too: the most exciting day of my life. Long adjectives take the most instead of -est.",
+    "examples": [
+      "Yesterday was the most exciting day of my life!",
+      "Health is the most important thing in life.",
+      "It's the most beautiful beach on the island."
+    ],
+    "uk": {
+      "explanation": "The + superlative + noun + фраза з in/of описує щось унікальне, тепер і з довшими прикметниками: the most exciting day of my life. Довгі прикметники утворюють найвищий ступінь з the most, а не з -est."
+    }
+  },
+  "70": {
+    "explanation": "To say that an experience is the best you have had, use the best + noun + present perfect, often with ever: the best film I've ever seen. The same works with other superlatives.",
+    "examples": [
+      "It's the best present I've ever had.",
+      "That was the best game I've ever played.",
+      "This is the worst coffee I've ever tasted."
+    ],
+    "uk": {
+      "explanation": "Щоб сказати, що це найкращий досвід у вашому житті, вживаємо the best + noun + present perfect, часто з ever: the best film I've ever seen. Так само працюють і інші прикметники в найвищому ступені."
+    }
+  },
+  "74": {
+    "explanation": "Put by far before the + superlative to show that something is much better, bigger and so on than all the others: by far the most beautiful. It can also go after the phrase: the best by far.",
+    "examples": [
+      "This is by far the most beautiful forest I've seen.",
+      "Christmas was by far the best time of year.",
+      "She is the fastest runner by far."
+    ],
+    "uk": {
+      "explanation": "By far перед the + superlative показує, що щось набагато краще, більше тощо, ніж усе інше: by far the most beautiful. Можна поставити й після фрази: the best by far."
+    }
+  },
+  "77": {
+    "explanation": "In formal English, put possible between the superlative and the noun to make it stronger: the highest possible level. It means as high as can be.",
+    "examples": [
+      "We aim for the highest possible quality.",
+      "Please reply at the earliest possible date.",
+      "They chose the best possible location."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській possible між прикметником у найвищому ступені та іменником підсилює його: the highest possible level. Це означає «наскільки взагалі можливо»."
+    }
+  },
+  "78": {
+    "explanation": "You can also make a superlative stronger by putting a word after the noun: possible, ever or by far. The pattern is the + superlative + noun + possible/ever/by far: in the shortest time possible.",
+    "examples": [
+      "We want to finish in the shortest time possible.",
+      "It was the worst storm ever.",
+      "She gave the best answer by far."
+    ],
+    "uk": {
+      "explanation": "Найвищий ступінь можна підсилити й словом після іменника: possible, ever або by far. Схема: the + superlative + noun + possible/ever/by far: in the shortest time possible."
+    }
+  },
+  "79": {
+    "explanation": "The slightest and the faintest mean even the smallest amount, and they usually come after a negative verb: I don't have the slightest idea. They go with nouns like idea, chance, doubt and interest.",
+    "examples": [
+      "I haven't the faintest idea where he is.",
+      "She didn't show the slightest interest.",
+      "There isn't the slightest chance of rain."
+    ],
+    "uk": {
+      "explanation": "The slightest і the faintest означають «навіть найменший», і зазвичай стоять після заперечення: I don't have the slightest idea. Вживаються з іменниками на кшталт idea, chance, doubt та interest."
+    }
+  }
+}
