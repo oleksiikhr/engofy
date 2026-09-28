@@ -719,12 +719,15 @@ that … of yours) вплетений за `egpIndex`. 7 секцій (табл�
 як підмет + формальне Ours is a…, порівняння as…as/than, a friend of mine, that car of his, common
 mistakes). Content — сам присвійний займенник. Не дублює `determiners-possessives` (там — перед іменником і 's).
 
-### [ ] 66. Pronouns — quantity (`pronouns-quantity`) — рівень A2
+### [x] 66. Pronouns — quantity (`pronouns-quantity`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-quantity`.
+14 EGP-рядків (956-969): 12 чистих FORM без карток, два USE (965 formal few/many/most, 969 Many are the…)
+вплетені за `egpIndex`. 10 секцій (some/any, both/a few/another, each/either/neither/several/enough, + of +
+pronoun, none, formal people, too many/very few, some of which, much has been said/Many are the…, common
+mistakes). Content — сам квантифікатор; `of`/займенник/дієслово — `grammar`. Не дублює `determiners-quantity` (там — перед іменником).
 
 ### [ ] 67. Pronouns — reflexive (`pronouns-reflexive`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
