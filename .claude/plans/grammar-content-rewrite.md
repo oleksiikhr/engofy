@@ -739,12 +739,15 @@ mistakes). Content — сам квантифікатор; `of`/займенни�
 не рендериться. 8 секцій (таблиця форм, same person + buy myself a…, після прийменника + next to her, by
 myself/itself, emphasis, itself/in itself, formal, common mistakes з -ся калькою). Content — сам зворотний займенник.
 
-### [ ] 68. Pronouns — substitution, one, ones, none (`pronouns-substitution-one-ones-none`) — рівень A2
+### [x] 68. Pronouns — substitution, one, ones, none (`pronouns-substitution-one-ones-none`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-substitution-one-ones-none`.
+12 EGP-рядків (970-981): 8 чистих FORM без карток, 4 FORM/USE (972 the one + complement, 977 the ones + complement,
+978 new ones general, 981 The one(s) that… focus) вплетені за `egpIndex` — generic-блок не рендериться. 7 секцій
+(one, ones, the one with…, which/this/that one, focus, none, common mistakes). Content — `one`/`ones`/`none`; детермінатор,
+прикметник, complement — `grammar` (навпаки до `pronouns-demonstratives`, де content — this/that).
 
 ### [ ] 69. Questions — alternatives (`questions-alternatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
