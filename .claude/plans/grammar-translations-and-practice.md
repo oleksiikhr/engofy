@@ -73,10 +73,10 @@ not shift".
 
 `adverbs-*` (37), `conjunctions-*` (13), `discourse-markers-*` (11).
 
-### [ ] 3. Рідна мова як налаштування: `nativeLang` + тумблер `EN / native`
+### [x] 3. Рідна мова як налаштування: `nativeLang` + тумблер `EN / native`
 - Branch: `grammar-translations-and-practice-03-native-lang`
-- Base: `grammar-translations-and-practice-02-adverbs-conjunctions`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/160
 
 Сайт планує кілька рідних мов (з яких вчать англійську); зараз UI перекладу захардкоджений на `uk`.
 Мова в перемикачі завжди одна — рідна мова користувача, тому тумблер лишається двопозиційним.
