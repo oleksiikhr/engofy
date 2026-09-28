@@ -892,12 +892,15 @@ still going on з for/since + How long, repeated a lot/lately vs past simple, re
 already, have been doing vs have done + state verbs (без EGP-рядка), інверсія Not only have I been… but C2, common mistakes).
 Content — `have/has been` + `-ing` (у питанні/з адвербом/в інверсії розділено: `have` … `been`); підмет, for/since-фраза, результат — `grammar`.
 
-### [ ] 83. Pronouns — reciprocal (`pronouns-reciprocal`) — рівень B1
+### [x] 83. Pronouns — reciprocal (`pronouns-reciprocal`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-reciprocal`.
+4 EGP-рядки (1004-1007), 1 картка (1005) inline; generic-блок не рендериться. 7 секцій (значення + таблиця themselves vs
+each other, після дієслова (+ meet/kiss без each other, help без to), після прийменника, each other's (без EGP-рядка), one another
+формально + "two vs more" як застаріле правило, each … the other(s) C1/C2, common mistakes). Content — `each other`/`one another`
+(+ 's); у C1/C2-патерні — `each`-фраза і `the other(s)`, дієслово й прийменник — `grammar`.
 
 ### [ ] 84. Future — future expressions with be (`future-future-expressions-with-be`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
