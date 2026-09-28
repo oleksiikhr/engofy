@@ -521,12 +521,15 @@ textual reference). Додано `however` (не EGP-рядок) — його о
 it-cleft), далі вказівники в тексті (note/see, wh-заголовки). Content — сам засіб фокусу (фраза/рамка),
 grammar — subject + verb і фокусована частина.
 
-### [ ] 47. Future — future continuous (`future-future-continuous`) — рівень A2
+### [x] 47. Future — future continuous (`future-future-continuous`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-continuous`.
+7 EGP-рядків (353-359): 4 чисті FORM (affirmative will / will+shall, negative, questions) без карток;
+3 USE (354/358/359) вплетені за `egpIndex`. 7 секцій (form + shall, won't, questions, in progress +
+контраст із will + verb, polite questions, might/may be + -ing, common mistakes). Content — лише
+`-ing`-дієслово; subject/will/be/час — grammar (у контрастному прикладі will + verb content-мітки нема).
 
 ### [ ] 48. Future — future with be going to (`future-future-with-be-going-to`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
