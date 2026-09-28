@@ -1,0 +1,279 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 6 USE and FORM/USE rows are inlined, matched by EGP index. The other
+// 5 rows (affirmative, ellipsis, oughtn't, ought not to, ought we not to…?)
+// are plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const advicePoint = point(557);
+const desiredPoint = point(559);
+const thereOughtPoint = point(560);
+const reallyPoint = point(561);
+const pastPoint = point(562);
+const likelihoodPoint = point(563);
+
+const inlineUsagePointIds = [advicePoint, desiredPoint, thereOughtPoint, reallyPoint, pastPoint, likelihoodPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Ought to: the form (ought + to + base verb), giving advice with you ought to, really ought to for emphasis, how things ought to be and there ought to be, it ought to for what is likely, ought to have + past participle for the past, short forms (as much as they ought to), and formal negatives and questions (ought not to, oughtn't, ought we not to…?)."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Ought to + base verb', open: true },
+    { id: 'advice', title: 'You ought to talk to them: advice', open: false },
+    { id: 'really', title: 'You really ought to…: emphasis', open: false },
+    { id: 'desired', title: 'There ought to be a lift: how things ought to be', open: false },
+    { id: 'likelihood', title: 'It ought to be easy: what is likely', open: false },
+    { id: 'past', title: 'We ought to have booked: the past', open: false },
+    { id: 'ellipsis', title: 'As much as they ought to: short forms', open: false },
+    { id: 'negative', title: "Ought not to, oughtn't, ought we…?: formal", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Ought to</em> means almost the same as <em>should</em>: it says what is a good idea or the right thing to do. <em>You ought to see a doctor</em> = <em>You should see a doctor.</em> It is a little more formal and less common than <em>should</em>, and — unlike <em>can</em>, <em>must</em> or <em>should</em> — it is followed by <em>to</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Ought to + base verb" id="form" open>
+    <p>
+      <em>Ought</em> is a modal verb, so it is the same for every subject (no <em>-s</em>, no past form). It is always followed by <em>to</em> and the base verb. In speech it sounds like /ˈɔːtə/.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'ought to', 'base verb']} />
+    <GrammarExample note="I + ought to + go: it's the right thing to do now.">
+      Oh, I'm sorry, my mum's calling and <mark data-role="grammar">I</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">go</mark>.
+    </GrammarExample>
+    <GrammarExample note="You + ought to + go: my opinion about the best plan.">
+      I think <mark data-role="grammar">you</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">go</mark> on holiday with both of them.
+    </GrammarExample>
+    <GrammarExample note="She + ought to (no -s): the same for every subject.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">call</mark> her grandmother more often.
+    </GrammarExample>
+    <p>
+      For the negative and questions, everyday English almost always uses <em>should</em> instead: <em>You shouldn't…</em>, <em>Should I…?</em> The negative and question forms of <em>ought</em> are formal — see the last section.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You ought to talk to them: advice" id="advice" open={false}>
+    <p>
+      <em>You ought to…</em> gives advice: it tells someone what you think is best for them. People often add <em>I think</em> or <em>maybe</em> to make it softer.
+    </p>
+    <GrammarFormula label="Advice" parts={['(I think) you', 'ought to', 'base verb']} />
+    <GrammarExample note="I think + you + ought to: soft advice.">
+      I think that <mark data-role="grammar">you</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">play</mark> tennis or football at the weekend.
+    </GrammarExample>
+    <GrammarExample note="Advice about what to do first.">
+      If you'd rather go with your friend, <mark data-role="grammar">you</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">talk</mark> to your parents first.
+    </GrammarExample>
+    <GrammarExample note="Advice with a reason.">
+      You look tired. Maybe <mark data-role="grammar">you</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">take</mark> a few days off.
+    </GrammarExample>
+    {advicePoint && <GrammarUsagePointCard usagePoint={advicePoint} />}
+    <p>
+      <em>We ought to…</em> works the same way for a plan that includes you: <em>It's late — we ought to leave.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You really ought to…: emphasis" id="really" open={false}>
+    <p>
+      Put <em>really</em> before <em>ought to</em> to make the advice or opinion stronger: "I am sure this is important".
+    </p>
+    <GrammarFormula label="Emphasis" parts={['subject', 'really', 'ought to', 'base verb']} />
+    <GrammarExample note="Really + ought to: strong advice.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">really</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">ask</mark> for details about the timetable.
+    </GrammarExample>
+    <GrammarExample note="We really ought to: a strong opinion about what we all should do.">
+      This is what almost everyone thinks, but <mark data-role="grammar">we</mark> <mark data-role="grammar">really</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">think</mark> a little bit more about it.
+    </GrammarExample>
+    <GrammarExample note="One really ought to: formal, about people in general.">
+      <mark data-role="grammar">One</mark> <mark data-role="grammar">really</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">know</mark> the interests and wishes of the reader.
+    </GrammarExample>
+    {reallyPoint && <GrammarUsagePointCard usagePoint={reallyPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="There ought to be a lift: how things ought to be" id="desired" open={false}>
+    <p>
+      <em>Ought to</em> also describes how things would be in a better world — what is right or best in general, not advice for one person. It is common when giving opinions, often in the passive: <em>ought to be</em> + past participle.
+    </p>
+    <GrammarFormula label="How things ought to be" parts={['people / things', 'ought to', 'base verb / be + past participle']} />
+    <GrammarExample note="We + ought to + take care: what is right for everyone.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">take</mark> care of our health.
+    </GrammarExample>
+    <GrammarExample note="Ought to + be + recycled: the passive, how things should be done.">
+      There shouldn't be any rubbish dumps — <mark data-role="grammar">all the rubbish</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be recycled</mark>.
+    </GrammarExample>
+    <GrammarExample note="As good as they ought to be: reality is worse than the ideal.">
+      Not all <mark data-role="grammar">zoos</mark> are as good as <mark data-role="grammar">they</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be</mark>.
+    </GrammarExample>
+    {desiredPoint && <GrammarUsagePointCard usagePoint={desiredPoint} />}
+    <p>
+      <em>There ought to be…</em> says that something is missing and it would be right to have it. It is typical in complaints and suggestions.
+    </p>
+    <GrammarFormula label="There ought to be" parts={['there', 'ought to', 'be', 'noun']} />
+    <GrammarExample note="A complaint: the hotel had no lift, but it needed one.">
+      The rooms were on the 4th floor, so <mark data-role="grammar">there</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">a lift</mark>.
+    </GrammarExample>
+    <GrammarExample note="A suggestion for next time.">
+      I think <mark data-role="grammar">there</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">more excursions</mark> and guided tours.
+    </GrammarExample>
+    <GrammarExample note="A conclusion after a meeting.">
+      We came to the conclusion that <mark data-role="grammar">there</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">some changes</mark> to the club's publicity.
+    </GrammarExample>
+    {thereOughtPoint && <GrammarUsagePointCard usagePoint={thereOughtPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It ought to be easy: what is likely" id="likelihood" open={false}>
+    <p>
+      Like <em>should</em>, <em>ought to</em> can say what you expect to happen because it is normal or logical: "it will probably…". It is used for good or neutral things, not for bad news.
+    </p>
+    <GrammarFormula label="Likely" parts={['subject', 'ought to', 'be / base verb']} />
+    <GrammarExample note="It + ought to + be: I expect it to be easy.">
+      You've practised a lot, so <mark data-role="grammar">the test</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">be</mark> easy.
+    </GrammarExample>
+    <GrammarExample note="It ought to provide: this is what we can expect from the software.">
+      Good accounting software records business activities. Besides, <mark data-role="grammar">it</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">provide</mark> useful information for decisions.
+    </GrammarExample>
+    <GrammarExample note="Ought not to be: I don't expect you to be hungry — you've just eaten.">
+      You've just had lunch. <mark data-role="grammar">You</mark> <mark data-role="content">ought not to</mark> <mark data-role="grammar">be</mark> hungry.
+    </GrammarExample>
+    {likelihoodPoint && <GrammarUsagePointCard usagePoint={likelihoodPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="We ought to have booked: the past" id="past" open={false}>
+    <p>
+      <em>Ought to have</em> + past participle talks about the past: it was the right thing to do, but it didn't happen. It often means you are sorry or you are criticising someone. It means the same as <em>should have</em>.
+    </p>
+    <GrammarFormula label="Past" parts={['subject', 'ought to have', 'past participle']} />
+    <GrammarExample note="We didn't book a guide, and now we regret it.">
+      We didn't get a tour guide. <mark data-role="grammar">We</mark> <mark data-role="content">ought to have</mark> <mark data-role="grammar">booked</mark> one!
+    </GrammarExample>
+    <GrammarExample note="Criticism: the government didn't know, but it was their job to know.">
+      <mark data-role="grammar">The government</mark> <mark data-role="content">ought to have</mark> <mark data-role="grammar">known</mark> that.
+    </GrammarExample>
+    <GrammarExample note="Ought to have + been + managed: the passive, it was badly managed.">
+      Another point which I think <mark data-role="content">ought to have</mark> <mark data-role="grammar">been managed</mark> better was <mark data-role="grammar">the boat trip</mark>.
+    </GrammarExample>
+    {pastPoint && <GrammarUsagePointCard usagePoint={pastPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="As much as they ought to: short forms" id="ellipsis" open={false}>
+    <p>
+      When the verb is clear from what was said before, you can stop after <em>ought to</em> and leave the verb out. Keep <em>to</em> — don't stop after <em>ought</em>.
+    </p>
+    <GrammarFormula label="Short form" parts={['subject', 'ought to', '(verb left out)']} />
+    <GrammarExample note="= as much specialised help as they ought to get.">
+      Some <mark data-role="grammar">students</mark> would not get as much help as <mark data-role="grammar">they</mark> <mark data-role="content">ought to</mark>.
+    </GrammarExample>
+    <GrammarExample note="= I know I ought to exercise more.">
+      I don't exercise as much as <mark data-role="grammar">I</mark> <mark data-role="content">ought to</mark>.
+    </GrammarExample>
+    <GrammarExample note="= Yes, I think you ought to tell her.">
+      "Should I tell her?" "Yes, I think <mark data-role="grammar">you</mark> <mark data-role="content">ought to</mark>."
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Ought not to, oughtn't, ought we…?: formal" id="negative" open={false}>
+    <p>
+      The full negative is <em>ought not to</em> — <em>not</em> goes between <em>ought</em> and <em>to</em>. It is formal and typical in writing; in everyday speech <em>shouldn't</em> is much more common.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'ought not to', 'base verb']} />
+    <GrammarExample note="Ought not to + forget: a formal opinion in an essay.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">ought not to</mark> <mark data-role="grammar">forget</mark> that the food industry now uses many more chemicals.
+    </GrammarExample>
+    <GrammarExample note="There ought not to be: how things shouldn't be.">
+      <mark data-role="grammar">There</mark> <mark data-role="content">ought not to</mark> <mark data-role="grammar">be</mark> a division between rich and poor.
+    </GrammarExample>
+    <p>
+      The short form <em>oughtn't</em> is sometimes used, often without <em>to</em>: <em>oughtn't</em> + base verb. <em>Oughtn't to</em> is also possible.
+    </p>
+    <GrammarFormula label="Short negative" parts={['subject', "oughtn't (to)", 'base verb']} />
+    <GrammarExample note="Oughtn't + miss: it's too good to miss.">
+      There will be a banquet that day, and <mark data-role="grammar">you</mark> <mark data-role="content">oughtn't</mark> <mark data-role="grammar">miss</mark> it for the world!
+    </GrammarExample>
+    <p>
+      In questions, <em>ought</em> goes before the subject. A negative question — <em>Ought we not to…?</em> — is a rhetorical question in formal writing: it isn't really asking, it means "we clearly should…".
+    </p>
+    <GrammarFormula label="Negative question" parts={['ought', 'subject', 'not to', 'base verb?']} />
+    <GrammarExample note="= We clearly should learn from the past.">
+      And if not, <mark data-role="content">ought</mark> <mark data-role="grammar">we</mark> <mark data-role="content">not to</mark> <mark data-role="grammar">learn</mark> from the mistakes of the past?
+    </GrammarExample>
+    <GrammarExample note="A formal question — in everyday English: Should we tell them?">
+      <mark data-role="content">Ought</mark> <mark data-role="grammar">we</mark> <mark data-role="content">to</mark> <mark data-role="grammar">tell</mark> them?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Ought</em> always needs <em>to</em> before the verb (in the affirmative), never takes <em>-s</em>, and never uses <em>do</em>.
+    </p>
+    <GrammarContrast
+      bad={['You ought go to the doctor.', 'She oughts to study more.', "You don't ought to worry.", 'Do we ought to leave now?']}
+      good={['You ought to go to the doctor.', 'She ought to study more.', "You ought not to worry. / You shouldn't worry.", 'Should we leave now?']}
+    />
+    <p>
+      In the negative, <em>not</em> goes after <em>ought</em>, not after <em>to</em>. In short answers, keep <em>to</em>.
+    </p>
+    <GrammarContrast
+      bad={['We ought to not forget it.', '"Should I call him?" "Yes, you ought."']}
+      good={['We ought not to forget it.', '"Should I call him?" "Yes, you ought to."']}
+    />
+    <p>
+      For the past, use <em>ought to have</em> + past participle — not the past simple.
+    </p>
+    <GrammarContrast
+      bad={['We ought to booked a guide.', 'You ought to have came earlier.']}
+      good={['We ought to have booked a guide.', 'You ought to have come earlier.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'You should… — the same meaning as ought to, but more common, especially in negatives and questions.',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: 'You must… — a strong obligation or rule; ought to is only advice or opinion.',
+      },
+      {
+        slug: 'modality-have-got-to',
+        name: 'have (got) to',
+        note: "I had to… — a past obligation that really happened; I ought to have… — it didn't happen.",
+      },
+      {
+        slug: 'modality-need',
+        name: 'need',
+        note: "You needn't… — it isn't necessary; you ought not to… — it isn't a good idea.",
+      },
+      {
+        slug: 'modality-used-to',
+        name: 'used to',
+        note: 'I used to… — another modal-like verb with to, but about past habits.',
+      },
+    ]}
+  />
+</GrammarShell>
