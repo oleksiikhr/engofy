@@ -1,0 +1,229 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 5 EGP rows (999-1003), all USE, all inlined — matched by EGP index because
+// the two GENDER NEUTRAL guidewords are identical. Generic "they" (They say…)
+// has no EGP row; it is written without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const youPoint = point(999);
+const onePoint = point(1000);
+const wePoint = point(1001);
+const theyBackPoint = point(1002);
+const heOrShePoint = point(1003);
+
+const inlineUsagePointIds = [youPoint, onePoint, wePoint, theyBackPoint, heOrShePoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Pronouns that mean people in general: You can take pictures with it, One should be careful, We all know that…, They say it will rain. Plus they / them and he or she for someone whose gender you don't know."
+  handcrafted
+  sections={[
+    { id: 'you', title: 'You can…: anyone at all', open: true },
+    { id: 'one', title: 'One can…: formal', open: false },
+    { id: 'we', title: 'We all know…: people, including me', open: false },
+    { id: 'they-people', title: 'They say…: other people', open: false },
+    { id: 'they-back', title: 'If someone…, they…', open: false },
+    { id: 'he-or-she', title: 'He or she, he/she', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Sometimes you don't mean one particular person — you mean <em>anybody</em>, or <em>people in general</em>. Ukrainian often has no subject here (<em>Тут можна купити квитки. Кажуть, буде дощ.</em>), but an English sentence needs one. So English uses a pronoun: <em>You can buy tickets here. They say it will rain.</em> The pronoun you choose — <em>you, one, we</em> or <em>they</em> — shows how formal you are and whether you include yourself.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="You can…: anyone at all" id="you" open>
+    <p>
+      The most common way to talk about people in general is <em>you</em>. It doesn't mean the person you are talking to — it means anyone, including you and me. It is normal in speaking and in informal writing.
+    </p>
+    <GrammarFormula label="General you" parts={['you', 'verb']} />
+    <GrammarExample note="You = anyone who has this phone.">
+      My new mobile phone can do lots of things! <mark data-role="content">You</mark> <mark data-role="grammar">can play</mark> games, <mark data-role="content">you</mark> <mark data-role="grammar">can take</mark> pictures.
+    </GrammarExample>
+    <GrammarExample note="You = anyone who wants to travel there.">
+      If <mark data-role="content">you</mark> <mark data-role="grammar">want</mark> to travel to China, <mark data-role="content">you</mark> <mark data-role="grammar">need</mark> to learn a little Chinese.
+    </GrammarExample>
+    <GrammarExample note="Giving directions or instructions.">
+      <mark data-role="content">You</mark> <mark data-role="grammar">can't park</mark> here after 8 am.
+    </GrammarExample>
+    {youPoint && <GrammarUsagePointCard usagePoint={youPoint} />}
+    <p>
+      General <em>you</em> often comes with <em>can, can't, need to, have to, should</em> — it describes what is possible, allowed or necessary for everybody.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="One can…: formal" id="one">
+    <p>
+      <em>One</em> means the same as general <em>you</em>, but it is formal. You will meet it in essays, formal letters and speeches. In conversation it sounds stiff or old-fashioned, so use <em>you</em> there.
+    </p>
+    <GrammarFormula label="Formal one" parts={['one', 'verb + -s / can / should…']} />
+    <GrammarExample note="One = any viewer.">
+      Television is like a box where <mark data-role="content">one</mark> <mark data-role="grammar">can find</mark> anything: rubbish and good things.
+    </GrammarExample>
+    <GrammarExample note="One takes a singular verb: sees, not see.">
+      One more reason I like Singapore is that <mark data-role="content">one</mark> <mark data-role="grammar">sees</mark> cats everywhere.
+    </GrammarExample>
+    <GrammarExample note="Formal advice.">
+      <mark data-role="content">One</mark> <mark data-role="grammar">should always read</mark> a contract before signing it.
+    </GrammarExample>
+    {onePoint && <GrammarUsagePointCard usagePoint={onePoint} />}
+    <p>
+      Keep going with <em>one</em> once you start: the possessive is <em>one's</em> and the reflexive is <em>oneself</em> — <em>One must look after one's health.</em> Don't switch to <em>you</em> or <em>he</em> in the middle of the sentence.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="We all know…: people, including me" id="we">
+    <p>
+      <em>We</em> and <em>us</em> can mean people in general, when the speaker wants to include themselves — "all of us, all people". It is common in essays and discussions, and it sounds more personal than <em>one</em>.
+    </p>
+    <GrammarFormula label="General we" parts={['we', 'verb']} />
+    <GrammarExample note="We = everybody, all over the world.">
+      These days the car is everywhere: <mark data-role="content">we</mark> <mark data-role="grammar">can see</mark> cars all over the world.
+    </GrammarExample>
+    <GrammarExample note="We all = every person, speaker included.">
+      <mark data-role="content">We</mark> <mark data-role="grammar">all know</mark> that being a writer is difficult.
+    </GrammarExample>
+    <GrammarExample note="In a review: we = anyone who watches the film.">
+      In this film <mark data-role="content">we</mark> <mark data-role="grammar">see</mark> the life of a teenage girl in South Africa.
+    </GrammarExample>
+    <p>
+      As an object, use <em>us</em>. <em>Some of us / many of us</em> divide people in general into groups.
+    </p>
+    <GrammarFormula label="Object us" parts={['verb / preposition', 'us']} />
+    <GrammarExample note="Us = people in general.">
+      Zoos <mark data-role="grammar">give</mark> <mark data-role="content">us</mark> a chance to understand nature.
+    </GrammarExample>
+    <GrammarExample note="Some of us = some people.">
+      <mark data-role="grammar">Some of</mark> <mark data-role="content">us</mark> find technology very useful, while others still find it difficult.
+    </GrammarExample>
+    {wePoint && <GrammarUsagePointCard usagePoint={wePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="They say…: other people" id="they-people">
+    <p>
+      <em>They</em> can mean people in general too, but <em>without</em> the speaker — other people, experts, or people in charge like the government or a company. It is informal.
+    </p>
+    <GrammarFormula label="General they" parts={['they', 'verb']} />
+    <GrammarExample note="They = people, everyone says so.">
+      <mark data-role="content">They</mark> <mark data-role="grammar">say</mark> it's going to be a cold winter.
+    </GrammarExample>
+    <GrammarExample note="They = the city, the builders.">
+      <mark data-role="content">They</mark> <mark data-role="grammar">are building</mark> a new bridge over the river.
+    </GrammarExample>
+    <GrammarExample note="They = the people in that country.">
+      In Spain <mark data-role="content">they</mark> <mark data-role="grammar">have</mark> dinner very late.
+    </GrammarExample>
+    <p>
+      In formal writing, a passive is more usual: <em>It is said that…, A new bridge is being built.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="If someone…, they…" id="they-back">
+    <p>
+      After <em>someone, anyone, everyone, no one</em>, or a noun like <em>a student, a person, a child</em>, you often don't know — or it doesn't matter — whether the person is a man or a woman. To refer back to them, use <em>they / them / their</em>. This is normal in all kinds of English, spoken and written.
+    </p>
+    <GrammarFormula label="Referring back" parts={['someone / anyone / a person…', '… they / them / their']} />
+    <GrammarExample note="They = the person watching.">
+      If <mark data-role="grammar">someone</mark> is watching a film that <mark data-role="content">they</mark> don't like, <mark data-role="content">they</mark> can always change the channel.
+    </GrammarExample>
+    <GrammarExample note="They = anyone who wants to give a presentation.">
+      If <mark data-role="grammar">anyone</mark> wishes to give a presentation, <mark data-role="content">they</mark> can contact the Events Department.
+    </GrammarExample>
+    <GrammarExample note="Them = the student.">
+      If <mark data-role="grammar">a student</mark> wants to make music, there is no point teaching <mark data-role="content">them</mark> science.
+    </GrammarExample>
+    <GrammarExample note="Their = everyone's own.">
+      <mark data-role="grammar">Everyone</mark> has to bring <mark data-role="content">their</mark> own lunch.
+    </GrammarExample>
+    {theyBackPoint && <GrammarUsagePointCard usagePoint={theyBackPoint} />}
+    <p>
+      <em>They</em> keeps its plural verb even when it means one person: <em>they are, they have, they don't</em> — never <em>they is</em>. The reflexive is usually <em>themselves</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="He or she, he/she" id="he-or-she">
+    <p>
+      A more formal choice is <em>he or she</em> (and <em>him or her, his or her</em>). In writing only, you may see the short form <em>he/she</em>. Both work, but they get heavy when repeated — many writers use them once and then switch to <em>they</em>.
+    </p>
+    <GrammarFormula label="Formal" parts={['someone / a child…', '… he or she / he/she']} />
+    <GrammarExample note="He or she = the future journalist.">
+      If <mark data-role="grammar">somebody</mark> wants to be a journalist, <mark data-role="content">he or she</mark> has to know a lot about the world.
+    </GrammarExample>
+    <GrammarExample note="He/she, his/her: written only.">
+      If <mark data-role="grammar">a child</mark> had free time, <mark data-role="content">he/she</mark> would play on <mark data-role="content">his/her</mark> own.
+    </GrammarExample>
+    {heOrShePoint && <GrammarUsagePointCard usagePoint={heOrShePoint} />}
+    <p>
+      Older texts use just <em>he</em> for any person: <em>Every student must bring his book.</em> Today this sounds old-fashioned and can seem to leave women out — prefer <em>their</em> or <em>his or her</em>. Use <em>he</em> or <em>she</em> alone only when you know who you mean.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      English needs a subject. Don't copy the Ukrainian sentence with no subject — add <em>you</em>, or rephrase.
+    </p>
+    <GrammarContrast bad={['With this phone can take pictures.', 'Here is possible to buy tickets.']} good={['With this phone you can take pictures.', 'You can buy tickets here.']} />
+    <p>
+      General <em>one</em> takes a singular verb, like <em>he</em> or <em>she</em>.
+    </p>
+    <GrammarContrast bad={['One never know what will happen.']} good={['One never knows what will happen.']} />
+    <p>
+      Don't mix <em>one</em> and <em>you</em> in the same sentence. Choose one and stay with it.
+    </p>
+    <GrammarContrast bad={['One should do what you enjoy.']} good={['One should do what one enjoys.', 'You should do what you enjoy.']} />
+    <p>
+      <em>They</em> takes a plural verb even when it refers back to one person.
+    </p>
+    <GrammarContrast bad={['If a student is ill, they has to call the school.']} good={['If a student is ill, they have to call the school.']} />
+    <p>
+      <em>He or she</em> is singular, so the verb is singular.
+    </p>
+    <GrammarContrast bad={['If someone wants to help, he or she have to register.']} good={['If someone wants to help, he or she has to register.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'you, we, they, them for particular people — the basic forms these generic uses are built on.',
+      },
+      {
+        slug: 'pronouns-indefinite-thing-one-body-etc',
+        name: 'someone, anyone, everyone',
+        note: 'the words that they / them and he or she refer back to.',
+      },
+      {
+        slug: 'pronouns-substitution-one-ones-none',
+        name: 'one, ones, none',
+        note: 'one replacing a noun (the red one) — different from one meaning "people in general".',
+      },
+      {
+        slug: 'passives-passives-form',
+        name: 'the passive',
+        note: 'the formal alternative when you don’t want any subject: Tickets can be bought here.',
+      },
+    ]}
+  />
+</GrammarShell>
