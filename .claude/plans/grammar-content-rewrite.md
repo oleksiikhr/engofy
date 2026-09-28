@@ -780,12 +780,16 @@ how much/what time/which + noun, subject questions — коротко з пос�
 Why don't we…?, негативні why can't/didn't, focus, common mistakes з калькою How do you think? → What). Content — wh-слово/фраза;
 допоміжне, підмет, дієслово — `grammar`. Таблиця з 4 колонками переповнювала контейнер на 375px — укр. переклад злито в колонку.
 
-### [ ] 72. Reported speech — reported speech (`reported-speech-reported-speech`) — рівень A2
+### [x] 72. Reported speech — reported speech (`reported-speech-reported-speech`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `reported-speech-reported-speech`.
+17 EGP-рядків (1143-1159): 12 чистих FORM без карток, 5 FORM/USE (1152/1159 time words future/past — обидві в одній
+секції, 1148 wonder + 1158 was wondering — обидві в секції wonder, 1157 citation says) вплетені за `egpIndex` —
+generic-блок не рендериться. 12 секцій (say, say vs tell, backshift-таблиця, time words, if/whether, wh-, wonder,
+requests + not to, direct speech before/after/middle з «» — vs “ ”, said John + adverb, citation, common mistakes).
+Content — дієслово-репортер (said/told/asked/wondered); слухач, that/if/wh-, підмет і дієслово reported clause — `grammar`.
 
 ### [ ] 73. Verbs — patterns_that clauses (`verbs-patterns-that-clauses`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
