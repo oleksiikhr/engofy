@@ -1,0 +1,306 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 7 USE rows are inlined, matched by EGP index. The one plain FORM row
+// (maybe / perhaps before a clause) opens the page without a card. Sections
+// go from the A2 positions (start of the clause, mid position) through the B1
+// modal verb + adverb, emphasis and could … possibly, to the C1/C2
+// not necessarily and one-word answers.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const midPositionPoint = point(639);
+const emphasisPoint = point(641);
+const modalVerbPoint = point(642);
+const possiblyPoint = point(643);
+const notNecessarilyPoint = point(644);
+const notNecessarilyAnswerPoint = point(645);
+const certaintyAnswerPoint = point(646);
+
+const inlineUsagePointIds = [
+  midPositionPoint,
+  emphasisPoint,
+  modalVerbPoint,
+  possiblyPoint,
+  notNecessarilyPoint,
+  notNecessarilyAnswerPoint,
+  certaintyAnswerPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Adverbs that say how sure you are: maybe and perhaps at the start, probably and definitely in mid position, should probably, would certainly, Could you possibly…?, not necessarily, and one-word answers like Definitely."
+  handcrafted
+  sections={[
+    { id: 'start', title: 'Maybe / perhaps at the start', open: true },
+    { id: 'mid', title: "It's probably…, She definitely knows…: mid position", open: false },
+    { id: 'modal', title: 'You should probably…: modal verb + adverb', open: false },
+    { id: 'emphasis', title: 'Certainly, definitely, obviously: stronger statements', open: false },
+    { id: 'possibly', title: 'Could you possibly…?: polite requests', open: false },
+    { id: 'not-necessarily', title: 'Not necessarily: not in every case', open: false },
+    { id: 'short-answers', title: 'Definitely. / Not necessarily.: one-word answers', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Modal adverbs say how sure you are about something, just like modal verbs do. <em>Maybe he's at home</em> means almost the same as <em>He might be at home</em>; <em>She's definitely right</em> is close to <em>She must be right</em>. The adverb doesn't change the verb — you only have to put it in the right place.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Maybe / perhaps at the start" id="start" open>
+    <p>
+      <em>Maybe</em> and <em>perhaps</em> mean that something is possible, but you are not sure. They usually go at the very start, before the whole clause. <em>Maybe</em> is more common in speech; <em>perhaps</em> sounds a little more careful or formal.
+    </p>
+    <GrammarFormula label="Before a clause" parts={['maybe / perhaps', 'subject', 'verb']} />
+    <GrammarExample note="Perhaps + a guess about where something is.">
+      <mark data-role="content">Perhaps</mark> <mark data-role="grammar">it</mark><mark data-role="grammar">'s</mark> in the kitchen under the table.
+    </GrammarExample>
+    <GrammarExample note="Maybe + could: a friendly suggestion.">
+      <mark data-role="content">Maybe</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">could visit</mark> that park you told me about.
+    </GrammarExample>
+    <GrammarExample note="In the second clause, after but.">
+      I'm not sure, but <mark data-role="content">maybe</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">missed</mark> the bus.
+    </GrammarExample>
+    <p>
+      They can also go before just a short phrase, when the rest of the sentence is clear and doesn't need to be repeated.
+    </p>
+    <GrammarFormula label="Before a phrase" parts={['maybe / perhaps', 'phrase']} />
+    <GrammarExample note="Maybe in your kitchen = maybe I left it in your kitchen.">
+      I think I left my phone there, <mark data-role="content">maybe</mark> <mark data-role="grammar">in your kitchen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Perhaps a T-shirt = perhaps I want to buy a T-shirt.">
+      I want to buy new trousers and, <mark data-role="content">perhaps</mark>, <mark data-role="grammar">a T-shirt</mark>.
+    </GrammarExample>
+    <GrammarExample note="In brackets: an extra idea, not a certain one.">
+      There you can dance, eat and meet new friends (or <mark data-role="content">perhaps</mark> <mark data-role="grammar">a girlfriend</mark>).
+    </GrammarExample>
+    <p>
+      <em>Maybe</em> is one word. <em>May be</em> — two words — is the modal verb <em>may</em> + <em>be</em>: <em>Maybe he is ill</em> = <em>He may be ill.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It's probably…, She definitely knows…: mid position" id="mid" open={false}>
+    <p>
+      <em>Probably</em>, <em>definitely</em>, <em>certainly</em> and <em>possibly</em> usually go in the middle of the clause, not at the start. Where exactly depends on the verb. After <em>be</em>, the adverb comes after it.
+    </p>
+    <GrammarFormula label="After be" parts={['subject', 'be', 'probably / definitely', '…']} />
+    <GrammarExample note="Is probably: a guess about where something is.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">probably</mark> in the sitting room on the table.
+    </GrammarExample>
+    <GrammarExample note="'s definitely going to: a strong prediction.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">definitely</mark> <mark data-role="grammar">going to get</mark> messy.
+    </GrammarExample>
+    <p>
+      With any other verb, the adverb goes before the main verb. If there is an auxiliary (<em>have</em>, <em>will</em>, <em>be</em> + -ing), it goes after the first auxiliary.
+    </p>
+    <GrammarFormula label="Main verb" parts={['subject', 'probably / definitely', 'main verb']} />
+    <GrammarExample note="Before knows: one main verb, no auxiliary.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">probably</mark> <mark data-role="grammar">knows</mark> the answer.
+    </GrammarExample>
+    <GrammarFormula label="Auxiliary" parts={['subject', 'auxiliary', 'probably / definitely', 'main verb']} />
+    <GrammarExample note="After has, before the past participle.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">has</mark> <mark data-role="content">definitely</mark> <mark data-role="grammar">left</mark> — his coat isn't here.
+    </GrammarExample>
+    {midPositionPoint && <GrammarUsagePointCard usagePoint={midPositionPoint} />}
+    <p>
+      With a short negative (<em>won't</em>, <em>doesn't</em>, <em>isn't</em>), the adverb usually comes before it.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'probably / definitely', "won't / doesn't", 'main verb']} />
+    <GrammarExample note="Probably won't: I think the answer is no.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">probably</mark> <mark data-role="grammar">won't</mark> <mark data-role="grammar">come</mark> tomorrow.
+    </GrammarExample>
+    <GrammarExample note="Definitely doesn't: I'm sure the answer is no.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">definitely</mark> <mark data-role="grammar">doesn't</mark> <mark data-role="grammar">like</mark> coffee.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="You should probably…: modal verb + adverb" id="modal" open={false}>
+    <p>
+      A modal verb is an auxiliary too, so the adverb goes after it and before the main verb. The adverb changes how strong the modal verb sounds: <em>probably</em> makes advice or a prediction softer, <em>certainly</em> and <em>surely</em> make it stronger.
+    </p>
+    <GrammarFormula label="Modal verb + adverb" parts={['subject', 'modal verb', 'probably / certainly', 'base verb']} />
+    <GrammarExample note="Should probably: gentle advice, not an order.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">should</mark> <mark data-role="content">probably</mark> <mark data-role="grammar">bring</mark> sun cream, because it's going to be hot.
+    </GrammarExample>
+    <GrammarExample note="Would certainly … would probably: a strong prediction, then a softer one.">
+      In a big school <mark data-role="grammar">you</mark> <mark data-role="grammar">would</mark> <mark data-role="content">certainly</mark> <mark data-role="grammar">meet</mark> a lot of cool people and <mark data-role="grammar">you</mark><mark data-role="grammar">'d</mark> <mark data-role="content">probably</mark> <mark data-role="grammar">find</mark> it great.
+    </GrammarExample>
+    <GrammarExample note="Can surely: the speaker is confident it will be possible.">
+      Next year <mark data-role="grammar">you</mark> <mark data-role="grammar">can</mark> <mark data-role="content">surely</mark> <mark data-role="grammar">go</mark> somewhere with your friends.
+    </GrammarExample>
+    <GrammarExample note="Might possibly: very unsure — two words of doubt together.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">might</mark> <mark data-role="content">possibly</mark> <mark data-role="grammar">need</mark> an extra day.
+    </GrammarExample>
+    {modalVerbPoint && <GrammarUsagePointCard usagePoint={modalVerbPoint} />}
+    <p>
+      At the start of a sentence, <em>surely</em> often shows surprise rather than certainty: <em>Surely you're not leaving already?</em> means "I can't believe you're leaving".
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Certainly, definitely, obviously: stronger statements" id="emphasis" open={false}>
+    <p>
+      Some adverbs make a statement stronger: they show that you are completely sure, or that you really mean it. They go in the same mid position as <em>probably</em>.
+    </p>
+    <GrammarFormula label="Emphasis" parts={['subject', '(auxiliary)', 'certainly / definitely / obviously', 'main verb']} />
+    <GrammarExample note="Will certainly: a promise.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">will</mark> <mark data-role="content">certainly</mark> <mark data-role="grammar">ring</mark> you on Friday.
+    </GrammarExample>
+    <GrammarExample note="Definitely + main verb: your final opinion in an essay.">
+      For these reasons, <mark data-role="grammar">I</mark> <mark data-role="content">definitely</mark> <mark data-role="grammar">recommend</mark> staying in a city.
+    </GrammarExample>
+    <GrammarExample note="'d certainly: strong advice with If I were you.">
+      If I were you, <mark data-role="grammar">I</mark><mark data-role="grammar">'d</mark> <mark data-role="content">certainly</mark> <mark data-role="grammar">choose</mark> not to go with your parents.
+    </GrammarExample>
+    <GrammarExample note="Obviously before can't: the listener knows this too.">
+      With the job you've got, <mark data-role="grammar">you</mark> <mark data-role="content">obviously</mark> <mark data-role="grammar">can't</mark> <mark data-role="grammar">keep</mark> fit.
+    </GrammarExample>
+    {emphasisPoint && <GrammarUsagePointCard usagePoint={emphasisPoint} />}
+    <p>
+      The meanings are close but not the same: <em>definitely</em> — your mind is made up; <em>certainly</em> — a little more formal, often a promise; <em>obviously</em> and <em>clearly</em> — everyone can see it, so you don't need to prove it.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Could you possibly…?: polite requests" id="possibly" open={false}>
+    <p>
+      Adding <em>possibly</em> to a request with <em>could</em> makes it extra polite: you show you know you are asking for something that may not be easy. It's common in emails and when asking a stranger or your boss.
+    </p>
+    <GrammarFormula label="Polite request" parts={['could', 'subject', 'possibly', 'base verb']} />
+    <GrammarExample note="Could I possibly…?: asking for permission.">
+      <mark data-role="grammar">Could</mark> <mark data-role="grammar">I</mark> <mark data-role="content">possibly</mark> <mark data-role="grammar">see</mark> you at 3.30?
+    </GrammarExample>
+    <GrammarExample note="Could you possibly…?: asking someone to do something.">
+      <mark data-role="grammar">Could</mark> <mark data-role="grammar">you</mark> <mark data-role="content">possibly</mark> <mark data-role="grammar">recommend</mark> what action should be taken?
+    </GrammarExample>
+    <GrammarExample note="Could we possibly…?: suggesting a change politely.">
+      <mark data-role="grammar">Could</mark> <mark data-role="grammar">we</mark> <mark data-role="content">possibly</mark> <mark data-role="grammar">move</mark> the meeting to Thursday?
+    </GrammarExample>
+    {possiblyPoint && <GrammarUsagePointCard usagePoint={possiblyPoint} />}
+    <p>
+      In a negative sentence, <em>possibly</em> means the opposite — it makes the "no" stronger: <em>I can't possibly finish it today</em> = there is no way I can finish it.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Not necessarily: not in every case" id="not-necessarily" open={false}>
+    <p>
+      <em>Not necessarily</em> says that something is often true, but not always. Use it to disagree gently with a general idea: you don't say it's wrong, only that there are exceptions. <em>Necessarily</em> comes straight after <em>not</em> or the short negative.
+    </p>
+    <GrammarFormula label="Not necessarily" parts={['subject', "be not / doesn't", 'necessarily', '…']} />
+    <GrammarExample note="Isn't necessarily: expensive food is sometimes better, but not always.">
+      <mark data-role="grammar">Expensive food</mark> <mark data-role="grammar">isn't</mark> <mark data-role="content">necessarily</mark> better.
+    </GrammarExample>
+    <GrammarExample note="Is not necessarily: other people may see it differently.">
+      <mark data-role="grammar">This</mark> <mark data-role="grammar">is not</mark> <mark data-role="content">necessarily</mark> the way the older generation would see it.
+    </GrammarExample>
+    <GrammarExample note="Doesn't necessarily + main verb, then a contrast with does.">
+      While <mark data-role="grammar">what we wear</mark> <mark data-role="grammar">doesn't</mark> <mark data-role="content">necessarily</mark> <mark data-role="grammar">define</mark> who we are, it does play a big part in it.
+    </GrammarExample>
+    {notNecessarilyPoint && <GrammarUsagePointCard usagePoint={notNecessarilyPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Definitely. / Not necessarily.: one-word answers" id="short-answers" open={false}>
+    <p>
+      A modal adverb can be a complete answer on its own. It's shorter and more natural than repeating the whole sentence: <em>Definitely</em> instead of <em>Yes, I definitely agree</em>. Add <em>not</em> after it for a negative answer.
+    </p>
+    <GrammarFormula label="Short answer" parts={['adverb', '(not)']} />
+    <GrammarExample note="Probably: yes, but I'm not sure.">
+      Are you coming tonight? <mark data-role="content">Probably</mark>.
+    </GrammarExample>
+    <GrammarExample note="Probably not: no, but I'm not sure.">
+      Will it rain tomorrow? <mark data-role="content">Probably</mark> <mark data-role="grammar">not</mark>.
+    </GrammarExample>
+    <GrammarExample note="Definitely: a strong yes — you can ask and answer your own question in writing.">
+      Do I agree with this statement? <mark data-role="content">Definitely</mark>.
+    </GrammarExample>
+    {certaintyAnswerPoint && <GrammarUsagePointCard usagePoint={certaintyAnswerPoint} />}
+    <p>
+      <em>Not necessarily</em> works as a short answer too. The <em>not</em> comes first: it answers "is that always true?" with "no, not always".
+    </p>
+    <GrammarExample note="Not necessarily: the obvious guess is not the only one.">
+      Presents, paper, bows. Thinking of Christmas? <mark data-role="grammar">Not</mark> <mark data-role="content">necessarily</mark>.
+    </GrammarExample>
+    {notNecessarilyAnswerPoint && <GrammarUsagePointCard usagePoint={notNecessarilyAnswerPoint} />}
+    <p>
+      Other common one-word answers: <em>Certainly</em> (polite yes, often to a request), <em>Absolutely</em> (strong yes), <em>Maybe</em> / <em>Perhaps</em> (I don't know yet), <em>Definitely not</em> (strong no).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Maybe</em> is one word and goes at the start; <em>may be</em> is a verb and goes after the subject.
+    </p>
+    <GrammarContrast
+      bad={['May be he is at home.', 'He maybe is at home.']}
+      good={['Maybe he is at home.', 'He may be at home.']}
+    />
+    <p>
+      The adverb goes before a main verb, not between the verb and its object.
+    </p>
+    <GrammarContrast
+      bad={['She knows probably the answer.', 'I will ring certainly you on Friday.']}
+      good={['She probably knows the answer.', 'I will certainly ring you on Friday.']}
+    />
+    <p>
+      With a short negative, the adverb comes first.
+    </p>
+    <GrammarContrast
+      bad={["He won't probably come.", "She doesn't definitely like it."]}
+      good={["He probably won't come.", "She definitely doesn't like it."]}
+    />
+    <p>
+      <em>Not</em> comes before <em>necessarily</em>, never after it.
+    </p>
+    <GrammarContrast
+      bad={['Big cities are necessarily not dangerous.', 'Necessarily not.']}
+      good={["Big cities aren't necessarily dangerous.", 'Not necessarily.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-adjectives',
+        name: 'modal adjectives',
+        note: "It's likely that…, I'm sure that… — the same meanings as adjectives.",
+      },
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'He might be late — the modal verb for maybe.',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "She must be right — the modal verb for definitely.",
+      },
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: 'Could you…? — polite requests, with or without possibly.',
+      },
+      {
+        slug: 'adverbs-position',
+        name: 'adverb position',
+        note: 'Front, mid and end position for all kinds of adverbs.',
+      },
+    ]}
+  />
+</GrammarShell>
