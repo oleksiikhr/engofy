@@ -415,6 +415,7 @@ function toGrammarConstructionResponse(
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,
       explanation: point.explanation,
+      translations: point.translations,
       examples: point.examples,
       state: point.state,
       assumedKnown: point.assumedKnown,

@@ -82,6 +82,38 @@ upserts usage points on), each value an array of exercises:
 - Every `egpIndex` key must match an already-imported usage point (run
   `import-egp` first); the importer throws listing any that don't.
 
+## `grammar-usage-point-content.json`
+
+Hand-written learner content per `grammar_usage_point`, the same fields the
+`grammar_enrichment` stage writes (`learner_explanation`, `learner_examples`,
+`translations.uk`). Written in a Claude Code session, no AI API call.
+`import-usage-point-content` (part of `make seed`) overwrites every listed
+point, so edits are picked up on re-run; `grammar_enrichment` skips a point
+that already has its translation (schema:
+`src/modules/post/domain/usage-point-content-seed.ts`).
+
+Shape: a JSON object keyed by `egpIndex`:
+
+```json
+{
+  "2": {
+    "explanation": "We use the present simple for habits. Add -s after he, she, it: she works.",
+    "examples": ["I walk to work every day.", "She plays tennis on Sundays."],
+    "uk": {
+      "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works."
+    }
+  }
+}
+```
+
+- `explanation` — 2-3 short sentences in plain English at the point's CEFR
+  level or easier: why the construction is used for this purpose and its form
+  pattern.
+- `examples` — 2-3 complete sentences, at most 12 words each, showing exactly
+  this use.
+- `uk.explanation` — faithful Ukrainian translation of `explanation`; the form
+  pattern stays in English.
+
 ## `irregular-verbs.json`
 
 ~164 English irregular verbs (`base_form`, `past_simple[]`,

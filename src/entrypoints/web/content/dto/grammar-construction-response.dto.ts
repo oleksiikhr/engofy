@@ -1,5 +1,11 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
+import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
+import type { PostGrammarTranslationDto } from './post-detail-response.dto.js';
+
+type ConstructionGrammarTranslations = Partial<
+  Record<ContentLanguage, PostGrammarTranslationDto>
+>;
 
 export class ConstructionUsagePointDto {
   readonly grammarUsagePointId!: string;
@@ -18,6 +24,9 @@ export class ConstructionUsagePointDto {
   // Learner-facing explanation and clean example sentences; null / empty
   // until the grammar_enrichment stage has covered this point.
   readonly explanation!: string | null;
+
+  // Translations of `explanation` by language; empty until translated.
+  readonly translations!: ConstructionGrammarTranslations;
 
   readonly examples!: string[];
 
