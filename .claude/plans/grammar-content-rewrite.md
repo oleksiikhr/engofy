@@ -902,12 +902,15 @@ each other, після дієслова (+ meet/kiss без each other, help б�
 формально + "two vs more" як застаріле правило, each … the other(s) C1/C2, common mistakes). Content — `each other`/`one another`
 (+ 's); у C1/C2-патерні — `each`-фраза і `the other(s)`, дієслово й прийменник — `grammar`.
 
-### [ ] 84. Future — future expressions with be (`future-future-expressions-with-be`) — рівень B2
+### [x] 84. Future — future expressions with be (`future-future-expressions-with-be`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-expressions-with-be`.
+6 EGP-рядків (360-365), 3 картки (363/364/365) inline; generic-блок не рендериться. 7 секцій (форма + таблиця трьох виразів +
+was/were → future in the past, about to + just, due to + be due без дієслова, be to — формальні плани + заголовки новин, be to —
+накази/are not to/What am I to do?, таблиця about to/due to/be to/going to/present continuous/will (без EGP-рядка), common mistakes).
+Content — `am/is/are` + `about to`/`due to`/`to` одним блоком (з just розділено: `are` … `about to`); підмет і дієслово — `grammar`.
 
 ### [ ] 85. Future — future perfect continuous (`future-future-perfect-continuous`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
