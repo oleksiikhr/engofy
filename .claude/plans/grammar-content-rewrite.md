@@ -912,12 +912,15 @@ was/were → future in the past, about to + just, due to + be due без діє�
 накази/are not to/What am I to do?, таблиця about to/due to/be to/going to/present continuous/will (без EGP-рядка), common mistakes).
 Content — `am/is/are` + `about to`/`due to`/`to` одним блоком (з just розділено: `are` … `about to`); підмет і дієслово — `grammar`.
 
-### [ ] 85. Future — future perfect continuous (`future-future-perfect-continuous`) — рівень B2
+### [x] 85. Future — future perfect continuous (`future-future-perfect-continuous`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-perfect-continuous`.
+4 EGP-рядки (371-374), 2 картки (373/374) inline; generic-блок не рендериться. 7 секцій (форма + by the time + present simple,
+won't have been + How long will…?, тривалість до точки в майбутньому + укр. відповідник, майбутній результат (без EGP-рядка),
+припущення про теперішнє C2 (vs must have been), таблиця will be doing/will have been doing/will have done + state verbs, common
+mistakes). Content — `will have been` + `-ing` (у питанні розділено: `will` … `have been`); підмет, by/for-фрази — `grammar`.
 
 ### [ ] 86. Future — future perfect simple (`future-future-perfect-simple`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
