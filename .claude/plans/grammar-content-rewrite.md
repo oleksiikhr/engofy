@@ -500,12 +500,15 @@ clause C2, isn't it / wouldn't it). Додано what + plural/uncountable бе�
 їх обіцяють GrammarCompare-посилання з `prepositions-prepositions`/`adjectives-superlatives`. Content —
 relative-слово; у реченнях без займенника content-мітки нема (слова нема), усе — grammar.
 
-### [ ] 45. Discourse markers — discourse markers in writing (`discourse-markers-discourse-markers-in-writing`) — рівень A2
+### [x] 45. Discourse markers — discourse markers in writing (`discourse-markers-discourse-markers-in-writing`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `discourse-markers-discourse-markers-in-writing`.
+11 EGP-рядків (1132-1142), усі FORM/USE — усі вплетені за `egpIndex`. 10 секцій за функцією маркера
+(as you know / you see, so, sequencing, adding, contrasting, stance, comparing, result, opening/closing,
+textual reference). Додано `however` (не EGP-рядок) — його обіцяє GrammarCompare з
+`conjunctions-coordinating`. Content — сам маркер, grammar — subject + verb речення, що йде після.
 
 ### [ ] 46. Focus — focus (`focus-focus`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
