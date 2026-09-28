@@ -801,12 +801,15 @@ verb + person — tell/promise/remind/warn, ширший набір B1 табл�
 I don't think — без EGP-рядка, I think so / I hope not — без EGP-рядка, common mistakes з комою перед що і explain me).
 Content — головне дієслово; that, слухач, підмет і дієслово підрядного — `grammar`. Скорочення (`you'll`, `it's`) — одна мітка.
 
-### [ ] 74. Verbs — phrasal (`verbs-phrasal`) — рівень A2
+### [x] 74. Verbs — phrasal (`verbs-phrasal`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `verbs-phrasal`.
+9 EGP-рядків (1057-1065), усі чисті FORM — жодної картки, generic-блок не рендериться. 9 секцій (що таке phrasal verb —
+частка ≈ укр. префікс, без об'єкта, частка + об'єкт, іменник посередині, займенник завжди посередині, таблиця значень часток,
+відмежування від prepositional verbs — look after it, everyday vs formal — put off/postpone, common mistakes). Content —
+дієслово і частка (одна мітка поруч, дві — коли їх розділяє об'єкт); об'єкт — `grammar`.
 
 ### [ ] 75. Verbs — phrasal-prepositional (`verbs-phrasal-prepositional`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
