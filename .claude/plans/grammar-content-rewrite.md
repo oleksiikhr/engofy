@@ -851,12 +851,15 @@ there used to be, didn't use to (+ didn't used to як поширений, ал�
 used to vs would vs past simple (без EGP-рядка), еліпсис, as she used to say C2, used not to C2, common mistakes з be used to + -ing).
 Content — `used to`/`use to`/`used not to`; did/didn't/never — `grammar`.
 
-### [ ] 79. Passives — get and have (`passives-get-and-have`) — рівень B1
+### [x] 79. Passives — get and have (`passives-get-and-have`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `passives-get-and-have`.
+7 EGP-рядків (736-742), 5 карток (738-742) inline; generic-блок не рендериться. 9 секцій (get-passive + did/didn't, got vs was
+без EGP-рядка + fixed get married, get yourself killed, have something done — послуга і "had my purse stolen", get something done,
+get someone to do vs make, get someone doing, have someone do vs get to, common mistakes). Content — форма get/have + дієслівна
+форма після об'єкта (participle/to-inf/-ing/base); підмет, об'єкт, зворотний займенник — `grammar`.
 
 ### [ ] 80. Past — past perfect continuous (`past-past-perfect-continuous`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
