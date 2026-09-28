@@ -1,0 +1,427 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 15 EGP rows (1160-1174), all FORM/USE, all inlined, matched by egpIndex.
+// Sections follow the focusing device, not the level: something moved to the
+// front (phrase, adverb, fixed expression, -ed clause, not a + noun), then the
+// "frame" structures that split one sentence in two to point at one part
+// (it's + adjective + that, the thing is, the reason … is, what-cleft,
+// it-cleft), then pointing devices inside a longer text.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const prepPhraseA2 = point(1160);
+const adverbB1 = point(1161);
+const itAdjThatB1 = point(1162);
+const reasonPlaceB2 = point(1163);
+const thingIsB2 = point(1164);
+const fixedExpressionC1 = point(1165);
+const imperativeC1 = point(1166);
+const whatCleftC1 = point(1167);
+const whTitleC1 = point(1168);
+const edClauseC1 = point(1169);
+const notANounC2 = point(1170);
+const whCleftSubjectC2 = point(1171);
+const premodifiedThingC2 = point(1172);
+const itCleftC2 = point(1173);
+const multipleFixedC2 = point(1174);
+
+const inlineUsagePointIds = [
+  prepPhraseA2,
+  adverbB1,
+  itAdjThatB1,
+  reasonPlaceB2,
+  thingIsB2,
+  fixedExpressionC1,
+  imperativeC1,
+  whatCleftC1,
+  whTitleC1,
+  edClauseC1,
+  notANounC2,
+  whCleftSubjectC2,
+  premodifiedThingC2,
+  itCleftC2,
+  multipleFixedC2,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to give focus to part of an English sentence: putting a phrase or adverb at the front, it's important that, the problem is that, the reason I'm writing is, what we need is, it was Paul who, all in all, compared to, not a word, and signposting a text with note and why-titles."
+  handcrafted
+  sections={[
+    { id: 'front-phrase', title: 'In the morning, …: a phrase at the front', open: true },
+    { id: 'front-adverb', title: 'Suddenly, …: an adverb at the front', open: false },
+    { id: 'it-adjective', title: "It's important that …", open: false },
+    { id: 'thing-is', title: 'The problem is (that) …, the sad thing is …', open: false },
+    { id: 'reason-place', title: "The reason I'm writing is …, the place we loved was …", open: false },
+    { id: 'what-cleft', title: 'What we need is …, how we live is …', open: false },
+    { id: 'it-cleft', title: 'It was Paul who …', open: false },
+    { id: 'fixed', title: 'All in all, when it comes down to it: fixed expressions at the front', open: false },
+    { id: 'ed-clause', title: 'Compared to …, outlined below are …', open: false },
+    { id: 'not-a', title: 'Not a word was spoken', open: false },
+    { id: 'signposting', title: 'Note the difference, Why I think …: pointing inside a text', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      In a normal English sentence the subject comes first: <em>I go to the beach in the morning.</em> To make one part stand out — to set the scene, stress the key idea or show what you're really talking about — you can change that order. Either move something to the front (<em><strong>In the morning</strong>, I go to the beach.</em>), or split the sentence into two parts with a "frame" that points at the important bit: <em><strong>What we need is</strong> a strong campaign.</em> / <em><strong>It was</strong> Paul <strong>who</strong> stole the money.</em> The words and the facts don't change — only what the reader notices first.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="In the morning, …: a phrase at the front" id="front-phrase" open>
+    <p>
+      A prepositional phrase of time or place usually goes at the end of the sentence. Put it at the front to set the scene before the main news — when, where or from which point something happens. After a fronted phrase, the word order of the rest doesn't change: subject, then verb. A comma after the phrase is common, especially when it's long.
+    </p>
+    <GrammarFormula label="Fronted phrase" parts={['preposition + noun', ',', 'subject', 'verb']} />
+    <GrammarExample note="Time first: the usual routine, then what happens.">
+      <mark data-role="content">In the morning</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">go</mark> to the beach.
+    </GrammarExample>
+    <GrammarExample note="Place first: the reader knows we're talking about my country before the fact.">
+      <mark data-role="content">In my country</mark>, <mark data-role="grammar">the most popular food</mark> <mark data-role="grammar">is</mark> paella, a kind of rice with seafood.
+    </GrammarExample>
+    <GrammarExample note="Starting point first: typical of directions.">
+      <mark data-role="content">From your house</mark>, <mark data-role="grammar">take</mark> the first turning on your left after the roundabout.
+    </GrammarExample>
+    <GrammarExample note="Compare the neutral order: the phrase at the end, no comma.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">go</mark> to the beach <mark data-role="content">in the morning</mark>.
+    </GrammarExample>
+    {prepPhraseA2 && <GrammarUsagePointCard usagePoint={prepPhraseA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Suddenly, …: an adverb at the front" id="front-adverb" open={false}>
+    <p>
+      Adverbs of time, place and manner can move to the front too. In stories this is how you build tension: <em>Suddenly</em> warns the reader that something unexpected is coming, <em>Quickly</em> shows the speed of the action before the action itself. <em>Here</em>, <em>There</em> and <em>Outside</em> point to a place you've just mentioned. The subject and verb still follow in normal order.
+    </p>
+    <GrammarFormula label="Fronted adverb" parts={['adverb', '(,)', 'subject', 'verb']} />
+    <GrammarExample note="Suddenly: the reader is ready for a surprise.">
+      <mark data-role="content">Suddenly</mark>, <mark data-role="grammar">the door</mark> <mark data-role="grammar">opened</mark>.
+    </GrammarExample>
+    <GrammarExample note="Quickly: the manner comes first, then the three actions.">
+      <mark data-role="content">Quickly</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">opened</mark> the envelope, took out a white piece of paper and started to read.
+    </GrammarExample>
+    <GrammarExample note="Here: points back to the diary in the sentence before.">
+      That's my diary. <mark data-role="content">Here</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wrote</mark> how I felt, what I did and who I met.
+    </GrammarExample>
+    <GrammarExample note="Outside: a change of scene.">
+      <mark data-role="content">Outside</mark>, <mark data-role="grammar">it</mark> <mark data-role="grammar">was raining</mark> a lot.
+    </GrammarExample>
+    <p>
+      Adverbs of frequency (<em>always</em>, <em>often</em>) and degree (<em>very</em>, <em>really</em>) don't work like this — they stay in the middle of the sentence. And a short fronted adverb doesn't always need a comma: both <em>Suddenly the door opened</em> and <em>Suddenly, the door opened</em> are correct.
+    </p>
+    {adverbB1 && <GrammarUsagePointCard usagePoint={adverbB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="It's important that …" id="it-adjective" open={false}>
+    <p>
+      Instead of starting with a long <em>that</em>-clause as the subject (<em>That you are happy is important</em> — correct, but heavy and very formal), English puts <em>it</em> in the subject position and moves the clause to the end. Your opinion — the adjective — comes first, so the reader knows how to take the news before they hear it.
+    </p>
+    <GrammarFormula label="It + be + adjective" parts={['it', 'be', 'adjective', 'that', 'subject', 'verb']} />
+    <GrammarExample note="Your reaction first, then the news.">
+      <mark data-role="content">It</mark><mark data-role="grammar">'s</mark> <mark data-role="grammar">great</mark> <mark data-role="content">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">have got</mark> a new job!
+    </GrammarExample>
+    <GrammarExample note="It's important that: the key point for the reader.">
+      <mark data-role="content">It</mark><mark data-role="grammar">'s</mark> <mark data-role="grammar">important</mark> <mark data-role="content">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> happy.
+    </GrammarExample>
+    <GrammarExample note="It's true that … but: agree with one part, then argue against the rest.">
+      <mark data-role="content">It</mark><mark data-role="grammar">'s</mark> <mark data-role="grammar">true</mark> <mark data-role="content">that</mark> <mark data-role="grammar">there</mark> <mark data-role="grammar">are</mark> one or two interesting programmes, but the rest are horrible!
+    </GrammarExample>
+    <GrammarExample note="An adverb can make the adjective stronger.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> really <mark data-role="grammar">sad</mark> <mark data-role="content">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">have to move</mark> to a different area.
+    </GrammarExample>
+    <p>
+      In speech and informal writing <em>that</em> is often dropped: <em>It's great you've got a new job!</em>
+    </p>
+    {itAdjThatB1 && <GrammarUsagePointCard usagePoint={itAdjThatB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="The problem is (that) …, the sad thing is …" id="thing-is" open={false}>
+    <p>
+      A general noun — <em>thing</em>, <em>fact</em>, <em>point</em>, <em>problem</em>, <em>reason</em> — plus <em>is</em> announces what kind of information is coming, and the clause after it delivers it. <em>The problem is</em> prepares the reader for a difficulty, <em>the point is</em> for what really matters, <em>the fact is</em> for something you present as undeniable. <em>That</em> after <em>is</em> is optional; without it, a comma is common.
+    </p>
+    <GrammarFormula label="The thing is" parts={['the', 'thing / fact / point / problem / reason', 'is', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="The problem is: the difficulty comes next.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">problem</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> always late, so I need a car.
+    </GrammarExample>
+    <GrammarExample note="The fact is that: presented as something no one can argue with.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">fact</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">not all animals</mark> <mark data-role="grammar">are</mark> able to deal with this.
+    </GrammarExample>
+    <GrammarExample note="The point is that: after a concession, what really matters.">
+      It is true that cars cause a lot of accidents. <mark data-role="grammar">The</mark> <mark data-role="content">point</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the car itself</mark> <mark data-role="grammar">does not cause</mark> the accident.
+    </GrammarExample>
+    <GrammarExample note="The reason is: a whole list of reasons can follow.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">reason</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">like</mark> children and I have experience of looking after them.
+    </GrammarExample>
+    {thingIsB2 && <GrammarUsagePointCard usagePoint={thingIsB2} />}
+    <p>
+      Add an adjective before the noun and the frame also carries your judgement: <em>the sad thing</em>, <em>the strange thing</em>, <em>the only problem</em>, <em>the relevant point</em>. It can go in the past (<em>was</em>) when you're telling a story.
+    </p>
+    <GrammarFormula label="The sad thing is" parts={['the', 'adjective', 'thing / fact / point / problem', 'is / was', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="The only problem: everything else is fine.">
+      <mark data-role="grammar">The</mark> <mark data-role="grammar">only</mark> <mark data-role="content">problem</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">are</mark> a little too noisy at night.
+    </GrammarExample>
+    <GrammarExample note="The strange thing was: past, in a story.">
+      <mark data-role="grammar">The</mark> <mark data-role="grammar">strange</mark> <mark data-role="content">thing</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the noise</mark> <mark data-role="grammar">reminded</mark> her of someone making a cup of tea.
+    </GrammarExample>
+    <GrammarExample note="The sad fact is: a comma instead of that.">
+      <mark data-role="grammar">The</mark> <mark data-role="grammar">sad</mark> <mark data-role="content">fact</mark> <mark data-role="grammar">is</mark>, <mark data-role="grammar">poverty</mark> <mark data-role="grammar">is</mark> very likely to pass down to the next generation.
+    </GrammarExample>
+    {premodifiedThingC2 && <GrammarUsagePointCard usagePoint={premodifiedThingC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="The reason I'm writing is …, the place we loved was …" id="reason-place" open={false}>
+    <p>
+      Here the general noun gets its own clause and the whole group becomes the subject: <em>the reason I am writing</em>, <em>the place we liked most</em>. Then <em>be</em>, then the thing you want to highlight. <em>The reason I am writing is to …</em> is the classic first line of a formal letter or email. <em>That</em> / <em>which</em> after the noun is optional.
+    </p>
+    <GrammarFormula label="The reason / the place" parts={['the reason / the place', '(that / which)', 'subject + verb', 'be', 'focus']} />
+    <GrammarExample note="The standard opening of a formal letter.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">reason</mark> <mark data-role="grammar">I am writing</mark> <mark data-role="grammar">is</mark> to suggest a few things about our holidays.
+    </GrammarExample>
+    <GrammarExample note="With that; the focus is another clause with that.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">reason</mark> <mark data-role="grammar">that I never continued taking lessons</mark> <mark data-role="grammar">is</mark> that my schoolwork became too heavy.
+    </GrammarExample>
+    <GrammarExample note="The place: the name comes last, where the reader notices it.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">place</mark> <mark data-role="grammar">we appreciated the most</mark> <mark data-role="grammar">was</mark> Cap Fréhel, where nature is still wild.
+    </GrammarExample>
+    <GrammarExample note="With which.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">place</mark> <mark data-role="grammar">which has impressed me most</mark> <mark data-role="grammar">is</mark> Abastumani.
+    </GrammarExample>
+    <p>
+      After <em>the reason … is</em>, use <em>that</em> or <em>to</em>, not <em>because</em>: <em>because</em> repeats the idea of <em>reason</em>. You'll hear <em>the reason is because</em> in speech, but avoid it in writing.
+    </p>
+    {reasonPlaceB2 && <GrammarUsagePointCard usagePoint={reasonPlaceB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="What we need is …, how we live is …" id="what-cleft" open={false}>
+    <p>
+      A <em>what</em>-clause (<em>what we need</em> = the thing that we need) works as the subject, then <em>is</em> / <em>was</em>, then the focus. The first part says what the reader already has in mind; the part after <em>is</em> is the new, important information. The verb agrees with the focus in careful writing: <em>What everyone loved <strong>were</strong> the special effects.</em>
+    </p>
+    <GrammarFormula label="What-cleft" parts={['what', 'subject + verb', 'is / was', 'focus']} />
+    <GrammarExample note="What we need is: the solution, highlighted at the end.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">we need</mark> <mark data-role="grammar">is</mark> a strong publicity campaign directed at young people.
+    </GrammarExample>
+    <GrammarExample note="The focus is a to-infinitive.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">tourists want</mark> <mark data-role="grammar">is</mark> to see the most typical things in England.
+    </GrammarExample>
+    <GrammarExample note="The focus is a that-clause.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">I found particularly fascinating</mark> <mark data-role="grammar">is</mark> that the story is still exciting.
+    </GrammarExample>
+    <GrammarExample note="Were, because the focus — the special effects — is plural.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">everyone loved</mark> <mark data-role="grammar">were</mark> the special effects.
+    </GrammarExample>
+    {whatCleftC1 && <GrammarUsagePointCard usagePoint={whatCleftC1} />}
+    <p>
+      <em>How</em>, <em>why</em> and <em>where</em> can start the subject clause in the same way — the focus is then a way, a reason or a place. It's formal and typical of essays. Here the verb is always singular: the clause counts as one thing.
+    </p>
+    <GrammarFormula label="How / why / where" parts={['how / why / where', 'subject + verb', 'verb', 'rest of the sentence']} />
+    <GrammarExample note="How we are brought up = the way we are brought up.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">we are brought up</mark> <mark data-role="grammar">forms</mark> our character and our attitude towards everyone around us.
+    </GrammarExample>
+    <GrammarExample note="Where he had gone to = the place he had gone to.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">he had gone to</mark> <mark data-role="grammar">was</mark> a mystery.
+    </GrammarExample>
+    <GrammarExample note="How they influenced my life = the way they influenced my life.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">they influenced my life</mark> <mark data-role="grammar">is</mark> hard to tell.
+    </GrammarExample>
+    {whCleftSubjectC2 && <GrammarUsagePointCard usagePoint={whCleftSubjectC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="It was Paul who …" id="it-cleft" open={false}>
+    <p>
+      An <em>it</em>-cleft takes one part of the sentence — usually a person or thing — and puts it between <em>It is / It was</em> and <em>who</em> / <em>that</em>. It says "this one, and not anyone else": <em>Paul stole the money</em> just reports; <em>It was Paul who stole the money</em> answers the question "who?" and rejects other answers. Use <em>who</em> for people, <em>that</em> for things (<em>that</em> is also fine for people).
+    </p>
+    <GrammarFormula label="It-cleft" parts={['it', 'is / was', 'focus', 'who / that', 'rest of the clause']} />
+    <GrammarExample note="Paul — not someone else — stole the money.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">Paul</mark> <mark data-role="content">who</mark> <mark data-role="grammar">stole the money</mark>.
+    </GrammarExample>
+    <GrammarExample note="Present is, for a fact about a book: Piggy is the one.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">Piggy</mark> <mark data-role="content">who</mark> <mark data-role="grammar">finds the conch and knows how to blow it</mark>.
+    </GrammarExample>
+    <GrammarExample note="My mother, out of the whole family.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">my mother</mark> <mark data-role="content">who</mark> <mark data-role="grammar">always plays the role of mediator</mark>.
+    </GrammarExample>
+    <GrammarExample note="A thing in focus: that, not who.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">this silence</mark> <mark data-role="content">that</mark> <mark data-role="grammar">gives me the impression of togetherness</mark>.
+    </GrammarExample>
+    <p>
+      The <em>be</em> after <em>it</em> is always singular, even when the focus is plural: <em>It <strong>was</strong> the students who complained.</em>
+    </p>
+    {itCleftC2 && <GrammarUsagePointCard usagePoint={itCleftC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="All in all, when it comes down to it: fixed expressions at the front" id="fixed" open={false}>
+    <p>
+      Some fixed expressions open a sentence to tell the reader how to take it: <em>All in all</em> and <em>All things considered</em> sum up after looking at everything; <em>At the end of the day</em> and <em>When it comes down to it</em> introduce what really matters in the end; <em>When you think about it</em> invites the reader to reflect. They're followed by a comma and a normal sentence — or a question.
+    </p>
+    <GrammarFormula label="Fixed expression" parts={['fixed expression', ',', 'subject', 'verb']} />
+    <GrammarExample note="All in all: the overall judgement.">
+      <mark data-role="content">All in all</mark>, <mark data-role="grammar">the activity week</mark> <mark data-role="grammar">was</mark> a nice experience for both students and teachers.
+    </GrammarExample>
+    <GrammarExample note="All things considered: a recommendation after weighing the options.">
+      <mark data-role="content">All things considered</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">would recommend</mark> the third proposal.
+    </GrammarExample>
+    <GrammarExample note="At the end of the day: what really counts.">
+      <mark data-role="content">At the end of the day</mark>, <mark data-role="grammar">everything</mark> <mark data-role="grammar">is</mark> up to you!
+    </GrammarExample>
+    <GrammarExample note="When it comes down to it: followed by a question.">
+      <mark data-role="content">When it comes down to it</mark>, who <mark data-role="grammar">does</mark> not <mark data-role="grammar">like</mark> such a surprise?
+    </GrammarExample>
+    {fixedExpressionC1 && <GrammarUsagePointCard usagePoint={fixedExpressionC1} />}
+    <p>
+      For extra weight, two expressions can open the sentence one after another — each with its own comma or none at all, as in a story. Don't stack more than two: the sentence starts to sound like a speech.
+    </p>
+    <GrammarFormula label="Two expressions" parts={['expression 1', ',', 'expression 2', ',', 'subject', 'verb']} />
+    <GrammarExample note="All in all + taking everything into account: a very emphatic summary.">
+      <mark data-role="content">All in all</mark>, <mark data-role="content">taking everything into account</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">would suggest</mark> a leisure centre.
+    </GrammarExample>
+    <GrammarExample note="All of a sudden + out of nowhere: a double surprise in a story.">
+      But <mark data-role="content">all of a sudden</mark>, <mark data-role="content">out of nowhere</mark> <mark data-role="grammar">a bunch of people</mark> <mark data-role="grammar">came</mark> running towards him.
+    </GrammarExample>
+    <GrammarExample note="What is more + from my point of view: adding a point and your stance.">
+      <mark data-role="content">What is more</mark>, <mark data-role="content">from my point of view</mark> <mark data-role="grammar">happiness</mark> <mark data-role="grammar">has</mark> nothing to do with big things.
+    </GrammarExample>
+    {multipleFixedC2 && <GrammarUsagePointCard usagePoint={multipleFixedC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Compared to …, outlined below are …" id="ed-clause" open={false}>
+    <p>
+      In formal, academic and business writing a short clause with an <em>-ed</em> form can open the sentence and set the frame for the main clause: <em>Compared to</em>, <em>Based on</em>, <em>Given</em>. There's no subject in it — so the subject of the main clause should be the thing that is compared, based or given.
+    </p>
+    <GrammarFormula label="-ed clause" parts={['-ed form', 'rest of the phrase', ',', 'subject', 'verb']} />
+    <GrammarExample note="Compared to: Berlin is compared with other capitals.">
+      <mark data-role="content">Compared</mark> to other European capitals, <mark data-role="grammar">Berlin</mark> <mark data-role="grammar">has done</mark> a lot to make cycling safer.
+    </GrammarExample>
+    <GrammarExample note="Based on: the report is based on the survey.">
+      <mark data-role="content">Based</mark> on this survey, <mark data-role="grammar">the report</mark> <mark data-role="grammar">recommends</mark> longer opening hours.
+    </GrammarExample>
+    <p>
+      A second pattern turns the sentence round: the <em>-ed</em> form and a place word come first, then <em>be</em>, then the subject at the end. It points the reader forward or back to a list, a table or a document.
+    </p>
+    <GrammarFormula label="Inverted" parts={['-ed form', 'below / above / attached', 'be', 'subject']} />
+    <GrammarExample note="Outlined below are + the reasons: the subject comes last.">
+      <mark data-role="content">Outlined</mark> below <mark data-role="grammar">are</mark> <mark data-role="grammar">some essential reasons</mark> which justify my choice.
+    </GrammarExample>
+    <GrammarExample note="Attached is: typical of a business email.">
+      <mark data-role="content">Attached</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">the report</mark> you asked for.
+    </GrammarExample>
+    {edClauseC1 && <GrammarUsagePointCard usagePoint={edClauseC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Not a word was spoken" id="not-a" open={false}>
+    <p>
+      <em>Not a</em> + noun at the start means "not even one" and is strongly emphatic, almost literary. It's followed by one of two patterns: the noun is the subject of a (usually passive) verb, or the noun is the object — and then the auxiliary comes before the subject, as in a question.
+    </p>
+    <GrammarFormula label="Not a + subject" parts={['not a', 'noun', 'passive verb']} />
+    <GrammarExample note="Not a word is the subject of was spoken.">
+      <mark data-role="content">Not a</mark> <mark data-role="grammar">word</mark> <mark data-role="grammar">was spoken</mark> by anyone throughout the journey.
+    </GrammarExample>
+    <GrammarFormula label="Not a + object" parts={['not a', 'noun', 'auxiliary', 'subject', 'verb']} />
+    <GrammarExample note="Not a scrap of remorse is the object: do comes before they.">
+      <mark data-role="content">Not a</mark> <mark data-role="grammar">scrap of remorse</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">have</mark>.
+    </GrammarExample>
+    <p>
+      The neutral versions are <em>Nobody spoke a word</em> and <em>They don't have any remorse</em>. In everyday English, <em>not a single</em> + noun is more common: <em>Not a single person came.</em>
+    </p>
+    {notANounC2 && <GrammarUsagePointCard usagePoint={notANounC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Note the difference, Why I think …: pointing inside a text" id="signposting" open={false}>
+    <p>
+      In reports, proposals and instructions, an imperative can point the reader at something important: <em>Note</em>, <em>Notice</em>, <em>See</em>, <em>Consider</em>. It isn't an order — it's a signpost that says "look at this".
+    </p>
+    <GrammarFormula label="Pointing imperative" parts={['note / notice / see / consider', 'the thing to look at']} />
+    <GrammarExample note="Note: the disadvantages are the key point here.">
+      <mark data-role="content">Note</mark> <mark data-role="grammar">the disadvantages of this transfer</mark>.
+    </GrammarExample>
+    <GrammarExample note="Notice: draws the eye to one figure.">
+      <mark data-role="content">Notice</mark> <mark data-role="grammar">the difference in the salary</mark>.
+    </GrammarExample>
+    <GrammarExample note="See: sends the reader to another place for details.">
+      <mark data-role="content">See</mark> <mark data-role="grammar">the written instructions on the phone</mark> for more information.
+    </GrammarExample>
+    {imperativeC1 && <GrammarUsagePointCard usagePoint={imperativeC1} />}
+    <p>
+      A <em>wh</em>-clause can also be a heading: <em>Why I think this is a good idea</em>, <em>How we could benefit</em>. It tells the reader what the paragraph below will answer. It's not a question — there's no auxiliary before the subject and no question mark.
+    </p>
+    <GrammarFormula label="Wh-heading" parts={['why / how / what', 'subject', 'verb']} />
+    <GrammarExample note="A heading in a proposal; the paragraph gives the reasons.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">think</mark> this is a good idea
+    </GrammarExample>
+    <GrammarExample note="A heading in a sponsorship letter.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">should choose</mark> this event
+    </GrammarExample>
+    <GrammarExample note="A heading in a report: what the section explains.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">could benefit</mark> in terms of sales
+    </GrammarExample>
+    {whTitleC1 && <GrammarUsagePointCard usagePoint={whTitleC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After a fronted phrase or adverb the subject and verb keep their normal order — no inversion. In a <em>what</em>-cleft the <em>what</em>-clause is not a question, so no <em>do</em>. <em>The reason … is</em> takes <em>that</em> or <em>to</em>, not <em>because</em>. In an <em>it</em>-cleft, <em>be</em> stays singular and the relative word is <em>who</em> / <em>that</em>, not <em>what</em>. And a <em>wh</em>-heading has statement word order.
+    </p>
+    <GrammarContrast
+      bad={[
+        'In the morning go I to the beach.',
+        'What do we need is a strong campaign.',
+        'The reason I am writing is because I want to complain.',
+        'It were the students who complained.',
+        'It was Paul what stole the money.',
+        'Why do I think this is a good idea?',
+        'Is important that you are happy.',
+      ]}
+      good={[
+        'In the morning I go to the beach.',
+        'What we need is a strong campaign.',
+        'The reason I am writing is to complain.',
+        'It was the students who complained.',
+        'It was Paul who stole the money.',
+        'Why I think this is a good idea',
+        "It's important that you are happy.",
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'The thing I enjoyed most was …, what tourists want is … as noun phrases.',
+      },
+      {
+        slug: 'negation-negation',
+        name: 'negation',
+        note: 'Not a single, never, not in the least: other emphatic negatives at the front.',
+      },
+      {
+        slug: 'discourse-markers-discourse-markers-in-writing',
+        name: 'discourse markers',
+        note: 'The thing is, as mentioned above, in conclusion: markers that open a sentence.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'Who and that in it-clefts work like relative pronouns.',
+      },
+    ]}
+  />
+</GrammarShell>
