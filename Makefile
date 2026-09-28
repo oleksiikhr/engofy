@@ -173,6 +173,7 @@ seed: ## Seed grammar and word reference data
 	pnpm cli grammar import-irregular-verbs
 	pnpm cli words import-frequency
 	pnpm cli grammar import-usage-point-exercises
+	pnpm cli grammar import-usage-point-content
 
 .PHONY: dev-seed
 dev-seed: ## Seed deterministic reader-page fixtures (posts/tokens) on the dev DB for manual QA

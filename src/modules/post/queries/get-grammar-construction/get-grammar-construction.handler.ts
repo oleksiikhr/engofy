@@ -8,6 +8,7 @@ import {
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
+import { readGrammarTranslations } from '../../domain/content-translations.js';
 import { countResolved } from '../../domain/effective-state-priority.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
@@ -72,6 +73,7 @@ export class GetGrammarConstructionHandler
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
         explanation: point.learnerExplanation ?? null,
+        translations: readGrammarTranslations(point.translations),
         examples: point.learnerExamples ?? [],
         state,
         // Untouched but at or below the learner's own level — shown as

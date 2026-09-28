@@ -5,6 +5,7 @@ import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
+import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
 import { PostModule } from '../../post.module.js';
 import { GetGrammarConstructionQuery } from './get-grammar-construction.query.js';
@@ -70,6 +71,36 @@ describe('GetGrammarConstructionHandler', () => {
     expect(view?.usagePoints.every((p) => p.state === 'new')).toBe(true);
     expect(view?.usagePoints.every((p) => !p.assumedKnown)).toBe(true);
     expect(view?.levelProgress).toBeUndefined();
+  });
+
+  it('returns learner content and translations, empty when missing', async () => {
+    const slug = `present-perfect-${uuidv7().slice(0, 8)}`;
+    const { a2PointId } = seedConstruction(suite.orm.em, slug);
+    await suite.orm.em.flush();
+    await suite.orm.em.nativeUpdate(
+      GrammarUsagePoint,
+      { id: a2PointId },
+      {
+        learnerExplanation: 'We use it for recent events.',
+        learnerExamples: ['I have just eaten.', 'She has left.'],
+        translations: { uk: { explanation: 'Для недавніх подій.' } },
+      },
+    );
+    suite.orm.em.clear();
+
+    const view = await suite.query(new GetGrammarConstructionQuery(slug));
+    const [a2, b1] = view?.usagePoints ?? [];
+
+    expect(a2).toMatchObject({
+      explanation: 'We use it for recent events.',
+      examples: ['I have just eaten.', 'She has left.'],
+      translations: { uk: { explanation: 'Для недавніх подій.' } },
+    });
+    expect(b1).toMatchObject({
+      explanation: null,
+      examples: [],
+      translations: {},
+    });
   });
 
   describe('per-point state (grammar-page-redesign зріз 1)', () => {
