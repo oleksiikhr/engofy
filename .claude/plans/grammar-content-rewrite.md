@@ -933,12 +933,15 @@ won't have + питання C2, завершене до точки в майбу
 у листах, таблиця will do/will have done/will have been doing + state verbs, common mistakes). Content — `will have` + дієприкметник
 (з прислівником/у питанні розділено: `will` … `have`); підмет, by-фрази, прислівник — `grammar`.
 
-### [ ] 87. Modality — dare (`modality-dare`) — рівень B2
+### [x] 87. Modality — dare (`modality-dare`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-dare`.
+7 EGP-рядків (457-463), 4 картки (459/460/462/463) inline; generic-блок не рендериться. 8 секцій (dare + base verb, dare not/daren't
+(+ don't dare (to)), didn't dare (to) + dared not, Dare we…? формальні питання, звичайне дієслово dare to + I dare you to… + Don't you
+dare! (без EGP-рядка), How dare…!, I dare say, common mistakes). Content — `dare`/`daren't`/`dare not`/`didn't dare`/`dare say`
+(to при didn't dare — у `grammar` разом із дієсловом); підмет, how, об'єкт — `grammar`.
 
 ### [ ] 88. Modality — need (`modality-need`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
