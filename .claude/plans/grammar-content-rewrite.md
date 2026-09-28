@@ -468,12 +468,15 @@ if so/not/needed, unless/as long as/whether or not, should, were to, if it weren
 (не EGP-рядок) — його обіцяють GrammarCompare-посилання 4 інших сторінок. Content — маркер умови
 (if/unless/had/should/were…), grammar — решта слотів.
 
-### [ ] 42. Clauses — imperatives (`clauses-imperatives`) — рівень A2
+### [x] 42. Clauses — imperatives (`clauses-imperatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `clauses-imperatives`.
+17 EGP-рядків (186-202): 1 чистий FORM (186) без картки; 16 FORM/USE/USE — усі вплетені за
+`egpIndex`. 9 секцій за словом, що починає команду (base verb, don't, do/do not/don't you, come and,
+let's/let's not, let me, let him/her/them, imperative + and, see above). Content — саме це слово
+(base verb лише в базовій секції; у `don't let` content — `let`, `don't` — grammar).
 
 ### [ ] 43. Clauses — phrases/exclamations (`clauses-phrases-exclamations`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
