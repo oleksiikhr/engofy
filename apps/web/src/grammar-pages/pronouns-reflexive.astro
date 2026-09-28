@@ -1,0 +1,362 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 14 EGP rows (908-921): 6 pure FORM rows without cards (same subject and
+// object, after prepositions, by itself); the 8 USE / FORM/USE rows — 909 and
+// 913 (by + reflexive), 912 and 919 (emphasis), 918 (itself), 917 (in
+// itself), 920 (yourselves, polite), 921 (as for myself) — are inlined,
+// matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const bySingularPoint = point(909);
+const byPluralPoint = point(913);
+const emphasisSingularPoint = point(912);
+const emphasisPluralPoint = point(919);
+const itselfPoint = point(918);
+const inItselfPoint = point(917);
+const politePoint = point(920);
+const asForPoint = point(921);
+
+const inlineUsagePointIds = [
+  bySingularPoint,
+  byPluralPoint,
+  emphasisSingularPoint,
+  emphasisPluralPoint,
+  itselfPoint,
+  inItselfPoint,
+  politePoint,
+  asForPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Myself, yourself, herself, ourselves, themselves: I enjoyed myself, she was proud of herself, I did it by myself, the director himself, the building itself, in itself, and as for myself."
+  handcrafted
+  sections={[
+    { id: 'forms', title: 'Myself, yourself, themselves…', open: true },
+    { id: 'same-person', title: 'I enjoyed myself: the same person', open: false },
+    { id: 'after-preposition', title: 'Proud of herself: after a preposition', open: false },
+    { id: 'by-myself', title: 'By myself: alone, without help', open: false },
+    { id: 'emphasis', title: 'She cooked it herself: for emphasis', open: false },
+    { id: 'itself', title: 'The building itself, in itself', open: false },
+    { id: 'formal', title: 'By yourselves, as for myself: formal uses', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A reflexive pronoun — <em>myself, yourself, herself, ourselves, themselves…</em> — points back to the subject of the sentence: <em>I hurt myself</em> = I hurt me, the same person. It also adds emphasis (<em>I made it myself</em>) and, with <em>by</em>, means "alone" (<em>She lives by herself</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Myself, yourself, themselves…" id="forms" open>
+    <p>
+      Each subject pronoun has its own reflexive form. One person or thing takes <em>-self</em>; more than one takes <em>-selves</em>.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Subject</th><th>Reflexive</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>I</th><td><code>myself</code></td><td>I enjoyed myself.</td></tr>
+        <tr><th>you (one person)</th><td><code>yourself</code></td><td>Enjoy yourself!</td></tr>
+        <tr><th>he</th><td><code>himself</code></td><td>He cut himself.</td></tr>
+        <tr><th>she</th><td><code>herself</code></td><td>She told herself to be strong.</td></tr>
+        <tr><th>it</th><td><code>itself</code></td><td>The door opened by itself.</td></tr>
+        <tr><th>we</th><td><code>ourselves</code></td><td>We enjoyed ourselves.</td></tr>
+        <tr><th>you (two or more)</th><td><code>yourselves</code></td><td>Help yourselves!</td></tr>
+        <tr><th>they</th><td><code>themselves</code></td><td>They asked themselves why.</td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="One" parts={['my / your / him / her / it', '+ self']} />
+    <GrammarFormula label="More than one" parts={['our / your / them', '+ selves']} />
+    <p>
+      Look closely at the first part: <em>my-, your-, our-</em> come from the possessive, but <em>him-, them-</em> come from the object pronoun. So it's <em>himself</em> and <em>themselves</em> — never <em>hisself</em> or <em>theirselves</em>.
+    </p>
+    <p>
+      <em>You</em> has two reflexives: <em>yourself</em> when you talk to one person, <em>yourselves</em> when you talk to a group. A teacher tells the class <em>Help yourselves to the cake</em>, but a friend <em>Help yourself</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I enjoyed myself: the same person" id="same-person">
+    <p>
+      Use a reflexive pronoun as the object when the subject does the action to <em>itself</em> — the subject and the object are the same person.
+    </p>
+    <GrammarFormula label="Same person" parts={['subject', 'verb', 'myself / herself / themselves…']} />
+    <GrammarExample note="Enjoy yourself = have a good time. Enjoy always needs an object.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">enjoyed</mark> <mark data-role="content">myself</mark> so much.
+    </GrammarExample>
+    <GrammarExample note="A wish at the end of a letter or message.">
+      I hope <mark data-role="grammar">you</mark>'ll <mark data-role="grammar">enjoy</mark> <mark data-role="content">yourself</mark>.
+    </GrammarExample>
+    <GrammarExample note="Introduce myself = say my name to new people.">
+      I decided to talk to him, and <mark data-role="grammar">I</mark> <mark data-role="grammar">introduced</mark> <mark data-role="content">myself</mark>.
+    </GrammarExample>
+    <GrammarExample note="She is talking to herself inside her head.">
+      <mark data-role="grammar">Lisa</mark> <mark data-role="grammar">told</mark> <mark data-role="content">herself</mark> to be strong.
+    </GrammarExample>
+    <GrammarExample note="Calls himself = uses this name for himself.">
+      The e-mail was from <mark data-role="grammar">someone</mark> who <mark data-role="grammar">calls</mark> <mark data-role="content">himself</mark> "the black shadow".
+    </GrammarExample>
+    <p>
+      Plural subjects work the same way, with <em>ourselves, yourselves, themselves</em>.
+    </p>
+    <GrammarExample note="Ourselves = we (the same people).">
+      <mark data-role="grammar">We</mark> will be able to <mark data-role="grammar">enjoy</mark> <mark data-role="content">ourselves</mark> even if the work isn't well paid.
+    </GrammarExample>
+    <GrammarExample note="Ask yourself / themselves a question = think about it.">
+      But <mark data-role="grammar">adults</mark> often <mark data-role="grammar">ask</mark> <mark data-role="content">themselves</mark> the question: is it cruel to keep animals in zoos?
+    </GrammarExample>
+    <GrammarExample note="Yourselves — talking to a group of visitors.">
+      In the evening <mark data-role="grammar">you</mark> can <mark data-role="grammar">entertain</mark> <mark data-role="content">yourselves</mark> by dancing in our city clubs.
+    </GrammarExample>
+    <p>
+      With verbs like <em>buy, make, get, cook</em>, the reflexive can also be the person who receives something: <em>buy myself a T-shirt</em> = buy a T-shirt for me.
+    </p>
+    <GrammarFormula label="For me" parts={['subject', 'buy / make / get', 'myself / yourself…', 'something']} />
+    <GrammarExample note="Bought myself a T-shirt = bought a T-shirt for me.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">bought</mark> <mark data-role="content">myself</mark> <mark data-role="grammar">a yellow T-shirt</mark>.
+    </GrammarExample>
+    <GrammarExample note="Make yourself a coffee = make a coffee for you.">
+      Come in and <mark data-role="grammar">make</mark> <mark data-role="content">yourself</mark> <mark data-role="grammar">a coffee</mark>.
+    </GrammarExample>
+    <p>
+      Verbs that often take a reflexive: <em>enjoy, hurt, cut, burn, introduce, teach, ask, tell, blame, look after, behave, help</em> (at a table: <em>Help yourself!</em> = take what you want).
+    </p>
+    <p>
+      Ukrainian often uses <em>-ся</em> where English has no reflexive at all: <em>вмиватися → wash, одягатися → get dressed, зустрічатися → meet, розслаблятися → relax</em>. Add <em>myself</em> only when you want to stress it: <em>He's old enough to dress himself</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Proud of herself: after a preposition" id="after-preposition">
+    <p>
+      After a preposition, use the reflexive when it refers back to the subject of the verb.
+    </p>
+    <GrammarFormula label="After a preposition" parts={['subject', 'verb / adjective', 'of / about / for…', 'myself / herself…']} />
+    <GrammarExample note="Herself = she (the subject).">
+      Now <mark data-role="grammar">she</mark> <mark data-role="grammar">was</mark> very <mark data-role="grammar">proud</mark> <mark data-role="grammar">of</mark> <mark data-role="content">herself</mark>.
+    </GrammarExample>
+    <GrammarExample note="Himself = he, the one who is talking.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">told</mark> me <mark data-role="grammar">about</mark> <mark data-role="content">himself</mark> and how he started playing the guitar.
+    </GrammarExample>
+    <GrammarExample note="Ourselves = us, the people doing sport.">
+      Sport can help <mark data-role="grammar">us</mark> to <mark data-role="grammar">feel</mark> <mark data-role="grammar">good</mark> <mark data-role="grammar">about</mark> <mark data-role="content">ourselves</mark>.
+    </GrammarExample>
+    <GrammarExample note="Time for themselves = free time of their own.">
+      <mark data-role="grammar">The staff</mark> <mark data-role="grammar">didn't have</mark> enough time <mark data-role="grammar">for</mark> <mark data-role="content">themselves</mark>.
+    </GrammarExample>
+    <p>
+      Common phrases: <em>be proud of yourself, take care of yourself, talk to yourself, think about yourself, laugh at yourself, be angry with yourself, look at yourself (in the mirror)</em>.
+    </p>
+    <p>
+      But after prepositions of place — <em>next to, behind, near, in front of, with</em> — English usually uses the normal object pronoun, because the meaning is only a position, not an action to yourself.
+    </p>
+    <GrammarContrast bad={['She put the bag next to herself.', 'Did you bring your passport with yourself?']} good={['She put the bag next to her.', 'Did you bring your passport with you?']} />
+  </GrammarSection>
+
+  <GrammarSection title="By myself: alone, without help" id="by-myself">
+    <p>
+      <em>By</em> + reflexive pronoun has two meanings: <em>alone</em> (no one else is there) or <em>without any help</em>. The context tells you which one.
+    </p>
+    <GrammarFormula label="Alone / no help" parts={['subject', 'verb', 'by', 'myself / yourself / himself…']} />
+    <GrammarExample note="By myself = alone, not with a group.">
+      I'll ask my friends from the class, and <mark data-role="grammar">I</mark> <mark data-role="grammar">will study</mark> <mark data-role="grammar">by</mark> <mark data-role="content">myself</mark>.
+    </GrammarExample>
+    <GrammarExample note="By himself = without anyone's help.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">tried to open</mark> it <mark data-role="grammar">by</mark> <mark data-role="content">himself</mark>.
+    </GrammarExample>
+    <GrammarExample note="By herself = alone, without asking others.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">decided to find</mark> him <mark data-role="grammar">by</mark> <mark data-role="content">herself</mark>.
+    </GrammarExample>
+    <GrammarExample note="By yourself = on your own, at home.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">can do</mark> some exercise <mark data-role="grammar">by</mark> <mark data-role="content">yourself</mark>.
+    </GrammarExample>
+    {bySingularPoint && <GrammarUsagePointCard usagePoint={bySingularPoint} />}
+    <p>
+      The plural forms mean the same for a group: just us / you / them, nobody else.
+    </p>
+    <GrammarExample note="By ourselves = only the two of us.">
+      <mark data-role="grammar">A friend of mine and I</mark> <mark data-role="grammar">are planning</mark> a short holiday <mark data-role="grammar">by</mark> <mark data-role="content">ourselves</mark>.
+    </GrammarExample>
+    <GrammarExample note="By yourselves = without my help.">
+      I think that <mark data-role="grammar">you</mark> <mark data-role="grammar">will find</mark> these <mark data-role="grammar">by</mark> <mark data-role="content">yourselves</mark>.
+    </GrammarExample>
+    <GrammarExample note="By themselves = nobody opened them.">
+      Suddenly, <mark data-role="grammar">the windows</mark> <mark data-role="grammar">opened</mark> <mark data-role="grammar">by</mark> <mark data-role="content">themselves</mark>.
+    </GrammarExample>
+    {byPluralPoint && <GrammarUsagePointCard usagePoint={byPluralPoint} />}
+    <p>
+      <em>By itself</em> is for things and animals — often something that happens with no one making it happen.
+    </p>
+    <GrammarExample note="By itself = no person opened it.">
+      Suddenly, <mark data-role="grammar">the window</mark> <mark data-role="grammar">opened</mark> <mark data-role="grammar">by</mark> <mark data-role="content">itself</mark>, and the room filled with cold air.
+    </GrammarExample>
+    <GrammarExample note="By itself = alone, with no company.">
+      If <mark data-role="grammar">an animal</mark> <mark data-role="grammar">is kept</mark> <mark data-role="grammar">by</mark> <mark data-role="content">itself</mark>, it will get lonely.
+    </GrammarExample>
+    <p>
+      <em>On my own / on your own…</em> means the same and is just as common: <em>I live by myself</em> = <em>I live on my own</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She cooked it herself: for emphasis" id="emphasis">
+    <p>
+      A reflexive pronoun can also stress <em>who</em> did something — "this person and nobody else". Here it isn't the object: take it out and the sentence still works (<em>Sandra had cooked it</em>).
+    </p>
+    <GrammarFormula label="At the end" parts={['subject', 'verb …', 'myself / herself…']} />
+    <GrammarExample note="Herself = Sandra, not a shop or someone else.">
+      The cake was delicious — <mark data-role="grammar">Sandra</mark> <mark data-role="grammar">had cooked</mark> it <mark data-role="content">herself</mark>.
+    </GrammarExample>
+    <GrammarExample note="Yourself = you, not other people.">
+      The best solution is if <mark data-role="grammar">you</mark> <mark data-role="grammar">decide</mark> what to do <mark data-role="content">yourself</mark>.
+    </GrammarExample>
+    <GrammarExample note="Ourselves = we, not the canteen.">
+      The food isn't very good, but sometimes <mark data-role="grammar">we</mark> <mark data-role="grammar">can prepare</mark> something <mark data-role="content">ourselves</mark>.
+    </GrammarExample>
+    <GrammarExample note="Themselves = they too, just like me.">
+      They explained my job to me even though <mark data-role="grammar">they</mark> <mark data-role="grammar">were</mark> fairly busy <mark data-role="content">themselves</mark>.
+    </GrammarExample>
+    <p>
+      Or put it straight after the noun you want to stress — it means "that very person, not someone less important".
+    </p>
+    <GrammarFormula label="After the noun" parts={['noun', 'himself / herself / themselves…']} />
+    <GrammarExample note="The director himself = the director personally, not an assistant.">
+      It was <mark data-role="grammar">the director</mark> <mark data-role="content">himself</mark> who showed the actress round our school gardens.
+    </GrammarExample>
+    <GrammarExample note="Cars themselves = cars alone, without the driver.">
+      <mark data-role="grammar">Cars</mark> <mark data-role="content">themselves</mark> are never dangerous. It depends on us.
+    </GrammarExample>
+    {emphasisSingularPoint && <GrammarUsagePointCard usagePoint={emphasisSingularPoint} />}
+    {emphasisPluralPoint && <GrammarUsagePointCard usagePoint={emphasisPluralPoint} />}
+    <p>
+      Compare: <em>I did it by myself</em> (alone, no help) and <em>I did it myself</em> (I, not someone else). Often both are true, but <em>by</em> focuses on "alone".
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The building itself, in itself" id="itself">
+    <p>
+      <em>Itself</em> after a noun stresses the thing — "this thing, as opposed to everything around it".
+    </p>
+    <GrammarFormula label="Emphasis" parts={['the + noun', 'itself']} />
+    <GrammarExample note="The building itself = the building, not its gardens or location.">
+      <mark data-role="grammar">The building</mark> <mark data-role="content">itself</mark> looks splendid.
+    </GrammarExample>
+    <GrammarExample note="The story itself = the story, not the characters.">
+      The characters don't have to be likeable, but <mark data-role="grammar">the story</mark> <mark data-role="content">itself</mark> must be good.
+    </GrammarExample>
+    {itselfPoint && <GrammarUsagePointCard usagePoint={itselfPoint} />}
+    <p>
+      The fixed phrase <em>in itself</em> means "on its own, without anything else" — it makes the point stronger.
+    </p>
+    <GrammarFormula label="Fixed phrase" parts={['noun / it', 'be', '… in itself']} />
+    <GrammarExample note="In itself = without the garden, the architecture is already beautiful.">
+      <mark data-role="grammar">The architecture</mark> <mark data-role="grammar">in</mark> <mark data-role="content">itself</mark> is beautiful, but the garden is wonderful too.
+    </GrammarExample>
+    <GrammarExample note="A car alone isn't the problem — the driver is.">
+      In my opinion, <mark data-role="grammar">a car</mark> <mark data-role="grammar">can't be</mark> harmful <mark data-role="grammar">in</mark> <mark data-role="content">itself</mark>.
+    </GrammarExample>
+    <GrammarExample note="Important in itself = important for its own sake.">
+      I would spend more time with my family, <mark data-role="grammar">which</mark> <mark data-role="grammar">is</mark> quite important <mark data-role="grammar">in</mark> <mark data-role="content">itself</mark>.
+    </GrammarExample>
+    {inItselfPoint && <GrammarUsagePointCard usagePoint={inItselfPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="By yourselves, as for myself: formal uses" id="formal">
+    <p>
+      In formal letters and e-mails, some writers use <em>yourselves</em> instead of <em>you</em> to address a company or organisation politely. Plain <em>you</em> is always correct too, and many readers prefer it.
+    </p>
+    <GrammarFormula label="Polite" parts={['by / like / from', 'yourselves']} />
+    <GrammarExample note="Writing to a magazine: yourselves = your company.">
+      I am writing in response to the advertisement published <mark data-role="grammar">by</mark> <mark data-role="content">yourselves</mark> in "The Traveller".
+    </GrammarExample>
+    <GrammarExample note="A job application: yourselves = your organisation.">
+      It is a great opportunity to improve my sailing skills, as training will be provided <mark data-role="grammar">by</mark> <mark data-role="content">yourselves</mark>.
+    </GrammarExample>
+    <GrammarExample note="Like yourselves = like you (the readers).">
+      <mark data-role="grammar">Like</mark> <mark data-role="content">yourselves</mark>, I live in a busy town.
+    </GrammarExample>
+    {politePoint && <GrammarUsagePointCard usagePoint={politePoint} />}
+    <p>
+      <em>As for myself</em> at the start of a sentence turns attention to your own opinion or situation, after you have talked about other people. It is formal; in speech <em>As for me</em> is more usual.
+    </p>
+    <GrammarFormula label="Your opinion" parts={['As for', 'myself', 'your opinion']} />
+    <GrammarExample note="After describing other people's views.">
+      <mark data-role="grammar">As for</mark> <mark data-role="content">myself</mark>, I like taking responsibility.
+    </GrammarExample>
+    <GrammarExample note="Moving from the topic of the internet to the writer's own life.">
+      <mark data-role="grammar">As for</mark> <mark data-role="content">myself</mark>, I grew up in the internet era, but I can still remember life without it.
+    </GrammarExample>
+    {asForPoint && <GrammarUsagePointCard usagePoint={asForPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      There is no <em>hisself</em> or <em>theirselves</em> — use the object form.
+    </p>
+    <GrammarContrast bad={['He hurt hisself.', 'They did it theirselves.']} good={['He hurt himself.', 'They did it themselves.']} />
+    <p>
+      More than one person takes <em>-selves</em>, not <em>-selfs</em> or <em>-self</em>.
+    </p>
+    <GrammarContrast bad={['We enjoyed ourself.', 'They looked at themselfs.']} good={['We enjoyed ourselves.', 'They looked at themselves.']} />
+    <p>
+      Don't copy Ukrainian <em>-ся</em>: many English verbs don't need a reflexive.
+    </p>
+    <GrammarContrast bad={['I relaxed myself on the beach.', 'We met ourselves at the station.', 'I feel myself tired.']} good={['I relaxed on the beach.', 'We met at the station.', 'I feel tired.']} />
+    <p>
+      <em>Enjoy</em> can't stand alone — give it an object, or a reflexive.
+    </p>
+    <GrammarContrast bad={['I really enjoyed at the party.']} good={['I really enjoyed myself at the party.', 'I really enjoyed the party.']} />
+    <p>
+      Two people doing something to each other is <em>each other</em>, not <em>themselves</em>.
+    </p>
+    <GrammarContrast bad={['Anna and Tom love themselves.']} good={['Anna and Tom love each other.']} />
+    <p>
+      Don't use a reflexive instead of <em>I / me</em> just to sound polite.
+    </p>
+    <GrammarContrast bad={['Please contact John or myself.', 'Myself and Anna will be there.']} good={['Please contact John or me.', 'Anna and I will be there.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'I / me, he / him — the object form when it is a different person: She saw him.',
+      },
+      {
+        slug: 'pronouns-reciprocal',
+        name: 'reciprocal pronouns',
+        note: 'each other, one another — two people doing the action to each other.',
+      },
+      {
+        slug: 'pronouns-possessive',
+        name: 'possessive pronouns',
+        note: 'mine, yours, ours — and on my own, which means the same as by myself.',
+      },
+      {
+        slug: 'verbs-types',
+        name: 'verb types',
+        note: 'transitive verbs like enjoy and hurt, which always need an object.',
+      },
+    ]}
+  />
+</GrammarShell>
