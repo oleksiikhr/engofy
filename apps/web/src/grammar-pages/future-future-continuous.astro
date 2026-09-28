@@ -1,0 +1,236 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 3 USE rows are inlined, matched by EGP index. The other 4 rows
+// (affirmative will, affirmative will/shall, negative, questions) are plain
+// FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const inProgressPoint = point(354);
+const politePoint = point(358);
+const mightMayPoint = point(359);
+
+const inlineUsagePointIds = [inProgressPoint, politePoint, mightMayPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The future continuous: will be + -ing, won't be, Will you be…?, actions in progress at a future time, polite questions about plans, and might / may be + -ing."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Will be + -ing, I'll be", open: true },
+    { id: 'negative', title: "Won't be + -ing: the negative", open: false },
+    { id: 'questions', title: 'Will you be…? Questions', open: false },
+    { id: 'in-progress', title: "I'll be working at four: in progress", open: false },
+    { id: 'polite', title: 'Will you be staying? Polite questions', open: false },
+    { id: 'might-may', title: 'Might be / may be + -ing', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Will be + -ing puts you at a moment in the future and shows an action
+      that is already happening then: <em>This time tomorrow I'll be flying to Rome.</em> It is the future version of <em>I am flying</em> / <em>I was flying</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Will be + -ing, I'll be" id="form" open>
+    <p>
+      Put will, then be, then the -ing form of the verb. Will and be never
+      change: the same words for I, you, he, she, we and they.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "will / 'll", 'be', '-ing verb']} />
+    <GrammarExample note="I'll be + waiting: the waiting will already be going on when you arrive.">
+      <mark data-role="grammar">I'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">waiting</mark> for you.
+    </GrammarExample>
+    <GrammarExample note="We will be + starting, with a clock time.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">be</mark> <mark data-role="content">starting</mark> at 12 o'clock this afternoon.
+    </GrammarExample>
+    <GrammarExample note="She'll be + working: 'll joins the subject, as with will + verb.">
+      <mark data-role="grammar">She'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">working</mark> late on Friday.
+    </GrammarExample>
+    <p>
+      With I and we, formal British English can use shall instead of will.
+      The meaning is the same.
+    </p>
+    <GrammarFormula label="With shall" parts={['I / we', 'shall', 'be', '-ing verb']} />
+    <GrammarExample note="I shall be + attending: formal, for example in a letter or an email to a teacher.">
+      However, <mark data-role="grammar">I</mark> <mark data-role="grammar">shall</mark> <mark data-role="grammar">be</mark> <mark data-role="content">attending</mark> class the day after tomorrow.
+    </GrammarExample>
+    <GrammarExample note="We will be + waiting, with a place and a time.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">be</mark> <mark data-role="content">waiting</mark> for you at the River Café at 6.30.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Won't be + -ing: the negative" id="negative" open={false}>
+    <p>
+      Put not after will: will not be + -ing. In speech and messages the
+      short form won't is normal.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "will not / won't", 'be', '-ing verb']} />
+    <GrammarExample note="Won't be + attending: telling a teacher you will be absent.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">won't</mark> <mark data-role="grammar">be</mark> <mark data-role="content">attending</mark> your English class next week.
+    </GrammarExample>
+    <GrammarExample note="Won't be + coming, then the reason.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">won't</mark> <mark data-role="grammar">be</mark> <mark data-role="content">coming</mark> because my family and I are going on a tour of London.
+    </GrammarExample>
+    <GrammarExample note="Will not be + using: the full form, more formal.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">will not</mark> <mark data-role="grammar">be</mark> <mark data-role="content">using</mark> the car this weekend.
+    </GrammarExample>
+    <p>
+      Won't be + -ing sounds softer than won't + verb. <em>I won't come</em> can sound like a refusal; <em>I won't be coming</em> just gives information about your plans.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will you be…? Questions" id="questions" open={false}>
+    <p>
+      For a question, put will before the subject; be + -ing stays after it.
+      Short answers use will: <em>Yes, I will</em> / <em>No, I won't</em>.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'will', 'subject', 'be', '-ing verb']} />
+    <GrammarExample note="A yes/no question: will + they + be holding.">
+      <mark data-role="grammar">Will</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">be</mark> <mark data-role="content">holding</mark> any activities at night?
+    </GrammarExample>
+    <GrammarExample note="A wh- word goes first: what + will + you + be doing.">
+      <mark data-role="grammar">What</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> <mark data-role="content">doing</mark> in five years?
+    </GrammarExample>
+    <GrammarExample note="Where + will + she + be staying.">
+      <mark data-role="grammar">Where</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">be</mark> <mark data-role="content">staying</mark> in London?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I'll be working at four: in progress" id="in-progress" open={false}>
+    <p>
+      Choose a moment in the future — a clock time, <em>this time tomorrow</em>, <em>when you arrive</em>. Will be + -ing says the action will already be in the middle of happening at that moment: it started before and goes on after.
+    </p>
+    <GrammarFormula label="In progress" parts={['subject', 'will', 'be', '-ing verb', 'future time']} />
+    <GrammarExample note="Until 4.30 the work will still be going on, so come after it.">
+      Please come at 4.30, because <mark data-role="grammar">I'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">working</mark> <mark data-role="grammar">before then</mark>.
+    </GrammarExample>
+    <GrammarExample note="The studying fills the morning, so the visit has to be later.">
+      <mark data-role="grammar">Tomorrow morning</mark> <mark data-role="grammar">I'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">studying</mark>, so you can come at two.
+    </GrammarExample>
+    <GrammarExample note="This time tomorrow: the flight will be happening at that exact moment.">
+      <mark data-role="grammar">This time tomorrow</mark> <mark data-role="grammar">we'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">flying</mark> to Rome.
+    </GrammarExample>
+    {inProgressPoint && <GrammarUsagePointCard usagePoint={inProgressPoint} />}
+    <p>
+      Compare it with will + verb. Will + verb is the whole action, or the moment it starts; will be + -ing is the middle of it.
+    </p>
+    <GrammarExample note="Will + have: dinner starts at eight.">
+      <mark data-role="grammar">At eight</mark> <mark data-role="grammar">we'll</mark> <mark data-role="grammar">have</mark> dinner.
+    </GrammarExample>
+    <GrammarExample note="Will be + having: at eight, dinner will already be going on — so don't call then.">
+      <mark data-role="grammar">At eight</mark> <mark data-role="grammar">we'll</mark> <mark data-role="grammar">be</mark> <mark data-role="content">having</mark> dinner.
+    </GrammarExample>
+    <p>
+      It also describes things that will happen anyway, as part of a normal
+      plan or routine — not a new decision: <em>I'll be passing the post office, so I can post your letter.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will you be staying? Polite questions" id="polite" open={false}>
+    <p>
+      Will you be + -ing is a polite way to ask about someone's plans. It asks
+      what is already planned, so it does not sound like a request or
+      pressure. Hotels, shops and offices use it a lot.
+    </p>
+    <GrammarFormula label="Polite question" parts={['will', 'you / I', 'be', '-ing verb']} />
+    <GrammarExample note="Only asking about the plan. Will you stay for dinner? can sound like an invitation.">
+      <mark data-role="grammar">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> <mark data-role="content">staying</mark> for dinner?
+    </GrammarExample>
+    <GrammarExample note="Asking about arrangements without asking for money directly.">
+      <mark data-role="grammar">Will</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">be</mark> <mark data-role="content">needing</mark> any money?
+    </GrammarExample>
+    <GrammarExample note="A typical question at a hotel reception.">
+      How <mark data-role="grammar">will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> <mark data-role="content">paying</mark>, by card or in cash?
+    </GrammarExample>
+    {politePoint && <GrammarUsagePointCard usagePoint={politePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Might be / may be + -ing" id="might-may" open={false}>
+    <p>
+      Put might or may in place of will when you are not sure: the action
+      is possibly going on at a time in the future.
+    </p>
+    <GrammarFormula label="Possibility" parts={['subject', 'might / may', 'be', '-ing verb']} />
+    <GrammarExample note="Might be + coming up: new offers that are possibly on the way.">
+      We should do some extra publicity for <mark data-role="grammar">the new offers</mark>, which <mark data-role="grammar">might</mark> <mark data-role="grammar">be</mark> <mark data-role="content">coming</mark> up.
+    </GrammarExample>
+    <GrammarExample note="May be + calling: something that could be happening at 10 p.m.">
+      <mark data-role="grammar">Your boss</mark> <mark data-role="grammar">may</mark> <mark data-role="grammar">be</mark> <mark data-role="content">calling</mark> at 10 p.m. to ask for a report.
+    </GrammarExample>
+    <GrammarExample note="Might be + working: a guess about someone's future plans.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">might</mark> <mark data-role="grammar">be</mark> <mark data-role="content">working</mark> from home next week.
+    </GrammarExample>
+    {mightMayPoint && <GrammarUsagePointCard usagePoint={mightMayPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget be, and use the -ing form after it — not the base verb.
+    </p>
+    <GrammarContrast
+      bad={['I will working tomorrow.', 'We will be wait for you.']}
+      good={['I will be working tomorrow.', 'We will be waiting for you.']}
+    />
+    <p>
+      Verbs for states — know, like, want, believe, own — don't usually take
+      -ing. Use will + verb instead.
+    </p>
+    <GrammarContrast
+      bad={["I'll be knowing the results tomorrow.", 'She will be wanting a new phone.']}
+      good={["I'll know the results tomorrow.", 'She will want a new phone.']}
+    />
+    <p>
+      After when, while, until and as soon as, use the present continuous, not will be + -ing.
+    </p>
+    <GrammarContrast
+      bad={["I'll call you while I'll be waiting for the bus."]}
+      good={["I'll call you while I'm waiting for the bus."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'will + verb',
+        note: "the whole action or a new decision: At eight we'll have dinner. I'll help you.",
+      },
+      {
+        slug: 'future-present-continuous-for-future-use',
+        name: 'present continuous for the future',
+        note: "personal arrangements: I'm meeting Tom at six.",
+      },
+      {
+        slug: 'past-past-continuous',
+        name: 'past continuous',
+        note: 'the same idea in the past: At eight we were having dinner.',
+      },
+      {
+        slug: 'future-future-perfect-continuous',
+        name: 'future perfect continuous',
+        note: "how long by a future point: By June I'll have been working here for a year.",
+      },
+    ]}
+  />
+</GrammarShell>
