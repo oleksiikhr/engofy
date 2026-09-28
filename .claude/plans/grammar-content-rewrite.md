@@ -759,12 +759,15 @@ alternative, 1014 hedging) вплетені за `egpIndex` — generic-блок
 ↗↘, A, B or something else, Which…, A or B? — без EGP-рядка, or not, еліпсис + hedging, strong alternative, common mistakes
 з калькою чи → whether). Content — кожна альтернатива (її розмір і розрізняє FORM-рядки); opener і `or` — `grammar`.
 
-### [ ] 70. Questions — tags (`questions-tags`) — рівень A2
+### [x] 70. Questions — tags (`questions-tags`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `questions-tags`.
+7 EGP-рядків (1016-1022): 5 чистих FORM без карток, 2 FORM/USE (1020 right, 1021 imperative softeners) вплетені за
+`egpIndex` — generic-блок не рендериться. 11 секцій (базовий тег, +/−, −/+, таблиця вибору дієслова/займенника, інтонація
+↘↗, +/+, right?, імператив/Let's…shall we, there + be, відповідь на тег — без EGP-рядка, common mistakes з калькою так?
+→ isn't it). Content — сам тег; підмет + дієслово головного речення, яке тег копіює — `grammar`.
 
 ### [ ] 71. Questions — wh- (`questions-wh`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
