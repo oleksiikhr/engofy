@@ -510,12 +510,16 @@ relative-слово; у реченнях без займенника content-м�
 textual reference). Додано `however` (не EGP-рядок) — його обіцяє GrammarCompare з
 `conjunctions-coordinating`. Content — сам маркер, grammar — subject + verb речення, що йде після.
 
-### [ ] 46. Focus — focus (`focus-focus`) — рівень A2
+### [x] 46. Focus — focus (`focus-focus`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `focus-focus`.
+15 EGP-рядків (1160-1174), усі FORM/USE — усі вплетені за `egpIndex`. 11 секцій за засобом фокусу:
+спершу винесене наперед (phrase, adverb, fixed expressions + подвійні, -ed clause, not a + noun), далі
+«рамки» (it's + adj + that, the thing/problem is + premodified, the reason/place … is, what/how-cleft,
+it-cleft), далі вказівники в тексті (note/see, wh-заголовки). Content — сам засіб фокусу (фраза/рамка),
+grammar — subject + verb і фокусована частина.
 
 ### [ ] 47. Future — future continuous (`future-future-continuous`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
