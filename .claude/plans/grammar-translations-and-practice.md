@@ -32,29 +32,115 @@ transform/error-correction); речення генерує AI за патерн�
 10-15 вправ на 1-2 usage points, перевірка якості, потім ~100 на кожен. Секція `Practice` у
 `GrammarShell.astro` на кожній сторінці досі лише анонс.
 
+**Стан даних (2026-09-28, локальна БД).** 580 usage points (575 з `egpIndex`, 5 — E2E-фікстури),
+лише 2 мають `learnerExplanation`, 1 — `translations.uk`: `grammar_enrichment` покриває тільки
+точки, які зматчив якийсь пост, і на локальних постах не запускався. `GET /grammar/:slug`
+(`get-grammar-construction.handler.ts`, `ConstructionUsagePointDto`) `translations` взагалі не
+віддає — поле в `GrammarUsagePointRef` на фронті є лише завдяки типу.
+
+**Рішення (з користувачем).** Контент пишеться вручну в сесії Claude Code, без Anthropic API і без
+AI-CLI. На кожну точку — те саме, що дав би `grammar_enrichment`: `explanation` (2-3 речення
+простою англійською, рівень точки або нижче, патерн форми), 2-3 `examples` (≤12 слів, побутова
+лексика), `uk` — вірний переклад `explanation` природною українською, патерн форми лишається
+англійською. Сховище — `assets/grammar-usage-point-content.json`, ключ — `egpIndex`, завантажується
+`make seed` у `learnerExplanation`/`learnerExamples`/`translations.uk` (сид авторитетний —
+перезаписує). `grammar_enrichment` після цього такі точки пропускає (gap-fill по `translations`).
+Щоб узяти точки зрізу: `SELECT p.egp_index, c.slug, p.cefr_level, p.guideword, p.can_do_statement
+FROM grammar_usage_points p JOIN grammar_constructions c ON c.id = p.construction_id WHERE c.slug IN
+(...) ORDER BY c.slug, p.egp_index` + форма/приклади з відповідної ручної сторінки
+`apps/web/src/grammar-pages/<slug>.astro`, щоб пояснення не суперечило прозі сторінки.
+
 ## Зрізи
 
-### [ ] 1. Показ українського перекладу пояснення в картці usage point
+### [ ] 1. Інфраструктура перекладу + тумблер + ADJECTIVES (22)
 - Branch: `grammar-translations-and-practice-01-uk-explanation`
 - Base: `main`
 - PR: —
 
-Перевірити в БД, що `translations.uk.explanation` заповнений для всіх usage points (не лише для
-частини конструкцій); якщо є прогалини — прогнати `grammar_enrichment` для них. Додати в
-`GrammarUsagePointCard.astro` тумблер показу перекладу (стан — без layout shift, див. root
-`CLAUDE.md`). Картка без перекладу — без тумблера.
+Бекенд: `translations` у `ConstructionUsagePointView`/`ConstructionUsagePointDto`
+(`readGrammarTranslations`). Сид: формат `assets/grammar-usage-point-content.json` (zod-парсер у
+`modules/post/domain/`, опис у `assets/README.md`), команда `grammar import-usage-point-content`
+(помилка на невідомий `egpIndex`), додана в `make seed`. Фронт: тумблер `УКР` у
+`GrammarUsagePointCard.astro` — глобальний pref `grammarLang` у `lib/prefs.ts` + `bootScript()`,
+показ перекладу через CSS від `<html data-grammar-lang>` (без layout shift), e2e "does not shift".
+Картка без перекладу — без тумблера. Контент: ADJECTIVES (4 конструкції, 22 точки).
 
-### [ ] 2. Розширення перекладу: canDoStatement, приклади, проза ручних сторінок (дослідницький)
-- Branch: `grammar-translations-and-practice-02-translation-scope`
+### [ ] 2. Контент: ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (61)
+- Branch: `grammar-translations-and-practice-02-adverbs-conjunctions`
 - Base: `grammar-translations-and-practice-01-uk-explanation`
 - PR: —
 
-Відкриті питання до користувача: чи додавати `canDoStatement` і `examples` у `GrammarTranslations`
-(бекенд-промпт + тип), і чи перекладати прозу 90 ручних сторінок (i18n-підхід для `.astro`). Після
-відповідей — дописати конкретні зрізи в цей план.
+`adverbs-*` (37), `conjunctions-*` (13), `discourse-markers-*` (11).
 
-### [ ] 3. Аудит банку вправ і наповнення секції Practice (дослідницький)
-- Branch: `grammar-translations-and-practice-03-practice-audit`
+### [ ] 3. Контент: CLAUSES (74)
+- Branch: `grammar-translations-and-practice-03-clauses`
+- Base: `grammar-translations-and-practice-02-adverbs-conjunctions`
+- PR: —
+
+`clauses-*` — 8 конструкцій.
+
+### [ ] 4. Контент: DETERMINERS, FOCUS, NEGATION, NOUNS, PREPOSITIONS (62)
+- Branch: `grammar-translations-and-practice-04-determiners-focus`
+- Base: `grammar-translations-and-practice-03-clauses`
+- PR: —
+
+`determiners-*` (26), `focus-focus` (15), `negation-negation` (12), `nouns-noun-phrases` (6),
+`prepositions-prepositions` (3).
+
+### [ ] 5. Контент: FUTURE, PASSIVES (58)
+- Branch: `grammar-translations-and-practice-05-future-passives`
+- Base: `grammar-translations-and-practice-04-determiners-focus`
+- PR: —
+
+`future-*` (43), `passives-*` (15).
+
+### [ ] 6. Контент: PAST, PRESENT (72)
+- Branch: `grammar-translations-and-practice-06-past-present`
+- Base: `grammar-translations-and-practice-05-future-passives`
+- PR: —
+
+`past-*` (47 з `egpIndex`), `present-*` (25).
+
+### [ ] 7. Контент: PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (63)
+- Branch: `grammar-translations-and-practice-07-pronouns-questions`
+- Base: `grammar-translations-and-practice-06-past-present`
+- PR: —
+
+`pronouns-*` (42), `questions-*` (10), `reported-speech-*` (5), `verbs-*` (6).
+
+### [ ] 8. Контент: MODALITY I (56)
+- Branch: `grammar-translations-and-practice-08-modality-1`
+- Base: `grammar-translations-and-practice-07-pronouns-questions`
+- PR: —
+
+`modality-adjectives` (6), `-adverbs` (7), `-can` (13), `-could` (26), `-dare` (4).
+
+### [ ] 9. Контент: MODALITY II (56)
+- Branch: `grammar-translations-and-practice-09-modality-2`
+- Base: `grammar-translations-and-practice-08-modality-1`
+- PR: —
+
+`modality-expressions-with-be` (18), `-have-got-to` (5), `-may` (12), `-might` (9), `-must` (10),
+`-need` (2).
+
+### [ ] 10. Контент: MODALITY III (50)
+- Branch: `grammar-translations-and-practice-10-modality-3`
+- Base: `grammar-translations-and-practice-09-modality-2`
+- PR: —
+
+`modality-ought` (6), `-shall` (7), `-should` (12), `-used-to` (2), `-will` (10), `-would` (13).
+Після зрізу перевірити, що всі 575 точок з `egpIndex` покриті (парсер/тест на повноту).
+
+### [ ] 11. Переклад прози ручних сторінок (дослідницький)
+- Branch: `grammar-translations-and-practice-11-page-prose`
+- Base: `grammar-translations-and-practice-10-modality-3`
+- PR: —
+
+Відкрите питання до користувача: чи перекладати прозу 90 ручних сторінок (i18n-підхід для
+`.astro`) і чи потрібен переклад `examples`/`canDoStatement`. Після відповідей — дописати зрізи.
+
+### [ ] 12. Аудит банку вправ і наповнення секції Practice (дослідницький)
+- Branch: `grammar-translations-and-practice-12-practice-audit`
 - Base: `main`
 - PR: —
 
