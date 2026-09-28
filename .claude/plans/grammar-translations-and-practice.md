@@ -116,10 +116,10 @@ not shift".
 `determiners-*` (26), `focus-focus` (15), `negation-negation` (12), `nouns-noun-phrases` (6),
 `prepositions-prepositions` (3).
 
-### [ ] 6. Контент: FUTURE, PASSIVES (58)
+### [x] 6. Контент: FUTURE, PASSIVES (58)
 - Branch: `grammar-translations-and-practice-06-future-passives`
-- Base: `grammar-translations-and-practice-05-determiners-focus`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/163
 
 `future-*` (43), `passives-*` (15).
 
