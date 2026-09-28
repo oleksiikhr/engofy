@@ -1,0 +1,256 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 4 USE and FORM/USE rows are inlined, matched by EGP index. The other
+// 3 rows (affirmative, negative dare not / daren't, question Dare we…?) are
+// plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const bravePoint = point(459);
+const dareSayPoint = point(460);
+const howDarePoint = point(462);
+const didntDarePoint = point(463);
+
+const inlineUsagePointIds = [bravePoint, dareSayPoint, howDarePoint, didntDarePoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Dare: being brave enough to do something. The modal form (dare + base verb), dare not and daren't, didn't dare (to) for the past, formal questions (Dare we…?), dare to as an ordinary verb (do you dare to…?, I dare you to…), How dare you…! for anger, Don't you dare!, and I dare say for what is probably true."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Dare + base verb: brave enough', open: true },
+    { id: 'negative', title: "Dare not, daren't: not brave enough", open: false },
+    { id: 'didnt-dare', title: "Didn't dare (to): the past", open: false },
+    { id: 'question', title: 'Dare we…?: formal questions', open: false },
+    { id: 'ordinary-verb', title: 'Dare to, I dare you to…: the ordinary verb', open: false },
+    { id: 'how-dare', title: 'How dare you…!: anger', open: false },
+    { id: 'dare-say', title: 'I dare say: probably', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Dare</em> means "to be brave enough to do something" — to do it even though it is frightening or risky. It is most common in the negative: <em>I daren't tell him.</em> / <em>She didn't dare look.</em> It can work like a modal verb (<em>dare</em> + base verb) or like an ordinary verb (<em>dare to</em> + base verb) — both are correct, and people often mix them.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Dare + base verb: brave enough" id="form" open>
+    <p>
+      As a modal verb, <em>dare</em> is followed by the base verb without <em>to</em>, like <em>can</em> or <em>must</em>. In the affirmative this form is rare and sounds a little literary or playful — it is usually a challenge or a condition (<em>if you dare…</em>).
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'dare', 'base verb']} />
+    <GrammarExample note="If + you + dare + eat: a playful challenge — only if you are brave enough.">
+      I can cook if <mark data-role="grammar">you</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">eat</mark> it!
+    </GrammarExample>
+    <GrammarExample note="Nobody dare + say: nobody is brave enough to say it (no -s after nobody).">
+      <mark data-role="grammar">Nobody</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">say</mark> a word when the boss is angry.
+    </GrammarExample>
+    <p>
+      In everyday affirmative sentences, English usually uses <em>dare to</em> as an ordinary verb instead (<em>She dared to ask…</em>) — see the section on the ordinary verb below. The modal form is much more natural in the negative.
+    </p>
+    <p>
+      Whichever form you use, the meaning is the same: the person is (or isn't) brave enough to do it.
+    </p>
+    {bravePoint && <GrammarUsagePointCard usagePoint={bravePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Dare not, daren't: not brave enough" id="negative" open={false}>
+    <p>
+      The modal negative is <em>dare not</em>, short form <em>daren't</em> /deənt/, + base verb without <em>to</em>. It is the same for every subject: <em>he dare not</em>, <em>they daren't</em>. It says someone is too afraid to do something — now, or in general.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "dare not / daren't", 'base verb']} />
+    <GrammarExample note="People + dare not + go: they are afraid of the prices.">
+      But many local <mark data-role="grammar">people</mark> <mark data-role="content">dare not</mark> <mark data-role="grammar">go</mark> to that restaurant, because it is too expensive.
+    </GrammarExample>
+    <GrammarExample note="They + daren't + give up: they aren't brave enough to live without a car.">
+      I think they are rather jealous because <mark data-role="grammar">they</mark> <mark data-role="content">daren't</mark> <mark data-role="grammar">give up</mark> their car.
+    </GrammarExample>
+    <GrammarExample note="I + daren't + tell: I'm afraid of how he will react.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">daren't</mark> <mark data-role="grammar">tell</mark> him the truth — he'd be furious.
+    </GrammarExample>
+    <GrammarExample note="He + dare not (no -s): formal written style.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">dare not</mark> <mark data-role="grammar">admit</mark> that he was wrong.
+    </GrammarExample>
+    <p>
+      <em>Daren't</em> is mostly British. In American English and in everyday speech generally, <em>don't dare (to)</em> is more common: <em>I don't dare (to) tell him.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Didn't dare (to): the past" id="didnt-dare" open={false}>
+    <p>
+      For the past, the most common form is <em>didn't dare</em>. After it you can use the base verb with or without <em>to</em> — both are correct: <em>She didn't dare (to) look.</em> It is often about fear or tension in a story.
+    </p>
+    <GrammarFormula label="Past negative" parts={['subject', "didn't dare", '(to) base verb']} />
+    <GrammarExample note="She + didn't dare + think: it was too painful to think about.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">didn't dare</mark> <mark data-role="grammar">think</mark> about him and the possibility that he would never come back.
+    </GrammarExample>
+    <GrammarExample note="We + didn't dare + move: we were too afraid to move.">
+      Since <mark data-role="grammar">we</mark> <mark data-role="content">didn't dare</mark> <mark data-role="grammar">move</mark> our feet, we were slowly swaying to the left and to the right.
+    </GrammarExample>
+    <GrammarExample note="Didn't dare + to + ask: the same meaning with to.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">didn't dare</mark> <mark data-role="grammar">to ask</mark> her how old she was.
+    </GrammarExample>
+    {didntDarePoint && <GrammarUsagePointCard usagePoint={didntDarePoint} />}
+    <p>
+      In formal or literary writing you may also see the modal past <em>dared not</em> + base verb: <em>He dared not open the letter.</em> It means the same as <em>didn't dare</em>.
+    </p>
+    <GrammarFormula label="Formal past" parts={['subject', 'dared not', 'base verb']} />
+    <GrammarExample note="Dared not + open: literary style.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">dared not</mark> <mark data-role="grammar">open</mark> the letter until he was alone.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Dare we…?: formal questions" id="question" open={false}>
+    <p>
+      As a modal, <em>dare</em> goes before the subject in questions, with no <em>do</em>. This is formal and typical of essays and speeches — often a rhetorical question: the writer thinks the answer is "no, we can't take that risk".
+    </p>
+    <GrammarFormula label="Question" parts={['dare', 'subject', 'base verb?']} />
+    <GrammarExample note="Dare + we + run: can we really take this risk? (= no, we can't)">
+      <mark data-role="content">Dare</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">run</mark> the risk of even one child turning to violent crime?
+    </GrammarExample>
+    <GrammarExample note="Dare + I + ask: a polite, slightly humorous way to ask something risky.">
+      <mark data-role="content">Dare</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">ask</mark> how much it cost?
+    </GrammarExample>
+    <p>
+      In everyday English, questions with <em>dare</em> use <em>do</em> or <em>would</em>, like an ordinary verb: <em>Do you dare (to) jump?</em> / <em>Would you dare (to) swim there?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Dare to, I dare you to…: the ordinary verb" id="ordinary-verb" open={false}>
+    <p>
+      <em>Dare</em> can also be an ordinary verb, with <em>to</em>, an <em>-s</em> in the third person, past <em>dared</em>, and <em>do</em> in negatives and questions. This is the usual form in affirmative sentences.
+    </p>
+    <GrammarFormula label="Ordinary verb" parts={['subject', 'dare(s) / dared', 'to', 'base verb']} />
+    <GrammarExample note="She + dared + to + ask: she was brave enough, and she did it.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">dared</mark> <mark data-role="grammar">to ask</mark> the question that everyone was thinking.
+    </GrammarExample>
+    <GrammarExample note="Do + you + dare (+ to) + jump: an everyday question.">
+      <mark data-role="grammar">Do you</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">jump</mark> into the lake from here?
+    </GrammarExample>
+    <GrammarExample note="Few people + dare + to + disagree: not many are brave enough.">
+      <mark data-role="grammar">Few people</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">to disagree</mark> with him in meetings.
+    </GrammarExample>
+    <p>
+      With an object, <em>dare someone to do something</em> has a different meaning: to challenge someone to do something risky, to see if they are brave enough. Here <em>to</em> is always needed.
+    </p>
+    <GrammarFormula label="Challenge" parts={['subject', 'dare', 'someone', 'to', 'base verb']} />
+    <GrammarExample note="I + dare + you + to + eat: a challenge — I don't think you're brave enough.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to eat</mark> the whole chilli.
+    </GrammarExample>
+    <GrammarExample note="They + dared + him + to + climb: his friends challenged him.">
+      <mark data-role="grammar">His friends</mark> <mark data-role="content">dared</mark> <mark data-role="grammar">him</mark> <mark data-role="grammar">to climb</mark> onto the roof.
+    </GrammarExample>
+    <p>
+      <em>Don't you dare…!</em> is a strong warning — usually from a parent or someone angry: "if you do this, you'll be in trouble". It can also stand alone: <em>Don't you dare!</em>
+    </p>
+    <GrammarFormula label="Warning" parts={["don't you", 'dare', 'base verb!']} />
+    <GrammarExample note="Don't you + dare + touch: a warning, not a question.">
+      <mark data-role="grammar">Don't you</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">touch</mark> my phone!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="How dare you…!: anger" id="how-dare" open={false}>
+    <p>
+      <em>How dare</em> + subject + base verb is not a real question — it is an exclamation. It shows that you are angry or offended because someone did or said something they had no right to. Write it with <em>!</em>, not <em>?</em>
+    </p>
+    <GrammarFormula label="How dare" parts={['how', 'dare', 'subject', 'base verb!']} />
+    <GrammarExample note="How dare + people + say: I'm offended by what they say.">
+      <mark data-role="grammar">How</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">people</mark> <mark data-role="grammar">say</mark> that we don't do any sport!
+    </GrammarExample>
+    <GrammarExample note="How dare + you + say: angry about an unfair comment.">
+      <mark data-role="grammar">How</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">say</mark> that this event was a complete failure!
+    </GrammarExample>
+    <GrammarExample note="How dare + he + read: the anger is about something he did.">
+      <mark data-role="grammar">How</mark> <mark data-role="content">dare</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">read</mark> my messages!
+    </GrammarExample>
+    {howDarePoint && <GrammarUsagePointCard usagePoint={howDarePoint} />}
+    <p>
+      It can also be short: <em>How dare you!</em> The verb stays in the base form for every subject and even about the past: <em>How dare she speak to me like that!</em> (not <em>dares</em>, not <em>spoke</em>).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I dare say: probably" id="dare-say" open={false}>
+    <p>
+      <em>I dare say</em> (also written <em>I daresay</em>) is a fixed expression that means "I think it's probably true". It has nothing to do with bravery. It is used only with <em>I</em>, in the present, and sounds slightly formal or British. It often introduces an opinion or a careful conclusion.
+    </p>
+    <GrammarFormula label="I dare say" parts={['I', 'dare say', '(that) clause']} />
+    <GrammarExample note="I + dare say + that…: I think the last option is probably the best.">
+      It's hard to choose only one option, but <mark data-role="grammar">I</mark> <mark data-role="content">dare say</mark> <mark data-role="grammar">that the last option may be the best one</mark>.
+    </GrammarExample>
+    <GrammarExample note="In the middle of a clause: which, I think, probably needs improvement.">
+      I am concerned about the canteen, which <mark data-role="grammar">I</mark> <mark data-role="content">dare say</mark> <mark data-role="grammar">needs improvement</mark>.
+    </GrammarExample>
+    <GrammarExample note="At the end: a comment added after the main statement.">
+      You'll be tired after the journey, <mark data-role="grammar">I</mark> <mark data-role="content">dare say</mark>.
+    </GrammarExample>
+    {dareSayPoint && <GrammarUsagePointCard usagePoint={dareSayPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      The modal forms (<em>dare</em>, <em>daren't</em>, <em>dare not</em>, <em>How dare…!</em>) take the base verb without <em>to</em> and never <em>-s</em>. Don't mix a modal negative with <em>to</em>.
+    </p>
+    <GrammarContrast
+      bad={["I daren't to tell him.", 'He dare not to admit it.', 'How dare he says that!']}
+      good={["I daren't tell him. / I don't dare (to) tell him.", 'He dare not admit it.', 'How dare he say that!']}
+    />
+    <p>
+      <em>How dare…!</em> is an exclamation, not a question with <em>do</em>, and it uses the base verb even about the past.
+    </p>
+    <GrammarContrast
+      bad={['How do you dare to say that?', 'How dare you spoke to me like that!']}
+      good={['How dare you say that!', 'How dare you speak to me like that!']}
+    />
+    <p>
+      With an object, <em>dare someone</em> needs <em>to</em>. <em>I dare say</em> means "probably" and is only used with <em>I</em>.
+    </p>
+    <GrammarContrast
+      bad={['I dare you eat it.', 'They dare say it will rain.']}
+      good={['I dare you to eat it.', "I dare say it will rain. / They think it'll probably rain."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-need',
+        name: 'need',
+        note: "needn't + base verb / don't need to — the other semi-modal that works both as a modal and as an ordinary verb.",
+      },
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: "I can't… — not able; I daren't… — able, but too afraid.",
+      },
+      {
+        slug: 'modality-ought',
+        name: 'ought to',
+        note: 'Ought we not to…? — another formal question form with the modal before the subject.',
+      },
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'It might… / I dare say… — both say something is possible or probable; I dare say is more personal.',
+      },
+    ]}
+  />
+</GrammarShell>
