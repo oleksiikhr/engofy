@@ -108,10 +108,10 @@ not shift".
 
 `clauses-*` — 8 конструкцій.
 
-### [ ] 5. Контент: DETERMINERS, FOCUS, NEGATION, NOUNS, PREPOSITIONS (62)
+### [x] 5. Контент: DETERMINERS, FOCUS, NEGATION, NOUNS, PREPOSITIONS (62)
 - Branch: `grammar-translations-and-practice-05-determiners-focus`
-- Base: `grammar-translations-and-practice-04-clauses`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/162
 
 `determiners-*` (26), `focus-focus` (15), `negation-negation` (12), `nouns-noun-phrases` (6),
 `prepositions-prepositions` (3).
