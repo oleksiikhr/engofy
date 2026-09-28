@@ -658,12 +658,15 @@ likelihood, should have + -ed regrets, You should have seen it!, You shouldn't h
 should / shouldn't / should have / should be; контраст "should для правил → must" свідомо не додано
 (у табличках/інструкціях should для правил — нормальна англійська).
 
-### [ ] 60. Nouns — uncountable (`nouns-uncountable`) — рівень A2
+### [x] 60. Nouns — uncountable (`nouns-uncountable`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `nouns-uncountable`.
+8 EGP-рядків (690-697), усі чисті FORM — без карток. 7 секцій (no a/no plural + singular verb, with the,
+quantity words A2+B1 разом, containers/a piece of, "uncountable in English" — B1/C1 рядки злиті в
+список іменників, злічуваних в українській (advice/news/furniture…), no article для загального, common
+mistakes).
 
 ### [ ] 61. Passives — passives: form (`passives-passives-form`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
