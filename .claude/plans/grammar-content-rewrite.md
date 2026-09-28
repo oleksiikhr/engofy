@@ -636,12 +636,15 @@ might, common mistakes). На відміну від `may`, тут `might as well
 adverbs, I must admit / I must say, ellipsis, inversion, common mistakes). Content — сам must / mustn't /
 must have; для заперечної дедукції наголошено can't, а не mustn't (обіцяють may/might/can).
 
-### [ ] 58. Modality — shall (`modality-shall`) — рівень A2
+### [x] 58. Modality — shall (`modality-shall`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-shall`.
+10 EGP-рядків (567-576): 3 чисті FORM (567/568/573) без карток; 7 USE вплетені за `egpIndex`. 9 секцій
+(form + shan't, offers, suggestions + let's…shall we?, advice, formal plans, rules/contracts з shall not,
+after if-clause, predictions + We shall see, common mistakes). Content — сам shall / shall not / shan't;
+передбачення третьою особою (EGP 576 "our town shall…") не використано — з I/we природніше.
 
 ### [ ] 59. Modality — should (`modality-should`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
