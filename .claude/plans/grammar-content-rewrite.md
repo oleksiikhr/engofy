@@ -572,12 +572,16 @@ adjective). Content — сам модальний прикметник; it/be/se
 adverb, emphasis, could … possibly, not necessarily, one-word answers — 645 і 646 в одній секції) +
 common mistakes. Content — сам модальний прислівник; subject/be/auxiliary/modal/main verb/not — grammar.
 
-### [ ] 52. Modality — could (`modality-could`) — рівень A2
+### [x] 52. Modality — could (`modality-could`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-could`.
+`assets/egp.json` дублює кожен рядок could (1206-1239 парами) → 13 пар однакових usage points у БД;
+картка — перша з пари, обидва id в `inlineUsagePointIds` (сам баг даних не виправлявся). 4 FORM
+(affirmative/negative/questions/could have + -ed) без карток, 13 USE вплетені. 11 секцій (form, past
+ability, requests, permission, suggestions, possibility, could have: past possibility / past guess /
+regret+criticism, reported, common mistakes). Content — сам could / couldn't / could have.
 
 ### [ ] 53. Modality — expressions with be (`modality-expressions-with-be`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
