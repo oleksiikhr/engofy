@@ -625,12 +625,16 @@ requests, as you may know, may … but, may as well, concession, hedging, common
 + -ed, as you might know, might … but, Might I suggest / Might it not be, might as well, try as I
 might, common mistakes). На відміну від `may`, тут `might as well` — FORM-рядок (без картки).
 
-### [ ] 57. Modality — must (`modality-must`) — рівень A2
+### [x] 57. Modality — must (`modality-must`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-must`.
+22 EGP-рядки (529-550): 12 чистих FORM (529/530/532/533/534/539/540/541/547/548/549/550) без карток;
+10 USE вплетені за `egpIndex`. 12 секцій (form, obligation I/you + wide range, Must I…?, mustn't rules
++ vs don't have to, invitations + suggestions, it must be + can't, must have + -ed / must not have been,
+adverbs, I must admit / I must say, ellipsis, inversion, common mistakes). Content — сам must / mustn't /
+must have; для заперечної дедукції наголошено can't, а не mustn't (обіцяють may/might/can).
 
 ### [ ] 58. Modality — shall (`modality-shall`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
