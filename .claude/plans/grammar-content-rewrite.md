@@ -689,12 +689,16 @@ neg/questions, in progress, background when/while, reason because, mid-position 
 always — repeated B1 + undesired C2 в одній секції, I was wondering if, common mistakes). Розмітка як у
 future continuous: `was/were` — `grammar`, `-ing` дієслово — `content`.
 
-### [ ] 63. Pronouns — demonstratives (`pronouns-demonstratives`) — рівень A2
+### [x] 63. Pronouns — demonstratives (`pronouns-demonstratives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-demonstratives`.
+18 EGP-рядків (938-955): 6 чистих FORM без карток, 12 USE вплетені за `egpIndex`. 11 секцій (four words,
+pointing forward, right now, pointing back — 4 картки this/that/these/those разом, whole idea, That's +
+That's all разом, quantity + of, this one/these ones, those who/-ed/-ing, that of/those of, common
+mistakes). Content — сам демонстратив; `That's` — одна мітка (розділена `That`+`'s` виглядає як два слова).
+Не дублює `determiners-demonstratives` (там — перед іменником).
 
 ### [ ] 64. Pronouns — generic use (`pronouns-generic-use`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
