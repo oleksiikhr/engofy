@@ -2342,6 +2342,523 @@
       "explanation": "Have + person + base verb (без to) означає, що ви просите чи доручаєте комусь щось зробити, зазвичай тому, що це його робота. Звучить офіційно чи по-діловому: I'll have my assistant call you."
     }
   },
+  "745": {
+    "explanation": "Use the past continuous for a longer action that was going on in the background, and the past simple for the main event that happened in the middle of it. The pattern is was / were + -ing, often with when or while.",
+    "examples": [
+      "I was having a shower when the phone rang.",
+      "It was raining when we left the cinema.",
+      "While she was cooking, the lights went out."
+    ],
+    "uk": {
+      "explanation": "Past continuous вживаємо для довшої дії, яка відбувалася на тлі, а past simple — для головної події, що сталася посеред неї. Схема — was / were + -ing, часто з when або while."
+    }
+  },
+  "746": {
+    "explanation": "Use the past continuous for an action that was in progress at a particular time in the past. It had started and had not finished yet. The pattern is was / were + -ing.",
+    "examples": [
+      "At eight o'clock we were having dinner.",
+      "What were you doing last night at ten?",
+      "It was snowing all morning."
+    ],
+    "uk": {
+      "explanation": "Past continuous вживаємо для дії, яка тривала в певний момент у минулому: вона вже почалася і ще не закінчилася. Схема — was / were + -ing."
+    }
+  },
+  "750": {
+    "explanation": "The past continuous can explain why something happened: the situation that was going on was the reason. It often comes after because or as: because + subject + was / were + -ing.",
+    "examples": [
+      "I didn't answer because I was driving.",
+      "She was tired because she was working late every night.",
+      "As we were walking past, we decided to go in."
+    ],
+    "uk": {
+      "explanation": "Past continuous може пояснювати, чому щось сталося: причиною була ситуація, що тоді тривала. Часто стоїть після because або as: because + subject + was / were + -ing."
+    }
+  },
+  "751": {
+    "explanation": "Use the past continuous with always to talk about something that happened again and again over a period in the past. Always goes between was / were and the -ing verb.",
+    "examples": [
+      "In winter it was always raining.",
+      "He was always talking about football.",
+      "My grandmother was always baking something."
+    ],
+    "uk": {
+      "explanation": "Past continuous з always вживаємо, щоб сказати, що щось повторювалося знову і знову протягом певного часу в минулому. Always стоїть між was / were і дієсловом з -ing."
+    }
+  },
+  "753": {
+    "explanation": "I was wondering if… and I was thinking… make a request or suggestion softer and more polite. You mean now, but the past form sounds less direct.",
+    "examples": [
+      "I was wondering if you could help me.",
+      "I was thinking we could meet on Friday.",
+      "I was wondering if I could borrow your car."
+    ],
+    "uk": {
+      "explanation": "I was wondering if… та I was thinking… роблять прохання або пропозицію м'якшими й ввічливішими. Ідеться про теперішнє, але минула форма звучить менш прямо."
+    }
+  },
+  "754": {
+    "explanation": "Use the past continuous with always or constantly to complain about something that happened again and again and was annoying or out of control. The pattern is was / were + always / constantly + -ing.",
+    "examples": [
+      "He was constantly interrupting me.",
+      "She was always losing her keys.",
+      "They were always arguing about money."
+    ],
+    "uk": {
+      "explanation": "Past continuous з always або constantly вживаємо, щоб поскаржитися на те, що повторювалося знову і знову, дратувало або не піддавалося контролю. Схема — was / were + always / constantly + -ing."
+    }
+  },
+  "756": {
+    "explanation": "Use the past perfect continuous for a background action that started earlier and was still going on when the main event happened. The pattern is had been + -ing; the main event is in the past simple.",
+    "examples": [
+      "We had been walking for hours when it started to rain.",
+      "She had been sleeping when the alarm went off.",
+      "I had been waiting a long time when he finally called."
+    ],
+    "uk": {
+      "explanation": "Past perfect continuous вживаємо для фонової дії, яка почалася раніше й досі тривала, коли сталася головна подія. Схема — had been + -ing; головна подія — у past simple."
+    }
+  },
+  "757": {
+    "explanation": "Use the past perfect continuous for an action that started before a past moment and continued up to it. We often say how long with for or since: had been + -ing + for / since.",
+    "examples": [
+      "He had been working there for ten years.",
+      "They had been living in Lviv since 2015.",
+      "I had been learning English for two years before the trip."
+    ],
+    "uk": {
+      "explanation": "Past perfect continuous вживаємо для дії, яка почалася до певного моменту в минулому і тривала аж до нього. Часто кажемо, як довго, з for або since: had been + -ing + for / since."
+    }
+  },
+  "758": {
+    "explanation": "You can use the past perfect continuous in a relative clause to add background about someone or something. The pattern is who / which / that + had been + -ing.",
+    "examples": [
+      "The man who had been sitting next to me got off.",
+      "The dog, which had been barking all night, was finally quiet.",
+      "I met a woman who had been travelling for a year."
+    ],
+    "uk": {
+      "explanation": "Past perfect continuous можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про когось чи щось. Схема — who / which / that + had been + -ing."
+    }
+  },
+  "759": {
+    "explanation": "You can use the past perfect continuous after a time word like after, when, since or until to give background. The pattern is after / when + subject + had been + -ing.",
+    "examples": [
+      "After we had been driving for an hour, we stopped for coffee.",
+      "When she had been studying for months, she finally passed.",
+      "Since he had been feeling ill, he stayed at home."
+    ],
+    "uk": {
+      "explanation": "Past perfect continuous можна вжити після слова часу, як-от after, when, since чи until, щоб дати фонову інформацію. Схема — after / when + subject + had been + -ing."
+    }
+  },
+  "762": {
+    "explanation": "Use the past perfect continuous for an activity that had finished, but its results were still clear at a later past moment. The pattern is had been + -ing.",
+    "examples": [
+      "Her eyes were red because she had been crying.",
+      "The ground was wet. It had been raining.",
+      "He was tired because he had been running."
+    ],
+    "uk": {
+      "explanation": "Past perfect continuous вживаємо для дії, яка вже закінчилася, але її наслідки ще було видно в пізніший момент у минулому. Схема — had been + -ing."
+    }
+  },
+  "764": {
+    "explanation": "Use the past perfect after if to imagine a different past, often when you feel sorry about it. The pattern is if + had + past participle, would have + past participle.",
+    "examples": [
+      "If I had known, I would have called you.",
+      "If we had left earlier, we wouldn't have missed the bus.",
+      "If she had asked me, I would have helped."
+    ],
+    "uk": {
+      "explanation": "Past perfect після if вживаємо, щоб уявити інше минуле, часто коли шкодуємо про нього. Схема — if + had + past participle, would have + past participle."
+    }
+  },
+  "768": {
+    "explanation": "Use the past perfect to show that one thing happened before another time in the past. The pattern is had + past participle.",
+    "examples": [
+      "When we arrived, the film had already started.",
+      "I had never seen snow before that winter.",
+      "She had finished her work by six."
+    ],
+    "uk": {
+      "explanation": "Past perfect вживаємо, щоб показати, що одна подія сталася раніше за інший момент у минулому. Схема — had + past participle."
+    }
+  },
+  "769": {
+    "explanation": "Use the past perfect after because to explain a past situation with something that happened earlier. The pattern is because + subject + had + past participle.",
+    "examples": [
+      "I was hungry because I hadn't eaten all day.",
+      "He failed because he hadn't studied.",
+      "We were late because we had missed the train."
+    ],
+    "uk": {
+      "explanation": "Past perfect після because вживаємо, щоб пояснити ситуацію в минулому тим, що сталося ще раніше. Схема — because + subject + had + past participle."
+    }
+  },
+  "770": {
+    "explanation": "Use the past perfect after wish or if only to say you are sorry about something in the past. The pattern is wish / if only + subject + had (not) + past participle.",
+    "examples": [
+      "I wish I had studied harder.",
+      "If only we had booked a table!",
+      "She wishes she hadn't said that."
+    ],
+    "uk": {
+      "explanation": "Past perfect після wish або if only вживаємо, щоб сказати, що шкодуємо про щось у минулому. Схема — wish / if only + subject + had (not) + past participle."
+    }
+  },
+  "771": {
+    "explanation": "In formal English, you can start with never or never before and then put had before the subject. This shows that an event was unique. The pattern is never (before) + had + subject + past participle.",
+    "examples": [
+      "Never before had I seen such a crowd.",
+      "Never had she felt so alone.",
+      "Never before had the city looked so beautiful."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській можна почати з never або never before, а потім поставити had перед підметом. Так показуємо, що подія була єдиною у своєму роді. Схема — never (before) + had + subject + past participle."
+    }
+  },
+  "772": {
+    "explanation": "No sooner … than shows that one thing happened right after another. It is formal, and had goes before the subject: no sooner + had + subject + past participle + than + past simple.",
+    "examples": [
+      "No sooner had I sat down than the phone rang.",
+      "No sooner had we arrived than it started to rain.",
+      "No sooner had she left than he called."
+    ],
+    "uk": {
+      "explanation": "No sooner … than показує, що одна подія сталася одразу після іншої. Це офіційний стиль, і had стоїть перед підметом: no sooner + had + subject + past participle + than + past simple."
+    }
+  },
+  "776": {
+    "explanation": "You can use the past perfect in a relative clause to add background about something that happened earlier. The pattern is who / which / that + had + past participle.",
+    "examples": [
+      "I returned the book that I had borrowed.",
+      "We visited the town where my father had grown up.",
+      "The man who had helped us was gone."
+    ],
+    "uk": {
+      "explanation": "Past perfect можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про те, що сталося раніше. Схема — who / which / that + had + past participle."
+    }
+  },
+  "777": {
+    "explanation": "Use the past perfect to show that a situation was different before it changed. The earlier situation uses had + past participle, and the change often comes with but or then.",
+    "examples": [
+      "I had always lived in the city, but then we moved.",
+      "She had never liked fish, but now she loves it.",
+      "We had planned a picnic, but it rained."
+    ],
+    "uk": {
+      "explanation": "Past perfect вживаємо, щоб показати, що до зміни ситуація була іншою. Попередня ситуація — had + past participle, а зміна часто вводиться через but або then."
+    }
+  },
+  "778": {
+    "explanation": "When you report a question with a past verb like asked or wanted to know, a past simple or present perfect question often becomes past perfect. The pattern is asked + if / wh-word + subject + had + past participle.",
+    "examples": [
+      "She asked me if I had seen the film.",
+      "He wanted to know where I had been.",
+      "They asked if we had finished."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо запитання з дієсловом у минулому, як-от asked чи wanted to know, запитання в past simple або present perfect часто переходить у past perfect. Схема — asked + if / wh-word + subject + had + past participle."
+    }
+  },
+  "779": {
+    "explanation": "When you report what someone said with a past verb like said or told, a past simple or present perfect often becomes past perfect. The pattern is said (that) + subject + had + past participle.",
+    "examples": [
+      "She said she had lost her phone.",
+      "He told me he had already eaten.",
+      "They said they had never been to Kyiv."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо чиїсь слова з дієсловом у минулому, як-от said чи told, past simple або present perfect часто переходить у past perfect. Схема — said (that) + subject + had + past participle."
+    }
+  },
+  "780": {
+    "explanation": "In formal English, you can drop if and put had first to imagine a different past, often with regret. The pattern is had + subject + past participle, would have + past participle.",
+    "examples": [
+      "Had I known, I would have come earlier.",
+      "Had we left on time, we would have caught the train.",
+      "Had she asked, I would have helped her."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській можна прибрати if і поставити had на початок, щоб уявити інше минуле, часто з жалем. Схема — had + subject + past participle, would have + past participle."
+    }
+  },
+  "781": {
+    "explanation": "Use if only with the negative past perfect to say you strongly regret something that happened. The pattern is if only + subject + hadn't + past participle.",
+    "examples": [
+      "If only I hadn't said that!",
+      "If only we hadn't sold the house.",
+      "If only she hadn't missed the train."
+    ],
+    "uk": {
+      "explanation": "If only із заперечною формою past perfect вживаємо, щоб сказати, що дуже шкодуємо про те, що сталося. Схема — if only + subject + hadn't + past participle."
+    }
+  },
+  "785": {
+    "explanation": "Use the past simple for things that happened or were true at a finished time in the past. Regular verbs add -ed; many common verbs are irregular.",
+    "examples": [
+      "I watched TV last night.",
+      "We went to the park yesterday.",
+      "She was happy."
+    ],
+    "uk": {
+      "explanation": "Past simple вживаємо для того, що сталося або було правдою в минулому, у час, який уже закінчився. Правильні дієслова додають -ed; багато поширених дієслів — неправильні."
+    }
+  },
+  "793": {
+    "explanation": "Use the past simple for habits or states that were true for a period in the past but are not true now. The verb is in the past simple, often with every day or when I was a child.",
+    "examples": [
+      "We lived by the sea when I was small.",
+      "He walked to school every day.",
+      "I played football every weekend."
+    ],
+    "uk": {
+      "explanation": "Past simple вживаємо для звичок або станів, які були правдою певний час у минулому, але тепер уже ні. Дієслово — у past simple, часто з every day або when I was a child."
+    }
+  },
+  "794": {
+    "explanation": "Use the past simple after if to imagine a situation now or in the future that is not real or not likely. The pattern is if + past simple, would + verb.",
+    "examples": [
+      "If I had more money, I would buy a car.",
+      "If you asked him, he would help.",
+      "If we lived closer, we would visit more often."
+    ],
+    "uk": {
+      "explanation": "Past simple після if вживаємо, щоб уявити ситуацію тепер або в майбутньому, яка не є реальною чи малоймовірна. Схема — if + past simple, would + verb."
+    }
+  },
+  "795": {
+    "explanation": "In a story, use a series of past simple verbs to tell events in the order they happened. Words like first, then and after that help.",
+    "examples": [
+      "He opened the door, looked in and smiled.",
+      "First we had lunch, then we went to the beach.",
+      "She got up, dressed and left."
+    ],
+    "uk": {
+      "explanation": "В оповіді ряд дієслів у past simple передає події в тому порядку, в якому вони сталися. Допомагають слова first, then і after that."
+    }
+  },
+  "796": {
+    "explanation": "Use wish with the past simple to say you want something now to be different. The pattern is wish (that) + subject + past simple.",
+    "examples": [
+      "I wish I had a bigger flat.",
+      "I wish I knew the answer.",
+      "She wishes she lived near the sea."
+    ],
+    "uk": {
+      "explanation": "Wish з past simple вживаємо, щоб сказати, що хочемо, аби щось у теперішньому було інакше. Схема — wish (that) + subject + past simple."
+    }
+  },
+  "801": {
+    "explanation": "In polite letters and emails, use the past simple after if to make a request softer. The pattern is I would be grateful if you + past simple.",
+    "examples": [
+      "I would be grateful if you sent me the details.",
+      "It would be great if you called me back.",
+      "I would appreciate it if you replied soon."
+    ],
+    "uk": {
+      "explanation": "У ввічливих листах і емейлах past simple після if робить прохання м'якшим. Схема — I would be grateful if you + past simple."
+    }
+  },
+  "802": {
+    "explanation": "I wondered if… and I wanted to… are polite ways to ask for something or to thank someone. You mean now, but the past form sounds less direct.",
+    "examples": [
+      "I wondered if you could help me.",
+      "I wanted to thank you for the flowers.",
+      "I wondered if you were free on Friday."
+    ],
+    "uk": {
+      "explanation": "I wondered if… та I wanted to… — ввічливі способи про щось попросити або подякувати. Ідеться про теперішнє, але минула форма звучить менш прямо."
+    }
+  },
+  "805": {
+    "explanation": "In more complex stories, the past simple can order events with time words like as soon as, once, the moment or by the time. The verbs in both parts are usually in the past simple.",
+    "examples": [
+      "As soon as she saw him, she started to cry.",
+      "The moment I opened the door, the dog ran out.",
+      "Once we paid, we left the restaurant."
+    ],
+    "uk": {
+      "explanation": "У складніших оповідях past simple може впорядковувати події зі словами часу, як-от as soon as, once, the moment чи by the time. Дієслова в обох частинах зазвичай у past simple."
+    }
+  },
+  "806": {
+    "explanation": "Put did before the main verb to make a past statement stronger, often when someone doubts it. The pattern is did + verb, with stress on did.",
+    "examples": [
+      "I did call you, but you didn't answer.",
+      "She did finish the report in the end.",
+      "We did enjoy the party."
+    ],
+    "uk": {
+      "explanation": "Did перед основним дієсловом робить твердження про минуле сильнішим, часто коли хтось у ньому сумнівається. Схема — did + verb, наголос на did."
+    }
+  },
+  "807": {
+    "explanation": "I thought… makes a suggestion or opinion sound softer and less direct. You mean now, but the past form sounds more polite.",
+    "examples": [
+      "I thought we could go for a walk.",
+      "I thought you might like this book.",
+      "I thought it would be nice to invite them."
+    ],
+    "uk": {
+      "explanation": "I thought… робить пропозицію чи думку м'якшою й менш прямою. Ідеться про теперішнє, але минула форма звучить ввічливіше."
+    }
+  },
+  "810": {
+    "explanation": "Use the present perfect continuous for an activity that you have done again and again from some time in the past until now. The pattern is have / has been + -ing.",
+    "examples": [
+      "I've been going to the gym a lot lately.",
+      "She has been calling me every day.",
+      "We've been meeting on Fridays since May."
+    ],
+    "uk": {
+      "explanation": "Present perfect continuous вживаємо для дії, яку робимо знову і знову від певного моменту в минулому дотепер. Схема — have / has been + -ing."
+    }
+  },
+  "811": {
+    "explanation": "Use the present perfect continuous for one activity that started in the past and is still going on now. We often say how long with for or since: have / has been + -ing.",
+    "examples": [
+      "I've been waiting for an hour.",
+      "She has been living here since 2020.",
+      "How long have you been learning English?"
+    ],
+    "uk": {
+      "explanation": "Present perfect continuous вживаємо для однієї дії, яка почалася в минулому й триває досі. Часто кажемо, як довго, з for або since: have / has been + -ing."
+    }
+  },
+  "814": {
+    "explanation": "Use the present perfect continuous for an activity that has just finished when you can still see its results. The pattern is have / has been + -ing.",
+    "examples": [
+      "I'm tired because I've been running.",
+      "Your eyes are red. Have you been crying?",
+      "It's been raining — the street is wet."
+    ],
+    "uk": {
+      "explanation": "Present perfect continuous вживаємо для дії, яка щойно закінчилася, коли ще видно її наслідки. Схема — have / has been + -ing."
+    }
+  },
+  "815": {
+    "explanation": "In formal English, you can start with not only and put have / has before the subject to make a point stand out. The pattern is not only + have / has + subject + been + -ing, but (also)….",
+    "examples": [
+      "Not only have prices been rising, but wages have also fallen.",
+      "Not only has she been working, but she's been studying too.",
+      "Not only have they been ignoring us, but they have also lied."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській можна почати з not only і поставити have / has перед підметом, щоб виділити думку. Схема — not only + have / has + subject + been + -ing, but (also)…."
+    }
+  },
+  "816": {
+    "explanation": "Use the negative present perfect with for to say something has not happened during a period up to now. The pattern is haven't / hasn't + past participle + for + time.",
+    "examples": [
+      "I haven't seen her for years.",
+      "We haven't eaten out for a month.",
+      "He hasn't called me for weeks."
+    ],
+    "uk": {
+      "explanation": "Заперечну форму present perfect з for вживаємо, щоб сказати, що щось не відбувалося протягом певного часу дотепер. Схема — haven't / hasn't + past participle + for + time."
+    }
+  },
+  "817": {
+    "explanation": "Use the negative present perfect with yet for something you expect to happen, but it hasn't happened so far. Yet goes at the end: haven't / hasn't + past participle + yet.",
+    "examples": [
+      "I haven't finished my homework yet.",
+      "The bus hasn't come yet.",
+      "She hasn't replied yet."
+    ],
+    "uk": {
+      "explanation": "Заперечну форму present perfect з yet вживаємо для того, що має статися, але поки що не сталося. Yet стоїть у кінці: haven't / hasn't + past participle + yet."
+    }
+  },
+  "822": {
+    "explanation": "Use the present perfect to talk about experiences in your life up to now, when the exact time is not important. We often use ever and never: have / has + past participle.",
+    "examples": [
+      "Have you ever been to London?",
+      "I've never eaten sushi.",
+      "She has visited Paris twice."
+    ],
+    "uk": {
+      "explanation": "Present perfect вживаємо, щоб розповісти про досвід у житті дотепер, коли точний час не важливий. Часто вживаємо ever і never: have / has + past participle."
+    }
+  },
+  "823": {
+    "explanation": "Use the present perfect with since to say when a situation started, if it is still true now. The pattern is have / has + past participle + since + a point in time.",
+    "examples": [
+      "I've lived here since 2020.",
+      "We have known each other since school.",
+      "She has worked here since March."
+    ],
+    "uk": {
+      "explanation": "Present perfect із since вживаємо, щоб сказати, коли почалася ситуація, яка триває досі. Схема — have / has + past participle + since + момент у часі."
+    }
+  },
+  "824": {
+    "explanation": "Use the present perfect with already to show that something is done, often sooner than expected. Already usually goes between have / has and the past participle.",
+    "examples": [
+      "I've already done the shopping.",
+      "She has already left.",
+      "Have you already eaten?"
+    ],
+    "uk": {
+      "explanation": "Present perfect з already вживаємо, щоб показати, що щось уже зроблено, часто раніше, ніж очікували. Already зазвичай стоїть між have / has і past participle."
+    }
+  },
+  "829": {
+    "explanation": "Use the present perfect for something that happened a short time ago and matters now. Just often goes between have / has and the past participle.",
+    "examples": [
+      "I've just finished my lunch.",
+      "She has just arrived.",
+      "Oh no, I've lost my keys!"
+    ],
+    "uk": {
+      "explanation": "Present perfect вживаємо для того, що сталося недавно і важливе зараз. Just часто стоїть між have / has і past participle."
+    }
+  },
+  "830": {
+    "explanation": "Use the present perfect for a state or period that started in the past and has no clear end — it is still true now. The pattern is have / has + past participle.",
+    "examples": [
+      "I've always loved music.",
+      "People have lived here for centuries.",
+      "She has been my best friend for years."
+    ],
+    "uk": {
+      "explanation": "Present perfect вживаємо для стану чи періоду, який почався в минулому і не має чіткого кінця — він досі правдивий. Схема — have / has + past participle."
+    }
+  },
+  "831": {
+    "explanation": "Use the present perfect after a superlative to say that something is the best or worst in your experience so far. The pattern is the + superlative + noun + I have ever + past participle.",
+    "examples": [
+      "It's the best film I've ever seen.",
+      "This is the worst meal I've ever eaten.",
+      "She's the kindest person I've ever met."
+    ],
+    "uk": {
+      "explanation": "Present perfect після найвищого ступеня прикметника вживаємо, щоб сказати, що щось найкраще чи найгірше в нашому досвіді дотепер. Схема — the + superlative + noun + I have ever + past participle."
+    }
+  },
+  "832": {
+    "explanation": "Use still with the negative present perfect when something was expected to happen but still hasn't. Still goes before haven't / hasn't: still + haven't / hasn't + past participle.",
+    "examples": [
+      "I still haven't got my money back.",
+      "He still hasn't called me.",
+      "We still haven't found a flat."
+    ],
+    "uk": {
+      "explanation": "Still із заперечною формою present perfect вживаємо, коли щось мало статися, але досі не сталося. Still стоїть перед haven't / hasn't: still + haven't / hasn't + past participle."
+    }
+  },
+  "835": {
+    "explanation": "News reports often start with the present perfect to say that something new has happened. The details that follow are usually in the past simple.",
+    "examples": [
+      "A new bridge has opened in the city centre.",
+      "Scientists have found water on the planet.",
+      "The president has arrived in Kyiv."
+    ],
+    "uk": {
+      "explanation": "Новини часто починаються з present perfect, щоб повідомити, що сталося щось нове. Подробиці далі зазвичай подаються в past simple."
+    }
+  },
   "848": {
     "explanation": "In formal writing, put the preposition before which, whom or whose instead of at the end of the clause: the person to whom I spoke. This avoids leaving the preposition at the end, but sounds more formal than everyday speech.",
     "examples": [
@@ -2373,6 +2890,281 @@
     ],
     "uk": {
       "explanation": "Довші складені прийменники, як-от on account of, ahead of, with regard to та in accordance with, типові для офіційного, літературного чи ділового письма. Часто вони замінюють коротше й звичніше слово: on account of = because of."
+    }
+  },
+  "852": {
+    "explanation": "Use the present continuous for something that is happening now, at the moment of speaking. The pattern is am / is / are + -ing.",
+    "examples": [
+      "I'm reading a book.",
+      "She is cooking dinner.",
+      "What are you doing?"
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для того, що відбувається зараз, у момент мовлення. Схема — am / is / are + -ing."
+    }
+  },
+  "855": {
+    "explanation": "You can use the present continuous with always to talk about something that happens a lot, often when it surprises or annoys you. Always goes between am / is / are and the -ing verb.",
+    "examples": [
+      "He's always losing his phone.",
+      "You're always complaining!",
+      "My sister is always borrowing my clothes."
+    ],
+    "uk": {
+      "explanation": "Present continuous з always вживаємо, щоб сказати, що щось стається дуже часто, зазвичай коли це дивує чи дратує. Always стоїть між am / is / are і дієсловом з -ing."
+    }
+  },
+  "856": {
+    "explanation": "Use the present continuous for actions and situations that are happening now or around now. The pattern is am / is / are + -ing, and it works with many kinds of verbs.",
+    "examples": [
+      "The children are playing in the garden.",
+      "We're looking for a new flat.",
+      "Is it still raining outside?"
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для дій і ситуацій, що відбуваються зараз або приблизно в цей час. Схема — am / is / are + -ing, і вона працює з багатьма дієсловами."
+    }
+  },
+  "857": {
+    "explanation": "Use the present continuous for a situation that is true now but only for a short time. The pattern is am / is / are + -ing, often with at the moment or this week.",
+    "examples": [
+      "I'm staying with my aunt this week.",
+      "She's working from home at the moment.",
+      "We're living in a small flat for now."
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для ситуації, яка правдива зараз, але лише на короткий час. Схема — am / is / are + -ing, часто з at the moment або this week."
+    }
+  },
+  "858": {
+    "explanation": "Use the present continuous for something you do regularly, but only for a limited time. The pattern is am / is / are + -ing, often with these days or this month.",
+    "examples": [
+      "I'm going to the gym every day this month.",
+      "He's getting up early these days.",
+      "We're eating less meat at the moment."
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для того, що робимо регулярно, але лише обмежений час. Схема — am / is / are + -ing, часто з these days або this month."
+    }
+  },
+  "859": {
+    "explanation": "Use the present continuous for actions and situations in progress now, including longer changes. The pattern is am / is / are + -ing, and it works with a wide range of verbs.",
+    "examples": [
+      "The city is growing very fast.",
+      "More people are working from home.",
+      "Prices are going up again."
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для дій і ситуацій, що тривають зараз, зокрема для довших змін. Схема — am / is / are + -ing, і вона працює з широким колом дієслів."
+    }
+  },
+  "860": {
+    "explanation": "Use the present continuous for temporary situations, not permanent ones. The pattern is am / is / are + -ing, and it works with a wide range of verbs.",
+    "examples": [
+      "My brother is studying in Poland this year.",
+      "I'm using my old laptop while mine is repaired.",
+      "She's teaching at a school in Odesa for a year."
+    ],
+    "uk": {
+      "explanation": "Present continuous вживаємо для тимчасових ситуацій, а не постійних. Схема — am / is / are + -ing, і вона працює з широким колом дієслів."
+    }
+  },
+  "861": {
+    "explanation": "The present continuous goes with adverbs like constantly, continually and forever to show that something happens a lot, often in an annoying way. The adverb goes between am / is / are and the -ing verb.",
+    "examples": [
+      "He's constantly checking his phone.",
+      "They're forever arguing about money.",
+      "She's continually changing her mind."
+    ],
+    "uk": {
+      "explanation": "Present continuous поєднується з прислівниками на кшталт constantly, continually та forever, щоб показати, що щось стається дуже часто, зазвичай дратівливо. Прислівник стоїть між am / is / are і дієсловом з -ing."
+    }
+  },
+  "862": {
+    "explanation": "You can ask a question in the present continuous that does not need an answer, to show surprise or criticism. The pattern is question word + am / is / are + subject + -ing.",
+    "examples": [
+      "What are you doing? That's my coffee!",
+      "Who are you calling lazy?",
+      "Are you joking?"
+    ],
+    "uk": {
+      "explanation": "Можна поставити запитання в present continuous, яке не потребує відповіді, щоб висловити подив чи критику. Схема — question word + am / is / are + subject + -ing."
+    }
+  },
+  "863": {
+    "explanation": "The present continuous goes with many adverbs of frequency, including perpetually and incessantly, to show that something happens a lot and is annoying or out of control. The adverb goes between am / is / are and the -ing verb.",
+    "examples": [
+      "He is perpetually complaining about his job.",
+      "The neighbours are incessantly arguing.",
+      "She's eternally worrying about something."
+    ],
+    "uk": {
+      "explanation": "Present continuous поєднується з багатьма прислівниками частоти, зокрема perpetually та incessantly, щоб показати, що щось стається дуже часто, дратує чи не піддається контролю. Прислівник стоїть між am / is / are і дієсловом з -ing."
+    }
+  },
+  "864": {
+    "explanation": "Verbs like hope, want or wonder are not usually continuous, but the present continuous makes a request or statement softer and less direct. The pattern is I'm hoping / wondering / wanting + rest.",
+    "examples": [
+      "I'm hoping you can help me.",
+      "We're wanting to leave early, if that's OK.",
+      "I'm wondering whether to accept the offer."
+    ],
+    "uk": {
+      "explanation": "Дієслова на кшталт hope, want чи wonder зазвичай не вживаються в тривалій формі, але present continuous робить прохання чи твердження м'якшим і менш прямим. Схема — I'm hoping / wondering / wanting + решта речення."
+    }
+  },
+  "868": {
+    "explanation": "Use the present simple for habits, things that happen again and again, and general facts. Add -s or -es after he, she, it: she works.",
+    "examples": [
+      "I get up at seven every day.",
+      "She plays tennis on Sundays.",
+      "Water boils at 100 degrees."
+    ],
+    "uk": {
+      "explanation": "Present simple вживаємо для звичок, того, що повторюється, і загальних фактів. Після he, she, it додаємо -s або -es: she works."
+    }
+  },
+  "869": {
+    "explanation": "Use the present simple after if for a situation that can really happen, and say what will follow. The pattern is if + present simple, will / can / imperative + verb.",
+    "examples": [
+      "If it rains, we'll stay at home.",
+      "If you're hungry, eat something.",
+      "If you want, I can help you."
+    ],
+    "uk": {
+      "explanation": "Present simple після if вживаємо для ситуації, яка справді може статися, і кажемо, що з цього вийде. Схема — if + present simple, will / can / imperative + verb."
+    }
+  },
+  "875": {
+    "explanation": "Use the present simple to explain steps or give directions. Each step is a present simple verb, often with you or with first and then.",
+    "examples": [
+      "You turn left at the bank.",
+      "First you open the app, then you click Start.",
+      "You take the second street on the right."
+    ],
+    "uk": {
+      "explanation": "Present simple вживаємо, щоб пояснити кроки або показати дорогу. Кожен крок — дієслово в present simple, часто з you або з first і then."
+    }
+  },
+  "876": {
+    "explanation": "Verbs about thinking, like think, hope and know, are usually in the present simple, not the continuous. The pattern is subject + think / hope / know + rest.",
+    "examples": [
+      "I think it's a good idea.",
+      "I hope you feel better soon.",
+      "Do you know her name?"
+    ],
+    "uk": {
+      "explanation": "Дієслова мислення, як-от think, hope і know, зазвичай уживаються в present simple, а не в тривалій формі. Схема — subject + think / hope / know + решта речення."
+    }
+  },
+  "877": {
+    "explanation": "Use Why don't you / we…? or if you want / if you like with the present simple to suggest something in a friendly way. The pattern is Why don't you / we + verb?",
+    "examples": [
+      "Why don't we go to the cinema?",
+      "Why don't you ask your teacher?",
+      "We can meet later, if you like."
+    ],
+    "uk": {
+      "explanation": "Why don't you / we…? або if you want / if you like з present simple вживаємо, щоб дружньо щось запропонувати. Схема — Why don't you / we + verb?"
+    }
+  },
+  "878": {
+    "explanation": "Add don't you think? or don't you agree? to your opinion to ask someone to agree with you. It usually comes at the end, after a comma.",
+    "examples": [
+      "It's a great film, don't you think?",
+      "She's very talented, don't you agree?",
+      "Don't you think it's too expensive?"
+    ],
+    "uk": {
+      "explanation": "Don't you think? або don't you agree? після своєї думки вживаємо, щоб попросити співрозмовника погодитися. Зазвичай стоїть у кінці, після коми."
+    }
+  },
+  "880": {
+    "explanation": "Verbs about the mind, like remember, understand and believe, are usually in the present simple. The pattern is subject + remember / understand / believe + rest.",
+    "examples": [
+      "I remember our first meeting.",
+      "Do you understand the question?",
+      "I don't believe his story."
+    ],
+    "uk": {
+      "explanation": "Дієслова про розумові процеси, як-от remember, understand і believe, зазвичай уживаються в present simple. Схема — subject + remember / understand / believe + решта речення."
+    }
+  },
+  "881": {
+    "explanation": "Use the present simple with verbs like say and show to tell what a text, sign or picture says. The pattern is the sign / letter / map + says / shows + that.",
+    "examples": [
+      "The sign says 'No parking'.",
+      "The map shows where the station is.",
+      "His letter says that he is fine."
+    ],
+    "uk": {
+      "explanation": "Present simple з дієсловами на кшталт say і show вживаємо, щоб передати, що каже текст, табличка чи малюнок. Схема — the sign / letter / map + says / shows + that."
+    }
+  },
+  "882": {
+    "explanation": "Some verbs do an action when you say them, like suggest, apologise and recommend. Use them in the present simple with I: I suggest…, I apologise for…",
+    "examples": [
+      "I suggest we take a taxi.",
+      "I apologise for being late.",
+      "I recommend the fish soup."
+    ],
+    "uk": {
+      "explanation": "Деякі дієслова виконують дію вже тим, що їх вимовляють, як-от suggest, apologise і recommend. Уживаємо їх у present simple з I: I suggest…, I apologise for…"
+    }
+  },
+  "884": {
+    "explanation": "Many verbs, like agree, accept and advise, do an action when you say them. Use them in the present simple with I or we: I agree…, I advise you to….",
+    "examples": [
+      "I agree with you completely.",
+      "We accept your offer.",
+      "I advise you to see a doctor."
+    ],
+    "uk": {
+      "explanation": "Багато дієслів, як-от agree, accept і advise, виконують дію вже тим, що їх вимовляють. Уживаємо їх у present simple з I або we: I agree…, I advise you to…."
+    }
+  },
+  "885": {
+    "explanation": "You can use the present simple to retell a story, film or piece of history, so it feels more immediate. All the main events are in the present simple.",
+    "examples": [
+      "In the film, a boy finds a dog and takes it home.",
+      "In 1492, Columbus sails west and reaches America.",
+      "The hero wakes up and realises he is alone."
+    ],
+    "uk": {
+      "explanation": "Present simple можна вжити, щоб переказати історію, фільм чи подію з минулого, — так розповідь звучить живіше. Усі основні події подаються в present simple."
+    }
+  },
+  "886": {
+    "explanation": "A negative question can persuade someone to agree with you, because it suggests the answer is yes. The pattern is Don't / Doesn't + subject + verb…?",
+    "examples": [
+      "Don't you want to be healthy?",
+      "Doesn't everyone deserve a second chance?",
+      "Don't we all need a holiday?"
+    ],
+    "uk": {
+      "explanation": "Заперечне запитання може переконати співрозмовника погодитися, бо натякає, що відповідь — так. Схема — Don't / Doesn't + subject + verb…?"
+    }
+  },
+  "887": {
+    "explanation": "A negative question can check whether someone shares your opinion. The pattern is Don't / Doesn't + subject + think / agree / find…?",
+    "examples": [
+      "Don't you find this music a bit loud?",
+      "Doesn't she think it's too late?",
+      "Don't you agree that he was wrong?"
+    ],
+    "uk": {
+      "explanation": "Заперечне запитання може перевірити, чи поділяє співрозмовник нашу думку. Схема — Don't / Doesn't + subject + think / agree / find…?"
+    }
+  },
+  "888": {
+    "explanation": "In academic writing, use the present simple with reporting verbs like demonstrate, illustrate and argue to say what a study or writer shows. The pattern is the study / author + demonstrates / argues + that.",
+    "examples": [
+      "The study demonstrates that sleep improves memory.",
+      "This example illustrates the problem clearly.",
+      "The author argues that cities need more parks."
+    ],
+    "uk": {
+      "explanation": "В академічному письмі present simple з дієсловами переказу, як-от demonstrate, illustrate і argue, вживаємо, щоб сказати, що показує дослідження чи автор. Схема — the study / author + demonstrates / argues + that."
     }
   },
   "1107": {

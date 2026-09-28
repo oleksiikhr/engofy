@@ -123,10 +123,10 @@ not shift".
 
 `future-*` (43), `passives-*` (15).
 
-### [ ] 7. Контент: PAST, PRESENT (72)
+### [x] 7. Контент: PAST, PRESENT (72)
 - Branch: `grammar-translations-and-practice-07-past-present`
-- Base: `grammar-translations-and-practice-06-future-passives`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/164
 
 `past-*` (47 з `egpIndex`), `present-*` (25).
 
