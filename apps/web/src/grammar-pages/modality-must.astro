@@ -1,0 +1,422 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 10 USE rows are inlined, matched by EGP index. The other 12 rows
+// (affirmative, negative, questions, must have + -ed, must not have been,
+// adverbs ×3, ellipsis ×3, inversion) are plain FORM rows, written in full
+// without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const obligationPoint = point(531);
+const obligationWidePoint = point(537);
+const askingPoint = point(545);
+const rulesPoint = point(546);
+const invitationPoint = point(536);
+const suggestionPoint = point(538);
+const deductionPoint = point(535);
+const pastDeductionPoint = point(543);
+const admitPoint = point(542);
+const sayPoint = point(544);
+
+const inlineUsagePointIds = [
+  obligationPoint,
+  obligationWidePoint,
+  askingPoint,
+  rulesPoint,
+  invitationPoint,
+  suggestionPoint,
+  deductionPoint,
+  pastDeductionPoint,
+  admitPoint,
+  sayPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Must: forms (must, must not, mustn't, Must I…?), obligation and necessity, asking about obligation, mustn't for rules, invitations and strong suggestions, it must be for being sure, must have + past participle, must with adverbs, I must admit and I must say, short forms (You must! / Must go now), and inversion after not only, never and nor."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Must, mustn't, Must I…?", open: true },
+    { id: 'obligation', title: 'I must go / You must wear…: obligation and necessity', open: false },
+    { id: 'asking', title: 'Must I bring…?: asking about obligation', open: false },
+    { id: 'rules', title: "You mustn't…: rules and bans", open: false },
+    { id: 'invitations', title: 'You must come!: invitations and strong suggestions', open: false },
+    { id: 'deduction', title: "It must be / You must be: being sure", open: false },
+    { id: 'past-deduction', title: 'He must have forgotten: being sure about the past', open: false },
+    { id: 'adverbs', title: 'Must also / must never: adverbs with must', open: false },
+    { id: 'admit-say', title: 'I must admit / I must say: fixed expressions', open: false },
+    { id: 'ellipsis', title: 'You must! / Must go now: short forms', open: false },
+    { id: 'inversion', title: 'Not only must you…: inversion', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Must</em> is a modal verb for strong obligation and necessity: <em>I must call my parents.</em> In the negative, <em>mustn't</em> says that something is not allowed. <em>Must</em> also shows that the speaker is sure about something: <em>You must be tired.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Must, mustn't, Must I…?" id="form" open>
+    <p>
+      <em>Must</em> is the same for every subject — no <em>-s</em> with he, she, it. The verb after it is always the base form, without <em>to</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'must', 'base verb']} />
+    <GrammarExample note="You + must + wear / bring: two things that are necessary.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must</mark> <mark data-role="grammar">wear</mark> your sports shoes and <mark data-role="grammar">you</mark> <mark data-role="content">must</mark> also <mark data-role="grammar">bring</mark> your racket!
+    </GrammarExample>
+    <GrammarExample note="I + must + be: a time the speaker has to keep.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">be</mark> back at 10.15.
+    </GrammarExample>
+    <p>
+      The negative is <em>must not</em>, or <em>mustn't</em> in speech and informal writing. There is no <em>do</em>: not <em>don't must</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "must not / mustn't", 'base verb']} />
+    <GrammarExample note="Mustn't + forget: don't forget.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">mustn't</mark> <mark data-role="grammar">forget</mark> to buy some strawberry juice for us.
+    </GrammarExample>
+    <GrammarExample note="Must not + wear: a white shirt isn't allowed.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must not</mark> <mark data-role="grammar">wear</mark> a white shirt — you can only wear a dark one.
+    </GrammarExample>
+    <p>
+      For a question, put <em>must</em> before the subject. Questions with <em>must</em> sound formal; in everyday English, <em>Do I have to…?</em> is more common.
+    </p>
+    <GrammarFormula label="Question" parts={['must', 'subject', 'base verb']} />
+    <GrammarExample note="Must + I + bring: a question about what is necessary.">
+      How much money <mark data-role="content">must</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">bring</mark> with me?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I must go / You must wear…: obligation and necessity" id="obligation" open={false}>
+    <p>
+      <em>Must</em> says that something is necessary or very important. With <em>I</em>, it often shows the speaker's own feeling: "I think this is necessary". With <em>you</em>, it tells someone what they need to do.
+    </p>
+    <GrammarFormula label="Obligation" parts={['I / you', 'must', 'base verb']} />
+    <GrammarExample note="I must: the speaker feels it is important.">
+      My phone is very important to me because <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">call</mark> my parents.
+    </GrammarExample>
+    <GrammarExample note="You must: instructions for a friend.">
+      I will be at school, so <mark data-role="grammar">you</mark> <mark data-role="content">must</mark> <mark data-role="grammar">arrive</mark> at 3 pm. <mark data-role="grammar">You</mark> <mark data-role="content">must</mark> <mark data-role="grammar">take</mark> your towel with you.
+    </GrammarExample>
+    <GrammarExample note="I mustn't: it's important not to do this.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">mustn't</mark> <mark data-role="grammar">be</mark> late.
+    </GrammarExample>
+    {obligationPoint && <GrammarUsagePointCard usagePoint={obligationPoint} />}
+    <p>
+      The subject can be any person or noun: <em>we</em>, <em>they</em>, <em>your parents</em>, <em>the government</em>.
+    </p>
+    <GrammarFormula label="Obligation" parts={['subject', 'must', 'base verb']} />
+    <GrammarExample note="We must: something we all need to do.">
+      She said <mark data-role="grammar">we</mark> <mark data-role="content">must</mark> <mark data-role="grammar">go</mark> and find him.
+    </GrammarExample>
+    <GrammarExample note="A noun subject: what parents need to do.">
+      <mark data-role="grammar">Your parents</mark> <mark data-role="content">must</mark> <mark data-role="grammar">learn</mark> to let you live your own life.
+    </GrammarExample>
+    <GrammarExample note="A noun subject in a formal rule.">
+      <mark data-role="grammar">All visitors</mark> <mark data-role="content">must</mark> <mark data-role="grammar">sign</mark> in at the front desk.
+    </GrammarExample>
+    {obligationWidePoint && <GrammarUsagePointCard usagePoint={obligationWidePoint} />}
+    <p>
+      <em>Have to</em> is close in meaning. <em>Must</em> usually shows what the speaker feels is necessary (<em>I must call my grandma — I miss her</em>), while <em>have to</em> reports a fact or a rule from outside (<em>I have to wear a uniform at work</em>). <em>Must</em> has no past or future form: use <em>had to</em> and <em>will have to</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Must I bring…?: asking about obligation" id="asking" open={false}>
+    <p>
+      <em>Must I…?</em> asks whether something is necessary. It is formal and quite rare — in speech people usually say <em>Do I have to…?</em>
+    </p>
+    <GrammarFormula label="Asking" parts={['(wh-word)', 'must', 'I / we…', 'base verb']} />
+    <GrammarExample note="Is it necessary to cancel the trip?">
+      Is it possible to use the prize next year, or <mark data-role="content">must</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">cancel</mark> my trip to India?
+    </GrammarExample>
+    <GrammarExample note="A wh-question about what is necessary.">
+      <mark data-role="grammar">What time</mark> <mark data-role="content">must</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">leave</mark> the hotel?
+    </GrammarExample>
+    {askingPoint && <GrammarUsagePointCard usagePoint={askingPoint} />}
+    <p>
+      The short answer to <em>Must I…?</em> is often <em>No, you don't have to</em> or <em>No, you needn't</em> — not <em>No, you mustn't</em>, which means "it isn't allowed".
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You mustn't…: rules and bans" id="rules" open={false}>
+    <p>
+      <em>Must not</em> / <em>mustn't</em> says that something is not allowed. It is common for rules at school, at work, in public places, and for strong advice.
+    </p>
+    <GrammarFormula label="Rules" parts={['subject', "must not / mustn't", 'base verb']} />
+    <GrammarExample note="A school rule.">
+      In school, <mark data-role="grammar">you</mark> <mark data-role="content">mustn't</mark> <mark data-role="grammar">talk</mark> during lessons.
+    </GrammarExample>
+    <GrammarExample note="A rule about other people.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">must not</mark> <mark data-role="grammar">write</mark> on the walls.
+    </GrammarExample>
+    <GrammarExample note="Strong advice: this is wrong, don't do it.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must not</mark> <mark data-role="grammar">hit</mark> them or punish them without good reason.
+    </GrammarExample>
+    {rulesPoint && <GrammarUsagePointCard usagePoint={rulesPoint} />}
+    <p>
+      Be careful: <em>mustn't</em> and <em>don't have to</em> are very different. <em>Mustn't</em> = "it isn't allowed". <em>Don't have to</em> = "it isn't necessary, but you can if you want".
+    </p>
+    <GrammarContrast
+      good={["You mustn't park here. (= it isn't allowed)", "You don't have to park here. (= you can park somewhere else if you like)"]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="You must come!: invitations and strong suggestions" id="invitations" open={false}>
+    <p>
+      <em>You must</em> + verb is a warm, friendly way to invite someone. It isn't an order — it shows that the speaker really wants them to come.
+    </p>
+    <GrammarFormula label="Invitation" parts={['you', 'must', 'come and / come to…', 'verb']} />
+    <GrammarExample note="An invitation to stay.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must</mark> <mark data-role="grammar">come and stay</mark> in our house too.
+    </GrammarExample>
+    <GrammarExample note="An invitation to visit a place together.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must</mark> <mark data-role="grammar">come and see</mark> this restaurant!
+    </GrammarExample>
+    {invitationPoint && <GrammarUsagePointCard usagePoint={invitationPoint} />}
+    <p>
+      In the same way, <em>must</em> makes a strong, excited suggestion: "this is so good that you really should do it". <em>We must…</em> suggests doing something together.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['you / we', 'must', 'base verb']} />
+    <GrammarExample note="A recommendation from someone who loved the place.">
+      Rome is really fantastic and <mark data-role="grammar">you</mark> <mark data-role="content">must</mark> <mark data-role="grammar">go</mark> there!
+    </GrammarExample>
+    <GrammarExample note="We must: a suggestion to go together.">
+      This club opened just two weeks ago. <mark data-role="grammar">We</mark> <mark data-role="content">must</mark> <mark data-role="grammar">see</mark> it.
+    </GrammarExample>
+    <GrammarExample note="After a great day out: let's do it again.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">must</mark> <mark data-role="grammar">do</mark> that again, don't you think?
+    </GrammarExample>
+    {suggestionPoint && <GrammarUsagePointCard usagePoint={suggestionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It must be / You must be: being sure" id="deduction" open={false}>
+    <p>
+      <em>Must</em> can also mean "I'm sure this is true" — a conclusion from what you know or see. The most common patterns are <em>it must be</em> and <em>you must be</em>.
+    </p>
+    <GrammarFormula label="Being sure" parts={['subject', 'must', 'be / base verb']} />
+    <GrammarExample note="I'm sure it's boring.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">must</mark> <mark data-role="grammar">be</mark> boring for you to sit at a computer all day.
+    </GrammarExample>
+    <GrammarExample note="A friend is moving to a new town: I'm sure you're nervous.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">must</mark> <mark data-role="grammar">be</mark> so nervous.
+    </GrammarExample>
+    <GrammarExample note="The lights are on, so I'm sure they're at home.">
+      The lights are on — <mark data-role="grammar">they</mark> <mark data-role="content">must</mark> <mark data-role="grammar">be</mark> at home.
+    </GrammarExample>
+    <GrammarExample note="With another verb: I'm sure she knows.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">must</mark> <mark data-role="grammar">know</mark> the answer — she's the teacher.
+    </GrammarExample>
+    {deductionPoint && <GrammarUsagePointCard usagePoint={deductionPoint} />}
+    <p>
+      The opposite of <em>must be</em> ("I'm sure it's true") is <em>can't be</em> ("I'm sure it isn't true") — not <em>mustn't be</em>. Compare how sure the speaker is: <em>It must be</em> (sure) → <em>It may / might / could be</em> (perhaps) → <em>It can't be</em> (sure it isn't).
+    </p>
+    <GrammarContrast
+      bad={["He mustn't be at home — his car isn't here."]}
+      good={["He can't be at home — his car isn't here."]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="He must have forgotten: being sure about the past" id="past-deduction" open={false}>
+    <p>
+      To say you are sure about something in the past, use <em>must have</em> + past participle: "I'm sure it happened".
+    </p>
+    <GrammarFormula label="Past" parts={['subject', 'must have', 'past participle']} />
+    <GrammarExample note="I'm sure he forgot.">
+      When I realized that <mark data-role="grammar">he</mark> <mark data-role="content">must have</mark> <mark data-role="grammar">forgotten</mark>, I called him up.
+    </GrammarExample>
+    <GrammarExample note="I'm sure I fell many times.">
+      It was pretty hard at the beginning. <mark data-role="grammar">I</mark> <mark data-role="content">must have</mark> <mark data-role="grammar">fallen</mark> about fifty times.
+    </GrammarExample>
+    <GrammarExample note="A conclusion from how someone reacted.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">must have</mark> <mark data-role="grammar">looked</mark> awful, because she asked me if I was all right.
+    </GrammarExample>
+    <GrammarExample note="I'm sure India has changed a lot since then.">
+      <mark data-role="grammar">India</mark> <mark data-role="content">must have</mark> <mark data-role="grammar">changed</mark> a lot since Jules Verne wrote his book.
+    </GrammarExample>
+    {pastDeductionPoint && <GrammarUsagePointCard usagePoint={pastDeductionPoint} />}
+    <p>
+      The usual negative is <em>can't have</em> / <em>couldn't have</em> + past participle: <em>She can't have seen us.</em> <em>Must not have been</em> is also possible, especially in American English and with <em>easy</em>: "I'm sure it wasn't easy".
+    </p>
+    <GrammarFormula label="Past negative" parts={['subject', 'must not have', 'been']} />
+    <GrammarExample note="I'm sure it wasn't easy for him.">
+      She had three little children, which <mark data-role="content">must not have</mark> <mark data-role="grammar">been</mark> easy for him.
+    </GrammarExample>
+    <GrammarExample note="A guess about the time: not more than an hour.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">mustn't have</mark> <mark data-role="grammar">been</mark> more than an hour before the captain made a second announcement.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Must also / must never: adverbs with must" id="adverbs" open={false}>
+    <p>
+      Adverbs like <em>also</em>, <em>always</em>, <em>never</em>, <em>all</em>, <em>first</em> usually go after <em>must</em> and before the main verb.
+    </p>
+    <GrammarFormula label="Adverbs" parts={['subject', 'must', 'adverb', 'base verb']} />
+    <GrammarExample note="Must + also: one more thing to do.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">also</mark> <mark data-role="grammar">do</mark> the practice test because I have the exam soon.
+    </GrammarExample>
+    <GrammarExample note="Must + always: every time.">
+      First, <mark data-role="grammar">you</mark> <mark data-role="content">must</mark> <mark data-role="grammar">always</mark> <mark data-role="grammar">watch</mark> what you eat.
+    </GrammarExample>
+    <GrammarExample note="Must + never: a very strong 'don't'.">
+      There is one thing <mark data-role="grammar">we</mark> <mark data-role="content">must</mark> <mark data-role="grammar">never</mark> <mark data-role="grammar">forget</mark>: we have to be ourselves.
+    </GrammarExample>
+    <GrammarExample note="Must + all: everyone, together.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">must</mark> <mark data-role="grammar">all</mark> <mark data-role="grammar">act</mark> immediately.
+    </GrammarExample>
+    <p>
+      In more formal writing, many other adverbs fit in the same place: <em>strongly</em>, <em>clearly</em>, <em>certainly</em>, <em>completely</em>.
+    </p>
+    <GrammarExample note="Must + strongly + recommend: a formal opinion.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">strongly</mark> <mark data-role="grammar">recommend</mark> you add something about nightlife.
+    </GrammarExample>
+    <GrammarExample note="Must + certainly: being sure, with extra emphasis.">
+      <mark data-role="grammar">There</mark> <mark data-role="content">must</mark> <mark data-role="grammar">certainly</mark> <mark data-role="grammar">be</mark> other solutions to the problem.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I must admit / I must say: fixed expressions" id="admit-say" open={false}>
+    <p>
+      <em>I must admit (that)…</em> introduces something honest — often something you didn't expect or don't like to say. <em>You must admit…</em> asks the other person to agree with a fair point. <em>I have to admit</em> means the same.
+    </p>
+    <GrammarFormula label="Admitting" parts={['I / you', 'must', 'admit', '(that) + clause']} />
+    <GrammarExample note="I must admit: an honest opinion, a little surprising.">
+      However, <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">admit</mark> <mark data-role="grammar">that</mark> I completely agree with Chris.
+    </GrammarExample>
+    <GrammarExample note="You must admit: asking the reader to accept a point.">
+      On the other hand, <mark data-role="grammar">you</mark> <mark data-role="content">must</mark> <mark data-role="grammar">admit</mark> <mark data-role="grammar">that</mark> not all ready-made meals taste good.
+    </GrammarExample>
+    {admitPoint && <GrammarUsagePointCard usagePoint={admitPoint} />}
+    <p>
+      <em>I must say (that)…</em> adds emphasis to your opinion — usually a positive one.
+    </p>
+    <GrammarFormula label="Emphasis" parts={['I', 'must', 'say', '(that) + clause']} />
+    <GrammarExample note="I must say: a strong, positive opinion about concerts.">
+      I went to as many concerts as possible, and <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">say</mark> <mark data-role="grammar">that</mark> they were superb.
+    </GrammarExample>
+    <GrammarExample note="I must say: a warm welcome.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">must</mark> <mark data-role="grammar">say</mark> I'm delighted to have you here with us.
+    </GrammarExample>
+    {sayPoint && <GrammarUsagePointCard usagePoint={sayPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="You must! / Must go now: short forms" id="ellipsis" open={false}>
+    <p>
+      If the verb is clear from what was said before, you can end with <em>must</em> and leave out the verb.
+    </p>
+    <GrammarFormula label="Short answer" parts={['subject', 'must', '(verb left out)']} />
+    <GrammarExample note="= You must see it!">
+      “Should I see the film?” “<mark data-role="grammar">You</mark> <mark data-role="content">must</mark>! It's amazing!”
+    </GrammarExample>
+    <GrammarExample note="= I take care of her because I must take care of her.">
+      Right now, I take care of her because <mark data-role="grammar">I</mark> <mark data-role="content">must</mark>!
+    </GrammarExample>
+    <p>
+      In informal speech and messages, the subject is sometimes dropped too: <em>Must go now</em> (= I must go now), <em>Must be difficult</em> (= It must be difficult).
+    </p>
+    <GrammarFormula label="No subject" parts={['must', 'base verb']} />
+    <GrammarExample note="At the end of a letter: I must go now.">
+      <mark data-role="content">Must</mark> <mark data-role="grammar">go</mark> now. Write soon!
+    </GrammarExample>
+    <GrammarExample note="= It must be really difficult for you.">
+      <mark data-role="content">Must</mark> <mark data-role="grammar">be</mark> really difficult for you.
+    </GrammarExample>
+    <GrammarExample note="= It must have fallen out of a car. Common in stories and speech.">
+      “<mark data-role="content">Must have</mark> <mark data-role="grammar">fallen</mark> out of a car,” he thought.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Not only must you…: inversion" id="inversion" open={false}>
+    <p>
+      In formal writing, after a negative phrase at the start — <em>not only</em>, <em>never</em>, <em>nor</em> — <em>must</em> comes before the subject, like in a question. This gives the idea extra emphasis.
+    </p>
+    <GrammarFormula label="Inversion" parts={['not only / never / nor', 'must', 'subject', 'base verb']} />
+    <GrammarExample note="Not only must you…: emphasising the first point.">
+      <mark data-role="grammar">Not only</mark> <mark data-role="content">must</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">study</mark> hard at university, but you must also keep studying afterwards.
+    </GrammarExample>
+    <GrammarExample note="Nor must we…: adding one more thing not to forget.">
+      <mark data-role="grammar">Nor</mark> <mark data-role="content">must</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">overlook</mark> the human qualities.
+    </GrammarExample>
+    <GrammarExample note="Never must…: a very strong, formal 'must never'.">
+      <mark data-role="grammar">Never</mark> <mark data-role="content">must</mark> <mark data-role="grammar">education</mark> <mark data-role="grammar">be</mark> called a waste of time.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Must</em> never changes: no <em>-s</em>, no <em>to</em> after it, and no <em>do</em> in questions or negatives.
+    </p>
+    <GrammarContrast
+      bad={['She musts leave now.', 'You must to wear a uniform.', "You don't must smoke here."]}
+      good={['She must leave now.', 'You must wear a uniform.', "You mustn't smoke here."]}
+    />
+    <p>
+      <em>Must</em> has no past or future form. For past obligation, use <em>had to</em>; <em>must have</em> + past participle is only for being sure about the past.
+    </p>
+    <GrammarContrast
+      bad={['I must go to the dentist yesterday.', 'You will must wait.']}
+      good={['I had to go to the dentist yesterday.', 'You will have to wait.']}
+    />
+    <p>
+      <em>Mustn't</em> means "it isn't allowed". If something just isn't necessary, use <em>don't have to</em> or <em>needn't</em>.
+    </p>
+    <GrammarContrast
+      bad={["It's Sunday, so you mustn't get up early."]}
+      good={["It's Sunday, so you don't have to get up early."]}
+    />
+    <p>
+      For being sure something is <strong>not</strong> true, use <em>can't</em>, not <em>mustn't</em>.
+    </p>
+    <GrammarContrast
+      bad={["That mustn't be Tom — he's in Paris."]}
+      good={["That can't be Tom — he's in Paris."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-have-got-to',
+        name: 'have (got) to',
+        note: "I have to… — obligation from outside; had to / will have to for past and future; don't have to = not necessary.",
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'You should… — advice; softer than you must.',
+      },
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: "It can't be true — the opposite of it must be.",
+      },
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'It might be… — only a possibility, not being sure.',
+      },
+      {
+        slug: 'modality-need',
+        name: 'need',
+        note: "You needn't… — it isn't necessary; a short answer to Must I…?",
+      },
+    ]}
+  />
+</GrammarShell>
