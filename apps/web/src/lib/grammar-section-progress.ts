@@ -44,3 +44,29 @@ export function initGrammarSectionProgress(nav: HTMLElement): void {
     });
   }
 }
+
+// A `#usage-point-{egpIndex}` deep link (the Reader popup's "Practice" link)
+// can point into a closed section. Open every <details> around the target so
+// it's visible, then scroll to it; the sections' own `toggle` listeners
+// (above) keep the checklist in step.
+export function openHashTarget(): void {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const target = id ? document.getElementById(id) : null;
+  if (!target) {
+    return;
+  }
+  let opened = false;
+  for (
+    let details = target.closest('details');
+    details;
+    details = details.parentElement?.closest('details') ?? null
+  ) {
+    if (!details.open) {
+      details.open = true;
+      opened = true;
+    }
+  }
+  if (opened) {
+    target.scrollIntoView({ block: 'start' });
+  }
+}

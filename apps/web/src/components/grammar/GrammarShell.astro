@@ -51,7 +51,7 @@ const remainingUsagePoints = con.usagePoints.filter(
 const progressSections: Section[] = [
   ...sections,
   ...(remainingUsagePoints.length > 0
-    ? [{ id: 'use', title: "When it's used", open: true }]
+    ? [{ id: 'use', title: "When it's used", open: false }]
     : []),
   { id: 'practice', title: 'Practice', open: false },
 ];
