@@ -1,0 +1,285 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 5 rows are USE rows, each inlined in its own section, matched by EGP
+// index.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const goingToPoint = point(366);
+const wouldPoint = point(367);
+const aboutToPoint = point(368);
+const onThePointOfPoint = point(369);
+const dueToPoint = point(370);
+
+const inlineUsagePointIds = [goingToPoint, wouldPoint, aboutToPoint, onThePointOfPoint, dueToPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Future in the past: was / were going to, would, was about to, was on the point of + -ing and was due to — talking about what was still in the future at a moment in the past."
+  handcrafted
+  sections={[
+    { id: 'idea', title: 'Looking forward from the past', open: true },
+    { id: 'going-to', title: 'Was / were going to: plans and signs', open: false },
+    { id: 'would', title: 'I thought it would…: would', open: false },
+    { id: 'negative-questions', title: "Wasn't going to, wouldn't: negatives and questions", open: false },
+    { id: 'about-to', title: 'Was about to: the next moment', open: false },
+    { id: 'on-the-point-of', title: 'Was on the point of + -ing', open: false },
+    { id: 'due-to', title: 'Was due to: the timetable', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Sometimes a story stands at a moment in the past and looks forward from there: <em>We were going to meet two days later.</em> <em>I knew it would be a lovely present.</em> The action was still in the future then — now it is in the past too.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Looking forward from the past" id="idea" open>
+    <p>
+      Pick a moment in the past — <em>last Monday</em>, <em>when I saw the advert</em>. Some things were already over at that moment, some were happening, and some were still to come. Future in the past is for the things still to come.
+    </p>
+    <p>
+      There is no new tense to learn. Take a future form you already know and put it into the past: will becomes would, am / is / are becomes was / were.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Looking forward from now</th><th>Looking forward from the past</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>We're going to meet on Friday.</em></td><td><em>We were going to meet on Friday.</em></td></tr>
+        <tr><td><em>I think it will rain.</em></td><td><em>I thought it would rain.</em></td></tr>
+        <tr><td><em>The film is about to start.</em></td><td><em>The film was about to start.</em></td></tr>
+        <tr><td><em>The plane is due to leave at 8.</em></td><td><em>The plane was due to leave at 8.</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Future in the past" parts={['subject', 'was / were', 'going to / about to / due to', 'base verb']} />
+    <GrammarExample note="At that moment the meeting was still two days away.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">meet</mark> two days later in the square.
+    </GrammarExample>
+    <GrammarExample note="The plane had not left yet — it was 40 minutes away.">
+      It was 7.15 in the morning, and <mark data-role="grammar">my plane</mark> <mark data-role="grammar">was</mark> <mark data-role="content">due to</mark> <mark data-role="grammar">leave</mark> in about 40 minutes.
+    </GrammarExample>
+    <p>
+      Often we don't know from the sentence whether the future really happened. The rest of the story tells us — and very often it didn't.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Was / were going to: plans and signs" id="going-to" open={false}>
+    <p>
+      Was / were going to is the past of am / is / are going to. It talks about a plan someone had then, or something that looked certain then.
+    </p>
+    <GrammarFormula label="Was going to" parts={['subject', 'was / were', 'going to', 'base verb']} />
+    <GrammarExample note="A plan at that time: the meeting was arranged.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">meet</mark> two days later in the square next to the centre.
+    </GrammarExample>
+    <GrammarExample note="Nobody could see what was coming next.">
+      She didn't know <mark data-role="grammar">what</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">happen</mark>.
+    </GrammarExample>
+    <GrammarExample note="A sign in the past: the morning already showed the heat.">
+      When we realized <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> a very hot day, we took water.
+    </GrammarExample>
+    {goingToPoint && <GrammarUsagePointCard usagePoint={goingToPoint} />}
+    <p>
+      Very often the plan did not happen. Then was going to comes with but, and the reason follows. This is also a polite way to explain or say sorry.
+    </p>
+    <GrammarFormula label="Plan that didn't happen" parts={['subject', 'was / were', 'going to', 'base verb', 'but…']} />
+    <GrammarExample note="She planned to return it, then something stopped her.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">return</mark> it, <mark data-role="grammar">but</mark> she saw something very strange.
+    </GrammarExample>
+    <GrammarExample note="An apology: the call was planned, but it never happened.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">call</mark> you, <mark data-role="grammar">but</mark> my phone died.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I thought it would…: would" id="would" open={false}>
+    <p>
+      Would is the past of will. It usually comes after a verb of thinking or knowing in the past: thought, knew, was sure, hoped, expected. It says what someone believed about the future at that moment.
+    </p>
+    <GrammarFormula label="Would" parts={['thought / knew…', 'subject', 'would', 'base verb']} />
+    <GrammarExample note="When I saw them, the party was still in the future.">
+      When I saw them, <mark data-role="grammar">I thought</mark> <mark data-role="grammar">they</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> great for tonight's party.
+    </GrammarExample>
+    <GrammarExample note="An expectation that turned out wrong — the film was beautiful.">
+      <mark data-role="grammar">We thought</mark> that <mark data-role="grammar">the film</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> horrible because of the title, but we liked it a lot.
+    </GrammarExample>
+    <GrammarExample note="Knew + would: certain about the future at that moment.">
+      As I saw the advert, <mark data-role="grammar">I knew</mark> <mark data-role="grammar">it</mark> <mark data-role="content">would</mark> <mark data-role="grammar">be</mark> a lovely birthday present.
+    </GrammarExample>
+    {wouldPoint && <GrammarUsagePointCard usagePoint={wouldPoint} />}
+    <p>
+      In reported speech, will becomes would in the same way, after said, told, promised: <em>“I'll call you.” → He promised he would call me.</em>
+    </p>
+    <p>
+      Would or was going to? Both are often possible. Would is for opinions and predictions — what someone thought or knew. Was going to is for plans and intentions — what someone decided to do.
+    </p>
+    <GrammarExample note="Would: a prediction — what I believed about the weather.">
+      <mark data-role="grammar">I was sure</mark> <mark data-role="grammar">it</mark> <mark data-role="content">would</mark> <mark data-role="grammar">rain</mark>.
+    </GrammarExample>
+    <GrammarExample note="Was going to: an intention — what I had decided to do.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">take</mark> an umbrella, but I forgot.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Wasn't going to, wouldn't: negatives and questions" id="negative-questions" open={false}>
+    <p>
+      For the negative, put not after was / were or after would. In speech the short forms wasn't, weren't and wouldn't are normal.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "wasn't / weren't", 'going to', 'base verb']} />
+    <GrammarExample note="No plan to stay at that time — and then things changed.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">wasn't</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">stay</mark> long, but the party was great.
+    </GrammarExample>
+    <GrammarFormula label="Negative" parts={['thought / knew…', 'subject', "wouldn't", 'base verb']} />
+    <GrammarExample note="A belief about the future that was wrong.">
+      <mark data-role="grammar">I thought</mark> <mark data-role="grammar">you</mark> <mark data-role="content">wouldn't</mark> <mark data-role="grammar">come</mark>.
+    </GrammarExample>
+    <p>
+      For a question, put was / were before the subject. Would-questions usually sit inside another sentence, as reported questions: <em>She asked me if I would help her.</em>
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'was / were', 'subject', 'going to', 'base verb']} />
+    <GrammarExample note="Asking about someone's plan at a past moment.">
+      <mark data-role="grammar">Were</mark> <mark data-role="grammar">you</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">tell</mark> me about it?
+    </GrammarExample>
+    <GrammarExample note="A wh- word goes first.">
+      <mark data-role="grammar">What</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">she</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">say</mark> before you stopped her?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Was about to: the next moment" id="about-to" open={false}>
+    <p>
+      Was / were about to means the action was going to happen very soon — the next minute, the next second. Just makes it even closer: was just about to.
+    </p>
+    <GrammarFormula label="About to" parts={['subject', 'was / were', '(just) about to', 'base verb']} />
+    <GrammarExample note="The answer was only a moment away.">
+      When <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">about to</mark> <mark data-role="grammar">answer</mark> the question, I realised that it was not as easy as I had thought.
+    </GrammarExample>
+    <GrammarExample note="The purchase was coming very soon.">
+      Two days before, I told him that <mark data-role="grammar">our father</mark> <mark data-role="grammar">was</mark> <mark data-role="content">about to</mark> <mark data-role="grammar">buy</mark> a brand new car.
+    </GrammarExample>
+    {aboutToPoint && <GrammarUsagePointCard usagePoint={aboutToPoint} />}
+    <p>
+      A very common story pattern: was about to, then when + past simple for the thing that interrupted it. Just as at the start does the same job.
+    </p>
+    <GrammarFormula label="Interrupted" parts={['was / were', '(just) about to', 'base verb', 'when + past simple']} />
+    <GrammarExample note="The writing was about to start; the letter arrived first.">
+      Believe it or not, <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">just about to</mark> <mark data-role="grammar">write</mark> you a letter <mark data-role="grammar">when I received</mark> yours.
+    </GrammarExample>
+    <GrammarExample note="Just as + about to: the policeman came at that exact moment.">
+      Just as <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">about to</mark> <mark data-role="grammar">climb</mark> through the broken window, a policeman arrived.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Was on the point of + -ing" id="on-the-point-of" open={false}>
+    <p>
+      Was on the point of means the same as was about to, but it is a little more formal and more dramatic. After of, use the -ing form, not the base verb.
+    </p>
+    <GrammarFormula label="On the point of" parts={['subject', 'was / were', 'on the point of', '-ing verb']} />
+    <GrammarExample note="Leaving was a moment away when the phone rang.">
+      When <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">on the point of</mark> <mark data-role="grammar">leaving</mark> the office, another phone rang.
+    </GrammarExample>
+    <GrammarExample note="The police almost caught him — so he faked his death.">
+      He faked his death to escape from <mark data-role="grammar">the police</mark>, who <mark data-role="grammar">were</mark> <mark data-role="content">on the point of</mark> <mark data-role="grammar">catching</mark> him.
+    </GrammarExample>
+    {onThePointOfPoint && <GrammarUsagePointCard usagePoint={onThePointOfPoint} />}
+    <p>
+      It often describes a big decision that almost happened: <em>She was on the point of giving up when she got the job offer.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Was due to: the timetable" id="due-to" open={false}>
+    <p>
+      Was / were due to talks about something that was scheduled or expected at a fixed time: flights, meetings, lessons, building work. It is common in formal writing and news.
+    </p>
+    <GrammarFormula label="Due to" parts={['subject', 'was / were', 'due to', 'base verb']} />
+    <GrammarExample note="The departure time was fixed by the timetable.">
+      It was only 7.15 am, and <mark data-role="grammar">my plane</mark> <mark data-role="grammar">was</mark> <mark data-role="content">due to</mark> <mark data-role="grammar">leave</mark> in about 40 minutes.
+    </GrammarExample>
+    <GrammarExample note="The start time was agreed — she came ten minutes late.">
+      Ten minutes after the time <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">due to</mark> <mark data-role="grammar">begin</mark>, she arrived.
+    </GrammarExample>
+    <p>
+      With be + past participle it becomes passive: the thing was planned to be done.
+    </p>
+    <GrammarExample note="Due to be built: the building was planned, and then stopped.">
+      We persuaded the council that <mark data-role="grammar">the factory</mark> that <mark data-role="grammar">was</mark> <mark data-role="content">due to</mark> <mark data-role="grammar">be built</mark> near the lake was dangerous.
+    </GrammarExample>
+    {dueToPoint && <GrammarUsagePointCard usagePoint={dueToPoint} />}
+    <p>
+      Don't mix it up with due to + noun, which means because of: <em>The flight was cancelled due to the weather.</em> Here due to is followed by a verb.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After a past verb like thought, knew or said, use would, not will, when you look forward from that moment.
+    </p>
+    <GrammarContrast
+      bad={['I thought it will be easy.', 'She said she will come on Friday.']}
+      good={['I thought it would be easy.', 'She said she would come on Friday.']}
+    />
+    <p>
+      Use the base verb after going to, about to and due to — not the past form and not -ing.
+    </p>
+    <GrammarContrast
+      bad={['I was going to called you.', 'We were about to leaving.']}
+      good={['I was going to call you.', 'We were about to leave.']}
+    />
+    <p>
+      After on the point of, it is the other way round: always -ing.
+    </p>
+    <GrammarContrast
+      bad={['I was on the point of leave.']}
+      good={['I was on the point of leaving.']}
+    />
+    <p>
+      Don't forget was / were before going to, about to and due to.
+    </p>
+    <GrammarContrast
+      bad={['We going to meet at six, but he was late.']}
+      good={['We were going to meet at six, but he was late.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-with-be-going-to',
+        name: 'be going to',
+        note: "the same form looking forward from now: We're going to meet on Friday.",
+      },
+      {
+        slug: 'modality-would',
+        name: 'would',
+        note: 'all its other uses — polite requests, conditionals, past habits.',
+      },
+      {
+        slug: 'future-future-expressions-with-be',
+        name: 'be about to, be due to',
+        note: 'the same expressions in the present: The film is about to start.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'will → would and am going to → was going to after said, told, promised.',
+      },
+    ]}
+  />
+</GrammarShell>
