@@ -1,0 +1,227 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 7 EGP rows (214-220): 6 pure FORM (214-217, 219, 220) written without a
+// card; 1 FORM/USE (218, the negative interrogative) inlined, matched by
+// egpIndex. Sections follow the word that opens the exclamation: what a,
+// what a pity, how + adjective, how + clause (C2), then isn't it / wouldn't it.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const negativeInterrogativeB2 = point(218);
+
+const inlineUsagePointIds = [negativeInterrogativeB2]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to make exclamations in English: What a + noun, What a pity, How + adjective, How + adjective + clause, How + clause, and negative questions like Isn't it wonderful! to show surprise or enthusiasm."
+  handcrafted
+  sections={[
+    { id: 'what-a', title: 'What a …: exclamations about a thing', open: true },
+    { id: 'what-a-pity', title: 'What a pity …: saying you are sorry', open: false },
+    { id: 'how-adjective', title: 'How …: exclamations about a quality', open: false },
+    { id: 'how-clause', title: 'How I love …: How + clause', open: false },
+    { id: 'negative-question', title: "Negative questions: Isn't it wonderful!", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      An exclamation shows a strong feeling — surprise, pleasure, disappointment, admiration. English has two short patterns for this. Use <em>what</em> when your feeling is about a thing, a noun (<em>What a lovely day!</em>), and <em>how</em> when it's about a quality, an adjective (<em>How lovely!</em>). The word order after them is the normal statement order, not a question: <em>What a nice present I have!</em>, <em>How lucky you are!</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="What a …: exclamations about a thing" id="what-a" open>
+    <p>
+      <em>What a</em> + noun phrase is the most common exclamation. The noun is a singular countable noun, usually with an adjective in front of it that carries the feeling.
+    </p>
+    <GrammarFormula label="What a" parts={['what a / an', 'adjective', 'singular noun']} />
+    <GrammarExample note="What a + adjective + noun: the adjective carries the feeling.">
+      <mark data-role="content">What a</mark> <mark data-role="grammar">brilliant</mark> <mark data-role="grammar">idea</mark>!
+    </GrammarExample>
+    <GrammarExample note="An before a vowel sound, just as with any noun.">
+      <mark data-role="content">What an</mark> <mark data-role="grammar">amazing</mark> <mark data-role="grammar">view</mark>!
+    </GrammarExample>
+    <GrammarExample note="No adjective: the noun alone is already strong.">
+      <mark data-role="content">What a</mark> <mark data-role="grammar">surprise</mark>!
+    </GrammarExample>
+    <p>
+      You can add a clause after the noun phrase to say more. The clause keeps the normal order: subject, then verb.
+    </p>
+    <GrammarFormula label="What a + clause" parts={['what a / an', 'adjective', 'noun', 'subject', 'verb']} />
+    <GrammarExample note="I have — subject before verb, not have I.">
+      <mark data-role="content">What a</mark> <mark data-role="grammar">nice</mark> <mark data-role="grammar">present</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark>!
+    </GrammarExample>
+    <GrammarExample note="The clause can have a time phrase too.">
+      <mark data-role="content">What a</mark> <mark data-role="grammar">great</mark> <mark data-role="grammar">afternoon</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">had</mark> yesterday!
+    </GrammarExample>
+    <p>
+      With a plural or an uncountable noun there's no <em>a</em>: just <em>what</em> + adjective + noun. Words like <em>weather</em>, <em>news</em> and <em>advice</em> are uncountable, so they never take <em>a</em>.
+    </p>
+    <GrammarFormula label="What" parts={['what', 'adjective', 'plural / uncountable noun']} />
+    <GrammarExample note="Plural noun: no a.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">beautiful</mark> <mark data-role="grammar">flowers</mark>!
+    </GrammarExample>
+    <GrammarExample note="Weather is uncountable: What lovely weather, not What a lovely weather.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">lovely</mark> <mark data-role="grammar">weather</mark> <mark data-role="grammar">we</mark><mark data-role="grammar">'re having</mark>!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="What a pity …: saying you are sorry" id="what-a-pity" open={false}>
+    <p>
+      <em>What a pity</em> is a fixed phrase for saying you are disappointed or sorry about something. It can stand on its own, or a clause can follow it, with or without <em>that</em>. <em>What a shame</em> means the same and is just as common.
+    </p>
+    <GrammarFormula label="What a pity" parts={['what a pity', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="With that: slightly more careful, often in writing.">
+      <mark data-role="content">What a pity</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">didn't come</mark>.
+    </GrammarExample>
+    <GrammarExample note="Without that: the same meaning, more usual in speech.">
+      <mark data-role="content">What a pity</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">lost</mark> the information about the new art class.
+    </GrammarExample>
+    <GrammarExample note="On its own, as a reply to bad news.">
+      "I can't come on Saturday." — "Oh, <mark data-role="content">what a pity</mark>!"
+    </GrammarExample>
+    <GrammarExample note="What a shame: the same pattern.">
+      <mark data-role="content">What a shame</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">missed</mark> the start of the film.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="How …: exclamations about a quality" id="how-adjective" open={false}>
+    <p>
+      <em>How</em> + adjective is the shortest exclamation of all — just two words. There's no noun: the feeling is about the quality itself. It's a common reply to what someone has just told you.
+    </p>
+    <GrammarFormula label="How" parts={['how', 'adjective']} />
+    <GrammarExample note="A reply to good news.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">exciting</mark>!
+    </GrammarExample>
+    <GrammarExample note="A reply to bad news.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">terrible</mark>!
+    </GrammarExample>
+    <GrammarExample note="The exclamation first, then the reason.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">amazing</mark>! This is my first flight in a hot-air balloon.
+    </GrammarExample>
+    <p>
+      After the adjective you can add a clause (subject + verb) or <em>to</em> + verb to say who or what the feeling is about. Again the order is subject, then verb: <em>how lucky you are</em>, not <em>how lucky are you</em>.
+    </p>
+    <GrammarFormula label="How + clause" parts={['how', 'adjective', 'subject + verb / to + verb']} />
+    <GrammarExample note="You are — subject before verb.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">lucky</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> to have visited that exhibition!
+    </GrammarExample>
+    <GrammarExample note="To + verb: a common start to a letter.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">lovely</mark> <mark data-role="grammar">to get</mark> your letter.
+    </GrammarExample>
+    <GrammarExample note="It was: the clause can be in the past.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">kind</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> of you to help!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="How I love …: How + clause" id="how-clause" open={false}>
+    <p>
+      <em>How</em> can also come straight before a whole clause, with no adjective. Here it means "very much" or "so strongly", and it usually goes with verbs of feeling: <em>love</em>, <em>long</em>, <em>miss</em>, <em>wish</em>. This is literary and emotional — you meet it in stories, memoirs and personal letters rather than in everyday talk.
+    </p>
+    <GrammarFormula label="How + clause" parts={['how', 'subject', 'verb', 'rest of the clause']} />
+    <GrammarExample note="= I love the smell of home so much!">
+      <mark data-role="content">How</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">love</mark> the smell of home!
+    </GrammarExample>
+    <GrammarExample note="Long to + verb: wish very strongly.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">long</mark> to be there again.
+    </GrammarExample>
+    <GrammarExample note="An adverb like often goes in its usual place, before the verb.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">I</mark> often <mark data-role="grammar">longed</mark> to play with the other children or relax with a good book.
+    </GrammarExample>
+    <p>
+      <em>How</em> + adverb + clause works the same way as <em>how</em> + adjective, but the feeling is about how something happens or happened.
+    </p>
+    <GrammarFormula label="How + adverb" parts={['how', 'adverb', 'subject', 'verb']} />
+    <GrammarExample note="= We were brought up in very different ways.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">differently</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">were brought up</mark> by our mother.
+    </GrammarExample>
+    <GrammarExample note="Surprise at the speed.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">quickly</mark> <mark data-role="grammar">the time</mark> <mark data-role="grammar">passes</mark>!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Negative questions: Isn't it wonderful!" id="negative-question" open={false}>
+    <p>
+      A negative question — <em>isn't</em>, <em>doesn't</em>, <em>wouldn't</em>, <em>wasn't</em> + subject — can be an exclamation, not a real question. The speaker isn't asking for information: they're sure the listener agrees, and they're showing surprise or enthusiasm. The voice goes down at the end, and in writing it often has <em>!</em> or <em>?!</em>.
+    </p>
+    <GrammarFormula label="Negative question" parts={["isn't / doesn't / wouldn't …", 'subject', 'rest of the clause']} />
+    <GrammarExample note="= It would be wonderful! — imagining something you'd love.">
+      <mark data-role="content">Wouldn't</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">be wonderful</mark>!
+    </GrammarExample>
+    <GrammarExample note="= I think that sounds excellent — surely you do too.">
+      <mark data-role="content">Doesn't</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">sound excellent</mark> to you?!
+    </GrammarExample>
+    <GrammarExample note="= It's beautiful! — admiring something you both can see.">
+      <mark data-role="content">Isn't</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">beautiful</mark>!
+    </GrammarExample>
+    <GrammarExample note="The past: remembering something you both enjoyed.">
+      <mark data-role="content">Wasn't</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">an amazing concert</mark>!
+    </GrammarExample>
+    {negativeInterrogativeB2 && <GrammarUsagePointCard usagePoint={negativeInterrogativeB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Choose by the word that follows: <em>what</em> before a noun, <em>how</em> before an adjective or adverb. A singular countable noun needs <em>a / an</em>; a plural or uncountable noun has none. After <em>what</em> and <em>how</em>, the order is subject + verb, as in a statement — never the question order. A negative question still needs its subject.
+    </p>
+    <GrammarContrast
+      bad={[
+        'What beautiful day!',
+        'What a beautiful weather!',
+        'How a beautiful day!',
+        'What beautiful!',
+        'How lucky are you!',
+        "What pity you didn't come.",
+        "Isn't wonderful!",
+      ]}
+      good={[
+        'What a beautiful day!',
+        'What beautiful weather!',
+        'What a beautiful day!',
+        'How beautiful!',
+        'How lucky you are!',
+        "What a pity you didn't come.",
+        "Isn't it wonderful!",
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'such a + adjective + noun: It was such a lovely day! — emphasis inside a statement.',
+      },
+      {
+        slug: 'clauses-interrogatives',
+        name: 'interrogative clauses',
+        note: 'How to form a negative question — the same form used above for surprise.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'Why What a day! but What weather! — a / an only with singular countable nouns.',
+      },
+    ]}
+  />
+</GrammarShell>
