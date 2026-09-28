@@ -1,0 +1,359 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 19 EGP rows (221-239): 14 pure FORM (221-232, 236, 237) written without a
+// card; 5 FORM/USE (233, 234, 235, 238, 239) inlined, matched by egpIndex.
+// Sections follow the relative word: who (people), which / that (things),
+// then commas (defining vs non-defining), no pronoun, whose, where / when /
+// why, the thing that (focus), a preposition at the end, and which about a
+// whole sentence.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const reasonWhyB1 = point(233);
+const whenB1 = point(234);
+const theThingThatB1 = point(235);
+const whoseDefiningB2 = point(238);
+const sentenceWhichB2 = point(239);
+
+const inlineUsagePointIds = [reasonWhyB1, whenB1, theThingThatB1, whoseDefiningB2, sentenceWhichB2]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to use relative clauses in English: who for people, which and that for things, whose, where, when and why, defining and non-defining clauses with commas, leaving out the pronoun, and a preposition at the end."
+  handcrafted
+  sections={[
+    { id: 'who', title: 'who: describing people', open: true },
+    { id: 'which-that', title: 'which / that: describing things', open: false },
+    { id: 'commas', title: 'Defining or non-defining: the commas', open: false },
+    { id: 'no-pronoun', title: 'Leaving out who / which / that', open: false },
+    { id: 'whose', title: 'whose: whose name, whose parents', open: false },
+    { id: 'where-when-why', title: 'where, when, why: place, time, reason', open: false },
+    { id: 'the-thing-that', title: 'The thing that … is: focus', open: false },
+    { id: 'preposition', title: 'A preposition at the end: the people I live with', open: false },
+    { id: 'sentence-which', title: '…, which is great: which about a whole sentence', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A relative clause is a small clause that comes straight after a noun and tells you more about it: <em>a girl <strong>who lives next door</strong></em>, <em>the book <strong>that I bought</strong></em>. It starts with a relative word — <em>who</em> for people, <em>which</em> or <em>that</em> for things, and <em>whose</em>, <em>where</em>, <em>when</em>, <em>why</em> for special cases. The relative word replaces the noun inside the clause, so the noun is never repeated: <em>the book that I bought</em>, not <em>the book that I bought it</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="who: describing people" id="who" open>
+    <p>
+      Use <em>who</em> after a noun for a person. Most often <em>who</em> is the subject of the clause: it's the person who does the action, so a verb comes straight after it.
+    </p>
+    <GrammarFormula label="Subject" parts={['person', 'who', 'verb', 'rest of the clause']} />
+    <GrammarExample note="Who went — the girl went. Who is the subject.">
+      It's a film about <mark data-role="grammar">a girl</mark> <mark data-role="content">who</mark> <mark data-role="grammar">went</mark> to war at 22.
+    </GrammarExample>
+    <GrammarExample note="The clause tells you which kind of pen-friend.">
+      I'd like <mark data-role="grammar">a pen-friend</mark> <mark data-role="content">who</mark> <mark data-role="grammar">likes</mark> music and reading.
+    </GrammarExample>
+    <GrammarExample note="People who … : a very common way to talk about a group.">
+      I agree with <mark data-role="grammar">people</mark> <mark data-role="content">who</mark> <mark data-role="grammar">think</mark> Stonehenge is a magic place.
+    </GrammarExample>
+    <p>
+      <em>Who</em> can also be the object: someone else does the action to the person. Then the clause has its own subject after <em>who</em>. In this position <em>that</em> is just as common as <em>who</em>, and very formal English uses <em>whom</em>.
+    </p>
+    <GrammarFormula label="Object" parts={['person', 'who / that', 'subject', 'verb']} />
+    <GrammarExample note="I met her — who is the object, I is the subject.">
+      It was Sarah, <mark data-role="grammar">a girl</mark> <mark data-role="content">who</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">met</mark> in Spain last year.
+    </GrammarExample>
+    <GrammarExample note="That instead of who: the same meaning, a little more informal.">
+      They sent me details of <mark data-role="grammar">the family</mark> <mark data-role="content">that</mark> <mark data-role="grammar">I</mark><mark data-role="grammar">'m going to stay</mark> with.
+    </GrammarExample>
+    <GrammarExample note="The people who I love most = I love these people most.">
+      My friends are <mark data-role="grammar">the people</mark> <mark data-role="content">who</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">love</mark> most.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="which / that: describing things" id="which-that" open={false}>
+    <p>
+      For things and animals use <em>which</em> or <em>that</em> — never <em>who</em>. As the subject, a verb comes straight after it. In everyday English <em>that</em> is more common; <em>which</em> sounds a little more formal, but both are correct here.
+    </p>
+    <GrammarFormula label="Subject" parts={['thing', 'which / that', 'verb', 'rest of the clause']} />
+    <GrammarExample note="Which has — the T-shirt has a picture.">
+      I bought <mark data-role="grammar">a T-shirt</mark> <mark data-role="content">which</mark> <mark data-role="grammar">has</mark> a picture of a car on it.
+    </GrammarExample>
+    <GrammarExample note="Which can get dirty — old clothes, not your best ones.">
+      You should wear <mark data-role="grammar">clothes</mark> <mark data-role="content">which</mark> <mark data-role="grammar">can get</mark> dirty.
+    </GrammarExample>
+    <GrammarExample note="That instead of which: the same meaning.">
+      They played <mark data-role="grammar">a song</mark> <mark data-role="content">that</mark> <mark data-role="grammar">always makes</mark> me cry.
+    </GrammarExample>
+    <p>
+      As the object, the clause has its own subject after <em>which</em> or <em>that</em>.
+    </p>
+    <GrammarFormula label="Object" parts={['thing', 'which / that', 'subject', 'verb']} />
+    <GrammarExample note="I like the team — that is the object, I is the subject.">
+      <mark data-role="grammar">The team</mark> <mark data-role="content">that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">like</mark> is called The Monkeys.
+    </GrammarExample>
+    <GrammarExample note="The clause sits between the subject and its verb: The cup … is pretty.">
+      <mark data-role="grammar">The cup</mark> <mark data-role="content">which</mark> <mark data-role="grammar">my friend</mark> <mark data-role="grammar">gave</mark> me is pretty.
+    </GrammarExample>
+    <GrammarExample note="Which I failed = I failed the exam.">
+      Next month I'll retake <mark data-role="grammar">the exam</mark> <mark data-role="content">which</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">failed</mark> last year.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Defining or non-defining: the commas" id="commas" open={false}>
+    <p>
+      All the clauses above are <strong>defining</strong>: they tell you <em>which</em> person or thing you mean, and without them the sentence doesn't work (<em>I'd like a pen-friend.</em> — which one?). They have no commas.
+    </p>
+    <p>
+      A <strong>non-defining</strong> clause adds extra information about someone or something that is already clear — a name, <em>my brother</em>, <em>Cardiff</em>. You could remove it and the sentence would still make sense. It goes between commas (or a comma and the full stop), and it has two strict rules: no <em>that</em> — only <em>who</em> or <em>which</em> — and you can never leave the pronoun out.
+    </p>
+    <GrammarFormula label="Non-defining" parts={['known noun', ', who / which', 'verb …', ',']} />
+    <GrammarExample note="Jenny is already clear; the clause just adds a fact about her.">
+      It's a present from <mark data-role="grammar">Jenny</mark>, <mark data-role="content">who</mark> <mark data-role="grammar">is</mark> one of my best friends.
+    </GrammarExample>
+    <GrammarExample note="There is only one Cardiff — the clause is extra information.">
+      I've been to <mark data-role="grammar">Cardiff</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">is</mark> the capital of Wales.
+    </GrammarExample>
+    <GrammarExample note="Commas on both sides when the clause is in the middle.">
+      <mark data-role="grammar">My parents</mark>, <mark data-role="content">who</mark> <mark data-role="grammar">are</mark> in Japan, will call me this afternoon.
+    </GrammarExample>
+    <GrammarExample note="Object: which I received — the clause has its own subject.">
+      Thanks for <mark data-role="grammar">your letter</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">received</mark> on Monday.
+    </GrammarExample>
+    <GrammarExample note="Who as the object: Tom — I hadn't seen him for ages.">
+      It was <mark data-role="grammar">Tom</mark>, <mark data-role="content">who</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">hadn't seen</mark> for ages!
+    </GrammarExample>
+    <p>
+      The commas can change the meaning. Compare:
+    </p>
+    <GrammarExample note="Defining: I have several brothers; I mean the one in London.">
+      <mark data-role="grammar">My brother</mark> <mark data-role="content">who</mark> <mark data-role="grammar">lives</mark> in London is a doctor.
+    </GrammarExample>
+    <GrammarExample note="Non-defining: I have one brother; by the way, he lives in London.">
+      <mark data-role="grammar">My brother</mark>, <mark data-role="content">who</mark> <mark data-role="grammar">lives</mark> in London, is a doctor.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Leaving out who / which / that" id="no-pronoun" open={false}>
+    <p>
+      In a defining clause you can leave out <em>who</em>, <em>which</em> or <em>that</em> when it's the object — that is, when another subject follows it. This is the normal choice in speech. Test it: if the noun is followed directly by a subject + verb (<em>the clothes I wore</em>), the pronoun has been left out.
+    </p>
+    <GrammarFormula label="No pronoun" parts={['noun', 'subject', 'verb']} />
+    <GrammarExample note="= the clothes that I wore.">
+      My friends said <mark data-role="grammar">the clothes</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wore</mark> were very old.
+    </GrammarExample>
+    <GrammarExample note="= the information that you want.">
+      Here's <mark data-role="grammar">the information</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">want</mark>.
+    </GrammarExample>
+    <GrammarExample note="The one I liked best: very common after one / the one.">
+      Everyone gave me a present, but <mark data-role="grammar">the one</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">liked</mark> best was John's.
+    </GrammarExample>
+    <GrammarExample note="After a superlative + ever, the pronoun is almost always left out.">
+      It's <mark data-role="grammar">the best film</mark> <mark data-role="grammar">I</mark><mark data-role="grammar">'ve ever seen</mark>.
+    </GrammarExample>
+    <p>
+      You can't leave the pronoun out when it's the subject (a verb follows it), and never in a non-defining clause with commas.
+    </p>
+    <GrammarExample note="Subject: who must stay — not a girl lives next door.">
+      I know <mark data-role="grammar">a girl</mark> <mark data-role="content">who</mark> <mark data-role="grammar">lives</mark> next door.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="whose: whose name, whose parents" id="whose" open={false}>
+    <p>
+      <em>Whose</em> means "his / her / its / their" and joins two ideas: something belongs to or is connected with the noun. It is always followed by a noun: <em>whose name</em>, <em>whose job</em>, <em>whose parents</em>. The most common start is <em>whose name is</em>.
+    </p>
+    <GrammarFormula label="whose" parts={['noun', 'whose', 'noun', 'verb …']} />
+    <GrammarExample note="= We have a new employee. Her name is Mary Watts.">
+      We have <mark data-role="grammar">a new employee</mark> <mark data-role="content">whose</mark> <mark data-role="grammar">name</mark> <mark data-role="grammar">is</mark> Mary Watts.
+    </GrammarExample>
+    <GrammarExample note="Non-defining, with a comma: my best friend is already clear.">
+      Let me tell you about <mark data-role="grammar">my best friend</mark>, <mark data-role="content">whose</mark> <mark data-role="grammar">name</mark> <mark data-role="grammar">is</mark> Nicos.
+    </GrammarExample>
+    <GrammarExample note="Whose job: extra information about the friend.">
+      At the concert I met <mark data-role="grammar">an old friend</mark>, <mark data-role="content">whose</mark> <mark data-role="grammar">job</mark> <mark data-role="grammar">is</mark> to organise shows like that.
+    </GrammarExample>
+    <p>
+      In a defining clause, <em>whose</em> + noun tells you which people you mean by their relationship to someone else — very often family.
+    </p>
+    <GrammarExample note="Which children? The ones whose parents moved to Australia.">
+      I taught Vietnamese <mark data-role="grammar">children</mark> <mark data-role="content">whose</mark> <mark data-role="grammar">parents</mark> <mark data-role="grammar">had moved</mark> to Australia.
+    </GrammarExample>
+    <GrammarExample note="= Mary's parents had died.">
+      Mary is <mark data-role="grammar">a young woman</mark> <mark data-role="content">whose</mark> <mark data-role="grammar">parents</mark> <mark data-role="grammar">had died</mark>.
+    </GrammarExample>
+    {whoseDefiningB2 && <GrammarUsagePointCard usagePoint={whoseDefiningB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="where, when, why: place, time, reason" id="where-when-why" open={false}>
+    <p>
+      After a noun for a place, use <em>where</em>. It replaces <em>there</em> or <em>in it</em>, so no preposition is needed: <em>the city where I live</em>, not <em>the city where I live in</em>.
+    </p>
+    <GrammarFormula label="where" parts={['place noun', 'where', 'subject', 'verb']} />
+    <GrammarExample note="= I live in this city.">
+      <mark data-role="grammar">The city</mark> <mark data-role="content">where</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">live</mark> is very charming.
+    </GrammarExample>
+    <GrammarExample note="= I used to live in this area.">
+      We went to <mark data-role="grammar">the area</mark> <mark data-role="content">where</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">used to live</mark> as a child.
+    </GrammarExample>
+    <p>
+      After a noun for time — <em>day</em>, <em>year</em>, <em>moment</em>, <em>time</em> — use <em>when</em>. It picks out one particular moment.
+    </p>
+    <GrammarFormula label="when" parts={['time noun', 'when', 'subject', 'verb']} />
+    <GrammarExample note="= I lost my suitcase on that day.">
+      I really remember <mark data-role="grammar">the day</mark> <mark data-role="content">when</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">lost</mark> my suitcase at the airport.
+    </GrammarExample>
+    <GrammarExample note="The day when … can open the sentence to set the scene.">
+      <mark data-role="grammar">The day</mark> <mark data-role="content">when</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">went</mark> back to Korea, I couldn't stop crying.
+    </GrammarExample>
+    {whenB1 && <GrammarUsagePointCard usagePoint={whenB1} />}
+    <p>
+      After <em>reason</em>, use <em>why</em>. <em>The reason why …</em> puts the explanation at the centre of the sentence, and it's often followed by <em>is that …</em>.
+    </p>
+    <GrammarFormula label="why" parts={['the reason', 'why', 'subject', 'verb']} />
+    <GrammarExample note="The reason why … is that …: a strong way to explain.">
+      <mark data-role="grammar">The reason</mark> <mark data-role="content">why</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">love</mark> it is that it's so original.
+    </GrammarExample>
+    <GrammarExample note="This is the reason why …: pointing back to what you just said.">
+      This is <mark data-role="grammar">the reason</mark> <mark data-role="content">why</mark> <mark data-role="grammar">we</mark><mark data-role="grammar">'re changing</mark> our working hours.
+    </GrammarExample>
+    {reasonWhyB1 && <GrammarUsagePointCard usagePoint={reasonWhyB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="The thing that … is: focus" id="the-thing-that" open={false}>
+    <p>
+      A general noun — <em>the thing</em>, <em>the person</em>, <em>the (only) one</em> — plus a relative clause makes a long subject that builds up to the important part after <em>is</em> / <em>was</em>. It's a way to point at what matters most: the listener waits for the answer.
+    </p>
+    <GrammarFormula label="Focus" parts={['the thing / person / one', 'that / who', 'verb …', 'is / was', 'the focus']} />
+    <GrammarExample note="= I love going to the shops most — with the answer saved for the end.">
+      <mark data-role="grammar">The thing</mark> <mark data-role="content">that</mark> <mark data-role="grammar">I love most</mark> <mark data-role="grammar">is</mark> going to the shops.
+    </GrammarExample>
+    <GrammarExample note="The thing that was great was that …: a whole clause as the focus.">
+      <mark data-role="grammar">The thing</mark> <mark data-role="content">that</mark> <mark data-role="grammar">was great</mark> <mark data-role="grammar">was</mark> that it didn't rain.
+    </GrammarExample>
+    <GrammarExample note="The person who … for people.">
+      <mark data-role="grammar">The person</mark> <mark data-role="content">who</mark> <mark data-role="grammar">called me</mark> <mark data-role="grammar">was</mark> my best friend.
+    </GrammarExample>
+    <GrammarExample note="The only one who …: nobody else.">
+      You're <mark data-role="grammar">the only one</mark> <mark data-role="content">who</mark> <mark data-role="grammar">understands</mark> me.
+    </GrammarExample>
+    {theThingThatB1 && <GrammarUsagePointCard usagePoint={theThingThatB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="A preposition at the end: the people I live with" id="preposition" open={false}>
+    <p>
+      Some verbs and adjectives need a preposition: <em>live with</em>, <em>listen to</em>, <em>interested in</em>, <em>good at</em>. In a relative clause, the preposition normally stays after the verb or adjective, at the end of the clause. This works in defining and non-defining clauses, and in a defining clause the pronoun is often left out.
+    </p>
+    <GrammarFormula label="Everyday" parts={['noun', '(who / which / that)', 'subject', 'verb', 'preposition']} />
+    <GrammarExample note="= I love to play with them.">
+      They have three wonderful <mark data-role="grammar">children</mark> <mark data-role="content">who</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">love to play</mark> <mark data-role="grammar">with</mark>.
+    </GrammarExample>
+    <GrammarExample note="= I'm quite good at painting.">
+      I'd like to do some <mark data-role="grammar">painting</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">I</mark><mark data-role="grammar">'m quite good</mark> <mark data-role="grammar">at</mark>.
+    </GrammarExample>
+    <GrammarExample note="That + preposition at the end.">
+      He was involved in <mark data-role="grammar">a case</mark> <mark data-role="content">that</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">had</mark> nothing to do <mark data-role="grammar">with</mark>.
+    </GrammarExample>
+    <GrammarExample note="No pronoun at all: the most natural choice in speech.">
+      These are <mark data-role="grammar">the people</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">live</mark> <mark data-role="grammar">with</mark>.
+    </GrammarExample>
+    <p>
+      In formal writing the preposition can move to the front, before the relative word. Then only <em>whom</em> (people) or <em>which</em> (things) is possible — never <em>that</em> or <em>who</em>, and the pronoun can't be left out.
+    </p>
+    <GrammarFormula label="Formal" parts={['noun', 'preposition', 'whom / which', 'subject', 'verb']} />
+    <GrammarExample note="Formal = the person who you should send your application to.">
+      <mark data-role="grammar">The person</mark> <mark data-role="grammar">to</mark> <mark data-role="content">whom</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">should send</mark> your application is Ms Lee.
+    </GrammarExample>
+    <GrammarExample note="Formal = the services, which we are very interested in.">
+      Thank you for the information about <mark data-role="grammar">your services</mark>, <mark data-role="grammar">in</mark> <mark data-role="content">which</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">are</mark> very interested.
+    </GrammarExample>
+    <GrammarExample note="Of which after a number or quantity: four of the rooms.">
+      The hotel has <mark data-role="grammar">twenty rooms</mark>, four <mark data-role="grammar">of</mark> <mark data-role="content">which</mark> <mark data-role="grammar">have</mark> a sea view.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="…, which is great: which about a whole sentence" id="sentence-which" open={false}>
+    <p>
+      <em>Which</em> after a comma can refer back to the whole idea before it, not to one noun. It's the natural way to add your opinion or a comment about what you've just said: <em>…, which is great</em>, <em>…, which was a surprise</em>, <em>…, which means …</em>. Only <em>which</em> works here — not <em>that</em>, and not <em>what</em>.
+    </p>
+    <GrammarFormula label="Comment" parts={['whole clause', ', which', 'verb', 'opinion / comment']} />
+    <GrammarExample note="Which = the fact that you get an answer in ten minutes.">
+      <mark data-role="grammar">You can get an answer within ten minutes</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">a good thing</mark>.
+    </GrammarExample>
+    <GrammarExample note="Which = the fact that zoos teach us about animals.">
+      <mark data-role="grammar">Zoos help us understand how animals live</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">very important</mark> for protecting them.
+    </GrammarExample>
+    <GrammarExample note="Which = the fact that she passed first time.">
+      <mark data-role="grammar">She passed her driving test first time</mark>, <mark data-role="content">which</mark> <mark data-role="grammar">surprised</mark> <mark data-role="grammar">everyone</mark>.
+    </GrammarExample>
+    {sentenceWhichB2 && <GrammarUsagePointCard usagePoint={sentenceWhichB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Who</em> is for people, <em>which</em> for things; <em>that</em> works for both, but only without commas. The relative word replaces the noun, so don't add <em>it</em> / <em>him</em> / <em>there</em> as well. A non-defining clause always keeps its <em>who</em> or <em>which</em>. To comment on a whole sentence, use <em>which</em>, never <em>what</em>. And <em>whose</em> (belonging) is not <em>who's</em> (who is).
+    </p>
+    <GrammarContrast
+      bad={[
+        'The man which lives next door is a doctor.',
+        'The book that I bought it is great.',
+        'The city where I live in is very nice.',
+        'My sister, that lives in London, is a nurse.',
+        'My sister, lives in London, is a nurse.',
+        'I passed the exam, what was a big surprise.',
+        "I met a girl who's father is a pilot.",
+      ]}
+      good={[
+        'The man who lives next door is a doctor.',
+        'The book that I bought is great.',
+        'The city where I live is very nice.',
+        'My sister, who lives in London, is a nurse.',
+        'My sister, who lives in London, is a nurse.',
+        'I passed the exam, which was a big surprise.',
+        'I met a girl whose father is a pilot.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinate clauses',
+        note: 'other dependent clauses — because, when, if — that attach to a whole clause, not to a noun.',
+      },
+      {
+        slug: 'nouns-noun-phrases',
+        name: 'noun phrases',
+        note: 'where a relative clause sits in a longer noun phrase, after the noun and other modifiers.',
+      },
+      {
+        slug: 'prepositions-prepositions',
+        name: 'prepositions',
+        note: 'which verbs and adjectives take which preposition — the one that ends up at the end of the clause.',
+      },
+      {
+        slug: 'adjectives-superlatives',
+        name: 'superlatives',
+        note: "the best film I've ever seen — a superlative followed by a relative clause without a pronoun.",
+      },
+    ]}
+  />
+</GrammarShell>
