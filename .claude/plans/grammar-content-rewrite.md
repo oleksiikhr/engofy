@@ -749,12 +749,15 @@ myself/itself, emphasis, itself/in itself, formal, common mistakes з -ся ка
 (one, ones, the one with…, which/this/that one, focus, none, common mistakes). Content — `one`/`ones`/`none`; детермінатор,
 прикметник, complement — `grammar` (навпаки до `pronouns-demonstratives`, де content — this/that).
 
-### [ ] 69. Questions — alternatives (`questions-alternatives`) — рівень A2
+### [x] 69. Questions — alternatives (`questions-alternatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `questions-alternatives`.
+8 EGP-рядків (1008-1015): 4 чистих FORM без карток, 4 FORM/USE (1010 or something else, 1012 or not, 1013 strong
+alternative, 1014 hedging) вплетені за `egpIndex` — generic-блок не рендериться. 10 секцій (word/phrase/clause, інтонація
+↗↘, A, B or something else, Which…, A or B? — без EGP-рядка, or not, еліпсис + hedging, strong alternative, common mistakes
+з калькою чи → whether). Content — кожна альтернатива (її розмір і розрізняє FORM-рядки); opener і `or` — `grammar`.
 
 ### [ ] 70. Questions — tags (`questions-tags`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
