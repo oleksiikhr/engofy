@@ -3167,6 +3167,644 @@
       "explanation": "В академічному письмі present simple з дієсловами переказу, як-от demonstrate, illustrate і argue, вживаємо, щоб сказати, що показує дослідження чи автор. Схема — the study / author + demonstrates / argues + that."
     }
   },
+  "903": {
+    "explanation": "Put this or that before a noun + of + possessive pronoun to show a feeling about someone's thing: that car of yours. It often sounds annoyed, ironic or funny, sometimes warm. It is typical of stories and informal speech.",
+    "examples": [
+      "You can park that precious jeep of yours over there.",
+      "I didn't like that new girlfriend of his.",
+      "I want this dream of mine to come true."
+    ],
+    "uk": {
+      "explanation": "This або that перед іменником + of + присвійний займенник показує ставлення до чиєїсь речі: that car of yours. Часто це звучить роздратовано, іронічно чи смішно, інколи тепло. Це типово для оповідей і розмовного мовлення."
+    }
+  },
+  "909": {
+    "explanation": "Use by + myself, yourself, himself or herself to mean alone, or without any help. The situation tells you which meaning.",
+    "examples": [
+      "He tried to open it by himself.",
+      "I will study by myself at home.",
+      "She lives by herself in a small flat."
+    ],
+    "uk": {
+      "explanation": "By + myself, yourself, himself або herself означає «сам, наодинці» або «без жодної допомоги». Яке значення — видно з ситуації."
+    }
+  },
+  "912": {
+    "explanation": "Use myself, yourself, himself or herself to stress who did something: this person and nobody else. It usually goes at the end of the clause or straight after the noun: I made it myself.",
+    "examples": [
+      "The cake was delicious. Sandra made it herself.",
+      "You should decide what to do yourself.",
+      "The director himself showed us round the school."
+    ],
+    "uk": {
+      "explanation": "Myself, yourself, himself або herself підкреслюють, хто саме щось зробив: ця людина, а не хтось інший. Зазвичай стоїть у кінці частини речення або одразу після іменника: I made it myself."
+    }
+  },
+  "913": {
+    "explanation": "Use by + ourselves, yourselves or themselves to mean alone as a group, or without any help: just us, you or them, nobody else.",
+    "examples": [
+      "My friend and I are planning a holiday by ourselves.",
+      "I think you will find it by yourselves.",
+      "Suddenly, the windows opened by themselves."
+    ],
+    "uk": {
+      "explanation": "By + ourselves, yourselves або themselves означає «самі, групою без інших» або «без жодної допомоги»: лише ми, ви чи вони, більше ніхто."
+    }
+  },
+  "917": {
+    "explanation": "Use the fixed phrase in itself to mean \"on its own, without anything else\". It makes the point stronger and usually comes after be + adjective or after the noun.",
+    "examples": [
+      "The house in itself is beautiful.",
+      "A car can't be harmful in itself.",
+      "Spending time with family is important in itself."
+    ],
+    "uk": {
+      "explanation": "Сталий вираз in itself означає «сам по собі, без нічого іншого». Він підсилює думку й зазвичай стоїть після be + прикметник або після іменника."
+    }
+  },
+  "918": {
+    "explanation": "Put itself straight after a noun to stress the thing itself, not the things around it: the building itself.",
+    "examples": [
+      "The building itself looks splendid.",
+      "The story itself must be good.",
+      "The town itself is small, but the area is huge."
+    ],
+    "uk": {
+      "explanation": "Itself одразу після іменника підкреслює саму річ, а не те, що довкола неї: the building itself."
+    }
+  },
+  "919": {
+    "explanation": "Use ourselves, yourselves or themselves to stress who did something: these people and nobody else. Put it at the end of the clause or straight after the noun.",
+    "examples": [
+      "Sometimes we can cook something ourselves.",
+      "They were very busy themselves.",
+      "Cars themselves are never dangerous."
+    ],
+    "uk": {
+      "explanation": "Ourselves, yourselves або themselves підкреслюють, хто саме щось зробив: ці люди, а не хтось інший. Ставте в кінці частини речення або одразу після іменника."
+    }
+  },
+  "920": {
+    "explanation": "In formal letters and emails, some writers use yourselves instead of you to talk politely to a company or organisation. Plain you is always correct too.",
+    "examples": [
+      "I am replying to the advert published by yourselves.",
+      "Training will be provided by yourselves, I believe.",
+      "Like yourselves, I live in a busy town."
+    ],
+    "uk": {
+      "explanation": "В офіційних листах та імейлах дехто вживає yourselves замість you, щоб увічливо звернутися до компанії чи організації. Просте you теж завжди правильне."
+    }
+  },
+  "921": {
+    "explanation": "Use As for myself at the start of a sentence to move to your own opinion or situation after talking about other people. It is formal; in speaking, As for me is more usual.",
+    "examples": [
+      "As for myself, I like taking responsibility.",
+      "As for myself, I grew up with the internet.",
+      "As for myself, I prefer quiet holidays."
+    ],
+    "uk": {
+      "explanation": "As for myself на початку речення переводить увагу на вашу власну думку чи ситуацію після розповіді про інших людей. Це офіційний вираз; в усному мовленні частіше кажуть As for me."
+    }
+  },
+  "936": {
+    "explanation": "In formal writing, use it as the subject of a passive verb when who did the action is unknown or unimportant. The focus stays on the fact: It is hoped that…, It was decided that…",
+    "examples": [
+      "It is hoped that this report will help the club.",
+      "It was decided that the meeting would be cancelled.",
+      "It is believed that the painting is very old."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі it може бути підметом пасивного дієслова, коли невідомо або неважливо, хто виконав дію. Увага лишається на самому факті: It is hoped that…, It was decided that…"
+    }
+  },
+  "939": {
+    "explanation": "Use this on its own to point to one thing you are going to show or explain right now. The information often comes straight after it, sometimes after a colon: This is + information.",
+    "examples": [
+      "This is my phone number: 0754 567 7851.",
+      "Hi, Tom! This is Anna.",
+      "This is the plan: we meet at six."
+    ],
+    "uk": {
+      "explanation": "This без іменника вказує на одну річ, яку ви зараз покажете або поясните. Інформація часто йде одразу після нього, інколи після двокрапки: This is + інформація."
+    }
+  },
+  "940": {
+    "explanation": "Use this on its own to talk about something you have just mentioned, so you don't repeat the noun. It can mean one thing or a whole group of things: all this.",
+    "examples": [
+      "What a lovely present! Thank you for this.",
+      "Shoes, socks, a hat — why did I buy all this?",
+      "I got a new bike. This is my favourite thing now."
+    ],
+    "uk": {
+      "explanation": "This без іменника вказує на те, що ви щойно згадали, щоб не повторювати іменник. Воно може означати одну річ або цілу групу речей: all this."
+    }
+  },
+  "941": {
+    "explanation": "Use this on its own to talk about the situation you are in now: the party, the holiday, the letter you are writing. When it is over, it becomes that.",
+    "examples": [
+      "This is the best holiday I have ever had!",
+      "This is a great party!",
+      "This is just a short note to say thank you."
+    ],
+    "uk": {
+      "explanation": "This без іменника означає ситуацію, у якій ви зараз: вечірку, відпустку, лист, який пишете. Коли вона закінчилася, це вже that."
+    }
+  },
+  "943": {
+    "explanation": "Use that on its own to talk about something already mentioned, often something further back or something another person has just said. It takes a singular verb: that is, that was.",
+    "examples": [
+      "It has got a camera, and I like that.",
+      "Please come after four. I won't be home before that.",
+      "\"I'm moving to Canada.\" \"When did you decide that?\""
+    ],
+    "uk": {
+      "explanation": "That без іменника вказує на щось уже згадане, часто давніше або те, що щойно сказав хтось інший. Дієслово після нього в однині: that is, that was."
+    }
+  },
+  "944": {
+    "explanation": "Use That's + adjective to react to news someone has just told you. That points back to their news: That's great! That's a pity.",
+    "examples": [
+      "\"I passed my driving test!\" \"That's great!\"",
+      "\"I can't come to your party.\" \"Oh, that's a pity.\"",
+      "\"I'll help you tomorrow.\" \"That's very kind of you.\""
+    ],
+    "uk": {
+      "explanation": "That's + прикметник уживаємо, щоб відреагувати на новину, яку вам щойно розповіли. That вказує на їхню новину: That's great! That's a pity."
+    }
+  },
+  "945": {
+    "explanation": "Use That's all to end a letter, email or talk. It means \"I have nothing more to say\". It often comes with for now.",
+    "examples": [
+      "Well, that's all for now. Write soon!",
+      "I think that's all. See you on Saturday!",
+      "That's all from me. Love, Kate."
+    ],
+    "uk": {
+      "explanation": "That's all уживаємо, щоб закінчити лист, імейл або виступ. Це означає «більше мені нічого сказати». Часто разом із for now."
+    }
+  },
+  "946": {
+    "explanation": "Use this to point back to a whole sentence or idea, not just a thing. It keeps the idea in focus because you are going to say more about it. It is common in essays and letters: because of this, after this.",
+    "examples": [
+      "People don't care about the cost. Because of this, weddings are expensive.",
+      "I eat lots of fruit. I think you should do this too.",
+      "Prices went up again. This made many people angry."
+    ],
+    "uk": {
+      "explanation": "This може вказувати назад на ціле речення чи думку, а не лише на річ. Воно тримає думку у фокусі, бо ви збираєтеся сказати про неї більше. Це поширено в есе й листах: because of this, after this."
+    }
+  },
+  "948": {
+    "explanation": "Use these on its own to talk about several things you have just mentioned. It is often followed by are + a noun that sums them up: These are the things I like.",
+    "examples": [
+      "I watch two quiz shows. These are the only programmes I like.",
+      "He is clever and kind, and these are things I love.",
+      "I found some old photos. These are from our trip."
+    ],
+    "uk": {
+      "explanation": "These без іменника вказує на кілька речей, які ви щойно згадали. Після нього часто йде are + іменник, який їх підсумовує: These are the things I like."
+    }
+  },
+  "950": {
+    "explanation": "Use those on its own to talk about several things already mentioned, often further away in time or place. It takes a plural verb: those are, those were.",
+    "examples": [
+      "Paris and Rome are lovely. I love cities like those.",
+      "My clothes are green or orange. Those are my favourite colours.",
+      "Remember our school trips? Those were great days."
+    ],
+    "uk": {
+      "explanation": "Those без іменника вказує на кілька вже згаданих речей, часто віддаленіших у часі чи просторі. Дієслово після нього в множині: those are, those were."
+    }
+  },
+  "952": {
+    "explanation": "Put one after this or that so you don't repeat a singular countable noun. It is very useful when you choose between things: this one, that one.",
+    "examples": [
+      "\"Which cake would you like?\" \"That one, please.\"",
+      "My desk is very old, so I need to change this one.",
+      "I don't like dresses, but I bought this one."
+    ],
+    "uk": {
+      "explanation": "One після this або that ставимо, щоб не повторювати злічуваний іменник в однині. Це дуже зручно, коли обираєте між речами: this one, that one."
+    }
+  },
+  "953": {
+    "explanation": "Use these ones or those ones to avoid repeating a plural countable noun, mostly in speaking. In writing, these or those on their own usually sound better.",
+    "examples": [
+      "\"Do you like these shoes?\" \"I prefer those ones.\"",
+      "Let's just start with these ones.",
+      "These apples are fine, but those ones look fresher."
+    ],
+    "uk": {
+      "explanation": "These ones або those ones уживаємо, щоб не повторювати злічуваний іменник у множині, переважно в усному мовленні. На письмі these або those без ones зазвичай звучать краще."
+    }
+  },
+  "954": {
+    "explanation": "Use those + a description to mean \"the people or things that…\". The description can be a relative clause with who, which or that, or a short -ed or -ing form. This is typical of formal writing.",
+    "examples": [
+      "For those who don't like sport, there are some great shops.",
+      "Most of those surveyed were happy with the service.",
+      "All those attending are asked to arrive on time."
+    ],
+    "uk": {
+      "explanation": "Those + опис означає «ті люди або речі, які…». Опис може бути підрядним реченням з who, which чи that або короткою формою на -ed чи -ing. Це типово для офіційного письма."
+    }
+  },
+  "965": {
+    "explanation": "In reports, essays and surveys, few, many, most and others can mean people without the word people. Many means many people, few means hardly anyone. In conversation, say many people, most people.",
+    "examples": [
+      "Many say that extreme sports are only for adrenaline lovers.",
+      "Some students had comments; most were about the timetable.",
+      "Some prefer to study alone; others learn better in groups."
+    ],
+    "uk": {
+      "explanation": "У звітах, есе й опитуваннях few, many, most та others можуть означати людей без слова people. Many — це багато людей, few — майже ніхто. У розмові кажіть many people, most people."
+    }
+  },
+  "969": {
+    "explanation": "In formal writing, you can put many first and turn the sentence around for strong focus: Many are the + noun + who/which… = There are many… It sounds literary, so use it rarely, for effect.",
+    "examples": [
+      "Many are the reasons which have led to longer lives.",
+      "Many are the children who hate reading.",
+      "Many are the students who never ask for help."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі можна поставити many на початок і перевернути речення для сильного фокусу: Many are the + noun + who/which… = There are many… Це звучить літературно, тож уживайте рідко, для ефекту."
+    }
+  },
+  "972": {
+    "explanation": "Use the one or the + adjective + one with a phrase or clause after it to say exactly which thing you mean: the one with…, the one on…, the one (that) I…",
+    "examples": [
+      "My house is the one with silver gates.",
+      "My house is the first one on the left.",
+      "The one I liked best was John's present."
+    ],
+    "uk": {
+      "explanation": "The one або the + прикметник + one із фразою чи підрядним реченням після нього точно показує, яку річ ви маєте на увазі: the one with…, the one on…, the one (that) I…"
+    }
+  },
+  "977": {
+    "explanation": "Use the ones with a phrase or clause after it to say exactly which things you mean, so you don't repeat a plural noun: the ones in…, the ones (that) we…",
+    "examples": [
+      "These aren't the ones we ordered.",
+      "Weddings here are different from the ones in England.",
+      "I like the ones with big windows."
+    ],
+    "uk": {
+      "explanation": "The ones із фразою чи підрядним реченням після нього точно показує, які саме речі ви маєте на увазі, щоб не повторювати іменник у множині: the ones in…, the ones (that) we…"
+    }
+  },
+  "978": {
+    "explanation": "Use an adjective + ones without the or my to talk about that kind of thing in general: new ones, small ones. Without an adjective, don't use ones alone.",
+    "examples": [
+      "Our computers are slow. We should buy new ones.",
+      "Large schools are often better than small ones.",
+      "I prefer big cities to small ones."
+    ],
+    "uk": {
+      "explanation": "Прикметник + ones без the чи my говорить про такі речі загалом: new ones, small ones. Без прикметника ones окремо не вживають."
+    }
+  },
+  "981": {
+    "explanation": "In careful writing, start a sentence with The one that… or The ones that… to build up to the important information, which comes after is or are. You pick one thing out of many and put it in focus.",
+    "examples": [
+      "The one that impressed me most was the carnival.",
+      "The ones that he preferred were adventure stories.",
+      "The one that will really help is better education."
+    ],
+    "uk": {
+      "explanation": "У ретельному письмі речення можна почати з The one that… або The ones that…, щоб підвести до головної інформації, яка йде після is або are. Ви вибираєте одну річ із багатьох і ставите її у фокус."
+    }
+  },
+  "987": {
+    "explanation": "Put an adjective straight after something or anything to say what kind of thing you mean: something new, anything wrong. The adjective comes after the pronoun, not before it.",
+    "examples": [
+      "I need something new to wear.",
+      "I didn't find anything wrong.",
+      "Let's do something different this weekend."
+    ],
+    "uk": {
+      "explanation": "Прикметник одразу після something або anything уточнює, яку саме річ ви маєте на увазі: something new, anything wrong. Прикметник стоїть після займенника, а не перед ним."
+    }
+  },
+  "988": {
+    "explanation": "Put a to-infinitive after something or anything to say what the thing is for: something to drink, anything to wear.",
+    "examples": [
+      "Please bring something to drink.",
+      "I didn't have anything to wear.",
+      "Have you got something to read?"
+    ],
+    "uk": {
+      "explanation": "To-інфінітив після something або anything показує, для чого ця річ: something to drink, anything to wear."
+    }
+  },
+  "990": {
+    "explanation": "Add or something at the end of a sentence to mean \"this, or something similar\". It is an informal way of not saying one exact thing.",
+    "examples": [
+      "After the concert we can have a pizza or something.",
+      "Bring something to drink: juice, cola or something.",
+      "Is he ill or something?"
+    ],
+    "uk": {
+      "explanation": "Or something у кінці речення означає «це або щось подібне». Це неофіційний спосіб не називати щось одне точно."
+    }
+  },
+  "993": {
+    "explanation": "Put a word like absolutely, almost or nearly before an indefinite pronoun to make it stronger. Absolutely means 100%, and nearly or almost means just under 100%: absolutely anything, nearly everyone.",
+    "examples": [
+      "You can find absolutely anything in that shop.",
+      "Nearly everyone I know works at a computer.",
+      "Almost nobody came to the meeting."
+    ],
+    "uk": {
+      "explanation": "Слово на кшталт absolutely, almost чи nearly перед неозначеним займенником підсилює його. Absolutely означає 100%, а nearly чи almost — трохи менше за 100%: absolutely anything, nearly everyone."
+    }
+  },
+  "995": {
+    "explanation": "Start a sentence with something, everything or anything + a relative clause to build a longer subject. This puts the idea in focus before you say what it is. It is more formal and common in writing: Something that I like is…",
+    "examples": [
+      "Something that I really like is the teachers.",
+      "Everything that I believed changed.",
+      "Anything that helps you practise English is useful."
+    ],
+    "uk": {
+      "explanation": "Почніть речення з something, everything або anything + підрядне речення, щоб утворити довший підмет. Так думка опиняється у фокусі ще до того, як ви скажете, що це. Це офіційніше й поширене на письмі: Something that I like is…"
+    }
+  },
+  "996": {
+    "explanation": "Use expressions like or something, or anything like that and or somewhere else to talk about things in a vague way. They mean \"this, or something similar\" and are common in speaking.",
+    "examples": [
+      "Is it a cold or anything like that?",
+      "We could plant trees here, or somewhere else.",
+      "She's a teacher or something like that."
+    ],
+    "uk": {
+      "explanation": "Вирази на кшталт or something, or anything like that та or somewhere else допомагають говорити про речі нечітко. Вони означають «це або щось подібне» й поширені в усному мовленні."
+    }
+  },
+  "997": {
+    "explanation": "Use anything + a relative clause or other words after it as a long subject, to put the idea in focus. The verb is singular: Anything that… is…",
+    "examples": [
+      "Anything that gets you speaking English is useful.",
+      "Anything else can be sent by email.",
+      "Anything you say now will be remembered."
+    ],
+    "uk": {
+      "explanation": "Anything + підрядне речення або інші слова після нього може бути довгим підметом, що ставить думку у фокус. Дієслово в однині: Anything that… is…"
+    }
+  },
+  "998": {
+    "explanation": "Anything can start a clause with if there is left out: Anything you need, ask me = If there is anything you need, ask me. The main clause then follows after a comma.",
+    "examples": [
+      "Anything else you need, ask Sarah.",
+      "Anything you want to know, just call me.",
+      "Anything you don't understand, write it down."
+    ],
+    "uk": {
+      "explanation": "Anything може починати частину речення, в якій пропущено if there is: Anything you need, ask me = If there is anything you need, ask me. Потім після коми йде головне речення."
+    }
+  },
+  "999": {
+    "explanation": "Use you to talk about people in general, not only the person you are speaking to. It is normal in speaking and informal writing, often with can, can't, need to or have to.",
+    "examples": [
+      "You can't park here after 8 am.",
+      "If you want to visit China, you need a visa.",
+      "With this phone you can take great pictures."
+    ],
+    "uk": {
+      "explanation": "You уживаємо, щоб говорити про людей загалом, а не лише про співрозмовника. Це звично в усному мовленні й неофіційному письмі, часто з can, can't, need to або have to."
+    }
+  },
+  "1000": {
+    "explanation": "One means the same as general you, but it is formal. Use it in essays, formal letters and speeches. Keep using one in the sentence: one's, oneself.",
+    "examples": [
+      "One should always read a contract before signing it.",
+      "One must look after one's health.",
+      "In this city, one sees cats everywhere."
+    ],
+    "uk": {
+      "explanation": "One означає те саме, що you у значенні «будь-хто», але звучить офіційно. Уживайте його в есе, офіційних листах і промовах. Не змінюйте його в межах речення: one's, oneself."
+    }
+  },
+  "1001": {
+    "explanation": "Use we and us to mean people in general when you want to include yourself. It is common in essays and discussions and sounds more personal than one. Some of us, many of us divide people into groups.",
+    "examples": [
+      "We all know that being a writer is difficult.",
+      "Zoos give us a chance to understand nature.",
+      "Some of us find technology useful, while others don't."
+    ],
+    "uk": {
+      "explanation": "We та us уживаємо в значенні «люди загалом», коли хочемо включити й себе. Це поширено в есе та дискусіях і звучить особистіше, ніж one. Some of us, many of us ділять людей на групи."
+    }
+  },
+  "1002": {
+    "explanation": "After someone, anyone, everyone or no one, use they, them or their to refer back to the person. We use it when we don't know, or it doesn't matter, if it is a man or a woman. They keeps a plural verb: they are, they have.",
+    "examples": [
+      "Everyone has to bring their own lunch.",
+      "If anyone calls, tell them I'm out.",
+      "If someone doesn't like the film, they can leave."
+    ],
+    "uk": {
+      "explanation": "Після someone, anyone, everyone або no one уживаємо they, them чи their, щоб повернутися до цієї людини. Так роблять, коли не знаємо або неважливо, чоловік це чи жінка. Дієслово після they лишається в множині: they are, they have."
+    }
+  },
+  "1003": {
+    "explanation": "To refer back to a noun like a student or a person when you don't know if it is a man or a woman, you can use he or she (him or her, his or her), or they. He or she is more formal and takes a singular verb. Using only he sounds old-fashioned today.",
+    "examples": [
+      "If a student is ill, he or she must call the school.",
+      "A good doctor listens to his or her patients.",
+      "If a child is bored, they won't learn."
+    ],
+    "uk": {
+      "explanation": "Щоб повернутися до іменника на кшталт a student чи a person, коли не знаємо, чоловік це чи жінка, можна вжити he or she (him or her, his or her) або they. He or she офіційніше й потребує дієслова в однині. Лише he сьогодні звучить застаріло."
+    }
+  },
+  "1005": {
+    "explanation": "One another means the same as each other: two or more people do the same thing to the other person. It goes after a verb or a preposition and sounds more formal, so it is more common in writing.",
+    "examples": [
+      "Students and staff can meet one another here.",
+      "Since we last saw one another, much has changed.",
+      "Team members should respect one another's opinions."
+    ],
+    "uk": {
+      "explanation": "One another означає те саме, що each other: дві чи більше людей роблять одне одному те саме. Стоїть після дієслова або прийменника й звучить офіційніше, тому частіше трапляється на письмі."
+    }
+  },
+  "1010": {
+    "explanation": "End a question with or something else to give a list of ideas but leave the choice open. Put commas between the options and or before the last one: A, B or something else?",
+    "examples": [
+      "Shall we buy him a book, a CD or something else?",
+      "Do you want to go swimming or do something else?",
+      "Poetry, history or something else?"
+    ],
+    "uk": {
+      "explanation": "Or something else у кінці запитання дає список ідей, але лишає вибір відкритим. Між варіантами ставте коми, а перед останнім — or: A, B or something else?"
+    }
+  },
+  "1012": {
+    "explanation": "Put or not at the end of a question instead of repeating it in the negative: Did he pass or not? It asks for a clear answer and can sound impatient or annoyed.",
+    "examples": [
+      "Do you want to do it or not?",
+      "Do you agree with me or not?",
+      "Are you coming or not?"
+    ],
+    "uk": {
+      "explanation": "Or not у кінці запитання замінює повторення цього ж запитання із запереченням: Did he pass or not? Воно вимагає чіткої відповіді й може звучати нетерпляче чи роздратовано."
+    }
+  },
+  "1013": {
+    "explanation": "In essays and arguments, make the second option of an alternative question an extreme one: the opposite, a disaster, a waste of money. It is not a real question; it makes the reader doubt the first option.",
+    "examples": [
+      "Is this new industry a blessing or the exact opposite?",
+      "Is this reform real progress or just a waste of money?",
+      "Is social media helping us or destroying us?"
+    ],
+    "uk": {
+      "explanation": "В есе й аргументації другий варіант альтернативного запитання можна зробити крайнім: протилежністю, катастрофою, марнуванням грошей. Це не справжнє запитання; воно змушує читача засумніватися в першому варіанті."
+    }
+  },
+  "1014": {
+    "explanation": "In an alternative question with two clauses, don't repeat the shared subject and modal in the second clause: Could you A or B? With maybe or perhaps + could, this is a polite way to suggest ideas in formal writing.",
+    "examples": [
+      "Maybe you could hand out toys or show a movie?",
+      "Should I stay or go?",
+      "Perhaps you could extend the trip or add another visit?"
+    ],
+    "uk": {
+      "explanation": "В альтернативному запитанні з двох частин спільний підмет і модальне дієслово в другій частині не повторюють: Could you A or B? Із maybe або perhaps + could це ввічливий спосіб запропонувати ідеї в офіційному письмі."
+    }
+  },
+  "1020": {
+    "explanation": "In informal speaking and messages, add right? at the end of a sentence to check that something is true. It never changes, so it is easier than a full tag, but avoid it in formal writing.",
+    "examples": [
+      "You are 14 years old, right?",
+      "You asked me for some help, right?",
+      "The film starts at eight, right?"
+    ],
+    "uk": {
+      "explanation": "У неофіційній розмові й повідомленнях right? у кінці речення перевіряє, чи щось правда. Воно ніколи не змінюється, тож це простіше за повний tag, але в офіційному письмі його уникайте."
+    }
+  },
+  "1021": {
+    "explanation": "Add a tag after an imperative to make an order or request softer and friendlier. The usual tag is will you?; would you? and can you? are common too. After Let's…, the tag is shall we?",
+    "examples": [
+      "Pass me the salt, would you?",
+      "Don't be late, will you?",
+      "Let's check together, shall we?"
+    ],
+    "uk": {
+      "explanation": "Tag після наказового речення робить наказ чи прохання м'якшим і дружнішим. Звичайний tag — will you?; would you? та can you? теж поширені. Після Let's… tag завжди shall we?"
+    }
+  },
+  "1028": {
+    "explanation": "Use Why don't we…? or Why don't you…? + verb to make a friendly suggestion or invitation, not to ask for a reason. The answer is agreement or refusal: Good idea!",
+    "examples": [
+      "Why don't we watch a film?",
+      "Why don't you come with me?",
+      "You still have a headache. Why don't you see a doctor?"
+    ],
+    "uk": {
+      "explanation": "Why don't we…? або Why don't you…? + дієслово вживаємо для дружньої пропозиції чи запрошення, а не щоб дізнатися причину. Відповідь — згода чи відмова: Good idea!"
+    }
+  },
+  "1031": {
+    "explanation": "In an essay, a talk or a story, ask a wh- question and then answer it yourself. Nobody is expected to reply: the question points the reader to your next idea. Use one to open a paragraph, not several in a row.",
+    "examples": [
+      "So what makes a good present? The best presents are personal.",
+      "But what are the alternatives? The city has a good subway.",
+      "Why does this matter? Because it affects everyone."
+    ],
+    "uk": {
+      "explanation": "В есе, виступі чи оповіді можна поставити wh-запитання й самому на нього відповісти. Відповіді ні від кого не чекають: запитання спрямовує читача до наступної думки. Одним таким запитанням починайте абзац, а не кількома поспіль."
+    }
+  },
+  "1041": {
+    "explanation": "Use a negative yes/no question when you already think the answer is yes and want the listener to agree: Isn't that great? Don't you think?",
+    "examples": [
+      "It's funny! Don't you think?",
+      "Isn't that a great idea?",
+      "Wouldn't that be amazing?"
+    ],
+    "uk": {
+      "explanation": "Заперечне запитання yes/no вживаємо, коли ви вже думаєте, що відповідь «так», і хочете, щоб співрозмовник погодився: Isn't that great? Don't you think?"
+    }
+  },
+  "1042": {
+    "explanation": "In formal writing and argument, keep not in full and put it after the subject: Do we not…?, Is it not…? This makes the question an emphatic point, not a real question.",
+    "examples": [
+      "Do we not want our children to be happy?",
+      "Is it not too easy to blame the schools?",
+      "Should we not protect our forests?"
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі й аргументації not можна лишити повним і поставити після підмета: Do we not…?, Is it not…? Так запитання стає наголошеною думкою, а не справжнім запитанням."
+    }
+  },
+  "1043": {
+    "explanation": "Use look forward to + noun or -ing form to say you feel happy about something that will happen. The to is a preposition, so never use the bare verb after it. It is common at the end of a letter.",
+    "examples": [
+      "I'm looking forward to seeing you!",
+      "I look forward to hearing from you.",
+      "We're looking forward to the holidays."
+    ],
+    "uk": {
+      "explanation": "Look forward to + іменник або форма на -ing показує, що ви з нетерпінням чекаєте на щось. To тут — прийменник, тож після нього ніколи не ставте дієслово в початковій формі. Це поширено в кінці листа."
+    }
+  },
+  "1081": {
+    "explanation": "Use would love + to-infinitive to say you really want to do something. It is stronger than would like. In speaking, would is usually short: I'd love to…",
+    "examples": [
+      "I'd love to see your new flat.",
+      "I would love to go to the concert with you.",
+      "She'd love to visit Japan one day."
+    ],
+    "uk": {
+      "explanation": "Would love + to-інфінітив показує, що ви дуже хочете щось зробити. Це сильніше, ніж would like. В усному мовленні would зазвичай скорочують: I'd love to…"
+    }
+  },
+  "1084": {
+    "explanation": "Use would prefer + to-infinitive to say politely what you want to do, often instead of something else. In speaking, it is usually short: I'd prefer to…",
+    "examples": [
+      "I would prefer to pay by card, if that's OK.",
+      "I'd prefer to stay at home tonight.",
+      "We'd prefer to meet in the afternoon."
+    ],
+    "uk": {
+      "explanation": "Would prefer + to-інфінітив увічливо показує, що ви хочете зробити, часто замість чогось іншого. В усному мовленні зазвичай скорочують: I'd prefer to…"
+    }
+  },
+  "1092": {
+    "explanation": "Use a verb of the senses like see, hear, watch or feel + object + -ing form to show an action already in progress, caught partway through: I heard someone shouting.",
+    "examples": [
+      "I heard someone shouting in the street.",
+      "We watched the children playing in the park.",
+      "She felt the rain falling on her face."
+    ],
+    "uk": {
+      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + форма на -ing показує дію, що вже триває і яку ви застали посередині: I heard someone shouting."
+    }
+  },
+  "1093": {
+    "explanation": "Use a verb of the senses like see, hear, watch or feel + object + infinitive without to to show the whole action, from start to finish: I saw him cross the road.",
+    "examples": [
+      "I saw him cross the road and go into the shop.",
+      "We heard the door close behind us.",
+      "She watched the plane take off and disappear."
+    ],
+    "uk": {
+      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + інфінітив без to показує всю дію від початку до кінця: I saw him cross the road."
+    }
+  },
+  "1094": {
+    "explanation": "Use would hate + to-infinitive to say strongly that you don't want something to happen. It often comes before see, think or lose: I would hate to see…",
+    "examples": [
+      "We would hate to see all that work wasted.",
+      "I'd hate to lose my old photos.",
+      "I would hate to think that you were unhappy."
+    ],
+    "uk": {
+      "explanation": "Would hate + to-інфінітив рішуче показує, що ви не хочете, щоб щось сталося. Часто стоїть перед see, think або lose: I would hate to see…"
+    }
+  },
   "1107": {
     "explanation": "Use if + present simple for a real condition: something true now, true every time, or very likely. The main clause uses the present simple, can, or an imperative.",
     "examples": [
@@ -3539,6 +4177,61 @@
     ],
     "uk": {
       "explanation": "У довгому офіційному тексті можна послатися на вже написане, замість того щоб повторювати: as mentioned above, as mentioned earlier, as shown above. As described below і see below вказують на те, що буде далі. Після as немає підмета: зворот — це скорочення від «as I mentioned above»."
+    }
+  },
+  "1148": {
+    "explanation": "Use wonder + a wh- word or if + a clause to report a question you ask yourself in your head. The clause has statement order, and after wondered the tense usually moves back.",
+    "examples": [
+      "I wondered what she had written.",
+      "I really wondered who he was.",
+      "I wonder if they will come tomorrow."
+    ],
+    "uk": {
+      "explanation": "Wonder + wh-слово або if + підрядне речення передає запитання, яке ви ставите собі подумки. У підрядному реченні прямий порядок слів, а після wondered час зазвичай зсувається в минуле."
+    }
+  },
+  "1152": {
+    "explanation": "When you report what someone said about the future, will usually becomes would. If you report it later, time words change too: tomorrow → the next day, next week → the following week. If it is still in the future, you can keep will and tomorrow.",
+    "examples": [
+      "He said he would call me the next day.",
+      "They told us the shop would open the following week.",
+      "She said she's coming tomorrow."
+    ],
+    "uk": {
+      "explanation": "Коли переказуєте чиїсь слова про майбутнє, will зазвичай стає would. Якщо переказуєте пізніше, змінюються й слова часу: tomorrow → the next day, next week → the following week. Якщо подія ще в майбутньому, will і tomorrow можна лишити."
+    }
+  },
+  "1157": {
+    "explanation": "To report what a written text says, like an advert, a letter or a guidebook, use says in the present simple. The text still says it now, so the verb in the reported clause stays in the present too.",
+    "examples": [
+      "The guidebook says that we can get there by train.",
+      "Your advert says that you are looking for helpers.",
+      "It says the hotel has a swimming pool."
+    ],
+    "uk": {
+      "explanation": "Щоб переказати, що написано в тексті — оголошенні, листі, путівнику, — уживайте says у present simple. Текст і досі це «каже», тому дієслово в переказаній частині теж лишається в теперішньому часі."
+    }
+  },
+  "1158": {
+    "explanation": "Use I was wondering or I was thinking to show thinking as a process that went on for a while. After it, use a wh- clause or a wh- word + to-infinitive: I was wondering what had happened.",
+    "examples": [
+      "We were wondering what had happened.",
+      "While he was thinking how to reply, Jenny smiled.",
+      "I was wondering where to go next."
+    ],
+    "uk": {
+      "explanation": "I was wondering або I was thinking показують мислення як процес, що тривав якийсь час. Після них ідуть wh-підрядне речення або wh-слово + to-інфінітив: I was wondering what had happened."
+    }
+  },
+  "1159": {
+    "explanation": "When you report past words later, move the tense one step back: past simple or present perfect becomes past perfect. Time words change too: yesterday → the day before, last week → the previous week.",
+    "examples": [
+      "She said that she had won the lottery.",
+      "We told her we had been at her house the day before.",
+      "He said he had left his phone in a café."
+    ],
+    "uk": {
+      "explanation": "Коли пізніше переказуєте слова про минуле, зсуньте час на крок назад: past simple чи present perfect стає past perfect. Слова часу теж змінюються: yesterday → the day before, last week → the previous week."
     }
   },
   "1160": {
