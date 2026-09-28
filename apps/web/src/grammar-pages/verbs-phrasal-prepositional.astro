@@ -1,0 +1,263 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 5 EGP rows (1043-1047): 'look forward to' (1043 A2, FORM/USE — the only
+// usage point, carded in its own section), verb + particle + preposition +
+// object (1044 B1, 1045 B2), stranded preposition (1046 C1), direct object
+// between verb and particle (1047 C2). Content is the three-part verb — one
+// mark when its words stand together, split marks when an object or a
+// clause breaks it; the object is grammar.
+const { con, user } = Astro.props;
+
+const lookForwardPoint = con.usagePoints.find((p) =>
+  p.guideword.toUpperCase().includes('LOOK FORWARD TO'),
+);
+const inlineUsagePointIds = lookForwardPoint
+  ? [lookForwardPoint.grammarUsagePointId]
+  : [];
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Phrasal-prepositional verbs in English — a verb + a particle + a preposition: look forward to, get on with, run out of, come up with, put up with. Why the three words never split, why look forward to takes -ing (looking forward to seeing you), where the preposition goes in questions and relative clauses (the ideas I came up with), and verbs with two objects like let someone in on a secret."
+  handcrafted
+  sections={[
+    { id: 'what', title: 'get on with, run out of. Three words, one verb', open: true },
+    { id: 'look-forward', title: 'I look forward to hearing from you', open: false },
+    { id: 'everyday', title: 'catch up with, keep away from. Everyday verbs', open: false },
+    { id: 'wider-range', title: 'look up to, put up with. A wider range', open: false },
+    { id: 'word-order', title: 'get on with her, not get on her with. Word order', open: false },
+    { id: 'stranded', title: 'the ideas I came up with. The preposition at the end', open: false },
+    { id: 'two-objects', title: 'let us in on a secret. Two objects', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A phrasal-prepositional verb has three parts: a verb, a particle (<em>up, out, on, away, forward</em>) and a preposition (<em>with, of, to, for, from</em>): <em>get on with, run out of, look forward to, come up with</em>. The three words work as one verb with its own meaning, and the object always comes after the preposition: <em>I've run out of <strong>money</strong></em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="get on with, run out of. Three words, one verb" id="what" open>
+    <p>
+      Start from a phrasal verb you already know — <em>run out</em> (be used up), <em>get on</em> (have a good relationship). Add a preposition, and the verb can take an object: <em>We ran out.</em> → <em>We ran out <strong>of milk</strong>.</em> The meaning belongs to the whole group, so learn all three words together, like one word.
+    </p>
+    <GrammarFormula label="Phrasal-prepositional verb" parts={['verb', 'particle', 'preposition', 'object']} />
+    <GrammarExample note="run out of: have no more of something.">
+      We've <mark data-role="content">run out of</mark> <mark data-role="grammar">milk</mark> — can you buy some?
+    </GrammarExample>
+    <GrammarExample note="get on with: have a good relationship with someone.">
+      They filmed pupils and teachers to find out how they <mark data-role="content">get on with</mark> <mark data-role="grammar">each other</mark>.
+    </GrammarExample>
+    <GrammarExample note="come up with: think of an idea or a plan.">
+      We sat down and <mark data-role="content">came up with</mark> <mark data-role="grammar">the craziest idea ever</mark>.
+    </GrammarExample>
+    <p>
+      Only the verb changes for tense and person — the particle and the preposition stay the same: <em>get on with, <strong>gets</strong> on with, <strong>got</strong> on with, <strong>getting</strong> on with</em>. The object can be a noun, a pronoun (<em>with <strong>her</strong>, of <strong>it</strong></em>) or an <em>-ing</em> form: <em>I'd better get on with <strong>my studying</strong></em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I look forward to hearing from you" id="look-forward">
+    <p>
+      <em>Look forward to</em> means to feel happy about something that is going to happen — <em>чекати з нетерпінням</em>. The <em>to</em> here is a preposition, not part of an infinitive, so it is followed by a noun or an <em>-ing</em> form — never by the bare verb.
+    </p>
+    <GrammarFormula label="look forward to" parts={['look forward to', 'noun / -ing']} />
+    <GrammarExample note="to + -ing form.">
+      I'm <mark data-role="content">looking forward to</mark> <mark data-role="grammar">seeing</mark> you!
+    </GrammarExample>
+    <GrammarExample note="to + noun.">
+      I am <mark data-role="content">looking forward to</mark> <mark data-role="grammar">our meeting</mark>.
+    </GrammarExample>
+    <GrammarExample note="The classic last line of a formal letter or email.">
+      I <mark data-role="content">look forward to</mark> <mark data-role="grammar">hearing</mark> from you.
+    </GrammarExample>
+    {lookForwardPoint && <GrammarUsagePointCard usagePoint={lookForwardPoint} />}
+    <p>
+      At the end of a letter, the two tenses sound different. <em>I look forward to…</em> (present simple) is formal — job applications, letters to a company. <em>I'm looking forward to…</em> (present continuous) is friendlier — emails and messages to people you know.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="catch up with, keep away from. Everyday verbs" id="everyday">
+    <p>
+      At B1 you meet a small set of very common phrasal-prepositional verbs. Many of them are built on phrasal verbs you know — <em>get away, keep away, catch up</em> — with a preposition that tells you from what, with whom or with what.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Verb</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>get on with</em></td><td>have a good relationship with someone; continue doing something</td></tr>
+        <tr><td><em>catch up with</em></td><td>reach the same level as someone or something</td></tr>
+        <tr><td><em>run out of</em></td><td>have no more of something</td></tr>
+        <tr><td><em>get away from</em></td><td>leave a place, escape</td></tr>
+        <tr><td><em>keep away from</em></td><td>not go near, avoid</td></tr>
+        <tr><td><em>get back to</em></td><td>reply to someone later; return to something</td></tr>
+        <tr><td><em>go out with</em></td><td>have a romantic relationship with someone</td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="catch up with: do the work you missed.">
+      I could <mark data-role="content">catch up with</mark> <mark data-role="grammar">the work</mark> I miss after school.
+    </GrammarExample>
+    <GrammarExample note="get on with: continue doing something.">
+      I'd better stop now and <mark data-role="content">get on with</mark> <mark data-role="grammar">my studying</mark>.
+    </GrammarExample>
+    <GrammarExample note="get away from: leave a place for a rest.">
+      If you want a peaceful holiday, you should <mark data-role="content">get away from</mark> <mark data-role="grammar">the city</mark>.
+    </GrammarExample>
+    <GrammarExample note="keep away from: avoid.">
+      Don't forget to <mark data-role="content">keep away from</mark> <mark data-role="grammar">junk food</mark>.
+    </GrammarExample>
+    <GrammarExample note="get back to: reply later.">
+      I'll <mark data-role="content">get back to</mark> <mark data-role="grammar">you</mark> tomorrow.
+    </GrammarExample>
+    <p>
+      Notice that <em>get on with</em> has two meanings: with a person it's about a relationship (<em>I get on with my sister</em>), with a task it means continue (<em>get on with your homework</em>). The object tells you which.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="look up to, put up with. A wider range" id="wider-range">
+    <p>
+      At B2 the range grows. These verbs are hard to guess from their parts, so it helps to learn them by meaning — many have a one-word, more formal equivalent.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Verb</th><th>Meaning</th><th>More formal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>look up to</em></td><td>admire and respect someone</td><td><em>admire</em></td></tr>
+        <tr><td><em>look down on</em></td><td>think you are better than someone</td><td><em>despise</em></td></tr>
+        <tr><td><em>put up with</em></td><td>accept something bad without complaining</td><td><em>tolerate</em></td></tr>
+        <tr><td><em>face up to</em></td><td>accept a difficult fact and deal with it</td><td><em>confront</em></td></tr>
+        <tr><td><em>come up with</em></td><td>think of an idea, a plan, an answer</td><td><em>devise</em></td></tr>
+        <tr><td><em>cut down on</em></td><td>do or use less of something</td><td><em>reduce</em></td></tr>
+        <tr><td><em>look out for</em></td><td>watch carefully so that you notice something</td><td><em>watch for</em></td></tr>
+        <tr><td><em>go along with</em></td><td>agree with an idea or a person</td><td><em>accept</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="look up to: admire.">
+      Other people will see you as a knowledgeable person and they will <mark data-role="content">look up to</mark> <mark data-role="grammar">you</mark>.
+    </GrammarExample>
+    <GrammarExample note="face up to: accept a difficult truth.">
+      You should <mark data-role="content">face up to</mark> <mark data-role="grammar">the problem</mark> and tell everybody the truth.
+    </GrammarExample>
+    <GrammarExample note="put up with: tolerate.">
+      I can't <mark data-role="content">put up with</mark> <mark data-role="grammar">the noise</mark> any longer.
+    </GrammarExample>
+    <GrammarExample note="cut down on: use less.">
+      The doctor told him to <mark data-role="content">cut down on</mark> <mark data-role="grammar">sugar</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="get on with her, not get on her with. Word order" id="word-order">
+    <p>
+      With a phrasal verb, a pronoun object goes in the middle: <em>turn <strong>it</strong> off</em>. A phrasal-prepositional verb is different: the object always comes after the preposition — a noun and a pronoun alike. The three words stay together.
+    </p>
+    <GrammarFormula label="Object after the preposition" parts={['verb', 'particle', 'preposition', 'noun / pronoun']} />
+    <GrammarExample note="Pronoun after the preposition — never get on her with.">
+      My sister is great — I <mark data-role="content">get on with</mark> <mark data-role="grammar">her</mark> really well.
+    </GrammarExample>
+    <GrammarExample note="Same order with a noun.">
+      Can you <mark data-role="content">look out for</mark> <mark data-role="grammar">Tom</mark>? He's wearing a red jacket.
+    </GrammarExample>
+    <GrammarExample note="Same order with it.">
+      It's a small flat, but we can <mark data-role="content">put up with</mark> <mark data-role="grammar">it</mark> for a year.
+    </GrammarExample>
+    <p>
+      An adverb can go before the preposition, but never between the verb and the particle: <em>I get on <strong>really well</strong> with her</em> is also correct; <em>I get really well on with her</em> is not.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="the ideas I came up with. The preposition at the end" id="stranded">
+    <p>
+      In questions, relative clauses and after <em>to</em>-infinitives, the object moves to the front — but the preposition stays with its verb, at the end of the clause. This is normal, natural English, not a mistake.
+    </p>
+    <GrammarFormula label="Stranded preposition" parts={['object', '…', 'verb', 'particle', 'preposition']} />
+    <GrammarExample note="Reported question: what ideas is the object of came up with.">
+      Let me tell you <mark data-role="grammar">what ideas</mark> I <mark data-role="content">came up with</mark>.
+    </GrammarExample>
+    <GrammarExample note="After a to-infinitive: a person = the object.">
+      We need <mark data-role="grammar">a person</mark> to <mark data-role="content">look up to</mark>.
+    </GrammarExample>
+    <GrammarExample note="Relative clause with which.">
+      This shows her superficiality, <mark data-role="grammar">which</mark> Kingshaw cannot <mark data-role="content">put up with</mark>.
+    </GrammarExample>
+    <GrammarExample note="Question: who is the object.">
+      <mark data-role="grammar">Who</mark> are you <mark data-role="content">going out with</mark> tonight?
+    </GrammarExample>
+    <p>
+      Moving the preposition to the front (<em>the ideas <strong>with which</strong> I came up</em>) is wrong here: the preposition belongs to the verb, not to the object.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="let us in on a secret. Two objects" id="two-objects">
+    <p>
+      A few phrasal-prepositional verbs take two objects: a person between the verb and the particle, and a thing after the preposition. They are rare and mostly C2, but common in fixed phrases.
+    </p>
+    <GrammarFormula label="Two objects" parts={['verb', 'person', 'particle', 'preposition', 'thing']} />
+    <GrammarExample note="let someone in on: tell someone a secret.">
+      The people around us can <mark data-role="content">let</mark> <mark data-role="grammar">us</mark> <mark data-role="content">in on</mark> <mark data-role="grammar">a secret</mark>.
+    </GrammarExample>
+    <GrammarExample note="take someone up on: accept someone's offer.">
+      I'd like to <mark data-role="content">take</mark> <mark data-role="grammar">you</mark> <mark data-role="content">up on</mark> <mark data-role="grammar">your offer</mark>.
+    </GrammarExample>
+    <GrammarExample note="fill someone in on: give someone the details they missed.">
+      Can you <mark data-role="content">fill</mark> <mark data-role="grammar">me</mark> <mark data-role="content">in on</mark> <mark data-role="grammar">what happened</mark>?
+    </GrammarExample>
+    <GrammarExample note="put something down to: say what caused it.">
+      She <mark data-role="content">put</mark> <mark data-role="grammar">her success</mark> <mark data-role="content">down to</mark> <mark data-role="grammar">hard work</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After <em>look forward to</em>, use a noun or an <em>-ing</em> form — the <em>to</em> is a preposition.
+    </p>
+    <GrammarContrast bad={['I look forward to hear from you.', 'We’re looking forward to see you.']} good={['I look forward to hearing from you.', 'We’re looking forward to seeing you.']} />
+    <p>
+      Don't drop the preposition — without it the verb can't take an object.
+    </p>
+    <GrammarContrast bad={['We’ve run out petrol.', 'I can’t put up the noise.']} good={['We’ve run out of petrol.', 'I can’t put up with the noise.']} />
+    <p>
+      A pronoun goes after the preposition, not in the middle as with a phrasal verb.
+    </p>
+    <GrammarContrast bad={['I get on her with.', 'They look him up to.']} good={['I get on with her.', 'They look up to him.']} />
+    <p>
+      Use the right preposition — it's part of the verb, not free to choose.
+    </p>
+    <GrammarContrast bad={['He came up to a great idea.', 'Keep away of the fire.']} good={['He came up with a great idea.', 'Keep away from the fire.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'verbs-phrasal',
+        name: 'phrasal verbs',
+        note: 'turn off, give up — verb + particle, where a pronoun goes in the middle: turn it off.',
+      },
+      {
+        slug: 'verbs-prepositional',
+        name: 'prepositional verbs',
+        note: 'look after, listen to — verb + preposition, two parts, the object after the preposition.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'verbs with to and -ing',
+        note: 'want to go, enjoy going — and why look forward to takes -ing.',
+      },
+    ]}
+  />
+</GrammarShell>

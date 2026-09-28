@@ -1,0 +1,335 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 18 EGP rows (13-30): 9 pure FORM (-er, -ier, double consonant, -e + -r,
+// irregular, more, than, before nouns, after 'be') written without a card; 9
+// FORM/USE — all 9 inlined, matched by egpIndex. They are all modifiers of the
+// comparative, so they are grouped by how big a difference they express
+// rather than by level.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const soMuchB1 = point(22);
+const aBitB1 = point(23);
+const andB1 = point(24);
+const evenB1 = point(25);
+const aLotB2 = point(26);
+const muchNounB2 = point(27);
+const slightlyB2 = point(28);
+const noNotAnyC2 = point(29);
+const notThatMuchC2 = point(30);
+
+const inlineUsagePointIds = [
+  soMuchB1,
+  aBitB1,
+  andB1,
+  evenB1,
+  aLotB2,
+  muchNounB2,
+  slightlyB2,
+  noNotAnyC2,
+  notThatMuchC2,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to form and use English comparative adjectives: -er and more, spelling changes, better and worse, comparing with than, and saying how big the difference is with much, even, a bit, slightly and no."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Two patterns: -er and more', open: true },
+    { id: 'than', title: 'Comparing two things with than', open: false },
+    { id: 'position', title: 'Before a noun or after be', open: false },
+    { id: 'big-difference', title: 'A big difference: much, a lot, even', open: false },
+    { id: 'small-difference', title: 'A small difference: a bit, slightly', open: false },
+    { id: 'change', title: 'Bigger and bigger: change over time', open: false },
+    { id: 'no-better', title: 'No better, not any happier', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A comparative adjective compares two things, people or situations — <em>cheaper</em>, <em>more comfortable</em>, <em>better</em>. Short adjectives take the ending <em>-er</em>, longer ones take <em>more</em> in front, and a few common ones change completely. Most of the time <em>than</em> follows to say what you're comparing with.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Two patterns: -er and more" id="form" open>
+    <p>
+      For adjectives of one syllable, add <em>-er</em> to the end. For longer adjectives — all of three or more syllables and many of two — put <em>more</em> in front and leave the adjective unchanged.
+    </p>
+    <GrammarFormula label="Short adjectives" parts={['adjective + -er']} />
+    <GrammarExample note="Cheap has one syllable, so it simply takes -er.">
+      The shirt was <mark data-role="content">cheaper</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">the trousers</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Longer adjectives" parts={['more', 'adjective']} />
+    <GrammarExample note="Expensive has three syllables — too long for -er, so more does the work.">
+      It was <mark data-role="grammar">more</mark> <mark data-role="content">expensive</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">the other clothes</mark>.
+    </GrammarExample>
+    <GrammarExample note="Careful has two syllables and doesn't end in -y, so it also takes more.">
+      You need to be <mark data-role="grammar">more</mark> <mark data-role="content">careful</mark> on these roads.
+    </GrammarExample>
+    <p>
+      Three spelling rules change the adjective before <em>-er</em>:
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Rule</th><th>Adjective</th><th>Comparative</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ends in -e: add only -r</td>
+          <td>nice, safe, large</td>
+          <td>nicer, safer, larger</td>
+        </tr>
+        <tr>
+          <td>One short vowel + one consonant: double the consonant</td>
+          <td>big, hot, thin</td>
+          <td>bigger, hotter, thinner</td>
+        </tr>
+        <tr>
+          <td>Two syllables ending in -y: y → i + -er</td>
+          <td>easy, happy, busy</td>
+          <td>easier, happier, busier</td>
+        </tr>
+      </tbody>
+    </table>
+    <GrammarExample note="Easy ends in -y, so the y becomes i before -er — even though it has two syllables.">
+      This phone is <mark data-role="content">easier</mark> to use <mark data-role="grammar">than</mark> <mark data-role="grammar">my old one</mark>.
+    </GrammarExample>
+    <GrammarExample note="Hot has one short vowel before t, so the t doubles.">
+      The weather is getting <mark data-role="content">hotter</mark> every day.
+    </GrammarExample>
+    <p>
+      A few very common adjectives are irregular — they don't take <em>-er</em> or <em>more</em> at all.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Adjective</th><th>Comparative</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>good</td>
+          <td>better</td>
+          <td>What colour do you think is better?</td>
+        </tr>
+        <tr>
+          <td>bad</td>
+          <td>worse</td>
+          <td>The traffic is worse in the morning.</td>
+        </tr>
+        <tr>
+          <td>far</td>
+          <td>further / farther</td>
+          <td>For further information, call our office.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <em>Further</em> also means "more" or "extra" (<em>further information</em>, <em>further questions</em>) — <em>farther</em> is only used for distance.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Comparing two things with than" id="than" open={false}>
+    <p>
+      To say what the other side of the comparison is, put <em>than</em> after the comparative, followed by a noun, a noun phrase or a pronoun.
+    </p>
+    <GrammarFormula label="Comparative + than" parts={['subject', 'be', 'comparative adjective', 'than', 'noun phrase']} />
+    <GrammarExample note="The two things compared are my new phone and my old phone.">
+      <mark data-role="grammar">My new phone</mark> <mark data-role="grammar">is</mark> <mark data-role="content">smaller</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">my old phone</mark>.
+    </GrammarExample>
+    <GrammarExample note="With more, than comes after the adjective, not after more.">
+      <mark data-role="grammar">This film</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">more</mark> <mark data-role="content">interesting</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">the book</mark>.
+    </GrammarExample>
+    <p>
+      After <em>than</em>, everyday English uses the object pronoun (<em>than me</em>, <em>than him</em>). If you add a verb, use the subject pronoun instead (<em>than I am</em>, <em>than he does</em>).
+    </p>
+    <GrammarExample note="Than me is normal in speech and most writing.">
+      <mark data-role="grammar">My sister</mark> <mark data-role="grammar">is</mark> <mark data-role="content">older</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="With a verb after it, the pronoun switches to I.">
+      <mark data-role="grammar">My sister</mark> <mark data-role="grammar">is</mark> <mark data-role="content">older</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">I am</mark>.
+    </GrammarExample>
+    <p>
+      You can leave out <em>than</em> and the second part when it's already clear what you're comparing with.
+    </p>
+    <GrammarExample note="Than the train is understood — no need to say it again.">
+      You can take the train, but <mark data-role="grammar">the bus</mark> <mark data-role="grammar">is</mark> <mark data-role="content">cheaper</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Before a noun or after be" id="position" open={false}>
+    <p>
+      A comparative can sit in the same two places as any adjective: right before a noun, or after <em>be</em> (and other linking verbs like <em>get</em>, <em>become</em>, <em>look</em>).
+    </p>
+    <GrammarFormula label="Before a noun" parts={['determiner', 'comparative adjective', 'noun']} />
+    <GrammarExample note="Older describes which brother — no than is needed.">
+      I played games with <mark data-role="grammar">my</mark> <mark data-role="content">older</mark> <mark data-role="grammar">brother</mark>.
+    </GrammarExample>
+    <GrammarExample note="A better job means a job better than the one I have now.">
+      I want to learn more so I can get <mark data-role="grammar">a</mark> <mark data-role="content">better</mark> <mark data-role="grammar">job</mark>.
+    </GrammarExample>
+    <GrammarFormula label="After be" parts={['subject', 'be', 'comparative adjective']} />
+    <GrammarExample note="Easier comes after is, the same place as easy would go.">
+      Come by bus — <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">easier</mark>.
+    </GrammarExample>
+    <GrammarExample note="It would be better is a very common polite way to suggest something.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">would be</mark> <mark data-role="content">better</mark> if you came after four.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A big difference: much, a lot, even" id="big-difference" open={false}>
+    <p>
+      To show the difference is large, put <em>much</em>, <em>so much</em> or <em>a lot</em> in front of the comparative. <em>Very</em> doesn't work here — it goes with ordinary adjectives, not comparatives.
+    </p>
+    <GrammarFormula label="Much / so much + comparative" parts={['be', 'much / so much', 'comparative adjective']} />
+    <GrammarExample note="Much makes the difference between the two teachers bigger.">
+      The new teacher <mark data-role="grammar">is</mark> <mark data-role="grammar">much</mark> <mark data-role="content">better</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">the last one</mark>.
+    </GrammarExample>
+    <GrammarExample note="So much adds emotion — the speaker is clearly impressed.">
+      The house <mark data-role="grammar">is</mark> <mark data-role="grammar">so much</mark> <mark data-role="content">bigger</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">our old one</mark>.
+    </GrammarExample>
+    {soMuchB1 && <GrammarUsagePointCard usagePoint={soMuchB1} />}
+    <GrammarFormula label="A lot + comparative" parts={['be', 'a lot', 'comparative adjective']} />
+    <GrammarExample note="A lot means the same as much, and sounds a little more informal.">
+      A bike <mark data-role="grammar">is</mark> <mark data-role="grammar">a lot</mark> <mark data-role="content">cheaper</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">a car</mark>.
+    </GrammarExample>
+    {aLotB2 && <GrammarUsagePointCard usagePoint={aLotB2} />}
+    <p>
+      Before a noun, use <em>much</em> — not <em>a lot</em>. It works with both countable and uncountable nouns.
+    </p>
+    <GrammarFormula label="Much + comparative + noun" parts={['a', 'much', 'comparative adjective', 'noun']} />
+    <GrammarExample note="Much sits between a and the comparative, and the noun follows.">
+      What about <mark data-role="grammar">a</mark> <mark data-role="grammar">much</mark> <mark data-role="content">cheaper</mark> <mark data-role="grammar">hotel</mark>?
+    </GrammarExample>
+    <GrammarExample note="With an uncountable or plural noun there's no a.">
+      Our grandparents had <mark data-role="grammar">much</mark> <mark data-role="content">fresher</mark> <mark data-role="grammar">food</mark>.
+    </GrammarExample>
+    {muchNounB2 && <GrammarUsagePointCard usagePoint={muchNounB2} />}
+    <p>
+      <em>Even</em> adds surprise: the first thing was already good (or big, or hot), and the second goes further still.
+    </p>
+    <GrammarFormula label="Even + comparative" parts={['be / get', 'even', 'comparative adjective']} />
+    <GrammarExample note="Part one was already good — even says part two beat it.">
+      Part one was great, but part two <mark data-role="grammar">was</mark> <mark data-role="grammar">even</mark> <mark data-role="content">better</mark>!
+    </GrammarExample>
+    <GrammarExample note="Even works after get too — the smile was already big.">
+      As I finished, my smile <mark data-role="grammar">got</mark> <mark data-role="grammar">even</mark> <mark data-role="content">bigger</mark>.
+    </GrammarExample>
+    {evenB1 && <GrammarUsagePointCard usagePoint={evenB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="A small difference: a bit, slightly" id="small-difference" open={false}>
+    <p>
+      To show the difference is small, use <em>a bit</em>, <em>a little bit</em> or — more formally — <em>slightly</em>.
+    </p>
+    <GrammarFormula label="A (little) bit + comparative" parts={['be', 'a (little) bit', 'comparative adjective']} />
+    <GrammarExample note="A bit is informal and very common in speech.">
+      He <mark data-role="grammar">is</mark> <mark data-role="grammar">a bit</mark> <mark data-role="content">smaller</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="A little bit makes the difference sound even smaller.">
+      She <mark data-role="grammar">is</mark> <mark data-role="grammar">a little bit</mark> <mark data-role="content">older</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    {aBitB1 && <GrammarUsagePointCard usagePoint={aBitB1} />}
+    <GrammarFormula label="Slightly + comparative" parts={['be', 'slightly', 'comparative adjective']} />
+    <GrammarExample note="Slightly means the same as a bit, but fits formal writing and reports.">
+      The food in restaurant A <mark data-role="grammar">is</mark> <mark data-role="grammar">slightly</mark> <mark data-role="content">better</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">in restaurant B</mark>.
+    </GrammarExample>
+    {slightlyB2 && <GrammarUsagePointCard usagePoint={slightlyB2} />}
+    <p>
+      <em>Not that much</em> says the difference is smaller than you might expect — often to correct an impression.
+    </p>
+    <GrammarFormula label="Not that much + comparative" parts={['be not', 'that much', 'comparative adjective']} />
+    <GrammarExample note="People might think she is much older — not that much says she isn't.">
+      She <mark data-role="grammar">is not</mark> <mark data-role="grammar">that much</mark> <mark data-role="content">older</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">I am</mark>.
+    </GrammarExample>
+    {notThatMuchC2 && <GrammarUsagePointCard usagePoint={notThatMuchC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Bigger and bigger: change over time" id="change" open={false}>
+    <p>
+      Repeat the same comparative with <em>and</em> to show something keeps changing. It usually comes after <em>get</em> or <em>become</em>. With a long adjective, repeat only <em>more</em>: <em>more and more expensive</em>.
+    </p>
+    <GrammarFormula label="Comparative + and + comparative" parts={['get / become', 'comparative adjective', 'and', 'comparative adjective']} />
+    <GrammarExample note="The days keep growing longer, one after another.">
+      In summer the days <mark data-role="grammar">get</mark> <mark data-role="content">longer</mark> <mark data-role="grammar">and</mark> <mark data-role="content">longer</mark>.
+    </GrammarExample>
+    <GrammarExample note="Worse and worse — the irregular form repeats in the same way.">
+      Television <mark data-role="grammar">is getting</mark> <mark data-role="content">worse</mark> <mark data-role="grammar">and</mark> <mark data-role="content">worse</mark>.
+    </GrammarExample>
+    <GrammarExample note="With more, only more repeats — the adjective appears once at the end.">
+      Flats in the city <mark data-role="grammar">are becoming</mark> <mark data-role="content">more and more expensive</mark>.
+    </GrammarExample>
+    {andB1 && <GrammarUsagePointCard usagePoint={andB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="No better, not any happier" id="no-better" open={false}>
+    <p>
+      <em>No</em> or <em>not any</em> before a comparative denies the difference completely: the first thing is not higher, happier or better at all — often less than you might expect. It is a more advanced, emphatic pattern.
+    </p>
+    <GrammarFormula label="No / not any + comparative" parts={['be', 'no / not any', 'comparative adjective', 'than']} />
+    <GrammarExample note="No higher than my knees — the water reaches my knees at most.">
+      The water <mark data-role="grammar">was</mark> <mark data-role="grammar">no</mark> <mark data-role="content">higher</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">my knees</mark>.
+    </GrammarExample>
+    <GrammarExample note="Not any happier — money didn't make us happier at all.">
+      With all that money, we <mark data-role="grammar">are not any</mark> <mark data-role="content">happier</mark> <mark data-role="grammar">than</mark> <mark data-role="grammar">we were</mark>.
+    </GrammarExample>
+    {noNotAnyC2 && <GrammarUsagePointCard usagePoint={noNotAnyC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      An adjective takes <em>-er</em> or <em>more</em>, never both — and irregular forms like <em>better</em> are already comparative. Use <em>much</em>, not <em>very</em>, to make a comparative stronger, and don't confuse <em>than</em> with <em>that</em> or <em>then</em>.
+    </p>
+    <GrammarContrast
+      bad={[
+        'My new phone is more better than my old one.',
+        'This book is more easy to read.',
+        'This room is very bigger than that one.',
+        'She is taller that her brother.',
+      ]}
+      good={[
+        'My new phone is better than my old one.',
+        'This book is easier to read.',
+        'This room is much bigger than that one.',
+        'She is taller than her brother.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-superlatives',
+        name: 'superlatives',
+        note: 'picking the top of a group of three or more instead of comparing two.',
+      },
+      {
+        slug: 'clauses-comparatives',
+        name: 'comparative clauses',
+        note: 'than + a whole clause, as … as, and the more … the better.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'very, too and enough with ordinary (non-comparative) adjectives.',
+      },
+    ]}
+  />
+</GrammarShell>

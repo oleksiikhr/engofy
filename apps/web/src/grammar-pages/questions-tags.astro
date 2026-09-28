@@ -1,0 +1,333 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 7 EGP rows (1016-1022): 5 pure FORM rows without cards (basic tags,
+// negative + positive tag, positive + negative tag, positive + positive tag,
+// there + be); the 2 FORM/USE rows — 1020 (right as an informal tag) and
+// 1021 (tags after imperatives as softeners) — are inlined, matched by EGP
+// index. Content is the tag itself; the subject + verb of the main clause
+// that the tag copies is grammar.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const rightPoint = point(1020);
+const imperativePoint = point(1021);
+
+const inlineUsagePointIds = [rightPoint, imperativePoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Question tags — the short question at the end of a sentence: It's fantastic, isn't it? You don't know him, do you? How to pick the verb and pronoun, when the tag is positive or negative, rising and falling intonation, right?, Let's go, shall we? and there isn't, is there?"
+  handcrafted
+  sections={[
+    { id: 'basic', title: "It's fantastic, isn't it? The basic tag", open: true },
+    { id: 'positive', title: "Positive sentence → negative tag: …, don't you?", open: false },
+    { id: 'negative', title: 'Negative sentence → positive tag: …, do you?', open: false },
+    { id: 'choosing', title: 'Choosing the verb and the pronoun', open: false },
+    { id: 'intonation', title: 'Checking or asking? Falling and rising tags', open: false },
+    { id: 'same', title: 'Positive + positive: You bought new clothes, did you?', open: false },
+    { id: 'right', title: 'Informal tags: …, right?', open: false },
+    { id: 'imperative', title: "After an order: Think about it, will you? Let's…, shall we?", open: false },
+    { id: 'there', title: "There isn't much, is there?", open: false },
+    { id: 'answering', title: 'Answering a tag question', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A question tag is a short question added to the end of a statement: <em>It's fantastic, isn't it?</em> The speaker usually thinks they already know the answer and wants the listener to agree or confirm. The tag copies the verb of the sentence and turns positive into negative (or negative into positive).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="It's fantastic, isn't it? The basic tag" id="basic" open>
+    <p>
+      A tag has two words: an auxiliary verb (<em>be, do, have</em> or a modal like <em>can, will</em>) and a pronoun for the subject. Put a comma before it and a question mark after it.
+    </p>
+    <GrammarFormula label="Question tag" parts={['subject + verb …', ',', "auxiliary (+ n't)", 'pronoun', '?']} />
+    <GrammarExample note="The sentence has is ('s), so the tag uses is.">
+      <mark data-role="grammar">It's</mark> fantastic, <mark data-role="content">isn't it</mark>?
+    </GrammarExample>
+    <GrammarExample note="The sentence has don't, so the tag uses do.">
+      <mark data-role="grammar">You don't</mark> know where I live, <mark data-role="content">do you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two clauses: the tag goes with the last one — was not → was.">
+      It cost £30, <mark data-role="grammar">it was not</mark> too expensive, <mark data-role="content">was it</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present simple with he/she/it → does in the tag.">
+      <mark data-role="grammar">It differs</mark> from the story you told me, <mark data-role="content">doesn't it</mark>?
+    </GrammarExample>
+    <p>
+      The pronoun in the tag always refers back to the subject: <em>Anna is here, isn't <strong>she</strong>?</em> — never <em>isn't Anna?</em> In Ukrainian this job is done by one fixed word — <em>так?</em>, <em>правда?</em>, <em>чи не так?</em> — but in English the tag changes with every sentence.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Positive sentence → negative tag: …, don't you?" id="positive">
+    <p>
+      When the sentence is positive, the tag is negative: auxiliary + <em>n't</em> + pronoun. This is the most common kind of tag.
+    </p>
+    <GrammarFormula label="Positive → negative" parts={['positive sentence', ',', "auxiliary + n't", 'pronoun', '?']} />
+    <GrammarExample note="be: you're → aren't you.">
+      And so <mark data-role="grammar">you're</mark> moving to a different area, <mark data-role="content">aren't you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present simple: love → don't.">
+      <mark data-role="grammar">You love</mark> books, <mark data-role="content">don't you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present perfect: we've → haven't we.">
+      <mark data-role="grammar">We've</mark> arranged to meet at 12, <mark data-role="content">haven't we</mark>?
+    </GrammarExample>
+    <GrammarExample note="Modal: should → shouldn't.">
+      When you come back, <mark data-role="grammar">we should</mark> rent some movies, <mark data-role="content">shouldn't we</mark>?
+    </GrammarExample>
+    <GrammarExample note="will: you'll → won't you.">
+      <mark data-role="grammar">You'll</mark> see the programme on the 23rd of August, <mark data-role="content">won't you</mark>?
+    </GrammarExample>
+    <GrammarExample note="could → couldn't.">
+      <mark data-role="grammar">We could</mark> go on holiday together, <mark data-role="content">couldn't we</mark>?
+    </GrammarExample>
+    <p>
+      With <em>I think…</em> or <em>I suppose…</em>, the tag goes with the second clause — the idea you're really asking about: <em>I think <strong>it would</strong> be fantastic, <strong>wouldn't it</strong>?</em> — not <em>don't I?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Negative sentence → positive tag: …, do you?" id="negative">
+    <p>
+      When the sentence is negative, the tag is positive — no <em>n't</em>. Only one of the two parts is negative, never both.
+    </p>
+    <GrammarFormula label="Negative → positive" parts={["negative sentence (… n't / not …)", ',', 'auxiliary', 'pronoun', '?']} />
+    <GrammarExample note="don't → do.">
+      I mean, <mark data-role="grammar">your parents don't</mark> like discos, <mark data-role="content">do they</mark>?
+    </GrammarExample>
+    <GrammarExample note="is not → is.">
+      <mark data-role="grammar">He is not</mark> important, <mark data-role="content">is he</mark>?
+    </GrammarExample>
+    <GrammarExample note="isn't → is; that becomes it in the tag.">
+      <mark data-role="grammar">That isn't</mark> normal, <mark data-role="content">is it</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present perfect: haven't → have.">
+      <mark data-role="grammar">You haven't</mark> been to my house before, <mark data-role="content">have you</mark>?
+    </GrammarExample>
+    <GrammarExample note="In informal speech the subject can drop — the tag still shows it (it).">
+      <mark data-role="grammar">Doesn't</mark> sound interesting, <mark data-role="content">does it</mark>?
+    </GrammarExample>
+    <p>
+      Words like <em>never, nothing, nobody, hardly</em> make the sentence negative too, so the tag is positive: <em>You <strong>never</strong> call me, <strong>do you</strong>?</em> <em>She <strong>hardly</strong> eats anything, <strong>does she</strong>?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Choosing the verb and the pronoun" id="choosing">
+    <p>
+      Find the first auxiliary or modal in the sentence and copy it. If there isn't one, use <em>do / does / did</em>. A few cases need care:
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Sentence</th><th>Tag</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>I'm late,</th><td><code>aren't I?</code></td><td>There's no <em>amn't</em> in standard English.</td></tr>
+        <tr><th>She's finished,</th><td><code>hasn't she?</code></td><td>'s = has here (before a past participle).</td></tr>
+        <tr><th>She's tired,</th><td><code>isn't she?</code></td><td>'s = is here.</td></tr>
+        <tr><th>You'd seen it,</th><td><code>hadn't you?</code></td><td>'d = had (before a past participle).</td></tr>
+        <tr><th>You'd help,</th><td><code>wouldn't you?</code></td><td>'d = would (before a base verb).</td></tr>
+        <tr><th>They have a car,</th><td><code>don't they?</code></td><td><em>have</em> as a main verb → <em>do</em>.</td></tr>
+        <tr><th>This / That is new,</th><td><code>isn't it?</code></td><td><em>this / that</em> → <em>it</em>.</td></tr>
+        <tr><th>Everyone knows,</th><td><code>don't they?</code></td><td><em>everyone, someone, nobody</em> → <em>they</em>.</td></tr>
+        <tr><th>Nothing happened,</th><td><code>did it?</code></td><td><em>nothing, everything</em> → <em>it</em>; <em>nothing</em> is negative, so the tag is positive.</td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="I'm → aren't I.">
+      <mark data-role="grammar">I'm</mark> right about this, <mark data-role="content">aren't I</mark>?
+    </GrammarExample>
+    <GrammarExample note="everybody → they; had (past simple, main verb) → didn't.">
+      <mark data-role="grammar">Everybody had</mark> a good time, <mark data-role="content">didn't they</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Checking or asking? Falling and rising tags" id="intonation">
+    <p>
+      The same tag can mean two different things, and only the voice tells you which.
+    </p>
+    <GrammarFormula label="Falling ↘ — I'm sure, please agree" parts={['statement', ',', 'tag ↘']} />
+    <GrammarExample note="The speaker knows it's beautiful and invites agreement. Answer: Yes, it's lovely!">
+      <mark data-role="grammar">It's</mark> a beautiful day, <mark data-role="content">isn't it ↘</mark>?
+    </GrammarExample>
+    <GrammarFormula label="Rising ↗ — I'm not sure, please tell me" parts={['statement', ',', 'tag ↗']} />
+    <GrammarExample note="The speaker thinks so but really doesn't know. It's close to a yes/no question.">
+      <mark data-role="grammar">You're</mark> coming tomorrow, <mark data-role="content">aren't you ↗</mark>?
+    </GrammarExample>
+    <p>
+      Falling tags are typical in small talk: about the weather, a film, a meal. Rising tags are for real checking — times, plans, facts you half remember.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Positive + positive: You bought new clothes, did you?" id="same">
+    <p>
+      Sometimes both parts are positive. This isn't a check: the speaker repeats what they've just heard or found out, and shows interest, surprise or doubt. The voice goes up.
+    </p>
+    <GrammarFormula label="Same tag" parts={['positive sentence', ',', 'auxiliary', 'pronoun ↗', '?']} />
+    <GrammarExample note="Reacting to news: so that's what you did!">
+      <mark data-role="grammar">You bought</mark> new black clothes, <mark data-role="content">did you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Checking a surprising fact.">
+      <mark data-role="grammar">Your boyfriend is</mark> also 16, <mark data-role="content">is he</mark>?
+    </GrammarExample>
+    <GrammarExample note="With a strong tone this can sound sarcastic or even angry.">
+      So <mark data-role="grammar">you think</mark> you're clever, <mark data-role="content">do you</mark>?
+    </GrammarExample>
+    <p>
+      Often <em>so</em> or <em>oh</em> starts the sentence. Negative + negative (<em>You don't like it, don't you?</em>) is not possible.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Informal tags: …, right?" id="right">
+    <p>
+      In informal speech and messages, <em>right?</em> can replace a full tag. It never changes, so you don't need to choose a verb or pronoun — but it sounds casual, so avoid it in formal writing.
+    </p>
+    <GrammarFormula label="Informal tag" parts={['statement', ',', 'right', '?']} />
+    <GrammarExample note="Checking a fact.">
+      <mark data-role="grammar">You are</mark> 14 years old, <mark data-role="content">right</mark>?
+    </GrammarExample>
+    <GrammarExample note="Checking what the other person asked.">
+      <mark data-role="grammar">You asked</mark> me for some help, <mark data-role="content">right</mark>?
+    </GrammarExample>
+    <GrammarExample note="After a longer sentence.">
+      <mark data-role="grammar">I think you asked</mark> if I liked shopping for clothes, <mark data-role="content">right</mark>?
+    </GrammarExample>
+    <GrammarExample note="Very short and casual.">
+      <mark data-role="grammar">They're</mark> black, <mark data-role="content">right</mark>?
+    </GrammarExample>
+    {rightPoint && <GrammarUsagePointCard usagePoint={rightPoint} />}
+    <p>
+      Other casual options are <em>yeah?</em> and <em>OK?</em>: <em>You'll call me, yeah?</em> <em>Meet me at six, OK?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="After an order: Think about it, will you? Let's…, shall we?" id="imperative">
+    <p>
+      A tag after an imperative makes an order or request softer and friendlier. The usual tag is <em>will you?</em>; <em>would you?</em> and <em>can you?</em> are also common. After <em>Let's…</em> the tag is always <em>shall we?</em>
+    </p>
+    <GrammarFormula label="Imperative + tag" parts={['imperative', ',', 'will / would / can', 'you', '?']} />
+    <GrammarExample note="A softer way to say Think about it.">
+      <mark data-role="grammar">Think</mark> about it, <mark data-role="content">will you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Giving directions politely.">
+      <mark data-role="grammar">Go</mark> to the Lake Frene route, <mark data-role="content">will you</mark>?
+    </GrammarExample>
+    <GrammarExample note="Asking for help.">
+      <mark data-role="grammar">Pass</mark> me the salt, <mark data-role="content">would you</mark>?
+    </GrammarExample>
+    <GrammarFormula label="Suggestion" parts={["Let's + verb", ',', 'shall', 'we', '?']} />
+    <GrammarExample note="Let's … → shall we.">
+      <mark data-role="grammar">Let's</mark> check together, <mark data-role="content">shall we</mark>?
+    </GrammarExample>
+    {imperativePoint && <GrammarUsagePointCard usagePoint={imperativePoint} />}
+    <p>
+      After a negative imperative, use <em>will you?</em>: <em>Don't be late, will you?</em> A negative tag after a positive imperative — <em>Sit down, won't you?</em> — is a warm, polite invitation.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="There isn't much, is there?" id="there">
+    <p>
+      When the sentence starts with <em>there + be</em>, the tag repeats <em>there</em> — not <em>it</em>.
+    </p>
+    <GrammarFormula label="There + be" parts={['there + be …', ',', "be (+ n't)", 'there', '?']} />
+    <GrammarExample note="Negative sentence → positive tag.">
+      As you put it that way, <mark data-role="grammar">there isn't</mark> much of a difference, <mark data-role="content">is there</mark>?
+    </GrammarExample>
+    <GrammarExample note="Positive sentence → negative tag.">
+      But <mark data-role="grammar">there is</mark> always something you can improve, <mark data-role="content">isn't there</mark>?
+    </GrammarExample>
+    <GrammarExample note="Past, with was.">
+      <mark data-role="grammar">There were</mark> a lot of people at the party, <mark data-role="content">weren't there</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Answering a tag question" id="answering">
+    <p>
+      Answer about the facts, not about the form of the question. If the fact is true, say <em>Yes</em>; if not, say <em>No</em> — whatever the tag was. A short answer repeats the auxiliary.
+    </p>
+    <GrammarExample note="He really isn't coming → No.">
+      "<mark data-role="grammar">He isn't</mark> coming, <mark data-role="content">is he</mark>?" — "No, he isn't."
+    </GrammarExample>
+    <GrammarExample note="He is coming after all → Yes.">
+      "<mark data-role="grammar">He isn't</mark> coming, <mark data-role="content">is he</mark>?" — "Yes, he is. He's on his way."
+    </GrammarExample>
+    <p>
+      Ukrainian speakers often answer the other way round — <em>"Він не прийде, так?" — "Так, не прийде."</em> In English that <em>Yes</em> would mean he <em>is</em> coming.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't use <em>isn't it?</em> as a universal tag, the way Ukrainian uses <em>так?</em> or <em>правда?</em> Copy the verb and subject of your sentence.
+    </p>
+    <GrammarContrast bad={["You like pizza, isn't it?", "They were at home, isn't it?"]} good={["You like pizza, don't you?", "They were at home, weren't they?"]} />
+    <p>
+      Only one part is negative: positive + negative or negative + positive.
+    </p>
+    <GrammarContrast bad={["You don't like coffee, don't you?"]} good={["You don't like coffee, do you?"]} />
+    <p>
+      Copy the auxiliary or modal that's already there; use <em>do / does / did</em> only when there isn't one.
+    </p>
+    <GrammarContrast bad={["She can swim, doesn't she?", "He has finished, doesn't he?"]} good={["She can swim, can't she?", "He has finished, hasn't he?"]} />
+    <p>
+      Use a pronoun in the tag, not the noun.
+    </p>
+    <GrammarContrast bad={["Your sister is a doctor, isn't your sister?"]} good={["Your sister is a doctor, isn't she?"]} />
+    <p>
+      <em>I am</em> takes <em>aren't I?</em>, not <em>amn't I?</em> or <em>am not I?</em>
+    </p>
+    <GrammarContrast bad={["I'm next, am not I?"]} good={["I'm next, aren't I?"]} />
+    <p>
+      With <em>never, nothing, nobody</em>, the sentence is already negative — the tag is positive.
+    </p>
+    <GrammarContrast bad={["You never listen, don't you?"]} good={['You never listen, do you?']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'Are you coming? — the same auxiliary, moved to the front instead of added at the end.',
+      },
+      {
+        slug: 'negation-negation',
+        name: 'negation',
+        note: "not, don't, never, nothing — how to tell if a sentence is negative before choosing the tag.",
+      },
+      {
+        slug: 'clauses-imperatives',
+        name: 'imperatives',
+        note: "Open the window, will you? Let's go, shall we? — orders and suggestions.",
+      },
+      {
+        slug: 'verbs-there-is-are',
+        name: 'there is / there are',
+        note: "there's, there isn't, there were — the sentences behind …, is there?",
+      },
+      {
+        slug: 'questions-alternatives',
+        name: 'alternative questions',
+        note: 'Tea or coffee? — questions that offer a choice instead of asking for agreement.',
+      },
+    ]}
+  />
+</GrammarShell>

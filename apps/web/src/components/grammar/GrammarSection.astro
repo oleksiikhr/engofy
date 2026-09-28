@@ -7,14 +7,25 @@ interface Props {
   title: string;
   id: string;
   open?: boolean;
+  // Short muted note next to the title (e.g. a count), so a closed section
+  // still says what's inside.
+  meta?: string;
+  testId?: string;
 }
 
-const { title, id, open = true } = Astro.props;
+const { title, id, open = true, meta, testId } = Astro.props;
 ---
 
-<details class="gp-section" id={`gp-section-${id}`} data-gp-section open={open}>
+<details
+  class="gp-section"
+  id={`gp-section-${id}`}
+  data-gp-section
+  data-testid={testId}
+  open={open}
+>
   <summary class="gp-section__summary">
     <h2>{title}</h2>
+    {meta && <span class="gp-section__meta">{meta}</span>}
     <span class="gp-section__chev" aria-hidden="true"></span>
   </summary>
   <div class="gp-section__body">
@@ -41,6 +52,12 @@ const { title, id, open = true } = Astro.props;
     margin: 0;
     font-size: 1.19rem;
     font-weight: 800;
+  }
+  .gp-section__meta {
+    margin-right: auto;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ink-faint);
   }
   .gp-section__chev {
     flex: none;

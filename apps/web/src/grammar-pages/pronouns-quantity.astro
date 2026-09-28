@@ -1,0 +1,343 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 14 EGP rows (956-969): 12 pure FORM rows without cards; the two USE rows —
+// 965 (formal few / many / most / others) and 969 (Many are the…) — are
+// inlined, matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const formalPoint = point(965);
+const manyAreThePoint = point(969);
+
+const inlineUsagePointIds = [formalPoint, manyAreThePoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Quantity words used on their own, without a noun: Some were cheap, I don't have any, Both are good, all of them, neither of us, I see none, very few, some of which, and formal Much has been said, Many are the reasons…"
+  handcrafted
+  sections={[
+    { id: 'some-any', title: 'Some were cheap. I don’t have any.', open: true },
+    { id: 'both-few', title: 'Both, a few, another', open: false },
+    { id: 'each-neither', title: 'Each, either, neither, several, enough', open: false },
+    { id: 'of-them', title: 'All of them, neither of us: + of + pronoun', open: false },
+    { id: 'none', title: 'None: not any at all', open: false },
+    { id: 'formal-people', title: 'Few, many, most: people, in formal writing', open: false },
+    { id: 'very-few', title: 'Too many, very few, the very few', open: false },
+    { id: 'of-which', title: 'Some of which, many of whom', open: false },
+    { id: 'much-many-are', title: 'Much has been said. Many are the…', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Most quantity words — <em>some, any, both, a few, each, none, many, much</em> — can stand on their own, without a noun, when it's clear what you are talking about. <em>I need some CDs. Can you bring some?</em> The second <em>some</em> means "some CDs", so you don't repeat the noun. Ukrainian does the same (<em>Візьми кілька. — У мене немає жодного.</em>); English just needs the right word — and, before a pronoun like <em>them</em> or <em>us</em>, the word <em>of</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Some were cheap. I don’t have any." id="some-any" open>
+    <p>
+      <em>Some</em> and <em>any</em> can replace a plural noun (<em>CDs, people</em>) or an uncountable noun (<em>meat, juice</em>) you have already mentioned. <em>Some</em> can be the subject or the object of the sentence.
+    </p>
+    <GrammarFormula label="Some as subject" parts={['some', 'verb']} />
+    <GrammarExample note="Some = some of the clothes.">
+      I bought lots of clothes. <mark data-role="content">Some</mark> <mark data-role="grammar">were</mark> cheap, but <mark data-role="content">some</mark> <mark data-role="grammar">were</mark> expensive.
+    </GrammarExample>
+    <GrammarExample note="Some = some of the people on the beach.">
+      There were a lot of people on the beach: <mark data-role="content">some</mark> <mark data-role="grammar">were playing</mark> football and <mark data-role="content">some</mark> <mark data-role="grammar">were sunbathing</mark>.
+    </GrammarExample>
+    <GrammarFormula label="Some as object" parts={['verb', 'some']} />
+    <GrammarExample note="Some = some meat.">
+      We need more meat for the barbecue. Could you <mark data-role="grammar">bring</mark> <mark data-role="content">some</mark>?
+    </GrammarExample>
+    <GrammarExample note="Some = some CDs.">
+      I can bring CDs if you <mark data-role="grammar">need</mark> <mark data-role="content">some</mark>.
+    </GrammarExample>
+    <p>
+      <em>Any</em> works the same way, but mostly in negative sentences and questions. As an object, <em>not … any</em> means "zero".
+    </p>
+    <GrammarFormula label="Any as object" parts={['don’t / haven’t + verb', 'any']} />
+    <GrammarExample note="Any = any orange juice.">
+      Can you bring orange juice, please? I <mark data-role="grammar">don't have</mark> <mark data-role="content">any</mark>.
+    </GrammarExample>
+    <GrammarExample note="Any = any erasers.">
+      We need to bring some erasers because they <mark data-role="grammar">don't have</mark> <mark data-role="content">any</mark>.
+    </GrammarExample>
+    <GrammarExample note="In a question.">
+      Everyone brought presents to the party. <mark data-role="grammar">Did</mark> you <mark data-role="grammar">take</mark> <mark data-role="content">any</mark>?
+    </GrammarExample>
+    <p>
+      The verb after <em>some</em> is plural when it replaces a plural noun (<em>some were</em>) and singular when it replaces an uncountable noun (<em>There's some in the fridge</em>).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Both, a few, another" id="both-few">
+    <p>
+      <em>Both</em> means "the two of them". <em>A few</em> means "a small number — but some". Both take a plural verb.
+    </p>
+    <GrammarFormula label="Subject" parts={['both / a few', 'plural verb']} />
+    <GrammarExample note="Both = both films.">
+      I saw two films last week. <mark data-role="content">Both</mark> <mark data-role="grammar">are</mark> very good.
+    </GrammarExample>
+    <GrammarExample note="A few = a few programmes.">
+      There are lots of programmes on TV, but only <mark data-role="content">a few</mark> <mark data-role="grammar">are</mark> interesting.
+    </GrammarExample>
+    <GrammarFormula label="Object" parts={['verb', 'both / a few']} />
+    <GrammarExample note="Both = the city and the countryside.">
+      The city or the countryside? I think you'll <mark data-role="grammar">enjoy</mark> <mark data-role="content">both</mark>.
+    </GrammarExample>
+    <GrammarExample note="A few = a few of the photos.">
+      I took hundreds of photos. I'll <mark data-role="grammar">send</mark> you <mark data-role="content">a few</mark>.
+    </GrammarExample>
+    <p>
+      <em>Another</em> means "one more" or "a different one". It is singular. For more than one, use <em>others</em>.
+    </p>
+    <GrammarFormula label="One more / a different one" parts={['another', 'singular verb']} />
+    <GrammarExample note="Another = a different area.">
+      Moving from one area <mark data-role="grammar">to</mark> <mark data-role="content">another</mark> is not very simple.
+    </GrammarExample>
+    <GrammarExample note="Another = one more cake.">
+      These cakes are delicious. Can I <mark data-role="grammar">have</mark> <mark data-role="content">another</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Each, either, neither, several, enough" id="each-neither">
+    <p>
+      <em>Each</em> looks at the members of a group one by one. <em>Either</em> means "one or the other of two", and <em>neither</em> means "not one and not the other". All three take a <strong>singular</strong> verb.
+    </p>
+    <GrammarFormula label="One by one" parts={['each / either / neither', 'singular verb']} />
+    <GrammarExample note="Each = each of the restaurants.">
+      I've tried all three restaurants, and <mark data-role="content">each</mark> <mark data-role="grammar">has</mark> a very unique style.
+    </GrammarExample>
+    <GrammarExample note="Neither = neither of the two firms.">
+      We compared the two firms. Both meet some of our needs, but <mark data-role="content">neither</mark> <mark data-role="grammar">covers</mark> all of them.
+    </GrammarExample>
+    <GrammarExample note="Either = one or the other — it doesn't matter which.">
+      Tea or coffee? — <mark data-role="content">Either</mark> <mark data-role="grammar">is</mark> fine, thanks.
+    </GrammarExample>
+    <p>
+      <em>Several</em> means "more than two, but not many". <em>Enough</em> means "as many / as much as you need". <em>Several</em> is always plural; <em>enough</em> is plural or uncountable, like the noun it replaces.
+    </p>
+    <GrammarFormula label="Subject or object" parts={['several / enough', 'verb']} />
+    <GrammarExample note="Several = several courses.">
+      There are many good courses, and there <mark data-role="grammar">are</mark> <mark data-role="content">several</mark> that you should consider.
+    </GrammarExample>
+    <GrammarExample note="Enough = enough toilets.">
+      The toilets are very clean and there <mark data-role="grammar">are</mark> <mark data-role="content">enough</mark>, so you don't have to wait.
+    </GrammarExample>
+    <GrammarExample note="Enough = enough food.">
+      No more pizza for me, thank you — I've <mark data-role="grammar">had</mark> <mark data-role="content">enough</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="All of them, neither of us: + of + pronoun" id="of-them">
+    <p>
+      To say how many of a group of people or things, put <em>of</em> + an object pronoun (<em>us, you, them</em>) after the quantity word. Before a pronoun, <em>of</em> is not optional: <em>all of them</em>, never <em>all them</em>.
+    </p>
+    <GrammarFormula label="Quantity of a group" parts={['all / both / some / any / each…', 'of', 'us / you / them']} />
+    <GrammarExample note="All of them = all the functions.">
+      My phone has a lot of functions, but I don't know how to use <mark data-role="content">all</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">them</mark>.
+    </GrammarExample>
+    <GrammarExample note="Both of us = you and me.">
+      I've booked two tickets for <mark data-role="content">both</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">us</mark>, so I hope you'll come.
+    </GrammarExample>
+    <GrammarExample note="Some of them = some of the photos.">
+      I took many photos with my new camera, and I'll email you <mark data-role="content">some</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">them</mark>.
+    </GrammarExample>
+    <GrammarExample note="Each of them = every student, one by one.">
+      There are ten students in the group. Please make sure <mark data-role="content">each</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">them</mark> has a computer.
+    </GrammarExample>
+    <GrammarExample note="Neither of them: not Stella and not her boyfriend.">
+      Stella and her boyfriend lived with Chuck, but <mark data-role="content">neither</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">them</mark> knew that he was a spy.
+    </GrammarExample>
+    <GrammarExample note="None of us = not one person in our group.">
+      We didn't know what they wanted, and <mark data-role="content">none</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">us</mark> spoke any Italian.
+    </GrammarExample>
+    <p>
+      The verb follows the quantity word: <em>each of them has</em>, <em>neither of us is</em> (singular); <em>all of them are</em>, <em>a few of them were</em> (plural). After <em>none of</em> and <em>neither of</em>, a plural verb is also common in everyday English.
+    </p>
+    <p>
+      With <em>all</em> and <em>both</em> there is a second word order: the pronoun first, then <em>all / both</em>, with no <em>of</em> — <em>I love them all. We both agree.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="None: not any at all" id="none">
+    <p>
+      <em>None</em> means "not any" or "not one". It replaces the whole negative phrase, so the verb stays positive: <em>I see none</em> = <em>I don't see any</em>. It sounds more formal and more emphatic than <em>not any</em>.
+    </p>
+    <GrammarFormula label="Object" parts={['positive verb', 'none']} />
+    <GrammarExample note="None = no disadvantages.">
+      As for disadvantages, I <mark data-role="grammar">see</mark> <mark data-role="content">none</mark>.
+    </GrammarExample>
+    <GrammarExample note="There was none = there wasn't any.">
+      We expected a social programme, but there <mark data-role="grammar">was</mark> <mark data-role="content">none</mark>.
+    </GrammarExample>
+    <p>
+      <em>None</em> can also stand alone as a short answer — typical of lists, reports and forms.
+    </p>
+    <GrammarFormula label="Short answer" parts={['question / heading', 'None.']} />
+    <GrammarExample note="A one-word answer.">
+      <mark data-role="grammar">Problems when using English?</mark> <mark data-role="content">None</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Few, many, most: people, in formal writing" id="formal-people">
+    <p>
+      In reports, essays and surveys, <em>few, many, most</em> and <em>others</em> can mean "people" without the word <em>people</em>. <em>Many</em> = many people, <em>few</em> = hardly anyone, <em>most</em> = the majority. In conversation, say <em>many people, most people</em>.
+    </p>
+    <GrammarFormula label="Formal: people" parts={['few / many / most / others', 'verb']} />
+    <GrammarExample note="Many = many people.">
+      <mark data-role="content">Many</mark> <mark data-role="grammar">say</mark> that extreme sports attract only people who love adrenaline.
+    </GrammarExample>
+    <GrammarExample note="Few = almost nobody. Negative meaning.">
+      <mark data-role="content">Few</mark> <mark data-role="grammar">denied</mark> that it was the most exciting activity of the whole week.
+    </GrammarExample>
+    <GrammarExample note="Most = most of the students.">
+      Some of the students had comments. <mark data-role="content">Most</mark> <mark data-role="grammar">were concerned</mark> with the timetable.
+    </GrammarExample>
+    <GrammarExample note="Some … others: dividing people into two groups.">
+      Some prefer to study alone; <mark data-role="content">others</mark> <mark data-role="grammar">learn</mark> better in a group.
+    </GrammarExample>
+    {formalPoint && <GrammarUsagePointCard usagePoint={formalPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Too many, very few, the very few" id="very-few">
+    <p>
+      <em>Few</em> and <em>many</em> can be made stronger with <em>very, too, so</em> — and <em>far too</em> for extra emphasis. <em>Too many / too few</em> means more or less than is good.
+    </p>
+    <GrammarFormula label="Stronger" parts={['very / too / so / far too', 'few / many']} />
+    <GrammarExample note="Too many = more children than was good.">
+      I realised how many children were in the centre. There were <mark data-role="grammar">too</mark> <mark data-role="content">many</mark>, and the day was very tiring.
+    </GrammarExample>
+    <GrammarExample note="Very few = almost nobody.">
+      Almost 5,000 people died that night, and <mark data-role="grammar">very</mark> <mark data-role="content">few</mark> managed to survive.
+    </GrammarExample>
+    <GrammarExample note="Far too few = not nearly enough.">
+      Some drivers changed to bicycles — but <mark data-role="grammar">far too</mark> <mark data-role="content">few</mark>.
+    </GrammarExample>
+    <p>
+      <em>The (very) few</em> means "the small group of people who…", usually followed by <em>who</em>.
+    </p>
+    <GrammarFormula label="A small group" parts={['the (very)', 'few', 'who…']} />
+    <GrammarExample note="The very few = the small number of people who had access.">
+      The Internet used to be a luxury for <mark data-role="grammar">the very</mark> <mark data-role="content">few</mark> <mark data-role="grammar">who</mark> had access to it.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Some of which, many of whom" id="of-which">
+    <p>
+      In a relative clause after a comma, you can start with a quantity word + <em>of which</em> (for things) or <em>of whom</em> (for people). It adds extra information about part of the group you just named.
+    </p>
+    <GrammarFormula label="Part of the group" parts={['noun,', 'some / many / most / none / both…', 'of which / of whom', 'clause']} />
+    <GrammarExample note="Some of which = some of the factors.">
+      How we eat depends on <mark data-role="grammar">several factors,</mark> <mark data-role="content">some</mark> <mark data-role="grammar">of which</mark> have nothing to do with nationality.
+    </GrammarExample>
+    <GrammarExample note="Many of which = many of the lectures and exhibitions.">
+      We organise <mark data-role="grammar">lectures and exhibitions,</mark> <mark data-role="content">many</mark> <mark data-role="grammar">of which</mark> deal with local history.
+    </GrammarExample>
+    <GrammarExample note="Some of whom: people, so whom, not which.">
+      This event is a chance to meet <mark data-role="grammar">our young members,</mark> <mark data-role="content">some</mark> <mark data-role="grammar">of whom</mark> are very active in sports.
+    </GrammarExample>
+    <p>
+      After <em>of</em>, use <em>which</em> and <em>whom</em> — never <em>that</em> or <em>who</em>, and never <em>them</em>. This is mainly a written pattern; in speech, people often start a new sentence: <em>…exhibitions. Many of them deal with…</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Much has been said. Many are the…" id="much-many-are">
+    <p>
+      <em>A lot</em> and <em>much</em> can be the subject of a sentence, meaning "a lot of things". <em>A lot</em> is neutral. <em>Much</em> as a subject is formal — a typical way to open an essay paragraph: <em>Much has been said/written about…</em>
+    </p>
+    <GrammarFormula label="Subject" parts={['a lot / much', 'singular verb']} />
+    <GrammarExample note="A lot = many things.">
+      <mark data-role="content">A lot</mark> <mark data-role="grammar">has changed</mark> since prehistoric times.
+    </GrammarExample>
+    <GrammarExample note="A lot depends on… = the result depends strongly on…">
+      <mark data-role="content">A lot</mark> <mark data-role="grammar">depends</mark> on your background.
+    </GrammarExample>
+    <GrammarExample note="Formal essay opening.">
+      <mark data-role="content">Much</mark> <mark data-role="grammar">has been said</mark> about quality time, but children don't understand this idea.
+    </GrammarExample>
+    <p>
+      For even stronger focus, formal writing can put <em>many</em> first and turn the sentence around: <em>Many are the reasons…</em> = <em>There are many reasons…</em> It sounds literary; use it once, for effect, not in everyday writing.
+    </p>
+    <GrammarFormula label="Focus: inverted" parts={['Many', 'are', 'the + plural noun', 'which / who…']} />
+    <GrammarExample note="= There are many causes which have led us…">
+      <mark data-role="content">Many</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">the causes</mark> <mark data-role="grammar">which</mark> have led us to a better and longer life.
+    </GrammarExample>
+    <GrammarExample note="= There are many examples of children who…">
+      <mark data-role="content">Many</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">the examples</mark> of children <mark data-role="grammar">who</mark> hate reading.
+    </GrammarExample>
+    {manyAreThePoint && <GrammarUsagePointCard usagePoint={manyAreThePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Before <em>us, you, them</em>, you need <em>of</em> — and the pronoun is the object form.
+    </p>
+    <GrammarContrast bad={['All them asked about you.', 'Some of we were late.']} good={['All of them asked about you.', 'Some of us were late.']} />
+    <p>
+      <em>None</em> is already negative. Don't add <em>not</em> — use <em>not … any</em> or <em>none</em>, not both.
+    </p>
+    <GrammarContrast bad={["I don't have none."]} good={["I don't have any.", 'I have none.']} />
+    <p>
+      <em>Each, either, neither</em> (and <em>each of them</em>) take a singular verb.
+    </p>
+    <GrammarContrast bad={['Each of them have a computer.', 'Neither want to go.']} good={['Each of them has a computer.', 'Neither wants to go.']} />
+    <p>
+      <em>A few</em> and <em>both</em> are plural; <em>another</em> is singular — for more than one, use <em>others</em>.
+    </p>
+    <GrammarContrast bad={['Only a few was interesting.', 'Some students agreed, but anothers didn’t.']} good={['Only a few were interesting.', 'Some students agreed, but others didn’t.']} />
+    <p>
+      In a relative clause, <em>of</em> is followed by <em>which</em> (things) or <em>whom</em> (people).
+    </p>
+    <GrammarContrast bad={['I have three brothers, two of them live abroad.', 'the students, many of who are…']} good={['I have three brothers, two of whom live abroad.', 'the students, many of whom are…']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity determiners',
+        note: 'the same words before a noun: some CDs, both films, many of my friends.',
+      },
+      {
+        slug: 'pronouns-substitution-one-ones-none',
+        name: 'one, ones, none',
+        note: 'the red one, the new ones — replacing a noun with one instead of a quantity word.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'us, you, them — the object forms that follow all of, some of, neither of.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'which and who / whom — the clauses that some of which and many of whom begin.',
+      },
+      {
+        slug: 'pronouns-reciprocal',
+        name: 'each other',
+        note: 'each … the other(s): Each of them admires the other.',
+      },
+    ]}
+  />
+</GrammarShell>

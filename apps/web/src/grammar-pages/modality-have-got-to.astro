@@ -1,0 +1,336 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 5 USE / FORM-USE rows are inlined, matched by EGP index. The other 5
+// rows (affirmative, negative, questions, the infinitive to have to, and
+// have to have + -ed) are plain FORM rows, written in full without a card.
+// Had to and will have to aren't EGP rows of their own here, but the page
+// can't teach obligation without them, so they sit in the form section.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const obligationPoint = point(490);
+const admitPoint = point(491);
+const suggestionPoint = point(493);
+const deductionPoint = point(495);
+const pastObligationPoint = point(496);
+
+const inlineUsagePointIds = [
+  obligationPoint,
+  admitPoint,
+  suggestionPoint,
+  deductionPoint,
+  pastObligationPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Have to and have got to: forms (has to, don't have to, Do you have to…?, had to, will have to), obligation, don't have to vs mustn't, going to have to, I have to admit, you've got to see… for strong suggestions, it's got to be… for conclusions, and have to have + past participle."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Have to, don't have to, Do you have to…?", open: true },
+    { id: 'obligation', title: 'I have to go: obligation', open: false },
+    { id: 'no-obligation', title: "You don't have to… / You mustn't…: no need vs not allowed", open: false },
+    { id: 'infinitive', title: "I'm going to have to…: after other verbs", open: false },
+    { id: 'admit', title: 'I have to admit…: saying something honestly', open: false },
+    { id: 'suggestion', title: "You've got to see it!: strong suggestions", open: false },
+    { id: 'deduction', title: "It's got to be… / It had to be…: conclusions", open: false },
+    { id: 'have-to-have', title: 'You have to have lived there: something already done', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Have to</em> says that something is necessary: <em>I have to work on Saturday.</em> It works like a modal verb, but it is a normal verb: it changes for the subject (<em>she has to</em>), it has a past (<em>had to</em>) and a future (<em>will have to</em>), and it uses <em>do</em> for questions and negatives. <em>Have got to</em> means the same, but is more informal, mostly British, and only for the present.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Have to, don't have to, Do you have to…?" id="form" open>
+    <p>
+      Use <em>have to</em> with I, you, we, they and <em>has to</em> with he, she, it. The verb after it is always the base form. In speech it sounds like <em>hafta</em> / <em>hasta</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'have to / has to', 'base verb']} />
+    <GrammarExample note="I + have to: a plan you can't change.">
+      This weekend <mark data-role="grammar">I</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">go</mark> to a party.
+    </GrammarExample>
+    <GrammarExample note="Has to after my mom (she).">
+      We'll meet at four o'clock because <mark data-role="grammar">my mom</mark> <mark data-role="content">has to</mark> <mark data-role="grammar">go</mark> to the shopping centre then.
+    </GrammarExample>
+    <p>
+      <em>Have got to</em> is the same meaning in a more informal style. It is usually short: <em>I've got to</em>, <em>she's got to</em>.
+    </p>
+    <GrammarFormula label="Have got to" parts={['subject', "have got to / 've got to", 'base verb']} />
+    <GrammarExample note="Have got to: a rule for a trip.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">have got to</mark> <mark data-role="grammar">bring</mark> a cap for the sun.
+    </GrammarExample>
+    <GrammarExample note="'ve got to: the short form, very common in speech.">
+      For the art lessons <mark data-role="grammar">we</mark><mark data-role="content">'ve got to</mark> <mark data-role="grammar">bring</mark> a rubber, two pencils and some colour pencils.
+    </GrammarExample>
+    <p>
+      The negative uses <em>don't / doesn't</em> before <em>have to</em>. With have got to, <em>not</em> goes after have: <em>haven't got to</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "don't / doesn't", 'have to', 'base verb']} />
+    <GrammarExample note="Don't have to: it isn't necessary.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">don't</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">bring</mark> many things with you.
+    </GrammarExample>
+    <GrammarExample note="Do not have to + worry: the full form.">
+      About the transport, <mark data-role="grammar">you</mark> <mark data-role="grammar">do not</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">worry</mark> — my dad can drive us to the sports centre.
+    </GrammarExample>
+    <GrammarExample note="Haven't got to: the have got to negative.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">haven't got to</mark> <mark data-role="grammar">bring</mark> anything with us.
+    </GrammarExample>
+    <p>
+      For a question, put <em>do / does</em> before the subject. With have got to, <em>have</em> goes first.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'do / does', 'subject', 'have to', 'base verb']} />
+    <GrammarExample note="A wh- question: what + do + you + have to.">
+      What <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">wear</mark>?
+    </GrammarExample>
+    <GrammarExample note="A yes/no question about a rule.">
+      <mark data-role="grammar">Do</mark> <mark data-role="grammar">you</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">wear</mark> a skirt?
+    </GrammarExample>
+    <GrammarExample note="Have + you + got to: the have got to question.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">got to</mark> <mark data-role="grammar">bring</mark> a pencil?
+    </GrammarExample>
+    <p>
+      For the past, use <em>had to</em> for every subject; for the future, <em>will have to</em>. Have got to has no past or future form.
+    </p>
+    <GrammarFormula label="Past and future" parts={['subject', 'had to / will have to', 'base verb']} />
+    <GrammarExample note="Had to: an obligation yesterday.">
+      The bus didn't come, so <mark data-role="grammar">we</mark> <mark data-role="content">had to</mark> <mark data-role="grammar">walk</mark> home.
+    </GrammarExample>
+    <GrammarExample note="Didn't have to: the past negative.">
+      It was a holiday, so <mark data-role="grammar">I</mark> <mark data-role="grammar">didn't</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">get up</mark> early.
+    </GrammarExample>
+    <GrammarExample note="Will have to: an obligation in the future.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">will</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">show</mark> your passport at the airport.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I have to go: obligation" id="obligation" open={false}>
+    <p>
+      <em>Have to</em> talks about things that are necessary: rules, plans, the situation. Often the obligation comes from outside — the school, the job, the timetable — not from the speaker's own opinion.
+    </p>
+    <GrammarFormula label="Obligation" parts={['subject', 'have to / have got to', 'base verb']} />
+    <GrammarExample note="A rule for a swimming lesson.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">bring</mark> your swimming costume.
+    </GrammarExample>
+    <GrammarExample note="Have to and have got to in one sentence — the same meaning.">
+      The concert starts at midnight, but <mark data-role="grammar">we</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">go</mark> before then because <mark data-role="grammar">we</mark> <mark data-role="content">have got to</mark> <mark data-role="grammar">buy</mark> our tickets.
+    </GrammarExample>
+    <GrammarExample note="Has to: an obligation at work.">
+      <mark data-role="grammar">My sister</mark> <mark data-role="content">has to</mark> <mark data-role="grammar">work</mark> every Saturday.
+    </GrammarExample>
+    <GrammarExample note="'ve got to: informal, and you need to leave now.">
+      Sorry, <mark data-role="grammar">I</mark><mark data-role="content">'ve got to</mark> <mark data-role="grammar">go</mark> — my train leaves in ten minutes.
+    </GrammarExample>
+    {obligationPoint && <GrammarUsagePointCard usagePoint={obligationPoint} />}
+    <p>
+      <em>Must</em> is close in meaning, but it usually shows the speaker's own feeling (<em>I must call my grandma — I miss her</em>), while <em>have to</em> reports a fact or a rule (<em>I have to call the bank before five</em>). <em>Must</em> has no past: for the past, use <em>had to</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You don't have to… / You mustn't…: no need vs not allowed" id="no-obligation" open={false}>
+    <p>
+      In the affirmative, <em>have to</em> and <em>must</em> are close. In the negative they are very different. <em>Don't have to</em> means "it isn't necessary — you can if you want". <em>Mustn't</em> means "it isn't allowed — don't do it".
+    </p>
+    <GrammarFormula label="No need" parts={['subject', "don't / doesn't", 'have to', 'base verb']} />
+    <GrammarExample note="Free entrance: paying isn't necessary.">
+      The museum is free, so <mark data-role="grammar">you</mark> <mark data-role="grammar">don't</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">pay</mark>.
+    </GrammarExample>
+    <GrammarExample note="Doesn't have to: he can if he wants, but it isn't necessary.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">doesn't</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">wear</mark> a suit to work.
+    </GrammarExample>
+    <GrammarExample note="Mustn't: a rule that forbids — compare with the examples above.">
+      You mustn't use your phone during the exam.
+    </GrammarExample>
+    <GrammarContrast
+      good={["You don't have to come. (= it's your choice)", "You mustn't come. (= don't come, it isn't allowed)"]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="I'm going to have to…: after other verbs" id="infinitive" open={false}>
+    <p>
+      Must has no infinitive — you can't say <em>to must</em>. <em>Have to</em> can follow other verbs and modal verbs: <em>will have to</em>, <em>might have to</em>, <em>going to have to</em>, <em>sorry to have to</em>, <em>hate to have to</em>.
+    </p>
+    <GrammarFormula label="Verb + to have to" parts={['subject', 'going to / sorry to / hate to', 'have to', 'base verb']} />
+    <GrammarExample note="Going to have to: a necessity you see coming.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am going to</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">buy</mark> new curtains.
+    </GrammarExample>
+    <GrammarExample note="Sorry to have to: a polite apology in an email.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'m sorry to</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">change</mark> the time of our meeting next Tuesday.
+    </GrammarExample>
+    <GrammarExample note="'d hate to have to: an imagined, unpleasant necessity.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'d hate to</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">choose</mark> between family and friends.
+    </GrammarExample>
+    <GrammarFormula label="Modal + have to" parts={['subject', 'might / may / will', 'have to', 'base verb']} />
+    <GrammarExample note="Might have to: maybe it will be necessary.">
+      If the rain doesn't stop, <mark data-role="grammar">we</mark> <mark data-role="grammar">might</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">cancel</mark> the picnic.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I have to admit…: saying something honestly" id="admit" open={false}>
+    <p>
+      <em>I have to admit (that)…</em> is a fixed expression. Nobody forces you — you use it to say something honest, often something a little surprising or not very good about yourself. <em>I must admit</em> means the same.
+    </p>
+    <GrammarFormula label="I have to admit" parts={['I', 'have to', 'admit', '(that)', 'clause']} />
+    <GrammarExample note="An honest confession about a habit.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">admit</mark> <mark data-role="grammar">that</mark> I watch a lot of TV, especially movies and soap operas — I love them.
+    </GrammarExample>
+    <GrammarExample note="Admitting that something is hard.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">admit</mark> <mark data-role="grammar">that</mark> it is a very difficult choice.
+    </GrammarExample>
+    <GrammarExample note="Before but: you agree with one part, then disagree.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">admit</mark> the food was good, but the service was terrible.
+    </GrammarExample>
+    {admitPoint && <GrammarUsagePointCard usagePoint={admitPoint} />}
+    <p>
+      The same pattern works with <em>say</em>: <em>I have to say, this is the best pizza in town.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You've got to see it!: strong suggestions" id="suggestion" open={false}>
+    <p>
+      <em>You've got to</em> / <em>you have to</em> + verb can be a strong, enthusiastic suggestion — not a rule, but "you'll love it, don't miss it". The speaker usually stresses <em>have</em> or <em>got</em>.
+    </p>
+    <GrammarFormula label="Strong suggestion" parts={['you', "have to / 've got to", 'base verb']} />
+    <GrammarExample note="A museum you shouldn't miss.">
+      If you think you have seen almost everything in this world, <mark data-role="grammar">you</mark><mark data-role="content">'ve got to</mark> <mark data-role="grammar">see</mark> this museum.
+    </GrammarExample>
+    <GrammarExample note="Have to: recommending a film.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">see</mark> at least one of her films — if you haven't, you haven't lived!
+    </GrammarExample>
+    <GrammarExample note="Advice to a stressed friend.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">have to</mark> <mark data-role="grammar">relax</mark>. You should try to live a little.
+    </GrammarExample>
+    {suggestionPoint && <GrammarUsagePointCard usagePoint={suggestionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It's got to be… / It had to be…: conclusions" id="deduction" open={false}>
+    <p>
+      <em>Have (got) to be</em> can mean "I'm sure it is" — a conclusion from what you know, just like <em>must be</em>. It is common in speech: <em>You have to be joking!</em>
+    </p>
+    <GrammarFormula label="Present conclusion" parts={['subject', "has to / 's got to", 'be']} />
+    <GrammarExample note="'s got to be: the speaker is sure it's amazing.">
+      <mark data-role="grammar">It</mark><mark data-role="content">'s got to</mark> <mark data-role="grammar">be</mark> incredible to see a castle rising from the sea.
+    </GrammarExample>
+    <GrammarExample note="Has to be: the only explanation.">
+      All the lights are on. <mark data-role="grammar">Someone</mark> <mark data-role="content">has to</mark> <mark data-role="grammar">be</mark> at home.
+    </GrammarExample>
+    <p>
+      For a conclusion about the past, use <em>had to be</em> or <em>had to have</em> + past participle.
+    </p>
+    <GrammarFormula label="Past conclusion" parts={['subject', 'had to', 'be / have + -ed']} />
+    <GrammarExample note="Had to be: she never visits without a reason.">
+      <mark data-role="grammar">There</mark> <mark data-role="content">had to</mark> <mark data-role="grammar">be</mark> something else — she was not the kind of person who drops by without asking.
+    </GrammarExample>
+    <GrammarExample note="Had to have been: sure about who it was.">
+      Yes, I was sure — <mark data-role="grammar">it</mark> <mark data-role="content">had to</mark> <mark data-role="grammar">have been</mark> Peter.
+    </GrammarExample>
+    {deductionPoint && <GrammarUsagePointCard usagePoint={deductionPoint} />}
+    <p>
+      In the negative, don't use <em>doesn't have to be</em> for a conclusion — it means "it isn't necessary". To say "I'm sure it isn't", use <em>can't be</em>: <em>That can't be true.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You have to have lived there: something already done" id="have-to-have" open={false}>
+    <p>
+      At C2, <em>have to have</em> + past participle says that something must already be done or finished before something else is possible. It is often a condition or a requirement.
+    </p>
+    <GrammarFormula label="Have to have + -ed" parts={['subject', 'have to / has to / had to', 'have', 'past participle']} />
+    <GrammarExample note="A requirement: finished school before an employer looks at you.">
+      Nowadays, <mark data-role="grammar">one</mark> <mark data-role="content">has to</mark> <mark data-role="grammar">have finished</mark> at least senior high school for any employer to consider hiring you.
+    </GrammarExample>
+    <GrammarExample note="Experience you need before you can judge.">
+      To have an objective view, <mark data-role="grammar">you</mark> certainly <mark data-role="content">have to</mark> <mark data-role="grammar">have lived</mark> in both places for quite a long time.
+    </GrammarExample>
+    <GrammarExample note="Had to have been studying: a requirement in the past.">
+      To get into a state university, <mark data-role="grammar">you</mark> <mark data-role="content">had to</mark> <mark data-role="grammar">have been studying</mark> in a public school.
+    </GrammarExample>
+    {pastObligationPoint && <GrammarUsagePointCard usagePoint={pastObligationPoint} />}
+    <p>
+      It can also describe a place or thing that everyone is expected to have seen or done: <em>They stop at the famous places you "have to have seen" and take photos.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      With he, she and it, use <em>has to</em>. In questions and negatives with does, go back to <em>have to</em>.
+    </p>
+    <GrammarContrast
+      bad={['She have to work tomorrow.', 'Does he has to come?', "He doesn't has to pay."]}
+      good={['She has to work tomorrow.', 'Does he have to come?', "He doesn't have to pay."]}
+    />
+    <p>
+      After <em>to</em>, the verb is the base form — not -ing and not past.
+    </p>
+    <GrammarContrast
+      bad={['I have to going now.', 'We had to walked home.']}
+      good={['I have to go now.', 'We had to walk home.']}
+    />
+    <p>
+      Must has no past or future. Use <em>had to</em> and <em>will have to</em>.
+    </p>
+    <GrammarContrast
+      bad={['I must go to the dentist yesterday.', 'You will must wait.']}
+      good={['I had to go to the dentist yesterday.', 'You will have to wait.']}
+    />
+    <p>
+      Don't mix the two negatives: it's <em>don't have to</em> or <em>haven't got to</em>, not both.
+    </p>
+    <GrammarContrast
+      bad={["I don't have got to go."]}
+      good={["I don't have to go.", "I haven't got to go."]}
+    />
+    <p>
+      If something isn't necessary, use <em>don't have to</em>. <em>Mustn't</em> means it's forbidden.
+    </p>
+    <GrammarContrast
+      bad={["It's Sunday, so you mustn't get up early."]}
+      good={["It's Sunday, so you don't have to get up early."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "I must go / You mustn't… — the speaker's own obligation, and a ban in the negative.",
+      },
+      {
+        slug: 'modality-need',
+        name: 'need',
+        note: "You don't need to / needn't… — another way to say something isn't necessary.",
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'You should rest — advice, weaker than have to.',
+      },
+      {
+        slug: 'modality-expressions-with-be',
+        name: 'be obliged to / be supposed to',
+        note: 'formal obligation with be + adjective + to, and rules that may not be followed.',
+      },
+    ]}
+  />
+</GrammarShell>

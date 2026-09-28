@@ -5,6 +5,8 @@ export class GrammarConstructionPage {
   readonly badge: Locator;
   readonly cheatSheet: Locator;
   readonly usageItems: Locator;
+  readonly usageSection: Locator;
+  readonly usageMore: Locator;
   readonly handcrafted: Locator;
   readonly compare: Locator;
 
@@ -13,6 +15,8 @@ export class GrammarConstructionPage {
     this.badge = page.locator('.con-head .badge');
     this.cheatSheet = page.locator('#gp-section-form');
     this.usageItems = page.locator('.usage-item');
+    this.usageSection = page.getByTestId('grammar-usage');
+    this.usageMore = page.getByTestId('grammar-usage-more');
     this.handcrafted = page.locator('[data-handcrafted="true"]');
     this.compare = page.getByTestId('grammar-compare');
   }
@@ -29,13 +33,25 @@ export class GrammarConstructionPage {
     return this.usageItems.nth(index);
   }
 
+  // "When it's used" starts closed; open it before interacting with a card.
+  async openUsage() {
+    const open = await this.usageSection.evaluate(
+      (el) => (el as HTMLDetailsElement).open,
+    );
+    if (!open) {
+      await this.usageSection.locator('.gp-section__summary').click();
+    }
+  }
+
   async addUsageToDeck(index = 0) {
+    await this.openUsage();
     await this.usageItem(index)
       .getByRole('button', { name: '+ Add to deck' })
       .click();
   }
 
   async markUsageKnown(index = 0) {
+    await this.openUsage();
     await this.usageItem(index)
       .getByRole('button', { name: 'I know this' })
       .click();

@@ -1,0 +1,289 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 12 EGP rows (743-754): all 6 USE rows are inlined, matched by EGP index.
+// The other 6 are plain FORM rows (affirmative, negative, questions, and
+// mid-position adverbs at A2/B1/B2), written in full without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const backgroundPoint = point(745);
+const inProgressPoint = point(746);
+const reasonPoint = point(750);
+const repeatedPoint = point(751);
+const politenessPoint = point(753);
+const undesiredPoint = point(754);
+
+const inlineUsagePointIds = [
+  backgroundPoint,
+  inProgressPoint,
+  reasonPoint,
+  repeatedPoint,
+  politenessPoint,
+  undesiredPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Past continuous in English: form (was/were + -ing, negatives, questions, adverbs like just and still) and when to use it — actions in progress at a past time, background to a main event with when and while, reasons with because, repeated events with always, and polite requests (I was wondering if…)."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'I was waiting: the form', open: true },
+    { id: 'in-progress', title: 'At eight o’clock I was having dinner', open: false },
+    { id: 'background', title: 'It was raining when I arrived: the background', open: false },
+    { id: 'reason', title: 'Because I was driving: giving a reason', open: false },
+    { id: 'adverbs', title: 'I was still waiting: adverbs in the middle', open: false },
+    { id: 'always', title: 'It was always raining: repeated events', open: false },
+    { id: 'politeness', title: 'I was wondering if…: sounding polite', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The past continuous is <em>was / were</em> + a verb ending in <em>-ing</em>. It shows an action that was in the middle of happening at some moment in the past — it had started, and it had not finished yet: <em>At ten o'clock last night I was reading.</em> That's why it so often sets the scene for a story, while the past simple tells what happened next.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I was waiting: the form" id="form" open>
+    <p>
+      Use <em>was</em> after <em>I / he / she / it</em> and <em>were</em> after <em>you / we / they</em>. The main verb takes <em>-ing</em> and never changes.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'was / were', '-ing verb']} />
+    <GrammarExample note="I + was.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">waiting</mark> for you all Saturday evening.
+    </GrammarExample>
+    <GrammarExample note="We + were.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">dancing</mark> all evening.
+    </GrammarExample>
+    <GrammarExample note="Two actions, one was: no need to repeat it.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">swimming</mark> and <mark data-role="content">sunbathing</mark> every day of the holiday.
+    </GrammarExample>
+    <p>
+      For the negative, add <em>not</em> after <em>was / were</em>. In speaking and informal writing, use the short forms <em>wasn't</em> and <em>weren't</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "wasn't / weren't", '-ing verb']} />
+    <GrammarExample note="Wasn't: the short form of was not.">
+      I tried to phone her, but <mark data-role="grammar">her phone</mark> <mark data-role="grammar">wasn't</mark> <mark data-role="content">working</mark>.
+    </GrammarExample>
+    <GrammarExample note="Was not: the full form, more formal.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">was not</mark> <mark data-role="content">planning</mark> to become a professional player.
+    </GrammarExample>
+    <GrammarExample note="Weren't after you / we / they.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">weren't</mark> <mark data-role="content">listening</mark> to the teacher.
+    </GrammarExample>
+    <p>
+      For a question, put <em>was / were</em> before the subject. A question word (<em>what, why, where</em>) goes first.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh-word)', 'was / were', 'subject', '-ing verb']} />
+    <GrammarExample note="What + were + you + doing: a very common question.">
+      <mark data-role="grammar">What</mark> <mark data-role="grammar">were</mark> <mark data-role="grammar">you</mark> <mark data-role="content">doing</mark> at nine o'clock last night?
+    </GrammarExample>
+    <GrammarExample note="Why + was + I.">
+      Everything was strange. <mark data-role="grammar">Why</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">I</mark> <mark data-role="content">following</mark> a green fox?
+    </GrammarExample>
+    <GrammarExample note="Yes/no question: no question word.">
+      <mark data-role="grammar">Was</mark> <mark data-role="grammar">he</mark> <mark data-role="content">calling</mark> me?
+    </GrammarExample>
+    <p>
+      Short answers use only <em>was / were</em>: <em>Were you sleeping? — Yes, I was. / No, I wasn't.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="At eight o’clock I was having dinner" id="in-progress">
+    <p>
+      Use the past continuous for an action that was happening around a particular time in the past. The action started before that moment and continued after it — we see it from the middle, not from start to finish. A time phrase often gives the moment: <em>at eight o'clock</em>, <em>this time last year</em>, <em>all evening</em>.
+    </p>
+    <GrammarFormula label="In progress" parts={['subject', 'was / were', '-ing verb', 'past time']} />
+    <GrammarExample note="The dinner started before eight and went on after it.">
+      <mark data-role="grammar">At eight o'clock</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">having</mark> dinner.
+    </GrammarExample>
+    <GrammarExample note="Describing the scene at a game: what was going on.">
+      I went to a football match — <mark data-role="grammar">they</mark> <mark data-role="grammar">were</mark> <mark data-role="content">playing</mark> the final <mark data-role="grammar">that day</mark>.
+    </GrammarExample>
+    <GrammarExample note="States too: the weather around that time.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">raining</mark> <mark data-role="grammar">all evening</mark>, but the concert was so good that I didn't mind.
+    </GrammarExample>
+    {inProgressPoint && <GrammarUsagePointCard usagePoint={inProgressPoint} />}
+    <p>
+      Compare it with the past simple, which shows the whole action, finished: <em>We had dinner at eight</em> (we started at eight) vs <em>At eight we were having dinner</em> (we were already in the middle of it).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It was raining when I arrived: the background" id="background">
+    <p>
+      In a story, the past continuous gives the background — what was already going on — and the past simple gives the main event that happened in the middle of it. The main event is often short and can interrupt the longer action.
+    </p>
+    <GrammarFormula label="Background + event" parts={['subject', 'was / were', '-ing verb', 'when', 'subject', 'past simple']} />
+    <GrammarExample note="Raining = the background, arrived = the event.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">raining</mark> <mark data-role="grammar">when</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">arrived</mark>.
+    </GrammarExample>
+    <GrammarExample note="The phone call interrupts the shower.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">having</mark> a shower <mark data-role="grammar">when</mark> <mark data-role="grammar">the phone</mark> <mark data-role="grammar">rang</mark>.
+    </GrammarExample>
+    <p>
+      <em>While</em> goes with the longer, background action. You can also start with the <em>while</em> part — then put a comma after it.
+    </p>
+    <GrammarFormula label="With while" parts={['while', 'subject', 'was / were', '-ing verb', 'subject', 'past simple']} />
+    <GrammarExample note="While + the background, then the event.">
+      <mark data-role="grammar">While</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">studying</mark> at your house, <mark data-role="grammar">I</mark> <mark data-role="grammar">left</mark> my book on your bed.
+    </GrammarExample>
+    {backgroundPoint && <GrammarUsagePointCard usagePoint={backgroundPoint} />}
+    <p>
+      Two background actions happening at the same time can both be in the past continuous: <em>I was cooking while my brother was doing his homework.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Because I was driving: giving a reason" id="reason">
+    <p>
+      The past continuous often explains why something happened: the situation that was going on was the reason. It usually comes after <em>because</em> or <em>as</em>.
+    </p>
+    <GrammarFormula label="Reason" parts={['because', 'subject', 'was / were', '-ing verb']} />
+    <GrammarExample note="Sitting in the corner explains why she could see everything.">
+      <mark data-role="grammar">Because</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">was</mark> <mark data-role="content">sitting</mark> in the corner, she could see the whole café.
+    </GrammarExample>
+    <GrammarExample note="Why the TV company came.">
+      A TV company came to my school <mark data-role="grammar">because</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">were</mark> <mark data-role="content">making</mark> a programme about science.
+    </GrammarExample>
+    <GrammarExample note="Why I didn't answer.">
+      I didn't answer your call <mark data-role="grammar">because</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">driving</mark>.
+    </GrammarExample>
+    {reasonPoint && <GrammarUsagePointCard usagePoint={reasonPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I was still waiting: adverbs in the middle" id="adverbs">
+    <p>
+      Adverbs like <em>just, always, still, really, actually</em> usually go in the middle position — after <em>was / were</em> and before the <em>-ing</em> verb.
+    </p>
+    <GrammarFormula label="Mid-position adverb" parts={['subject', 'was / were', 'adverb', '-ing verb']} />
+    <GrammarExample note="Just: at that exact moment.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">just</mark> <mark data-role="content">watching</mark> a football match when you called.
+    </GrammarExample>
+    <GrammarExample note="Still: it hadn't stopped yet.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">still</mark> <mark data-role="content">waiting</mark> at the traffic lights.
+    </GrammarExample>
+    <GrammarExample note="Actually: what was really happening.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">actually</mark> <mark data-role="content">acting</mark> like a ghost.
+    </GrammarExample>
+    <p>
+      At higher levels, many more adverbs fit in the same place, including adverbs of manner that describe how someone was doing something.
+    </p>
+    <GrammarExample note="Constantly: again and again.">
+      <mark data-role="grammar">My younger brother</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">constantly</mark> <mark data-role="content">bothering</mark> me.
+    </GrammarExample>
+    <GrammarExample note="Wistfully: the way she was walking.">
+      One evening, as <mark data-role="grammar">she</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">wistfully</mark> <mark data-role="content">walking</mark> home, she made a decision.
+    </GrammarExample>
+    <p>
+      In the negative, most of these adverbs come after <em>not</em>: <em>I wasn't really listening.</em> But <em>still</em> comes before it: <em>He still wasn't answering his phone.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It was always raining: repeated events" id="always">
+    <p>
+      With <em>always</em>, the past continuous can describe something that happened again and again over a period in the past — it felt like it never stopped.
+    </p>
+    <GrammarFormula label="Repeated event" parts={['subject', 'was / were', 'always', '-ing verb']} />
+    <GrammarExample note="Rain again and again, all through September.">
+      Worst of all, in September <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">always</mark> <mark data-role="content">raining</mark>.
+    </GrammarExample>
+    <GrammarExample note="He talked about it many times.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">always</mark> <mark data-role="content">talking</mark> about this prize, but I never thought he would win it.
+    </GrammarExample>
+    {repeatedPoint && <GrammarUsagePointCard usagePoint={repeatedPoint} />}
+    <p>
+      With <em>always</em> or <em>constantly</em>, it often shows that the repeated events were annoying, unwanted, or out of the person's control. The speaker is complaining or criticising, not just counting.
+    </p>
+    <GrammarFormula label="Undesired event" parts={['subject', 'was / were', 'always / constantly', '-ing verb']} />
+    <GrammarExample note="Getting into trouble: the adults didn't like it.">
+      They had heard that <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">always</mark> <mark data-role="content">getting</mark> into trouble at school.
+    </GrammarExample>
+    <GrammarExample note="Running out of time: not what she wanted.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">constantly</mark> <mark data-role="content">trying</mark> to balance work and study, and <mark data-role="grammar">was</mark> <mark data-role="grammar">always</mark> <mark data-role="content">running</mark> out of time.
+    </GrammarExample>
+    {undesiredPoint && <GrammarUsagePointCard usagePoint={undesiredPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I was wondering if…: sounding polite" id="politeness">
+    <p>
+      <em>I was wondering if…</em> and <em>I was thinking (that)…</em> make a request or a suggestion softer and less direct. The meaning is present — you are asking now — but the past form puts a little distance between you and the request, so it sounds polite.
+    </p>
+    <GrammarFormula label="Polite request" parts={['I', 'was', 'wondering', 'if', 'subject', 'could']} />
+    <GrammarExample note="Softer than: Can I stay with you again?">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">wondering</mark> <mark data-role="grammar">if</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">could</mark> stay with you again on my next visit.
+    </GrammarExample>
+    <GrammarExample note="A polite question to someone you don't know well.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">wondering</mark> <mark data-role="grammar">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">could</mark> send me the timetable.
+    </GrammarExample>
+    <GrammarFormula label="Soft suggestion" parts={['I', 'was', 'thinking', '(that)', 'subject', 'could']} />
+    <GrammarExample note="Softer than: Come to my house.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">thinking</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">could</mark> come to my house and watch the film.
+    </GrammarExample>
+    {politenessPoint && <GrammarUsagePointCard usagePoint={politenessPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget <em>was / were</em>. The <em>-ing</em> verb can't make the past continuous on its own.
+    </p>
+    <GrammarContrast bad={['I watching TV when you called.', 'They playing football all afternoon.']} good={['I was watching TV when you called.', 'They were playing football all afternoon.']} />
+    <p>
+      <em>Was</em> goes with <em>I / he / she / it</em>, <em>were</em> with <em>you / we / they</em>. Don't use <em>was</em> with a plural subject.
+    </p>
+    <GrammarContrast bad={['We was waiting for the bus.', 'My parents was working in the garden.']} good={['We were waiting for the bus.', 'My parents were working in the garden.']} />
+    <p>
+      Use the past simple, not the past continuous, for a series of finished actions that happened one after another. The past continuous is for the background, not for the events of the story.
+    </p>
+    <GrammarContrast bad={['I was getting up, was having a shower and was going to work.']} good={['I got up, had a shower and went to work.']} />
+    <p>
+      The short event that interrupts goes in the past simple, not the past continuous.
+    </p>
+    <GrammarContrast bad={['I was reading when the lights were going out.']} good={['I was reading when the lights went out.']} />
+    <p>
+      State verbs like <em>know, like, want, believe, understand</em> are not normally used in the continuous form. Use the past simple.
+    </p>
+    <GrammarContrast bad={['I was knowing the answer.', 'She was wanting a new phone.']} good={['I knew the answer.', 'She wanted a new phone.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'the whole finished action or the main event of a story (I arrived), not the background.',
+      },
+      {
+        slug: 'present-present-continuous',
+        name: 'present continuous',
+        note: 'the same be + -ing shape, but with am / is / are for what is happening now.',
+      },
+      {
+        slug: 'past-past-perfect-continuous',
+        name: 'past perfect continuous',
+        note: 'an action that had been going on up to a past moment (I had been waiting for an hour).',
+      },
+      {
+        slug: 'future-future-continuous',
+        name: 'future continuous',
+        note: 'will be + -ing: an action in progress at a moment in the future.',
+      },
+    ]}
+  />
+</GrammarShell>

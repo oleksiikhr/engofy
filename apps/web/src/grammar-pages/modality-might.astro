@@ -1,0 +1,341 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 9 USE rows are inlined, matched by EGP index. The other 6 rows
+// (affirmative, negative, might have + -ed, questions, might not have + -ed,
+// might as well) are plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const possibilityPoint = point(515);
+const reportedPoint = point(517);
+const suggestionPoint = point(518);
+const pastPoint = point(520);
+const focusingPoint = point(521);
+const pastNegativePoint = point(524);
+const consolingPoint = point(525);
+const politeCriticismPoint = point(526);
+const emphasisPoint = point(527);
+
+const inlineUsagePointIds = [
+  possibilityPoint,
+  reportedPoint,
+  suggestionPoint,
+  pastPoint,
+  focusingPoint,
+  pastNegativePoint,
+  consolingPoint,
+  politeCriticismPoint,
+  emphasisPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Might: forms (might, might not, Might…?), weak possibility, might in reported speech, polite suggestions, might have + past participle, might not have + past participle, as you might know, might … but, Might I suggest…?, might as well, and try as I might."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Might, might not, Might…?', open: true },
+    { id: 'possibility', title: 'It might rain: weak possibility', open: false },
+    { id: 'reported', title: 'She said it might rain: reported speech', open: false },
+    { id: 'suggestions', title: 'You might want to…: polite suggestions', open: false },
+    { id: 'past', title: 'He might have seen us / It might not have been: possibility in the past', open: false },
+    { id: 'focusing', title: 'As you might know…: shared knowledge', open: false },
+    { id: 'consoling', title: 'It might sound strange, but…: consoling and justifying', open: false },
+    { id: 'polite-criticism', title: 'Might I suggest…?: polite criticism', open: false },
+    { id: 'might-as-well', title: 'We might as well stay: the easiest choice', open: false },
+    { id: 'emphasis', title: 'Try as I might…: emphasis', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Might</em> is a modal verb for things that are possible, but not very likely or not certain: <em>It might rain later.</em> It is a little weaker and more informal than <em>may</em>. <em>Might</em> also makes suggestions softer and more polite: <em>You might want to call first.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Might, might not, Might…?" id="form" open>
+    <p>
+      <em>Might</em> is the same for every subject — no <em>-s</em> with he, she, it. The verb after it is always the base form, without <em>to</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'might', 'base verb']} />
+    <GrammarExample note="The weather + might + be: the speaker isn't sure.">
+      <mark data-role="grammar">The weather</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> hot and sunny.
+    </GrammarExample>
+    <GrammarExample note="It + might + be: a guess about where something is.">
+      I think <mark data-role="grammar">it</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> in your bedroom.
+    </GrammarExample>
+    <p>
+      The negative is <em>might not</em>. In informal speech it is sometimes shortened to <em>mightn't</em>, but <em>might not</em> is much more common.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'might not', 'base verb']} />
+    <GrammarExample note="Might not + be: perhaps it isn't fashionable.">
+      I like to wear a shirt and trousers. <mark data-role="grammar">It</mark> <mark data-role="content">might not</mark> <mark data-role="grammar">be</mark> very fashionable, but that's the way I like it.
+    </GrammarExample>
+    <GrammarExample note="Mightn't + be: the short form, informal.">
+      People watch too much TV these days, and <mark data-role="grammar">this</mark> <mark data-role="content">mightn't</mark> <mark data-role="grammar">be</mark> such a good thing.
+    </GrammarExample>
+    <p>
+      For a question, put <em>might</em> before the subject. Questions with <em>might</em> are rare and sound formal. In everyday English, people usually ask <em>Do you think…?</em> or <em>Could it be…?</em> instead.
+    </p>
+    <GrammarFormula label="Question" parts={['might', 'subject', 'base verb']} />
+    <GrammarExample note="Might + it + be: a formal question in a complaint letter.">
+      Is this the wrong bill, or <mark data-role="content">might</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">be</mark> the bill for the last person who lived in my house?
+    </GrammarExample>
+    <GrammarExample note="Might + it + not + be: a polite, formal suggestion.">
+      <mark data-role="content">Might</mark> <mark data-role="grammar">it</mark> not <mark data-role="grammar">be</mark> a good idea to change your travel company next time?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It might rain: weak possibility" id="possibility" open={false}>
+    <p>
+      <em>Might</em> says that something is possible now or in the future, but the speaker isn't sure — often less than a 50% chance. It means almost the same as <em>may</em>, and is more common in speech.
+    </p>
+    <GrammarFormula label="Possibility" parts={['subject', 'might', 'base verb']} />
+    <GrammarExample note="Possibility in the future: perhaps Dad will take us.">
+      My dad isn't working that day, so <mark data-role="grammar">he</mark> <mark data-role="content">might</mark> <mark data-role="grammar">take</mark> us.
+    </GrammarExample>
+    <GrammarExample note="Possibility now: a guess about something that is missing.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> on the computer table.
+    </GrammarExample>
+    <GrammarExample note="Might not: perhaps I won't have time.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">might not</mark> <mark data-role="grammar">have</mark> time to call you tonight.
+    </GrammarExample>
+    <GrammarExample note="Might + even: something surprising is possible.">
+      Come early — <mark data-role="grammar">you</mark> <mark data-role="content">might</mark> even <mark data-role="grammar">meet</mark> the band.
+    </GrammarExample>
+    {possibilityPoint && <GrammarUsagePointCard usagePoint={possibilityPoint} />}
+    <p>
+      Compare how sure the speaker is: <em>It will rain</em> (sure) → <em>It may rain</em> (perhaps) → <em>It might rain</em> (perhaps, a little less likely).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She said it might rain: reported speech" id="reported" open={false}>
+    <p>
+      When you report what someone said or thought in the past, <em>may</em> usually becomes <em>might</em>. It works like <em>will</em> → <em>would</em> and <em>can</em> → <em>could</em>.
+    </p>
+    <GrammarFormula label="Reported speech" parts={['subject', 'said / thought', 'subject', 'might', 'base verb']} />
+    <GrammarExample note="Direct speech: “It may be the last holiday.”">
+      My parents <mark data-role="grammar">said</mark> <mark data-role="grammar">it</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> the last holiday when we are all together.
+    </GrammarExample>
+    <GrammarExample note="A past thought: “It may be a lucky one.”">
+      Lisa <mark data-role="grammar">thought</mark> <mark data-role="grammar">it</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> a lucky ticket, so she showed it to her dad.
+    </GrammarExample>
+    <GrammarExample note="A past worry: “He may not come.”">
+      I <mark data-role="grammar">was afraid</mark> <mark data-role="grammar">he</mark> <mark data-role="content">might not</mark> <mark data-role="grammar">come</mark>.
+    </GrammarExample>
+    {reportedPoint && <GrammarUsagePointCard usagePoint={reportedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="You might want to…: polite suggestions" id="suggestions" open={false}>
+    <p>
+      <em>You might</em> + verb gives advice or a suggestion in a soft, polite way — softer than <em>you should</em>. Common phrases: <em>you might want to</em>, <em>you might need to</em>, <em>you might like to</em>, <em>you might try</em>.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['you', 'might', 'want to / need to / try…', 'verb']} />
+    <GrammarExample note="Friendly advice for a picnic.">
+      The park is a great place for a picnic. <mark data-role="grammar">You</mark> <mark data-role="content">might</mark> <mark data-role="grammar">need to</mark> <mark data-role="grammar">bring</mark> some food and drink.
+    </GrammarExample>
+    <GrammarExample note="Soft advice: “maybe talk to your parents”.">
+      I don't really know what you should do, but I think <mark data-role="grammar">you</mark> <mark data-role="content">might</mark> <mark data-role="grammar">talk</mark> to your parents.
+    </GrammarExample>
+    <GrammarExample note="You might want to…: a very common polite tip.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">might</mark> <mark data-role="grammar">want to</mark> <mark data-role="grammar">book</mark> a table — it gets busy at weekends.
+    </GrammarExample>
+    {suggestionPoint && <GrammarUsagePointCard usagePoint={suggestionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="He might have seen us / It might not have been: possibility in the past" id="past" open={false}>
+    <p>
+      To guess about the past, use <em>might have</em> + past participle: "perhaps it happened". The speaker doesn't know for sure.
+    </p>
+    <GrammarFormula label="Past possibility" parts={['subject', 'might have', 'past participle']} />
+    <GrammarExample note="A guess about an unusual sound.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">might have</mark> <mark data-role="grammar">been</mark> our neighbours' cat.
+    </GrammarExample>
+    <GrammarExample note="Perhaps he saw us — we don't know.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">might have</mark> <mark data-role="grammar">seen</mark> us.
+    </GrammarExample>
+    <GrammarExample note="Possible reasons for something in the past.">
+      <mark data-role="grammar">Many things</mark> <mark data-role="content">might have</mark> <mark data-role="grammar">led</mark> to these changes.
+    </GrammarExample>
+    <GrammarExample note="A past fear, reported: “a burglar has perhaps broken in”.">
+      I thought that <mark data-role="grammar">a burglar</mark> <mark data-role="content">might have</mark> <mark data-role="grammar">broken</mark> into our house.
+    </GrammarExample>
+    {pastPoint && <GrammarUsagePointCard usagePoint={pastPoint} />}
+    <p>
+      The negative is <em>might not have</em> + past participle: "perhaps it didn't happen" or "perhaps it wasn't so".
+    </p>
+    <GrammarFormula label="Past negative" parts={['subject', 'might not have', 'past participle']} />
+    <GrammarExample note="Perhaps the survey didn't ask the right people.">
+      <mark data-role="grammar">The survey</mark> <mark data-role="content">might not have</mark> <mark data-role="grammar">asked</mark> an accurate sample of people.
+    </GrammarExample>
+    <GrammarExample note="Perhaps things didn't go as you hoped.">
+      Even though <mark data-role="grammar">things</mark> <mark data-role="content">might not have</mark> <mark data-role="grammar">gone</mark> as you expected, we are dealing with a charity here.
+    </GrammarExample>
+    <GrammarExample note="Perhaps it wasn't as bad as people said.">
+      <mark data-role="grammar">The disappointment</mark> <mark data-role="content">might not have</mark> <mark data-role="grammar">been</mark> as bad as you thought.
+    </GrammarExample>
+    {pastNegativePoint && <GrammarUsagePointCard usagePoint={pastNegativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="As you might know…: shared knowledge" id="focusing" open={false}>
+    <p>
+      <em>As you might know</em> and <em>as you might have heard / noticed</em> introduce information the reader probably knows already. They make a letter or email sound friendly and polite. <em>As you may know</em> means the same.
+    </p>
+    <GrammarFormula label="Shared knowledge" parts={['as', 'you', 'might / might have', 'know / heard / noticed']} />
+    <GrammarExample note="As you might know: a fact the reader probably knows.">
+      <mark data-role="grammar">As</mark> <mark data-role="grammar">you</mark> <mark data-role="content">might</mark> <mark data-role="grammar">know</mark>, I've been very busy recently with my exams.
+    </GrammarExample>
+    <GrammarExample note="As you might have noticed: something the reader perhaps saw.">
+      <mark data-role="grammar">As</mark> <mark data-role="grammar">you</mark> <mark data-role="content">might have</mark> <mark data-role="grammar">noticed</mark>, I broke your beautiful vase in the hall.
+    </GrammarExample>
+    <GrammarExample note="As you might have already heard: news the reader perhaps heard.">
+      <mark data-role="grammar">As</mark> <mark data-role="grammar">you</mark> <mark data-role="content">might have</mark> already <mark data-role="grammar">heard</mark>, there is a delay with the new computer system.
+    </GrammarExample>
+    {focusingPoint && <GrammarUsagePointCard usagePoint={focusingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It might sound strange, but…: consoling and justifying" id="consoling" open={false}>
+    <p>
+      <em>Might … but</em> first admits a weak point ("OK, perhaps this is true"), then gives a stronger, more positive point after <em>but</em>. It is useful for defending an idea or making someone feel better.
+    </p>
+    <GrammarFormula label="Might … but" parts={['subject', 'might', 'sound / be / not have been…', '…', 'but', 'clause']} />
+    <GrammarExample note="Justifying an idea: it looks weak, but it is true.">
+      <mark data-role="grammar">The argument</mark> <mark data-role="content">might</mark> <mark data-role="grammar">sound</mark> superficial, <mark data-role="grammar">but</mark> on closer examination it turns out to be true.
+    </GrammarExample>
+    <GrammarExample note="Admitting a problem, then the positive side.">
+      <mark data-role="grammar">Working out</mark> <mark data-role="content">might</mark> <mark data-role="grammar">be</mark> boring sometimes, <mark data-role="grammar">but</mark> most young people enjoy some kind of sport.
+    </GrammarExample>
+    <GrammarExample note="Consoling: it wasn't perfect, but people were happy.">
+      All in all, <mark data-role="grammar">it</mark> <mark data-role="content">might not have</mark> <mark data-role="grammar">been</mark> a huge success, <mark data-role="grammar">but</mark> people enjoyed themselves.
+    </GrammarExample>
+    <GrammarExample note="Consoling someone about their effort.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">might not have</mark> <mark data-role="grammar">changed</mark> the world, <mark data-role="grammar">but</mark> you have made a difference to one or two people.
+    </GrammarExample>
+    {consolingPoint && <GrammarUsagePointCard usagePoint={consolingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Might I suggest…?: polite criticism" id="polite-criticism" open={false}>
+    <p>
+      In formal writing, questions with <em>might</em> make criticism or a suggestion sound very polite and indirect. Two common patterns: <em>Might I suggest…?</em> and <em>Might it not be…?</em> ("Wouldn't it be better…?").
+    </p>
+    <GrammarFormula label="Polite suggestion" parts={['might', 'I', 'suggest', 'that + clause']} />
+    <GrammarExample note="Might I suggest: a formal suggestion to a club.">
+      Also, <mark data-role="content">might</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">suggest</mark> <mark data-role="grammar">that</mark> we have more exciting publicity for the club?
+    </GrammarExample>
+    <GrammarExample note="Might I suggest: polite advice to a theatre company.">
+      <mark data-role="content">Might</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">suggest</mark> <mark data-role="grammar">that</mark> you arrange seats where people can both see and hear?
+    </GrammarExample>
+    <GrammarFormula label="Polite criticism" parts={['might', 'it', 'not', 'be', 'better / wise…']} />
+    <GrammarExample note="= I think you should organise more trips.">
+      <mark data-role="content">Might</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">be</mark> wise to organise more trips?
+    </GrammarExample>
+    {politeCriticismPoint && <GrammarUsagePointCard usagePoint={politeCriticismPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="We might as well stay: the easiest choice" id="might-as-well" open={false}>
+    <p>
+      <em>Might as well</em> + base verb says "there's no better option, so let's do this" or "it makes no difference, so why not". It often sounds a little unenthusiastic. <em>May as well</em> means the same but is less common in speech.
+    </p>
+    <GrammarFormula label="Might as well" parts={['subject', 'might as well', 'base verb']} />
+    <GrammarExample note="No better option: the bus has gone.">
+      The last bus has gone, so <mark data-role="grammar">we</mark> <mark data-role="content">might as well</mark> <mark data-role="grammar">walk</mark>.
+    </GrammarExample>
+    <GrammarExample note="If that's all you want, there's no point in going away.">
+      If they only want to have fun, <mark data-role="grammar">they</mark> <mark data-role="content">might as well</mark> <mark data-role="grammar">stay</mark> at home.
+    </GrammarExample>
+    <GrammarExample note="The logical thing to do at this stage of life.">
+      When you reach this stage of your life, <mark data-role="grammar">you</mark> <mark data-role="content">might as well</mark> <mark data-role="grammar">make</mark> the best of these years.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Try as I might…: emphasis" id="emphasis" open={false}>
+    <p>
+      <em>Try as I might</em> at the start of a sentence means "however hard I tried" or "however hard I try". The main clause says the effort didn't work. It is formal and literary.
+    </p>
+    <GrammarFormula label="Emphasis" parts={['try as', 'I / we / he…', 'might', 'clause']} />
+    <GrammarExample note="= However hard I tried, I couldn't persuade her.">
+      <mark data-role="grammar">Try as</mark> <mark data-role="grammar">I</mark> <mark data-role="content">might</mark>, I was never able to persuade her to go for a walk.
+    </GrammarExample>
+    <GrammarExample note="= However hard I try, I can't imagine it.">
+      <mark data-role="grammar">Try as</mark> <mark data-role="grammar">I</mark> <mark data-role="content">might</mark>, I cannot imagine a world without music.
+    </GrammarExample>
+    <GrammarExample note="Other subjects are possible too.">
+      <mark data-role="grammar">Try as</mark> <mark data-role="grammar">they</mark> <mark data-role="content">might</mark>, the team couldn't score a goal.
+    </GrammarExample>
+    {emphasisPoint && <GrammarUsagePointCard usagePoint={emphasisPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Might</em> never changes: no <em>-s</em>, no <em>to</em> after it, and no <em>do</em> in questions or negatives.
+    </p>
+    <GrammarContrast
+      bad={['She mights come later.', 'I might to go out tonight.', "It doesn't might be true."]}
+      good={['She might come later.', 'I might go out tonight.', 'It might not be true.']}
+    />
+    <p>
+      For past possibility, use <em>might have</em> + past participle — not the past simple after might.
+    </p>
+    <GrammarContrast
+      bad={['He might forgot my number.', 'She might have went home.']}
+      good={['He might have forgotten my number.', 'She might have gone home.']}
+    />
+    <p>
+      <em>Might be</em> (two words) is modal + verb. <em>Maybe</em> (one word) is an adverb and needs its own verb.
+    </p>
+    <GrammarContrast
+      bad={['She maybe right.', 'Might be it will rain.']}
+      good={['She might be right. / Maybe she is right.', 'It might rain. / Maybe it will rain.']}
+    />
+    <p>
+      <em>Might as well</em> is followed by the base verb, not <em>to</em> or <em>-ing</em>.
+    </p>
+    <GrammarContrast
+      bad={['We might as well to go home.', 'We might as well going home.']}
+      good={['We might as well go home.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-may',
+        name: 'may',
+        note: 'It may rain — the same possibility, a little stronger and more formal; May I…? for permission.',
+      },
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: 'It could be… / It could have been… — another way to say something is possible.',
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'You should… — clearer, stronger advice than You might want to…',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "It must be… / It can't be… — being sure, not just guessing.",
+      },
+    ]}
+  />
+</GrammarShell>

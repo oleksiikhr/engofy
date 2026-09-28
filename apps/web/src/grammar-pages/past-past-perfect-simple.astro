@@ -1,0 +1,476 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 20 EGP rows (764-783): all 12 USE and FORM/USE rows are inlined, matched by
+// EGP index. The other 8 are plain FORM rows (affirmative, negative, questions,
+// ellipsis, two adverb rows, had it not been for, hardly … when), written in
+// full without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const ifClausePoint = point(764);
+const earlierPoint = point(768);
+const becausePoint = point(769);
+const ifOnlyWishPoint = point(770);
+const neverInversionPoint = point(771);
+const noSoonerPoint = point(772);
+const relativePoint = point(776);
+const changePoint = point(777);
+const reportedQuestionPoint = point(778);
+const reportedStatementPoint = point(779);
+const hadIKnownPoint = point(780);
+const ifOnlyNegativePoint = point(781);
+
+const inlineUsagePointIds = [
+  ifClausePoint,
+  earlierPoint,
+  becausePoint,
+  ifOnlyWishPoint,
+  neverInversionPoint,
+  noSoonerPoint,
+  relativePoint,
+  changePoint,
+  reportedQuestionPoint,
+  reportedStatementPoint,
+  hadIKnownPoint,
+  ifOnlyNegativePoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Past perfect simple in English: form (had + past participle, hadn't, questions, adverbs like just, already and never) and when to use it — the earlier of two past events, explanations with because, background in relative clauses, reported speech, plans that changed, imagined past with if, if only and wish, and formal inversion (Had I known…, No sooner had I…)."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'I had finished: the form', open: true },
+    { id: 'earlier', title: 'When I arrived, the film had started', open: false },
+    { id: 'adverbs', title: 'I had just arrived, I had never seen', open: false },
+    { id: 'because', title: 'Because he had lost a lot of blood', open: false },
+    { id: 'relative', title: 'The couple who had organised the party', open: false },
+    { id: 'reported', title: 'She said she had lost it', open: false },
+    { id: 'change', title: 'We had planned to go, but…', open: false },
+    { id: 'if', title: 'If I had known, I would have come', open: false },
+    { id: 'wish', title: 'I wish I had listened', open: false },
+    { id: 'inversion', title: 'Never had I seen… No sooner had I…', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The past perfect simple is <em>had</em> + a past participle (<em>had gone</em>, <em>had seen</em>, <em>had finished</em>). It takes you one step further back in the past: from a moment in a story, it looks at something that had already happened <strong>before</strong> that moment. <em>When I got to the station, the train had left.</em> It is also the tense of the imagined past: <em>If I had known, I would have helped.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I had finished: the form" id="form" open>
+    <p>
+      The form is the same for every subject: <em>had</em> + past participle. Regular verbs end in <em>-ed</em> (<em>had worked</em>, <em>had arrived</em>); irregular verbs use the third form (<em>had gone</em>, <em>had written</em>, <em>had forgotten</em>). In speaking, <em>had</em> is usually shortened to <em>'d</em>: <em>I'd</em>, <em>she'd</em>, <em>they'd</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'had', 'past participle']} />
+    <GrammarExample note="Had + read: first I read the letter, then I felt sorry.">
+      I felt really sorry for you after <mark data-role="grammar">I</mark> <mark data-role="content">had read</mark> your last letter.
+    </GrammarExample>
+    <GrammarExample note="'d + forgotten: the short form of had.">
+      <mark data-role="grammar">I</mark><mark data-role="content">'d forgotten</mark> that I had an appointment with the doctor.
+    </GrammarExample>
+    <p>
+      For the negative, put <em>not</em> after <em>had</em>. The short form is <em>hadn't</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "hadn't", 'past participle']} />
+    <GrammarExample note="Had not + delivered: the full form, common in formal writing.">
+      They called this morning to say that <mark data-role="grammar">our company</mark> <mark data-role="content">had not delivered</mark> the goods on time.
+    </GrammarExample>
+    <GrammarExample note="Hadn't + heard: the short form, common in speech.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">hadn't heard</mark> from her for two months.
+    </GrammarExample>
+    <p>
+      For a question, put <em>had</em> before the subject and the past participle after it.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh-word)', 'had', 'subject', 'past participle']} />
+    <GrammarExample note="Yes/no question: had + I + made.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">made</mark> the same mistake twice?
+    </GrammarExample>
+    <GrammarExample note="Why + had + he + done.">
+      The question was: <mark data-role="grammar">Why</mark> <mark data-role="content">had</mark> <mark data-role="grammar">he</mark> <mark data-role="content">done</mark> that?
+    </GrammarExample>
+    <p>
+      Short answers use only <em>had</em>: <em>Had you met him before? — Yes, I had. / No, I hadn't.</em>
+    </p>
+    <p>
+      When two past perfect verbs have the same subject and are joined by <em>and</em> or <em>but</em>, you can leave out the subject — and often <em>had</em> too — the second time.
+    </p>
+    <GrammarFormula label="Ellipsis" parts={['subject', 'had', 'past participle', 'and', '(had)', 'past participle']} />
+    <GrammarExample note="The same subject, Simon, for both verbs.">
+      <mark data-role="grammar">Simon</mark> was a very famous writer <mark data-role="grammar">and</mark> <mark data-role="content">had written</mark> ten best-sellers.
+    </GrammarExample>
+    <GrammarExample note="All her friends — had come and had brought — no second subject.">
+      <mark data-role="grammar">All her friends</mark> <mark data-role="content">had come</mark> to visit her <mark data-role="grammar">and</mark> <mark data-role="content">had brought</mark> a huge chocolate cake with them.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="When I arrived, the film had started" id="earlier" open={false}>
+    <p>
+      In a story, the main events are in the past simple. When you need to go back to something that happened <strong>before</strong> one of those events, use the past perfect. It tells the listener: this happened earlier.
+    </p>
+    <GrammarFormula label="Earlier past" parts={['past simple event', 'subject', 'had', 'past participle']} />
+    <GrammarExample note="First the film started, then I arrived.">
+      <mark data-role="grammar">When I arrived at the cinema</mark>, <mark data-role="grammar">the film</mark> <mark data-role="content">had</mark> already <mark data-role="content">started</mark>.
+    </GrammarExample>
+    <GrammarExample note="He was stupid earlier; he thought about it later.">
+      <mark data-role="grammar">He then thought</mark> how stupid <mark data-role="grammar">he</mark> <mark data-role="content">had been</mark>.
+    </GrammarExample>
+    <GrammarExample note="First the appointment, then the phone call.">
+      Actually <mark data-role="grammar">I</mark><mark data-role="content">'d arranged</mark> an appointment with my doctor <mark data-role="grammar">before calling you</mark>.
+    </GrammarExample>
+    {earlierPoint && <GrammarUsagePointCard usagePoint={earlierPoint} />}
+    <p>
+      Compare the order of events. With the past simple in both clauses, the actions happen one after the other, in the order you say them. With the past perfect, one action was already finished.
+    </p>
+    <GrammarContrast
+      good={[
+        'When I got home, my wife cooked dinner. (I came, then she started cooking)',
+        'When I got home, my wife had cooked dinner. (dinner was ready when I came)',
+      ]}
+    />
+    <p>
+      <em>By the time</em>, <em>by then</em> and <em>by + a time</em> often go with the past perfect — they mark the past moment you look back from.
+    </p>
+    <GrammarExample note="By the time + past simple, then had + gone.">
+      <mark data-role="grammar">By the time we got there</mark>, <mark data-role="grammar">everyone</mark> <mark data-role="content">had gone</mark> home.
+    </GrammarExample>
+    <p>
+      When the order is already clear from <em>before</em> or <em>after</em>, or when you simply tell events in the order they happened, the past simple is enough. The past perfect is not needed for every earlier action — only when you jump back.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Sentence</th><th>Past perfect needed?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>I had breakfast and went to work.</em></td><td>No — events in order</td></tr>
+        <tr><td><em>After I (had) finished, I went home.</em></td><td>Optional — <em>after</em> shows the order</td></tr>
+        <tr><td><em>I went home. I had finished all my work.</em></td><td>Yes — a jump back in time</td></tr>
+      </tbody>
+    </table>
+  </GrammarSection>
+
+  <GrammarSection title="I had just arrived, I had never seen" id="adverbs" open={false}>
+    <p>
+      Adverbs like <em>just</em>, <em>already</em>, <em>always</em>, <em>never</em> and <em>ever</em> usually go in the middle — after <em>had</em>, before the past participle.
+    </p>
+    <GrammarFormula label="Adverb" parts={['subject', 'had', 'adverb', 'past participle']} />
+    <GrammarExample note="Had + just + arrived: a very short time before.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">just</mark> <mark data-role="content">arrived</mark> from school when I saw the letter.
+    </GrammarExample>
+    <GrammarExample note="Had + ever + seen: often after a superlative.">
+      It was the most beautiful one <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">ever</mark> <mark data-role="content">seen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Had + never + seen: not once before that moment.">
+      She came to America to see a relative <mark data-role="grammar">she</mark> <mark data-role="content">had</mark> <mark data-role="grammar">never</mark> <mark data-role="content">seen</mark> before.
+    </GrammarExample>
+    <GrammarExample note="Had + always + wanted: a wish from long before.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">always</mark> <mark data-role="content">wanted</mark> to visit European cities, and Paris was one of the easiest to get to.
+    </GrammarExample>
+    <p>
+      At B2, the same position works with many more adverbs: <em>finally</em>, <em>recently</em>, <em>suddenly</em>, <em>simply</em>, <em>completely</em>, <em>nearly</em>.
+    </p>
+    <GrammarExample note="Had + finally + achieved.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">had</mark> <mark data-role="grammar">finally</mark> <mark data-role="content">achieved</mark> his goal!
+    </GrammarExample>
+    <GrammarExample note="Had + suddenly + woken up.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">had</mark> <mark data-role="grammar">suddenly</mark> <mark data-role="content">woken up</mark> at that noise, but now she was trying to persuade herself it was just a dream.
+    </GrammarExample>
+    <GrammarExample note="In a question, the adverb still goes before the participle.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">just simply</mark> <mark data-role="content">disappeared</mark>?
+    </GrammarExample>
+    <p>
+      In the negative, <em>not</em> comes first: <em>hadn't yet finished</em>, <em>hadn't really understood</em>. <em>Yet</em> usually goes at the end: <em>She hadn't finished yet.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Because he had lost a lot of blood" id="because" open={false}>
+    <p>
+      After <em>because</em>, the past perfect gives the reason for a past situation — something that had happened earlier and explains it.
+    </p>
+    <GrammarFormula label="Explanation" parts={['past situation', 'because', 'subject', 'had', 'past participle']} />
+    <GrammarExample note="He was asleep now; he had lost blood before.">
+      He was sleeping, but I realised that this was <mark data-role="grammar">because</mark> <mark data-role="grammar">he</mark> <mark data-role="content">had lost</mark> a lot of blood.
+    </GrammarExample>
+    <GrammarExample note="The arrangement was made earlier; that's why I was driving there.">
+      I was driving to my parents' house <mark data-role="grammar">because</mark> <mark data-role="grammar">I</mark> <mark data-role="content">had arranged</mark> to have dinner with them.
+    </GrammarExample>
+    <GrammarExample note="She hadn't eaten earlier, so she was hungry at that moment.">
+      She was very hungry <mark data-role="grammar">because</mark> <mark data-role="grammar">she</mark> <mark data-role="content">hadn't eaten</mark> anything all day.
+    </GrammarExample>
+    {becausePoint && <GrammarUsagePointCard usagePoint={becausePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The couple who had organised the party" id="relative" open={false}>
+    <p>
+      A relative clause with <em>who</em>, <em>which</em> or <em>that</em> can use the past perfect to add background: what a person or thing had done before the moment in the story.
+    </p>
+    <GrammarFormula label="Relative clause" parts={['noun', 'who / which / that', 'had', 'past participle']} />
+    <GrammarExample note="Who + had organised: it tells us who these people were.">
+      After a while <mark data-role="grammar">Mr and Mrs Landsbury</mark>, the couple <mark data-role="grammar">who</mark> <mark data-role="content">had organised</mark> the party, asked everybody to stay calm.
+    </GrammarExample>
+    <GrammarExample note="That + had sent: the letter came before he went to the hotel.">
+      He wanted to find out who <mark data-role="grammar">the person</mark> was <mark data-role="grammar">that</mark> <mark data-role="content">had sent</mark> him a mysterious letter.
+    </GrammarExample>
+    <GrammarExample note="Who + had arranged: the party was planned before she arrived.">
+      It was <mark data-role="grammar">Annika</mark> <mark data-role="grammar">who</mark> <mark data-role="content">had arranged</mark> a huge party for her at the airport.
+    </GrammarExample>
+    {relativePoint && <GrammarUsagePointCard usagePoint={relativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="She said she had lost it" id="reported" open={false}>
+    <p>
+      When the reporting verb is in the past (<em>said</em>, <em>told</em>, <em>asked</em>, <em>knew</em>), what happened before it moves back to the past perfect. A past simple or present perfect in the original words becomes <em>had</em> + past participle.
+    </p>
+    <GrammarFormula label="Reported statement" parts={['subject', 'said / told / knew', '(that)', 'subject', 'had', 'past participle']} />
+    <GrammarExample note="&quot;We have arrested a man&quot; → said that the police had arrested.">
+      Suddenly <mark data-role="grammar">the announcer said that</mark> <mark data-role="grammar">the police</mark> <mark data-role="content">had arrested</mark> a man who <mark data-role="content">had stolen</mark> five valuable paintings.
+    </GrammarExample>
+    <GrammarExample note="Explain / know + what had happened.">
+      <mark data-role="grammar">She tried to explain</mark> what <mark data-role="content">had happened</mark>, but she couldn't.
+    </GrammarExample>
+    <GrammarExample note="Knew + what had happened: the event came before I understood it.">
+      I looked at the address and <mark data-role="grammar">I knew</mark> what <mark data-role="content">had happened</mark> to my sister's postcard.
+    </GrammarExample>
+    {reportedStatementPoint && <GrammarUsagePointCard usagePoint={reportedStatementPoint} />}
+    <GrammarContrast
+      good={['"I lost my keys," she said.', 'She said (that) she had lost her keys.']}
+    />
+    <p>
+      Reported questions work the same way, but use normal word order — subject before <em>had</em> — and no question mark. Yes/no questions start with <em>if</em> or <em>whether</em>.
+    </p>
+    <GrammarFormula label="Reported question" parts={['asked', 'wh-word / if', 'subject', 'had', 'past participle']} />
+    <GrammarExample note="&quot;Who gave you my number?&quot; → asked him who had given.">
+      <mark data-role="grammar">I asked him</mark> <mark data-role="grammar">who</mark> <mark data-role="content">had given</mark> him my phone number.
+    </GrammarExample>
+    <GrammarExample note="&quot;Have you seen her?&quot; → ask me if I had seen.">
+      He decided to come to my house <mark data-role="grammar">to ask me</mark> <mark data-role="grammar">if</mark> <mark data-role="grammar">I</mark> <mark data-role="content">had seen</mark> her somewhere.
+    </GrammarExample>
+    <GrammarExample note="&quot;What happened?&quot; → asked her what had happened.">
+      <mark data-role="grammar">I asked her</mark> <mark data-role="grammar">what</mark> <mark data-role="content">had happened</mark>, and she told me that my grandmother was very ill.
+    </GrammarExample>
+    {reportedQuestionPoint && <GrammarUsagePointCard usagePoint={reportedQuestionPoint} />}
+    <GrammarContrast
+      bad={['I asked her what had she done.']}
+      good={['I asked her what she had done.']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="We had planned to go, but…" id="change" open={false}>
+    <p>
+      With verbs like <em>plan</em>, <em>want</em>, <em>hope</em>, <em>intend</em> and <em>expect</em>, the past perfect talks about an earlier plan or wish that <strong>did not happen</strong> — the situation changed. A <em>but</em> clause usually tells what went wrong.
+    </p>
+    <GrammarFormula label="Changed plan" parts={['subject', 'had', 'planned / wanted / hoped', 'to + verb', 'but + what happened']} />
+    <GrammarExample note="The plan was Switzerland; the car changed it.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">had planned</mark> to go to Switzerland, <mark data-role="grammar">but unfortunately our car broke down</mark>.
+    </GrammarExample>
+    <GrammarExample note="The plan was the restaurant; it was closed.">
+      After the show <mark data-role="grammar">we</mark> <mark data-role="content">had planned</mark> to go to the theatre restaurant. <mark data-role="grammar">But it was closed.</mark>
+    </GrammarExample>
+    <GrammarExample note="She wanted to at first, but then she changed her mind.">
+      At first <mark data-role="grammar">she</mark> <mark data-role="content">had wanted</mark> to make the first move, <mark data-role="grammar">but she wasn't quite convinced</mark>.
+    </GrammarExample>
+    {changePoint && <GrammarUsagePointCard usagePoint={changePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="If I had known, I would have come" id="if" open={false}>
+    <p>
+      The past perfect is also used for things that <strong>did not happen</strong> in the past — imagined situations. In an <em>if</em>-clause it shows the opposite of what really happened, often with regret. The main clause uses <em>would / could / might have</em> + past participle.
+    </p>
+    <GrammarFormula label="Imagined past" parts={['if', 'subject', 'had', 'past participle', 'would have', 'past participle']} />
+    <GrammarExample note="The weather wasn't better, so we didn't enjoy it much.">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">the weather</mark> <mark data-role="content">had been</mark> better, <mark data-role="grammar">we would have enjoyed</mark> it more.
+    </GrammarExample>
+    <GrammarExample note="You didn't go with me, so you weren't happy.">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">you</mark> <mark data-role="content">had gone</mark> there with me, <mark data-role="grammar">you would have been</mark> happy.
+    </GrammarExample>
+    <GrammarExample note="Hadn't been: the park was closed, so I didn't spend the night there.">
+      <mark data-role="grammar">I would have spent</mark> all night in the park <mark data-role="grammar">if</mark> <mark data-role="grammar">it</mark> <mark data-role="content">hadn't been</mark> closed!
+    </GrammarExample>
+    {ifClausePoint && <GrammarUsagePointCard usagePoint={ifClausePoint} />}
+    <p>
+      In formal English, you can drop <em>if</em> and put <em>had</em> before the subject. The meaning doesn't change.
+    </p>
+    <GrammarFormula label="Formal inversion" parts={['had', 'subject', 'past participle', 'would have', 'past participle']} />
+    <GrammarExample note="Had I known = if I had known.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">known</mark> the tour would be so bad, <mark data-role="grammar">I wouldn't have booked</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Had they been = if they had been.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">they</mark> <mark data-role="content">been</mark> travellers from other countries, <mark data-role="grammar">I could have accepted</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Inside a that-clause: that had I gone = that if I had gone.">
+      I think that <mark data-role="content">had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">gone</mark> to Britain without this experience, <mark data-role="grammar">my life would have been</mark> different.
+    </GrammarExample>
+    {hadIKnownPoint && <GrammarUsagePointCard usagePoint={hadIKnownPoint} />}
+    <p>
+      <em>If it hadn't been for…</em> and the formal <em>Had it not been for…</em> mean "without this thing or person". They give the reason why something did or didn't happen. Note that in the inverted form, <em>not</em> goes after the subject: <em>had it not</em>, never <em>hadn't it</em>.
+    </p>
+    <GrammarFormula label="Without…" parts={['if it hadn\'t been / had it not been', 'for + noun', 'would have', 'past participle']} />
+    <GrammarExample note="Without my lack of skills, I wouldn't have been fired.">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">it</mark> <mark data-role="content">hadn't been</mark> <mark data-role="grammar">for my lack of experience</mark>, <mark data-role="grammar">I wouldn't have been fired</mark>.
+    </GrammarExample>
+    <GrammarExample note="Had it not been for = if it hadn't been for, more formal.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">it</mark> <mark data-role="content">not been</mark> <mark data-role="grammar">for this feature</mark>, <mark data-role="grammar">he might have been able</mark> to react differently.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I wish I had listened" id="wish" open={false}>
+    <p>
+      After <em>wish</em> and <em>if only</em>, the past perfect expresses regret about the past — you want the past to have been different. <em>If only</em> is stronger and more emotional; it's often used as an exclamation.
+    </p>
+    <GrammarFormula label="Regret" parts={['I wish / if only', 'subject', 'had / hadn\'t', 'past participle']} />
+    <GrammarExample note="If only + had listened: I didn't listen, and I'm sorry now.">
+      <mark data-role="grammar">If only</mark> <mark data-role="grammar">I</mark> <mark data-role="content">had listened</mark> to my father!
+    </GrammarExample>
+    <GrammarExample note="Wish + had played: they didn't play more.">
+      At the end of the concert, I said to my friend, "<mark data-role="grammar">I wish</mark> <mark data-role="grammar">they</mark> <mark data-role="content">had played</mark> a bit more."
+    </GrammarExample>
+    <GrammarExample note="Wish + hadn't told: I told Pat, and now I regret it.">
+      <mark data-role="grammar">I wish</mark> <mark data-role="grammar">I</mark> <mark data-role="content">hadn't told</mark> Pat about my plans.
+    </GrammarExample>
+    {ifOnlyWishPoint && <GrammarUsagePointCard usagePoint={ifOnlyWishPoint} />}
+    <p>
+      <em>If only</em> with a negative — <em>If only I hadn't…</em> — is an even stronger regret about something you did.
+    </p>
+    <GrammarExample note="If only + hadn't been: I was rude, and I'm sorry.">
+      <mark data-role="grammar">If only</mark> <mark data-role="grammar">I</mark> <mark data-role="content">hadn't been</mark> that rude!
+    </GrammarExample>
+    <GrammarExample note="Two regrets in a row, then the result now.">
+      <mark data-role="grammar">If only</mark> <mark data-role="grammar">she</mark> <mark data-role="content">had not changed</mark>, <mark data-role="grammar">if only</mark> <mark data-role="grammar">I</mark> <mark data-role="content">had helped</mark> her, maybe we would still be best friends.
+    </GrammarExample>
+    {ifOnlyNegativePoint && <GrammarUsagePointCard usagePoint={ifOnlyNegativePoint} />}
+    <p>
+      Don't confuse the two times. <em>Wish</em> + past simple is about <strong>now</strong>; <em>wish</em> + past perfect is about the <strong>past</strong>.
+    </p>
+    <GrammarContrast
+      good={[
+        'I wish I knew the answer. (I don\'t know it now)',
+        'I wish I had known the answer. (I didn\'t know it then)',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Never had I seen… No sooner had I…" id="inversion" open={false}>
+    <p>
+      In formal and dramatic writing, some negative or time expressions at the start of a sentence are followed by <em>had</em> + subject + past participle — question word order in a statement.
+    </p>
+    <p>
+      <em>Never</em> or <em>never before</em> at the start stresses that something was unique — it had not happened before.
+    </p>
+    <GrammarFormula label="Never before" parts={['never (before)', 'had', 'subject', 'past participle']} />
+    <GrammarExample note="Never had I been = I had never been.">
+      <mark data-role="grammar">Never</mark> <mark data-role="content">had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">been</mark> in such a ridiculous situation!
+    </GrammarExample>
+    <GrammarExample note="Never before had we seen = we had never seen before.">
+      <mark data-role="grammar">Never before</mark> <mark data-role="content">had</mark> <mark data-role="grammar">we</mark> <mark data-role="content">seen</mark> such marvellous species of fish.
+    </GrammarExample>
+    {neverInversionPoint && <GrammarUsagePointCard usagePoint={neverInversionPoint} />}
+    <p>
+      <em>No sooner … than</em> and <em>Hardly … when</em> say that the second thing happened <strong>immediately</strong> after the first. The first event is in the inverted past perfect; the second is in the past simple. Be careful: <em>no sooner</em> goes with <em>than</em>, and <em>hardly</em> goes with <em>when</em>.
+    </p>
+    <GrammarFormula label="Immediately after" parts={['no sooner / hardly', 'had', 'subject', 'past participle', 'than / when', 'past simple']} />
+    <GrammarExample note="No sooner had I gone to bed than… = just after I went to bed.">
+      <mark data-role="grammar">No sooner</mark> <mark data-role="content">had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">gone</mark> to bed <mark data-role="grammar">than</mark> someone broke the door down.
+    </GrammarExample>
+    <GrammarExample note="No sooner … than: the news came the moment I arrived.">
+      <mark data-role="grammar">No sooner</mark> <mark data-role="content">had</mark> <mark data-role="grammar">I</mark> <mark data-role="content">got</mark> there <mark data-role="grammar">than</mark> my classmates told me I had done well in my physics exam.
+    </GrammarExample>
+    {noSoonerPoint && <GrammarUsagePointCard usagePoint={noSoonerPoint} />}
+    <GrammarExample note="Hardly had she spoken … when: C2, very formal.">
+      <mark data-role="grammar">Hardly</mark> <mark data-role="content">had</mark> <mark data-role="grammar">she</mark> <mark data-role="content">spoken</mark> these words <mark data-role="grammar">when</mark> it became clear that life could not continue like that.
+    </GrammarExample>
+    <GrammarExample note="Hardly had he taken … when: the monster vanished at once.">
+      <mark data-role="grammar">Hardly</mark> <mark data-role="content">had</mark> <mark data-role="grammar">he</mark> <mark data-role="content">taken</mark> them from the counter <mark data-role="grammar">when</mark> the monster vanished again.
+    </GrammarExample>
+    <GrammarContrast
+      bad={['No sooner I had arrived than it started to rain.', 'No sooner had I arrived when it started to rain.']}
+      good={['No sooner had I arrived than it started to rain.', 'Hardly had I arrived when it started to rain.']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After <em>had</em>, use the past participle (third form), not the past simple (second form). This matters for irregular verbs.
+    </p>
+    <GrammarContrast
+      bad={['She had went home.', 'I had wrote the letter.']}
+      good={['She had gone home.', 'I had written the letter.']}
+    />
+    <p>
+      Don't use the past perfect just because something happened long ago. If there's no later past moment to look back from, use the past simple.
+    </p>
+    <GrammarContrast
+      bad={['I had been to London in 2010.', 'My grandfather had built this house in 1950.']}
+      good={['I went to London in 2010.', 'My grandfather built this house in 1950.']}
+    />
+    <p>
+      When you look back from a past moment, use <em>had</em>, not <em>have / has</em>. <em>Have done</em> is for looking back from now.
+    </p>
+    <GrammarContrast
+      bad={['When I arrived, the film has already started.']}
+      good={['When I arrived, the film had already started.']}
+    />
+    <p>
+      In the <em>if</em>-clause, use <em>had</em> + participle, not <em>would have</em>. <em>Would have</em> belongs in the other clause.
+    </p>
+    <GrammarContrast
+      bad={['If I would have known, I would have come.']}
+      good={['If I had known, I would have come.']}
+    />
+    <p>
+      <em>'d</em> can mean <em>had</em> or <em>would</em>. Look at the next word: a past participle means <em>had</em> (<em>I'd seen</em>), a base form means <em>would</em> (<em>I'd see</em>).
+    </p>
+    <GrammarContrast
+      good={["I'd seen the film before. (I had seen)", "I'd see it again. (I would see)"]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'I arrived, I went — the main events of a story, told in order.',
+      },
+      {
+        slug: 'past-past-perfect-continuous',
+        name: 'past perfect continuous',
+        note: 'I had been waiting for an hour — the activity and how long, not the result.',
+      },
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect simple',
+        note: "I have finished — looking back from now, not from the past.",
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditionals',
+        note: 'If I had known, I would have come — all the types of if-sentences.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'She said she had lost it — how tenses move back after said and asked.',
+      },
+    ]}
+  />
+</GrammarShell>

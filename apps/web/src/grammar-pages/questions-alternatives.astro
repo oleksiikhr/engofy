@@ -1,0 +1,292 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 8 EGP rows (1008-1015): 4 pure FORM rows without cards (word + word,
+// phrase + phrase, clause + clause, C2 ellipsis); the 4 FORM/USE rows — 1010
+// (or something else), 1012 (or not), 1013 (strong alternative), 1014
+// (ellipted modal, hedging) — are inlined, matched by EGP index. Content is
+// each alternative (word, phrase or clause — its size is what the FORM rows
+// distinguish); the opener and `or` are grammar.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const somethingElsePoint = point(1010);
+const orNotPoint = point(1012);
+const strongPoint = point(1013);
+const hedgingPoint = point(1014);
+
+const inlineUsagePointIds = [somethingElsePoint, orNotPoint, strongPoint, hedgingPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Questions that offer a choice with or: Tea or coffee? Is it cheap or expensive? Are you still with him or did you break up? — plus or something else, or not, Which do you prefer, A or B?, and how the voice falls on the last option."
+  handcrafted
+  sections={[
+    { id: 'word', title: 'Cheap or expensive? Two words', open: true },
+    { id: 'intonation', title: 'Up on the first, down on the last', open: false },
+    { id: 'phrase', title: 'In the city or in the countryside? Two phrases', open: false },
+    { id: 'something-else', title: 'A, B or something else?', open: false },
+    { id: 'clause', title: 'Should I go or should I stay? Two clauses', open: false },
+    { id: 'which', title: 'Which do you prefer, A or B?', open: false },
+    { id: 'or-not', title: 'Or not?', open: false },
+    { id: 'ellipsis', title: 'Dropping repeated words: …or show a movie?', open: false },
+    { id: 'strong', title: 'A blessing or the exact opposite?', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      An alternative question gives the listener two (or more) options joined by <em>or</em>, and the answer is one of them — not <em>yes</em> or <em>no</em>. <em>"Is it cheap or expensive?" — "Cheap."</em> The question starts like a normal yes/no question; the options can be single words, phrases or whole clauses.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Cheap or expensive? Two words" id="word" open>
+    <p>
+      The simplest kind: two words of the same kind — two nouns, two adjectives, two verbs — with <em>or</em> between them. The start of the question is the usual yes/no word order: <em>is / do / can…</em> + subject.
+    </p>
+    <GrammarFormula label="Word or word" parts={['is / do / can… + subject', 'word', 'or', 'word']} />
+    <GrammarExample note="Two adjectives. Answer: Cheap. / Expensive.">
+      <mark data-role="grammar">Is it</mark> <mark data-role="content">cheap</mark> <mark data-role="grammar">or</mark> <mark data-role="content">expensive</mark> for you?
+    </GrammarExample>
+    <GrammarExample note="Two nouns. Answer: Coffee, please.">
+      <mark data-role="grammar">Would you like</mark> <mark data-role="content">tea</mark> <mark data-role="grammar">or</mark> <mark data-role="content">coffee</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two verbs. Answer: Let's watch a film.">
+      <mark data-role="grammar">Shall we</mark> <mark data-role="content">chat</mark> <mark data-role="grammar">or</mark> <mark data-role="content">watch</mark> a film?
+    </GrammarExample>
+    <GrammarExample note="Two nouns after one verb.">
+      <mark data-role="grammar">Can you</mark> bring some <mark data-role="content">food</mark> <mark data-role="grammar">or</mark> <mark data-role="content">drinks</mark> for the dinner?
+    </GrammarExample>
+    <p>
+      The answer is the option itself, often short: <em>"Tea or coffee?" — "Tea, please."</em> or a full sentence: <em>"I'd like tea."</em> In speaking, the start of the question often disappears completely: <em>Tea or coffee? Here or to take away?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Up on the first, down on the last" id="intonation">
+    <p>
+      In speech, the voice goes <strong>up</strong> on each option except the last, and <strong>down</strong> on the last one. The fall tells the listener: "that's the full list — choose".
+    </p>
+    <GrammarFormula label="Intonation" parts={['option ↗', 'or', 'option ↘']} />
+    <GrammarExample note="A choice between two drinks. Answer: Tea. / Coffee.">
+      Would you like <mark data-role="content">tea ↗</mark> <mark data-role="grammar">or</mark> <mark data-role="content">coffee ↘</mark>?
+    </GrammarExample>
+    <p>
+      If the voice goes up at the end instead, the same words become a yes/no question: "Would you like something to drink — tea, coffee, anything?" The answer is then <em>yes</em> or <em>no</em>.
+    </p>
+    <GrammarExample note="Rising at the end = an offer of any drink. Answer: Yes, please. / No, thanks.">
+      Would you like <mark data-role="content">tea</mark> <mark data-role="grammar">or</mark> <mark data-role="content">coffee ↗</mark>?
+    </GrammarExample>
+    <p>
+      In writing, a comma before <em>or</em> isn't needed with two options. With three or more, use commas between them: <em>A, B or C?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="In the city or in the countryside? Two phrases" id="phrase">
+    <p>
+      Each option can be a longer phrase — a preposition phrase, a noun phrase with an adjective, a verb with its object. Keep the two options parallel: the same kind of phrase on both sides of <em>or</em>.
+    </p>
+    <GrammarFormula label="Phrase or phrase" parts={['is / do / can… + subject', 'phrase', 'or', 'phrase']} />
+    <GrammarExample note="Two preposition phrases.">
+      <mark data-role="grammar">Is this area</mark> <mark data-role="content">in the city</mark> <mark data-role="grammar">or</mark> <mark data-role="content">in the countryside</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two noun phrases after for. The second for can be left out.">
+      <mark data-role="grammar">Do you feel</mark> more sympathy <mark data-role="content">for your friends</mark> <mark data-role="grammar">or</mark> <mark data-role="content">your parents</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two verb phrases.">
+      <mark data-role="grammar">Do you want to</mark> <mark data-role="content">stay at home</mark> <mark data-role="grammar">or</mark> <mark data-role="content">go out for dinner</mark>?
+    </GrammarExample>
+    <GrammarExample note="Two time phrases.">
+      <mark data-role="grammar">Are you leaving</mark> <mark data-role="content">on Friday</mark> <mark data-role="grammar">or</mark> <mark data-role="content">on Saturday morning</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A, B or something else?" id="something-else">
+    <p>
+      With three or more options, put commas between them and <em>or</em> only before the last one. To say "I've listed some ideas, but you can choose anything", end with <em>or something else</em>.
+    </p>
+    <GrammarFormula label="A list" parts={['option', ', option', 'or', 'something else']} />
+    <GrammarExample note="Two concrete ideas, then an open option.">
+      <mark data-role="grammar">Shall we</mark> buy him <mark data-role="content">a book</mark>, <mark data-role="content">a CD</mark> <mark data-role="grammar">or</mark> <mark data-role="content">something else</mark>?
+    </GrammarExample>
+    <GrammarExample note="No opening words at all — typical in speech and informal writing.">
+      <mark data-role="content">Poetry</mark>, <mark data-role="content">history</mark> <mark data-role="grammar">or</mark> <mark data-role="content">something else</mark>?
+    </GrammarExample>
+    <GrammarExample note="Same idea with a verb: or something else = any other activity.">
+      <mark data-role="grammar">Do you want to</mark> <mark data-role="content">go swimming</mark> <mark data-role="grammar">or</mark> <mark data-role="content">do something else</mark>?
+    </GrammarExample>
+    {somethingElsePoint && <GrammarUsagePointCard usagePoint={somethingElsePoint} />}
+    <p>
+      For people and places, use <em>or someone else</em>, <em>or somewhere else</em>: <em>Shall we ask Tom, Anna or someone else?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Should I go or should I stay? Two clauses" id="clause">
+    <p>
+      Each option can be a whole question. The second question after <em>or</em> keeps question word order too: <em>…or did you break up?</em>, not <em>…or you broke up?</em> The two questions can even use different verbs and tenses.
+    </p>
+    <GrammarFormula label="Clause or clause" parts={['question 1', 'or', 'question 2']} />
+    <GrammarExample note="Two questions with different verbs: are and did.">
+      <mark data-role="content">Are you still with him</mark> <mark data-role="grammar">or</mark> <mark data-role="content">did you two break up</mark>?
+    </GrammarExample>
+    <GrammarExample note="Both questions start with should I.">
+      <mark data-role="content">Should I go there and talk to her</mark> <mark data-role="grammar">or</mark> <mark data-role="content">should I stay here</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present and future in one question.">
+      <mark data-role="content">Do you live near here</mark> <mark data-role="grammar">or</mark> <mark data-role="content">will you need a taxi</mark>?
+    </GrammarExample>
+    <p>
+      If the two questions share the same start, you usually don't repeat it — see "Dropping repeated words" below.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Which do you prefer, A or B?" id="which">
+    <p>
+      You can also begin with a <em>wh-</em> question and then add the options after a comma. This sounds more open and polite than a bare <em>A or B?</em>, and it's very common with <em>which</em>.
+    </p>
+    <GrammarFormula label="Wh- + options" parts={['which / where / who… question', ',', 'option', 'or', 'option']} />
+    <GrammarExample note="Which do you prefer = choose one of these two.">
+      <mark data-role="grammar">Which do you prefer,</mark> <mark data-role="content">the red one</mark> <mark data-role="grammar">or</mark> <mark data-role="content">the blue one</mark>?
+    </GrammarExample>
+    <GrammarExample note="Where shall we go — and here are two ideas.">
+      <mark data-role="grammar">Where shall we go,</mark> <mark data-role="content">to the beach</mark> <mark data-role="grammar">or</mark> <mark data-role="content">to the mountains</mark>?
+    </GrammarExample>
+    <GrammarExample note="Who… with two people to choose from.">
+      <mark data-role="grammar">Who is older,</mark> <mark data-role="content">you</mark> <mark data-role="grammar">or</mark> <mark data-role="content">your sister</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Or not?" id="or-not">
+    <p>
+      <em>Or not</em> at the end is a short way to give the negative option without repeating the whole question: <em>Did he pass or not?</em> = <em>Did he pass or didn't he pass?</em> It asks for a clear answer, and it often sounds impatient or annoyed — use it carefully with people you don't know well.
+    </p>
+    <GrammarFormula label="Or not" parts={['yes/no question', 'or', 'not']} />
+    <GrammarExample note="Impatient: the speaker wants a clear answer now.">
+      <mark data-role="content">Do you want to do that</mark> <mark data-role="grammar">or</mark> <mark data-role="content">not</mark>?
+    </GrammarExample>
+    <GrammarExample note="Pushing for agreement.">
+      <mark data-role="content">Do you agree with me</mark> <mark data-role="grammar">or</mark> <mark data-role="content">not</mark>?
+    </GrammarExample>
+    <GrammarExample note="Nervous: the speaker can't wait for the answer.">
+      I couldn't wait, I asked nervously about his exam: <mark data-role="content">did he pass</mark> <mark data-role="grammar">or</mark> <mark data-role="content">not</mark>?
+    </GrammarExample>
+    <GrammarExample note="Neutral: just checking plans.">
+      <mark data-role="content">Will you be there till that time</mark> <mark data-role="grammar">or</mark> <mark data-role="content">not</mark>?
+    </GrammarExample>
+    {orNotPoint && <GrammarUsagePointCard usagePoint={orNotPoint} />}
+    <p>
+      A stronger, more emotional version repeats the auxiliary in the negative: <em>Are you coming or aren't you?</em> The polite neutral way is simply the yes/no question: <em>Are you coming?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Dropping repeated words: …or show a movie?" id="ellipsis">
+    <p>
+      When two clauses start with the same subject and auxiliary or modal, say them only once. The second option starts straight from the main verb: <em>Should I stay or (should I) go?</em>
+    </p>
+    <GrammarFormula label="Ellipsis" parts={['auxiliary / modal + subject', 'verb phrase', 'or', 'verb phrase']} />
+    <GrammarExample note="Is he going to… is said once, for both options.">
+      <mark data-role="grammar">Is he going to</mark> <mark data-role="content">give it back to me</mark> <mark data-role="grammar">or</mark> <mark data-role="content">show it to everybody</mark>?
+    </GrammarExample>
+    <GrammarExample note="Is it not better to… is said once, for both options.">
+      <mark data-role="grammar">Is it not better to</mark> <mark data-role="content">take the television away</mark> <mark data-role="grammar">or</mark> <mark data-role="content">stop them going to the cinema</mark>?
+    </GrammarExample>
+    <GrammarExample note="Three verb phrases after do you.">
+      <mark data-role="grammar">Do you</mark> <mark data-role="content">enjoy reading</mark>, <mark data-role="content">find it a waste of time</mark> <mark data-role="grammar">or</mark> <mark data-role="content">have an indifferent attitude to it</mark>?
+    </GrammarExample>
+    <p>
+      In formal writing, especially suggestions, the same pattern with <em>maybe / perhaps + could / will be able to</em> is a soft, polite way to suggest ideas: it's phrased as a question, so the reader is free to say no.
+    </p>
+    <GrammarFormula label="Hedging" parts={['maybe + you could / will be able to', 'verb phrase', 'or', 'verb phrase']} />
+    <GrammarExample note="A polite suggestion with two ideas; could isn't repeated.">
+      <mark data-role="grammar">Maybe you could</mark> <mark data-role="content">hand out toys</mark> <mark data-role="grammar">or</mark> <mark data-role="content">show a movie</mark>?
+    </GrammarExample>
+    <GrammarExample note="In a formal letter: suggesting without demanding.">
+      <mark data-role="grammar">Maybe you will be able to</mark> <mark data-role="content">arrange another excursion this year</mark> <mark data-role="grammar">or</mark> <mark data-role="content">provide more time there</mark>?
+    </GrammarExample>
+    {hedgingPoint && <GrammarUsagePointCard usagePoint={hedgingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="A blessing or the exact opposite?" id="strong">
+    <p>
+      In argument and essays, the second option can be an extreme one — <em>the exact opposite, a disaster, a waste of money</em>. It's not really a question to answer: it pushes the reader to doubt the first, positive option.
+    </p>
+    <GrammarFormula label="Strong alternative" parts={['question', 'positive option', 'or', 'extreme option']} />
+    <GrammarExample note="The writer suggests the industry may be bad for the region.">
+      <mark data-role="grammar">Is this new industry</mark> <mark data-role="content">a blessing for the region</mark> <mark data-role="grammar">or</mark> <mark data-role="content">the exact opposite</mark>?
+    </GrammarExample>
+    <GrammarExample note="The writer doubts that the reform is useful.">
+      <mark data-role="grammar">Is this reform</mark> <mark data-role="content">real progress</mark> <mark data-role="grammar">or</mark> <mark data-role="content">just a waste of money</mark>?
+    </GrammarExample>
+    {strongPoint && <GrammarUsagePointCard usagePoint={strongPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      An alternative question isn't answered <em>yes</em> or <em>no</em> — choose one of the options.
+    </p>
+    <GrammarContrast bad={['— Tea or coffee? — Yes, please.']} good={['— Tea or coffee? — Coffee, please.']} />
+    <p>
+      Ukrainian starts such questions with <em>чи</em>: <em>Чи ти прийдеш, чи ні?</em> English has no word at the start — the auxiliary does that job. Don't translate <em>чи</em> as <em>whether</em> or <em>or</em> at the beginning of a direct question. (<em>Whether</em> is only for reported questions: <em>He asked whether I was coming or not.</em>)
+    </p>
+    <GrammarContrast bad={['Whether you want tea or coffee?', 'Or you will come or not?']} good={['Do you want tea or coffee?', 'Will you come or not?']} />
+    <p>
+      The second clause is still a question: keep the auxiliary before the subject — or drop both.
+    </p>
+    <GrammarContrast bad={['Should I call her or I should wait?']} good={['Should I call her or should I wait?', 'Should I call her or wait?']} />
+    <p>
+      Don't add <em>either</em> to a question that offers a choice — <em>either… or</em> makes it a yes/no question ("any of these?").
+    </p>
+    <GrammarContrast bad={['Do you want either tea or coffee? — Coffee.']} good={['Do you want tea or coffee? — Coffee.']} />
+    <p>
+      Keep the options parallel — the same kind of word or phrase on both sides of <em>or</em>.
+    </p>
+    <GrammarContrast bad={['Do you prefer swimming or to run?']} good={['Do you prefer swimming or running?']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'Is it cheap? — the same word order, but the answer is yes or no.',
+      },
+      {
+        slug: 'questions-wh',
+        name: 'wh- questions',
+        note: 'Which do you prefer? — an open question, often followed by the options.',
+      },
+      {
+        slug: 'clauses-interrogatives',
+        name: 'interrogative clauses',
+        note: 'How be, do, auxiliaries and modals build any question.',
+      },
+      {
+        slug: 'conjunctions-coordinating',
+        name: 'coordinating conjunctions',
+        note: 'and, but, or — joining words, phrases and clauses in statements.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'He asked whether I wanted tea or coffee — reporting an alternative question.',
+      },
+    ]}
+  />
+</GrammarShell>

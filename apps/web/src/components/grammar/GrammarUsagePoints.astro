@@ -6,46 +6,81 @@
 // nothing left to show, so a handcrafted page that covers every usage point
 // inline doesn't leave an empty section (and its own progress bar, if the
 // construction has one, lives in GrammarShell's header instead).
+//
+// Closed by default, and only the first VISIBLE_COUNT points are shown once
+// opened — the rest sit behind a "Show N more" toggle. The source order (EGP:
+// roughly the typical rule first, exceptions later) is the only ranking.
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
+import GrammarSection from './GrammarSection.astro';
 import GrammarUsagePointCard from './GrammarUsagePointCard.astro';
 
 interface Props {
   usagePoints: GrammarConstructionUsagePoint[];
   // Anchor for GrammarSectionProgress: renders as `gp-section-${sectionId}`.
-  sectionId?: string;
+  sectionId: string;
 }
 
+const VISIBLE_COUNT = 2;
+
 const { usagePoints, sectionId } = Astro.props;
+const shown = usagePoints.slice(0, VISIBLE_COUNT);
+const more = usagePoints.slice(VISIBLE_COUNT);
+const plural = (n: number) => (n === 1 ? '' : 's');
 ---
 
 {
   usagePoints.length > 0 && (
-    <section
-      class="usage"
-      data-testid="grammar-usage"
-      id={sectionId && `gp-section-${sectionId}`}
+    <GrammarSection
+      title="When it's used"
+      id={sectionId}
+      open={false}
+      meta={`${usagePoints.length} rule${plural(usagePoints.length)}`}
+      testId="grammar-usage"
     >
-      <h2>When it's used</h2>
       <ul class="usage-list">
-        {usagePoints.map((up) => (
+        {shown.map((up) => (
           <li>
             <GrammarUsagePointCard usagePoint={up} />
           </li>
         ))}
       </ul>
-    </section>
+      {more.length > 0 && (
+        <details class="usage-more" data-testid="grammar-usage-more">
+          <summary class="usage-more__toggle">
+            Show {more.length} more usage point{plural(more.length)}
+          </summary>
+          <ul class="usage-list">
+            {more.map((up) => (
+              <li>
+                <GrammarUsagePointCard usagePoint={up} />
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </GrammarSection>
   )
 }
 
 <style>
-  .usage h2 {
-    margin: 0 0 0.75rem;
-    font-size: 1.19rem;
-    font-weight: 800;
-  }
   .usage-list {
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+  .usage-more__toggle {
+    display: inline-block;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--color-brand-strong);
+  }
+  .usage-more__toggle::-webkit-details-marker {
+    display: none;
+  }
+  .usage-more[open] > .usage-more__toggle {
+    display: none;
   }
 </style>

@@ -1,0 +1,236 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// Both USE rows are inlined, matched by EGP index. The other 3 rows
+// (negative needn't, past needn't have + -ed, question Need I…?) are plain
+// FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const noObligationPoint = point(552);
+const discussionPoint = point(555);
+
+const inlineUsagePointIds = [noObligationPoint, discussionPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Need: saying that something is or isn't necessary. The modal negative needn't + base verb (it isn't necessary), don't need to as the everyday equivalent, needn't vs mustn't, needn't have done (you did it, but it wasn't necessary) vs didn't need to, and formal questions like Need I say more?"
+  handcrafted
+  sections={[
+    { id: 'form', title: "Needn't + base verb: not necessary", open: true },
+    { id: 'ordinary-verb', title: "Need to, don't need to: the ordinary verb", open: false },
+    { id: 'mustnt', title: "Needn't vs mustn't vs don't have to", open: false },
+    { id: 'neednt-have', title: "Needn't have done: it wasn't necessary, but you did it", open: false },
+    { id: 'question', title: 'Need I…?: formal and rhetorical questions', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Need</em> talks about what is necessary. It works in two ways: as an ordinary verb (<em>I need to go</em>, <em>You don't need to worry</em>) — the usual form — and as a modal verb, mostly in the negative: <em>You needn't worry.</em> Both negatives mean the same thing: it isn't necessary, you don't have to.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Needn't + base verb: not necessary" id="form" open>
+    <p>
+      As a modal verb, <em>need</em> is used mainly in the negative: <em>need not</em>, short form <em>needn't</em>, + base verb without <em>to</em>. It is the same for every subject — no <em>-s</em>: <em>she needn't</em>, not <em>she needsn't</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "needn't / need not", 'base verb']} />
+    <GrammarExample note="You + needn't + worry: there's no reason to worry.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">needn't</mark> <mark data-role="grammar">worry</mark> about where we can stay.
+    </GrammarExample>
+    <GrammarExample note="I + need not + worry: the full form, a little more formal.">
+      When I send an e-mail, <mark data-role="grammar">I</mark> <mark data-role="content">need not</mark> <mark data-role="grammar">worry</mark> about the time.
+    </GrammarExample>
+    <GrammarExample note="You + needn't + go: it isn't necessary, because you've already done your exercise.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">needn't</mark> <mark data-role="grammar">go</mark> out jogging this evening — you've already had your exercise.
+    </GrammarExample>
+    <p>
+      The meaning is "there is no obligation" — you can do it if you want, but nobody requires it. It is often used to reassure someone or to give them permission not to do something.
+    </p>
+    <GrammarExample note="We + needn't + wear: the hot weather means a jacket isn't necessary.">
+      I love summer because it's hot and <mark data-role="grammar">we</mark> <mark data-role="content">needn't</mark> <mark data-role="grammar">wear</mark> a jacket.
+    </GrammarExample>
+    <GrammarExample note="You + needn't + worry: reassuring a friend — I'll take care of it.">
+      As for the music, <mark data-role="grammar">you</mark> <mark data-role="content">needn't</mark> <mark data-role="grammar">worry</mark> about it.
+    </GrammarExample>
+    {noObligationPoint && <GrammarUsagePointCard usagePoint={noObligationPoint} />}
+    <p>
+      <em>Needn't</em> is mostly British and a little formal. In everyday speech, and especially in American English, <em>don't need to</em> is more common — see the next section.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Need to, don't need to: the ordinary verb" id="ordinary-verb" open={false}>
+    <p>
+      As an ordinary verb, <em>need</em> has <em>to</em>, an <em>-s</em> in the third person, the past <em>needed</em>, and <em>do</em> in negatives and questions. This is the normal form in affirmative sentences: <em>I need to go</em>, never <em>I need go</em>.
+    </p>
+    <GrammarFormula label="Ordinary verb" parts={['subject', 'need(s) / needed', 'to', 'base verb']} />
+    <GrammarExample note="She + needs + to call: it's necessary for her.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">needs</mark> <mark data-role="grammar">to call</mark> her mother tonight.
+    </GrammarExample>
+    <GrammarExample note="We + needed + to leave: necessary in the past.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">needed</mark> <mark data-role="grammar">to leave</mark> early to catch the train.
+    </GrammarExample>
+    <GrammarFormula label="Negative" parts={['subject', "don't / doesn't / didn't need", 'to', 'base verb']} />
+    <GrammarExample note="You + don't need + to worry: the same meaning as you needn't worry.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">don't need</mark> <mark data-role="grammar">to worry</mark> about the tickets — I've already booked them.
+    </GrammarExample>
+    <GrammarExample note="He + doesn't need + to come: -s goes on does, not on need.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">doesn't need</mark> <mark data-role="grammar">to come</mark> to the meeting.
+    </GrammarExample>
+    <GrammarFormula label="Question" parts={['do / does / did', 'subject', 'need', 'to', 'base verb?']} />
+    <GrammarExample note="Do + I + need + to bring: an everyday question.">
+      <mark data-role="grammar">Do</mark> <mark data-role="grammar">I</mark> <mark data-role="content">need</mark> <mark data-role="grammar">to bring</mark> anything to the party?
+    </GrammarExample>
+    <p>
+      <em>Need</em> is also often followed by a noun: <em>I need a break.</em> / <em>Do you need any help?</em> In this use it is always an ordinary verb.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Needn't vs mustn't vs don't have to" id="mustnt" open={false}>
+    <p>
+      <em>Needn't</em> and <em>mustn't</em> look similar, but their meanings are very different. <em>Needn't</em> and <em>don't have to</em> mean "it isn't necessary — you can choose". <em>Mustn't</em> means "it isn't allowed — don't do it".
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>Meaning</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>needn't</code></th><td>not necessary (you can if you want)</td><td>You needn't come — we can manage.</td></tr>
+        <tr><th><code>don't need to</code></th><td>not necessary (everyday form)</td><td>You don't need to come.</td></tr>
+        <tr><th><code>don't have to</code></th><td>not necessary, often because of a rule or situation</td><td>You don't have to wear a uniform on Fridays.</td></tr>
+        <tr><th><code>mustn't</code></th><td>not allowed / a strong warning</td><td>You mustn't tell anyone — it's a secret.</td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="Needn't + take: it isn't necessary — it won't rain.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">needn't</mark> <mark data-role="grammar">take</mark> an umbrella — it's going to be sunny.
+    </GrammarExample>
+    <GrammarExample note="Mustn't + touch: it's dangerous, so it isn't allowed.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">mustn't</mark> <mark data-role="grammar">touch</mark> that wire — it's live.
+    </GrammarExample>
+    <p>
+      That's why the short answer to <em>Must I…?</em> is <em>No, you needn't</em> or <em>No, you don't have to</em> — not <em>No, you mustn't</em>.
+    </p>
+    <GrammarExample note="Must I…? — No, you needn't: it isn't necessary.">
+      "Must I finish it today?" "No, <mark data-role="grammar">you</mark> <mark data-role="content">needn't</mark>. Tomorrow is fine."
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Needn't have done: it wasn't necessary, but you did it" id="neednt-have" open={false}>
+    <p>
+      <em>Needn't have</em> + past participle is about the past: someone did something, and later it turned out it wasn't necessary. It often sounds like a mild regret (<em>I needn't have hurried</em>) or a polite, grateful complaint when someone gives you a present.
+    </p>
+    <GrammarFormula label="Past" parts={['subject', "needn't have", 'past participle']} />
+    <GrammarExample note="You + needn't have + bought: you bought a present, but it wasn't necessary (thank you!).">
+      <mark data-role="grammar">You</mark> <mark data-role="content">needn't have</mark> <mark data-role="grammar">bought</mark> me anything!
+    </GrammarExample>
+    <GrammarExample note="You + needn't have + bothered: you made an effort that wasn't necessary.">
+      However, <mark data-role="grammar">you</mark> <mark data-role="content">needn't have</mark> <mark data-role="grammar">bothered</mark> so much.
+    </GrammarExample>
+    <GrammarExample note="I + needn't have + hurried: I did hurry, and it was a waste.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">needn't have</mark> <mark data-role="grammar">hurried</mark> — the train was twenty minutes late.
+    </GrammarExample>
+    <p>
+      Compare <em>didn't need to</em>: it usually means the action was not necessary, so the person <strong>didn't</strong> do it. <em>Needn't have done</em> always means they <strong>did</strong> it.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>Did it happen?</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>needn't have done</code></th><td>yes — but it was unnecessary</td><td>I needn't have cooked — they'd already eaten.</td></tr>
+        <tr><th><code>didn't need to do</code></th><td>usually no — it was unnecessary, so I didn't</td><td>I didn't need to cook — they'd already eaten.</td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="Didn't need + to wait: the doctor saw me at once, so I didn't wait.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">didn't need</mark> <mark data-role="grammar">to wait</mark> — the doctor saw me straight away.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Need I…?: formal and rhetorical questions" id="question" open={false}>
+    <p>
+      As a modal, <em>need</em> goes before the subject in questions, with no <em>do</em> and no <em>to</em>. This is formal and fairly rare. In everyday English, use <em>Do I need to…?</em>
+    </p>
+    <GrammarFormula label="Question" parts={['need', 'subject', 'base verb?']} />
+    <GrammarExample note="Need + you + ask: is it really necessary to ask? (= the answer is obvious)">
+      <mark data-role="content">Need</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">ask</mark>?
+    </GrammarExample>
+    <GrammarExample note="Need + I + say: I don't have to say more — you understand.">
+      The premises should be cleaner, as I'm sure others would agree. <mark data-role="content">Need</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">say</mark> more?
+    </GrammarExample>
+    <p>
+      In essays, speeches and formal discussion, these questions are usually rhetorical: the writer doesn't expect an answer. <em>Need I say more?</em> / <em>Need I go on?</em> mean "the point is already clear". <em>Need you…?</em> / <em>Need we…?</em> suggest that something is unnecessary or wrong.
+    </p>
+    <GrammarExample note="Need + I + go on: the argument is already strong enough.">
+      <mark data-role="content">Need</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">go on</mark>?
+    </GrammarExample>
+    <GrammarExample note="Need + you + work: is it really necessary to work like this? (= you shouldn't)">
+      <mark data-role="content">Need</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">work</mark> in this way?
+    </GrammarExample>
+    {discussionPoint && <GrammarUsagePointCard usagePoint={discussionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Modal <em>needn't</em> takes the base verb without <em>to</em> and never <em>-s</em>. Ordinary <em>need</em> needs <em>to</em> and <em>do</em>. Don't mix the two forms.
+    </p>
+    <GrammarContrast
+      bad={["You needn't to worry.", "She needsn't come.", "You don't need worry."]}
+      good={["You needn't worry. / You don't need to worry.", "She needn't come. / She doesn't need to come.", "You don't need to worry."]}
+    />
+    <p>
+      In affirmative sentences, use ordinary <em>need to</em> — modal <em>need</em> + base verb is only for negatives and formal questions.
+    </p>
+    <GrammarContrast bad={['I need go now.', 'He need to finish it.']} good={['I need to go now.', 'He needs to finish it.']} />
+    <p>
+      <em>Needn't</em> means "not necessary", not "not allowed". For something you did that turned out unnecessary, use <em>needn't have</em> + past participle.
+    </p>
+    <GrammarContrast
+      bad={["You needn't smoke here — it's a hospital.", "You needn't have buy me anything.", "I needn't bring an umbrella yesterday."]}
+      good={["You mustn't smoke here — it's a hospital.", "You needn't have bought me anything.", "I needn't have brought an umbrella yesterday."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "You mustn't… — not allowed; you needn't… — not necessary. No, you needn't is the short answer to Must I…?",
+      },
+      {
+        slug: 'modality-have-got-to',
+        name: 'have (got) to',
+        note: "You don't have to… — the other everyday way to say something isn't necessary.",
+      },
+      {
+        slug: 'modality-dare',
+        name: 'dare',
+        note: "daren't + base verb / don't dare (to) — the other semi-modal that works both as a modal and as an ordinary verb.",
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: "You shouldn't have… — it was a mistake; you needn't have… — it just wasn't necessary.",
+      },
+    ]}
+  />
+</GrammarShell>

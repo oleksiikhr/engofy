@@ -1,0 +1,394 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 18 EGP rows (938-955): all 12 USE rows are inlined, matched by EGP index
+// (the guidewords repeat — 'THIS', ALREADY MENTIONED is both A2 and B1).
+// The other 6 are plain FORM rows (this, that, these, those, quantifier + of,
+// that of / those of), written in full without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const pointingPoint = point(939);
+const nowPoint = point(941);
+const backPoints = [point(940), point(943), point(948), point(950)];
+const wholeIdeaPoint = point(946);
+const responsePoint = point(944);
+const closingPoint = point(945);
+const thisOnePoint = point(952);
+const theseOnesPoint = point(953);
+const thoseWhoPoint = point(954);
+
+const inlineUsagePointIds = [
+  pointingPoint,
+  nowPoint,
+  ...backPoints,
+  wholeIdeaPoint,
+  responsePoint,
+  closingPoint,
+  thisOnePoint,
+  theseOnesPoint,
+  thoseWhoPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="This, that, these and those as pronouns, without a noun: This is my number, That was amazing, I like that. Pointing forward and back, reacting with That’s great!, one of these, this one, those who… and the formal that of / those of."
+  handcrafted
+  sections={[
+    { id: 'four-words', title: 'This, that, these, those on their own', open: true },
+    { id: 'pointing', title: 'This is my number: pointing forward', open: false },
+    { id: 'now', title: 'This is the best holiday: right now', open: false },
+    { id: 'back', title: 'I like that: pointing back', open: false },
+    { id: 'whole-idea', title: 'Because of this: a whole idea', open: false },
+    { id: 'thats', title: 'That’s great! That’s all: fixed phrases', open: false },
+    { id: 'quantity', title: 'One of these, all of that', open: false },
+    { id: 'this-one', title: 'This one, those ones', open: false },
+    { id: 'those-who', title: 'Those who…: the people who', open: false },
+    { id: 'that-of', title: 'That of, those of: formal comparisons', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>This, that, these</em> and <em>those</em> can stand on their own, without a noun after them: <em>This is my brother. I like that. Those are mine.</em> Used this way they are pronouns. They still show near or far and singular or plural — but now the thing they point to is the one you can see, the one you are about to explain, or the one you have just talked about.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="This, that, these, those on their own" id="four-words" open>
+    <p>
+      The same two questions decide which word to use: is the thing near or far, and is it one thing or several?
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th></th><th>Singular</th><th>Plural</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Near</th>
+          <td><code>this</code> — This is nice.</td>
+          <td><code>these</code> — These are nice.</td>
+        </tr>
+        <tr>
+          <th>Far</th>
+          <td><code>that</code> — That was fun.</td>
+          <td><code>those</code> — Those were fun.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <em>This</em> and <em>that</em> take a singular verb (<em>is, was</em>). They often point to a place, a thing, a situation or an idea.
+    </p>
+    <GrammarFormula label="Singular" parts={['this / that', 'singular verb']} />
+    <GrammarExample note="This: a place near the speaker.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> a very interesting place.
+    </GrammarExample>
+    <GrammarExample note="That: something finished, now further away in time.">
+      <mark data-role="content">That</mark> <mark data-role="grammar">was</mark> amazing.
+    </GrammarExample>
+    <GrammarExample note="After a preposition, as the object.">
+      I'm very happy about <mark data-role="content">this</mark>.
+    </GrammarExample>
+    <p>
+      <em>These</em> and <em>those</em> take a plural verb (<em>are, were</em>).
+    </p>
+    <GrammarFormula label="Plural" parts={['these / those', 'plural verb']} />
+    <GrammarExample note="These: several things, close or just about to be named.">
+      <mark data-role="content">These</mark> <mark data-role="grammar">are</mark> the main things I can tell you.
+    </GrammarExample>
+    <GrammarExample note="Those: several things, further away.">
+      Most of my clothes are green or orange — <mark data-role="content">those</mark> <mark data-role="grammar">are</mark> my favourite colours!
+    </GrammarExample>
+    <p>
+      For people, use <em>this / that</em> only to introduce or identify someone: <em>This is my sister. Who's that?</em> When you go on talking about the person, switch to <em>he / she</em>: <em>This is my sister. She's a doctor.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="This is my number: pointing forward" id="pointing">
+    <p>
+      <em>This</em> can point forward to information that comes straight after it — often after a colon. It introduces something the reader needs right now: a number, an address, the details of a plan.
+    </p>
+    <GrammarFormula label="Pointing forward" parts={['this', 'is', 'noun', ': the details']} />
+    <GrammarExample note="The number follows immediately.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">my number</mark>: 0754 567 7851.
+    </GrammarExample>
+    <GrammarExample note="The information follows after the colon.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">the information</mark> about the art class: it's on Fridays, from 4 to 6 pm.
+    </GrammarExample>
+    <GrammarExample note="On the phone: saying who is speaking.">
+      Hi, Tom! <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">Anna</mark>.
+    </GrammarExample>
+    {pointingPoint && <GrammarUsagePointCard usagePoint={pointingPoint} />}
+    <p>
+      On the phone, say <em>This is Anna</em> or <em>It's Anna</em> — not <em>I am Anna</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="This is the best holiday: right now" id="now">
+    <p>
+      <em>This</em> can mean the situation you are in right now — the holiday you are on, the letter you are writing, the moment you are living.
+    </p>
+    <GrammarFormula label="Right now" parts={['this', 'is', 'noun phrase']} />
+    <GrammarExample note="The holiday is still going on.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">the best holiday</mark> I have ever had!
+    </GrammarExample>
+    <GrammarExample note="This = the message you are reading.">
+      <mark data-role="content">This</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">just a short note</mark> to ask if you want to come to the concert with me.
+    </GrammarExample>
+    {nowPoint && <GrammarUsagePointCard usagePoint={nowPoint} />}
+    <p>
+      Once it is over, the same thing becomes <em>that</em>: <em>This is a great party!</em> (you are at the party) — <em>That was a great party!</em> (the next day).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I like that: pointing back" id="back">
+    <p>
+      A demonstrative pronoun can point back to something you have just mentioned, so you don't need to repeat the noun.
+    </p>
+    <GrammarFormula label="Pointing back" parts={['earlier sentence.', '… this / that …']} />
+    <p>
+      <em>This</em> keeps the thing close — it matters now, or you are going to say more about it. It can even point back to a whole group of things.
+    </p>
+    <GrammarExample note="This = the present you have just received.">
+      What a lovely present! Thank you for <mark data-role="content">this</mark>.
+    </GrammarExample>
+    <GrammarExample note="All this = the T-shirts, sneakers and socks.">
+      I bought three T-shirts, a pair of sneakers and some socks. Why did I buy all <mark data-role="content">this</mark>?
+    </GrammarExample>
+    <p>
+      <em>That</em> is more usual for something further back, or something another person has said.
+    </p>
+    <GrammarExample note="That = the camera just mentioned.">
+      It has got a camera, and I like <mark data-role="content">that</mark>.
+    </GrammarExample>
+    <GrammarExample note="Before that = before 4.30.">
+      Please come after 4.30 — I won't be there before <mark data-role="content">that</mark>.
+    </GrammarExample>
+    <GrammarExample note="Reacting to what someone else said.">
+      "I'm moving to Canada." — "Really? When did you decide <mark data-role="content">that</mark>?"
+    </GrammarExample>
+    <p>
+      <em>These</em> and <em>those</em> do the same for several things. <em>These</em> is often followed by <em>are</em> + a noun that sums them up.
+    </p>
+    <GrammarFormula label="Plural, pointing back" parts={['earlier sentence.', 'these / those', 'are', 'noun']} />
+    <GrammarExample note="These = The Simpsons and the other programmes just listed.">
+      I watch The Simpsons and a couple of quiz shows. <mark data-role="content">These</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">the only programmes</mark> I like.
+    </GrammarExample>
+    <GrammarExample note="These = being clever and generous.">
+      He is very clever and generous, and <mark data-role="content">these</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">the things</mark> I like most about him.
+    </GrammarExample>
+    <GrammarExample note="Those = Paris and Rome.">
+      I would love to live in Paris or Rome. I'm very keen on cities like <mark data-role="content">those</mark>.
+    </GrammarExample>
+    {backPoints.map((p) => p && <GrammarUsagePointCard usagePoint={p} />)}
+  </GrammarSection>
+
+  <GrammarSection title="Because of this: a whole idea" id="whole-idea">
+    <p>
+      <em>This</em> and <em>that</em> can point back to a whole sentence or idea, not just a thing. <em>This</em> keeps the idea in focus — you are going to build on it. It is very common in essays and letters.
+    </p>
+    <GrammarFormula label="A whole idea" parts={['idea.', 'because of / after / do', 'this / that']} />
+    <GrammarExample note="This = people don't care about the cost.">
+      People usually don't care about the cost. <mark data-role="grammar">Because of</mark> <mark data-role="content">this</mark>, weddings are very expensive.
+    </GrammarExample>
+    <GrammarExample note="Do this = eat lots of fruit and vegetables.">
+      To stay fit I eat lots of fruit and vegetables. I think you should <mark data-role="grammar">do</mark> <mark data-role="content">this</mark> too.
+    </GrammarExample>
+    <GrammarExample note="After that = after the museum: the next step.">
+      First we'll visit the museum. <mark data-role="grammar">After</mark> <mark data-role="content">that</mark>, we can have coffee and cake.
+    </GrammarExample>
+    {wholeIdeaPoint && <GrammarUsagePointCard usagePoint={wholeIdeaPoint} />}
+    <p>
+      <em>That's why</em> gives the result of the idea before it: <em>They look really nice on me — that's why I bought them.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="That’s great! That’s all: fixed phrases" id="thats">
+    <p>
+      To react to what someone has just told you, use <em>That's</em> + an adjective or a noun. <em>That</em> points back to their news.
+    </p>
+    <GrammarFormula label="Reacting" parts={["that's", 'adjective / a + noun']} />
+    <GrammarExample note="Good news.">
+      "I passed my driving test!" — "<mark data-role="content">That's</mark> <mark data-role="grammar">great</mark>!"
+    </GrammarExample>
+    <GrammarExample note="Bad news.">
+      "I can't come to your party." — "Oh, <mark data-role="content">that's</mark> <mark data-role="grammar">a pity</mark>."
+    </GrammarExample>
+    <GrammarExample note="Agreeing with a suggestion.">
+      "Let's go to the beach." — "<mark data-role="content">That's</mark> <mark data-role="grammar">a good idea</mark>!"
+    </GrammarExample>
+    {responsePoint && <GrammarUsagePointCard usagePoint={responsePoint} />}
+    <p>
+      Other common reactions: <em>That's right. That's OK. That's a shame. That's true. That's very kind of you.</em>
+    </p>
+    <p>
+      <em>That's all</em> means "I have nothing more to say". Use it to finish a letter, an email or a talk.
+    </p>
+    <GrammarFormula label="Closing" parts={["that's", 'all', '(for now)']} />
+    <GrammarExample note="The end of an informal email.">
+      Well, <mark data-role="content">that's</mark> <mark data-role="grammar">all</mark> for now. Write soon!
+    </GrammarExample>
+    <GrammarExample note="With I think: a little softer.">
+      I think <mark data-role="content">that's</mark> <mark data-role="grammar">all</mark>. See you on Saturday!
+    </GrammarExample>
+    {closingPoint && <GrammarUsagePointCard usagePoint={closingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="One of these, all of that" id="quantity">
+    <p>
+      Quantity words like <em>one, some, all, both, most, each, none</em> go before a demonstrative pronoun with <em>of</em>. The demonstrative says which group, the quantity word says how much of it.
+    </p>
+    <GrammarFormula label="Quantity" parts={['one / some / all…', 'of', 'this / that / these / those']} />
+    <GrammarExample note="One of these: choose a single item from the group.">
+      If you can't decide, just choose <mark data-role="grammar">one</mark> <mark data-role="grammar">of</mark> <mark data-role="content">these</mark>.
+    </GrammarExample>
+    <GrammarExample note="Some of these: only part of the group.">
+      There are a lot of programmes, but only <mark data-role="grammar">some</mark> <mark data-role="grammar">of</mark> <mark data-role="content">these</mark> are interesting.
+    </GrammarExample>
+    <GrammarExample note="All of that: everything just described.">
+      We have to go to Sydney to see <mark data-role="grammar">all</mark> <mark data-role="grammar">of</mark> <mark data-role="content">that</mark>.
+    </GrammarExample>
+    <p>
+      With <em>all</em> and <em>both</em>, you can leave out <em>of</em>: <em>all this, all that, both these</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="This one, those ones" id="this-one">
+    <p>
+      To avoid repeating a countable noun, put <em>one</em> after <em>this / that</em>. It is especially useful when you are choosing between things.
+    </p>
+    <GrammarFormula label="Singular" parts={['this / that', 'one']} />
+    <GrammarExample note="This one = this dress.">
+      I don't usually wear dresses, but I had to buy <mark data-role="content">this</mark> <mark data-role="grammar">one</mark> for the competition.
+    </GrammarExample>
+    <GrammarExample note="That one = that film.">
+      It's my favourite Harry Potter film, so I'm going to buy <mark data-role="content">that</mark> <mark data-role="grammar">one</mark>.
+    </GrammarExample>
+    <GrammarExample note="Choosing in a shop.">
+      "Which cake would you like?" — "<mark data-role="content">That</mark> <mark data-role="grammar">one</mark>, please."
+    </GrammarExample>
+    {thisOnePoint && <GrammarUsagePointCard usagePoint={thisOnePoint} />}
+    <p>
+      For plural nouns, <em>these ones / those ones</em> are possible, especially in speaking — but <em>these / those</em> on their own are more common and sound more natural in writing.
+    </p>
+    <GrammarFormula label="Plural" parts={['these / those', '(ones)']} />
+    <GrammarExample note="These ones = these things we should do.">
+      There are a lot of things that should be done, but let's just start with <mark data-role="content">these</mark> <mark data-role="grammar">ones</mark>.
+    </GrammarExample>
+    <GrammarExample note="Informal: those ones = those shoes.">
+      "Do you like these shoes?" — "I prefer <mark data-role="content">those</mark> <mark data-role="grammar">ones</mark>."
+    </GrammarExample>
+    {theseOnesPoint && <GrammarUsagePointCard usagePoint={theseOnesPoint} />}
+    <p>
+      <em>One / ones</em> only replace countable nouns. With an uncountable noun, use <em>this / that</em> alone: <em>I don't like this music, I prefer that.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Those who…: the people who" id="those-who">
+    <p>
+      <em>Those</em> + a description means "the people (or things) that…". The description can be a relative clause with <em>who / which / that</em>, or a short <em>-ed</em> or <em>-ing</em> form. This is typical of formal writing.
+    </p>
+    <GrammarFormula label="With a clause" parts={['those', 'who / which / that', 'clause']} />
+    <GrammarExample note="Those who = the people who.">
+      For <mark data-role="content">those</mark> <mark data-role="grammar">who</mark> <mark data-role="grammar">aren't interested in sport</mark>, there are some great shops.
+    </GrammarExample>
+    <GrammarExample note="Those which = the subjects which.">
+      Students should study all subjects, not only <mark data-role="content">those</mark> <mark data-role="grammar">which</mark> <mark data-role="grammar">are enjoyable</mark>.
+    </GrammarExample>
+    <GrammarFormula label="With -ed / -ing" parts={['those', '-ed / -ing form']} />
+    <GrammarExample note="Those surveyed = the people who were surveyed.">
+      87% of <mark data-role="content">those</mark> <mark data-role="grammar">surveyed</mark> rated the store as good.
+    </GrammarExample>
+    <GrammarExample note="Those attending = the people who are attending.">
+      All <mark data-role="content">those</mark> <mark data-role="grammar">attending</mark> are asked to be on time.
+    </GrammarExample>
+    {thoseWhoPoint && <GrammarUsagePointCard usagePoint={thoseWhoPoint} />}
+    <p>
+      The singular <em>he who</em> sounds old-fashioned. Today, say <em>anyone who</em> or <em>people who</em>: <em>Anyone who wants to come is welcome.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="That of, those of: formal comparisons" id="that-of">
+    <p>
+      In formal writing, <em>that of</em> and <em>those of</em> replace a noun you have just used, so you don't repeat it. Use <em>that of</em> for a singular or uncountable noun, <em>those of</em> for a plural one. It is most common in comparisons.
+    </p>
+    <GrammarFormula label="Replacing a noun" parts={['that / those', 'of', 'noun phrase']} />
+    <GrammarExample note="That of = the educational system of.">
+      The Russian educational system is very different from <mark data-role="content">that</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">other European countries</mark>.
+    </GrammarExample>
+    <GrammarExample note="Those of = the demands of.">
+      Our product meets customers' demands — especially <mark data-role="content">those</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">young single people</mark>.
+    </GrammarExample>
+    <GrammarExample note="Those of = the opinions of.">
+      Your opinions clearly do not reflect <mark data-role="content">those</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the general population</mark>.
+    </GrammarExample>
+    <p>
+      In everyday English, people usually repeat the noun or use a possessive instead: <em>Russian schools are very different from schools in other countries.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Match the pronoun and the verb: <em>this / that</em> + <em>is</em>, <em>these / those</em> + <em>are</em>.
+    </p>
+    <GrammarContrast bad={['This are my friends from school.', 'Those is my favourite shoes.']} good={['These are my friends from school.', 'Those are my favourite shoes.']} />
+    <p>
+      Ukrainian <em>це</em> covers both <em>this</em> and <em>it</em>. To introduce or show someone or something for the first time, use <em>this / that</em>, not <em>it</em>.
+    </p>
+    <GrammarContrast bad={['It is my brother, Oleh.', 'It is my number: 0754 567 7851.']} good={['This is my brother, Oleh.', 'This is my number: 0754 567 7851.']} />
+    <p>
+      Use <em>these / those</em> for plurals with <em>one</em>: never <em>this ones</em>.
+    </p>
+    <GrammarContrast bad={['I like this ones better.']} good={['I like these ones better.', 'I like these better.']} />
+    <p>
+      For "the people who", use <em>those who</em>, not <em>them who</em>.
+    </p>
+    <GrammarContrast bad={['Them who arrive late will not be allowed in.']} good={['Those who arrive late will not be allowed in.']} />
+    <p>
+      In a comparison, compare the same kind of thing. Don't compare a climate with a country — use <em>that of</em>.
+    </p>
+    <GrammarContrast bad={['The climate of Spain is warmer than England.']} good={['The climate of Spain is warmer than that of England.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'determiners-demonstratives',
+        name: 'demonstrative determiners',
+        note: 'the same four words before a noun: this bag, those houses, this weekend.',
+      },
+      {
+        slug: 'pronouns-substitution-one-ones-none',
+        name: 'one, ones, none',
+        note: 'one / ones after other words too: the red one, the ones on the table.',
+      },
+      {
+        slug: 'pronouns-subject-object',
+        name: 'subject and object pronouns',
+        note: 'it / they for something already known — this / that when you point or introduce.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'who / which / that clauses — the part that comes after those in those who…',
+      },
+    ]}
+  />
+</GrammarShell>

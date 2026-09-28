@@ -1,0 +1,320 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 8 EGP rows (808-815): all 4 USE and FORM/USE rows are inlined, matched by EGP
+// index. The other 4 are plain FORM rows (affirmative, questions, negative,
+// mid-position adverbs), written in full without a card.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const repeatedPoint = point(810);
+const singlePoint = point(811);
+const recentPastPoint = point(814);
+const inversionPoint = point(815);
+
+const inlineUsagePointIds = [repeatedPoint, singlePoint, recentPastPoint, inversionPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Present perfect continuous in English: form (have / has been + -ing, haven't been, questions like How long have you been…?, adverbs like just and already) and when to use it — an activity that started in the past and is still going on (for and since), repeated activities lately, a recent activity with a visible result (It's been raining), have been doing vs have done, and formal inversion with not only."
+  handcrafted
+  sections={[
+    { id: 'form', title: "I've been waiting: the form", open: true },
+    { id: 'still-going-on', title: "I've been living here since April", open: false },
+    { id: 'repeated', title: "I've been going to the gym a lot", open: false },
+    { id: 'recent-past', title: "It's been raining: you can see the result", open: false },
+    { id: 'adverbs', title: "I've just been reading…", open: false },
+    { id: 'vs-simple', title: 'Have been doing or have done?', open: false },
+    { id: 'inversion', title: 'Not only have I been…', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The present perfect continuous is <em>have / has been</em> + a verb ending in <em>-ing</em>. It connects the past with <strong>now</strong>: an activity started in the past and is still going on — <em>I've been learning English for three years</em> — or it has only just stopped and you can still see the result — <em>Your eyes are red. Have you been crying?</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I've been waiting: the form" id="form" open>
+    <p>
+      Use <em>have been</em> with <em>I</em>, <em>you</em>, <em>we</em>, <em>they</em> and <em>has been</em> with <em>he</em>, <em>she</em>, <em>it</em>. In speaking and informal writing, they are usually shortened: <em>I've been</em>, <em>we've been</em>, <em>she's been</em>, <em>it's been</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'have / has been', '-ing verb']} />
+    <GrammarExample note="Have been + thinking: I started thinking earlier and I'm still thinking.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">have been</mark> <mark data-role="content">thinking</mark> about your letter.
+    </GrammarExample>
+    <GrammarExample note="'ve been: the short form of have been.">
+      <mark data-role="grammar">We</mark><mark data-role="content">'ve been</mark> <mark data-role="content">studying</mark> together since grade one.
+    </GrammarExample>
+    <GrammarExample note="Has been with he: one person, third person.">
+      My brother, <mark data-role="grammar">who</mark> <mark data-role="content">has been</mark> <mark data-role="content">living</mark> in New York since he graduated, wrote to me last week.
+    </GrammarExample>
+    <p>
+      Be careful: <em>'s</em> can mean <em>is</em> or <em>has</em>. Before <em>been</em>, it always means <em>has</em>: <em>She's been working</em> = <em>She has been working</em>.
+    </p>
+    <p>
+      For the negative, put <em>not</em> after <em>have / has</em>. The short forms are <em>haven't been</em> and <em>hasn't been</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "haven't / hasn't been", '-ing verb']} />
+    <GrammarExample note="Haven't been: the short form, common in friendly letters and speech.">
+      I hope <mark data-role="grammar">you</mark> <mark data-role="content">haven't been</mark> <mark data-role="content">working</mark> too hard!
+    </GrammarExample>
+    <GrammarExample note="Has not been: the full form, more formal — here in a complaint.">
+      <mark data-role="grammar">The heating</mark> <mark data-role="content">has not been</mark> <mark data-role="content">working</mark> properly since your staff finished the work.
+    </GrammarExample>
+    <p>
+      For a question, put <em>have / has</em> before the subject, and <em>been</em> + <em>-ing</em> after it.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh-word)', 'have / has', 'subject', 'been', '-ing verb']} />
+    <GrammarExample note="What + have + you + been doing: a very common question.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">been</mark> <mark data-role="content">doing</mark>?
+    </GrammarExample>
+    <GrammarExample note="How long + have + you + been playing.">
+      <mark data-role="grammar">How long</mark> <mark data-role="content">have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">been</mark> <mark data-role="content">playing</mark> the guitar?
+    </GrammarExample>
+    <GrammarExample note="Yes/no question: no question word.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">been</mark> <mark data-role="content">thinking</mark> about it a lot?
+    </GrammarExample>
+    <p>
+      Short answers use only <em>have / has</em>: <em>Have you been waiting long? — Yes, I have. / No, I haven't.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I've been living here since April" id="still-going-on" open={false}>
+    <p>
+      The main use: one activity or situation <strong>started in the past and is still going on now</strong>. Very often you say how long with <em>for</em> + a period of time (<em>for four years</em>, <em>for ages</em>) or <em>since</em> + a starting point (<em>since April</em>, <em>since I was a child</em>).
+    </p>
+    <GrammarFormula label="How long" parts={['subject', 'have / has been', '-ing verb', 'for + period / since + start']} />
+    <GrammarExample note="For + four years: I started four years ago, and I'm still studying.">
+      <mark data-role="grammar">I</mark><mark data-role="content">'ve been</mark> <mark data-role="content">studying</mark> international business there <mark data-role="grammar">for four years</mark>.
+    </GrammarExample>
+    <GrammarExample note="Since + last April: the starting point. I still live here.">
+      <mark data-role="grammar">I</mark><mark data-role="content">'ve been</mark> <mark data-role="content">living</mark> here <mark data-role="grammar">since last April</mark>.
+    </GrammarExample>
+    <GrammarExample note="Has been + for + six years: she still works there.">
+      <mark data-role="grammar">Susan</mark> <mark data-role="content">has been</mark> <mark data-role="content">working</mark> in our company <mark data-role="grammar">for six years</mark>.
+    </GrammarExample>
+    {singlePoint && <GrammarUsagePointCard usagePoint={singlePoint} />}
+    <p>
+      The question is <em>How long have you been…?</em> — you ask about the time from the start until now.
+    </p>
+    <GrammarExample note="How long + have + you + been + waiting: from when you arrived until now.">
+      <mark data-role="grammar">How long</mark> <mark data-role="content">have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">been</mark> <mark data-role="content">waiting</mark>? — <mark data-role="grammar">Since ten o'clock</mark>.
+    </GrammarExample>
+    <p>
+      Without <em>for</em> or <em>since</em>, it still means "from some time ago until now" — the time is just not said.
+    </p>
+    <GrammarExample note="No time phrase: I've been waiting from some moment until now.">
+      Where are you? <mark data-role="grammar">I</mark><mark data-role="content">'ve been</mark> <mark data-role="content">waiting</mark> outside the cinema!
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I've been going to the gym a lot" id="repeated" open={false}>
+    <p>
+      The activity doesn't have to go on without a break. It can also be something you have been doing <strong>again and again</strong> during a period up to now: a new habit, something you do a lot these days. Words like <em>a lot</em>, <em>lately</em>, <em>recently</em>, <em>these days</em> and <em>for two weeks</em> often go with it.
+    </p>
+    <GrammarFormula label="Repeated" parts={['subject', 'have / has been', '-ing verb', 'a lot / lately / for…']} />
+    <GrammarExample note="Watching TV many times, and I still do it.">
+      <mark data-role="grammar">I</mark><mark data-role="content">'ve been</mark> <mark data-role="content">watching</mark> TV <mark data-role="grammar">a lot</mark>, especially the sports programmes.
+    </GrammarExample>
+    <GrammarExample note="He goes to the club regularly — this started two weeks ago.">
+      He told me he had joined a sports club, and <mark data-role="grammar">he</mark><mark data-role="content">'s been</mark> <mark data-role="content">going</mark> there <mark data-role="grammar">for two weeks</mark>.
+    </GrammarExample>
+    <GrammarExample note="Lately: many times in the recent period.">
+      <mark data-role="grammar">She</mark><mark data-role="content">'s been</mark> <mark data-role="content">calling</mark> me every evening <mark data-role="grammar">lately</mark>.
+    </GrammarExample>
+    {repeatedPoint && <GrammarUsagePointCard usagePoint={repeatedPoint} />}
+    <GrammarContrast
+      good={[
+        "I've been playing tennis a lot this summer. (many times, up to now — maybe I'll play again tomorrow)",
+        'I played tennis a lot last summer. (a finished time — past simple)',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="It's been raining: you can see the result" id="recent-past" open={false}>
+    <p>
+      Sometimes the activity has <strong>just stopped</strong>, but its result is still here now: the streets are wet, you are tired, your hands are dirty. The present perfect continuous explains why things look this way.
+    </p>
+    <GrammarFormula label="Result now" parts={['result now', 'subject', 'have / has been', '-ing verb']} />
+    <GrammarExample note="The snow has stopped, but the roads are still slippery.">
+      <mark data-role="grammar">The roads might be slippery</mark> when <mark data-role="grammar">it</mark> <mark data-role="content">has been</mark> <mark data-role="content">snowing</mark>.
+    </GrammarExample>
+    <GrammarExample note="The rain has stopped. The result: everything is wet.">
+      <mark data-role="grammar">The ground is wet</mark> — <mark data-role="grammar">it</mark><mark data-role="content">'s been</mark> <mark data-role="content">raining</mark>.
+    </GrammarExample>
+    <GrammarExample note="You can see the result, so you ask about the activity.">
+      <mark data-role="grammar">You look tired.</mark> <mark data-role="content">Have</mark> <mark data-role="grammar">you</mark> <mark data-role="content">been</mark> <mark data-role="content">running</mark>?
+    </GrammarExample>
+    <GrammarExample note="The painting is finished (or paused), but there's paint on my clothes.">
+      Sorry about <mark data-role="grammar">my clothes</mark> — <mark data-role="grammar">I</mark><mark data-role="content">'ve been</mark> <mark data-role="content">painting</mark> the kitchen.
+    </GrammarExample>
+    {recentPastPoint && <GrammarUsagePointCard usagePoint={recentPastPoint} />}
+    <p>
+      Here there is usually no <em>for</em> or <em>since</em>: the focus is on the activity that caused the situation, not on how long it went on.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I've just been reading…" id="adverbs" open={false}>
+    <p>
+      Adverbs like <em>just</em>, <em>also</em>, <em>already</em>, <em>always</em>, <em>really</em> and <em>recently</em> usually go in the middle — after <em>have / has</em>, before <em>been</em>.
+    </p>
+    <GrammarFormula label="Adverb" parts={['subject', 'have / has', 'adverb', 'been', '-ing verb']} />
+    <GrammarExample note="Have + just + been: a moment ago.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">have</mark> <mark data-role="grammar">just</mark> <mark data-role="content">been</mark> <mark data-role="content">reading</mark> an article in your newspaper about the music festival.
+    </GrammarExample>
+    <GrammarExample note="'ve + also + been: the short form works the same way.">
+      <mark data-role="grammar">I</mark><mark data-role="content">'ve</mark> <mark data-role="grammar">also</mark> <mark data-role="content">been</mark> <mark data-role="content">singing</mark> in a choir for five years.
+    </GrammarExample>
+    <GrammarExample note="Have + already + been: this started earlier than expected.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">have</mark> <mark data-role="grammar">already</mark> <mark data-role="content">been</mark> <mark data-role="content">complaining</mark> about headaches.
+    </GrammarExample>
+    <p>
+      In the negative, <em>not</em> comes first: <em>haven't really been</em>, <em>hasn't always been</em>. <em>Sorry, I haven't really been listening.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Have been doing or have done?" id="vs-simple" open={false}>
+    <p>
+      Both connect the past with now. The difference is what they focus on.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Tense</th><th>Focus</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>present perfect continuous</td><td>the activity itself, how long, maybe not finished</td><td><em>I've been reading this book all week.</em></td></tr>
+        <tr><td>present perfect simple</td><td>the result, how many or how much, finished</td><td><em>I've read three chapters.</em></td></tr>
+      </tbody>
+    </table>
+    <p>
+      Ask <em>How long…?</em> with the continuous, and <em>How many / How much…?</em> with the simple.
+    </p>
+    <GrammarContrast
+      good={[
+        "She's been writing emails all morning. (the activity, how long)",
+        "She's written twenty emails. (how many, finished)",
+      ]}
+    />
+    <GrammarContrast
+      good={[
+        "I've been painting the kitchen. (maybe not finished — there's paint on me)",
+        "I've painted the kitchen. (finished — come and look)",
+      ]}
+    />
+    <p>
+      State verbs — <em>know</em>, <em>be</em>, <em>have</em> (= own), <em>like</em>, <em>believe</em>, <em>understand</em> — are not normally used in the continuous. Use the present perfect simple with them, even with <em>for</em> and <em>since</em>.
+    </p>
+    <GrammarContrast
+      bad={["I've been knowing her since school.", "We've been having this car for ten years."]}
+      good={["I've known her since school.", "We've had this car for ten years."]}
+    />
+    <p>
+      With <em>live</em>, <em>work</em>, <em>study</em> and <em>teach</em>, both are often possible with little difference: <em>I've lived / I've been living here for five years.</em> The continuous can sound more temporary.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Not only have I been…" id="inversion" open={false}>
+    <p>
+      In formal writing, you can start a sentence with <em>Not only</em> to give extra emphasis to the first idea. After <em>not only</em>, the word order changes like a question: <em>have / has</em> comes before the subject. The second part starts with <em>but (also)</em> and uses normal order.
+    </p>
+    <GrammarFormula label="Inversion" parts={['not only', 'have / has', 'subject', 'been', '-ing verb', 'but (also) …']} />
+    <GrammarExample note="Not only + have + I + been wandering: have before I.">
+      <mark data-role="grammar">Not only</mark> <mark data-role="content">have</mark> <mark data-role="grammar">I</mark> <mark data-role="content">been</mark> <mark data-role="content">wandering</mark> its streets since I was ten, <mark data-role="grammar">but</mark> I have also come to know its history.
+    </GrammarExample>
+    <GrammarExample note="Not only … but also: two things, the first one emphasised.">
+      <mark data-role="grammar">Not only</mark> <mark data-role="content">have</mark> <mark data-role="grammar">I</mark> <mark data-role="content">been</mark> <mark data-role="content">expecting</mark> it for months, <mark data-role="grammar">but</mark> I will <mark data-role="grammar">also</mark> support my wife.
+    </GrammarExample>
+    {inversionPoint && <GrammarUsagePointCard usagePoint={inversionPoint} />}
+    <GrammarContrast
+      bad={['Not only I have been working late, but I have also been working weekends.']}
+      good={['Not only have I been working late, but I have also been working weekends.']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      For an activity that started in the past and is still going on, don't use the present continuous or the present simple with <em>for</em> and <em>since</em>. English needs the present perfect.
+    </p>
+    <GrammarContrast
+      bad={['I am learning English for three years.', 'I work here since 2020.']}
+      good={["I've been learning English for three years.", "I've been working here since 2020."]}
+    />
+    <p>
+      Don't forget <em>been</em>, and don't forget <em>-ing</em>.
+    </p>
+    <GrammarContrast
+      bad={["I've waiting for an hour.", "She's been work all day."]}
+      good={["I've been waiting for an hour.", "She's been working all day."]}
+    />
+    <p>
+      <em>For</em> goes with a period of time; <em>since</em> goes with a starting point. Don't use <em>ago</em> with this tense.
+    </p>
+    <GrammarContrast
+      bad={["I've been living here since three years.", "I've been living here three years ago."]}
+      good={["I've been living here for three years.", "I've been living here since 2022."]}
+    />
+    <p>
+      Use <em>has</em> with <em>he / she / it</em>, and <em>have</em> with the others. In negatives, there's no <em>do</em>.
+    </p>
+    <GrammarContrast
+      bad={['He have been working all day.', "I don't have been sleeping well."]}
+      good={["He has been working all day.", "I haven't been sleeping well."]}
+    />
+    <p>
+      Don't use it with a finished time (<em>yesterday</em>, <em>last week</em>, <em>in 2019</em>). For that, use the past simple or past continuous.
+    </p>
+    <GrammarContrast
+      bad={["I've been playing football yesterday."]}
+      good={['I played football yesterday.', 'I was playing football yesterday when it started to rain.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect simple',
+        note: "I've read three chapters — the result and how many, not how long.",
+      },
+      {
+        slug: 'past-past-perfect-continuous',
+        name: 'past perfect continuous',
+        note: 'I had been waiting for an hour when… — looking back from the past, not from now.',
+      },
+      {
+        slug: 'present-present-continuous',
+        name: 'present continuous',
+        note: "I'm reading a book — happening now, without how long.",
+      },
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'I played a lot last summer — a finished time, not connected to now.',
+      },
+      {
+        slug: 'focus-focus',
+        name: 'focus',
+        note: 'Not only have I… — fronting and inversion to emphasise an idea.',
+      },
+    ]}
+  />
+</GrammarShell>

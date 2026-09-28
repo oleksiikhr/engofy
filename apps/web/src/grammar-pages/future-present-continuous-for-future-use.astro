@@ -1,0 +1,359 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 9 USE rows are inlined, matched by EGP index. The other 4 rows (when,
+// as soon as, by the time, only when + inversion) are plain FORM rows,
+// written in full without a card. EGP files the present simple for the
+// future under this construction too, so the page covers both tenses.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const arrangementsPoint = point(412);
+const questionsPoint = point(413);
+const arrangementsMorePoint = point(414);
+const questionsMorePoint = point(415);
+const arrangementsWidePoint = point(416);
+const questionsWidePoint = point(417);
+const hopePoint = point(419);
+const timetablesPoint = point(420);
+const suggestionsPoint = point(423);
+
+const inlineUsagePointIds = [
+  arrangementsPoint,
+  questionsPoint,
+  arrangementsMorePoint,
+  questionsMorePoint,
+  arrangementsWidePoint,
+  questionsWidePoint,
+  hopePoint,
+  timetablesPoint,
+  suggestionsPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Present tenses for the future: I'm meeting Tom at six for arrangements, Are you coming? to ask about plans, the film starts at eight for timetables, and the present simple after when, as soon as, by the time, I hope and I suggest that."
+  handcrafted
+  sections={[
+    { id: 'form', title: "I'm meeting Tom at six: arrangements", open: true },
+    { id: 'arrangements', title: "We're expecting a baby: more verbs", open: false },
+    { id: 'questions', title: 'Are you coming? Asking about plans', open: false },
+    { id: 'timetables', title: 'The film starts at eight: timetables', open: false },
+    { id: 'hope', title: 'I hope you enjoy it', open: false },
+    { id: 'time-clauses', title: 'When I get home: when, as soon as, by the time', open: false },
+    { id: 'only-when', title: 'Only when …, will we …', open: false },
+    { id: 'suggest', title: 'I suggest that we go', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      English often talks about the future with a present tense. The present
+      continuous is for things you have already arranged (<em>I'm meeting Tom at six</em>); the present simple is for timetables (<em>The film starts at eight</em>) and after words like when and as soon as (<em>I'll call you when I get home</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I'm meeting Tom at six: arrangements" id="form" open>
+    <p>
+      Use am, is or are + the -ing form for something you have already
+      arranged: the time is fixed, and often other people know about it too.
+      Think of things you could write in a diary.
+    </p>
+    <GrammarFormula label="Arrangement" parts={['subject', "am / is / are ('m / 's / 're)", 'verb-ing', 'future time']} />
+    <GrammarExample note="Tom knows too: the meeting is arranged.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">meeting</mark> Tom <mark data-role="grammar">at six</mark>.
+    </GrammarExample>
+    <GrammarExample note="A work shift: the days are already decided.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">working</mark> <mark data-role="grammar">this Saturday and Sunday morning</mark>.
+    </GrammarExample>
+    <GrammarExample note="The table is booked for seven.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are</mark> <mark data-role="content">having</mark> the meal <mark data-role="grammar">at 7 pm</mark>.
+    </GrammarExample>
+    <GrammarExample note="They have tickets for a date.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">are</mark> <mark data-role="content">going</mark> back <mark data-role="grammar">on 20th July</mark>.
+    </GrammarExample>
+    <p>
+      The form is the same as for now, so the time word shows it is the
+      future: <em>I'm working</em> alone usually means at the moment; <em>I'm working on Saturday</em> is an arrangement.
+    </p>
+    {arrangementsPoint && <GrammarUsagePointCard usagePoint={arrangementsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="We're expecting a baby: more verbs" id="arrangements" open={false}>
+    <p>
+      At first you mostly meet go, come, meet, have and work in this use, but
+      almost any action verb works when the event is planned and fixed.
+    </p>
+    <GrammarFormula label="Arrangement" parts={['subject', 'am / is / are', 'verb-ing', 'future time']} />
+    <GrammarExample note="A family event with a date: everyone is going.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">attending</mark> my grandmother's funeral <mark data-role="grammar">tomorrow</mark>.
+    </GrammarExample>
+    <GrammarExample note="Expecting a child: the date is already known.">
+      <mark data-role="grammar">We're</mark> <mark data-role="content">expecting</mark> a child <mark data-role="grammar">very soon</mark>.
+    </GrammarExample>
+    <GrammarExample note="The start time is fixed by the cinema.">
+      <mark data-role="grammar">The movie</mark> <mark data-role="grammar">is</mark> <mark data-role="content">starting</mark> <mark data-role="grammar">at 8 o'clock</mark>.
+    </GrammarExample>
+    {arrangementsMorePoint && <GrammarUsagePointCard usagePoint={arrangementsMorePoint} />}
+    <GrammarExample note="The party is organised, with a date.">
+      <mark data-role="grammar">We're</mark> <mark data-role="content">throwing</mark> a party <mark data-role="grammar">on 5th January</mark>.
+    </GrammarExample>
+    <GrammarExample note="She has signed up; the first day is Friday.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">is</mark> <mark data-role="content">joining</mark> the course <mark data-role="grammar">on Friday</mark>.
+    </GrammarExample>
+    {arrangementsWidePoint && <GrammarUsagePointCard usagePoint={arrangementsWidePoint} />}
+    <p>
+      Compare it with be going to. Going to is your own decision; the present
+      continuous says it is already arranged — booked, agreed with someone,
+      in the calendar.
+    </p>
+    <GrammarExample note="Going to: you have decided, but nothing is booked yet.">
+      <mark data-role="grammar">I'm</mark> going to <mark data-role="grammar">see</mark> a doctor about my back.
+    </GrammarExample>
+    <GrammarExample note="Present continuous: the appointment is booked for ten.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">seeing</mark> the doctor <mark data-role="grammar">at ten tomorrow</mark>.
+    </GrammarExample>
+    <p>
+      Often both are possible and the difference is small. But nobody can arrange the weather, so for predictions use will or going to: <em>It's going to rain tomorrow</em>, not <em>It's raining tomorrow</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Are you coming? Asking about plans" id="questions" open={false}>
+    <p>
+      To ask what someone has arranged, put am, is or are before the subject.
+      This is the usual way to ask about someone's plans: <em>What are you doing tonight?</em>
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'am / is / are', 'subject', 'verb-ing', '(future time)']} />
+    <GrammarExample note="About a concert: will you be there?">
+      <mark data-role="grammar">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">coming</mark>?
+    </GrammarExample>
+    <GrammarExample note="The party starts at 6 — what time will you arrive?">
+      It starts at 6. <mark data-role="grammar">When</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">coming</mark>?
+    </GrammarExample>
+    <GrammarExample note="Asking about holidays.">
+      <mark data-role="grammar">Where</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">going</mark> <mark data-role="grammar">this summer</mark>?
+    </GrammarExample>
+    {questionsPoint && <GrammarUsagePointCard usagePoint={questionsPoint} />}
+    <GrammarExample note="A yes/no question with a time phrase at the end.">
+      <mark data-role="grammar">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">visiting</mark> my country <mark data-role="grammar">on your next holiday</mark>?
+    </GrammarExample>
+    <GrammarExample note="Why + are you + moving: asking the reason for a decided change.">
+      <mark data-role="grammar">Why</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">moving</mark> to a different area?
+    </GrammarExample>
+    {questionsMorePoint && <GrammarUsagePointCard usagePoint={questionsMorePoint} />}
+    <GrammarExample note="Is + the festival + starting: the subject can be a thing, not a person.">
+      <mark data-role="grammar">When</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">the festival</mark> <mark data-role="content">starting</mark>, and when is it finishing?
+    </GrammarExample>
+    <GrammarExample note="A wh- phrase of several words: what kind of seminar materials.">
+      <mark data-role="grammar">What kind of seminar materials</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">providing</mark>?
+    </GrammarExample>
+    <GrammarExample note="Planning to + verb: checking what someone intends.">
+      So <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">planning</mark> to visit Japan <mark data-role="grammar">then</mark>?
+    </GrammarExample>
+    {questionsWidePoint && <GrammarUsagePointCard usagePoint={questionsWidePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The film starts at eight: timetables" id="timetables" open={false}>
+    <p>
+      Use the present simple for events on a timetable or programme: films,
+      trains, classes, shops. The time is set by someone else, and it is the
+      same for everybody.
+    </p>
+    <GrammarFormula label="Timetable" parts={['subject', 'present simple', 'future time']} />
+    <GrammarExample note="A film: the cinema sets the time.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">begins</mark> <mark data-role="grammar">at 8 o'clock in the evening</mark>.
+    </GrammarExample>
+    <GrammarExample note="A class: start and finish times from the schedule.">
+      The class is on Monday. <mark data-role="grammar">It</mark> <mark data-role="content">starts</mark> <mark data-role="grammar">at 6 pm</mark> and <mark data-role="content">finishes</mark> <mark data-role="grammar">at 7 pm</mark>.
+    </GrammarExample>
+    <GrammarExample note="A train: the time is on the ticket.">
+      <mark data-role="grammar">My train</mark> <mark data-role="content">leaves</mark> <mark data-role="grammar">at 7.15 tomorrow</mark>.
+    </GrammarExample>
+    {timetablesPoint && <GrammarUsagePointCard usagePoint={timetablesPoint} />}
+    <p>
+      For your own arrangement, use the present continuous; for the
+      timetable, the present simple.
+    </p>
+    <GrammarExample note="Present continuous: my personal plan.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">leaving</mark> <mark data-role="grammar">tomorrow morning</mark>.
+    </GrammarExample>
+    <GrammarExample note="Present simple: the train's timetable.">
+      <mark data-role="grammar">The train</mark> <mark data-role="content">leaves</mark> <mark data-role="grammar">at 7.15</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I hope you enjoy it" id="hope" open={false}>
+    <p>
+      After I hope, the present simple often talks about the future. Will is
+      also correct, but the present simple is more common in letters and
+      messages.
+    </p>
+    <GrammarFormula label="Hope" parts={['I hope', 'subject', 'present simple']} />
+    <GrammarExample note="The holiday is in the future, but the verb is present.">
+      <mark data-role="grammar">I hope</mark> <mark data-role="grammar">you</mark> <mark data-role="content">enjoy</mark> your holiday too.
+    </GrammarExample>
+    <GrammarExample note="A wish at the end of a message.">
+      <mark data-role="grammar">I hope</mark> <mark data-role="grammar">you</mark> <mark data-role="content">come</mark> to visit me soon.
+    </GrammarExample>
+    <GrammarExample note="The negative: doesn't + verb.">
+      <mark data-role="grammar">I hope</mark> <mark data-role="grammar">it</mark> <mark data-role="content">doesn't rain</mark> tomorrow.
+    </GrammarExample>
+    {hopePoint && <GrammarUsagePointCard usagePoint={hopePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="When I get home: when, as soon as, by the time" id="time-clauses" open={false}>
+    <p>
+      After time words like when, as soon as, before, after, until and by the
+      time, use the present simple for the future — not will. Will goes in the
+      other part of the sentence.
+    </p>
+    <GrammarFormula label="Time clause" parts={['when / as soon as / by the time', 'subject', 'present simple', 'will / imperative / can …']} />
+    <GrammarExample note="When + present simple; will is in the main part.">
+      <mark data-role="grammar">I'll tell</mark> you more <mark data-role="grammar">when</mark> <mark data-role="grammar">I</mark> <mark data-role="content">meet</mark> you.
+    </GrammarExample>
+    <GrammarExample note="A request: can you call me + when + present simple.">
+      <mark data-role="grammar">Can you</mark> please <mark data-role="grammar">call</mark> me <mark data-role="grammar">when</mark> <mark data-role="grammar">you</mark> <mark data-role="content">find</mark> it?
+    </GrammarExample>
+    <p>
+      As soon as means immediately after. It follows the same rule.
+    </p>
+    <GrammarExample note="As soon as + present simple: the moment I have the date.">
+      <mark data-role="grammar">I will let</mark> you know <mark data-role="grammar">as soon as</mark> <mark data-role="grammar">I</mark> <mark data-role="content">get</mark> the exact date.
+    </GrammarExample>
+    <GrammarExample note="The main part can be a present continuous or another form, too.">
+      <mark data-role="grammar">I'm planning</mark> to move <mark data-role="grammar">as soon as</mark> <mark data-role="grammar">I</mark> <mark data-role="content">finish</mark> college.
+    </GrammarExample>
+    <p>
+      By the time means at or before that moment. The time clause can go
+      first — then put a comma after it.
+    </p>
+    <GrammarExample note="By the time + present simple, then will in the main part.">
+      <mark data-role="grammar">By the time</mark> <mark data-role="grammar">he</mark> <mark data-role="content">gets</mark> home, <mark data-role="grammar">he will</mark> just <mark data-role="grammar">want</mark> to go straight to bed.
+    </GrammarExample>
+    <GrammarExample note="The office closes before you arrive.">
+      <mark data-role="grammar">By the time</mark> <mark data-role="grammar">you</mark> <mark data-role="content">arrive</mark>, <mark data-role="grammar">the information office</mark> <mark data-role="grammar">will be</mark> closed.
+    </GrammarExample>
+    <p>
+      With by the time, the main part often uses the future perfect: <em>By the time you arrive, we will have left.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Only when …, will we …" id="only-when" open={false}>
+    <p>
+      In formal writing you can start with only when. The time clause keeps
+      the present simple, but the main part changes order: will comes before
+      the subject, like in a question.
+    </p>
+    <GrammarFormula label="Inversion" parts={['only when', 'subject', 'present simple', 'will', 'subject', 'verb']} />
+    <GrammarExample note="Will + we: the order of a question, but it is a statement.">
+      <mark data-role="grammar">Only when</mark> <mark data-role="grammar">we</mark> <mark data-role="content">understand</mark> that, <mark data-role="grammar">will</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">be</mark> able to live in better societies.
+    </GrammarExample>
+    <GrammarExample note="Only when + something happens + will + citizens + face.">
+      <mark data-role="grammar">Only when</mark> <mark data-role="grammar">something really catastrophic</mark> <mark data-role="content">happens</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">citizens</mark> <mark data-role="grammar">face</mark> reality.
+    </GrammarExample>
+    <p>
+      The normal order says the same thing with less emphasis: <em>We will only be able to live in better societies when we understand that.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I suggest that we go" id="suggest" open={false}>
+    <p>
+      After suggest, recommend, insist and propose + that, the second verb
+      talks about something that should happen in the future. In British
+      English this is often the present simple; in more formal style, and in
+      American English, the base form (the same for every subject).
+    </p>
+    <GrammarFormula label="Suggestion" parts={['suggest / recommend / insist', 'that', 'subject', 'present simple / base verb']} />
+    <GrammarExample note="Present simple: takes, with -s after our management.">
+      We would <mark data-role="grammar">suggest that</mark> <mark data-role="grammar">our management</mark> <mark data-role="content">takes</mark> a closer look.
+    </GrammarExample>
+    <GrammarExample note="With we, the present simple and the base form look the same: go.">
+      I <mark data-role="grammar">recommend that</mark> <mark data-role="grammar">we</mark> <mark data-role="content">go</mark> to the theatre in Ginza.
+    </GrammarExample>
+    <GrammarExample note="Insist that: a strong demand about the future.">
+      We <mark data-role="grammar">insist that</mark> <mark data-role="grammar">the agreement between you</mark> <mark data-role="content">is</mark> legally binding.
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+    <p>
+      The formal version of the same sentences: <em>We suggest that our management take a closer look</em>, <em>We insist that the agreement be legally binding</em>. Should + verb is also possible: <em>I suggest that he should apply.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget am, is or are before the -ing form.
+    </p>
+    <GrammarContrast
+      bad={['We having a party on Saturday.', 'She leaving tomorrow.']}
+      good={["We're having a party on Saturday.", "She's leaving tomorrow."]}
+    />
+    <p>
+      For your own arrangements, use the present continuous, not the present
+      simple. Keep the present simple for timetables.
+    </p>
+    <GrammarContrast
+      bad={['I meet Tom at six tomorrow.', 'What do you do this weekend?']}
+      good={["I'm meeting Tom at six tomorrow.", 'What are you doing this weekend?']}
+    />
+    <p>
+      After when, as soon as, before, until and by the time, don't use will.
+    </p>
+    <GrammarContrast
+      bad={["I'll call you when I will arrive.", 'Tell me as soon as you will know.']}
+      good={["I'll call you when I arrive.", 'Tell me as soon as you know.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-with-be-going-to',
+        name: 'be going to',
+        note: "a plan you have decided on, and predictions from what you can see: I'm going to see a doctor.",
+      },
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'will + verb',
+        note: "decisions made now and general predictions: It'll rain tomorrow.",
+      },
+      {
+        slug: 'present-present-continuous',
+        name: 'present continuous',
+        note: "the same am/is/are + verb-ing form for things happening now: I'm working at the moment.",
+      },
+      {
+        slug: 'present-present-simple',
+        name: 'present simple',
+        note: 'the same form for habits and facts: The train leaves at 7.15 every day.',
+      },
+      {
+        slug: 'future-future-perfect-simple',
+        name: 'future perfect',
+        note: 'what will be finished by a time: By the time you arrive, we will have left.',
+      },
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinate clauses',
+        note: 'when, as soon as, before, until and other words that start a time clause.',
+      },
+    ]}
+  />
+</GrammarShell>

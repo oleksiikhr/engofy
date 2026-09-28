@@ -5,7 +5,8 @@
 // steps instead of one continuous scroll. `open` is known at render time
 // (it's the same prop each GrammarSection got), so the initial fill/done
 // state needs no client JS and there's nothing to jump into place after
-// paint — the script below only reacts to the visitor's own clicks/toggles.
+// paint — the script below only reacts to the visitor's own clicks/toggles
+// and to a deep link (`#usage-point-…`) into a closed section.
 interface Section {
   id: string;
   title: string;
@@ -54,12 +55,17 @@ const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 }
 
 <script>
-  import { initGrammarSectionProgress } from '../../lib/grammar-section-progress';
+  import {
+    initGrammarSectionProgress,
+    openHashTarget,
+  } from '../../lib/grammar-section-progress';
 
   const nav = document.querySelector<HTMLElement>('[data-gp-progress]');
   if (nav) {
     initGrammarSectionProgress(nav);
   }
+  openHashTarget();
+  window.addEventListener('hashchange', openHashTarget);
 </script>
 
 <style>

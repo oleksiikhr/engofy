@@ -254,6 +254,26 @@ test.describe('grammar construction detail', () => {
     await expect(construction.handcrafted).toHaveCount(0);
   });
 
+  test('keeps "When it\'s used" closed until opened, with a rule count', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+
+    await expect(construction.usageSection).not.toHaveAttribute('open');
+    await expect(construction.usageSection).toContainText('2 rules');
+    await expect(construction.usageItem(0)).toBeHidden();
+    // Two points fit under the visible limit — no "Show more" toggle.
+    await expect(construction.usageMore).toHaveCount(0);
+
+    const checklistItem = page.locator('[data-gp-progress-item="use"]');
+    await expect(checklistItem).toHaveAttribute('data-done', 'false');
+    await checklistItem.click();
+    await expect(construction.usageSection).toHaveAttribute('open');
+    await expect(checklistItem).toHaveAttribute('data-done', 'true');
+    await expect(construction.usageItem(1)).toBeVisible();
+  });
+
   test('shows the learner explanation and clean examples, and falls back to the can-do statement', async ({
     page,
   }) => {
@@ -281,11 +301,11 @@ test.describe('grammar construction detail', () => {
   test('anchors a usage point at its egpIndex and lets the visitor answer its exercise pool', async ({
     page,
   }) => {
-    const construction = new GrammarConstructionPage(page);
-    await construction.goto('e2e-past-perfect');
-
     // The fixture's "Earlier past" point has egpIndex 90012 — the Reader
-    // popup's "Practice" link targets this anchor.
+    // popup's "Practice" link targets this anchor, which opens the closed
+    // "When it's used" section.
+    await page.goto('/grammar/e2e-past-perfect#usage-point-90012');
+    const construction = new GrammarConstructionPage(page);
     await expect(page.locator('#usage-point-90012')).toBeVisible();
 
     const enriched = construction.usageItem(0);
@@ -315,6 +335,7 @@ test.describe('grammar construction detail', () => {
       construction.compare.locator('a[href="/grammar/past-past-simple"]'),
     ).toBeVisible();
     // Usage points still come from the API.
+    await construction.openUsage();
     await expect(construction.usageItems.first()).toBeVisible();
   });
 
@@ -365,6 +386,7 @@ test.describe('grammar construction detail', () => {
       await expect(construction.levelProgress('A1')).toContainText(
         '0/1 learned',
       );
+      await construction.openUsage();
       await expect(construction.usageState()).toHaveText('Assumed known');
       // Still actionable: assumed known is not a settled state.
       await expect(

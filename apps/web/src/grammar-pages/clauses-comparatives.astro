@@ -1,0 +1,371 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 20 EGP rows (149-168): 14 pure FORM written without a card; 6 FORM/USE (151,
+// 152, 153, 154, 161, 167) — all 6 inlined, matched by egpIndex. The rows are
+// grouped by the comparison word that links the two parts (like, than, as … as,
+// the same as, rather than, superlative + clause, as if, too/enough/so), each
+// section climbing from its lowest level up.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const thanIngB1 = point(151);
+const asAsB1 = point(152);
+const ratherThanB1 = point(153);
+const theBestB1 = point(154);
+const superlativeB2 = point(161);
+const soAsToC2 = point(167);
+
+const inlineUsagePointIds = [thanIngB1, asAsB1, ratherThanB1, theBestB1, superlativeB2, soAsToC2]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to build comparisons with a whole clause or phrase in English: be like and look like, than + clause, as … as, the same as, rather than, the best I've ever seen, as if, and too, enough and so … that."
+  handcrafted
+  sections={[
+    { id: 'like', title: 'Be like, look like, similar to', open: true },
+    { id: 'than-clause', title: 'Than + a clause', open: false },
+    { id: 'as-as', title: 'As … as: equal or not', open: false },
+    { id: 'the-same', title: 'The same as', open: false },
+    { id: 'rather-than', title: 'Rather than', open: false },
+    { id: 'best-ever', title: "The best I've ever seen", open: false },
+    { id: 'as-if', title: 'As if and as though', open: false },
+    { id: 'result', title: 'Too, enough, so … that', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A comparison has two sides: the thing you're describing and the thing you compare it with. Often the second side is more than a single noun — a whole clause (<em>faster than you can imagine</em>), an <em>-ing</em> form (<em>more fun than sitting at home</em>) or an imagined picture (<em>as if I was a bird</em>). This page collects the words that link the two sides: <em>like</em>, <em>than</em>, <em>as … as</em>, <em>the same as</em>, <em>rather than</em>, <em>as if</em>, and <em>too</em>, <em>enough</em> and <em>so</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Be like, look like, similar to" id="like" open>
+    <p>
+      To say two people or things are similar, use <em>be like</em> + a noun or pronoun. Here <em>like</em> is a preposition meaning "similar to", not the verb <em>like</em> — so it never takes <em>-s</em> or <em>do</em>.
+    </p>
+    <GrammarFormula label="Be like" parts={['subject', 'be', 'like', 'noun / pronoun']} />
+    <GrammarExample note="Like here means 'similar to', not 'enjoy'.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">is</mark> <mark data-role="content">like</mark> <mark data-role="grammar">me</mark> — we both love music.
+    </GrammarExample>
+    <GrammarExample note="Is like explains something new by comparing it with something familiar.">
+      <mark data-role="grammar">The Funiculaire</mark> <mark data-role="grammar">is</mark> <mark data-role="content">like</mark> <mark data-role="grammar">a little train</mark>.
+    </GrammarExample>
+    <GrammarExample note="What … like? asks someone to describe a thing or a person.">
+      What <mark data-role="grammar">is</mark> <mark data-role="grammar">your new school</mark> <mark data-role="content">like</mark>?
+    </GrammarExample>
+    <p>
+      After the linking verbs <em>look</em>, <em>sound</em>, <em>feel</em>, <em>smell</em> and <em>seem</em>, <em>like</em> compares what you see, hear or feel with something else. <em>Similar to</em> means the same and is a little more formal.
+    </p>
+    <GrammarFormula label="Linking verb + like" parts={['subject', 'look / sound / feel / smell / seem', 'like / similar to', 'noun phrase']} />
+    <GrammarExample note="Look like compares how someone looks.">
+      People say <mark data-role="grammar">I</mark> <mark data-role="grammar">look</mark> <mark data-role="content">like</mark> <mark data-role="grammar">a pop star</mark> in this jacket.
+    </GrammarExample>
+    <GrammarExample note="Sound like compares what you hear.">
+      <mark data-role="grammar">The noise</mark> <mark data-role="grammar">sounded</mark> <mark data-role="content">like</mark> <mark data-role="grammar">a gunshot</mark>.
+    </GrammarExample>
+    <GrammarExample note="Smell like works the same way for smells.">
+      <mark data-role="grammar">The garden</mark> <mark data-role="grammar">smelled</mark> <mark data-role="content">like</mark> <mark data-role="grammar">roses</mark>.
+    </GrammarExample>
+    <GrammarExample note="Similar to usually follows be.">
+      <mark data-role="grammar">Your story</mark> <mark data-role="grammar">is</mark> <mark data-role="content">similar to</mark> <mark data-role="grammar">my last dream</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Than + a clause" id="than-clause" open={false}>
+    <p>
+      After a comparative, <em>than</em> is often followed by a noun or pronoun (<em>taller than me</em>). It can also be followed by a whole clause with its own subject and verb — often a short one, just a subject and <em>be</em> or an auxiliary.
+    </p>
+    <GrammarFormula label="Than + clause" parts={['comparative', 'than', 'subject', 'verb']} />
+    <GrammarExample note="The clause says what you'd expect — and he's faster than that.">
+      He's almost 60, but he's <mark data-role="grammar">faster</mark> <mark data-role="content">than</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">can imagine</mark>.
+    </GrammarExample>
+    <GrammarExample note="Than we expected is a very common way to talk about a surprise.">
+      The delivery price was <mark data-role="grammar">higher</mark> <mark data-role="content">than</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">expected</mark>.
+    </GrammarExample>
+    <GrammarExample note="The clause can be just subject + be.">
+      I wish our schools could be <mark data-role="grammar">better</mark> <mark data-role="content">than</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">are</mark>.
+    </GrammarExample>
+    <p>
+      When you compare two activities, put the second one after <em>than</em> in the <em>-ing</em> form.
+    </p>
+    <GrammarFormula label="Than + -ing" parts={['comparative', 'than', 'verb-ing …']} />
+    <GrammarExample note="Both sides are activities: going away and sitting at home.">
+      Going away with friends will be <mark data-role="grammar">more fun</mark> <mark data-role="content">than</mark> <mark data-role="grammar">sitting at home</mark>.
+    </GrammarExample>
+    <GrammarExample note="Less + adjective + than works the same way as more.">
+      A small school is <mark data-role="grammar">less complicated</mark> <mark data-role="content">than</mark> <mark data-role="grammar">going to a large one</mark>.
+    </GrammarExample>
+    {thanIngB1 && <GrammarUsagePointCard usagePoint={thanIngB1} />}
+    <p>
+      If the first activity is a <em>to</em>-infinitive (usually after <em>it is</em>), the second one matches it with <em>to</em>.
+    </p>
+    <GrammarFormula label="Than + to-infinitive" parts={['it is', 'comparative', 'to-infinitive', 'than', 'to-infinitive']} />
+    <GrammarExample note="To be single on one side, to have a partner on the other.">
+      <mark data-role="grammar">It is</mark> <mark data-role="grammar">much easier</mark> <mark data-role="grammar">to be single</mark> <mark data-role="content">than</mark> <mark data-role="grammar">to have a partner</mark>.
+    </GrammarExample>
+    <p>
+      A reduced clause drops the subject and verb and keeps only a past participle or an adjective: <em>than expected</em>, <em>than planned</em>, <em>than usual</em>, <em>than necessary</em>.
+    </p>
+    <GrammarFormula label="Reduced clause" parts={['comparative', 'than', 'expected / planned / usual']} />
+    <GrammarExample note="Than expected is short for than we expected.">
+      The new model performs <mark data-role="grammar">better</mark> <mark data-role="content">than</mark> <mark data-role="grammar">expected</mark>.
+    </GrammarExample>
+    <GrammarExample note="Than usual compares today with a normal day.">
+      The train was <mark data-role="grammar">busier</mark> <mark data-role="content">than</mark> <mark data-role="grammar">usual</mark> this morning.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="As … as: equal or not" id="as-as" open={false}>
+    <p>
+      <em>As</em> + adjective or adverb + <em>as</em> says two things are equal. <em>Not as … as</em> says the first is less. The second <em>as</em> is often followed by a clause — and instead of repeating the verb, English uses an auxiliary like <em>do</em>, <em>did</em> or <em>can</em>.
+    </p>
+    <GrammarFormula label="(Not) as … as" parts={['(not) as', 'adjective / adverb', 'as', 'clause']} />
+    <GrammarExample note="Not as cold as = less cold than I expected.">
+      The weather is perfect — it's <mark data-role="grammar">not</mark> <mark data-role="content">as</mark> <mark data-role="grammar">cold</mark> <mark data-role="content">as</mark> <mark data-role="grammar">I expected</mark>.
+    </GrammarExample>
+    <GrammarExample note="With an adverb, as … as describes how much or how well you do something.">
+      I'll try to do the work <mark data-role="content">as</mark> <mark data-role="grammar">well</mark> <mark data-role="content">as</mark> <mark data-role="grammar">I can</mark>.
+    </GrammarExample>
+    <GrammarExample note="Do replaces 'like trousers', so the verb isn't repeated.">
+      I really don't like trousers <mark data-role="content">as</mark> <mark data-role="grammar">much</mark> <mark data-role="content">as</mark> <mark data-role="grammar">you do</mark>.
+    </GrammarExample>
+    <GrammarExample note="Did replaces 'watched TV' — the past habit is compared with now.">
+      Now I don't watch TV <mark data-role="content">as</mark> <mark data-role="grammar">often</mark> <mark data-role="content">as</mark> <mark data-role="grammar">I did</mark>.
+    </GrammarExample>
+    {asAsB1 && <GrammarUsagePointCard usagePoint={asAsB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="The same as" id="the-same" open={false}>
+    <p>
+      To say two things are identical, use <em>the same as</em>. A noun can go between <em>the same</em> and <em>as</em> to say in what way they're the same: <em>the same age as</em>, <em>the same level as</em>.
+    </p>
+    <GrammarFormula label="The same as + noun or pronoun" parts={['the same', '(noun)', 'as', 'noun / pronoun']} />
+    <GrammarExample note="Age says in what way the people are the same.">
+      It's better to be with people who are <mark data-role="content">the same</mark> <mark data-role="grammar">age</mark> <mark data-role="content">as</mark> <mark data-role="grammar">you</mark>.
+    </GrammarExample>
+    <GrammarExample note="With no noun, the same as sits together as one phrase.">
+      My problem was almost <mark data-role="content">the same as</mark> <mark data-role="grammar">yours</mark>.
+    </GrammarExample>
+    <p>
+      After <em>as</em> you can also put a whole clause — again often with an auxiliary instead of the full verb.
+    </p>
+    <GrammarFormula label="The same as + clause" parts={['the same', '(noun)', 'as', 'subject + verb']} />
+    <GrammarExample note="You did is short for you did that thing, so the verb phrase isn't repeated.">
+      Maybe I'll do <mark data-role="content">the same</mark> <mark data-role="grammar">thing</mark> <mark data-role="content">as</mark> <mark data-role="grammar">you did</mark>.
+    </GrammarExample>
+    <GrammarExample note="Not the same as it used to be compares now with the past.">
+      Friendship today is not <mark data-role="content">the same as</mark> <mark data-role="grammar">it used to be</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Rather than" id="rather-than" open={false}>
+    <p>
+      <em>Rather than</em> means "and not" or "instead of". It stresses which of two options you mean. After it comes a noun phrase or a prepositional phrase that matches the one before it.
+    </p>
+    <GrammarFormula label="Rather than + phrase" parts={['phrase', 'rather than', 'phrase']} />
+    <GrammarExample note="Two noun phrases: the stairs, not the lift.">
+      Use <mark data-role="grammar">the stairs</mark> <mark data-role="content">rather than</mark> <mark data-role="grammar">the lift</mark>.
+    </GrammarExample>
+    <GrammarExample note="Rather than is often advice about the better choice.">
+      Eat <mark data-role="grammar">healthy food</mark> <mark data-role="content">rather than</mark> <mark data-role="grammar">fatty food</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two prepositional phrases: in the morning, not in the evening.">
+      I'd like to meet <mark data-role="grammar">in the morning</mark> <mark data-role="content">rather than</mark> <mark data-role="grammar">in the evening</mark>.
+    </GrammarExample>
+    {ratherThanB1 && <GrammarUsagePointCard usagePoint={ratherThanB1} />}
+    <p>
+      <em>Rather than</em> can also compare two actions. Use <em>-ing</em> after <em>rather than</em> when the first verb is <em>-ing</em>; after a <em>to</em>-infinitive, use the bare verb without <em>to</em>.
+    </p>
+    <GrammarFormula label="Rather than + verb" parts={['verb-ing / to-infinitive', 'rather than', 'verb-ing / bare verb']} />
+    <GrammarExample note="Walking on one side, going on the other.">
+      We're keen on <mark data-role="grammar">walking</mark> in the mountains <mark data-role="content">rather than</mark> <mark data-role="grammar">going</mark> shopping.
+    </GrammarExample>
+    <GrammarExample note="After to sleep, rather than takes the bare verb stay.">
+      I'd prefer <mark data-role="grammar">to sleep</mark> in a tent <mark data-role="content">rather than</mark> <mark data-role="grammar">stay</mark> in a hotel.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The best I've ever seen" id="best-ever" open={false}>
+    <p>
+      To say something is unique in your experience, follow a superlative with a clause. The present perfect with <em>ever</em> is the typical choice, and <em>that</em> before the clause is optional.
+    </p>
+    <GrammarFormula label="The best (that) + present perfect" parts={['the best', 'noun', '(that)', 'subject + have ever + past participle']} />
+    <GrammarExample note="Of every place I have seen in my life, this is the best.">
+      It's <mark data-role="content">the best</mark> <mark data-role="grammar">place</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">I have ever seen</mark>.
+    </GrammarExample>
+    <GrammarExample note="That is often left out — the meaning doesn't change.">
+      Going to France was <mark data-role="content">the best</mark> <mark data-role="grammar">decision</mark> <mark data-role="grammar">I've ever made</mark>.
+    </GrammarExample>
+    {theBestB1 && <GrammarUsagePointCard usagePoint={theBestB1} />}
+    <p>
+      Any superlative works in the same way, and the clause can use other tenses or a modal verb.
+    </p>
+    <GrammarFormula label="Superlative + clause" parts={['superlative', '(noun)', '(that)', 'clause']} />
+    <GrammarExample note="The worst + can happen: nothing could be worse.">
+      This is <mark data-role="content">the worst</mark> <mark data-role="grammar">thing</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">can happen</mark>.
+    </GrammarExample>
+    <GrammarExample note="No that here — the clause follows the noun directly.">
+      That is <mark data-role="content">the clearest</mark> <mark data-role="grammar">thing</mark> <mark data-role="grammar">I can remember</mark>.
+    </GrammarExample>
+    <GrammarExample note="With no noun, that + clause follows the superlative directly.">
+      Our new chip is <mark data-role="content">the fastest</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">exists</mark> at the moment.
+    </GrammarExample>
+    {superlativeB2 && <GrammarUsagePointCard usagePoint={superlativeB2} />}
+    <p>
+      <em>The best</em> can also work like an adverb with a short clause of just a pronoun and <em>can</em> or <em>could</em> — the main verb is left out because it's clear from the sentence.
+    </p>
+    <GrammarFormula label="The best + pronoun + can / could" parts={['verb', 'the best', 'pronoun', 'can / could']} />
+    <GrammarExample note="Short for the best I could do.">
+      On Thursday I <mark data-role="grammar">did</mark> <mark data-role="content">the best</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">could</mark>.
+    </GrammarExample>
+    <GrammarExample note="Short for the best we can offer.">
+      We always want to <mark data-role="grammar">offer</mark> <mark data-role="content">the best</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">can</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="As if and as though" id="as-if" open={false}>
+    <p>
+      <em>As if</em> and <em>as though</em> mean the same: they compare a real situation with an imagined one. They are most common after the sense verbs <em>look</em>, <em>feel</em>, <em>sound</em> and <em>seem</em>, followed by a full clause.
+    </p>
+    <GrammarFormula label="Sense verb + as if" parts={['subject', 'look / feel / sound / seem', 'as if / as though', 'clause']} />
+    <GrammarExample note="Looks as if says what you expect from what you can see.">
+      Take an umbrella — <mark data-role="grammar">it</mark> <mark data-role="grammar">looks</mark> <mark data-role="content">as if</mark> <mark data-role="grammar">it's going to rain</mark>.
+    </GrammarExample>
+    <GrammarExample note="I wasn't a bird — as if introduces the imagined picture.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">felt</mark> <mark data-role="content">as if</mark> <mark data-role="grammar">I was a bird</mark>.
+    </GrammarExample>
+    <GrammarExample note="As though means exactly the same as as if.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">sound</mark> <mark data-role="content">as though</mark> <mark data-role="grammar">you've got a cold</mark>.
+    </GrammarExample>
+    <p>
+      At a higher level, <em>as if</em> and <em>as though</em> can follow any clause, not only a sense verb, to describe how something happened.
+    </p>
+    <GrammarFormula label="Clause + as if" parts={['main clause,', 'as if / as though', 'clause']} />
+    <GrammarExample note="Her heart didn't burst — as if shows how fast it felt.">
+      Her heart was beating very fast, <mark data-role="content">as if</mark> <mark data-role="grammar">it was going to burst</mark>.
+    </GrammarExample>
+    <GrammarExample note="He had left — as though describes how it felt to him.">
+      Everything was so familiar, <mark data-role="content">as though</mark> <mark data-role="grammar">he had never left</mark>.
+    </GrammarExample>
+    <p>
+      In formal or literary writing, <em>as if</em> can be followed by a <em>to</em>-infinitive or an <em>-ing</em> form instead of a full clause. It shows what someone seemed to be trying to do.
+    </p>
+    <GrammarFormula label="As if + to / -ing" parts={['main clause', 'as if', 'to-infinitive / verb-ing …']} />
+    <GrammarExample note="As if to = as if she wanted to.">
+      She closed her eyes <mark data-role="content">as if</mark> <mark data-role="grammar">to push those thoughts away</mark>.
+    </GrammarExample>
+    <GrammarExample note="As if trying = as if she was trying.">
+      My mother never said no to us, <mark data-role="content">as if</mark> <mark data-role="grammar">trying to make up for our loss</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Too, enough, so … that" id="result" open={false}>
+    <p>
+      These patterns compare how much of a quality there is with what it leads to. <em>Too</em> + adjective + <em>to</em>-infinitive means "more than is needed, so something can't happen".
+    </p>
+    <GrammarFormula label="Too … to" parts={['too', 'adjective', 'to-infinitive']} />
+    <GrammarExample note="Too young to go = so young that you can't go.">
+      I think you are <mark data-role="content">too</mark> <mark data-role="grammar">young</mark> <mark data-role="grammar">to go</mark> on holiday by yourself.
+    </GrammarExample>
+    <GrammarExample note="He didn't write — being busy stopped him.">
+      He always said he was <mark data-role="content">too</mark> <mark data-role="grammar">busy</mark> <mark data-role="grammar">to write</mark> to me.
+    </GrammarExample>
+    <p>
+      <em>Enough</em> is the opposite: there is as much of the quality as is needed. It goes after the adjective.
+    </p>
+    <GrammarFormula label="Enough … to" parts={['adjective', 'enough', 'to-infinitive']} />
+    <GrammarExample note="Enough comes after responsible, not before it.">
+      I think I am <mark data-role="grammar">responsible</mark> <mark data-role="content">enough</mark> <mark data-role="grammar">to handle</mark> this job.
+    </GrammarExample>
+    <GrammarExample note="Not … enough says the quality falls short.">
+      Some teenagers are not <mark data-role="grammar">mature</mark> <mark data-role="content">enough</mark> <mark data-role="grammar">to decide</mark> about their future.
+    </GrammarExample>
+    <p>
+      <em>So</em> + adjective + <em>that</em> + clause says what result the quality had. In speech <em>that</em> is often left out: <em>I was so tired I fell asleep.</em>
+    </p>
+    <GrammarFormula label="So … that" parts={['so', 'adjective', 'that', 'clause']} />
+    <GrammarExample note="Being so tired had a result: I couldn't stand up.">
+      I was <mark data-role="content">so</mark> <mark data-role="grammar">tired</mark> <mark data-role="content">that</mark> <mark data-role="grammar">I couldn't stand up</mark>.
+    </GrammarExample>
+    <GrammarExample note="The clause after that tells you what happened.">
+      I was <mark data-role="content">so</mark> <mark data-role="grammar">nervous</mark> <mark data-role="content">that</mark> <mark data-role="grammar">I shouted my answer</mark>.
+    </GrammarExample>
+    <p>
+      In formal English, <em>so</em> + adjective + <em>as to</em> + infinitive does a similar job. It often appears in advice, criticism or polite conditions.
+    </p>
+    <GrammarFormula label="So … as to" parts={['so', 'adjective', 'as', 'to-infinitive']} />
+    <GrammarExample note="So ignorant as to think = so ignorant that they think — but more formal.">
+      Travellers should not be <mark data-role="content">so</mark> <mark data-role="grammar">ignorant</mark> <mark data-role="content">as</mark> <mark data-role="grammar">to think</mark> they understand every culture.
+    </GrammarExample>
+    <GrammarExample note="A very polite, formal way to say 'if I win'.">
+      Should I be <mark data-role="content">so</mark> <mark data-role="grammar">fortunate</mark> <mark data-role="content">as</mark> <mark data-role="grammar">to win</mark> the scholarship, I would use it well.
+    </GrammarExample>
+    {soAsToC2 && <GrammarUsagePointCard usagePoint={soAsToC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Like</em> in comparisons is a preposition, so it doesn't need another verb before it except <em>be</em> or a linking verb. Each pattern has its own fixed second word: <em>as … as</em>, <em>the same as</em>, <em>so … that</em> — never <em>than</em> or <em>like</em> in their place. <em>Enough</em> goes after an adjective, and <em>too</em> is followed by <em>to</em>, not <em>that</em>.
+    </p>
+    <GrammarContrast
+      bad={[
+        'She is look like her mother.',
+        "It's not as cold than I expected.",
+        'I have the same phone like you.',
+        'She is enough old to vote.',
+        'I was too tired that I fell asleep.',
+      ]}
+      good={[
+        'She looks like her mother.',
+        "It's not as cold as I expected.",
+        'I have the same phone as you.',
+        'She is old enough to vote.',
+        'I was so tired that I fell asleep.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-comparatives',
+        name: 'comparative adjectives',
+        note: 'forming -er and more, and than + a noun or pronoun.',
+      },
+      {
+        slug: 'adjectives-superlatives',
+        name: 'superlatives',
+        note: 'forming the -est and most forms before adding a clause.',
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'too and enough with an adjective on its own, without a to-infinitive.',
+      },
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinate clauses',
+        note: 'because, when, if and other words that join a second clause.',
+      },
+    ]}
+  />
+</GrammarShell>

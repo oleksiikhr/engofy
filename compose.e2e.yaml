@@ -28,12 +28,19 @@ services:
     # Dev image, hot reload via bind mount — same command as `make watch`,
     # plus an install since the image only has the base pnpm/corepack setup
     # baked in (the bind mount below replaces /app's contents at runtime).
-    command: sh -c "pnpm i --frozen-lockfile && NODE_ENV=development pnpm exec nest start --type-check --watch"
+    # `-p tsconfig.e2e.json` compiles into the backend_e2e_build volume, not
+    # the host's dist/ — a root-owned container writing dist/ breaks the host's
+    # `pnpm dev` (EACCES), and deleteOutDir makes the two builds wipe each other.
+    command: sh -c "pnpm i --frozen-lockfile && NODE_ENV=development pnpm exec nest start --type-check --watch -p tsconfig.e2e.json"
     volumes:
       - .:/app
       # Named volume, not the host node_modules: avoids native-binary
       # mismatches between the host OS/arch and the Linux container.
       - backend_e2e_node_modules:/app/node_modules
+      # outDir is a subdirectory (.e2e-build/dist), not the mount point itself:
+      # deleteOutDir's rm() on a mount point fails with EBUSY. Kept under /app
+      # so compiled ESM still resolves packages from /app/node_modules.
+      - backend_e2e_build:/app/.e2e-build
     environment:
       NODE_ENV: development
       HOST: 0.0.0.0
@@ -100,5 +107,6 @@ services:
 
 volumes:
   backend_e2e_node_modules:
+  backend_e2e_build:
   web_e2e_node_modules:
   web_e2e_web_node_modules:

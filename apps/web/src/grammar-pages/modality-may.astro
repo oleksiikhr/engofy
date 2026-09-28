@@ -1,0 +1,403 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 12 USE / FORM-USE rows are inlined, matched by EGP index. The other 5
+// rows (affirmative, negative, May I…? questions, and the two adverb rows)
+// are plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const possibilityPoint = point(498);
+const permissionPoint = point(501);
+const pastPoint = point(503);
+const formalRequestPoint = point(505);
+const focusingPoint = point(506);
+const opinionPoint = point(507);
+const politePermissionPoint = point(508);
+const mayWellPoint = point(509);
+const pastNegativePoint = point(510);
+const mayAsWellPoint = point(511);
+const concessionPoint = point(512);
+const hedgingPoint = point(513);
+
+const inlineUsagePointIds = [
+  possibilityPoint,
+  permissionPoint,
+  pastPoint,
+  formalRequestPoint,
+  focusingPoint,
+  opinionPoint,
+  politePermissionPoint,
+  mayWellPoint,
+  pastNegativePoint,
+  mayAsWellPoint,
+  concessionPoint,
+  hedgingPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="May: forms (may, may not, May I…?), possibility now and in the future, may also / may even, may well, may have + past participle, asking for permission, formal requests with May I…?, as you may know, may … but, may as well, however small it may be, and it may be argued that."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'May, may not, May I…?', open: true },
+    { id: 'possibility', title: 'It may rain: possibility', open: false },
+    { id: 'adverbs', title: 'It may also help / They may never…: adverbs after may', open: false },
+    { id: 'may-well', title: 'They may well agree: a strong possibility', open: false },
+    { id: 'past', title: "He may have forgotten / She may not have known: possibility in the past", open: false },
+    { id: 'permission', title: 'May I borrow your bike?: asking for permission', open: false },
+    { id: 'formal-request', title: 'May I have your attention?: formal requests and suggestions', open: false },
+    { id: 'focusing', title: 'As you may know…: shared knowledge', open: false },
+    { id: 'opinion', title: 'You may think… but…: an unexpected point of view', open: false },
+    { id: 'may-as-well', title: 'We may as well go home: the easiest choice', open: false },
+    { id: 'concession', title: 'However small it may be: concession', open: false },
+    { id: 'hedging', title: 'It may be argued that…: careful conclusions', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>May</em> is a modal verb with two main jobs. It says that something is possible, but not certain: <em>It may rain tomorrow.</em> And with <em>I</em> or <em>we</em>, it asks for permission politely: <em>May I come in?</em> It is a little more formal than <em>might</em> and <em>can</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="May, may not, May I…?" id="form" open>
+    <p>
+      <em>May</em> is the same for every subject — no <em>-s</em> with he, she, it. The verb after it is always the base form, without <em>to</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'may', 'base verb']} />
+    <GrammarExample note="I + may + need: maybe I will need them.">
+      Take the umbrellas — <mark data-role="grammar">I</mark> <mark data-role="content">may</mark> <mark data-role="grammar">need</mark> them.
+    </GrammarExample>
+    <GrammarExample note="It + may + be: the speaker isn't sure.">
+      I think <mark data-role="grammar">it</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be</mark> dirty.
+    </GrammarExample>
+    <p>
+      The negative is <em>may not</em>. It is not usually shortened — <em>mayn't</em> is very old-fashioned.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'may not', 'base verb']} />
+    <GrammarExample note="May not + be: perhaps it isn't the best way.">
+      I realise that <mark data-role="grammar">this</mark> <mark data-role="content">may not</mark> <mark data-role="grammar">be</mark> the best way to solve your problem.
+    </GrammarExample>
+    <GrammarExample note="May not + have: perhaps there's no internet there.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">may not</mark> even <mark data-role="grammar">have</mark> internet in the countryside!
+    </GrammarExample>
+    <p>
+      For a question, put <em>may</em> before the subject. Questions with may are almost always <em>May I…?</em> or <em>May we…?</em> — asking for permission. To ask about possibility, use <em>might</em> or <em>Do you think…?</em> instead.
+    </p>
+    <GrammarFormula label="Question" parts={['may', 'I / we', 'base verb']} />
+    <GrammarExample note="May + I + ask: a polite question in a formal email.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">ask</mark> you about my accommodation?
+    </GrammarExample>
+    <GrammarExample note="May + I + give: offering something at work.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">give</mark> you a short presentation on 17th December?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="It may rain: possibility" id="possibility" open={false}>
+    <p>
+      <em>May</em> says that something is possible now or in the future — about a 50% chance. The speaker doesn't know for sure. <em>Might</em> means almost the same and is a little weaker and more common in speech.
+    </p>
+    <GrammarFormula label="Possibility" parts={['subject', 'may', 'base verb']} />
+    <GrammarExample note="Possibility now: perhaps the document is in the bag.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be</mark> in our room, inside my bag.
+    </GrammarExample>
+    <GrammarExample note="Possibility in the future: perhaps we'll need money.">
+      Bring some money with you. <mark data-role="grammar">We</mark> <mark data-role="content">may</mark> <mark data-role="grammar">need</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Talking about the weather for a trip.">
+      Pack some light clothes — <mark data-role="grammar">the weather</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be</mark> hot.
+    </GrammarExample>
+    <GrammarExample note="May not: perhaps he won't come.">
+      <mark data-role="grammar">Tom</mark> <mark data-role="content">may not</mark> <mark data-role="grammar">come</mark> to the party — he's very busy this week.
+    </GrammarExample>
+    {possibilityPoint && <GrammarUsagePointCard usagePoint={possibilityPoint} />}
+    <p>
+      Compare the modal verb and the adverb: <em>It may be true</em> = <em>Maybe it is true.</em> <em>May be</em> is two words (modal + verb); <em>maybe</em> is one word and comes at the start.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It may also help / They may never…: adverbs after may" id="adverbs" open={false}>
+    <p>
+      Short adverbs like <em>also</em>, <em>even</em>, <em>only</em>, <em>never</em>, <em>just</em>, <em>already</em> and <em>sometimes</em> go between <em>may</em> and the main verb.
+    </p>
+    <GrammarFormula label="Adverb after may" parts={['subject', 'may', 'also / even / never…', 'base verb']} />
+    <GrammarExample note="May + also: one more possible benefit.">
+      Why don't you try going to the gym before work? <mark data-role="grammar">It</mark> <mark data-role="content">may</mark> <mark data-role="grammar">also</mark> <mark data-role="grammar">help</mark> you relax.
+    </GrammarExample>
+    <GrammarExample note="May + also: adding another request.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">may</mark> <mark data-role="grammar">also</mark> <mark data-role="grammar">ask</mark> you for another favour.
+    </GrammarExample>
+    <GrammarExample note="May + even: something surprising is possible.">
+      When you read books, <mark data-role="grammar">you</mark> <mark data-role="content">may</mark> <mark data-role="grammar">even</mark> <mark data-role="grammar">find</mark> words you don't know.
+    </GrammarExample>
+    <GrammarExample note="May + never: perhaps it will never happen.">
+      Children in big cities <mark data-role="content">may</mark> <mark data-role="grammar">never</mark> <mark data-role="grammar">get</mark> the chance to see farm animals.
+    </GrammarExample>
+    <GrammarContrast
+      bad={['It also may help you.', 'They may get never the chance.']}
+      good={['It may also help you.', 'They may never get the chance.']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="They may well agree: a strong possibility" id="may-well" open={false}>
+    <p>
+      <em>May well</em> makes the possibility stronger — "it's quite likely", often about something the listener doesn't expect. <em>Well</em> here doesn't mean "good".
+    </p>
+    <GrammarFormula label="May well" parts={['subject', 'may well', 'base verb']} />
+    <GrammarExample note="Quite likely, even if it doesn't look like it now.">
+      I think <mark data-role="grammar">they</mark> <mark data-role="content">may well</mark> <mark data-role="grammar">come</mark> to an agreement on these payment problems.
+    </GrammarExample>
+    <GrammarExample note="It may well be that…: a likely future result.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">may well</mark> <mark data-role="grammar">be</mark> that after leaving school these students become our employees.
+    </GrammarExample>
+    <GrammarExample note="A warning: this is really possible.">
+      Book early — <mark data-role="grammar">the tickets</mark> <mark data-role="content">may well</mark> <mark data-role="grammar">sell out</mark> in a day.
+    </GrammarExample>
+    {mayWellPoint && <GrammarUsagePointCard usagePoint={mayWellPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="He may have forgotten / She may not have known: possibility in the past" id="past" open={false}>
+    <p>
+      To talk about something that possibly happened in the past, use <em>may have</em> + past participle. The speaker is guessing — they don't know for sure.
+    </p>
+    <GrammarFormula label="Past possibility" parts={['subject', 'may have', 'past participle']} />
+    <GrammarExample note="Perhaps he has forgiven me — I'm not sure.">
+      I think <mark data-role="grammar">he</mark> <mark data-role="content">may have</mark> <mark data-role="grammar">forgiven</mark> me for that accident!
+    </GrammarExample>
+    <GrammarExample note="Perhaps you have already seen it.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">may have</mark> <mark data-role="grammar">seen</mark> that your blue vase isn't in your room any more — I broke it.
+    </GrammarExample>
+    <GrammarExample note="A possible problem with buying online.">
+      Another disadvantage is that <mark data-role="grammar">you</mark> <mark data-role="content">may have</mark> <mark data-role="grammar">received</mark> the wrong size or colour.
+    </GrammarExample>
+    {pastPoint && <GrammarUsagePointCard usagePoint={pastPoint} />}
+    <p>
+      The negative is <em>may not have</em> + past participle: "perhaps it didn't happen" or "perhaps it wasn't so".
+    </p>
+    <GrammarFormula label="Past negative" parts={['subject', 'may not have', 'past participle']} />
+    <GrammarExample note="Perhaps the number wasn't as high.">
+      <mark data-role="grammar">The percentage</mark> of Dutch people eating a hot breakfast <mark data-role="content">may not have</mark> <mark data-role="grammar">been</mark> as high as in England, but it has certainly fallen.
+    </GrammarExample>
+    <GrammarExample note="Skills they perhaps didn't get at home.">
+      Working helps people learn skills <mark data-role="grammar">they</mark> <mark data-role="content">may not have</mark> <mark data-role="grammar">learned</mark> by staying at home.
+    </GrammarExample>
+    <GrammarExample note="Perhaps she didn't know — so don't be angry.">
+      Don't be angry with her — <mark data-role="grammar">she</mark> <mark data-role="content">may not have</mark> <mark data-role="grammar">known</mark> about the meeting.
+    </GrammarExample>
+    {pastNegativePoint && <GrammarUsagePointCard usagePoint={pastNegativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="May I borrow your bike?: asking for permission" id="permission" open={false}>
+    <p>
+      <em>May I…?</em> asks for permission. It is more polite and more formal than <em>Can I…?</em> — good for teachers, customers, people you don't know well, and formal emails.
+    </p>
+    <GrammarFormula label="Asking for permission" parts={['may', 'I / we', 'base verb']} />
+    <GrammarExample note="Asking a friend politely.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">borrow</mark> your bike?
+    </GrammarExample>
+    <GrammarExample note="A polite offer: may I be…?">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">be</mark> your guide while you stay here?
+    </GrammarExample>
+    {permissionPoint && <GrammarUsagePointCard usagePoint={permissionPoint} />}
+    <p>
+      In very polite situations — a teacher's office, a phone call to a company, a letter — <em>may I</em> is the natural choice.
+    </p>
+    <GrammarExample note="Knocking on a teacher's door.">
+      Sir, <mark data-role="content">may</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">come in</mark>?
+    </GrammarExample>
+    <GrammarExample note="A formal phone call.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">speak</mark> to Miss Wright, please?
+    </GrammarExample>
+    <GrammarExample note="A formal question in a letter to a company.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">ask</mark> if your special offer will still be available in September?
+    </GrammarExample>
+    {politePermissionPoint && <GrammarUsagePointCard usagePoint={politePermissionPoint} />}
+    <p>
+      To give permission, say <em>Yes, you may</em> (formal) or <em>Yes, of course</em>. <em>You may not…</em> is a strong, formal "no": <em>You may not use phones in the exam room.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="May I have your attention?: formal requests and suggestions" id="formal-request" open={false}>
+    <p>
+      In formal situations, <em>May I…?</em> can be a polite way to ask for something, tell people what to do, or make a suggestion. It looks like a question, but the speaker doesn't really wait for permission.
+    </p>
+    <GrammarFormula label="Formal request" parts={['may', 'I', 'have / ask / suggest', '…']} />
+    <GrammarExample note="At the start of a speech: = Please listen.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> your attention, please?
+    </GrammarExample>
+    <GrammarExample note="A polite instruction in a work email.">
+      <mark data-role="content">May</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">ask</mark> you to use email whenever possible?
+    </GrammarExample>
+    <GrammarExample note="May I suggest…: a polite suggestion.">
+      As for travelling around, <mark data-role="content">may</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">suggest</mark> that we use the two bicycles at the house?
+    </GrammarExample>
+    {formalRequestPoint && <GrammarUsagePointCard usagePoint={formalRequestPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="As you may know…: shared knowledge" id="focusing" open={false}>
+    <p>
+      <em>As you may know</em> and <em>as you may have heard / noticed</em> + past participle introduce information the reader probably knows already. They make writing sound friendly and polite — common at the start of letters and emails.
+    </p>
+    <GrammarFormula label="Shared knowledge" parts={['as', 'you', 'may / may have', 'know / heard / noticed']} />
+    <GrammarExample note="As you may know: a fact the reader probably knows.">
+      I usually take more than one book because, <mark data-role="grammar">as</mark> <mark data-role="grammar">you</mark> <mark data-role="content">may</mark> <mark data-role="grammar">know</mark>, it takes many hours to get there.
+    </GrammarExample>
+    <GrammarExample note="As you may have heard: news the reader perhaps heard.">
+      <mark data-role="grammar">As</mark> <mark data-role="grammar">you</mark> <mark data-role="content">may have</mark> <mark data-role="grammar">heard</mark>, I am going to move to the engineering department.
+    </GrammarExample>
+    <GrammarExample note="As you may have noticed: a problem the reader perhaps saw.">
+      <mark data-role="grammar">As</mark> <mark data-role="grammar">you</mark> <mark data-role="content">may have</mark> <mark data-role="grammar">noticed</mark>, there has been a delay setting up the new computer system.
+    </GrammarExample>
+    {focusingPoint && <GrammarUsagePointCard usagePoint={focusingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="You may think… but…: an unexpected point of view" id="opinion" open={false}>
+    <p>
+      <em>May … but</em> first says what the listener probably thinks or feels, then gives a different, surprising view. <em>You may think</em> = "perhaps you think".
+    </p>
+    <GrammarFormula label="May … but" parts={['subject', 'may', 'think / surprise / seem', '…', 'but', 'clause']} />
+    <GrammarExample note="You may think…, but: correcting an expected opinion.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">may</mark> <mark data-role="grammar">think</mark> that cleaning instruments is boring, <mark data-role="grammar">but</mark> it is not.
+    </GrammarExample>
+    <GrammarExample note="This may surprise you, but: introducing surprising news.">
+      <mark data-role="grammar">This</mark> <mark data-role="content">may</mark> <mark data-role="grammar">surprise</mark> you, <mark data-role="grammar">but</mark> I've managed to lose some weight.
+    </GrammarExample>
+    <GrammarExample note="It may seem…, but: how it looks vs how it is.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">may</mark> <mark data-role="grammar">seem</mark> strange, <mark data-role="grammar">but</mark> I actually enjoy exams.
+    </GrammarExample>
+    {opinionPoint && <GrammarUsagePointCard usagePoint={opinionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="We may as well go home: the easiest choice" id="may-as-well" open={false}>
+    <p>
+      <em>May as well</em> + base verb says "there's no better option, so let's do this" or "it won't hurt to do it". It often sounds a little unenthusiastic. <em>Might as well</em> means the same and is more common in speech.
+    </p>
+    <GrammarFormula label="May as well" parts={['subject', 'may as well', 'base verb']} />
+    <GrammarExample note="No reason not to: I'm here anyway.">
+      I'm already here, so <mark data-role="grammar">I</mark> <mark data-role="content">may as well</mark> <mark data-role="grammar">see</mark> the other things.
+    </GrammarExample>
+    <GrammarExample note="There's no point in hiding it any more.">
+      After all, <mark data-role="grammar">you</mark> <mark data-role="content">may as well</mark> <mark data-role="grammar">know</mark> the truth.
+    </GrammarExample>
+    <GrammarExample note="Nothing better to do.">
+      The last bus has gone, so <mark data-role="grammar">we</mark> <mark data-role="content">may as well</mark> <mark data-role="grammar">walk</mark>.
+    </GrammarExample>
+    {mayAsWellPoint && <GrammarUsagePointCard usagePoint={mayAsWellPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="However small it may be: concession" id="concession" open={false}>
+    <p>
+      In formal writing, <em>however / whatever / whoever</em> + … + <em>may be</em> or <em>may seem</em> means "it doesn't matter how / what / who". The main clause is true in every case.
+    </p>
+    <GrammarFormula label="Concession" parts={['however + adjective / whatever', 'it / this', 'may', 'be / seem']} />
+    <GrammarExample note="However small it may be = even if it is very small.">
+      The price of the watch also plays a part, <mark data-role="grammar">however small</mark> <mark data-role="grammar">it</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be</mark>, in my love of it.
+    </GrammarExample>
+    <GrammarExample note="However useful it may seem = even if it seems useful.">
+      <mark data-role="grammar">However useful</mark> <mark data-role="grammar">it</mark> <mark data-role="content">may</mark> <mark data-role="grammar">seem</mark>, travel does not always broaden the mind.
+    </GrammarExample>
+    <GrammarExample note="Whatever it may be = any kind of activity.">
+      The most important thing is that people enjoy what they are doing, <mark data-role="grammar">whatever</mark> <mark data-role="grammar">it</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be</mark>.
+    </GrammarExample>
+    {concessionPoint && <GrammarUsagePointCard usagePoint={concessionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It may be argued that…: careful conclusions" id="hedging" open={false}>
+    <p>
+      In academic writing, <em>it may be</em> + past participle + <em>that</em> presents an idea carefully, without saying "I'm 100% sure". Common verbs: <em>argued</em>, <em>concluded</em>, <em>said</em>, <em>suggested</em>.
+    </p>
+    <GrammarFormula label="Hedging" parts={['it', 'may', 'be + past participle', 'that', 'clause']} />
+    <GrammarExample note="It may be argued: introducing one side of a debate.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be argued</mark> <mark data-role="grammar">that</mark> a child's success at school is crucial to his or her future.
+    </GrammarExample>
+    <GrammarExample note="It may be concluded: a careful summary at the end of an essay.">
+      On balance, <mark data-role="grammar">it</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be concluded</mark> <mark data-role="grammar">that</mark> the main aim of international sport remains unchanged.
+    </GrammarExample>
+    <GrammarExample note="It may be argued: a point for athletes' high pay.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">may</mark> <mark data-role="grammar">be argued</mark> <mark data-role="grammar">that</mark> an athlete's career is short, so the money is well deserved.
+    </GrammarExample>
+    {hedgingPoint && <GrammarUsagePointCard usagePoint={hedgingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>May</em> never changes: no <em>-s</em>, no <em>to</em> after it, and no <em>do</em> in questions or negatives.
+    </p>
+    <GrammarContrast
+      bad={['She mays come later.', 'I may to go out tonight.', "It doesn't may be true."]}
+      good={['She may come later.', 'I may go out tonight.', 'It may not be true.']}
+    />
+    <p>
+      <em>May be</em> (two words) is modal + verb. <em>Maybe</em> (one word) is an adverb and needs its own verb.
+    </p>
+    <GrammarContrast
+      bad={['She maybe right.', 'It maybe cold tomorrow.']}
+      good={['She may be right. / Maybe she is right.', 'It may be cold tomorrow.']}
+    />
+    <p>
+      For past possibility, use <em>may have</em> + past participle — not the past simple after may.
+    </p>
+    <GrammarContrast
+      bad={['He may forgot my number.', 'She may have went home.']}
+      good={['He may have forgotten my number.', 'She may have gone home.']}
+    />
+    <p>
+      For requests, <em>may</em> goes with <em>I</em> or <em>we</em>. To ask someone else to do something, use <em>could you</em> or <em>can you</em>.
+    </p>
+    <GrammarContrast
+      bad={['May you help me, please?']}
+      good={['Could you help me, please?', 'May I ask for your help?']}
+    />
+    <p>
+      Don't use <em>may</em> to ask whether something is possible — use <em>might</em>, <em>could</em> or <em>Do you think…?</em>
+    </p>
+    <GrammarContrast
+      bad={['May it rain tomorrow?']}
+      good={['Do you think it will rain tomorrow?', 'Might it rain tomorrow?']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'It might rain — the same possibility, a little weaker and more informal.',
+      },
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: 'Can I…? — permission in everyday speech, less formal than May I…?',
+      },
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: 'Could you…? / It could be… — polite requests to others and another way to say something is possible.',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: "It must be… / It can't be… — being sure, not just guessing.",
+      },
+    ]}
+  />
+</GrammarShell>

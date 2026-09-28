@@ -1,0 +1,349 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 7 USE rows are inlined, matched by EGP index. The other 7 rows
+// (affirmative, questions, negative, past, and adverbs at B1/C1/C2) are plain
+// FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const intentionsPoint = point(400);
+const predictionsBePoint = point(401);
+const futureInPastPoint = point(405);
+const negativeIntentionsPoint = point(406);
+const pastPlansPoint = point(407);
+const predictionsPoint = point(408);
+const reportingPoint = point(409);
+
+const inlineUsagePointIds = [
+  intentionsPoint,
+  predictionsBePoint,
+  futureInPastPoint,
+  negativeIntentionsPoint,
+  pastPlansPoint,
+  predictionsPoint,
+  reportingPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Be going to: I'm going to, I'm not going to, Are you going to…?, plans and intentions, predictions from what you can see, adverbs like never and really, and was going to for plans that changed and reported speech."
+  handcrafted
+  sections={[
+    { id: 'form', title: "I'm going to + verb", open: true },
+    { id: 'negative', title: "I'm not going to: the negative", open: false },
+    { id: 'questions', title: 'Are you going to…? Questions', open: false },
+    { id: 'plans', title: "I'm going to paint it pink: plans", open: false },
+    { id: 'predictions', title: "It's going to rain: predictions", open: false },
+    { id: 'adverbs', title: "I'm never going to forget: adverbs", open: false },
+    { id: 'past-plans', title: 'I was going to…, but: changed plans', open: false },
+    { id: 'future-in-past', title: "She didn't know what was going to happen", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Be going to + verb talks about the future when the idea is already
+      there now: a plan you have made (<em>I'm going to visit my aunt on Saturday</em>) or a prediction from what you can see (<em>Look at those clouds — it's going to rain</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I'm going to + verb" id="form" open>
+    <p>
+      Use am, is or are — it changes with the subject, like in the present
+      continuous. Then going to, then the base form of the verb. Going to
+      itself never changes.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "am / is / are ('m / 's / 're)", 'going to', 'base verb']} />
+    <GrammarExample note="I'm + going to + wear: said about some new jeans.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">wear</mark> them on holiday.
+    </GrammarExample>
+    <GrammarExample note="It is + going to + start, with a clock time.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">start</mark> at half past four.
+    </GrammarExample>
+    <GrammarExample note="We are + going to + take.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">take</mark> a taxi to the sports centre.
+    </GrammarExample>
+    <GrammarExample note="Going to + be: very common for the weather.">
+      <mark data-role="grammar">It's</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> hot.
+    </GrammarExample>
+    <p>
+      In fast speech going to often sounds like <em>gonna</em>: <em>I'm gonna call her</em>. You will hear it in films and songs, but write going to.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'm not going to: the negative" id="negative" open={false}>
+    <p>
+      Put not after am, is or are. The short forms are normal in speech:
+      I'm not, he isn't / he's not, they aren't / they're not.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "am / is / are + not", 'going to', 'base verb']} />
+    <GrammarExample note="Am not + going to + go: a plan not to do something.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am not</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">go</mark> to school tomorrow.
+    </GrammarExample>
+    <GrammarExample note="There is not + going to + be: no adult will be there.">
+      You can do whatever you want because <mark data-role="grammar">there</mark> <mark data-role="grammar">is not</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> an adult there to stop you.
+    </GrammarExample>
+    <p>
+      The negative often tells someone about a plan that stops you doing
+      something, or about what you have decided not to do.
+    </p>
+    <GrammarExample note="'m not + going to + be able to: saying you can't come, then the reason.">
+      <mark data-role="grammar">I'm not</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> able to meet you next Tuesday, because I have to go to the dentist.
+    </GrammarExample>
+    <GrammarExample note="A decision about the future: this town is not forever.">
+      I'm sure <mark data-role="grammar">I'm not</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">live</mark> here forever.
+    </GrammarExample>
+    {negativeIntentionsPoint && <GrammarUsagePointCard usagePoint={negativeIntentionsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Are you going to…? Questions" id="questions" open={false}>
+    <p>
+      For a question, put am, is or are before the subject. Going to + verb
+      stays after it. Short answers use be: <em>Yes, I am</em> / <em>No, I'm not</em>.
+    </p>
+    <GrammarFormula label="Question" parts={['(wh- word)', 'am / is / are', 'subject', 'going to', 'base verb']} />
+    <GrammarExample note="A yes/no question: are + you + going to come.">
+      <mark data-role="grammar">Are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">come</mark> tomorrow evening?
+    </GrammarExample>
+    <GrammarExample note="A wh- word goes first: what + are + you + going to wear.">
+      <mark data-role="grammar">What</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">wear</mark>?
+    </GrammarExample>
+    <GrammarExample note="What colour paint: the wh- phrase can be longer than one word.">
+      <mark data-role="grammar">What colour paint</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">we</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">use</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I'm going to paint it pink: plans" id="plans" open={false}>
+    <p>
+      Use be going to for something you have already decided to do. The
+      decision was made before you speak — now you are telling someone
+      about it or asking about theirs.
+    </p>
+    <GrammarFormula label="Plan" parts={['subject', 'am / is / are', 'going to', 'base verb']} />
+    <GrammarExample note="The colour is already chosen.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">use</mark> pink paint.
+    </GrammarExample>
+    <GrammarExample note="Someone else's plan: Mum has already said she will drive.">
+      <mark data-role="grammar">My mum</mark> <mark data-role="grammar">is</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">take</mark> us by car.
+    </GrammarExample>
+    <GrammarExample note="Asking about the other person's plans.">
+      <mark data-role="grammar">What time</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">come</mark>? And what are you going to bring?
+    </GrammarExample>
+    {intentionsPoint && <GrammarUsagePointCard usagePoint={intentionsPoint} />}
+    <p>
+      Compare it with will. Will is a decision you make at the moment of
+      speaking; going to is a decision you made earlier.
+    </p>
+    <GrammarExample note="Will: you decide right now, because the phone is ringing.">
+      The phone's ringing — <mark data-role="grammar">I'll</mark> <mark data-role="grammar">get</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Going to: you decided yesterday, before this conversation.">
+      <mark data-role="grammar">I'm</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">call</mark> the bank tomorrow — I decided yesterday.
+    </GrammarExample>
+    <p>
+      For an arrangement with a fixed time and other people, the present continuous is also common: <em>I'm meeting Tom at six.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It's going to rain: predictions" id="predictions" open={false}>
+    <p>
+      Use be going to to say what you think will happen. It is especially
+      natural when something you can see or know now points to it.
+    </p>
+    <GrammarFormula label="Prediction" parts={['subject', 'am / is / are', 'going to', 'be / verb']} />
+    <p>
+      The simplest predictions use going to + be, often with an adjective:
+      how something will be.
+    </p>
+    <GrammarExample note="Going to + be + adjective: a guess about the weather.">
+      I think <mark data-role="grammar">this Saturday</mark> <mark data-role="grammar">is</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> a nice day.
+    </GrammarExample>
+    <GrammarExample note="It's going to be + adjective: excited about something coming.">
+      <mark data-role="grammar">It's</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> fantastic.
+    </GrammarExample>
+    <GrammarExample note="The reason is known now, so the result is easy to predict.">
+      Wear comfortable clothes because <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> hot.
+    </GrammarExample>
+    {predictionsBePoint && <GrammarUsagePointCard usagePoint={predictionsBePoint} />}
+    <p>
+      Any verb can follow going to in a prediction. I think / I'm sure /
+      don't you think often come before it.
+    </p>
+    <GrammarExample note="Going to + like: you know the person and the place.">
+      I think <mark data-role="grammar">you're</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">like</mark> it.
+    </GrammarExample>
+    <GrammarExample note="A question that predicts: don't you think + going to + miss.">
+      Don't you think <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">miss</mark> your parents?
+    </GrammarExample>
+    <GrammarExample note="A negative prediction, with the reason after because.">
+      I think <mark data-role="grammar">I'm not</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">sleep</mark> tonight because tomorrow is an exciting day.
+    </GrammarExample>
+    <GrammarExample note="Evidence you can see: the clouds are already there.">
+      Look at those clouds — <mark data-role="grammar">it's</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">rain</mark>.
+    </GrammarExample>
+    {predictionsPoint && <GrammarUsagePointCard usagePoint={predictionsPoint} />}
+    <p>
+      Will also makes predictions (<em>I think it will rain</em>), but with clear evidence in front of you, going to sounds more natural.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'm never going to forget: adverbs" id="adverbs" open={false}>
+    <p>
+      An adverb usually goes in the middle: after am / is / are, before
+      going to. Common ones are never, really, always, probably and
+      definitely.
+    </p>
+    <GrammarFormula label="With an adverb" parts={['subject', 'am / is / are', 'adverb', 'going to', 'base verb']} />
+    <GrammarExample note="Never between 'm and going to.">
+      I know that <mark data-role="grammar">I'm</mark> <mark data-role="grammar">never</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">forget</mark> this moment.
+    </GrammarExample>
+    <GrammarExample note="Really makes the feeling stronger.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">really</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">miss</mark> you.
+    </GrammarExample>
+    <p>
+      In more formal writing, adverbs of certainty — probably, surely,
+      undoubtedly, certainly — go in the same place and show how sure you
+      are.
+    </p>
+    <GrammarExample note="Probably: likely, but not sure.">
+      <mark data-role="grammar">He</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">probably</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">finish</mark> his political career in two or three years.
+    </GrammarExample>
+    <GrammarExample note="Undoubtedly: the writer is completely sure.">
+      <mark data-role="grammar">The new store</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">undoubtedly</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">have</mark> a negative effect on our company.
+    </GrammarExample>
+    <p>
+      Some adverbs — still, even, briefly, just — can also go after going
+      to, right before the main verb.
+    </p>
+    <GrammarFormula label="Before the verb" parts={['subject', 'am / is / are', 'going to', 'adverb', 'base verb']} />
+    <GrammarExample note="Briefly between going to and introduce: typical in a talk or report.">
+      First, <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">briefly</mark> <mark data-role="grammar">introduce</mark> the three main activities.
+    </GrammarExample>
+    <GrammarExample note="Even before the verb adds surprise.">
+      <mark data-role="grammar">Nobody</mark> <mark data-role="grammar">is</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">even</mark> <mark data-role="grammar">look</mark> at you when your sister is there.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I was going to…, but: changed plans" id="past-plans" open={false}>
+    <p>
+      Put be in the past: was / were going to. It talks about a plan you
+      had in the past. Often the plan did not happen or changed, so but
+      comes next.
+    </p>
+    <GrammarFormula label="Past" parts={['subject', 'was / were', 'going to', 'base verb', '(but …)']} />
+    <GrammarExample note="The plan was 11.30; now there is a new time.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">meet</mark> at 11.30, <mark data-role="grammar">but</mark> now we'll meet at 2.30 in the same place.
+    </GrammarExample>
+    <GrammarExample note="The wedding was planned, but it didn't happen.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">get</mark> married two months ago, <mark data-role="grammar">but</mark> we broke up.
+    </GrammarExample>
+    <GrammarExample note="Reminding someone of a plan you both made.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">have</mark> a coffee on Tuesday morning, do you remember?
+    </GrammarExample>
+    {pastPlansPoint && <GrammarUsagePointCard usagePoint={pastPlansPoint} />}
+    <p>
+      It is also a soft way to explain or apologise: <em>I was going to call you, but my phone died.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She didn't know what was going to happen" id="future-in-past" open={false}>
+    <p>
+      Was / were going to can also look forward from a moment in the past:
+      what was still in the future then. It is common in stories.
+    </p>
+    <GrammarFormula label="Future in the past" parts={['subject', 'was / were', 'going to', 'base verb']} />
+    <GrammarExample note="At that moment, what would happen next was still unknown.">
+      She didn't know <mark data-role="grammar">what</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">happen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Going to + be, looking forward from the moment they realized.">
+      When we realized <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> a very hot day, we took water.
+    </GrammarExample>
+    {futureInPastPoint && <GrammarUsagePointCard usagePoint={futureInPastPoint} />}
+    <p>
+      When you report what someone said, am / is / are going to usually
+      becomes was / were going to.
+    </p>
+    <GrammarExample note="He said: 'I'm going to arrive tomorrow.' → he said he was going to arrive.">
+      He told me that <mark data-role="grammar">he</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">arrive</mark> tomorrow.
+    </GrammarExample>
+    <GrammarExample note="Someone said: 'Your boss is going to be late.'">
+      He was told <mark data-role="grammar">his boss</mark> <mark data-role="grammar">was</mark> <mark data-role="content">going to</mark> <mark data-role="grammar">be</mark> a bit late, so he had time to go back home.
+    </GrammarExample>
+    {reportingPoint && <GrammarUsagePointCard usagePoint={reportingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget be, and use the base verb after going to — not -ing, not
+      the past form.
+    </p>
+    <GrammarContrast
+      bad={['I going to buy a new phone.', 'She is going to calling you.', 'We are going to went home.']}
+      good={["I'm going to buy a new phone.", 'She is going to call you.', 'We are going to go home.']}
+    />
+    <p>
+      Keep to: going to + verb. Without to, it means moving to a place.
+    </p>
+    <GrammarContrast
+      bad={["I'm going visit my aunt."]}
+      good={["I'm going to visit my aunt.", "I'm going to Paris. (= travelling there)"]}
+    />
+    <p>
+      After when, if, before and as soon as, use the present simple, not
+      going to.
+    </p>
+    <GrammarContrast
+      bad={["I'll call you when I'm going to arrive."]}
+      good={["I'll call you when I arrive."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'will + verb',
+        note: "a decision made now and general predictions: The phone's ringing — I'll get it.",
+      },
+      {
+        slug: 'future-present-continuous-for-future-use',
+        name: 'present continuous for the future',
+        note: "fixed arrangements with a time and other people: I'm meeting Tom at six.",
+      },
+      {
+        slug: 'future-future-in-the-past',
+        name: 'future in the past',
+        note: 'was going to, would and was about to, looking forward from a past moment.',
+      },
+      {
+        slug: 'future-future-expressions-with-be',
+        name: 'future expressions with be',
+        note: 'be about to, be due to, be to: My class is about to begin.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: "how going to changes when you report it: He said he was going to come.",
+      },
+    ]}
+  />
+</GrammarShell>

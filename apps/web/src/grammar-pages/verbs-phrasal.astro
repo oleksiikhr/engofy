@@ -1,0 +1,301 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 9 EGP rows (1057-1065), all pure FORM, so no usage-point cards: no object
+// (1057 A2, 1059 B1, 1062 B2), verb + particle + object (1060 B1, 1063 B2),
+// verb + noun + particle (1064 B2), verb + pronoun + particle (1058 A2, 1061
+// B1, 1065 C1). Content is the verb and its particle — one mark when they
+// stand together, two when an object splits them; the object is grammar.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Phrasal verbs in English — a verb + a particle like up, out, off: get up, give up, turn off, pick up. Phrasal verbs with and without an object, where the object goes (turn off the light, turn the light off, turn it off — never turn off it), what the common particles add to the meaning, and how phrasal verbs differ from prepositional verbs like look after."
+  handcrafted
+  sections={[
+    { id: 'what', title: 'get up, give up. What a phrasal verb is', open: true },
+    { id: 'no-object', title: 'I got up early. Without an object', open: false },
+    { id: 'particle-object', title: 'She turned off the phone. Particle + object', open: false },
+    { id: 'noun-middle', title: 'Turn the computers off. The noun in the middle', open: false },
+    { id: 'pronoun', title: 'I’ll pick you up. Pronouns always in the middle', open: false },
+    { id: 'particles', title: 'up, out, off, away… What the particle adds', open: false },
+    { id: 'look-after', title: 'look after it, not look it after. Prepositional verbs', open: false },
+    { id: 'style', title: 'put off or postpone? Everyday and formal', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      A phrasal verb is a verb + a small word called a particle — <em>up, out, off, on, away, back, down, over</em>: <em>get up, go out, turn off, give up</em>. Together they work as one verb, often with a meaning you can't guess from the two parts. The particle does the job a prefix does in Ukrainian: <em>turn off</em> — <em>вимкнути</em>, <em>go out</em> — <em>вийти</em>, <em>take out</em> — <em>вийняти</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="get up, give up. What a phrasal verb is" id="what" open>
+    <p>
+      Some phrasal verbs mean exactly what their parts say: <em>go out</em> is to go outside, <em>come back</em> is to return. Many others have a new meaning of their own: <em>give up</em> is to stop trying, <em>find out</em> is to learn a fact, <em>look up</em> a word is to check it in a dictionary. Learn each one as a single word, with its meaning.
+    </p>
+    <GrammarFormula label="Phrasal verb" parts={['verb', 'particle']} />
+    <GrammarExample note="Literal: go + out = leave the house.">
+      Shall we <mark data-role="content">go out</mark> this weekend?
+    </GrammarExample>
+    <GrammarExample note="New meaning: give up = stop trying.">
+      Lisa didn't <mark data-role="content">give up</mark>.
+    </GrammarExample>
+    <GrammarExample note="New meaning: find out = learn a fact you didn't know.">
+      I <mark data-role="content">found out</mark> the answer yesterday.
+    </GrammarExample>
+    <p>
+      Only the verb changes for tense and person — the particle never does: <em>get up, <strong>gets</strong> up, <strong>got</strong> up, <strong>getting</strong> up</em>. Irregular verbs keep their irregular forms: <em>give up → <strong>gave</strong> up</em>, <em>take out → <strong>took</strong> out</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I got up early. Without an object" id="no-object">
+    <p>
+      Many phrasal verbs don't take an object: the action doesn't pass to anything else. The verb and the particle stay together, and any other words — time, place — come after them.
+    </p>
+    <GrammarFormula label="No object" parts={['verb', 'particle']} />
+    <GrammarExample note="get up: get out of bed.">
+      I'm going to <mark data-role="content">get up</mark> early on Saturday.
+    </GrammarExample>
+    <GrammarExample note="meet up: meet friends, usually by arrangement.">
+      We can <mark data-role="content">meet up</mark> at 2 pm.
+    </GrammarExample>
+    <GrammarExample note="come over: come to someone's home.">
+      If you have time, you can <mark data-role="content">come over</mark> and I'll introduce you to my friends.
+    </GrammarExample>
+    <p>
+      At B1 and B2 the range grows. These are all very common in everyday English:
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Phrasal verb</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>wake up, get up</em></td><td>stop sleeping; get out of bed</td></tr>
+        <tr><td><em>hang out</em></td><td>spend free time with friends</td></tr>
+        <tr><td><em>run out</em></td><td>be used up — <em>the battery ran out</em></td></tr>
+        <tr><td><em>break down</em></td><td>stop working — a car, a machine</td></tr>
+        <tr><td><em>show up, turn up</em></td><td>arrive, often late or unexpectedly</td></tr>
+        <tr><td><em>end up</em></td><td>finally be somewhere or do something you didn't plan</td></tr>
+        <tr><td><em>die out</em></td><td>disappear completely — a species, a tradition</td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="run out: be used up.">
+      Its battery had <mark data-role="content">run out</mark>.
+    </GrammarExample>
+    <GrammarExample note="show up: arrive when people expect you.">
+      The next day my grandpa didn't <mark data-role="content">show up</mark>.
+    </GrammarExample>
+    <GrammarExample note="end up + -ing: the result you didn't plan.">
+      If you don't read carefully, you'll <mark data-role="content">end up</mark> wasting your time.
+    </GrammarExample>
+    <p>
+      Don't put a word between the verb and the particle here: <em>I got up early</em>, not <em>I got early up</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She turned off the phone. Particle + object" id="particle-object">
+    <p>
+      Many phrasal verbs take an object — the thing you turn off, pick up, look up. One common order is verb + particle + object, just like an ordinary verb followed by its object.
+    </p>
+    <GrammarFormula label="Particle + object" parts={['verb', 'particle', 'object']} />
+    <GrammarExample note="turn off: stop a machine or light — вимкнути.">
+      She <mark data-role="content">turned off</mark> <mark data-role="grammar">the phone</mark> and walked to the bathroom.
+    </GrammarExample>
+    <GrammarExample note="take out: remove from inside something.">
+      I opened the envelope and <mark data-role="content">took out</mark> <mark data-role="grammar">the letter</mark>.
+    </GrammarExample>
+    <GrammarExample note="pick up: collect.">
+      I need to <mark data-role="content">pick up</mark> <mark data-role="grammar">my award</mark>.
+    </GrammarExample>
+    <GrammarExample note="look up: find information in a dictionary or online.">
+      I can <mark data-role="content">look up</mark> <mark data-role="grammar">some useful information</mark> on the internet.
+    </GrammarExample>
+    <GrammarExample note="put off: move to a later time.">
+      I couldn't <mark data-role="content">put off</mark> <mark data-role="grammar">my trip</mark>.
+    </GrammarExample>
+    <p>
+      When the object is long — a noun with several words after it — this order is the natural one: <em>Turn off <strong>all the lights in the kitchen</strong></em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Turn the computers off. The noun in the middle" id="noun-middle">
+    <p>
+      With most phrasal verbs that take an object, the particle can move: it can go before a noun object or after it. Both orders are correct and mean the same thing. With a short noun, putting it in the middle is very common in speech.
+    </p>
+    <GrammarFormula label="Noun in the middle" parts={['verb', 'noun', 'particle']} />
+    <GrammarExample note="Same as turn off the computers.">
+      Another way is to <mark data-role="content">turn</mark> <mark data-role="grammar">the computers</mark> <mark data-role="content">off</mark> in the evenings.
+    </GrammarExample>
+    <GrammarExample note="work out: find a solution.">
+      We might be able to <mark data-role="content">work</mark> <mark data-role="grammar">this problem</mark> <mark data-role="content">out</mark>.
+    </GrammarExample>
+    <GrammarExample note="take time off: not go to work or school.">
+      I'm glad that you've decided to <mark data-role="content">take</mark> <mark data-role="grammar">some time</mark> <mark data-role="content">off</mark>.
+    </GrammarExample>
+    <GrammarExample note="Both orders are fine with a short noun.">
+      Can you <mark data-role="content">turn</mark> <mark data-role="grammar">the TV</mark> <mark data-role="content">down</mark>? — Can you <mark data-role="content">turn down</mark> <mark data-role="grammar">the TV</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I’ll pick you up. Pronouns always in the middle" id="pronoun">
+    <p>
+      When the object is a pronoun — <em>it, them, me, you, him, her, us</em> — it must go between the verb and the particle. There is no choice here: <em>pick <strong>you</strong> up</em>, never <em>pick up you</em>.
+    </p>
+    <GrammarFormula label="Pronoun object" parts={['verb', 'it / them / me / you…', 'particle']} />
+    <GrammarExample note="pick up: collect someone, usually by car.">
+      I'll <mark data-role="content">pick</mark> <mark data-role="grammar">you</mark> <mark data-role="content">up</mark> at the station.
+    </GrammarExample>
+    <GrammarExample note="throw away: put in the bin.">
+      You may need to <mark data-role="content">throw</mark> <mark data-role="grammar">it</mark> <mark data-role="content">away</mark> — it'll be too dirty after painting.
+    </GrammarExample>
+    <GrammarExample note="help out: help someone, often with a practical job.">
+      Could you come by nine o'clock to <mark data-role="content">help</mark> <mark data-role="grammar">me</mark> <mark data-role="content">out</mark>?
+    </GrammarExample>
+    <GrammarExample note="try on: put on clothes to see if they fit.">
+      I love shopping for clothes, but I hate <mark data-role="content">trying</mark> <mark data-role="grammar">them</mark> <mark data-role="content">on</mark>.
+    </GrammarExample>
+    <GrammarExample note="check out: go and look at something interesting.">
+      I heard about this club on TV and I wanted to <mark data-role="content">check</mark> <mark data-role="grammar">it</mark> <mark data-role="content">out</mark>.
+    </GrammarExample>
+    <GrammarExample note="think over: think carefully before you decide.">
+      <mark data-role="content">Think</mark> <mark data-role="grammar">it</mark> <mark data-role="content">over</mark> and tell me what you decide.
+    </GrammarExample>
+    <p>
+      This is the most common mistake with phrasal verbs. A noun can go either side; a pronoun only in the middle: <em>turn off the TV / turn the TV off / turn <strong>it</strong> off</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="up, out, off, away… What the particle adds" id="particles">
+    <p>
+      Particles are not random. Each has a few typical meanings, and once you know them, new phrasal verbs are easier to understand and remember.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Particle</th><th>Typical meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>up</em></td><td>completely, to the end — <em>clean up, eat up, use up</em>; more — <em>turn up, speed up</em></td></tr>
+        <tr><td><em>out</em></td><td>outside, away from inside — <em>go out, take out</em>; to the end — <em>run out, sell out</em>; discover — <em>find out, work out</em></td></tr>
+        <tr><td><em>off</em></td><td>stop, disconnect — <em>turn off, switch off</em>; leave — <em>set off, take off</em></td></tr>
+        <tr><td><em>on</em></td><td>start, connect — <em>turn on, put on</em>; continue — <em>go on, carry on</em></td></tr>
+        <tr><td><em>away</em></td><td>to another place, gone — <em>throw away, give away, run away</em></td></tr>
+        <tr><td><em>back</em></td><td>return — <em>come back, give back, call back</em></td></tr>
+        <tr><td><em>down</em></td><td>less, lower — <em>turn down, slow down</em>; on paper — <em>write down</em></td></tr>
+        <tr><td><em>over</em></td><td>to someone's place — <em>come over</em>; again, carefully — <em>think over</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="up = completely: clean the whole room.">
+      After the concert I had to <mark data-role="content">clean up</mark> <mark data-role="grammar">the hall</mark>.
+    </GrammarExample>
+    <GrammarExample note="up = more, bigger: create step by step.">
+      When I read a book, I can <mark data-role="content">build up</mark> <mark data-role="grammar">the whole world</mark> in my head.
+    </GrammarExample>
+    <GrammarExample note="back = return.">
+      I'll <mark data-role="content">call</mark> <mark data-role="grammar">you</mark> <mark data-role="content">back</mark> in ten minutes.
+    </GrammarExample>
+    <p>
+      One phrasal verb can have several meanings: <em>take off</em> is what a plane does, what you do with a coat, and <em>take a day off</em> is not going to work. The object and the context tell you which.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="look after it, not look it after. Prepositional verbs" id="look-after">
+    <p>
+      Some verbs look like phrasal verbs but are prepositional verbs: <em>look after, look at, listen to, wait for, get on (a bus)</em>. Here the second word is a preposition, and a preposition always comes before its object — even a pronoun. It never moves.
+    </p>
+    <GrammarFormula label="Prepositional verb" parts={['verb', 'preposition', 'object / pronoun']} />
+    <GrammarExample note="look after: take care of — the pronoun comes after.">
+      Can you <mark data-role="content">look after</mark> <mark data-role="grammar">it</mark> while I'm away?
+    </GrammarExample>
+    <GrammarExample note="Compare a phrasal verb: the pronoun goes in the middle.">
+      Can you <mark data-role="content">look</mark> <mark data-role="grammar">it</mark> <mark data-role="content">up</mark> in the dictionary?
+    </GrammarExample>
+    <p>
+      There is no simple rule to tell them apart from the words alone — a dictionary marks which verbs are separable. A quick test: if <em>verb + it + second word</em> sounds right (<em>turn it off, pick it up</em>), it's a phrasal verb. More on the prepositional-verbs page.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="put off or postpone? Everyday and formal" id="style">
+    <p>
+      Most phrasal verbs have a one-word equivalent, usually from Latin. The phrasal verb sounds natural in conversation, messages and informal writing; the one-word verb is more formal — reports, official letters, instructions.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Everyday</th><th>Formal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><em>put off</em></td><td><em>postpone</em></td></tr>
+        <tr><td><em>find out</em></td><td><em>discover</em></td></tr>
+        <tr><td><em>go on</em></td><td><em>continue</em></td></tr>
+        <tr><td><em>give up</em></td><td><em>stop, quit</em></td></tr>
+        <tr><td><em>set up</em></td><td><em>establish</em></td></tr>
+        <tr><td><em>turn down</em></td><td><em>refuse, reject</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="To a friend: everyday.">
+      We had to <mark data-role="content">put</mark> <mark data-role="grammar">the party</mark> <mark data-role="content">off</mark> till next week.
+    </GrammarExample>
+    <GrammarExample note="In an official email the one-word verb fits better: The meeting has been postponed.">
+      Sorry, I need to <mark data-role="content">put off</mark> <mark data-role="grammar">our meeting</mark>.
+    </GrammarExample>
+    <p>
+      Learners often use only the formal verbs, because they look like words from other languages. In everyday English that sounds stiff — try the phrasal verb first when you speak.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      A pronoun object goes between the verb and the particle — never after the particle.
+    </p>
+    <GrammarContrast bad={['I’ll pick up you at six.', 'Turn off it, please.', 'Wake up me at seven.']} good={['I’ll pick you up at six.', 'Turn it off, please.', 'Wake me up at seven.']} />
+    <p>
+      A prepositional verb is different: the pronoun comes after the preposition.
+    </p>
+    <GrammarContrast bad={['Can you look him after?']} good={['Can you look after him?']} />
+    <p>
+      Don't drop the particle — without it the verb means something else or nothing at all.
+    </p>
+    <GrammarContrast bad={['Please turn the TV.', 'I gave smoking last year.']} good={['Please turn the TV off.', 'I gave up smoking last year.']} />
+    <p>
+      Without an object, nothing goes between the verb and the particle.
+    </p>
+    <GrammarContrast bad={['I got early up.']} good={['I got up early.']} />
+    <p>
+      Only the verb changes form; the particle stays the same.
+    </p>
+    <GrammarContrast bad={['He gived up smoking.']} good={['He gave up smoking.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'verbs-prepositional',
+        name: 'prepositional verbs',
+        note: 'look after, listen to, depend on — the second word is a preposition and never moves.',
+      },
+      {
+        slug: 'verbs-phrasal-prepositional',
+        name: 'phrasal-prepositional verbs',
+        note: 'look forward to, get on with, run out of — a verb + particle + preposition, three parts.',
+      },
+      {
+        slug: 'verbs-types',
+        name: 'types of verbs',
+        note: 'main, linking, auxiliary, modal — what job a verb does in the sentence.',
+      },
+    ]}
+  />
+</GrammarShell>

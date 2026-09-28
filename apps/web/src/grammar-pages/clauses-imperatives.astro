@@ -1,0 +1,393 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 17 EGP rows (186-202): 1 pure FORM (186, the affirmative base verb) written
+// without a card; 16 FORM/USE or USE — all 16 inlined, matched by egpIndex.
+// Sections follow the word that starts the command: the bare verb, don't,
+// do / do not / don't you, come and, let's, let me, let him / her / them,
+// then the imperative + and condition and the formal "see above".
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const instructionsA2 = point(187);
+const closingsA2 = point(188);
+const negativeA2 = point(189);
+const letsA2 = point(190);
+const emphasisingA2 = point(191);
+const doEmphasisB1 = point(192);
+const invitationB1 = point(193);
+const letMeB1 = point(194);
+const letsNotB2 = point(195);
+const doNotB2 = point(196);
+const letThemC1 = point(197);
+const dontLetC1 = point(198);
+const pointingC1 = point(199);
+const andConditionC1 = point(200);
+const letThemBeC2 = point(201);
+const dontYouC2 = point(202);
+
+const inlineUsagePointIds = [
+  instructionsA2,
+  closingsA2,
+  negativeA2,
+  letsA2,
+  emphasisingA2,
+  doEmphasisB1,
+  invitationB1,
+  letMeB1,
+  letsNotB2,
+  doNotB2,
+  letThemC1,
+  dontLetC1,
+  pointingC1,
+  andConditionC1,
+  letThemBeC2,
+  dontYouC2,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to give instructions, orders, advice and invitations in English with the imperative: the base verb, don't, emphatic do and do not, let's and let's not, let me, let him / her / them, don't you, and imperative + and as a condition."
+  handcrafted
+  sections={[
+    { id: 'affirmative', title: 'Base verb: telling someone what to do', open: true },
+    { id: 'negative', title: "Don't + verb: telling someone not to", open: false },
+    { id: 'emphasis', title: "Do, do not, don't you: stronger commands", open: false },
+    { id: 'invitation', title: 'Come and stay: invitations and offers', open: false },
+    { id: 'lets', title: "Let's and let's not: suggestions", open: false },
+    { id: 'let-me', title: 'Let me: introducing what you say next', open: false },
+    { id: 'let-them', title: 'Let him, let her, let them', open: false },
+    { id: 'and-condition', title: 'Imperative + and: a condition', open: false },
+    { id: 'pointing', title: 'See above: pointing in formal writing', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The imperative is the form you use to tell someone to do something — an instruction, an order, a piece of advice or an invitation. It's the simplest clause in English: just the base form of the verb, with no subject, because the subject is always the person you're talking to (<em>Sit down</em>, <em>Call me</em>). Put <em>don't</em> in front to tell someone not to do something (<em>Don't worry</em>), and use <em>let's</em> when the instruction includes you as well (<em>Let's go</em>).
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Base verb: telling someone what to do" id="affirmative" open>
+    <p>
+      An affirmative imperative is the base form of the verb — the form without <em>to</em>, <em>-s</em> or <em>-ing</em>. There's no subject: <em>you</em> is understood. The verb doesn't change whether you speak to one person or to many.
+    </p>
+    <GrammarFormula label="Imperative" parts={['base verb', 'rest of the clause']} />
+    <GrammarExample note="Bring, not brings or to bring — just the base verb.">
+      <mark data-role="content">Bring</mark> <mark data-role="grammar">your swimsuit</mark> for the swimming pool.
+    </GrammarExample>
+    <GrammarExample note="An imperative often follows an if-clause.">
+      <mark data-role="content">Call</mark> <mark data-role="grammar">me</mark> if you need anything.
+    </GrammarExample>
+    <p>
+      The most common use is giving instructions — directions, recipes, rules, how to get somewhere. A list of steps is just a series of imperatives, often joined by <em>and</em> or <em>then</em>.
+    </p>
+    <GrammarExample note="Two steps in order, joined by then.">
+      <mark data-role="content">Take</mark> <mark data-role="grammar">a taxi</mark> to the petrol station, then <mark data-role="content">call</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="Directions: three imperatives in a row.">
+      <mark data-role="content">Take</mark> <mark data-role="grammar">line 14</mark> and <mark data-role="content">change</mark> <mark data-role="grammar">to line 8</mark>. Then <mark data-role="content">walk</mark> <mark data-role="grammar">a little further</mark>.
+    </GrammarExample>
+    <GrammarExample note="Remember to + verb: a reminder inside an instruction.">
+      <mark data-role="content">Remember</mark> <mark data-role="grammar">to bring your camera</mark>!
+    </GrammarExample>
+    {instructionsA2 && <GrammarUsagePointCard usagePoint={instructionsA2} />}
+    <p>
+      Short imperatives are also the usual way to end a letter, a message or a conversation. They sound warm and friendly, not bossy.
+    </p>
+    <GrammarExample note="The end of an informal letter or email.">
+      <mark data-role="content">Write</mark> <mark data-role="grammar">to me</mark> soon. <mark data-role="content">Take</mark> <mark data-role="grammar">care</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two verbs, one object: email or phone.">
+      <mark data-role="content">Email</mark> or <mark data-role="content">phone</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="A fixed phrase for saying goodbye.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">a nice day</mark>!
+    </GrammarExample>
+    {closingsA2 && <GrammarUsagePointCard usagePoint={closingsA2} />}
+    <p>
+      To make an imperative more polite, add <em>please</em> at the start or at the end. Without <em>please</em>, a request to someone you don't know can sound rude.
+    </p>
+    <GrammarExample note="Please at the start: a polite request.">
+      Please <mark data-role="content">close</mark> <mark data-role="grammar">the door</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Don't + verb: telling someone not to" id="negative" open={false}>
+    <p>
+      A negative imperative is <em>don't</em> + base verb. It gives advice, a warning or an order not to do something. Every verb takes <em>don't</em> here — even <em>be</em>, which never takes <em>do</em> anywhere else.
+    </p>
+    <GrammarFormula label="Negative" parts={["don't", 'base verb', 'rest of the clause']} />
+    <GrammarExample note="Please makes the request softer.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">tell</mark> <mark data-role="grammar">Lucy</mark>, please.
+    </GrammarExample>
+    <GrammarExample note="Don't worry: comforting someone.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">worry</mark> — I'll be there.
+    </GrammarExample>
+    <GrammarExample note="Don't + be: not Don't late or Be not late.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">so hard on yourself</mark>.
+    </GrammarExample>
+    {negativeA2 && <GrammarUsagePointCard usagePoint={negativeA2} />}
+    <p>
+      A short negative imperative after an instruction or a piece of information repeats it in a stronger way. <em>Don't forget</em> and <em>Don't be late</em> are the most common.
+    </p>
+    <GrammarExample note="The instruction comes first, don't + verb makes sure it's followed.">
+      We'll meet at my house at 3 o'clock. <mark data-role="content">Don't</mark> <mark data-role="grammar">be</mark> <mark data-role="grammar">late</mark>!
+    </GrammarExample>
+    <GrammarExample note="Don't forget on its own: remember what I just told you.">
+      My house is opposite the post office. <mark data-role="content">Don't</mark> <mark data-role="grammar">forget</mark>.
+    </GrammarExample>
+    {emphasisingA2 && <GrammarUsagePointCard usagePoint={emphasisingA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Do, do not, don't you: stronger commands" id="emphasis" open={false}>
+    <p>
+      <em>Do</em> before an affirmative imperative adds emphasis. It sounds warm and keen in a letter (<em>do write</em> = please, really write) and polite but firm in a formal text.
+    </p>
+    <GrammarFormula label="Emphatic do" parts={['do', 'base verb', 'rest of the clause']} />
+    <GrammarExample note="Friendly: I'd really like you to write.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">write</mark> <mark data-role="grammar">back</mark> and let me know all your news.
+    </GrammarExample>
+    <GrammarExample note="Formal: a polite invitation to reply.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">let</mark> <mark data-role="grammar">me know</mark> your views on this.
+    </GrammarExample>
+    <GrammarExample note="Firm: this is important.">
+      <mark data-role="content">Do</mark> <mark data-role="grammar">follow</mark> <mark data-role="grammar">the instructions</mark>.
+    </GrammarExample>
+    {doEmphasisB1 && <GrammarUsagePointCard usagePoint={doEmphasisB1} />}
+    <p>
+      The full form <em>do not</em> instead of <em>don't</em> is stronger or more formal. You see it in notices, rules and formal letters.
+    </p>
+    <GrammarFormula label="Formal negative" parts={['do not', 'base verb', 'rest of the clause']} />
+    <GrammarExample note="A fixed phrase at the end of a formal letter.">
+      <mark data-role="content">Do not</mark> <mark data-role="grammar">hesitate</mark> <mark data-role="grammar">to contact me</mark> should you need further information.
+    </GrammarExample>
+    <GrammarExample note="Stronger than don't forget: this matters.">
+      <mark data-role="content">Do not</mark> <mark data-role="grammar">forget</mark> <mark data-role="grammar">to have a break</mark> at lunchtime.
+    </GrammarExample>
+    {doNotB2 && <GrammarUsagePointCard usagePoint={doNotB2} />}
+    <p>
+      Adding <em>you</em> after <em>don't</em> turns the command into an angry warning or a telling-off. It's spoken and emotional, often with <em>ever</em>, or in the fixed phrase <em>Don't you dare</em>.
+    </p>
+    <GrammarFormula label="Warning" parts={["don't", 'you', '(ever / dare)', 'base verb']} />
+    <GrammarExample note="Never do this again — a strong warning.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">ever</mark> <mark data-role="grammar">do</mark> that again!
+    </GrammarExample>
+    <GrammarExample note="Don't you dare: a complete sentence on its own.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">dare</mark>!
+    </GrammarExample>
+    <GrammarExample note="Between friends it can be playful, but it's still strong.">
+      <mark data-role="content">Don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">dare</mark> <mark data-role="grammar">forget</mark> me — I want letters from you!
+    </GrammarExample>
+    {dontYouC2 && <GrammarUsagePointCard usagePoint={dontYouC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Come and stay: invitations and offers" id="invitation" open={false}>
+    <p>
+      An imperative isn't always an order. With verbs like <em>come</em>, <em>have</em> and <em>help yourself</em>, it's a friendly invitation or offer — the speaker wants something good for the listener. <em>Come and</em> + verb is especially common.
+    </p>
+    <GrammarFormula label="Invitation" parts={['come', 'and', 'base verb']} />
+    <GrammarExample note="Come and + stay: an invitation to visit.">
+      <mark data-role="content">Come</mark> <mark data-role="grammar">and</mark> <mark data-role="grammar">stay</mark> with us this weekend!
+    </GrammarExample>
+    <GrammarExample note="Come and + visit, then a reason.">
+      <mark data-role="content">Come</mark> <mark data-role="grammar">and</mark> <mark data-role="grammar">visit</mark> us after the New Year — we've got so much to talk about.
+    </GrammarExample>
+    <GrammarExample note="An offer: take as much as you want.">
+      <mark data-role="content">Have</mark> <mark data-role="grammar">another piece of cake</mark>.
+    </GrammarExample>
+    {invitationB1 && <GrammarUsagePointCard usagePoint={invitationB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Let's and let's not: suggestions" id="lets" open={false}>
+    <p>
+      <em>Let's</em> (<em>let us</em>) + base verb is an imperative that includes the speaker: it suggests that you and the listener do something together. The full form <em>let us</em> is very formal; in everyday English always say <em>let's</em>.
+    </p>
+    <GrammarFormula label="Suggestion" parts={["let's", 'base verb', 'rest of the clause']} />
+    <GrammarExample note="Let's + go: the shortest suggestion.">
+      The concert is on Saturday. <mark data-role="content">Let's</mark> <mark data-role="grammar">go</mark>!
+    </GrammarExample>
+    <GrammarExample note="Let's + meet: suggesting a time.">
+      <mark data-role="content">Let's</mark> <mark data-role="grammar">meet</mark> <mark data-role="grammar">at half past four</mark>.
+    </GrammarExample>
+    <GrammarExample note="A suggestion followed by the reason for it.">
+      <mark data-role="content">Let's</mark> <mark data-role="grammar">go</mark> <mark data-role="grammar">to the town centre</mark> — it's an interesting place.
+    </GrammarExample>
+    {letsA2 && <GrammarUsagePointCard usagePoint={letsA2} />}
+    <p>
+      For a negative suggestion, put <em>not</em> after <em>let's</em>: we shouldn't do this.
+    </p>
+    <GrammarFormula label="Negative suggestion" parts={["let's", 'not', 'base verb']} />
+    <GrammarExample note="Let's not + lose: let's make sure this doesn't happen.">
+      <mark data-role="content">Let's</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">lose</mark> touch with each other again!
+    </GrammarExample>
+    <GrammarExample note="Let's not forget: a common way to bring a point into an argument.">
+      <mark data-role="content">Let's</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">forget</mark> that zoos help to keep endangered species alive.
+    </GrammarExample>
+    <GrammarExample note="Let's not + make: suggesting we avoid something.">
+      <mark data-role="content">Let's</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">make</mark> the situation more complicated.
+    </GrammarExample>
+    {letsNotB2 && <GrammarUsagePointCard usagePoint={letsNotB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Let me: introducing what you say next" id="let-me" open={false}>
+    <p>
+      <em>Let me</em> + base verb is an imperative about yourself. It prepares the listener for what you are going to say or do next — a story, an explanation, an answer. It sounds polite and organised, so it's common in presentations and letters.
+    </p>
+    <GrammarFormula label="Focusing" parts={['let me', 'base verb', 'rest of the clause']} />
+    <GrammarExample note="The start of a story.">
+      <mark data-role="content">Let me</mark> <mark data-role="grammar">tell</mark> <mark data-role="grammar">you my story</mark>.
+    </GrammarExample>
+    <GrammarExample note="Before an explanation.">
+      <mark data-role="content">Let me</mark> <mark data-role="grammar">explain</mark> <mark data-role="grammar">something</mark>.
+    </GrammarExample>
+    <GrammarExample note="Before a reply.">
+      <mark data-role="content">Let me</mark> <mark data-role="grammar">answer</mark> <mark data-role="grammar">your question</mark>.
+    </GrammarExample>
+    {letMeB1 && <GrammarUsagePointCard usagePoint={letMeB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Let him, let her, let them" id="let-them" open={false}>
+    <p>
+      <em>Let</em> + <em>him / her / them</em> + base verb tells the listener to allow someone to do something. The pronoun is always the object form: <em>let him</em>, not <em>let he</em>.
+    </p>
+    <GrammarFormula label="Permission" parts={['let', 'him / her / them', 'base verb']} />
+    <GrammarExample note="Allow him to win.">
+      Play chess with him whenever you can, and remember: <mark data-role="content">let</mark> <mark data-role="grammar">him</mark> <mark data-role="grammar">win</mark>!
+    </GrammarExample>
+    <GrammarExample note="Give them more free time.">
+      They want to do their shopping there, so <mark data-role="content">let</mark> <mark data-role="grammar">them</mark> <mark data-role="grammar">have</mark> more free time.
+    </GrammarExample>
+    <GrammarExample note="Please makes it a request: allow her to go.">
+      If she wants to study away from home, please <mark data-role="content">let</mark> <mark data-role="grammar">her</mark> <mark data-role="grammar">go</mark>.
+    </GrammarExample>
+    {letThemC1 && <GrammarUsagePointCard usagePoint={letThemC1} />}
+    <p>
+      <em>Don't let</em> + pronoun + base verb is the opposite: don't allow it, stop it from happening.
+    </p>
+    <GrammarFormula label="Not allowing" parts={["don't", 'let', 'him / her / them', 'base verb']} />
+    <GrammarExample note="Don't allow them to spend all their time this way.">
+      <mark data-role="grammar">Don't</mark> <mark data-role="content">let</mark> <mark data-role="grammar">them</mark> <mark data-role="grammar">spend</mark> all their free time in front of the TV.
+    </GrammarExample>
+    <GrammarExample note="Don't let him + go out: followed by the reason.">
+      <mark data-role="grammar">Don't</mark> <mark data-role="content">let</mark> <mark data-role="grammar">him</mark> <mark data-role="grammar">go out</mark> alone — he may not feel well.
+    </GrammarExample>
+    {dontLetC1 && <GrammarUsagePointCard usagePoint={dontLetC1} />}
+    <p>
+      The same pattern can mean the opposite of taking care of someone: it's their problem now, not ours. The tone is often cold or impatient.
+    </p>
+    <GrammarExample note="They can do it themselves — we won't help.">
+      <mark data-role="content">Let</mark> <mark data-role="grammar">them</mark> <mark data-role="grammar">find</mark> their own food.
+    </GrammarExample>
+    <GrammarExample note="Her friends gave up: she wants to be alone, so leave her.">
+      <mark data-role="content">Let</mark> <mark data-role="grammar">her</mark> <mark data-role="grammar">live</mark> alone.
+    </GrammarExample>
+    <GrammarExample note="Let them be: leave them alone, don't interfere.">
+      <mark data-role="content">Let</mark> <mark data-role="grammar">them</mark> <mark data-role="grammar">be</mark>.
+    </GrammarExample>
+    {letThemBeC2 && <GrammarUsagePointCard usagePoint={letThemBeC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Imperative + and: a condition" id="and-condition" open={false}>
+    <p>
+      An imperative followed by <em>and</em> + <em>will</em> isn't an instruction at all — it's a condition. The imperative means "if you do this", and the clause after <em>and</em> says what will happen. With <em>or</em>, it's a warning: "if you don't".
+    </p>
+    <GrammarFormula label="Condition" parts={['base verb', 'and', 'subject', 'will', 'base verb']} />
+    <GrammarExample note="= If you see one of them, you'll want to see them all.">
+      <mark data-role="content">See</mark> one of them <mark data-role="grammar">and</mark> <mark data-role="grammar">you</mark><mark data-role="grammar">'ll</mark> <mark data-role="grammar">want</mark> to see them all.
+    </GrammarExample>
+    <GrammarExample note="= If you work hard, you'll pass.">
+      <mark data-role="content">Work</mark> hard <mark data-role="grammar">and</mark> <mark data-role="grammar">you</mark><mark data-role="grammar">'ll</mark> <mark data-role="grammar">pass</mark>.
+    </GrammarExample>
+    <GrammarExample note="With or: = If you don't hurry, you'll miss the bus.">
+      <mark data-role="content">Hurry</mark> up, <mark data-role="grammar">or</mark> <mark data-role="grammar">you</mark><mark data-role="grammar">'ll</mark> <mark data-role="grammar">miss</mark> the bus.
+    </GrammarExample>
+    {andConditionC1 && <GrammarUsagePointCard usagePoint={andConditionC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="See above: pointing in formal writing" id="pointing" open={false}>
+    <p>
+      In reports, essays and formal letters, short imperatives point the reader to another part of the text or to an attached document. They often stand in brackets, and the object usually has no article (<em>see enclosed brochure</em>).
+    </p>
+    <GrammarFormula label="Pointing" parts={['see / look at / note', 'part of the text or document']} />
+    <GrammarExample note="Pointing to an attached document.">
+      <mark data-role="content">See</mark> <mark data-role="grammar">enclosed brochure</mark>.
+    </GrammarExample>
+    <GrammarExample note="In brackets, pointing back to an earlier part of the text.">
+      I have spent the past few days talking to the six students in our programme (<mark data-role="content">see</mark> <mark data-role="grammar">above</mark>).
+    </GrammarExample>
+    <GrammarExample note="Directing the reader to a chart.">
+      <mark data-role="content">Look at</mark> <mark data-role="grammar">the graph of the agricultural sector</mark>, 1991–2001.
+    </GrammarExample>
+    {pointingC1 && <GrammarUsagePointCard usagePoint={pointingC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      The imperative is always the bare base verb: no <em>to</em>, no <em>-ing</em>, no subject. Negatives need <em>don't</em>, not just <em>not</em> or <em>no</em> — and that includes <em>be</em>. After <em>let</em>, use the object pronoun and the base verb without <em>to</em>; for a negative suggestion, <em>not</em> goes after <em>let's</em>.
+    </p>
+    <GrammarContrast
+      bad={[
+        'Please to call me tomorrow.',
+        'Not go there alone.',
+        'No worry, I will help you.',
+        "Don't being late!",
+        "Let's to go to the cinema.",
+        "Let's don't forget about Anna.",
+        "Don't let he go out alone.",
+      ]}
+      good={[
+        'Please call me tomorrow.',
+        "Don't go there alone.",
+        "Don't worry, I will help you.",
+        "Don't be late!",
+        "Let's go to the cinema.",
+        "Let's not forget about Anna.",
+        "Don't let him go out alone.",
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'negation-negation',
+        name: 'negation',
+        note: "don't + base verb next to all the other ways to make a sentence negative.",
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditional clauses',
+        note: 'if + present with an imperative in the main clause: If you need help, call me.',
+      },
+      {
+        slug: 'modality-shall',
+        name: 'shall',
+        note: "Shall we …? — another way to make a suggestion, next to let's.",
+      },
+      {
+        slug: 'questions-tags',
+        name: 'question tags',
+        note: "Let's go, shall we? and Open the window, will you? — tags after an imperative.",
+      },
+    ]}
+  />
+</GrammarShell>

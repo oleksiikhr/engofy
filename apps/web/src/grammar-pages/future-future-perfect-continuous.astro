@@ -1,0 +1,228 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 4 EGP rows (371-374): 371 (affirmative) and 372 (negative) are pure FORM
+// rows without cards; 373 (looking back from a future point) and 374
+// (assumptions, C2) are USE rows, inlined and matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const lookingBackPoint = point(373);
+const assumptionsPoint = point(374);
+
+const inlineUsagePointIds = [lookingBackPoint, assumptionsPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The future perfect continuous: will have been + -ing, won't have been, How long will you have been…?, how long an activity has lasted by a point in the future, and assumptions like You'll have been wondering why."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Will have been + -ing, I'll have been", open: true },
+    { id: 'negative', title: "Won't have been + -ing and questions", open: false },
+    { id: 'looking-back', title: "By June I'll have been working here for a year", open: false },
+    { id: 'results', title: "You'll be tired: you'll have been driving all day", open: false },
+    { id: 'assumptions', title: "You'll have been wondering why: assumptions", open: false },
+    { id: 'vs-other-tenses', title: 'Will have been doing, will have done or will be doing?', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The future perfect continuous stands at a point in the future and looks back at an activity that is still going on: <em>By June I'll have been working here for a year.</em> It answers the question "how long, by then?" — and at C2 level it can also guess about the present: <em>You'll have been wondering why I called you.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Will have been + -ing, I'll have been" id="form" open>
+    <p>
+      Put <em>will</em>, then <em>have been</em>, then the <em>-ing</em> form of the verb. None of these words change: the same form for I, you, he, she, we and they. In speech <em>will</em> is usually <em>'ll</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "will / 'll", 'have been', '-ing verb', '(for + period / by + time)']} />
+    <GrammarExample note="Three years of work, counted from this summer.">
+      <mark data-role="grammar">This summer</mark> <mark data-role="grammar">I</mark> <mark data-role="content">will have been</mark> <mark data-role="content">working</mark> <mark data-role="grammar">for three years</mark> for my company.
+    </GrammarExample>
+    <GrammarExample note="The contraction 'll is the normal spoken form.">
+      <mark data-role="grammar">In May</mark> <mark data-role="grammar">we</mark><mark data-role="content">'ll have been</mark> <mark data-role="content">living</mark> in this flat <mark data-role="grammar">for ten years</mark>.
+    </GrammarExample>
+    <GrammarExample note="He, she, it: still will have been — no has.">
+      <mark data-role="grammar">By the time she retires</mark>, <mark data-role="grammar">she</mark> <mark data-role="content">will have been</mark> <mark data-role="content">teaching</mark> <mark data-role="grammar">for forty years</mark>.
+    </GrammarExample>
+    <p>
+      The tense almost always comes with two time markers: a point in the future (<em>this summer</em>, <em>by June</em>, <em>by the time…</em>, <em>next month</em>) and a length of time (<em>for three years</em>, <em>all day</em>, <em>since 2020</em>).
+    </p>
+    <p>
+      After <em>by the time</em>, <em>when</em> and <em>before</em> the verb stays in the present simple, not <em>will</em>: <em>By the time she <strong>retires</strong></em>, not <em>By the time she will retire</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Won't have been + -ing and questions" id="negative">
+    <p>
+      For the negative, put <em>not</em> after <em>will</em>: <em>will not have been</em>, or in speech <em>won't have been</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "will not / won't", 'have been', '-ing verb']} />
+    <GrammarExample note="Not long enough by then to feel at home.">
+      <mark data-role="grammar">By Christmas</mark> <mark data-role="grammar">they</mark> <mark data-role="content">won't have been</mark> <mark data-role="content">living</mark> here long enough to know the neighbours.
+    </GrammarExample>
+    <GrammarExample note="Full form: more formal or emphatic.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">will not have been</mark> <mark data-role="content">waiting</mark> <mark data-role="grammar">for long</mark> — the bus comes every ten minutes.
+    </GrammarExample>
+    <p>
+      For a question, put <em>will</em> before the subject. The most common question is <em>How long will… have been + -ing?</em>
+    </p>
+    <GrammarFormula label="Question" parts={['(How long)', 'will', 'subject', 'have been', '-ing verb']} />
+    <GrammarExample note="How long, counted up to next year.">
+      <mark data-role="grammar">How long</mark> <mark data-role="content">will</mark> <mark data-role="grammar">you</mark> <mark data-role="content">have been</mark> <mark data-role="content">studying</mark> English <mark data-role="grammar">by next year</mark>?
+    </GrammarExample>
+    <GrammarExample note="A yes/no question.">
+      <mark data-role="content">Will</mark> <mark data-role="grammar">she</mark> <mark data-role="content">have been</mark> <mark data-role="content">working</mark> there <mark data-role="grammar">for a year</mark> <mark data-role="grammar">by then</mark>?
+    </GrammarExample>
+    <p>
+      Negatives and questions in this tense are rare. People often say the same idea more simply: <em>How long will you have been studying?</em> → <em>How long have you been studying? It'll be two years in June.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="By June I'll have been working here for a year" id="looking-back">
+    <p>
+      The main use: imagine yourself at a point in the future and look back. The activity started in the past (or starts soon) and is still going on at that future point. The tense stresses <strong>how long</strong> it will have lasted by then.
+    </p>
+    <GrammarFormula label="Duration up to a future point" parts={['by / in + future time', 'subject', "will / 'll have been", '-ing verb', 'for + period']} />
+    <GrammarExample note="Now: studying. This month: seven months of it.">
+      Now I am staying in Hastings in England and <mark data-role="grammar">this month</mark>, <mark data-role="grammar">I</mark> <mark data-role="content">will have been</mark> <mark data-role="content">studying</mark> English <mark data-role="grammar">for seven months</mark>.
+    </GrammarExample>
+    <GrammarExample note="A full year of work by the end of June — the reason for a holiday.">
+      I could have a holiday in July because <mark data-role="grammar">I</mark> <mark data-role="content">will have been</mark> <mark data-role="content">working</mark> for my company <mark data-role="grammar">for one year</mark> <mark data-role="grammar">by the end of June</mark>.
+    </GrammarExample>
+    <GrammarExample note="The trip isn't over yet at that point.">
+      <mark data-role="grammar">When we reach Lviv</mark>, <mark data-role="grammar">we</mark><mark data-role="content">'ll have been</mark> <mark data-role="content">travelling</mark> <mark data-role="grammar">for twelve hours</mark>.
+    </GrammarExample>
+    {lookingBackPoint && <GrammarUsagePointCard usagePoint={lookingBackPoint} />}
+    <p>
+      Ukrainian has no separate tense for this: <em>До червня я працюватиму тут уже рік</em> or <em>У червні буде рік, як я тут працюю</em> → <em>By June I'll have been working here for a year.</em> When you see <em>уже</em> + a period of time + a future moment, this is the tense to reach for.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You'll be tired: you'll have been driving all day" id="results">
+    <p>
+      Like the present perfect continuous (<em>I'm tired — I've been running</em>), this tense can explain a situation at a future moment by the activity that led to it.
+    </p>
+    <GrammarFormula label="Future result" parts={['subject', "will / 'll have been", '-ing verb', '(for + period / all day)', '→ future result']} />
+    <GrammarExample note="Tired then, because of the long drive before it.">
+      Don't plan anything for the evening — <mark data-role="grammar">you</mark><mark data-role="content">'ll have been</mark> <mark data-role="content">driving</mark> <mark data-role="grammar">all day</mark> and you'll be exhausted.
+    </GrammarExample>
+    <GrammarExample note="The garden will be wet because of the rain before it.">
+      <mark data-role="grammar">By the weekend</mark> <mark data-role="grammar">it</mark> <mark data-role="content">will have been</mark> <mark data-role="content">raining</mark> <mark data-role="grammar">for a week</mark>, so the match will probably be cancelled.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="You'll have been wondering why: assumptions" id="assumptions">
+    <p>
+      At C2 level, <em>will</em> can mean "I'm sure" rather than "in the future". Then <em>will have been + -ing</em> is a confident guess about an activity that has been going on up to <strong>now</strong> — nothing to do with the future.
+    </p>
+    <GrammarFormula label="Assumption about now" parts={['subject', "will / 'll", 'have been', '-ing verb']} />
+    <GrammarExample note="A classic opening: I'm sure you've been wondering.">
+      <mark data-role="grammar">You</mark><mark data-role="content">'ll have been</mark> <mark data-role="content">wondering</mark> why I asked you all to come here today.
+    </GrammarExample>
+    <GrammarExample note="A guess about their night: they have probably been driving.">
+      Don't phone them yet — <mark data-role="grammar">they</mark><mark data-role="content">'ll have been</mark> <mark data-role="content">driving</mark> <mark data-role="grammar">all night</mark> and they'll be asleep now.
+    </GrammarExample>
+    <GrammarExample note="An assumption about someone who got the job.">
+      It is fair to assume that <mark data-role="grammar">anyone in that position</mark> <mark data-role="content">will have been</mark> <mark data-role="content">studying</mark> very hard to get it.
+    </GrammarExample>
+    {assumptionsPoint && <GrammarUsagePointCard usagePoint={assumptionsPoint} />}
+    <p>
+      The same guess with <em>must</em> is more common: <em>You must have been wondering why.</em> <em>Will have been</em> sounds a little more formal and more certain — the speaker treats it as the obvious explanation.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will have been doing, will have done or will be doing?" id="vs-other-tenses">
+    <p>
+      All three look at a moment in the future. Choose by what you want to show about the activity at that moment.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>At that future moment…</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>will be doing</code></th><td>the activity is in progress</td><td>At nine I'll be writing my essay.</td></tr>
+        <tr><th><code>will have been doing</code></th><td>it is still in progress, and we count how long</td><td>By nine I'll have been writing it for three hours.</td></tr>
+        <tr><th><code>will have done</code></th><td>it is finished; we count the result</td><td>By nine I'll have written two pages.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      A number of things done (<em>two pages</em>, <em>ten emails</em>, <em>three times</em>) needs the future perfect simple, not the continuous: <em>By Friday I'll have read five books</em>, not <em>I'll have been reading five books</em>.
+    </p>
+    <p>
+      State verbs like <em>know</em>, <em>be</em>, <em>have</em> (= own), <em>believe</em>, <em>own</em> are not used in the continuous. Use the future perfect simple with them: <em>By June we'll have known each other for ten years</em>, not <em>we'll have been knowing</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      All four parts are needed, in this order: <em>will</em> + <em>have</em> + <em>been</em> + <em>-ing</em>. Don't drop <em>have</em> or <em>been</em>.
+    </p>
+    <GrammarContrast bad={["By June I'll been working here for a year.", "By June I'll have working here for a year."]} good={["By June I'll have been working here for a year."]} />
+    <p>
+      After <em>will</em> the form never changes: <em>have</em>, not <em>has</em>.
+    </p>
+    <GrammarContrast bad={['Next month she will has been living here for a year.']} good={["Next month she'll have been living here for a year."]} />
+    <p>
+      Use the present simple, not <em>will</em>, after <em>by the time</em>, <em>when</em> and <em>before</em>.
+    </p>
+    <GrammarContrast bad={["By the time you will arrive, I'll have been waiting for an hour."]} good={["By the time you arrive, I'll have been waiting for an hour."]} />
+    <p>
+      Say how long with <em>for</em> + period, not <em>during</em> or <em>since</em> + period.
+    </p>
+    <GrammarContrast bad={["In May I'll have been learning English during five years.", "In May I'll have been learning English since five years."]} good={["In May I'll have been learning English for five years."]} />
+    <p>
+      State verbs and finished results take the future perfect simple.
+    </p>
+    <GrammarContrast bad={["By June we'll have been knowing each other for ten years.", "By Friday I'll have been reading five books."]} good={["By June we'll have known each other for ten years.", "By Friday I'll have read five books."]} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-perfect-simple',
+        name: 'future perfect simple',
+        note: "By nine I'll have written two pages — the finished result, not the duration.",
+      },
+      {
+        slug: 'future-future-continuous',
+        name: 'future continuous',
+        note: "At nine I'll be writing — in progress at a future moment, without counting how long.",
+      },
+      {
+        slug: 'past-present-perfect-continuous',
+        name: 'present perfect continuous',
+        note: "I've been working here for a year — the same idea counted up to now.",
+      },
+      {
+        slug: 'past-past-perfect-continuous',
+        name: 'past perfect continuous',
+        note: "I'd been working there for a year when… — the same idea counted up to a past moment.",
+      },
+      {
+        slug: 'modality-must',
+        name: 'must have been + -ing',
+        note: 'You must have been wondering why — the more common way to make the same assumption.',
+      },
+    ]}
+  />
+</GrammarShell>

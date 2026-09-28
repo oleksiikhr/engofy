@@ -1,0 +1,348 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 11 EGP rows (1132-1142), all FORM/USE, all inlined, matched by egpIndex.
+// Sections follow what the marker does for the reader: known / new
+// information, so, sequencing, adding, contrasting, stance, comparing,
+// result, opening and closing a text, pointing to another part of the text.
+// However is not an EGP row here but is covered in the contrast section — the
+// conjunctions-coordinating page links here for it.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const asYouKnowA2 = point(1132);
+const soA2 = point(1133);
+const sequencingB1 = point(1134);
+const contrastingB1 = point(1135);
+const addingB1 = point(1136);
+const youSeeB1 = point(1137);
+const stanceB1 = point(1138);
+const comparingB2 = point(1139);
+const openingsClosingsB2 = point(1140);
+const resultB2 = point(1141);
+const textualReferenceC1 = point(1142);
+
+const inlineUsagePointIds = [
+  asYouKnowA2,
+  soA2,
+  sequencingB1,
+  contrastingB1,
+  addingB1,
+  youSeeB1,
+  stanceB1,
+  comparingB2,
+  openingsClosingsB2,
+  resultB2,
+  textualReferenceC1,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to use discourse markers in English writing: as you know, so, firstly, moreover, however, on the other hand, unfortunately, similarly, therefore, in conclusion and as mentioned above — what each one does, where it goes and how to punctuate it."
+  handcrafted
+  sections={[
+    { id: 'known-new', title: 'As you know, you see, the thing is: known and new information', open: true },
+    { id: 'so', title: 'So, …: getting to the point', open: false },
+    { id: 'sequencing', title: 'Firstly, secondly, finally: putting points in order', open: false },
+    { id: 'adding', title: 'Moreover, in addition, what is more: adding a point', open: false },
+    { id: 'contrasting', title: 'However, on the other hand: contrasting', open: false },
+    { id: 'stance', title: 'Unfortunately, actually: your attitude', open: false },
+    { id: 'comparing', title: 'Similarly, likewise: comparing', open: false },
+    { id: 'result', title: 'Therefore, thus, consequently: result', open: false },
+    { id: 'opening-closing', title: 'To begin with, in conclusion: opening and closing', open: false },
+    { id: 'reference', title: 'As mentioned above: pointing to another part of the text', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A discourse marker is a word or short phrase that tells the reader how the next sentence connects to what came before: it adds a point (<em>Moreover</em>), contrasts (<em>However</em>), gives a result (<em>Therefore</em>), puts points in order (<em>Firstly</em>) or wraps up (<em>In conclusion</em>). It usually stands at the start of the sentence, followed by a comma, and the rest is a complete sentence with its own subject and verb. Unlike <em>and</em>, <em>but</em> and <em>because</em>, a discourse marker doesn't join two clauses into one sentence — it links two separate sentences: <em>The flat is small. <strong>However</strong>, it's very cheap.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="As you know, you see, the thing is: known and new information" id="known-new" open>
+    <p>
+      <em>As you know</em> reminds the reader of something they already know, so they aren't surprised by it. It's polite and friendly: you're not telling them news, just recalling a fact you both share before you build on it. It can open the sentence or sit in the middle, between commas.
+    </p>
+    <GrammarFormula label="As you know" parts={['as you know', ',', 'subject', 'verb']} />
+    <GrammarExample note="Opening the sentence: the reader already knows about the trip.">
+      <mark data-role="content">As you know</mark>, <mark data-role="grammar">my parents</mark> <mark data-role="grammar">are leaving</mark> for Spain tomorrow night.
+    </GrammarExample>
+    <GrammarExample note="In the middle, between two commas: a reminder inside the reason.">
+      I can't come to your wedding because, <mark data-role="content">as you know</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">live</mark> in England now.
+    </GrammarExample>
+    {asYouKnowA2 && <GrammarUsagePointCard usagePoint={asYouKnowA2} />}
+    <p>
+      <em>You see</em> and <em>the thing is</em> do the opposite: they announce information the reader <strong>doesn't</strong> know yet — usually an explanation or the real reason behind a problem. They're informal, for emails and messages to friends, and sound like speech.
+    </p>
+    <GrammarFormula label="New information" parts={['you see / the thing is', ',', 'subject', 'verb']} />
+    <GrammarExample note="The thing is: here comes the real problem.">
+      I'd love to come on Saturday. <mark data-role="content">The thing is</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> an exam on Monday.
+    </GrammarExample>
+    <GrammarExample note="You see: explaining something the reader might not know.">
+      <mark data-role="content">You see</mark>, <mark data-role="grammar">the park</mark> <mark data-role="grammar">is</mark> the only green place in our part of the city.
+    </GrammarExample>
+    {youSeeB1 && <GrammarUsagePointCard usagePoint={youSeeB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="So, …: getting to the point" id="so" open={false}>
+    <p>
+      At the start of a sentence, <em>So</em> sums up what you've just said and moves on to the point that follows from it — a decision, an apology, a plan, a question. It's informal: perfect for an email to a friend, too casual for an essay.
+    </p>
+    <GrammarFormula label="So" parts={['so', ',', 'subject', 'verb']} />
+    <GrammarExample note="The facts first, then So + the plan that follows from them.">
+      I'll be free at three. <mark data-role="content">So</mark>, <mark data-role="grammar">I</mark><mark data-role="grammar">'ll be</mark> at your house at half past.
+    </GrammarExample>
+    <GrammarExample note="After an explanation, So + the apology.">
+      I've got a dentist appointment that afternoon. <mark data-role="content">So</mark>, <mark data-role="grammar">I</mark><mark data-role="grammar">'m</mark> really sorry, but I can't come.
+    </GrammarExample>
+    <GrammarExample note="So + a question: asking for the reader's reply at the end.">
+      <mark data-role="content">So</mark>, what <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">think</mark>?
+    </GrammarExample>
+    {soA2 && <GrammarUsagePointCard usagePoint={soA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Firstly, secondly, finally: putting points in order" id="sequencing" open={false}>
+    <p>
+      When you have several reasons, steps or pieces of advice, number them with sequencing markers so the reader can follow. <em>Firstly</em> / <em>First of all</em> opens the list, <em>Secondly</em>, <em>Thirdly</em> continue it, and <em>Finally</em> or <em>Lastly</em> introduces the last point. <em>First</em>, <em>second</em>, <em>third</em> without <em>-ly</em> work the same way.
+    </p>
+    <GrammarFormula label="Sequencing" parts={['firstly / secondly / finally', ',', 'subject', 'verb']} />
+    <GrammarExample note="Firstly: the first point in a list.">
+      <mark data-role="content">Firstly</mark>, <mark data-role="grammar">we</mark> <mark data-role="grammar">need</mark> a good expert to run the course.
+    </GrammarExample>
+    <GrammarExample note="Secondly: the next point.">
+      <mark data-role="content">Secondly</mark>, <mark data-role="grammar">we</mark> <mark data-role="grammar">need</mark> good materials.
+    </GrammarExample>
+    <GrammarExample note="Finally: the last point — the reader knows the list is ending.">
+      <mark data-role="content">Finally</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">would be</mark> grateful if you could arrange a car from the airport.
+    </GrammarExample>
+    <GrammarExample note="First of all: a slightly more spoken way to begin.">
+      <mark data-role="content">First of all</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">must tell</mark> you that it depends on how much you want it.
+    </GrammarExample>
+    {sequencingB1 && <GrammarUsagePointCard usagePoint={sequencingB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Moreover, in addition, what is more: adding a point" id="adding" open={false}>
+    <p>
+      These markers add another point that supports the same idea — often a stronger one. <em>In addition</em> and <em>Moreover</em> are neutral-to-formal and very common in essays and formal letters; <em>Furthermore</em> is the most formal. <em>What is more</em> (<em>what's more</em>) and <em>Besides</em> are a little more personal and fit arguments and friendly advice.
+    </p>
+    <GrammarFormula label="Adding" parts={['moreover / in addition / what is more', ',', 'subject', 'verb']} />
+    <GrammarExample note="Moreover: a second, equally important reason.">
+      We must keep the kitchen clean. <mark data-role="content">Moreover</mark>, <mark data-role="grammar">the health of our staff and customers</mark> <mark data-role="grammar">is</mark> essential.
+    </GrammarExample>
+    <GrammarExample note="In addition: one more good thing about the same event.">
+      <mark data-role="content">In addition</mark>, <mark data-role="grammar">the winner</mark> <mark data-role="grammar">gets</mark> a prize at the end — sometimes money or a holiday.
+    </GrammarExample>
+    <GrammarExample note="What is more: adding something that makes the case even stronger.">
+      <mark data-role="content">What is more</mark>, <mark data-role="grammar">you</mark> <mark data-role="grammar">could go</mark> to the stadium to watch football matches.
+    </GrammarExample>
+    <GrammarExample note="Besides: an extra argument, often a personal one.">
+      <mark data-role="content">Besides</mark>, <mark data-role="grammar">you</mark><mark data-role="grammar">'re</mark> 18 years old — you aren't a baby any more.
+    </GrammarExample>
+    <GrammarExample note="Furthermore: the most formal of the group.">
+      <mark data-role="content">Furthermore</mark>, <mark data-role="grammar">you</mark> <mark data-role="grammar">should do</mark> some short exercises during your break.
+    </GrammarExample>
+    <p>
+      Don't confuse the marker with the preposition. <em>In addition to</em> and <em>besides</em> (with no comma) are followed by a noun or an <em>-ing</em> form, inside one sentence: <em>In addition to the prize, the winner gets a trophy.</em>
+    </p>
+    {addingB1 && <GrammarUsagePointCard usagePoint={addingB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="However, on the other hand: contrasting" id="contrasting" open={false}>
+    <p>
+      <em>However</em> is the most common contrast marker in writing: the next sentence says something different from, or surprising after, the previous one. It's the written partner of <em>but</em> — but it starts a new sentence (or follows a semicolon), and it takes a comma.
+    </p>
+    <GrammarFormula label="However" parts={['sentence.', 'however', ',', 'subject', 'verb']} />
+    <GrammarExample note="A new sentence, then However + comma.">
+      The hotel was expensive. <mark data-role="content">However</mark>, <mark data-role="grammar">the rooms</mark> <mark data-role="grammar">were</mark> beautiful.
+    </GrammarExample>
+    <p>
+      <em>On the one hand … on the other hand</em> weighs two sides of a question against each other — a classic pattern for discussion essays. The second half can come alone, but only when it really contrasts with a point already made.
+    </p>
+    <GrammarFormula label="Two sides" parts={['on the one hand', 'point A', 'on the other hand', 'point B']} />
+    <GrammarExample note="Two sides of the same choice, in two sentences.">
+      <mark data-role="content">On the one hand</mark>, <mark data-role="grammar">a large school</mark> <mark data-role="grammar">is</mark> better for making friends. <mark data-role="content">On the other hand</mark>, <mark data-role="grammar">you</mark> <mark data-role="grammar">can learn</mark> better in a small school.
+    </GrammarExample>
+    <p>
+      <em>In contrast</em> / <em>By contrast</em> compares two different things. <em>On the contrary</em> is different: it rejects what was just said and says the opposite is true — usually after a negative statement.
+    </p>
+    <GrammarFormula label="Contrast" parts={['in contrast / on the contrary', ',', 'subject', 'verb']} />
+    <GrammarExample note="In contrast: two teachers, two different styles.">
+      My old teacher never explained anything. <mark data-role="content">In contrast</mark>, <mark data-role="grammar">my new teacher</mark> <mark data-role="grammar">makes</mark> every lesson clear.
+    </GrammarExample>
+    <GrammarExample note="On the contrary: not boring — the opposite, fascinating.">
+      The lecture wasn't boring. <mark data-role="content">On the contrary</mark>, <mark data-role="grammar">it</mark> <mark data-role="grammar">was</mark> fascinating.
+    </GrammarExample>
+    {contrastingB1 && <GrammarUsagePointCard usagePoint={contrastingB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Unfortunately, actually: your attitude" id="stance" open={false}>
+    <p>
+      A stance adverb at the start of the sentence tells the reader how you feel about what follows before they read it: bad news (<em>Unfortunately</em>), good luck (<em>Luckily</em>, <em>Fortunately</em>), something unexpected (<em>Surprisingly</em>), something everyone knows (<em>Obviously</em>). <em>Actually</em> and <em>In fact</em> introduce the real situation, often correcting what the reader might expect.
+    </p>
+    <GrammarFormula label="Stance" parts={['unfortunately / luckily / actually', ',', 'subject', 'verb']} />
+    <GrammarExample note="Unfortunately: the reader knows bad news is coming.">
+      <mark data-role="content">Unfortunately</mark>, <mark data-role="grammar">they</mark> <mark data-role="grammar">filmed</mark> only the building and the garden, not the students!
+    </GrammarExample>
+    <GrammarExample note="Surprisingly: the result is not what you'd expect.">
+      <mark data-role="content">Surprisingly</mark>, <mark data-role="grammar">the suitcase</mark> <mark data-role="grammar">was</mark> Lucy's.
+    </GrammarExample>
+    <GrammarExample note="Actually = in reality; here it corrects the idea that I watch a lot of TV.">
+      <mark data-role="content">Actually</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">don't have</mark> much time to watch television.
+    </GrammarExample>
+    <GrammarExample note="Luckily: good news after a problem.">
+      We missed the last bus. <mark data-role="content">Luckily</mark>, <mark data-role="grammar">a friend</mark> <mark data-role="grammar">drove</mark> us home.
+    </GrammarExample>
+    {stanceB1 && <GrammarUsagePointCard usagePoint={stanceB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Similarly, likewise: comparing" id="comparing" open={false}>
+    <p>
+      <em>Similarly</em>, <em>Likewise</em> and <em>In the same way</em> say that the next point is like the one before — the same idea in a new example. They're the opposite of <em>In contrast</em>, and they belong to essays, reports and descriptions of data.
+    </p>
+    <GrammarFormula label="Comparing" parts={['similarly / likewise / in the same way', ',', 'subject', 'verb']} />
+    <GrammarExample note="Similarly: a second figure that follows the same trend.">
+      The number of workers will fall over the next fifty years. <mark data-role="content">Similarly</mark>, <mark data-role="grammar">the number of children</mark> <mark data-role="grammar">is likely to drop</mark> to 11.5%.
+    </GrammarExample>
+    <GrammarExample note="Likewise: another country with the same kind of tradition.">
+      China celebrates New Year by its own calendar. <mark data-role="content">Likewise</mark>, <mark data-role="grammar">Nepal</mark> <mark data-role="grammar">celebrates</mark> it in the month of Baishak.
+    </GrammarExample>
+    <GrammarExample note="In the same way: the same experience in a new situation.">
+      A letter lets you feel the writer's emotions. <mark data-role="content">In the same way</mark>, <mark data-role="grammar">a book</mark> <mark data-role="grammar">lets</mark> you feel what the author felt.
+    </GrammarExample>
+    {comparingB2 && <GrammarUsagePointCard usagePoint={comparingB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Therefore, thus, consequently: result" id="result" open={false}>
+    <p>
+      These markers say that the next sentence is a result or a logical conclusion of the one before — the formal, written partner of <em>so</em>. <em>Therefore</em> and <em>Consequently</em> are the most common; <em>Thus</em> and <em>Hence</em> are very formal and typical of academic writing.
+    </p>
+    <GrammarFormula label="Result" parts={['therefore / consequently / thus', ',', 'subject', 'verb']} />
+    <GrammarExample note="Therefore: the logical conclusion of the point before.">
+      No other company offers this service. <mark data-role="content">Therefore</mark>, <mark data-role="grammar">we</mark> <mark data-role="grammar">are likely to enter</mark> the market first.
+    </GrammarExample>
+    <GrammarExample note="Consequently: what happens as a result.">
+      Zoos show animals from all over the world. <mark data-role="content">Consequently</mark>, <mark data-role="grammar">visiting a zoo</mark> <mark data-role="grammar">can help</mark> people learn about nature.
+    </GrammarExample>
+    <GrammarExample note="Thus: very formal, here in a formal request.">
+      <mark data-role="content">Thus</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">would be</mark> grateful if you could send me a clear explanation of the prices.
+    </GrammarExample>
+    <GrammarExample note="Hence: formal; the need follows from the facts described before.">
+      <mark data-role="content">Hence</mark>, <mark data-role="grammar">there</mark> <mark data-role="grammar">is</mark> a great need to improve the lives of these animals.
+    </GrammarExample>
+    <p>
+      <em>Therefore</em> can also go in the middle of the sentence, after the subject or after <em>be</em>, with no commas: <em>We <strong>therefore</strong> recommend the cheaper option.</em>
+    </p>
+    {resultB2 && <GrammarUsagePointCard usagePoint={resultB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="To begin with, in conclusion: opening and closing" id="opening-closing" open={false}>
+    <p>
+      A formal text — an essay, a report, a letter of complaint — often signals its beginning and its end. <em>To begin with</em> and <em>For a start</em> introduce the first point of an argument; <em>For a start</em> is more conversational and suggests there are more reasons to come.
+    </p>
+    <GrammarFormula label="Opening" parts={['to begin with / for a start', ',', 'subject', 'verb']} />
+    <GrammarExample note="To begin with: the first point of a formal letter.">
+      <mark data-role="content">To begin with</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">want</mark> to make sure you have a great time with us.
+    </GrammarExample>
+    <GrammarExample note="For a start: the first and strongest argument.">
+      <mark data-role="content">For a start</mark>, <mark data-role="grammar">we</mark><mark data-role="grammar">'ve lived</mark> with books for thousands of years, but television is only a century old.
+    </GrammarExample>
+    <p>
+      <em>In conclusion</em>, <em>To sum up</em> and <em>In summary</em> open the last paragraph, where you repeat your main point or give your final opinion. Use them in essays and reports, not in a friendly email.
+    </p>
+    <GrammarFormula label="Closing" parts={['in conclusion / to sum up / in summary', ',', 'subject', 'verb']} />
+    <GrammarExample note="In conclusion: the writer's final opinion.">
+      <mark data-role="content">In conclusion</mark>, <mark data-role="grammar">keeping animals in a zoo</mark> <mark data-role="grammar">isn't</mark> cruel if they are well looked after.
+    </GrammarExample>
+    <GrammarExample note="To sum up: the main points again, briefly.">
+      <mark data-role="content">To sum up</mark>, <mark data-role="grammar">the choice between a car and a bike</mark> <mark data-role="grammar">depends</mark> on where you live and the kind of job you do.
+    </GrammarExample>
+    <GrammarExample note="In summary: the result of a survey in one sentence.">
+      <mark data-role="content">In summary</mark>, <mark data-role="grammar">most students</mark> <mark data-role="grammar">are</mark> willing to help with cleaning the campus.
+    </GrammarExample>
+    {openingsClosingsB2 && <GrammarUsagePointCard usagePoint={openingsClosingsB2} />}
+  </GrammarSection>
+
+  <GrammarSection title="As mentioned above: pointing to another part of the text" id="reference" open={false}>
+    <p>
+      In a longer formal text you can point the reader back to something you've already written, instead of repeating it in full. <em>As mentioned above</em>, <em>As mentioned earlier</em> and <em>As shown above</em> refer back; <em>as described below</em> or <em>see below</em> point forward. There's no subject after <em>as</em> — the phrase is short for "as I mentioned above".
+    </p>
+    <GrammarFormula label="Reference" parts={['as mentioned above / as shown above', ',', 'subject', 'verb']} />
+    <GrammarExample note="As mentioned above: the idea was already explained earlier in the report.">
+      <mark data-role="content">As mentioned above</mark>, <mark data-role="grammar">it</mark> <mark data-role="grammar">might be</mark> possible to negotiate better contracts for your company.
+    </GrammarExample>
+    <GrammarExample note="As mentioned earlier: reminding the reader of a detail from the start.">
+      <mark data-role="content">As mentioned earlier</mark>, <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> already asked for information.
+    </GrammarExample>
+    <GrammarExample note="As shown above: pointing back to evidence — a table, a list, a comparison.">
+      <mark data-role="content">As shown above</mark>, <mark data-role="grammar">this supplier</mark> <mark data-role="grammar">offers</mark> everything we need.
+    </GrammarExample>
+    {textualReferenceC1 && <GrammarUsagePointCard usagePoint={textualReferenceC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      A discourse marker starts a new sentence (or comes after a semicolon), never after a comma alone. <em>In addition</em> and <em>besides</em> as markers have no <em>to</em> / <em>of</em>. <em>On the other hand</em> needs a real contrast — to add a point, use <em>Moreover</em>. <em>At first</em> means "in the beginning, before something changed", not "firstly"; <em>at the end</em> means "at the final moment", not "in conclusion". <em>Actually</em> means "in fact", never "currently". And the marker is an adverb: <em>Similarly</em>, not <em>Similar</em>.
+    </p>
+    <GrammarContrast
+      bad={[
+        'The flat is small, however it is very cheap.',
+        'In addition to, the winner gets a prize.',
+        'Besides of, you are 18 now.',
+        'The city is beautiful. On the other hand, it has great museums.',
+        'At first, we need a good expert. Secondly, we need good materials.',
+        'At the end, I want to say that zoos are not cruel.',
+        'Actually I live in Kyiv, but next year I am moving to Lviv.',
+        'Similar, the number of children will fall.',
+      ]}
+      good={[
+        'The flat is small. However, it is very cheap.',
+        'In addition, the winner gets a prize.',
+        'Besides, you are 18 now.',
+        'The city is beautiful. Moreover, it has great museums.',
+        'Firstly, we need a good expert. Secondly, we need good materials.',
+        'In conclusion, I want to say that zoos are not cruel.',
+        'Currently I live in Kyiv, but next year I am moving to Lviv.',
+        'Similarly, the number of children will fall.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'conjunctions-coordinating',
+        name: 'coordinating conjunctions',
+        note: 'and, but, so join two clauses inside one sentence; moreover, however, therefore link two sentences.',
+      },
+      {
+        slug: 'conjunctions-subordinating',
+        name: 'subordinating conjunctions',
+        note: 'although, because: Although it was cheap, … vs It was cheap. However, …',
+      },
+      {
+        slug: 'adverbs-adverbs-as-modifiers',
+        name: 'adverbs',
+        note: 'Stance and sequencing adverbs in other positions in the sentence, not just at the start.',
+      },
+    ]}
+  />
+</GrammarShell>

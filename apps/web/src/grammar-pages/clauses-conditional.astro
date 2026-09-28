@@ -1,0 +1,506 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 27 EGP rows (1105-1131): 4 pure FORM (1105, 1106, 1121, 1123) written without
+// a card; 23 FORM/USE or USE — all 23 inlined, matched by egpIndex. Sections
+// follow the tense pattern (real, first, second, third), then the short forms
+// (if so, if needed), the other condition words, and the formal should / were
+// / inverted patterns.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const realA2 = point(1107);
+const hedgingA2 = point(1108);
+const firstB1 = point(1109);
+const firstModalB1 = point(1110);
+const continuousB1 = point(1111);
+const secondB1 = point(1112);
+const ifIWereYouB1 = point(1113);
+const unlessB1 = point(1114);
+const secondCouldB1 = point(1115);
+const thirdB1 = point(1116);
+const ifNotB1 = point(1117);
+const ifSoB1 = point(1118);
+const asLongAsB2 = point(1119);
+const thirdModalC1 = point(1120);
+const ifShouldC1 = point(1122);
+const shouldInvertedC2 = point(1124);
+const hadInvertedC2 = point(1125);
+const wereToInvertedC2 = point(1126);
+const onConditionC2 = point(1127);
+const wereItNotForC2 = point(1128);
+const ifItWerentForC2 = point(1129);
+const ifItWereToC2 = point(1130);
+const whetherOrNotC2 = point(1131);
+
+const inlineUsagePointIds = [
+  realA2,
+  hedgingA2,
+  firstB1,
+  firstModalB1,
+  continuousB1,
+  secondB1,
+  ifIWereYouB1,
+  unlessB1,
+  secondCouldB1,
+  thirdB1,
+  ifNotB1,
+  ifSoB1,
+  asLongAsB2,
+  thirdModalC1,
+  ifShouldC1,
+  shouldInvertedC2,
+  hadInvertedC2,
+  wereToInvertedC2,
+  onConditionC2,
+  wereItNotForC2,
+  ifItWerentForC2,
+  ifItWereToC2,
+  whetherOrNotC2,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="How to build if-sentences in English: real conditions with the present simple, the first, second and third conditionals, if so and if not, unless and as long as, and formal patterns like should you, had I known and were it not for."
+  handcrafted
+  sections={[
+    { id: 'real', title: 'If + present: things that are true', open: true },
+    { id: 'imperative', title: 'If + an instruction or offer', open: false },
+    { id: 'first', title: 'First conditional: a likely future', open: false },
+    { id: 'second', title: 'Second conditional: imagined now', open: false },
+    { id: 'third', title: 'Third conditional: imagined past', open: false },
+    { id: 'short', title: 'If so, if not, if needed', open: false },
+    { id: 'conjunctions', title: 'Unless, as long as, whether or not', open: false },
+    { id: 'should', title: 'If you should, should you', open: false },
+    { id: 'were-to', title: 'Were to: a formal, unlikely future', open: false },
+    { id: 'were-not-for', title: "If it weren't for", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A conditional sentence has two parts: the <em>if</em>-clause gives a condition, and the main clause says what happens when that condition is met. The tense in each part tells the listener how real the situation is — true in general (<em>If I have time, I read</em>), likely in the future (<em>If it rains, we'll stay in</em>), only imagined (<em>If I won, I'd travel</em>) or already impossible because it's in the past (<em>If I had known, I would have come</em>). The two parts can go in either order; when the <em>if</em>-clause comes first, put a comma after it.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="If + present: things that are true" id="real" open>
+    <p>
+      The simplest conditional clause is <em>if</em> + present simple. It talks about a real condition — something true now, true every time, or very likely. The main clause is usually in the present simple or uses <em>can</em>; <em>will</em> or <em>have to</em> for the result are also common.
+    </p>
+    <GrammarFormula label="If + present simple" parts={['if', 'subject', 'present simple', ',', 'main clause']} />
+    <GrammarExample note="Every time this condition is true, the same thing happens.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">have</mark> spare time, <mark data-role="grammar">I always read</mark> a book.
+    </GrammarExample>
+    <GrammarExample note="Can in the main clause says what is possible when the condition is met.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">agree</mark>, <mark data-role="grammar">we can go</mark> shopping after the film.
+    </GrammarExample>
+    <GrammarExample note="The if-clause can come second — then there's no comma.">
+      <mark data-role="grammar">You can get</mark> to my house <mark data-role="content">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">take</mark> the number 35 bus.
+    </GrammarExample>
+    <GrammarExample note="The if-clause stays in the present even though the exam is in the future.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">want</mark> to pass it, <mark data-role="grammar">you will have to</mark> study very hard.
+    </GrammarExample>
+    {realA2 && <GrammarUsagePointCard usagePoint={realA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="If + an instruction or offer" id="imperative" open={false}>
+    <p>
+      The main clause can be an imperative — an instruction or a request. The <em>if</em>-clause says in which situation the listener should do it.
+    </p>
+    <GrammarFormula label="If + imperative" parts={['if', 'subject', 'present simple', ',', 'imperative']} />
+    <GrammarExample note="Call me only in this situation — when you find it.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">find</mark> it, <mark data-role="grammar">call</mark> me.
+    </GrammarExample>
+    <GrammarExample note="A very common pattern in emails and notes.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">need</mark> more information, <mark data-role="grammar">call</mark> me.
+    </GrammarExample>
+    <p>
+      Short <em>if</em>-clauses with <em>want</em>, <em>like</em> or <em>prefer</em> make an instruction, offer or suggestion softer. They leave the choice to the listener, so the sentence sounds friendly rather than bossy.
+    </p>
+    <GrammarFormula label="Softening if-clause" parts={['imperative / offer', 'if', 'you', 'want / like / prefer']} />
+    <GrammarExample note="Without if you want, this sounds like an order.">
+      <mark data-role="grammar">Bring</mark> some films <mark data-role="content">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">want</mark>.
+    </GrammarExample>
+    <GrammarExample note="If you like before an offer with can or could is polite and open.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">like</mark>, <mark data-role="grammar">you could bring</mark> some drinks.
+    </GrammarExample>
+    <GrammarExample note="If you prefer offers a second option.">
+      We can go by bus, or <mark data-role="content">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">prefer</mark>, <mark data-role="grammar">we can go</mark> in my car.
+    </GrammarExample>
+    {hedgingA2 && <GrammarUsagePointCard usagePoint={hedgingA2} />}
+  </GrammarSection>
+
+  <GrammarSection title="First conditional: a likely future" id="first" open={false}>
+    <p>
+      To talk about a possible future situation and its likely result, use <em>if</em> + present simple and <em>will</em> in the main clause. This is often called the <strong>first conditional</strong>. Even though the condition is in the future, the <em>if</em>-clause stays in the present simple — never <em>if you will</em>.
+    </p>
+    <GrammarFormula label="First conditional" parts={['if', 'subject', 'present simple', ',', 'will', 'bare verb']} />
+    <GrammarExample note="The telling hasn't happened yet, but the verb is present: tell, not will tell.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">tell</mark> them your reasons, they <mark data-role="grammar">will</mark> <mark data-role="grammar">accept</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Main clause first: no comma before if.">
+      Your parents <mark data-role="grammar">will</mark> <mark data-role="grammar">be</mark> happy <mark data-role="content">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark> with them.
+    </GrammarExample>
+    <GrammarExample note="Won't gives a likely negative result.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">don't leave</mark> now, we <mark data-role="grammar">won't</mark> <mark data-role="grammar">catch</mark> the train.
+    </GrammarExample>
+    {firstB1 && <GrammarUsagePointCard usagePoint={firstB1} />}
+    <p>
+      Replace <em>will</em> with another modal verb when the result is only possible, not likely: <em>can</em> for a possibility or permission, <em>may</em> or <em>might</em> when you're less sure, <em>should</em> for advice.
+    </p>
+    <GrammarFormula label="If + present, modal" parts={['if', 'subject', 'present simple', ',', 'can / may / might / should', 'bare verb']} />
+    <GrammarExample note="Can offers a possibility, not a prediction.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> to Brazil, you <mark data-role="grammar">can</mark> <mark data-role="grammar">stay</mark> at my home.
+    </GrammarExample>
+    <GrammarExample note="Might makes the result less certain than will.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">rains</mark> tomorrow, the match <mark data-role="grammar">might</mark> <mark data-role="grammar">be</mark> cancelled.
+    </GrammarExample>
+    {firstModalB1 && <GrammarUsagePointCard usagePoint={firstModalB1} />}
+    <p>
+      The <em>if</em>-clause can also use the present continuous or <em>going to</em> to talk about someone's plan. The main clause then usually gives advice with <em>should</em> or an imperative.
+    </p>
+    <GrammarFormula label="If + plan, advice" parts={['if', 'subject', 'am / is / are + -ing / going to', ',', 'should / imperative']} />
+    <GrammarExample note="Are moving describes a plan that is already decided.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are moving</mark>, you <mark data-role="grammar">should think</mark> about it carefully.
+    </GrammarExample>
+    <GrammarExample note="Going to in the if-clause, advice in the main clause.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are going to live</mark> in a town, you <mark data-role="grammar">should choose</mark> the large school.
+    </GrammarExample>
+    <GrammarExample note="An imperative works as advice too.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are going to travel</mark>, <mark data-role="grammar">choose</mark> your partner very carefully.
+    </GrammarExample>
+    {continuousB1 && <GrammarUsagePointCard usagePoint={continuousB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Second conditional: imagined now" id="second" open={false}>
+    <p>
+      To talk about an imagined situation — something unreal now or unlikely in the future — use <em>if</em> + past simple and <em>would</em> in the main clause. This is the <strong>second conditional</strong>. The past tense here doesn't mean past time; it shows that the situation is imagined.
+    </p>
+    <GrammarFormula label="Second conditional" parts={['if', 'subject', 'past simple', ',', 'would', 'bare verb']} />
+    <GrammarExample note="You aren't going with friends — this imagines it.">
+      It <mark data-role="grammar">would</mark> <mark data-role="grammar">be</mark> more fun <mark data-role="content">if</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">went</mark> with your friends.
+    </GrammarExample>
+    <GrammarExample note="A question about an imagined situation.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">went</mark> on holiday with your friends, where <mark data-role="grammar">would</mark> you <mark data-role="grammar">go</mark>?
+    </GrammarExample>
+    <GrammarExample note="I can't move now; the sentence imagines that I could.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> able to move, I <mark data-role="grammar">would</mark> <mark data-role="grammar">live</mark> near the coast.
+    </GrammarExample>
+    {secondB1 && <GrammarUsagePointCard usagePoint={secondB1} />}
+    <p>
+      <em>If I were you</em> + <em>would</em> is the standard way to give advice: you imagine yourself in the other person's place. Use <em>were</em>, not <em>was</em>, in this fixed phrase.
+    </p>
+    <GrammarFormula label="If I were you" parts={['if', 'I were you', ',', 'I would', 'bare verb']} />
+    <GrammarExample note="Advice: this is what I would do in your place.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I were you</mark>, <mark data-role="grammar">I would</mark> <mark data-role="grammar">go</mark> to a small school in the countryside.
+    </GrammarExample>
+    <GrammarExample note="I'd is the short form of I would.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I were you</mark>, <mark data-role="grammar">I'd</mark> <mark data-role="grammar">accept</mark> both of them.
+    </GrammarExample>
+    {ifIWereYouB1 && <GrammarUsagePointCard usagePoint={ifIWereYouB1} />}
+    <p>
+      With <em>could</em> instead of <em>would</em>, the main clause says what would be possible. It's a gentle way to make a suggestion.
+    </p>
+    <GrammarFormula label="If + past simple, could" parts={['if', 'subject', 'past simple', ',', 'could', 'bare verb']} />
+    <GrammarExample note="Could suggests an option without pushing it.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">wanted</mark> to do something outdoors, we <mark data-role="grammar">could</mark> <mark data-role="grammar">go</mark> fishing.
+    </GrammarExample>
+    <GrammarExample note="A polite offer that depends on the other person's plans.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">arrived</mark> the day before, we <mark data-role="grammar">could</mark> <mark data-role="grammar">book</mark> a hotel for you.
+    </GrammarExample>
+    {secondCouldB1 && <GrammarUsagePointCard usagePoint={secondCouldB1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Third conditional: imagined past" id="third" open={false}>
+    <p>
+      To imagine a different past — something that didn't happen — use <em>if</em> + past perfect and <em>would have</em> + past participle. This is the <strong>third conditional</strong>. Because the past can't be changed, it often expresses regret or relief.
+    </p>
+    <GrammarFormula label="Third conditional" parts={['if', 'subject', 'had + past participle', ',', 'would have', 'past participle']} />
+    <GrammarExample note="They were there, so I wasn't lonely — a relief.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">had not been</mark> there, I <mark data-role="grammar">would have</mark> <mark data-role="grammar">been</mark> very lonely.
+    </GrammarExample>
+    <GrammarExample note="I went and I lost it — a regret.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">hadn't gone</mark> to those lessons, I <mark data-role="grammar">wouldn't have</mark> <mark data-role="grammar">lost</mark> my watch.
+    </GrammarExample>
+    <GrammarExample note="In speech, 'd can mean had in the if-clause and would in the main clause: If I'd known, I'd have come.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">had asked</mark> me, I <mark data-role="grammar">would have</mark> <mark data-role="grammar">helped</mark>.
+    </GrammarExample>
+    {thirdB1 && <GrammarUsagePointCard usagePoint={thirdB1} />}
+    <p>
+      Other modal verbs work the same way: <em>could have</em> for a past possibility that was lost, <em>might have</em> when you aren't sure what would have happened.
+    </p>
+    <GrammarFormula label="If + past perfect, modal + have" parts={['if', 'subject', 'had + past participle', ',', 'could / might have', 'past participle']} />
+    <GrammarExample note="The problem was possible to avoid, but it wasn't avoided.">
+      All this <mark data-role="grammar">could have</mark> <mark data-role="grammar">been</mark> avoided <mark data-role="content">if</mark> <mark data-role="grammar">the plan</mark> <mark data-role="grammar">had been</mark> more flexible.
+    </GrammarExample>
+    <GrammarExample note="Might have: a different opinion was possible, not certain.">
+      I <mark data-role="grammar">might have</mark> <mark data-role="grammar">had</mark> a different opinion <mark data-role="content">if</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">had gone</mark> to another city.
+    </GrammarExample>
+    {thirdModalC1 && <GrammarUsagePointCard usagePoint={thirdModalC1} />}
+    <p>
+      In formal writing, <em>if</em> can be dropped and <em>had</em> moved before the subject. The meaning doesn't change.
+    </p>
+    <GrammarFormula label="Inverted had" parts={['had', 'subject', 'past participle', ',', 'would / could / might have', 'past participle']} />
+    <GrammarExample note="Had we known = if we had known.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">known</mark> this, we <mark data-role="grammar">would have</mark> <mark data-role="grammar">organised</mark> more activities.
+    </GrammarExample>
+    <GrammarExample note="Had he been = if he had been.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">been</mark> more experienced, he <mark data-role="grammar">would have</mark> <mark data-role="grammar">known</mark> what to do.
+    </GrammarExample>
+    <GrammarExample note="Might have works after inversion too.">
+      <mark data-role="content">Had</mark> <mark data-role="grammar">this file</mark> <mark data-role="grammar">fallen</mark> into the wrong hands, it <mark data-role="grammar">might have</mark> <mark data-role="grammar">had</mark> terrible effects.
+    </GrammarExample>
+    {hadInvertedC2 && <GrammarUsagePointCard usagePoint={hadInvertedC2} />}
+    <p>
+      You can also mix the patterns. A <strong>mixed conditional</strong> joins an imagined past (<em>if</em> + past perfect) with an imagined present result (<em>would</em> + bare verb) — or the other way round.
+    </p>
+    <GrammarFormula label="Mixed: past condition, present result" parts={['if', 'subject', 'had + past participle', ',', 'would', 'bare verb']} />
+    <GrammarExample note="Not taking the job was in the past; not living in London is now.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">had taken</mark> that job, I <mark data-role="grammar">would</mark> <mark data-role="grammar">live</mark> in London now.
+    </GrammarExample>
+    <GrammarExample note="A present fact (I'm not good at maths) explains a past result.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> better at maths, I <mark data-role="grammar">would have</mark> <mark data-role="grammar">passed</mark> the test.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="If so, if not, if needed" id="short" open={false}>
+    <p>
+      After a yes/no question, <em>if so</em> means "if the answer is yes" and <em>if not</em> means "if the answer is no". They replace a whole <em>if</em>-clause, so there's no need to repeat the question.
+    </p>
+    <GrammarFormula label="If not" parts={['yes/no question', 'if not', ',', 'main clause']} />
+    <GrammarExample note="If not = if the hotel is not OK for you.">
+      Is the Sheraton Hotel OK for you? <mark data-role="content">If not</mark>, <mark data-role="grammar">call me</mark> as soon as possible.
+    </GrammarExample>
+    <GrammarExample note="If not offers an alternative for the 'no' answer.">
+      Do you work on Sundays? <mark data-role="content">If not</mark>, <mark data-role="grammar">you could do</mark> some exercise then.
+    </GrammarExample>
+    {ifNotB1 && <GrammarUsagePointCard usagePoint={ifNotB1} />}
+    <GrammarFormula label="If so" parts={['yes/no question', 'if so', ',', 'main clause']} />
+    <GrammarExample note="If so = if it is possible to pay by card.">
+      Is it possible to pay by credit card? <mark data-role="content">If so</mark>, <mark data-role="grammar">which ones do you take</mark>?
+    </GrammarExample>
+    <GrammarExample note="If so = if we can have an extra class.">
+      Could we have an extra class? <mark data-role="content">If so</mark>, <mark data-role="grammar">I'd like to do it</mark> next week.
+    </GrammarExample>
+    {ifSoB1 && <GrammarUsagePointCard usagePoint={ifSoB1} />}
+    <p>
+      In formal writing, <em>if</em> can be followed directly by a past participle or an adjective, with the subject and <em>be</em> left out: <em>if needed</em>, <em>if requested</em>, <em>if possible</em>, <em>if married</em>.
+    </p>
+    <GrammarFormula label="If + past participle" parts={['main clause', 'if', 'past participle / adjective']} />
+    <GrammarExample note="If needed = if it is needed.">
+      There is a small room where staff can take a short nap <mark data-role="content">if</mark> <mark data-role="grammar">needed</mark>.
+    </GrammarExample>
+    <GrammarExample note="If requested = if they are requested.">
+      Meals are served, <mark data-role="content">if</mark> <mark data-role="grammar">requested</mark>, three times a day.
+    </GrammarExample>
+    <GrammarExample note="If possible = if it is possible.">
+      Please reply by Friday, <mark data-role="content">if</mark> <mark data-role="grammar">possible</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Unless, as long as, whether or not" id="conjunctions" open={false}>
+    <p>
+      <em>Unless</em> means "except if" or "if … not". It introduces the one situation in which the main clause is not true. The verb after <em>unless</em> is positive, because the negative idea is already inside the word.
+    </p>
+    <GrammarFormula label="Unless" parts={['main clause', 'unless', 'subject', 'present simple']} />
+    <GrammarExample note="I'll pay cash — except if you accept cards.">
+      I'm going to pay in cash, <mark data-role="content">unless</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">accept</mark> credit cards.
+    </GrammarExample>
+    <GrammarExample note="Unless you do = if you don't do.">
+      <mark data-role="content">Unless</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">do</mark> some sport, you will gain a lot of weight.
+    </GrammarExample>
+    {unlessB1 && <GrammarUsagePointCard usagePoint={unlessB1} />}
+    <p>
+      <em>As long as</em>, <em>provided (that)</em> and <em>providing (that)</em> mean "only if": the main clause is true on this one condition. Like <em>if</em>, they take a present tense for a future condition. <em>Provided</em> sounds more formal.
+    </p>
+    <GrammarFormula label="Only if" parts={['main clause', 'as long as / provided / providing', 'subject', 'present simple']} />
+    <GrammarExample note="The age doesn't matter — on this one condition.">
+      Age doesn't really matter <mark data-role="content">as long as</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> willing to learn.
+    </GrammarExample>
+    <GrammarExample note="Provided is typical in business letters and offers.">
+      We can offer a 10% discount <mark data-role="content">provided</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">reserve</mark> the office for eighteen months.
+    </GrammarExample>
+    <GrammarExample note="Providing works the same way as provided.">
+      <mark data-role="content">Providing</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">follow</mark> the plan, sales will increase next year.
+    </GrammarExample>
+    {asLongAsB2 && <GrammarUsagePointCard usagePoint={asLongAsB2} />}
+    <p>
+      At a higher level, <em>so long as</em>, <em>on condition that</em> and <em>in the event that</em> add more formal options. <em>On condition that</em> sets a strict condition; <em>in the event that</em> means "if this happens".
+    </p>
+    <GrammarFormula label="Formal conditions" parts={['main clause', 'so long as / on condition that / in the event that', 'clause']} />
+    <GrammarExample note="On condition that: permission depended on this.">
+      I was allowed to go out <mark data-role="content">on condition that</mark> <mark data-role="grammar">my parents knew</mark> where I was.
+    </GrammarExample>
+    <GrammarExample note="So long as = as long as, a little more formal.">
+      They can study at any university <mark data-role="content">so long as</mark> <mark data-role="grammar">they have</mark> the right qualifications.
+    </GrammarExample>
+    <GrammarExample note="In the event that = if this (unlikely) thing happens.">
+      <mark data-role="content">In the event that</mark> <mark data-role="grammar">the flight is</mark> cancelled, passengers will get a full refund.
+    </GrammarExample>
+    {onConditionC2 && <GrammarUsagePointCard usagePoint={onConditionC2} />}
+    <p>
+      <em>Whether or not</em> says that the condition doesn't change the result — it's true in both cases. At the start of a sentence, a <em>whether or not</em> clause often acts as the subject, especially in formal essays.
+    </p>
+    <GrammarFormula label="Whether or not" parts={['whether or not', 'clause', 'verb …']} />
+    <GrammarExample note="The whole clause is the subject of is.">
+      <mark data-role="content">Whether or not</mark> <mark data-role="grammar">visitors should follow local customs</mark> is a debatable issue.
+    </GrammarExample>
+    <GrammarExample note="After a verb, whether or not introduces a choice between two outcomes.">
+      It depends on the children <mark data-role="content">whether or not</mark> <mark data-role="grammar">they go</mark> to university.
+    </GrammarExample>
+    {whetherOrNotC2 && <GrammarUsagePointCard usagePoint={whetherOrNotC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="If you should, should you" id="should" open={false}>
+    <p>
+      <em>If</em> + <em>should</em> makes a condition sound less likely and more polite. It's typical of formal letters, instructions and customer service: "if, by any chance, …".
+    </p>
+    <GrammarFormula label="If + should" parts={['if', 'subject', 'should', 'bare verb', ',', 'main clause']} />
+    <GrammarExample note="If you should have = if, by chance, you have.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">should</mark> <mark data-role="grammar">have</mark> any further questions, do not hesitate to contact us.
+    </GrammarExample>
+    <GrammarExample note="Getting lost is unlikely, but here's what to do.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">should</mark> <mark data-role="grammar">get</mark> lost, don't hesitate to call us.
+    </GrammarExample>
+    {ifShouldC1 && <GrammarUsagePointCard usagePoint={ifShouldC1} />}
+    <p>
+      Even more formally, drop <em>if</em> and put <em>should</em> before the subject.
+    </p>
+    <GrammarFormula label="Inverted should" parts={['should', 'subject', 'bare verb', ',', 'main clause']} />
+    <GrammarExample note="Should you require = if you require.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">require</mark> any further information, please do not hesitate to ask.
+    </GrammarExample>
+    <GrammarExample note="Should there be works like if there is.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">there</mark> <mark data-role="grammar">be</mark> a lack of understanding, a break-up is unavoidable.
+    </GrammarExample>
+    <p>
+      With <em>would</em> in the main clause, inverted <em>should</em> talks about a possible future outcome — often in formal promises, plans or warnings.
+    </p>
+    <GrammarFormula label="Should …, would" parts={['should', 'subject', 'bare verb', ',', 'would', 'bare verb']} />
+    <GrammarExample note="A formal plan for a possible future.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">win</mark> the prize, we <mark data-role="grammar">would</mark> <mark data-role="grammar">build</mark> a new school.
+    </GrammarExample>
+    <GrammarExample note="A polite but firm warning.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">fail</mark> to do so, we <mark data-role="grammar">would</mark> <mark data-role="grammar">have</mark> no choice but to take further action.
+    </GrammarExample>
+    {shouldInvertedC2 && <GrammarUsagePointCard usagePoint={shouldInvertedC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Were to: a formal, unlikely future" id="were-to" open={false}>
+    <p>
+      <em>Were</em> + subject + <em>to</em>-infinitive is a formal way to imagine an unlikely future situation. It's the same as <em>if</em> + past simple, but more distant and literary.
+    </p>
+    <GrammarFormula label="Inverted were to" parts={['were', 'subject', 'to-infinitive', ',', 'would', 'bare verb']} />
+    <GrammarExample note="Were I to win = if I won.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">to win</mark> this scholarship, my first choice <mark data-role="grammar">would</mark> <mark data-role="grammar">be</mark> Japan.
+    </GrammarExample>
+    <GrammarExample note="Were you to compare = if you compared.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to compare</mark> the two views, you <mark data-role="grammar">would</mark> <mark data-role="grammar">find</mark> many similarities.
+    </GrammarExample>
+    <GrammarExample note="A passive infinitive works too: to be put.">
+      <mark data-role="content">Were</mark> <mark data-role="grammar">this idea</mark> <mark data-role="grammar">to be put</mark> into practice, our town <mark data-role="grammar">would</mark> <mark data-role="grammar">change</mark> completely.
+    </GrammarExample>
+    {wereToInvertedC2 && <GrammarUsagePointCard usagePoint={wereToInvertedC2} />}
+    <p>
+      The same idea without inversion keeps <em>if</em>: <em>if</em> + subject + <em>were to</em>.
+    </p>
+    <GrammarFormula label="If … were to" parts={['if', 'subject', 'were', 'to-infinitive', ',', 'would', 'bare verb']} />
+    <GrammarExample note="If it were to be published = if it was published.">
+      <mark data-role="content">If</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">were</mark> <mark data-role="grammar">to be published</mark>, the first issue <mark data-role="grammar">would</mark> <mark data-role="grammar">include</mark> a short introduction.
+    </GrammarExample>
+    <GrammarExample note="The if-clause can come second.">
+      The project <mark data-role="grammar">would</mark> <mark data-role="grammar">need</mark> a lot of planning <mark data-role="content">if</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">were</mark> <mark data-role="grammar">to succeed</mark>.
+    </GrammarExample>
+    {ifItWereToC2 && <GrammarUsagePointCard usagePoint={ifItWereToC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="If it weren't for" id="were-not-for" open={false}>
+    <p>
+      <em>If it weren't for</em> + noun phrase means "without this person or thing". It says that one thing is the only reason the situation is as it is. With <em>would have</em> in the main clause, it refers to the past.
+    </p>
+    <GrammarFormula label="If it weren't for" parts={["if it weren't / were not for", 'noun phrase', ',', 'would (have)', 'verb']} />
+    <GrammarExample note="Without that boy, I would have failed.">
+      <mark data-role="content">If it weren't for</mark> <mark data-role="grammar">that boy</mark>, I <mark data-role="grammar">would have</mark> <mark data-role="grammar">failed</mark> the exams.
+    </GrammarExample>
+    <GrammarExample note="His determination is the only reason he didn't resign.">
+      <mark data-role="content">If it weren't for</mark> <mark data-role="grammar">his determination</mark>, he <mark data-role="grammar">would have</mark> <mark data-role="grammar">resigned</mark> long ago.
+    </GrammarExample>
+    {ifItWerentForC2 && <GrammarUsagePointCard usagePoint={ifItWerentForC2} />}
+    <p>
+      In formal writing, drop <em>if</em> and move <em>were</em> to the front: <em>were it not for</em>. <em>Not</em> can't be contracted here: <em>weren't it for</em> is wrong.
+    </p>
+    <GrammarFormula label="Were it not for" parts={['were it not for', 'noun phrase', ',', 'would (have)', 'verb']} />
+    <GrammarExample note="A present situation: I only stay in the class because of my university.">
+      <mark data-role="content">Were it not for</mark> <mark data-role="grammar">my university</mark>, I <mark data-role="grammar">would</mark> <mark data-role="grammar">give up</mark> this class immediately.
+    </GrammarExample>
+    <GrammarExample note="A past situation: that reason stopped her.">
+      <mark data-role="content">Were it not for</mark> <mark data-role="grammar">that reason</mark>, Laura <mark data-role="grammar">would have</mark> <mark data-role="grammar">accepted</mark> the job.
+    </GrammarExample>
+    {wereItNotForC2 && <GrammarUsagePointCard usagePoint={wereItNotForC2} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't use <em>will</em> or <em>would</em> in the <em>if</em>-clause — the future or imagined meaning comes from the main clause. In the third conditional, the <em>if</em>-clause needs the past perfect (<em>had gone</em>), not <em>would have</em>. <em>Unless</em> already contains <em>not</em>, so don't add another one. In inverted conditionals, there's no <em>if</em>.
+    </p>
+    <GrammarContrast
+      bad={[
+        "If it will rain, we'll stay at home.",
+        'If I would have money, I would buy a car.',
+        'If I would have known, I would have come.',
+        "Unless you don't hurry, you'll be late.",
+        'If had I known, I would have helped.',
+      ]}
+      good={[
+        "If it rains, we'll stay at home.",
+        'If I had money, I would buy a car.',
+        'If I had known, I would have come.',
+        "Unless you hurry, you'll be late.",
+        'Had I known, I would have helped.',
+      ]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'conjunctions-subordinating',
+        name: 'subordinating conjunctions',
+        note: 'if, unless and provided next to because, when, although and the rest.',
+      },
+      {
+        slug: 'modality-would',
+        name: 'would',
+        note: 'all the uses of would, not only in the main clause of a conditional.',
+      },
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'the future with will',
+        note: 'predictions and decisions with will outside if-sentences.',
+      },
+      {
+        slug: 'past-past-perfect-simple',
+        name: 'the past perfect',
+        note: 'had + past participle, the tense in the if-clause of the third conditional.',
+      },
+    ]}
+  />
+</GrammarShell>

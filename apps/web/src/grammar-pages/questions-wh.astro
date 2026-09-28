@@ -1,0 +1,373 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 9 EGP rows (1023-1031): 7 pure FORM rows without cards (main verb be,
+// auxiliary do, auxiliary have, auxiliary be, modals, negative + modal,
+// negative + do); the 2 USE rows — 1028 (Why don't we …? as a suggestion)
+// and 1031 (a wh- question as a focusing device) — are inlined, matched by
+// EGP index. `clauses-interrogatives` owns the shared question word order;
+// this page is about the wh- words themselves. Content is the wh- word (or
+// wh- phrase: how much, what time, which bus); the verb and subject after it
+// are grammar.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const suggestionPoint = point(1028);
+const focusPoint = point(1031);
+
+const inlineUsagePointIds = [suggestionPoint, focusPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Wh- questions — questions with what, who, where, when, why, how, which and whose: Where did you go? How can I help you? What each question word asks about, the word order with be, do, have and modals, how much / how long / what time, prepositions at the end, Why don't we…? suggestions and negative questions like Why didn't you tell me?"
+  handcrafted
+  sections={[
+    { id: 'words', title: 'What, who, where… The question words', open: true },
+    { id: 'be', title: 'How was your dinner? Wh- + be', open: false },
+    { id: 'do', title: 'What do you think? Wh- + do / does / did', open: false },
+    { id: 'auxiliary', title: 'Where are you going? What have you done? Wh- + be / have', open: false },
+    { id: 'modal', title: 'How can I help you? Wh- + modal', open: false },
+    { id: 'phrases', title: 'How much, how long, what time, which bus', open: false },
+    { id: 'subject', title: 'Who called? When the wh- word is the subject', open: false },
+    { id: 'preposition', title: 'Who are you going with? Prepositions at the end', open: false },
+    { id: 'suggestion', title: "Why don't we…? Suggestions", open: false },
+    { id: 'negative', title: "Why can't you…? Why didn't you…? Negative wh- questions", open: false },
+    { id: 'focus', title: 'So what makes a good present? Questions that focus', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A wh- question asks for information, not for <em>yes</em> or <em>no</em>: <em>Where did you go?</em> — <em>To the beach.</em> It starts with a question word (<em>what, who, where, when, why, how, which, whose</em>), and after it comes the same order as in a yes/no question: auxiliary or modal, then the subject, then the main verb.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="What, who, where… The question words" id="words" open>
+    <p>
+      Each question word asks about one kind of information. Choose it by thinking about the answer you want.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Word</th><th>Asks about</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>what</th><td>a thing, an action (<em>що? який?</em>)</td><td><em>What did you buy?</em></td></tr>
+        <tr><th>who</th><td>a person (<em>хто? кого?</em>)</td><td><em>Who is your teacher?</em></td></tr>
+        <tr><th>where</th><td>a place (<em>де? куди?</em>)</td><td><em>Where do you live?</em></td></tr>
+        <tr><th>when</th><td>a time (<em>коли?</em>)</td><td><em>When can we meet?</em></td></tr>
+        <tr><th>why</th><td>a reason (<em>чому? навіщо?</em>)</td><td><em>Why are you late?</em></td></tr>
+        <tr><th>how</th><td>a way, a state (<em>як?</em>)</td><td><em>How do you know?</em> <em>How are you?</em></td></tr>
+        <tr><th>which</th><td>a choice from a known set (<em>який (з цих)?</em>)</td><td><em>Which one do you want?</em></td></tr>
+        <tr><th>whose</th><td>the owner (<em>чий?</em>)</td><td><em>Whose phone is this?</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Wh- question" parts={['wh- word', 'auxiliary / modal / be', 'subject', '(main verb)', '?']} />
+    <GrammarExample note="The wh- word comes first; did goes before the subject, just as in Did you go?">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark>?
+    </GrammarExample>
+    <GrammarExample note="Why asks for a reason.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> late?
+    </GrammarExample>
+    <p>
+      Ukrainian <em>як?</em> doesn't always become <em>how</em>. For an opinion, English says <em>What do you think?</em>, and for a name — <em>What's it called?</em> (not <em>How…?</em>).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="How was your dinner? Wh- + be" id="be">
+    <p>
+      When <em>be</em> is the main verb, it goes straight after the wh- word, before the subject. There is no <em>do</em>.
+    </p>
+    <GrammarFormula label="Wh- + be" parts={['wh- word', 'am / is / are / was / were', 'subject', '?']} />
+    <GrammarExample note="Past: was, before the subject your dinner.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">your dinner</mark> yesterday?
+    </GrammarExample>
+    <GrammarExample note="The most common greeting question.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark>, my friend?
+    </GrammarExample>
+    <GrammarExample note="Asking about a place.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">my keys</mark>?
+    </GrammarExample>
+    <GrammarExample note="Asking about a person.">
+      <mark data-role="content">Who</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">that man</mark>?
+    </GrammarExample>
+    <p>
+      In speech, <em>is</em> usually shortens: <em>What's your name?</em> <em>Where's the station?</em> <em>How's it going?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="What do you think? Wh- + do / does / did" id="do">
+    <p>
+      With any other main verb in the present simple or past simple, add <em>do</em>, <em>does</em> or <em>did</em> after the wh- word. The tense goes on <em>do</em>, so the main verb stays in its base form.
+    </p>
+    <GrammarFormula label="Wh- + do" parts={['wh- word', 'do / does / did', 'subject', 'base verb', '?']} />
+    <GrammarExample note="Present simple with you → do.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">think</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present simple with she → does; the verb is live, not lives.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">does</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">live</mark>?
+    </GrammarExample>
+    <GrammarExample note="Past simple → did + base verb: did … do, not did … did.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">do</mark> yesterday?
+    </GrammarExample>
+    <GrammarExample note="did … go, not did … went.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark>?
+    </GrammarExample>
+    <GrammarExample note="How asks about the way you know it.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">know</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Where are you going? What have you done? Wh- + be / have" id="auxiliary">
+    <p>
+      Continuous and perfect tenses already have an auxiliary — <em>be</em> or <em>have</em>. Move it in front of the subject; don't add <em>do</em>.
+    </p>
+    <GrammarFormula label="Continuous" parts={['wh- word', 'am / is / are / was / were', 'subject', 'verb-ing', '?']} />
+    <GrammarExample note="Present continuous: are … going.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">going</mark>?
+    </GrammarExample>
+    <GrammarExample note="Present continuous for a future plan.">
+      <mark data-role="content">When</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">coming</mark> here?
+    </GrammarExample>
+    <GrammarExample note="Past continuous: were … doing.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">were</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">doing</mark> at eight o'clock?
+    </GrammarExample>
+    <GrammarFormula label="Perfect" parts={['wh- word', 'have / has / had', 'subject', 'past participle', '?']} />
+    <GrammarExample note="Present perfect: have … brought.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">brought</mark> for me?
+    </GrammarExample>
+    <GrammarExample note="A friendly question when you haven't seen someone for a while.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">been</mark>?
+    </GrammarExample>
+    <GrammarExample note="Past perfect: had … gone — before another past moment.">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">had</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">gone</mark> before the party?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="How can I help you? Wh- + modal" id="modal">
+    <p>
+      Modal verbs (<em>can, will, should, could, would, must</em>) also go before the subject. The main verb after them is always the base form, with no <em>to</em>.
+    </p>
+    <GrammarFormula label="Wh- + modal" parts={['wh- word', 'modal', 'subject', 'base verb', '?']} />
+    <GrammarExample note="A polite offer, e.g. in a shop.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">can</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">help</mark> you?
+    </GrammarExample>
+    <GrammarExample note="Asking for a time.">
+      <mark data-role="content">When</mark> <mark data-role="grammar">can</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">meet</mark>?
+    </GrammarExample>
+    <GrammarExample note="will for the future.">
+      <mark data-role="content">How</mark> <mark data-role="grammar">will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">get</mark> here?
+    </GrammarExample>
+    <GrammarExample note="Asking for advice.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">should</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wear</mark> tonight?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="How much, how long, what time, which bus" id="phrases">
+    <p>
+      A wh- word often joins with another word to ask something more exact. The whole phrase goes at the front, and the rest of the question doesn't change.
+    </p>
+    <GrammarFormula label="Wh- phrase" parts={['wh- phrase (how much, what time…)', 'auxiliary / modal / be', 'subject', '(verb)', '?']} />
+    <table class="gp-table">
+      <thead>
+        <tr><th>Phrase</th><th>Asks about</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>how much</th><td>price; amount (uncountable)</td><td><em>How much is this jacket?</em></td></tr>
+        <tr><th>how many</th><td>number (countable)</td><td><em>How many brothers have you got?</em></td></tr>
+        <tr><th>how old</th><td>age</td><td><em>How old is your sister?</em></td></tr>
+        <tr><th>how long</th><td>length of time</td><td><em>How long did the film last?</em></td></tr>
+        <tr><th>how often</th><td>frequency</td><td><em>How often do you play tennis?</em></td></tr>
+        <tr><th>how far</th><td>distance</td><td><em>How far is the station?</em></td></tr>
+        <tr><th>what time</th><td>the clock time</td><td><em>What time does the shop open?</em></td></tr>
+        <tr><th>what kind of</th><td>type</td><td><em>What kind of music do you like?</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarExample note="The noun stays next to how many: not How many have you got brothers?">
+      <mark data-role="content">How many brothers</mark> <mark data-role="grammar">have</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">got</mark>?
+    </GrammarExample>
+    <GrammarExample note="what time + does + the shop + open.">
+      <mark data-role="content">What time</mark> <mark data-role="grammar">does</mark> <mark data-role="grammar">the shop</mark> <mark data-role="grammar">open</mark>?
+    </GrammarExample>
+    <GrammarExample note="which + noun: a choice between a few buses you both know about.">
+      <mark data-role="content">Which bus</mark> <mark data-role="grammar">do</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">take</mark> to work?
+    </GrammarExample>
+    <p>
+      <em>What</em> or <em>which</em>? Use <em>which</em> when the choice is small and known (<em>Which colour — red or blue?</em>), and <em>what</em> when it's open (<em>What colour is your car?</em>).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Who called? When the wh- word is the subject" id="subject">
+    <p>
+      When <em>who</em>, <em>what</em> or <em>which + noun</em> is the subject — the person or thing that does the action — keep statement order: no <em>do / does / did</em>, and the verb takes its normal form.
+    </p>
+    <GrammarFormula label="Subject question" parts={['who / what / which + noun', 'verb', '…', '?']} />
+    <GrammarExample note="Someone called you → Who called? — no did.">
+      <mark data-role="content">Who</mark> <mark data-role="grammar">called</mark> you?
+    </GrammarExample>
+    <GrammarExample note="You called someone → Who did you call? — who is the object, so did comes back.">
+      <mark data-role="content">Who</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">call</mark>?
+    </GrammarExample>
+    <GrammarExample note="What is the subject: happened, not did happen.">
+      <mark data-role="content">What</mark> <mark data-role="grammar">happened</mark>?
+    </GrammarExample>
+    <p>
+      More on this word order — on the <a href="/grammar/clauses-interrogatives">interrogatives</a> page.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Who are you going with? Prepositions at the end" id="preposition">
+    <p>
+      When the wh- word goes with a preposition (<em>with, for, from, about, to</em>), everyday English puts the wh- word at the front and leaves the preposition at the end.
+    </p>
+    <GrammarFormula label="Preposition at the end" parts={['wh- word', 'auxiliary / be', 'subject', 'verb …', 'preposition', '?']} />
+    <GrammarExample note="go with someone → Who … with?">
+      <mark data-role="content">Who</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">going</mark> <mark data-role="grammar">with</mark>?
+    </GrammarExample>
+    <GrammarExample note="be from a place → Where … from?">
+      <mark data-role="content">Where</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">from</mark>?
+    </GrammarExample>
+    <GrammarExample note="talk about something → What … about?">
+      <mark data-role="content">What</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">talking</mark> <mark data-role="grammar">about</mark>?
+    </GrammarExample>
+    <p>
+      Ukrainian puts the preposition first — <em>З ким ти йдеш?</em> <em>Звідки ти?</em> In English, <em>With whom are you going?</em> is correct but very formal; in speech, say <em>Who are you going with?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Why don't we…? Suggestions" id="suggestion">
+    <p>
+      <em>Why don't we…?</em> and <em>Why don't you…?</em> are usually not real questions about a reason. They are friendly suggestions or invitations — close in meaning to <em>Let's…</em> or <em>You could…</em>
+    </p>
+    <GrammarFormula label="Suggestion" parts={['why', "don't", 'we / you', 'base verb', '?']} />
+    <GrammarExample note="= Let's watch a film.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">don't</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">watch</mark> a film?
+    </GrammarExample>
+    <GrammarExample note="An invitation: please come with me.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">come</mark> with me?
+    </GrammarExample>
+    <GrammarExample note="Advice to a friend.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">buy</mark> it?
+    </GrammarExample>
+    {suggestionPoint && <GrammarUsagePointCard usagePoint={suggestionPoint} />}
+    <p>
+      The answer is an agreement or a refusal, not a reason: <em>"Why don't we go out?" — "Good idea!"</em> A shorter, more casual form drops the subject and <em>do</em>: <em>Why not ask him?</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Why can't you…? Why didn't you…? Negative wh- questions" id="negative">
+    <p>
+      A wh- question can be negative too: add <em>n't</em> to the auxiliary or modal at the front. It's most common with <em>why</em>, and it often sounds surprised, annoyed or critical — the speaker thinks something should have happened.
+    </p>
+    <GrammarFormula label="Negative with a modal" parts={['wh- word', "modal + n't", 'subject', 'base verb', '?']} />
+    <GrammarExample note="The speaker thinks both are possible.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">can't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">do</mark> both things?
+    </GrammarExample>
+    <GrammarExample note="Past, about yourself: regret.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">couldn't</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">control</mark> myself?
+    </GrammarExample>
+    <GrammarFormula label="Negative with do / have" parts={['wh- word', "don't / didn't / haven't", 'subject', 'verb', '?']} />
+    <GrammarExample note="A complaint: you should have said something.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">didn't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">say</mark> something about it?
+    </GrammarExample>
+    <GrammarExample note="Present perfect: haven't … told.">
+      <mark data-role="content">Why</mark> <mark data-role="grammar">haven't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">told</mark> me before?
+    </GrammarExample>
+    <GrammarExample note="Here Why don't you… is strong advice, not a friendly invitation.">
+      You still have this headache. <mark data-role="content">Why</mark> <mark data-role="grammar">don't</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">go</mark> to your doctor?
+    </GrammarExample>
+    <p>
+      <em>n't</em> stays on the front verb, before the subject: <em>Why didn't you…?</em> — not <em>Why you didn't…?</em> The full form <em>Why did you not…?</em> exists, but it's formal.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="So what makes a good present? Questions that focus" id="focus">
+    <p>
+      In an essay, a talk or a story, a writer can ask a wh- question and then answer it themselves. Nobody is expected to reply: the question points the reader at the next idea and makes the text feel like a conversation.
+    </p>
+    <GrammarFormula label="Focusing question" parts={['(So / But)', 'wh- question', '?', 'the writer’s answer']} />
+    <GrammarExample note="The question introduces the writer's main point.">
+      <mark data-role="grammar">So</mark> <mark data-role="content">what</mark> <mark data-role="grammar">makes</mark> a good present? From my point of view, the best presents are personal.
+    </GrammarExample>
+    <GrammarExample note="But + question: turning to the next part of the argument.">
+      <mark data-role="grammar">But</mark> <mark data-role="content">what</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">the alternatives</mark>? Berlin has a well-structured subway.
+    </GrammarExample>
+    <GrammarExample note="Moving on to more advice in a letter.">
+      <mark data-role="content">What else</mark> <mark data-role="grammar">can</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">tell</mark> you? There are restaurants at the airport.
+    </GrammarExample>
+    {focusPoint && <GrammarUsagePointCard usagePoint={focusPoint} />}
+    <p>
+      Use one such question to open a paragraph, not several in a row — too many make the text sound like a quiz.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't leave the question in statement order. Ukrainian can ask <em>Де ти живеш?</em> with no extra word, but English needs <em>do / does / did</em> (or another auxiliary) before the subject.
+    </p>
+    <GrammarContrast bad={['Where you live?', 'What you did yesterday?']} good={['Where do you live?', 'What did you do yesterday?']} />
+    <p>
+      The tense goes on <em>do</em>, not on both verbs.
+    </p>
+    <GrammarContrast bad={['Where did you went?', 'What does she wants?']} good={['Where did you go?', 'What does she want?']} />
+    <p>
+      Don't use <em>do</em> when <em>who / what</em> is the subject, and don't put the subject after the main verb.
+    </p>
+    <GrammarContrast bad={['Who did call you?', 'What means this word?']} good={['Who called you?', 'What does this word mean?']} />
+    <p>
+      <em>Як ти думаєш?</em> and <em>Як це називається?</em> use <em>what</em> in English, not <em>how</em>.
+    </p>
+    <GrammarContrast bad={['How do you think?', 'How is it called in English?']} good={['What do you think?', "What's it called in English?"]} />
+    <p>
+      Inside a longer question (<em>Can you tell me…? Do you know…?</em>) the wh- part goes back to statement order.
+    </p>
+    <GrammarContrast bad={['Can you tell me where is the station?']} good={['Can you tell me where the station is?']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'clauses-interrogatives',
+        name: 'interrogatives',
+        note: 'the question word order shared by yes/no and wh- questions, and subject questions in more detail.',
+      },
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: 'Did you go? — the same order without a wh- word, answered with yes or no.',
+      },
+      {
+        slug: 'questions-alternatives',
+        name: 'alternative questions',
+        note: 'Tea or coffee? Which do you prefer, A or B? — questions that offer a choice.',
+      },
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'She asked where I lived — wh- questions inside another sentence, in statement order.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'the man who called, the place where we met — the same words, but not asking anything.',
+      },
+    ]}
+  />
+</GrammarShell>

@@ -1,0 +1,257 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 6 EGP rows (360-365): 360-362 are pure FORM rows without cards; 363 (about
+// to), 364 (be to, instructions) and 365 (schedules) are USE rows, inlined and
+// matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const aboutToPoint = point(363);
+const instructionsPoint = point(364);
+const schedulesPoint = point(365);
+
+const inlineUsagePointIds = [aboutToPoint, instructionsPoint, schedulesPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Future expressions with be: be about to (the next moment), be due to (the timetable) and be to (formal plans, orders and instructions) — I'm about to leave, the train is due to arrive, you are to wait here."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Be about to / be due to / be to + verb', open: true },
+    { id: 'about-to', title: "I'm about to leave: the next moment", open: false },
+    { id: 'due-to', title: 'The meeting is due to start: the timetable', open: false },
+    { id: 'be-to-plans', title: 'The President is to visit Kyiv: formal plans', open: false },
+    { id: 'be-to-orders', title: 'You are to wait here: orders and instructions', open: false },
+    { id: 'which-one', title: 'About to, due to, be to, going to or will?', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Besides <em>will</em> and <em>going to</em>, English has three future expressions built on <em>be</em>: <em>I'm about to leave</em> (in a moment), <em>The train is due to arrive at six</em> (it's on the timetable), and <em>The President is to visit Kyiv</em> (it's officially arranged). They sound more precise than <em>will</em> — and <em>be to</em> sounds formal.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Be about to / be due to / be to + verb" id="form" open>
+    <p>
+      All three have the same shape: a present form of <em>be</em> (<em>am / is / are</em>, often <em>'m / 's / 're</em>), then <em>about to</em>, <em>due to</em> or just <em>to</em>, then the base form of the verb.
+    </p>
+    <GrammarFormula label="The pattern" parts={['subject', 'am / is / are', 'about to / due to / to', 'base verb']} />
+    <GrammarExample note="About to: it will happen in a moment.">
+      I'm in a hurry — <mark data-role="grammar">my class</mark> <mark data-role="content">is about to</mark> <mark data-role="grammar">begin</mark>.
+    </GrammarExample>
+    <GrammarExample note="Due to: the start date is fixed.">
+      July is the only month that suits me, because <mark data-role="grammar">I</mark> <mark data-role="content">am due to</mark> <mark data-role="grammar">start</mark> work in August.
+    </GrammarExample>
+    <GrammarExample note="Be to: an official arrangement.">
+      <mark data-role="grammar">He</mark> <mark data-role="content">is to</mark> <mark data-role="grammar">come</mark> to Athens next Friday.
+    </GrammarExample>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Expression</th><th>Meaning</th><th>Style</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>be about to</code></th><td>very soon, in the next moment</td><td>everyday</td></tr>
+        <tr><th><code>be due to</code></th><td>planned for a set time, expected</td><td>neutral, common in work and news</td></tr>
+        <tr><th><code>be to</code></th><td>officially arranged; an order</td><td>formal</td></tr>
+      </tbody>
+    </table>
+    <p>
+      For the negative, put <em>not</em> after <em>be</em>; for a question, put <em>be</em> before the subject: <em>The shop isn't due to open until ten.</em> <em>When is the report due to be ready?</em> <em>What am I to do?</em>
+    </p>
+    <p>
+      With <em>was / were</em> the same expressions look forward from a moment in the past: <em>I was about to leave when the phone rang.</em> That's the future in the past — see the link at the bottom of the page.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I'm about to leave: the next moment" id="about-to">
+    <p>
+      <em>Be about to</em> means the action will start very soon — in seconds, minutes, or "any moment now". Add <em>just</em> before <em>about to</em> to make it even closer.
+    </p>
+    <GrammarFormula label="Immediate future" parts={['subject', 'am / is / are', '(just)', 'about to', 'base verb']} />
+    <GrammarExample note="The speaker hasn't said it yet, but will in a second.">
+      You're not going to believe what <mark data-role="grammar">I</mark> <mark data-role="content">am about to</mark> <mark data-role="grammar">tell</mark> you!
+    </GrammarExample>
+    <GrammarExample note="The other person is ready to answer.">
+      I know what <mark data-role="grammar">you</mark><mark data-role="content">'re about to</mark> <mark data-role="grammar">say</mark>, and you might be right.
+    </GrammarExample>
+    <GrammarExample note="A business context: very soon, not years ahead.">
+      <mark data-role="grammar">We</mark><mark data-role="content">'re about to</mark> <mark data-role="grammar">introduce</mark> a new ID card system in our company.
+    </GrammarExample>
+    <GrammarExample note="Just makes it closer still: the launch is days away.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">are</mark> just <mark data-role="content">about to</mark> <mark data-role="grammar">launch</mark> a new healthy snack for children.
+    </GrammarExample>
+    {aboutToPoint && <GrammarUsagePointCard usagePoint={aboutToPoint} />}
+    <p>
+      Because <em>about to</em> already means "very soon", don't add a future time like <em>tomorrow</em> or <em>next week</em>: <em>I'm about to leave</em>, but <em>I'm leaving tomorrow</em>.
+    </p>
+    <p>
+      In Ukrainian this is often <em>ось-ось</em>, <em>саме збираюся</em>, <em>от-от</em>: <em>Фільм от-от почнеться</em> → <em>The film is about to start.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The meeting is due to start: the timetable" id="due-to">
+    <p>
+      <em>Be due to</em> says that something is planned or expected for a certain time — trains, flights, meetings, deadlines, reports, births. It is common at work and in the news.
+    </p>
+    <GrammarFormula label="Schedule" parts={['subject', 'am / is / are', 'due to', 'base verb', '(time)']} />
+    <GrammarExample note="A date on the calendar.">
+      <mark data-role="grammar">Our annual conference</mark> <mark data-role="content">is due to</mark> <mark data-role="grammar">take place</mark> on 10 December.
+    </GrammarExample>
+    <GrammarExample note="Expected, according to the forecast.">
+      Demand for our products <mark data-role="content">is due to</mark> <mark data-role="grammar">increase</mark> within the next six months.
+    </GrammarExample>
+    <GrammarExample note="A passive verb after due to: to be present.">
+      <mark data-role="grammar">Some members of our team</mark> <mark data-role="content">are due to</mark> <mark data-role="grammar">be</mark> at a sales event next Friday, so the meeting is moved to Saturday.
+    </GrammarExample>
+    <GrammarExample note="The negative: not planned before ten.">
+      <mark data-role="grammar">The shop</mark> <mark data-role="content">isn't due to</mark> <mark data-role="grammar">open</mark> until ten.
+    </GrammarExample>
+    {schedulesPoint && <GrammarUsagePointCard usagePoint={schedulesPoint} />}
+    <p>
+      Without a verb, <em>be due</em> + a time works too: <em>The train is due at 6.15.</em> <em>The baby is due in May.</em> <em>The rent is due on Monday.</em>
+    </p>
+    <p>
+      The plan may still change: <em>The flight is due to land at nine, but it's late.</em> <em>Due to</em> tells you what the timetable says, not what will certainly happen.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The President is to visit Kyiv: formal plans" id="be-to-plans">
+    <p>
+      <em>Be to</em> + verb means something has been officially arranged — by a company, a government, an organiser. It is formal and common in news reports and business letters; in conversation people usually say <em>be going to</em> or the present continuous.
+    </p>
+    <GrammarFormula label="Arrangement" parts={['subject', 'am / is / are', 'to', 'base verb']} />
+    <GrammarExample note="A business trip that the company has arranged.">
+      I'm sorry I can't come to the meeting, as <mark data-role="grammar">I</mark> <mark data-role="content">am to</mark> <mark data-role="grammar">go</mark> on a business trip to New York then.
+    </GrammarExample>
+    <GrammarExample note="A change to the official plan.">
+      I'm sorry, but <mark data-role="grammar">we</mark> <mark data-role="content">are to</mark> <mark data-role="grammar">leave</mark> a bit earlier, at about 4 p.m.
+    </GrammarExample>
+    <GrammarExample note="News style: the government has announced it.">
+      <mark data-role="grammar">The city</mark> <mark data-role="content">is to</mark> <mark data-role="grammar">build</mark> two new bridges next year.
+    </GrammarExample>
+    <p>
+      In headlines, <em>be</em> is dropped and only <em>to</em> + verb is left: <em>President to visit Kyiv</em> = The President is to visit Kyiv.
+    </p>
+    <p>
+      <em>Be to</em> is only for plans that people have made. It can't predict the weather or other things nobody controls — use <em>will</em> or <em>going to</em> there.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You are to wait here: orders and instructions" id="be-to-orders">
+    <p>
+      <em>Be to</em> can also tell someone what they must do. It sounds like an order from someone in charge — a teacher, a boss, an official notice. The negative <em>are not to</em> means "must not".
+    </p>
+    <GrammarFormula label="Instruction" parts={['you / they / subject', 'am / is / are (not)', 'to', 'base verb']} />
+    <GrammarExample note="An instruction for the audience.">
+      <mark data-role="grammar">You</mark><mark data-role="content">'re to</mark> <mark data-role="grammar">sit</mark> in front of the TV and just watch the film.
+    </GrammarExample>
+    <GrammarExample note="A rule for travellers: they must have them.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">are to</mark> <mark data-role="grammar">have</mark> their passports with them.
+    </GrammarExample>
+    <GrammarExample note="A passive verb: they must be respected.">
+      We have no right to do so, because <mark data-role="grammar">gorillas</mark> <mark data-role="content">are to</mark> <mark data-role="grammar">be respected</mark> as much as any other living thing on this planet.
+    </GrammarExample>
+    <GrammarExample note="The negative is a ban: you must not.">
+      <mark data-role="grammar">Children</mark> <mark data-role="content">are not to</mark> <mark data-role="grammar">use</mark> the pool without an adult.
+    </GrammarExample>
+    {instructionsPoint && <GrammarUsagePointCard usagePoint={instructionsPoint} />}
+    <p>
+      In a question, <em>be to</em> asks what someone should do: <em>What am I to do?</em> = What should I do? It sounds a little literary, often a bit desperate.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="About to, due to, be to, going to or will?" id="which-one">
+    <p>
+      All of these talk about the future. Choose by how soon it is, who decided it, and how formal you want to sound.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>Use it for</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>be about to</code></th><td>the next moment</td><td>Hurry — the bus is about to leave.</td></tr>
+        <tr><th><code>be due to</code></th><td>a time on a timetable or plan</td><td>The bus is due to leave at 8.40.</td></tr>
+        <tr><th><code>be to</code></th><td>an official arrangement; an order</td><td>All passengers are to show their tickets.</td></tr>
+        <tr><th><code>be going to</code></th><td>your own plan; a prediction from what you see</td><td>I'm going to take the bus.</td></tr>
+        <tr><th><code>present continuous</code></th><td>a personal arrangement</td><td>I'm taking the bus tomorrow.</td></tr>
+        <tr><th><code>will</code></th><td>a decision now; a general prediction</td><td>OK, I'll take the bus.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      <em>About to</em> and <em>going to</em> are both close to now, but <em>about to</em> is closer and never used with a future time: <em>I'm going to leave at five</em>, not <em>I'm about to leave at five</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After <em>about to</em>, <em>due to</em> and <em>be to</em> comes the base form — not <em>-ing</em>, and don't drop the <em>to</em>.
+    </p>
+    <GrammarContrast bad={["I'm about to going out.", 'The train is due arriving at six.', "I'm about leave."]} good={["I'm about to go out.", 'The train is due to arrive at six.', "I'm about to leave."]} />
+    <p>
+      Don't forget <em>be</em>.
+    </p>
+    <GrammarContrast bad={['The film about to start.', 'We due to finish the project in May.']} good={['The film is about to start.', "We're due to finish the project in May."]} />
+    <p>
+      <em>About to</em> means "in a moment", so it doesn't go with a future time.
+    </p>
+    <GrammarContrast bad={["I'm about to fly to Rome next month."]} good={["I'm flying to Rome next month.", "I'm about to fly to Rome — I'm at the gate now."]} />
+    <p>
+      <em>Be to</em> is for arrangements people make, not for predictions.
+    </p>
+    <GrammarContrast bad={["It is to rain tomorrow."]} good={["It's going to rain tomorrow.", 'It will rain tomorrow.']} />
+    <p>
+      <em>Due to</em> + noun means "because of" — a different meaning. For a schedule you need <em>be due to</em> + a verb.
+    </p>
+    <GrammarContrast bad={['The meeting is due to Monday.']} good={['The meeting is due to take place on Monday.', 'The meeting is due on Monday.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-with-be-going-to',
+        name: 'be going to',
+        note: "I'm going to take the bus — your own plans and predictions from what you see.",
+      },
+      {
+        slug: 'future-present-continuous-for-future-use',
+        name: 'present continuous for the future',
+        note: "I'm taking the bus tomorrow — a personal arrangement, the everyday choice.",
+      },
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'will and shall',
+        note: 'OK, I will — decisions made now and general predictions.',
+      },
+      {
+        slug: 'future-future-in-the-past',
+        name: 'future in the past',
+        note: 'I was about to leave when… / It was due to open in May — the same expressions with was / were.',
+      },
+      {
+        slug: 'modality-expressions-with-be',
+        name: 'modal expressions with be',
+        note: 'be supposed to, be set to, be bound to — more be + to patterns about the future.',
+      },
+    ]}
+  />
+</GrammarShell>

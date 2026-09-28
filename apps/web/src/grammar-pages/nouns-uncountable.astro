@@ -1,0 +1,289 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 8 EGP rows (690-697: uncountable nouns A2/B1/C1, with the, with
+// quantity words A2/B1, containers and pieces, no article for things in
+// general) are plain FORM rows — no usage points, so no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Uncountable nouns in English: no a/an, no plural and a singular verb (music, money, weather), the + noun for something specific, quantity words (some, any, much, a lot of, a bit of, enough), containers and pieces (a cup of tea, a piece of paper), nouns that are uncountable in English but not in Ukrainian (advice, information, furniture), and no article for things in general (Education is important)."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Music, money, weather: no a, no plural', open: true },
+    { id: 'the', title: 'The weather was fine: with the', open: false },
+    { id: 'quantity', title: 'Some money, a lot of fun: quantity words', open: false },
+    { id: 'containers', title: 'A cup of tea, a piece of paper', open: false },
+    { id: 'tricky', title: 'Advice, information, furniture: uncountable in English', open: false },
+    { id: 'general', title: 'Education is important: no article', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      An uncountable noun names something you can't count one by one: a substance (<em>water</em>, <em>meat</em>), a mass of things (<em>money</em>, <em>furniture</em>) or an idea (<em>music</em>, <em>time</em>, <em>fun</em>). It has no plural, never takes <em>a</em> or <em>an</em>, and uses a singular verb: <em>The weather <strong>is</strong> nice.</em> To count it, use a word like <em>a cup of</em> or <em>a piece of</em>.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Music, money, weather: no a, no plural" id="form" open>
+    <p>
+      Many everyday nouns are uncountable: <em>music</em>, <em>money</em>, <em>time</em>, <em>weather</em>, <em>water</em>, <em>meat</em>, <em>bread</em>, <em>homework</em>, <em>furniture</em>. Use them on their own, without <em>a</em> and without <em>-s</em>.
+    </p>
+    <GrammarFormula label="Uncountable noun" parts={['verb', 'uncountable noun (no a, no -s)']} />
+    <GrammarExample note="Listen to + music, watch + TV: no a, no -s.">
+      I <mark data-role="grammar">listen to</mark> <mark data-role="content">music</mark>, I watch TV and I talk to my friends.
+    </GrammarExample>
+    <GrammarExample note="Have + time: not a time, not times.">
+      Come to my house at 4.30 so we <mark data-role="grammar">have</mark> <mark data-role="content">time</mark> to get ready.
+    </GrammarExample>
+    <GrammarExample note="Bring + money.">
+      <mark data-role="grammar">Bring</mark> <mark data-role="content">money</mark> with you.
+    </GrammarExample>
+    <p>
+      As the subject, an uncountable noun always takes a singular verb: <em>is</em>, <em>was</em>, <em>has</em>, <em>costs</em>.
+    </p>
+    <GrammarFormula label="As subject" parts={['uncountable noun', 'is / was / has']} />
+    <GrammarExample note="Weather + was: singular verb.">
+      The <mark data-role="content">weather</mark> there <mark data-role="grammar">was</mark> cold.
+    </GrammarExample>
+    <GrammarExample note="Money + isn't.">
+      <mark data-role="content">Money</mark> <mark data-role="grammar">isn't</mark> everything.
+    </GrammarExample>
+    <p>
+      To talk about the thing itself, not one item of it, English uses the uncountable noun even where you might expect a plural: <em>I ate meat</em>, <em>I need bread</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The weather was fine: with the" id="the" open={false}>
+    <p>
+      Use <em>the</em> when you mean a specific amount or kind that both people know about: the music at this party, the information about this class. <em>A</em> is impossible, but <em>the</em> is fine.
+    </p>
+    <GrammarFormula label="Something specific" parts={['the', 'uncountable noun']} />
+    <GrammarExample note="The music at the party we're talking about.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">music</mark> is going to be loud, since it's rap.
+    </GrammarExample>
+    <GrammarExample note="The weather on that trip.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">weather</mark> was absolutely fine.
+    </GrammarExample>
+    <GrammarExample note="The information about one particular class.">
+      If you can't find <mark data-role="grammar">the</mark> <mark data-role="content">information</mark> about the new art class, please call me.
+    </GrammarExample>
+    <p>
+      Compare: <em>I love music</em> (all music, in general) and <em>I love the music in this film</em> (this specific music).
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Some money, a lot of fun: quantity words" id="quantity" open={false}>
+    <p>
+      To say how much, put a quantity word before the noun. Use the ones that work with uncountable nouns: <em>some</em> and <em>any</em>, <em>a lot of</em>, <em>much</em>, <em>more</em>, <em>enough</em>.
+    </p>
+    <GrammarFormula label="How much" parts={['some / any / a lot of / much / more', 'uncountable noun']} />
+    <GrammarExample note="Some in positive sentences.">
+      I need to do <mark data-role="grammar">some</mark> <mark data-role="content">homework</mark>.
+    </GrammarExample>
+    <GrammarExample note="Any in negatives and questions.">
+      Now I haven't got <mark data-role="grammar">any</mark> <mark data-role="content">money</mark>, but I am really happy!
+    </GrammarExample>
+    <GrammarExample note="A lot of: a big amount, in any kind of sentence.">
+      We have had <mark data-role="grammar">a lot of</mark> <mark data-role="content">fun</mark>.
+    </GrammarExample>
+    <GrammarExample note="More: an extra amount.">
+      I'm going to find <mark data-role="grammar">more</mark> <mark data-role="content">information</mark> about the new art class.
+    </GrammarExample>
+    <p>
+      <em>Much</em> is mostly used in negatives and questions (<em>not much time</em>, <em>How much money?</em>). <em>Many</em> and numbers are only for countable nouns.
+    </p>
+    <GrammarExample note="Can't spend much + time.">
+      They can't spend <mark data-role="grammar">much</mark> <mark data-role="content">time</mark> with you.
+    </GrammarExample>
+    <GrammarExample note="Enough: as much as you need.">
+      I don't have <mark data-role="grammar">enough</mark> <mark data-role="content">money</mark>.
+    </GrammarExample>
+    <p>
+      For a small amount, say <em>a bit of</em> or <em>a little bit of</em> (informal) or <em>a little</em>. For a big amount in informal English, <em>plenty of</em> (more than enough) and <em>loads of</em>. <em>Further</em> means extra, more of the same, and is common in formal letters.
+    </p>
+    <GrammarExample note="A bit of: a small amount.">
+      Every time it rains, <mark data-role="grammar">a bit of</mark> <mark data-role="content">water</mark> comes inside the house.
+    </GrammarExample>
+    <GrammarExample note="A little bit of: small and friendly.">
+      I hope this <mark data-role="grammar">little bit of</mark> <mark data-role="content">advice</mark> can help you!
+    </GrammarExample>
+    <GrammarExample note="Loads of: informal, a big amount.">
+      I have <mark data-role="grammar">loads of</mark> <mark data-role="content">work</mark> to finish.
+    </GrammarExample>
+    <GrammarExample note="Plenty of: more than enough.">
+      Don't worry, we've got <mark data-role="grammar">plenty of</mark> <mark data-role="content">time</mark>.
+    </GrammarExample>
+    <GrammarExample note="Further: formal, extra information.">
+      Please attend a meeting next week for <mark data-role="grammar">further</mark> <mark data-role="content">information</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A cup of tea, a piece of paper" id="containers" open={false}>
+    <p>
+      You can't say <em>a water</em> or <em>two papers</em> (meaning sheets). To count an uncountable noun, count something it comes in or a piece of it: the container or unit is countable, so it takes <em>a</em> and a plural.
+    </p>
+    <GrammarFormula label="Counting it" parts={['a / two', 'bottle / cup / piece / slice', 'of', 'uncountable noun']} />
+    <GrammarExample note="A bottle of + water.">
+      We have to bring <mark data-role="grammar">a</mark> <mark data-role="grammar">bottle</mark> <mark data-role="grammar">of</mark> <mark data-role="content">water</mark> and a T-shirt.
+    </GrammarExample>
+    <GrammarExample note="A cup of + tea.">
+      I can drink <mark data-role="grammar">a</mark> <mark data-role="grammar">cup</mark> <mark data-role="grammar">of</mark> <mark data-role="content">tea</mark> in a café.
+    </GrammarExample>
+    <GrammarExample note="A piece of + paper: one sheet.">
+      You must bring two pencils, a rubber and <mark data-role="grammar">a</mark> <mark data-role="grammar">piece</mark> <mark data-role="grammar">of</mark> <mark data-role="content">paper</mark>.
+    </GrammarExample>
+    <GrammarExample note="Two + glasses: only the container becomes plural.">
+      Can we have <mark data-role="grammar">two</mark> <mark data-role="grammar">glasses</mark> <mark data-role="grammar">of</mark> <mark data-role="content">juice</mark>, please?
+    </GrammarExample>
+    <p>
+      <em>A piece of</em> works with almost any uncountable noun, including abstract ones: <em>a piece of news</em>, <em>a piece of advice</em>, <em>a piece of furniture</em>. Other common pairs:
+    </p>
+    <ul>
+      <li><em>a cup / glass / bottle of</em> + <em>water</em>, <em>milk</em>, <em>coffee</em></li>
+      <li><em>a slice / loaf of</em> + <em>bread</em>; <em>a slice of</em> + <em>cake</em>, <em>pizza</em></li>
+      <li><em>a kilo / packet of</em> + <em>rice</em>, <em>sugar</em>; <em>a bar of</em> + <em>chocolate</em>, <em>soap</em></li>
+    </ul>
+    <GrammarExample note="A piece of + news: one item of news.">
+      I have <mark data-role="grammar">a</mark> <mark data-role="grammar">piece</mark> <mark data-role="grammar">of</mark> <mark data-role="content">news</mark>.
+    </GrammarExample>
+    <p>
+      In cafés, people often say <em>a coffee</em> or <em>two teas</em> to mean <em>a cup of</em> — that is normal spoken English, but only for drinks you order.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Advice, information, furniture: uncountable in English" id="tricky" open={false}>
+    <p>
+      Some nouns are uncountable in English even though the same idea is countable in Ukrainian (<em>порада</em> → <em>поради</em>, <em>новина</em> → <em>новини</em>). They never take <em>a</em> or <em>-s</em>, and the verb stays singular. Learn these as a group:
+    </p>
+    <ul>
+      <li><em>advice</em>, <em>information</em>, <em>news</em>, <em>knowledge</em>, <em>research</em></li>
+      <li><em>furniture</em>, <em>luggage</em>, <em>baggage</em>, <em>equipment</em>, <em>accommodation</em></li>
+      <li><em>homework</em>, <em>work</em>, <em>travel</em>, <em>progress</em>, <em>traffic</em>, <em>weather</em></li>
+      <li><em>money</em>, <em>hair</em> (on your head), <em>fruit</em> (as food), <em>clothing</em>, <em>fashion</em></li>
+    </ul>
+    <GrammarFormula label="Tricky nouns" parts={['some / any / the / —', 'advice / news / furniture …', 'is / was']} />
+    <GrammarExample note="Any + furniture: not any furnitures.">
+      Do you have <mark data-role="grammar">any</mark> <mark data-role="content">furniture</mark> in this room?
+    </GrammarExample>
+    <GrammarExample note="The news + is: news looks plural but is singular.">
+      <mark data-role="grammar">The</mark> <mark data-role="content">news</mark> <mark data-role="grammar">is</mark> good — I passed!
+    </GrammarExample>
+    <GrammarExample note="New + accommodation: not a new accommodation.">
+      I hope you can help me to find new <mark data-role="content">accommodation</mark> as soon as possible.
+    </GrammarExample>
+    <GrammarExample note="Love + fashion.">
+      I love shopping for clothes because I love <mark data-role="content">fashion</mark>.
+    </GrammarExample>
+    <p>
+      Places and fields of study are often uncountable too: <em>the countryside</em>, <em>architecture</em>, <em>history</em>, <em>traffic</em>.
+    </p>
+    <GrammarExample note="The + countryside: one area, never countrysides.">
+      I think <mark data-role="grammar">the</mark> <mark data-role="content">countryside</mark> <mark data-role="grammar">is</mark> better than the town centre.
+    </GrammarExample>
+    <GrammarExample note="Architecture: no article, no plural.">
+      You can admire lovely <mark data-role="content">architecture</mark> and visit a museum about our history.
+    </GrammarExample>
+    <p>
+      At a higher level you'll meet many abstract uncountable nouns: <em>safety</em>, <em>administration</em>, <em>humanity</em>, <em>tolerance</em>, <em>respect</em>, <em>solidarity</em>. They follow exactly the same rules.
+    </p>
+    <GrammarExample note="Concerned about + safety.">
+      Your company is concerned about <mark data-role="content">safety</mark>.
+    </GrammarExample>
+    <GrammarExample note="More + three abstract nouns in a list.">
+      We can develop <mark data-role="grammar">more</mark> <mark data-role="content">humanity</mark>, <mark data-role="content">tolerance</mark> and <mark data-role="content">respect</mark> among people of different countries.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Education is important: no article" id="general" open={false}>
+    <p>
+      To talk about something abstract in general — the whole idea, not one part of it — use the uncountable noun alone, with no <em>the</em>. This is a common difference from languages where you'd add an article.
+    </p>
+    <GrammarFormula label="In general" parts={['uncountable noun (no the)', 'verb']} />
+    <GrammarExample note="Education in general: no the.">
+      <mark data-role="content">Education</mark> <mark data-role="grammar">is</mark> important.
+    </GrammarExample>
+    <GrammarExample note="Music as a whole, for her.">
+      <mark data-role="content">Music</mark> <mark data-role="grammar">was</mark> her life, not only a hobby.
+    </GrammarExample>
+    <GrammarExample note="Television as a medium.">
+      <mark data-role="content">Television</mark> <mark data-role="grammar">is</mark> more attractive because it has moving images.
+    </GrammarExample>
+    <GrammarExample note="Language in general, not one language.">
+      <mark data-role="content">Language</mark> <mark data-role="grammar">reflects</mark> the culture and tradition of the country.
+    </GrammarExample>
+    <p>
+      Add <em>the</em> as soon as the noun becomes specific: <em>Education is important</em>, but <em>The education I got at school was very good.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Uncountable nouns never take <em>a</em> / <em>an</em> and never add <em>-s</em>.
+    </p>
+    <GrammarContrast
+      bad={['Can you give me an advice?', 'Thank you for the informations.', 'We bought new furnitures.']}
+      good={['Can you give me some advice? / a piece of advice?', 'Thank you for the information.', 'We bought new furniture.']}
+    />
+    <p>
+      The verb after an uncountable noun is singular — even with <em>news</em>, which ends in <em>-s</em>.
+    </p>
+    <GrammarContrast
+      bad={['The news are bad.', 'My hair are long.', 'The money were on the table.']}
+      good={['The news is bad.', 'My hair is long.', 'The money was on the table.']}
+    />
+    <p>
+      Use <em>much</em>, <em>a lot of</em> or <em>a little</em>, not <em>many</em> or <em>a few</em>, and no number straight before the noun.
+    </p>
+    <GrammarContrast
+      bad={['I don\'t have many money.', 'I need two breads.']}
+      good={['I don\'t have much money.', 'I need two loaves of bread.']}
+    />
+    <p>
+      No <em>the</em> when you mean the thing in general.
+    </p>
+    <GrammarContrast
+      bad={['The life is difficult.', 'I am interested in the history.']}
+      good={['Life is difficult.', 'I am interested in history.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'nouns-plural',
+        name: 'plural nouns',
+        note: 'games, boxes, children — countable nouns and their plurals.',
+      },
+      {
+        slug: 'determiners-quantity',
+        name: 'quantity words',
+        note: 'much / many, a little / a few — which go with which noun.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'articles',
+        note: 'a / the / no article — the uncountable rules in context.',
+      },
+      {
+        slug: 'nouns-types',
+        name: 'types of nouns',
+        note: 'common, proper and compound nouns.',
+      },
+    ]}
+  />
+</GrammarShell>

@@ -1,0 +1,254 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 7 EGP rows (375-381): 375 (affirmative), 376 (negative), 378 (with
+// adverbs, C1) and 381 (questions, C2) are pure FORM rows without cards;
+// 377 (completed by a future point), 379 (assumptions, C1) and 380
+// (politeness, C1) are USE rows, inlined and matched by EGP index.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const completedPoint = point(377);
+const assumptionsPoint = point(379);
+const politenessPoint = point(380);
+
+const inlineUsagePointIds = [completedPoint, assumptionsPoint, politenessPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The future perfect simple: will have + past participle, won't have, Will he have changed?, things finished by a point in the future, adverbs like already and probably, assumptions like As you will have heard, and polite formal phrases."
+  handcrafted
+  sections={[
+    { id: 'form', title: "Will have + past participle, I'll have finished", open: true },
+    { id: 'negative', title: "Won't have + past participle and questions", open: false },
+    { id: 'completed', title: 'By Friday I will have finished: done before a future point', open: false },
+    { id: 'adverbs', title: 'Will already have, will probably have: adverbs', open: false },
+    { id: 'assumptions', title: 'As you will have heard: assumptions', open: false },
+    { id: 'politeness', title: 'I hope I will have answered your questions: politeness', open: false },
+    { id: 'vs-other-tenses', title: 'Will have done, will do or will have been doing?', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      The future perfect simple stands at a point in the future and looks back at something that will be finished by then: <em>By Friday I will have finished the report.</em> It answers the question "what will be done by then?" — and at C1 level it can also guess about the present: <em>As you will have heard, the meeting is cancelled.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Will have + past participle, I'll have finished" id="form" open>
+    <p>
+      Put <em>will</em>, then <em>have</em>, then the past participle of the verb (<em>finished</em>, <em>done</em>, <em>written</em>). None of these words change: the same form for I, you, he, she, we and they. In speech <em>will</em> is usually <em>'ll</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', "will / 'll", 'have', 'past participle', '(by + time)']} />
+    <GrammarExample note="The lesson learned before the next one starts.">
+      I'm sure <mark data-role="grammar">I</mark> <mark data-role="content">will have</mark> <mark data-role="content">learned</mark> today's lesson <mark data-role="grammar">by the next lesson</mark>.
+    </GrammarExample>
+    <GrammarExample note="The contraction 'll is the normal spoken form.">
+      <mark data-role="grammar">We</mark><mark data-role="content">'ll have</mark> <mark data-role="content">painted</mark> the kitchen <mark data-role="grammar">by the weekend</mark>.
+    </GrammarExample>
+    <GrammarExample note="He, she, it: still will have — no has.">
+      <mark data-role="grammar">By 2050</mark> <mark data-role="grammar">the old bridge</mark> <mark data-role="content">will have</mark> <mark data-role="content">disappeared</mark>.
+    </GrammarExample>
+    <p>
+      Irregular verbs use their third form, the same one as in the present perfect: <em>go → gone</em>, <em>write → written</em>, <em>spend → spent</em>, <em>make → made</em>.
+    </p>
+    <p>
+      The tense almost always comes with a point in the future: <em>by Friday</em>, <em>by the end of the month</em>, <em>by then</em>, <em>by the time…</em>, <em>in two years</em>. After <em>by the time</em>, <em>when</em> and <em>before</em> the verb stays in the present simple: <em>By the time you <strong>get</strong> home, I'll have cooked dinner</em>, not <em>By the time you will get home</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Won't have + past participle and questions" id="negative">
+    <p>
+      For the negative, put <em>not</em> after <em>will</em>: <em>will not have</em>, or in speech <em>won't have</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "will not / won't", 'have', 'past participle']} />
+    <GrammarExample note="The exams won't be over yet in June.">
+      July is better for me, because <mark data-role="grammar">I</mark> <mark data-role="content">will not have</mark> <mark data-role="content">finished</mark> my university exams <mark data-role="grammar">by June</mark>.
+    </GrammarExample>
+    <GrammarExample note="The short form won't have is usual in speech.">
+      <mark data-role="grammar">When we stop for lunch</mark>, <mark data-role="grammar">we</mark> <mark data-role="content">won't have</mark> <mark data-role="content">done</mark> more than 40 km.
+    </GrammarExample>
+    <p>
+      For a question, put <em>will</em> before the subject. Questions are rare and mostly C2 level; often they sound like wondering aloud.
+    </p>
+    <GrammarFormula label="Question" parts={['(Wh-word)', 'will', 'subject', 'have', 'past participle']} />
+    <GrammarExample note="Ten years later — wondering what he's like now.">
+      I haven't seen him for ten years. <mark data-role="content">Will</mark> <mark data-role="grammar">he</mark> <mark data-role="content">have</mark> <mark data-role="content">changed</mark>?
+    </GrammarExample>
+    <GrammarExample note="A wh-question about the result by a future point.">
+      <mark data-role="grammar">How many pages</mark> <mark data-role="content">will</mark> <mark data-role="grammar">you</mark> <mark data-role="content">have</mark> <mark data-role="content">written</mark> <mark data-role="grammar">by tonight</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="By Friday I will have finished: done before a future point" id="completed">
+    <p>
+      The main use: imagine yourself at a point in the future and look back. Something will be complete (or not complete) <strong>before</strong> that point. We don't say exactly when it finishes — only that it is done by then.
+    </p>
+    <GrammarFormula label="Completed by a future point" parts={['subject', "will / 'll have", 'past participle', 'by + future time']} />
+    <GrammarExample note="At 4.30 the match is already over.">
+      You can leave at 4.30 — <mark data-role="grammar">the match</mark> <mark data-role="content">will have</mark> <mark data-role="content">finished</mark> <mark data-role="grammar">by that time</mark>.
+    </GrammarExample>
+    <GrammarExample note="The saving adds up before the end of the month.">
+      If you cycle to work every day, <mark data-role="grammar">at the end of the month</mark> <mark data-role="grammar">you</mark> <mark data-role="content">will have</mark> <mark data-role="content">saved</mark> money, because <mark data-role="grammar">you</mark> <mark data-role="content">won't have</mark> <mark data-role="content">spent</mark> it on petrol.
+    </GrammarExample>
+    <GrammarExample note="A number of things done by then.">
+      <mark data-role="grammar">By the end of the course</mark> <mark data-role="grammar">you</mark><mark data-role="content">'ll have</mark> <mark data-role="content">learned</mark> about 2,000 new words.
+    </GrammarExample>
+    {completedPoint && <GrammarUsagePointCard usagePoint={completedPoint} />}
+    <p>
+      <em>By</em> means "not later than": <em>by Friday</em> = on Friday or earlier. Don't confuse it with <em>until</em>, which is about something that continues up to that point: <em>I'll have finished by Friday</em>, but <em>I'll be here until Friday</em>.
+    </p>
+    <p>
+      Ukrainian usually says this with the perfective future: <em>До п'ятниці я закінчу звіт</em> → <em>By Friday I will have finished the report.</em> A plain <em>I will finish the report on Friday</em> means the finishing happens on Friday; the future perfect means it is already done when Friday comes.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will already have, will probably have: adverbs" id="adverbs">
+    <p>
+      Adverbs like <em>already</em>, <em>probably</em>, <em>surely</em>, <em>certainly</em>, <em>possibly</em>, <em>just</em>, <em>never</em> usually go in the middle: after <em>will</em>, before <em>have</em>. <em>Already</em> and <em>just</em> can also come after <em>have</em>: <em>they will have already left</em> is fine too.
+    </p>
+    <GrammarFormula label="With an adverb" parts={['subject', 'will', 'adverb', 'have', 'past participle']} />
+    <GrammarExample note="Already: finished earlier than you might expect.">
+      Don't hurry — <mark data-role="grammar">they</mark> <mark data-role="content">will</mark> <mark data-role="grammar">already</mark> <mark data-role="content">have</mark> <mark data-role="content">left</mark> <mark data-role="grammar">by the time</mark> we get there.
+    </GrammarExample>
+    <GrammarExample note="Possibly makes the prediction less certain.">
+      <mark data-role="grammar">Sales</mark> <mark data-role="content">will</mark> <mark data-role="grammar">possibly</mark> <mark data-role="content">have</mark> <mark data-role="content">fallen</mark> to 5,000 units again <mark data-role="grammar">by the end of the year</mark>.
+    </GrammarExample>
+    <GrammarExample note="Surely: the writer is confident the reader knows this.">
+      If you have ever read a fairy tale by Andersen, <mark data-role="grammar">you</mark> <mark data-role="content">will</mark> <mark data-role="grammar">surely</mark> <mark data-role="content">have</mark> <mark data-role="content">discovered</mark> why he is so famous.
+    </GrammarExample>
+    <p>
+      In the negative, <em>probably</em> and <em>certainly</em> go <strong>before</strong> <em>won't</em>: <em>They probably won't have finished by six</em>, not <em>They won't probably have finished</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="As you will have heard: assumptions" id="assumptions">
+    <p>
+      At C1 level, <em>will</em> can mean "I'm sure" rather than "in the future". Then <em>will have + past participle</em> is a confident guess about something that has <strong>already</strong> happened — nothing to do with the future. It is especially common with <em>you</em>, when the speaker assumes the listener already knows something.
+    </p>
+    <GrammarFormula label="Assumption about now" parts={['(As)', 'subject', "will / 'll", 'have', 'past participle']} />
+    <GrammarExample note="A classic opening: I'm sure you have already heard.">
+      As <mark data-role="grammar">you</mark> <mark data-role="content">will have</mark> <mark data-role="content">heard</mark>, this year's work experience programme was a success.
+    </GrammarExample>
+    <GrammarExample note="A guess about something already done, not a future event.">
+      Don't worry about the tickets — <mark data-role="grammar">Anna</mark><mark data-role="content">'ll have</mark> <mark data-role="content">booked</mark> them already. She always does.
+    </GrammarExample>
+    <GrammarExample note="Many of you: the speaker assumes shared experience.">
+      <mark data-role="grammar">Many of you</mark> <mark data-role="content">will have</mark> <mark data-role="content">noticed</mark> the new signs in the car park.
+    </GrammarExample>
+    {assumptionsPoint && <GrammarUsagePointCard usagePoint={assumptionsPoint} />}
+    <p>
+      The same guess with <em>must</em> is more common in speech: <em>You must have heard the news.</em> <em>Will have</em> sounds more formal and treats the fact as obvious — typical of announcements, letters and speeches: <em>As you will have seen from the email…</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I hope I will have answered your questions: politeness" id="politeness">
+    <p>
+      In formal letters and emails, <em>will have + past participle</em> can soften a statement about what the writer has just done. It looks at the text from the moment the reader finishes it: "by the time you read this, I hope it has helped".
+    </p>
+    <GrammarFormula label="Polite formal phrase" parts={['I hope / I trust', 'subject', 'will have', 'past participle']} />
+    <GrammarExample note="The end of a formal reply to a complaint.">
+      I hope <mark data-role="grammar">I</mark> <mark data-role="content">will have</mark> <mark data-role="content">reassured</mark> you.
+    </GrammarExample>
+    <GrammarExample note="A common closing line in business emails.">
+      I trust <mark data-role="grammar">this</mark> <mark data-role="content">will have</mark> <mark data-role="content">answered</mark> your questions.
+    </GrammarExample>
+    {politenessPoint && <GrammarUsagePointCard usagePoint={politenessPoint} />}
+    <p>
+      The plain present perfect says the same thing more directly: <em>I hope I have reassured you.</em> The future perfect adds distance and sounds more modest. Keep it for formal writing — in a chat message it sounds stiff.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Will have done, will do or will have been doing?" id="vs-other-tenses">
+    <p>
+      Choose by what you want to show about the action at the future moment.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Form</th><th>At that future moment…</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>will do</code></th><td>the action happens then</td><td>I'll finish the report on Friday.</td></tr>
+        <tr><th><code>will have done</code></th><td>it is already finished; we count the result</td><td>By Friday I'll have finished the report.</td></tr>
+        <tr><th><code>will have been doing</code></th><td>it is still in progress; we count how long</td><td>By Friday I'll have been writing it for a week.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      A number of things done (<em>two pages</em>, <em>five books</em>, <em>three times</em>) needs the simple form: <em>By Friday I'll have read five books</em>, not <em>I'll have been reading five books</em>.
+    </p>
+    <p>
+      State verbs like <em>know</em>, <em>be</em>, <em>have</em> (= own), <em>own</em> use the simple form even for duration: <em>By June we'll have known each other for ten years</em>, not <em>we'll have been knowing</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After <em>will have</em>, use the past participle, not the past simple or the base form.
+    </p>
+    <GrammarContrast bad={["By Friday I'll have wrote the report.", "By Friday I'll have finish the report."]} good={["By Friday I'll have written the report."]} />
+    <p>
+      After <em>will</em> the form never changes: <em>have</em>, not <em>has</em>.
+    </p>
+    <GrammarContrast bad={['By then she will has left.']} good={["By then she'll have left."]} />
+    <p>
+      Use the present simple, not <em>will</em>, after <em>by the time</em>, <em>when</em> and <em>before</em>.
+    </p>
+    <GrammarContrast bad={["By the time you will arrive, we'll have eaten."]} good={["By the time you arrive, we'll have eaten."]} />
+    <p>
+      "Not later than" is <em>by</em>, not <em>until</em> or <em>till</em>.
+    </p>
+    <GrammarContrast bad={["I'll have finished it until Monday."]} good={["I'll have finished it by Monday."]} />
+    <p>
+      In the negative, <em>probably</em> and <em>certainly</em> go before <em>won't</em>, not after it.
+    </p>
+    <GrammarContrast bad={["They won't probably have finished by six."]} good={["They probably won't have finished by six."]} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'future-future-perfect-continuous',
+        name: 'future perfect continuous',
+        note: "By Friday I'll have been writing it for a week — still in progress, counting how long.",
+      },
+      {
+        slug: 'future-future-simple-with-will-and-shall',
+        name: 'future simple with will',
+        note: "I'll finish it on Friday — the action happens at that moment, not before it.",
+      },
+      {
+        slug: 'past-present-perfect-simple',
+        name: 'present perfect simple',
+        note: "I've finished the report — the same idea counted up to now.",
+      },
+      {
+        slug: 'past-past-perfect-simple',
+        name: 'past perfect simple',
+        note: "I'd finished it by Friday — the same idea counted up to a past moment.",
+      },
+      {
+        slug: 'modality-must',
+        name: 'must have + past participle',
+        note: 'You must have heard the news — the more common way to make the same assumption.',
+      },
+    ]}
+  />
+</GrammarShell>

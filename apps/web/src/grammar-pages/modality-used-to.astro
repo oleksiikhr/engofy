@@ -1,0 +1,268 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// Both USE and FORM/USE rows are inlined, matched by EGP index. The other
+// 5 rows (affirmative, didn't use to, ellipsis, questions, used not to) are
+// plain FORM rows, written in full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const noLongerPoint = point(598);
+const narrativePoint = point(601);
+
+const inlineUsagePointIds = [noLongerPoint, narrativePoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Used to: the form (used to + base verb), past habits and states that are no longer true, the negative (didn't use to, never used to), questions (did you use to…?), used to vs would vs the past simple, short forms (as much as she used to), as she used to say in stories, and the formal negative used not to."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Used to + base verb', open: true },
+    { id: 'no-longer', title: 'I used to live by the sea: not true now', open: false },
+    { id: 'negative', title: "I didn't use to…: the negative", open: false },
+    { id: 'questions', title: 'Did you use to…?: questions', open: false },
+    { id: 'would-past-simple', title: 'Used to, would or the past simple?', open: false },
+    { id: 'ellipsis', title: 'As much as she used to: short forms', open: false },
+    { id: 'narrative', title: 'As she used to say: background in stories', open: false },
+    { id: 'used-not-to', title: 'I used not to…: formal negative', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Used to</em> + verb talks about the past: things that happened again and again, or were true for a long time, but are not true now. <em>I used to play football</em> = I played football regularly in the past, but I don't play now. There is no present form — for habits now, use the present simple: <em>I usually play…</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Used to + base verb" id="form" open>
+    <p>
+      <em>Used to</em> is the same for every subject (no <em>-s</em>) and is always followed by the base verb. It already means the past, so there is no <em>was</em> or <em>did</em> in the affirmative. In speech it sounds like /ˈjuːstə/ — with an /s/, not a /z/.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'used to', 'base verb']} />
+    <GrammarExample note="I + used to + share: this was true for years, but not now.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">share</mark> my room with my brother.
+    </GrammarExample>
+    <GrammarExample note="We + used to + be: a past state, not an action.">
+      When I was a little girl, <mark data-role="grammar">we</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">be</mark> together all the time.
+    </GrammarExample>
+    <GrammarExample note="She + used to (no -s): the same for every subject.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">work</mark> in a bank.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I used to live by the sea: not true now" id="no-longer" open={false}>
+    <p>
+      Use <em>used to</em> for two kinds of past situations that have finished: <strong>repeated actions</strong> (habits: <em>go</em>, <em>play</em>, <em>visit</em>) and <strong>states</strong> (things that were true for a long time: <em>be</em>, <em>live</em>, <em>have</em>, <em>like</em>). The message is always "then, but not now". Words like <em>when I was a child</em>, <em>at school</em> or <em>before</em> often show the time.
+    </p>
+    <GrammarFormula label="Past habit or state" parts={['(when I was…)', 'subject', 'used to', 'base verb']} />
+    <GrammarExample note="A past state: I went to that school for years. Now I don't.">
+      When I was a child, <mark data-role="grammar">I</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">go</mark> to a small school and I enjoyed it very much.
+    </GrammarExample>
+    <GrammarExample note="A repeated action: she did this many times.">
+      My best friend lived next door, and <mark data-role="grammar">she</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">come</mark> to my house and play computer games with me.
+    </GrammarExample>
+    <GrammarExample note="There used to be: something existed here, but it's gone now.">
+      <mark data-role="grammar">There</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">be</mark> a cinema in our street, but now it's a supermarket.
+    </GrammarExample>
+    <GrammarExample note="A state that changed: I don't like it any more.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">like</mark> horror films, but now I find them boring.
+    </GrammarExample>
+    {noLongerPoint && <GrammarUsagePointCard usagePoint={noLongerPoint} />}
+    <p>
+      You often add the present to show the change: <em>I used to…, but now I…</em> Or you can leave it out — <em>used to</em> alone already says it isn't true now.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I didn't use to…: the negative" id="negative" open={false}>
+    <p>
+      The negative uses <em>didn't</em>. Because <em>did</em> already shows the past, the usual spelling after it is <em>use to</em> — without <em>-d</em>.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "didn't", 'use to', 'base verb']} />
+    <GrammarExample note="Didn't + use to: we didn't talk then, but we do now.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">didn't</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">talk</mark> to each other.
+    </GrammarExample>
+    <GrammarExample note="The negative + but now: the change is clear.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">didn't</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">laugh</mark> much, but since the day we met, I'm always happy.
+    </GrammarExample>
+    <p>
+      You will also see <em>didn't used to</em>. It is common in real writing, but many teachers and exams count it as a mistake, so <em>didn't use to</em> is the safer choice.
+    </p>
+    <GrammarExample note="Didn't used to: you will see it, but didn't use to is safer.">
+      This year I've met lots of new people that <mark data-role="grammar">I</mark> <mark data-role="grammar">didn't</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">talk</mark> to.
+    </GrammarExample>
+    <p>
+      In everyday speech, <em>never used to</em> is a very common alternative — and it has no spelling problem.
+    </p>
+    <GrammarFormula label="Never" parts={['subject', 'never', 'used to', 'base verb']} />
+    <GrammarExample note="Never used to = didn't use to (at any time).">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">never</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">eat</mark> vegetables, but now I love them.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Did you use to…?: questions" id="questions" open={false}>
+    <p>
+      Questions also use <em>did</em>, so again the spelling is <em>use to</em>. <em>Did</em> goes before the subject; a question word (<em>what</em>, <em>where</em>…) goes before <em>did</em>.
+    </p>
+    <GrammarFormula label="Yes/no question" parts={['did', 'subject', 'use to', 'base verb?']} />
+    <GrammarExample note="Did + you + use to: asking about a past habit.">
+      <mark data-role="grammar">Did</mark> <mark data-role="grammar">you</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">play</mark> with dolls when you were small?
+    </GrammarExample>
+    <GrammarExample note="The short answer uses did: Yes, I did. / No, I didn't.">
+      "<mark data-role="grammar">Did</mark> <mark data-role="grammar">she</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">have</mark> long hair?" "Yes, she did."
+    </GrammarExample>
+    <GrammarFormula label="Wh- question" parts={['wh- word', 'did', 'subject', 'use to', 'base verb?']} />
+    <GrammarExample note="What + did + we + use to + eat: how our eating habits have changed.">
+      Our diet is so different now. <mark data-role="grammar">What</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">we</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">eat</mark>?
+    </GrammarExample>
+    <GrammarExample note="Where did you use to live: a past state.">
+      <mark data-role="grammar">Where</mark> <mark data-role="grammar">did</mark> <mark data-role="grammar">you</mark> <mark data-role="content">use to</mark> <mark data-role="grammar">live</mark> before you moved here?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Used to, would or the past simple?" id="would-past-simple" open={false}>
+    <p>
+      <em>Would</em> + base verb can also describe repeated actions in the past, especially in stories and memories. But <em>would</em> works only for actions, never for states — <em>used to</em> works for both.
+    </p>
+    <GrammarFormula label="Repeated action" parts={['subject', 'used to / would', 'base verb']} />
+    <GrammarExample note="An action: used to and would are both correct.">
+      Every summer <mark data-role="grammar">we</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">visit</mark> my grandparents. = Every summer <mark data-role="grammar">we</mark> <mark data-role="grammar">would</mark> <mark data-role="grammar">visit</mark> my grandparents.
+    </GrammarExample>
+    <GrammarExample note="A state (live): only used to is possible — not we would live.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">live</mark> in a small flat in the city centre.
+    </GrammarExample>
+    <p>
+      Use the past simple, not <em>used to</em>, for one finished event, and when you say exactly <strong>how many times</strong> or <strong>how long</strong>.
+    </p>
+    <GrammarFormula label="One event / exact number" parts={['subject', 'past simple', '(once / three times / for two years)']} />
+    <GrammarExample note="One event: the past simple.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">went</mark> to Paris last summer.
+    </GrammarExample>
+    <GrammarExample note="An exact number of times: the past simple, not used to.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">went</mark> to Paris <mark data-role="grammar">three times</mark> when I was a student.
+    </GrammarExample>
+    <p>
+      The past simple can also describe habits (<em>I played football every day</em>), but it doesn't say that the habit has stopped. <em>Used to</em> makes the contrast with now clear.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="As much as she used to: short forms" id="ellipsis" open={false}>
+    <p>
+      When the verb is clear from what was said before, you can stop after <em>used to</em> and leave the verb out. Keep <em>to</em> — don't stop after <em>used</em>.
+    </p>
+    <GrammarFormula label="Short form" parts={['subject', 'used to', '(verb left out)']} />
+    <GrammarExample note="= as much as she used to travel.">
+      <mark data-role="grammar">She</mark> doesn't travel as much as <mark data-role="grammar">she</mark> <mark data-role="content">used to</mark>.
+    </GrammarExample>
+    <GrammarExample note="= better than they used to sound.">
+      I must admit that <mark data-role="grammar">they</mark> sound quite a lot better than <mark data-role="grammar">they</mark> <mark data-role="content">used to</mark>.
+    </GrammarExample>
+    <GrammarExample note="= I don't play football now, but I used to play it.">
+      I don't play football now, but <mark data-role="grammar">I</mark> <mark data-role="content">used to</mark>.
+    </GrammarExample>
+    <p>
+      In the negative, stop after <em>use to</em>: <em>"Did you smoke?" "No, I didn't use to."</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="As she used to say: background in stories" id="narrative" open={false}>
+    <p>
+      In stories, <em>as</em> + pronoun + <em>used to</em> adds a short piece of background: what someone always did or said. It often points to something a bit unusual about the person — a habit, a favourite phrase, a nickname.
+    </p>
+    <GrammarFormula label="Background" parts={['as', 'pronoun', 'used to', 'do / say / call (her)…']} />
+    <GrammarExample note="As she used to do every Sunday: her regular habit.">
+      She had gone out for a walk in the woods <mark data-role="grammar">as</mark> <mark data-role="grammar">she</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">do</mark> every Sunday, with her diary in her hand.
+    </GrammarExample>
+    <GrammarExample note="As she used to call her: the name she always used.">
+      He divorced his wife, old flabby Nellie <mark data-role="grammar">as</mark> <mark data-role="grammar">she</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">call</mark> her, and proposed to her.
+    </GrammarExample>
+    <GrammarExample note="As she used to say: her own words, repeated many times.">
+      She ended up as a housewife, doing piecework for peanuts, <mark data-role="grammar">as</mark> <mark data-role="grammar">she</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">say</mark>.
+    </GrammarExample>
+    {narrativePoint && <GrammarUsagePointCard usagePoint={narrativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I used not to…: formal negative" id="used-not-to" open={false}>
+    <p>
+      <em>Used not to</em> is another negative form, without <em>did</em>: <em>not</em> goes between <em>used</em> and <em>to</em>. It is formal and a little old-fashioned, found mostly in British writing. In everyday English, use <em>didn't use to</em> or <em>never used to</em>.
+    </p>
+    <GrammarFormula label="Formal negative" parts={['subject', 'used not to', 'base verb']} />
+    <GrammarExample note="Used not to + do: in a list of past habits.">
+      I used to play until late in the evening, <mark data-role="grammar">I</mark> <mark data-role="content">used not to</mark> <mark data-role="grammar">do</mark> my homework and I did not excel at school.
+    </GrammarExample>
+    <GrammarExample note="Used not to + be: a past state — I'm more sociable now.">
+      As a teenager <mark data-role="grammar">I</mark> <mark data-role="content">used not to</mark> <mark data-role="grammar">be</mark> very sociable; I had few friends.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      In the affirmative, write <em>used to</em> (with <em>-d</em>). After <em>did</em> / <em>didn't</em>, write <em>use to</em>. The verb after it is always the base form.
+    </p>
+    <GrammarContrast
+      bad={['I use to play football when I was a child.', 'Did you used to live here?', 'I used to playing tennis.', 'She used to works in a bank.']}
+      good={['I used to play football when I was a child.', 'Did you use to live here?', 'I used to play tennis.', 'She used to work in a bank.']}
+    />
+    <p>
+      <em>Used to</em> is only for the past. For habits now, use the present simple with <em>usually</em>. For one event or an exact number of times, use the past simple.
+    </p>
+    <GrammarContrast
+      bad={['I used to get up at 7 every day. (and I still do)', 'I used to visit Paris three times last year.', 'We would live near the sea.']}
+      good={['I usually get up at 7 every day.', 'I visited Paris three times last year.', 'We used to live near the sea.']}
+    />
+    <p>
+      Don't confuse <em>used to do</em> (a past habit) with <em>be used to doing</em> (be familiar with something, so it isn't strange or difficult). After <em>be used to</em>, the verb takes <em>-ing</em>.
+    </p>
+    <GrammarContrast
+      bad={['I am used to get up early. (a habit now)', 'I used to getting up early. (a past habit)']}
+      good={["I'm used to getting up early — it's easy for me.", 'I used to get up early — but now I sleep late.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-would',
+        name: 'would',
+        note: 'We would visit… — also past habits, but only actions, not states.',
+      },
+      {
+        slug: 'past-past-simple',
+        name: 'past simple',
+        note: 'I went… — one finished event or an exact number of times; used to — a habit that has stopped.',
+      },
+      {
+        slug: 'present-present-simple',
+        name: 'present simple',
+        note: 'I usually get up at 7 — habits now; used to has no present form.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'be used to + -ing',
+        note: "I'm used to getting up early — being familiar with something, not a past habit.",
+      },
+      {
+        slug: 'modality-ought',
+        name: 'ought to',
+        note: 'You ought to… — another modal-like verb followed by to, but about advice.',
+      },
+    ]}
+  />
+</GrammarShell>
