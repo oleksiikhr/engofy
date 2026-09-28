@@ -98,39 +98,15 @@ usage points з AI-написаним поясненням/прикладами 
 
 Деталі виконання — див. `archive/grammar-content-rewrite.md#2`.
 
-### [ ] 2b. Use-секція закрита за замовчуванням + компактний показ usage points
+### [x] 2b. Use-секція закрита за замовчуванням + компактний показ usage points
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Фідбек 2026-09-27: сторінка правила одразу показує всі usage points/буллети, що для рівня A1-B1
-виглядає лякаюче і не дає мінімальної кількості інформації, з якої вчаться. Розкопано під час
-обговорення: "When it's used" (`GrammarUsagePoints.astro`, рендериться і з generic fallback, і з
-ручних сторінок Фази 2 для usage points, не вплетених inline) зараз — це завжди розгорнутий
-`<section>`, **не** `<details>`-акордеон, попри те, що `GrammarShell.astro`'s `progressSections`
-(рядки ~51-57) вже позначає його `open: true` для sticky-чекліста, і `grammar-section-progress.ts`
-вже вміє синхронізувати toggle/клік з будь-яким `HTMLDetailsElement` за `id="gp-section-<id>"` —
-інфраструктура готова, просто ніхто не завернув цей блок у `<details>`.
-
-Скоуп:
-- `GrammarUsagePoints.astro`: обгорнути вивід у `<details class="gp-section" data-gp-section>`
-  (той самий паттерн/стилі, що в `GrammarSection.astro` — не дублювати CSS, а зробити спільним або
-  імпортувати розмітку), `open={false}` за замовчуванням. `<summary>` показує лічильник, напр.
-  "When it's used — N rules", а не порожній заголовок — має бути скановним і закритим.
-- `GrammarShell.astro`: `progressSections`'ове `{ id: 'use', ..., open: true }` → `open: false`, щоб
-  sticky-чекліст стартував як "не пройдено" (узгоджено з реальним закритим станом), а не завжди
-  "done". Клік по пункту чекліста й далі відкриває секцію — це вже існуюча поведінка скрипта, нічого
-  міняти в `grammar-section-progress.ts`.
-- Усередині розгорнутої секції: показувати повністю розгорнутими лише перші 2 usage points у
-  наявному порядку (порядок EGP — вже приблизно "типове правило спочатку, винятки згодом"), решту —
-  за кнопкою "Show N more usage points" (клієнтський show-more, без нової серверної логіки). Це
-  свідомо **не** справжнє ранжування за важливістю — у даних немає поля important/priority
-  (`GrammarUsagePointRef`/`GrammarConstructionUsagePoint` в `apps/web/src/lib/types.ts` не мають
-  такого поля, і додавати його зараз означало б ретрофіт 40+ вже написаних зрізів Фази 2) — це
-  proxy на існуючому порядку джерела, не нова модель даних.
-
-Не входить у цей зріз: жодних змін до `GrammarSection`-акордеонів handcrafted-сторінок (Form/типові
-помилки — лишаються як є, `open: true`), жодних змін до Practice-заглушки.
+"When it's used" тепер `GrammarSection` (`open={false}`, лічильник "N rules" через новий проп
+`meta`); у розгорнутій секції — перші 2 usage points, решта за вкладеним `<details>` "Show N more"
+(без JS). Deep link `#usage-point-N` з рідера відкриває всі `<details>` навколо цілі
+(`openHashTarget()` у `grammar-section-progress.ts`).
 
 ## Фаза 2 — контент по одному правилу (86 зрізів)
 
