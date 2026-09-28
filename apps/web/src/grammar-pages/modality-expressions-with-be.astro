@@ -1,0 +1,529 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 18 USE / FORM-USE rows are inlined, matched by EGP index. The other 5
+// rows (modal + be able to, the B1 and B2 lists of be + adjective + to,
+// be + adjective + that, be + not + adjective + to) are plain FORM rows,
+// written in full without a card. One pattern runs through the whole page:
+// be + adjective / participle + to + base verb, and the be part changes for
+// tense (is / was / will be / might be) while the rest stays the same.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const willBeAblePoint = point(464);
+const allowedPoint = point(467);
+const pastExpectationPoint = point(468);
+const wasAblePoint = point(469);
+const moreLikelyPoint = point(472);
+const likelyPoint = point(473);
+const duePoint = point(474);
+const meantPoint = point(475);
+const supposedPoint = point(476);
+const hearsayPoint = point(477);
+const boundPoint = point(478);
+const imperativePoint = point(479);
+const surePoint = point(480);
+const obligedPoint = point(481);
+const forcedPoint = point(482);
+const setPoint = point(483);
+const hedgingPoint = point(484);
+const notToPoint = point(486);
+
+const inlineUsagePointIds = [
+  willBeAblePoint,
+  allowedPoint,
+  pastExpectationPoint,
+  wasAblePoint,
+  moreLikelyPoint,
+  likelyPoint,
+  duePoint,
+  meantPoint,
+  supposedPoint,
+  hearsayPoint,
+  boundPoint,
+  imperativePoint,
+  surePoint,
+  obligedPoint,
+  forcedPoint,
+  setPoint,
+  hedgingPoint,
+  notToPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Expressions with be + to that work like modal verbs: be able to, be allowed to, be supposed to, be meant to, be likely to, be sure / certain / bound to, be due to, be set to, be obliged / forced to — in every tense, in the negative and with a that-clause."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Be + adjective + to: one pattern, every tense', open: true },
+    { id: 'will-be-able', title: 'Will you be able to…?: ability in the future', open: false },
+    { id: 'was-able', title: 'She was able to get a seat: one success in the past', open: false },
+    { id: 'allowed', title: "Are we allowed to…? / I wasn't allowed to…: permission", open: false },
+    { id: 'supposed', title: 'What am I supposed to do?: rules, plans and expectations', open: false },
+    { id: 'hearsay', title: 'The lake is supposed to be beautiful: what people say', open: false },
+    { id: 'meant', title: 'Animals are meant to be free: how things should be', open: false },
+    { id: 'likely', title: 'Problems are likely to happen: probability', open: false },
+    { id: 'sure-bound', title: "You're sure to / bound to…: something certain", open: false },
+    { id: 'be-sure-imperative', title: 'Be sure to call me: instructions', open: false },
+    { id: 'due-set', title: 'The train is due to arrive / Sales are set to rise: schedules and forecasts', open: false },
+    { id: 'obliged', title: 'Be obliged to / be forced to: obligation from outside', open: false },
+    { id: 'that-clause', title: "I'm not sure that… / It's not likely that…: softer claims", open: false },
+    { id: 'not-to', title: 'Not likely to / sure not to: the negative', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Modal verbs like can, must and should have only one or two forms: there is no <em>will can</em> or <em>musted</em>. English fills these gaps with expressions made from <em>be</em> + an adjective + <em>to</em>: <em>be able to</em> (can), <em>be allowed to</em> (may), <em>be supposed to</em> (should), <em>be likely to</em> (will probably). Because they start with <em>be</em>, they work in every tense: <em>I was able to…</em>, <em>You'll be allowed to…</em>, <em>We might be able to…</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Be + adjective + to: one pattern, every tense" id="form" open>
+    <p>
+      Every expression on this page has the same shape. Only <em>be</em> changes — for the subject, for the tense, or after a modal verb. The adjective and <em>to</em> stay the same, and the verb after <em>to</em> is always the base form.
+    </p>
+    <GrammarFormula label="Be + adjective + to" parts={['subject', 'be', 'adjective', 'to', 'base verb']} />
+    <GrammarExample note="Present: are + allowed to.">
+      If <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> <mark data-role="content">allowed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> out in your break, you should do it.
+    </GrammarExample>
+    <GrammarExample note="Past: was + supposed to.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">meet</mark> my friend Laura, but she didn't come.
+    </GrammarExample>
+    <GrammarExample note="Future: will be + allowed to.">
+      Perhaps <mark data-role="grammar">you</mark> <mark data-role="grammar">will be</mark> <mark data-role="content">allowed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> on holiday with your friends next year.
+    </GrammarExample>
+    <GrammarExample note="Negative: not goes after be.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> not <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">meet</mark> you next Tuesday.
+    </GrammarExample>
+    <p>
+      At B1 you mostly need <em>able</em>, <em>allowed</em> and <em>supposed</em>. At B2 the list grows: <em>likely</em>, <em>sure</em>, <em>certain</em>, <em>bound</em>, <em>due</em>, <em>meant</em>, <em>obliged</em>, <em>forced</em> — each one has its own section below.
+    </p>
+    <GrammarExample note="Bound to: B2, same shape.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'m</mark> <mark data-role="content">bound</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">feel</mark> nervous.
+    </GrammarExample>
+    <GrammarExample note="Will be obliged to: B2, future.">
+      From 1 June all staff <mark data-role="grammar">will be</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">use</mark> identity cards.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Will you be able to…?: ability in the future" id="will-be-able" open={false}>
+    <p>
+      Can has no future form — you can't say <em>will can</em>. Use <em>will be able to</em> instead. In the negative it is usually <em>won't be able to</em>.
+    </p>
+    <GrammarFormula label="Will be able to" parts={['subject', 'will / won\'t be', 'able', 'to', 'base verb']} />
+    <GrammarExample note="Question: will goes before the subject.">
+      <mark data-role="grammar">Will</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">come</mark> this time?
+    </GrammarExample>
+    <GrammarExample note="Negative: a result of the if-clause.">
+      Without my glasses <mark data-role="grammar">I</mark> <mark data-role="grammar">will not be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">play</mark> football.
+    </GrammarExample>
+    <GrammarExample note="Won't be able to: the short form.">
+      I can bring my guitar, but <mark data-role="grammar">I</mark> <mark data-role="grammar">won't be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">play</mark> it.
+    </GrammarExample>
+    {willBeAblePoint && <GrammarUsagePointCard usagePoint={willBeAblePoint} />}
+    <p>
+      The same trick works after any modal verb: <em>might be able to</em>, <em>should be able to</em>, <em>would be able to</em>. Two modals can't stand together (<em>might can</em> is wrong), but a modal + <em>be able to</em> is fine.
+    </p>
+    <GrammarFormula label="Modal + be able to" parts={['subject', 'might / should / would', 'be', 'able', 'to', 'base verb']} />
+    <GrammarExample note="Might be able to: a possible ability.">
+      After school <mark data-role="grammar">you</mark> <mark data-role="grammar">might be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">hang out</mark> with your friends.
+    </GrammarExample>
+    <GrammarExample note="Should be able to: you expect it to work out.">
+      If we meet in Zurich, <mark data-role="grammar">we</mark> <mark data-role="grammar">should be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">finish</mark> the project by 20 June.
+    </GrammarExample>
+    <GrammarExample note="Would be able to ('d be able to): an imagined situation.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'d be</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> for walks without worrying about the polluted air.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="She was able to get a seat: one success in the past" id="was-able" open={false}>
+    <p>
+      For a general ability in the past, <em>could</em> and <em>was able to</em> both work: <em>I could swim when I was five.</em> But for one particular thing that someone managed to do, use <em>was / were able to</em>, not could.
+    </p>
+    <GrammarFormula label="Was / were able to" parts={['subject', 'was / were', 'able', 'to', 'base verb']} />
+    <GrammarExample note="One journey, one good result.">
+      <mark data-role="grammar">She</mark> <mark data-role="grammar">was</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">get</mark> a good seat, and she got to school early.
+    </GrammarExample>
+    <GrammarExample note="Were able to: something the team achieved.">
+      Sales went up, so <mark data-role="grammar">we</mark> <mark data-role="grammar">were</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">improve</mark> the quality of our products.
+    </GrammarExample>
+    <GrammarExample note="Freedom to choose on one occasion.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">able</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">choose</mark> the songs ourselves, so I liked them very much.
+    </GrammarExample>
+    {wasAblePoint && <GrammarUsagePointCard usagePoint={wasAblePoint} />}
+    <p>
+      In the negative there is no difference: <em>I couldn't find it</em> and <em>I wasn't able to find it</em> are both correct.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Are we allowed to…? / I wasn't allowed to…: permission" id="allowed" open={false}>
+    <p>
+      <em>Be allowed to</em> talks about permission — usually permission given by someone else: parents, a school, the rules. It's the form to use in the past and the future, where can and may don't work well.
+    </p>
+    <GrammarFormula label="Be allowed to" parts={['subject', 'be', 'allowed', 'to', 'base verb']} />
+    <GrammarExample note="Past negative: the parents said no.">
+      My mother came with me because <mark data-role="grammar">I</mark> <mark data-role="grammar">wasn't</mark> <mark data-role="content">allowed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> by myself.
+    </GrammarExample>
+    <GrammarExample note="Future negative: won't be allowed to.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">won't be</mark> <mark data-role="content">allowed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">do</mark> what you want.
+    </GrammarExample>
+    <GrammarExample note="Question: be goes before the subject.">
+      <mark data-role="grammar">Are</mark> <mark data-role="grammar">we</mark> <mark data-role="content">allowed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">use</mark> a dictionary in the exam?
+    </GrammarExample>
+    {allowedPoint && <GrammarUsagePointCard usagePoint={allowedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="What am I supposed to do?: rules, plans and expectations" id="supposed" open={false}>
+    <p>
+      <em>Be supposed to</em> says what should happen because of a rule, a plan or what people expect. It is softer than must and often suggests that reality may be different.
+    </p>
+    <GrammarFormula label="Be supposed to" parts={['subject', 'be', 'supposed', 'to', 'base verb']} />
+    <GrammarExample note="A plan: the museum trip is on the same day.">
+      The show is on the 14th of March, the same day <mark data-role="grammar">we</mark> <mark data-role="grammar">are</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> to the Science Museum.
+    </GrammarExample>
+    <GrammarExample note="What something should give us.">
+      <mark data-role="grammar">Travel</mark> <mark data-role="grammar">is</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">give</mark> us pleasure and new experiences.
+    </GrammarExample>
+    <GrammarExample note="In a question: what is the rule / the right action?">
+      I've bought some disks, but I don't know what <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">do</mark> with them.
+    </GrammarExample>
+    {supposedPoint && <GrammarUsagePointCard usagePoint={supposedPoint} />}
+    <p>
+      <em>Was / were supposed to</em> is very common for plans that did not happen, or that are about to change. The next clause often starts with <em>but</em>.
+    </p>
+    <GrammarFormula label="Was / were supposed to" parts={['subject', 'was / were', 'supposed', 'to', 'base verb', 'but…']} />
+    <GrammarExample note="The plan changed: arriving a month later.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">arrive</mark> on 11 June, but I will arrive the next month.
+    </GrammarExample>
+    <GrammarExample note="The meeting place changed.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">were</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">meet</mark> at noon, but they asked to meet at the restaurant.
+    </GrammarExample>
+    <GrammarExample note="With be as the verb: the time of an event.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> on Tuesday at 1 pm.
+    </GrammarExample>
+    {pastExpectationPoint && <GrammarUsagePointCard usagePoint={pastExpectationPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The lake is supposed to be beautiful: what people say" id="hearsay" open={false}>
+    <p>
+      <em>Be supposed to</em> can also mean "people say that…". You pass on information you have heard, without saying if it's true. For something in the past, use <em>supposed to have</em> + past participle.
+    </p>
+    <GrammarFormula label="Hearsay" parts={['subject', 'be', 'supposed', 'to', 'be / base verb / have + -ed']} />
+    <GrammarExample note="People say it is beautiful — you haven't seen it.">
+      <mark data-role="grammar">The lake</mark> <mark data-role="grammar">is</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> very beautiful.
+    </GrammarExample>
+    <GrammarExample note="A good review you've heard about.">
+      <mark data-role="grammar">This film</mark> <mark data-role="grammar">is</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> really funny.
+    </GrammarExample>
+    <GrammarExample note="To have killed: a story about the past.">
+      <mark data-role="grammar">That woman</mark> <mark data-role="grammar">is</mark> <mark data-role="content">supposed</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">have killed</mark> two husbands for their money.
+    </GrammarExample>
+    {hearsayPoint && <GrammarUsagePointCard usagePoint={hearsayPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Animals are meant to be free: how things should be" id="meant" open={false}>
+    <p>
+      <em>Be meant to</em> describes the ideal: how something should be, or what it exists for. It is close to <em>be supposed to</em>, but often sounds more like a belief about nature or purpose than a rule.
+    </p>
+    <GrammarFormula label="Be meant to" parts={['subject', 'be', 'meant', 'to', 'base verb']} />
+    <GrammarExample note="A belief about nature.">
+      <mark data-role="grammar">Animals</mark> <mark data-role="grammar">are</mark> <mark data-role="content">meant</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> free.
+    </GrammarExample>
+    <GrammarExample note="The purpose of something.">
+      <mark data-role="grammar">Primary school</mark> <mark data-role="grammar">is</mark> <mark data-role="content">meant</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">give</mark> you the basics of your education.
+    </GrammarExample>
+    <GrammarExample note="Past: how it should have been, but wasn't.">
+      <mark data-role="grammar">This holiday</mark> <mark data-role="grammar">was</mark> <mark data-role="content">meant</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> relaxing, not stressful.
+    </GrammarExample>
+    {meantPoint && <GrammarUsagePointCard usagePoint={meantPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Problems are likely to happen: probability" id="likely" open={false}>
+    <p>
+      <em>Be likely to</em> means "will probably". Adverbs like <em>very</em>, <em>quite</em> or <em>highly</em> go before likely to make it stronger or weaker. The opposite is <em>unlikely to</em>.
+    </p>
+    <GrammarFormula label="Be likely to" parts={['subject', 'be', '(very) likely', 'to', 'base verb']} />
+    <GrammarExample note="A general truth: where there is money, there are problems.">
+      Whenever money is involved, <mark data-role="grammar">some problems</mark> <mark data-role="grammar">are</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">happen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Very likely: a strong prediction about yourself.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> very <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">make</mark> mistakes.
+    </GrammarExample>
+    <GrammarExample note="Unlikely to: probably not.">
+      <mark data-role="grammar">The weather</mark> <mark data-role="grammar">is</mark> <mark data-role="content">unlikely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">change</mark> before the weekend.
+    </GrammarExample>
+    {likelyPoint && <GrammarUsagePointCard usagePoint={likelyPoint} />}
+    <p>
+      To compare two groups or situations, put <em>more</em> or <em>less</em> before likely. <em>Much</em> makes the difference bigger.
+    </p>
+    <GrammarFormula label="More / less likely" parts={['subject', 'be', '(much) more / less likely', 'to', 'base verb']} />
+    <GrammarExample note="More likely: comparing a bike with a car.">
+      In an accident, <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> more <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> badly injured on a bicycle.
+    </GrammarExample>
+    <GrammarExample note="More likely and much less likely in one sentence.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">are</mark> more <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">have</mark> better jobs, and much less <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">cause</mark> problems.
+    </GrammarExample>
+    {moreLikelyPoint && <GrammarUsagePointCard usagePoint={moreLikelyPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="You're sure to / bound to…: something certain" id="sure-bound" open={false}>
+    <p>
+      <em>Be sure to</em> and <em>be certain to</em> mean "will definitely". The speaker is sure — not the subject. <em>You are sure to arrive on time</em> means "I'm sure that you will arrive on time".
+    </p>
+    <GrammarFormula label="Be sure / certain to" parts={['subject', 'be', 'sure / certain', 'to', 'base verb']} />
+    <GrammarExample note="Sure to: the speaker's confident prediction.">
+      By bicycle, you don't sit in traffic jams, and <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">arrive</mark> at work on time.
+    </GrammarExample>
+    <GrammarExample note="A person who acts like this — definitely successful.">
+      <mark data-role="grammar">A person like that</mark> <mark data-role="grammar">is</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> successful.
+    </GrammarExample>
+    <GrammarExample note="Certain to: a little more formal, common in business.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are</mark> <mark data-role="content">certain</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">attract</mark> more and more students.
+    </GrammarExample>
+    {surePoint && <GrammarUsagePointCard usagePoint={surePoint} />}
+    <p>
+      <em>Be bound to</em> is even stronger: the thing is inevitable, it will happen because of the situation. It is often used for problems and feelings you can't avoid.
+    </p>
+    <GrammarFormula label="Be bound to" parts={['subject', 'be', '(almost) bound', 'to', 'base verb']} />
+    <GrammarExample note="Wherever many people meet — problems, for sure.">
+      Where many people get together, <mark data-role="grammar">problems</mark> <mark data-role="grammar">are</mark> <mark data-role="content">bound</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">arise</mark>.
+    </GrammarExample>
+    <GrammarExample note="A confident promise to a client.">
+      I assure you that <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">bound</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be</mark> popular with young people.
+    </GrammarExample>
+    <GrammarExample note="Almost bound to: nearly inevitable.">
+      Riding a bike in the rain, <mark data-role="grammar">you</mark><mark data-role="grammar">'re</mark> almost <mark data-role="content">bound</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">catch</mark> a cold.
+    </GrammarExample>
+    {boundPoint && <GrammarUsagePointCard usagePoint={boundPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Be sure to call me: instructions" id="be-sure-imperative" open={false}>
+    <p>
+      As an imperative — with no subject, starting with <em>Be</em> — <em>be sure to</em> tells someone firmly but politely to do something. It is common at the end of emails and letters. It means the same as <em>Make sure you…</em> or <em>Don't forget to…</em>
+    </p>
+    <GrammarFormula label="Imperative" parts={['Be', 'sure', 'to', 'base verb']} />
+    <GrammarExample note="An instruction in a formal email.">
+      If you cannot attend, <mark data-role="grammar">be</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">inform</mark> me in advance.
+    </GrammarExample>
+    <GrammarExample note="A polite closing line.">
+      <mark data-role="grammar">Be</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">contact</mark> me for any further information.
+    </GrammarExample>
+    {imperativePoint && <GrammarUsagePointCard usagePoint={imperativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="The train is due to arrive / Sales are set to rise: schedules and forecasts" id="due-set" open={false}>
+    <p>
+      <em>Be due to</em> talks about things that are planned for a particular time: timetables, deadlines, start dates. <em>Be to</em> + verb (with no adjective) means the same but is more formal — you see it in official plans and the news.
+    </p>
+    <GrammarFormula label="Be due to" parts={['subject', 'be', 'due', 'to', 'base verb']} />
+    <GrammarExample note="A start date in a new job.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="content">due</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">start</mark> on Monday 4 June.
+    </GrammarExample>
+    <GrammarExample note="Past: the planned time.">
+      <mark data-role="grammar">The programme</mark> <mark data-role="grammar">was</mark> <mark data-role="content">due</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">start</mark> at midday.
+    </GrammarExample>
+    <GrammarExample note="With a passive: due to be + past participle.">
+      <mark data-role="grammar">The new law</mark> <mark data-role="grammar">is</mark> <mark data-role="content">due</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">be introduced</mark> next year.
+    </GrammarExample>
+    <GrammarExample note="Be to: formal, an arrangement someone else made.">
+      I can't attend the meeting, as <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">go</mark> on a business trip to New York.
+    </GrammarExample>
+    <GrammarExample note="Was to: a plan in the past.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">was</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">take</mark> exams in two weeks and had to study hard.
+    </GrammarExample>
+    {duePoint && <GrammarUsagePointCard usagePoint={duePoint} />}
+    <p>
+      At C1, <em>be set to</em> makes a strong, confident statement about the future — a forecast presented almost as a fact. It's typical of business reports, news and statistics, with verbs like <em>increase</em>, <em>rise</em>, <em>fall</em>, <em>become</em>.
+    </p>
+    <GrammarFormula label="Be set to" parts={['subject', 'be', 'set', 'to', 'base verb']} />
+    <GrammarExample note="A business forecast.">
+      <mark data-role="grammar">Our turnover</mark> <mark data-role="grammar">is</mark> <mark data-role="content">set</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">increase</mark> dramatically after the e-shop opens.
+    </GrammarExample>
+    <GrammarExample note="Statistics about the future.">
+      <mark data-role="grammar">The number of children</mark> <mark data-role="grammar">is</mark> <mark data-role="content">set</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">fall</mark> to 11.5% by 2050.
+    </GrammarExample>
+    {setPoint && <GrammarUsagePointCard usagePoint={setPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Be obliged to / be forced to: obligation from outside" id="obliged" open={false}>
+    <p>
+      <em>Be obliged to</em> is a formal way to say "have to" when the obligation comes from a rule, a law or an organisation. It is typical of official notices and workplace emails.
+    </p>
+    <GrammarFormula label="Be obliged to" parts={['subject', 'be', 'obliged', 'to', 'base verb']} />
+    <GrammarExample note="A company rule.">
+      <mark data-role="grammar">The sales representatives</mark> <mark data-role="grammar">are</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">take part</mark>.
+    </GrammarExample>
+    <GrammarExample note="A deadline in an official notice.">
+      From 2 January <mark data-role="grammar">everybody</mark> <mark data-role="grammar">is</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">have</mark> a parking permit.
+    </GrammarExample>
+    <GrammarExample note="Past: they had no choice.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">were</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">give up</mark> their house.
+    </GrammarExample>
+    {obligedPoint && <GrammarUsagePointCard usagePoint={obligedPoint} />}
+    <p>
+      <em>Be forced to</em> is stronger: circumstances leave no choice, and the speaker doesn't control them. Nobody in particular is named as the one who forces.
+    </p>
+    <GrammarFormula label="Be forced to" parts={['subject', 'be', 'forced', 'to', 'base verb']} />
+    <GrammarExample note="Falling sales — no other option.">
+      Because of falling sales, <mark data-role="grammar">we</mark> <mark data-role="grammar">are</mark> <mark data-role="content">forced</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">cut</mark> the budget.
+    </GrammarExample>
+    <GrammarExample note="After like: a general feeling.">
+      I don't like <mark data-role="grammar">to be</mark> <mark data-role="content">forced</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">do</mark> things I don't want to do.
+    </GrammarExample>
+    {forcedPoint && <GrammarUsagePointCard usagePoint={forcedPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I'm not sure that… / It's not likely that…: softer claims" id="that-clause" open={false}>
+    <p>
+      Instead of <em>to</em> + verb, <em>sure</em>, <em>certain</em>, <em>likely</em> and <em>obvious</em> can be followed by a <em>that</em>-clause. With a person as subject (<em>I am sure that…</em>) it's about your feeling; with <em>it</em> (<em>It is likely that…</em>) it's about the situation.
+    </p>
+    <GrammarFormula label="Be + adjective + that" parts={['I / it', 'be', 'sure / certain / likely / obvious', 'that', 'subject', 'verb']} />
+    <GrammarExample note="I am sure that: the speaker's feeling.">
+      It's about 1,000 years old, so <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">will find</mark> it fascinating.
+    </GrammarExample>
+    <GrammarExample note="It was obvious that: clear to everyone.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">obvious</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">would be</mark> late for work.
+    </GrammarExample>
+    <GrammarExample note="It is likely that: a probable result.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">will learn</mark> new words by reading books.
+    </GrammarExample>
+    <p>
+      At C1, adding <em>not</em> makes a claim less direct. <em>I'm not sure that…</em> is a polite way to disagree or to point out a problem without saying "you're wrong".
+    </p>
+    <GrammarFormula label="Hedging" parts={['subject', 'be', 'not', 'sure / certain / likely', 'that', 'clause']} />
+    <GrammarExample note="Polite doubt about someone else's plan.">
+      I like this plan, but <mark data-role="grammar">I</mark><mark data-role="grammar">'m</mark> <mark data-role="grammar">not</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the council</mark> <mark data-role="grammar">has thought</mark> of everything.
+    </GrammarExample>
+    <GrammarExample note="Not certain: softer than 'they haven't'.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="grammar">not</mark> <mark data-role="content">certain</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">they</mark> <mark data-role="grammar">have got</mark> used to it.
+    </GrammarExample>
+    <GrammarExample note="It's not likely that: softer than 'you won't'.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="grammar">not</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark><mark data-role="grammar">'ll make</mark> progress with the TV on.
+    </GrammarExample>
+    {hedgingPoint && <GrammarUsagePointCard usagePoint={hedgingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Not likely to / sure not to: the negative" id="not-to" open={false}>
+    <p>
+      There are two places for <em>not</em>, and they mean different things. <em>Not</em> after <em>be</em> makes the whole expression negative: <em>He is not likely to come</em> = he probably won't come.
+    </p>
+    <GrammarFormula label="Be + not + adjective + to" parts={['subject', 'be', 'not', 'adjective', 'to', 'base verb']} />
+    <GrammarExample note="Not likely to: probably won't.">
+      <mark data-role="grammar">The population</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">not</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">increase</mark> fast enough.
+    </GrammarExample>
+    <GrammarExample note="Not obliged to: you don't have to — it's your choice.">
+      <mark data-role="grammar">You</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">not</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">invite</mark> them.
+    </GrammarExample>
+    <GrammarExample note="Not certain to: it may or may not happen.">
+      <mark data-role="grammar">The positive effects</mark> <mark data-role="grammar">are</mark> <mark data-role="grammar">not</mark> <mark data-role="content">certain</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">outweigh</mark> the negative ones.
+    </GrammarExample>
+    <p>
+      At C2, <em>not</em> can go after the adjective, before <em>to</em>. Now only the action is negative, and the expression stays strong: <em>sure not to</em> = definitely won't; <em>obliged not to</em> = must not. This is emphatic.
+    </p>
+    <GrammarFormula label="Be + adjective + not + to" parts={['subject', 'be', 'adjective', 'not', 'to', 'base verb']} />
+    <GrammarExample note="Imperative: definitely don't miss it.">
+      <mark data-role="grammar">Be</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">miss</mark> the alligator steak.
+    </GrammarExample>
+    <GrammarExample note="Almost certain not to: nearly sure they will fail.">
+      Whatever path parents choose, <mark data-role="grammar">they</mark> <mark data-role="grammar">are</mark> almost <mark data-role="content">certain</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">get</mark> everything right.
+    </GrammarExample>
+    <GrammarExample note="Obliged not to: a rule that forbids.">
+      <mark data-role="grammar">Employees</mark> <mark data-role="grammar">are</mark> <mark data-role="content">obliged</mark> <mark data-role="grammar">not</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">share</mark> customer data.
+    </GrammarExample>
+    {notToPoint && <GrammarUsagePointCard usagePoint={notToPoint} />}
+    <GrammarContrast
+      good={["You're not obliged to come. (= you don't have to)", "You're obliged not to come. (= you must not come)"]}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Two modal verbs can't go together. After will, might, should or would, use <em>be able to</em>, not can.
+    </p>
+    <GrammarContrast
+      bad={['I will can come tomorrow.', 'We might can finish today.']}
+      good={['I will be able to come tomorrow.', 'We might be able to finish today.']}
+    />
+    <p>
+      Don't forget <em>be</em> — the adjective can't work without it, and it must match the subject and tense.
+    </p>
+    <GrammarContrast
+      bad={['We supposed to meet at six.', 'She able to swim when she was five.']}
+      good={['We were supposed to meet at six.', 'She was able to swim when she was five.']}
+    />
+    <p>
+      After <em>to</em>, the verb is the base form — not -ing and not past.
+    </p>
+    <GrammarContrast
+      bad={['Problems are likely to happening.', 'I was allowed to went out.']}
+      good={['Problems are likely to happen.', 'I was allowed to go out.']}
+    />
+    <p>
+      For one specific success in the past, use <em>was able to</em>, not could.
+    </p>
+    <GrammarContrast
+      bad={['The fire was big, but everybody could escape.']}
+      good={['The fire was big, but everybody was able to escape.']}
+    />
+    <p>
+      Be due to means "planned for". Due to + noun (without be) means "because of" — a different thing.
+    </p>
+    <GrammarContrast
+      bad={['The train is due to the delay.']}
+      good={['The train is due to arrive at 10.', 'The train is late due to the delay.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: 'I can swim / Can I go? — the modal verb that be able to and be allowed to replace in other tenses.',
+      },
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: 'I could swim at five — general past ability, next to was able to for one success.',
+      },
+      {
+        slug: 'modality-have-got-to',
+        name: 'have (got) to',
+        note: 'I have to go — everyday obligation, less formal than be obliged to.',
+      },
+      {
+        slug: 'modality-should',
+        name: 'should',
+        note: 'You should rest — advice, close to be supposed to.',
+      },
+      {
+        slug: 'modality-adjectives',
+        name: 'modal adjectives',
+        note: "It's likely that… / It's important to… — more adjectives with it + be.",
+      },
+      {
+        slug: 'future-future-expressions-with-be',
+        name: 'future with be',
+        note: 'be about to, be due to, be to — be expressions for the near future and timetables.',
+      },
+    ]}
+  />
+</GrammarShell>
