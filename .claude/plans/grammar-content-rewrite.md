@@ -488,12 +488,17 @@ let's/let's not, let me, let him/her/them, imperative + and, see above). Content
 clause C2, isn't it / wouldn't it). Додано what + plural/uncountable без `a` (не EGP-рядок, але
 головна пастка поруч із what a). Content — what (a)/how/заперечний допоміжний, grammar — решта слотів.
 
-### [ ] 44. Clauses — relative (`clauses-relative`) — рівень A2
+### [x] 44. Clauses — relative (`clauses-relative`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `clauses-relative`.
+19 EGP-рядків (221-239): 14 чистих FORM без карток; 5 FORM/USE (233/234/235/238/239) вплетені за
+`egpIndex`. 9 секцій за relative-словом (who, which/that, коми defining vs non-defining, без
+займенника, whose, where/when/why, the thing that, прийменник у кінці, which про ціле речення).
+Додано формальний fronted preposition (to whom / in which / of which) і superlative + zero relative —
+їх обіцяють GrammarCompare-посилання з `prepositions-prepositions`/`adjectives-superlatives`. Content —
+relative-слово; у реченнях без займенника content-мітки нема (слова нема), усе — grammar.
 
 ### [ ] 45. Discourse markers — discourse markers in writing (`discourse-markers-discourse-markers-in-writing`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
