@@ -52,10 +52,10 @@ FROM grammar_usage_points p JOIN grammar_constructions c ON c.id = p.constructio
 
 ## Зрізи
 
-### [ ] 1. Інфраструктура перекладу + тумблер + ADJECTIVES (22)
+### [x] 1. Інфраструктура перекладу + тумблер + ADJECTIVES (22)
 - Branch: `grammar-translations-and-practice-01-uk-explanation`
 - Base: `main`
-- PR: —
+- PR: https://github.com/oleksiikhr/engofy/pull/158
 
 Бекенд: `translations` у `ConstructionUsagePointView`/`ConstructionUsagePointDto`
 (`readGrammarTranslations`). Сид: формат `assets/grammar-usage-point-content.json` (zod-парсер у
