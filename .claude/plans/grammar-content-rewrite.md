@@ -709,12 +709,15 @@ mistakes). Content — сам демонстратив; `That's` — одна м
 (you, one, we/us, they say — без EGP-рядка й картки, someone…they, he or she, common mistakes). Content —
 сам генеричний займенник; антецедент (`someone`/`a student`) — `grammar`.
 
-### [ ] 65. Pronouns — possessive (`pronouns-possessive`) — рівень A2
+### [x] 65. Pronouns — possessive (`pronouns-possessive`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-possessive`.
+19 EGP-рядків (889-907): 17 чистих FORM без карток, 895 — порожній General comment, єдиний USE (903,
+that … of yours) вплетений за `egpIndex`. 7 секцій (таблиця my/mine, після be/дієслова/прийменника,
+як підмет + формальне Ours is a…, порівняння as…as/than, a friend of mine, that car of his, common
+mistakes). Content — сам присвійний займенник. Не дублює `determiners-possessives` (там — перед іменником і 's).
 
 ### [ ] 66. Pronouns — quantity (`pronouns-quantity`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
