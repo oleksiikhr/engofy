@@ -648,6 +648,567 @@
       "explanation": "Після прислівника може стояти прийменникова фраза, яка показує, кого чи чого саме він стосується: luckily for you, unfortunately for them, independently of the others. Схема — adverb + preposition + noun phrase, і вона виділяє цю інформацію."
     }
   },
+  "151": {
+    "explanation": "To compare two activities, put the second one after than in the -ing form: comparative adjective + than + verb-ing. The first activity is often an -ing form too.",
+    "examples": [
+      "Going out with friends is more fun than sitting at home.",
+      "Cycling to work is cheaper than driving.",
+      "Reading a book is better than watching TV."
+    ],
+    "uk": {
+      "explanation": "Щоб порівняти дві дії, другу ставимо після than у формі -ing: comparative adjective + than + verb-ing. Перша дія теж часто має форму -ing."
+    }
+  },
+  "152": {
+    "explanation": "Use as + adjective or adverb + as to say two things are equal, and not as … as to say the first is less. After the second as you can put a clause, often with an auxiliary like do, did or can instead of the full verb.",
+    "examples": [
+      "It's not as cold as I expected.",
+      "I'll do the work as well as I can.",
+      "I don't like coffee as much as you do."
+    ],
+    "uk": {
+      "explanation": "As + прикметник або прислівник + as означає, що дві речі однакові, а not as … as — що першого менше. Після другого as може стояти підрядне речення, часто з допоміжним дієсловом do, did чи can замість повного дієслова."
+    }
+  },
+  "153": {
+    "explanation": "Rather than means \"and not\" or \"instead of\". It shows which of two options you mean. After it, use a noun phrase or a prepositional phrase that matches the one before it: the stairs rather than the lift.",
+    "examples": [
+      "Use the stairs rather than the lift.",
+      "I'd like to meet in the morning rather than in the evening.",
+      "Eat fresh fruit rather than sweets."
+    ],
+    "uk": {
+      "explanation": "Rather than означає «а не» або «замість». Воно показує, котрий із двох варіантів ви маєте на увазі. Після нього ставимо іменникову або прийменникову групу, таку ж, як перед ним: the stairs rather than the lift."
+    }
+  },
+  "154": {
+    "explanation": "To say something is the best in your whole life so far, use the best (that) + present perfect, often with ever. You can leave out that: the best film I've ever seen.",
+    "examples": [
+      "It's the best place that I have ever seen.",
+      "This is the best pizza I've ever eaten.",
+      "Moving here was the best decision I've ever made."
+    ],
+    "uk": {
+      "explanation": "Щоб сказати, що щось найкраще у вашому житті досі, вживаємо the best (that) + present perfect, часто з ever. That можна пропустити: the best film I've ever seen."
+    }
+  },
+  "161": {
+    "explanation": "Any superlative adjective, with or without a noun, can be followed by a clause to show that something is unique: the worst thing that can happen. That is optional, and the clause can use different tenses or a modal verb.",
+    "examples": [
+      "This is the worst thing that can happen.",
+      "That is the clearest memory I have of her.",
+      "It was the longest journey we had ever made."
+    ],
+    "uk": {
+      "explanation": "Після будь-якого прикметника в найвищому ступені, з іменником чи без нього, може стояти підрядне речення, яке показує, що щось унікальне: the worst thing that can happen. That необов'язкове, а в підрядному реченні можуть бути різні часи або модальне дієслово."
+    }
+  },
+  "167": {
+    "explanation": "In formal English, so + adjective + as + to-infinitive says that a quality is strong enough to lead to an action. It often appears in criticism, advice or polite conditions: be so kind as to ….",
+    "examples": [
+      "Travellers should not be so ignorant as to ignore local customs.",
+      "Would you be so kind as to close the window?",
+      "Nobody was so foolish as to believe him."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській so + прикметник + as + to-infinitive означає, що якість настільки сильна, що веде до дії. Цей зворот часто трапляється в критиці, порадах або ввічливих умовах: be so kind as to …."
+    }
+  },
+  "171": {
+    "explanation": "You can join several short main clauses into one sentence with commas, and a conjunction such as and or then before the last one. This is common when you give instructions or directions.",
+    "examples": [
+      "Go straight on, turn left and the station is on your right.",
+      "Take the bus to the centre, then call me.",
+      "Open the box, take out the phone and charge it."
+    ],
+    "uk": {
+      "explanation": "Кілька коротких головних речень можна об'єднати в одне через коми, а перед останнім поставити сполучник, наприклад and чи then. Так часто дають інструкції або пояснюють дорогу."
+    }
+  },
+  "172": {
+    "explanation": "In a story, you can join several main clauses with and, but, so or then to show events one after another. When the subject is the same, you usually don't repeat it.",
+    "examples": [
+      "I got up, made coffee and sat down to read.",
+      "He looked everywhere for his keys but never found them.",
+      "We missed the bus, so we walked home."
+    ],
+    "uk": {
+      "explanation": "В оповіді кілька головних речень можна поєднати за допомогою and, but, so чи then, щоб показати події одна за одною. Якщо підмет той самий, його зазвичай не повторюють."
+    }
+  },
+  "175": {
+    "explanation": "Neither … nor joins two negative ideas for emphasis. Neither goes at the front or before the first verb, and nor introduces the second part. The verbs stay positive, because neither and nor already carry the negative meaning.",
+    "examples": [
+      "I neither called nor texted her back.",
+      "We neither saw nor heard anything strange.",
+      "He neither apologised nor explained."
+    ],
+    "uk": {
+      "explanation": "Neither … nor поєднує дві заперечні думки для підсилення. Neither стоїть на початку або перед першим дієсловом, а nor вводить другу частину. Дієслова лишаються стверджувальними, бо заперечення вже несуть neither і nor."
+    }
+  },
+  "176": {
+    "explanation": "Not only … but (also) links two ideas and shows that the second one is just as important, often more surprising. Not only goes in the middle of the first clause, usually before the verb, and but (also) introduces the second part.",
+    "examples": [
+      "She not only passed the exam but got the top score.",
+      "The hotel was not only cheap but also very clean.",
+      "He not only cooked dinner but also washed up."
+    ],
+    "uk": {
+      "explanation": "Not only … but (also) поєднує дві думки й показує, що друга не менш важлива, а часто й несподіваніша. Not only стоїть усередині першого речення, зазвичай перед дієсловом, а but (also) вводить другу частину."
+    }
+  },
+  "177": {
+    "explanation": "For stronger focus, put not only at the very front of the sentence. Then the first clause uses question word order: not only + auxiliary + subject + verb. The second clause starts with but (also).",
+    "examples": [
+      "Not only did they win, but they also broke the record.",
+      "Not only is she clever, but she is also very kind.",
+      "Not only have prices risen, but wages have also fallen."
+    ],
+    "uk": {
+      "explanation": "Для сильнішого наголосу not only ставлять на самий початок речення. Тоді в першому реченні питальний порядок слів: not only + auxiliary + subject + verb. Друге речення починається з but (also)."
+    }
+  },
+  "178": {
+    "explanation": "After a negative clause, you can add a second negative idea with nor for focus. Nor is followed by question word order: nor + auxiliary + subject. It means \"and also not\".",
+    "examples": [
+      "I didn't enjoy the film, nor did my sister.",
+      "He has never apologised, nor does he intend to.",
+      "The plan was not cheap, nor was it popular."
+    ],
+    "uk": {
+      "explanation": "Після заперечного речення можна додати другу заперечну думку з nor для наголосу. Після nor — питальний порядок слів: nor + auxiliary + subject. Воно означає «і також не»."
+    }
+  },
+  "185": {
+    "explanation": "In a positive statement, you can add do, does or did before the base verb to stress that something is true. It often corrects or confirms what someone thinks: I do like it!",
+    "examples": [
+      "Yes, I do have a favourite restaurant.",
+      "You did say you wanted to come with us.",
+      "She does work hard, but she needs a break."
+    ],
+    "uk": {
+      "explanation": "У стверджувальному реченні перед base verb можна додати do, does чи did, щоб наголосити, що щось правда. Часто так виправляють або підтверджують чиюсь думку: I do like it!"
+    }
+  },
+  "187": {
+    "explanation": "Use the imperative to give instructions: the base form of the verb, with no subject. It is common in directions, recipes and rules. Add please to make it more polite.",
+    "examples": [
+      "Take the number 5 bus to the station.",
+      "Turn left at the bank.",
+      "Please close the door."
+    ],
+    "uk": {
+      "explanation": "Наказовий спосіб вживаємо для інструкцій: base form дієслова без підмета. Він типовий для пояснення дороги, рецептів і правил. Щоб звучало ввічливіше, додайте please."
+    }
+  },
+  "188": {
+    "explanation": "Short imperatives are a friendly way to end a letter, a message or a conversation. They sound warm, not bossy.",
+    "examples": [
+      "Write to me soon.",
+      "Take care!",
+      "Have a nice weekend!"
+    ],
+    "uk": {
+      "explanation": "Короткі наказові речення — дружній спосіб завершити лист, повідомлення чи розмову. Вони звучать тепло, а не владно."
+    }
+  },
+  "189": {
+    "explanation": "To tell someone not to do something, use don't + base verb. It gives advice, a warning or an order. Every verb takes don't here, even be: Don't be late.",
+    "examples": [
+      "Don't worry, I'll be there.",
+      "Don't tell Lucy, please.",
+      "Don't be so hard on yourself."
+    ],
+    "uk": {
+      "explanation": "Щоб сказати комусь чогось не робити, вживаємо don't + base verb. Так дають пораду, попередження чи наказ. Тут усі дієслова беруть don't, навіть be: Don't be late."
+    }
+  },
+  "190": {
+    "explanation": "Let's + base verb makes a suggestion that includes you and the listener: we should do this together. Let's is short for let us, but in everyday English always say let's.",
+    "examples": [
+      "Let's go to the cinema.",
+      "Let's meet at half past four.",
+      "It's late. Let's go home."
+    ],
+    "uk": {
+      "explanation": "Let's + base verb — це пропозиція, що стосується і вас, і співрозмовника: давайте зробимо це разом. Let's — скорочення від let us, але в повсякденній англійській завжди кажуть let's."
+    }
+  },
+  "191": {
+    "explanation": "After an instruction or some information, a short negative imperative repeats it more strongly. Don't forget and Don't be late are the most common.",
+    "examples": [
+      "We'll meet at three. Don't be late!",
+      "Bring your passport. Don't forget!",
+      "Call me when you arrive. Don't forget."
+    ],
+    "uk": {
+      "explanation": "Після інструкції чи інформації коротке заперечне наказове речення повторює її з більшим натиском. Найчастіше — Don't forget і Don't be late."
+    }
+  },
+  "192": {
+    "explanation": "Do + base verb makes an imperative stronger. In a letter it sounds warm and keen, and in a formal text it sounds polite but firm.",
+    "examples": [
+      "Do write back soon!",
+      "Do come in and sit down.",
+      "Do let me know what you think."
+    ],
+    "uk": {
+      "explanation": "Do + base verb посилює наказове речення. У листі це звучить тепло й щиро, а в офіційному тексті — ввічливо, але твердо."
+    }
+  },
+  "193": {
+    "explanation": "An imperative can be a friendly invitation or offer, not an order. Verbs like come, have and help yourself are common, and come and + verb is especially typical.",
+    "examples": [
+      "Come and stay with us this weekend!",
+      "Have another piece of cake.",
+      "Help yourself to some coffee."
+    ],
+    "uk": {
+      "explanation": "Наказове речення може бути дружнім запрошенням чи пропозицією, а не наказом. Часто вживаються come, have і help yourself, а особливо типове come and + дієслово."
+    }
+  },
+  "194": {
+    "explanation": "Let me + base verb prepares the listener for what you are going to say or do next. It sounds polite and organised, so it is common in presentations and letters.",
+    "examples": [
+      "Let me tell you about my trip.",
+      "Let me explain how it works.",
+      "Let me answer your question."
+    ],
+    "uk": {
+      "explanation": "Let me + base verb готує слухача до того, що ви скажете чи зробите далі. Це звучить ввічливо й організовано, тож часто трапляється в презентаціях і листах."
+    }
+  },
+  "195": {
+    "explanation": "For a negative suggestion, put not after let's: let's not + base verb. It means \"we shouldn't do this\".",
+    "examples": [
+      "Let's not lose touch again!",
+      "Let's not make things more complicated.",
+      "Let's not talk about work tonight."
+    ],
+    "uk": {
+      "explanation": "Для заперечної пропозиції ставимо not після let's: let's not + base verb. Це означає «нам не варто цього робити»."
+    }
+  },
+  "196": {
+    "explanation": "The full form do not instead of don't makes a negative imperative stronger or more formal. You see it in notices, rules and formal letters.",
+    "examples": [
+      "Do not hesitate to contact me.",
+      "Do not leave bags unattended.",
+      "Do not forget to take a break."
+    ],
+    "uk": {
+      "explanation": "Повна форма do not замість don't робить заперечне наказове речення сильнішим або офіційнішим. Її можна побачити в оголошеннях, правилах і офіційних листах."
+    }
+  },
+  "197": {
+    "explanation": "Let + him, her or them + base verb tells the listener to allow someone to do something. Use the object pronoun (him, not he) and the base verb without to.",
+    "examples": [
+      "If she wants to study abroad, let her go.",
+      "Play chess with him and let him win.",
+      "Let them have more free time."
+    ],
+    "uk": {
+      "explanation": "Let + him, her чи them + base verb просить слухача дозволити комусь щось зробити. Вживаємо займенник в об'єктному відмінку (him, а не he) і base verb без to."
+    }
+  },
+  "198": {
+    "explanation": "Don't let + him, her or them + base verb tells the listener not to allow something, or to stop it from happening.",
+    "examples": [
+      "Don't let him go out alone.",
+      "Don't let them watch TV all day.",
+      "Don't let her carry that heavy bag."
+    ],
+    "uk": {
+      "explanation": "Don't let + him, her чи them + base verb просить слухача не дозволяти чогось або не дати цьому статися."
+    }
+  },
+  "199": {
+    "explanation": "In reports, essays and formal letters, short imperatives point the reader to another part of the text or to an attached document. They often stand in brackets, and the noun often has no article: see enclosed brochure.",
+    "examples": [
+      "See enclosed brochure.",
+      "The results were better than expected (see above).",
+      "Look at the graph in Figure 2."
+    ],
+    "uk": {
+      "explanation": "У звітах, есе й офіційних листах короткі наказові речення відсилають читача до іншої частини тексту чи до доданого документа. Вони часто стоять у дужках, а іменник часто без артикля: see enclosed brochure."
+    }
+  },
+  "200": {
+    "explanation": "Imperative + and + will is a condition, not an instruction. The imperative means \"if you do this\", and the clause after and gives the result.",
+    "examples": [
+      "Work hard and you'll pass.",
+      "Try it once and you'll love it.",
+      "See one of his films and you'll want to see them all."
+    ],
+    "uk": {
+      "explanation": "Imperative + and + will — це умова, а не інструкція. Наказовий спосіб означає «якщо ви це зробите», а речення після and називає результат."
+    }
+  },
+  "201": {
+    "explanation": "Let + him, her or them + base verb can also mean \"it's their problem now, not ours\". The speaker gives the responsibility to someone else, and the tone is often cold or impatient.",
+    "examples": [
+      "Let them find their own food.",
+      "If he wants to leave, let him leave.",
+      "Let her solve it herself."
+    ],
+    "uk": {
+      "explanation": "Let + him, her чи them + base verb може також означати «тепер це їхня проблема, а не наша». Мовець перекладає відповідальність на інших, і тон часто холодний або нетерплячий."
+    }
+  },
+  "202": {
+    "explanation": "Adding you after don't turns a negative imperative into an angry warning or a telling-off: Don't you + base verb. It is spoken and emotional, often with ever, or in the fixed phrase Don't you dare.",
+    "examples": [
+      "Don't you ever do that again!",
+      "Don't you dare!",
+      "Don't you talk to me like that!"
+    ],
+    "uk": {
+      "explanation": "Якщо після don't додати you, заперечне наказове речення стає сердитим попередженням чи доганою: Don't you + base verb. Це розмовний, емоційний зворот, часто з ever або в сталому виразі Don't you dare."
+    }
+  },
+  "218": {
+    "explanation": "A negative question like Isn't it …? or Wasn't that …? can be an exclamation, not a real question. The speaker is sure the listener agrees and shows surprise or enthusiasm. In writing it often ends with ! or ?!",
+    "examples": [
+      "Isn't it beautiful!",
+      "Wasn't that an amazing concert!",
+      "Wouldn't it be wonderful to live by the sea!"
+    ],
+    "uk": {
+      "explanation": "Заперечне питання на кшталт Isn't it …? чи Wasn't that …? може бути вигуком, а не справжнім питанням. Мовець упевнений, що слухач погодиться, і виражає здивування чи захоплення. На письмі в кінці часто стоїть ! або ?!"
+    }
+  },
+  "233": {
+    "explanation": "After reason, use why to start a relative clause: the reason why …. It puts the explanation at the centre of the sentence and is often followed by is that.",
+    "examples": [
+      "The reason why I love it is that it's so original.",
+      "That's the reason why I called you.",
+      "Nobody knows the reason why she left."
+    ],
+    "uk": {
+      "explanation": "Після reason підрядне означальне речення починається з why: the reason why …. Цей зворот ставить пояснення в центр речення, і після нього часто йде is that."
+    }
+  },
+  "234": {
+    "explanation": "After a noun for time, like day, year, moment or time, use when to start a relative clause. It picks out one particular moment: the day when ….",
+    "examples": [
+      "I remember the day when I lost my suitcase.",
+      "Summer is the time when we travel most.",
+      "That was the moment when everything changed."
+    ],
+    "uk": {
+      "explanation": "Після іменника на позначення часу — day, year, moment, time — підрядне означальне речення починається з when. Воно виокремлює один конкретний момент: the day when …."
+    }
+  },
+  "235": {
+    "explanation": "A general noun (the thing, the person, the only one) + a relative clause with who or that makes a long subject. It builds up to the important part after is or was, so the listener waits for the answer.",
+    "examples": [
+      "The thing that I love most is going to the beach.",
+      "The person who called me was my best friend.",
+      "You're the only one who understands me."
+    ],
+    "uk": {
+      "explanation": "Загальний іменник (the thing, the person, the only one) + підрядне означальне з who чи that утворює довгий підмет. Так речення підводить до головного після is чи was, і слухач чекає на відповідь."
+    }
+  },
+  "238": {
+    "explanation": "Whose + noun starts a relative clause about who something belongs to or is connected with. It means \"his, her, its or their\", and a noun always follows it: whose name, whose parents.",
+    "examples": [
+      "We have a new teacher whose name is Mary.",
+      "I met a boy whose father is a pilot.",
+      "She's the writer whose book won the prize."
+    ],
+    "uk": {
+      "explanation": "Whose + іменник починає підрядне означальне речення про те, кому щось належить чи з ким пов'язане. Воно означає «його, її, їхній», і після нього завжди стоїть іменник: whose name, whose parents."
+    }
+  },
+  "239": {
+    "explanation": "After a comma, which can refer back to the whole idea before it, not to one noun. It is a natural way to add your opinion or a comment: …, which is great. Only which works here, not that or what.",
+    "examples": [
+      "She passed her driving test first time, which surprised everyone.",
+      "The train was late, which meant I missed the meeting.",
+      "You can get an answer in minutes, which is very useful."
+    ],
+    "uk": {
+      "explanation": "Після коми which може стосуватися всієї попередньої думки, а не одного іменника. Це природний спосіб додати свою думку чи коментар: …, which is great. Тут можливе лише which, а не that чи what."
+    }
+  },
+  "240": {
+    "explanation": "Use because to give a reason. Put the because-clause after the main clause: main clause + because + subject + verb.",
+    "examples": [
+      "I like my flat because it is quiet.",
+      "She is happy because it is her birthday.",
+      "I'm tired because I worked late."
+    ],
+    "uk": {
+      "explanation": "Because вживаємо, щоб назвати причину. Речення з because ставимо після головного: main clause + because + subject + verb."
+    }
+  },
+  "241": {
+    "explanation": "An if-clause gives a condition: the main clause happens only when it is true. The if-clause can go first, with a comma after it, or after the main clause with no comma.",
+    "examples": [
+      "If you want to come, just tell me.",
+      "I'll visit you on Friday if that's OK.",
+      "If it's sunny, we can go to the park."
+    ],
+    "uk": {
+      "explanation": "If-речення задає умову: головне речення справджується лише тоді, коли вона виконана. If-речення може стояти першим, з комою після нього, або після головного, без коми."
+    }
+  },
+  "242": {
+    "explanation": "Time words like when, before, after, until and as soon as start a clause that says when something happens. The clause can go before the main clause, with a comma, or after it. For the future, use the present tense in the time clause, not will.",
+    "examples": [
+      "When I got home, I made dinner.",
+      "I'll call you when I arrive.",
+      "Wait here until I come back."
+    ],
+    "uk": {
+      "explanation": "Слова часу when, before, after, until і as soon as починають підрядне речення, яке каже, коли щось відбувається. Воно може стояти перед головним реченням, з комою, або після нього. Про майбутнє в такому реченні вживаємо теперішній час, а не will."
+    }
+  },
+  "243": {
+    "explanation": "To say why someone does something, use to + base verb. There is no subject and no conjunction. The to-clause usually comes after the main clause.",
+    "examples": [
+      "I went to the shop to buy some bread.",
+      "She's saving money to buy a car.",
+      "To get to my house, turn left at the bank."
+    ],
+    "uk": {
+      "explanation": "Щоб сказати, навіщо хтось щось робить, вживаємо to + base verb. Тут немає ні підмета, ні сполучника. Речення з to зазвичай стоїть після головного."
+    }
+  },
+  "244": {
+    "explanation": "Besides because, you can give a reason after the main clause with as or since. They sound a little more formal and often introduce a reason the reader already knows, so they are common in emails and letters.",
+    "examples": [
+      "I can't come next week, as I'm travelling to Italy.",
+      "We need a new printer, since the old one is broken.",
+      "I stayed at home, as I didn't feel well."
+    ],
+    "uk": {
+      "explanation": "Крім because, причину після головного речення можна ввести через as чи since. Вони звучать трохи офіційніше й часто вводять причину, яку читач уже знає, тож типові для імейлів і листів."
+    }
+  },
+  "245": {
+    "explanation": "Use so (that) or, more formally, in order that + a clause to give a purpose or result after the main clause. Use this pattern when the purpose has its own subject, often with a modal like can or could.",
+    "examples": [
+      "Could you send me the notes so that I can catch up?",
+      "I left early so I wouldn't miss the train.",
+      "Please bring your camera in order that we can take photos."
+    ],
+    "uk": {
+      "explanation": "So (that) або, офіційніше, in order that + підрядне речення після головного вводять мету чи результат. Цей зворот вживаємо, коли мета має власний підмет, часто з модальним can чи could."
+    }
+  },
+  "246": {
+    "explanation": "Although, though and even though introduce a fact that makes the main clause surprising. Even though is the strongest. While contrasts two situations side by side, and the clause can go before or after the main clause.",
+    "examples": [
+      "Although he was famous, I didn't like him.",
+      "Even though I'm busy, I'll come to the dinner.",
+      "My sister loves sport, while I prefer reading."
+    ],
+    "uk": {
+      "explanation": "Although, though та even though вводять факт, через який головне речення здається несподіваним. Even though — найсильніше. While зіставляє дві ситуації поруч, а підрядне речення може стояти до або після головного."
+    }
+  },
+  "247": {
+    "explanation": "After before and after, you can use an -ing form instead of subject + verb when both clauses have the same subject: before + -ing, after + -ing. The clause can go before or after the main clause.",
+    "examples": [
+      "I usually read before going to bed.",
+      "After having breakfast, I started my homework.",
+      "Wash your hands before eating."
+    ],
+    "uk": {
+      "explanation": "Після before та after замість subject + verb можна вжити форму -ing, якщо в обох реченнях той самий підмет: before + -ing, after + -ing. Таке речення може стояти до або після головного."
+    }
+  },
+  "248": {
+    "explanation": "After having + past participle shows that the first action was finished before the second one. After being + past participle is the passive form. The clause goes before the main clause and has no subject.",
+    "examples": [
+      "After having worked all day, I was very tired.",
+      "After being given a pass, you can enter any room.",
+      "After having read the book, I watched the film."
+    ],
+    "uk": {
+      "explanation": "After having + past participle показує, що перша дія завершилася до другої. After being + past participle — пасивна форма. Таке речення стоїть перед головним і не має підмета."
+    }
+  },
+  "249": {
+    "explanation": "Besides if, conditions can start with unless (\"if … not\"), provided (that) or as long as (\"only if\"). The clause can go before or after the main clause. In formal writing, if can be followed by just a past participle: if needed.",
+    "examples": [
+      "Driving is faster unless there's a lot of traffic.",
+      "Provided the weather is fine, we'll go swimming.",
+      "Please ask for help if needed."
+    ],
+    "uk": {
+      "explanation": "Крім if, умову можуть вводити unless («якщо не»), provided (that) чи as long as («лише якщо»). Таке речення може стояти до або після головного. В офіційному письмі після if може стояти лише past participle: if needed."
+    }
+  },
+  "251": {
+    "explanation": "An -ing clause at the start of a sentence gives background, such as a reason or the way something was done. It has no subject: the subject comes from the main clause. This is typical of written English.",
+    "examples": [
+      "Having no choice, I sat down to wait.",
+      "Using his best smile, Paul asked for a table.",
+      "Feeling tired, she went to bed early."
+    ],
+    "uk": {
+      "explanation": "Зворот з -ing на початку речення подає тло, наприклад причину чи спосіб дії. Він не має підмета: підмет береться з головного речення. Це типово для письмової англійської."
+    }
+  },
+  "252": {
+    "explanation": "In formal English, a condition can drop if and move should, had or were in front of the subject, as in a question: Should you …, Had I …, Were I …. The meaning stays the same as with if.",
+    "examples": [
+      "Should you need help, please contact me.",
+      "Had we known earlier, we would have brought more money.",
+      "Were I able to, I would visit ancient Greece."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській в умові можна пропустити if і винести should, had чи were перед підметом, як у питанні: Should you …, Had I …, Were I …. Значення таке саме, як з if."
+    }
+  },
+  "253": {
+    "explanation": "A clause starting with a past participle like based on, compared to or given comes before the main clause. It puts the focus on the information the main clause builds on. It is common in reports and formal letters.",
+    "examples": [
+      "Based on these results, I recommend some changes.",
+      "Compared to my last job, this one is easier.",
+      "Given the weather, the event was a success."
+    ],
+    "uk": {
+      "explanation": "Зворот, що починається з past participle, як-от based on, compared to чи given, стоїть перед головним реченням. Він наголошує на інформації, на яку спирається головне речення. Це типово для звітів та офіційних листів."
+    }
+  },
+  "254": {
+    "explanation": "To make an -ing clause negative, put not in front of it: not + -ing. It gives background, often a reason, and takes its subject from the main clause.",
+    "examples": [
+      "Not knowing the area, I got lost.",
+      "Not wanting to wake anyone, she walked quietly.",
+      "Not having a car, we took the bus."
+    ],
+    "uk": {
+      "explanation": "Щоб зробити зворот з -ing заперечним, ставимо перед ним not: not + -ing. Він подає тло, часто причину, і бере підмет із головного речення."
+    }
+  },
+  "255": {
+    "explanation": "In advanced writing, although and though can drop the subject and be, leaving only an adjective, a past participle or an -ing form. The subject is the same as in the main clause.",
+    "examples": [
+      "Although committed to her job, she has an active social life.",
+      "Jack, though disappointed, accepted the result.",
+      "Though tired, we kept walking."
+    ],
+    "uk": {
+      "explanation": "У письмі високого рівня після although і though можна пропустити підмет і be, залишивши лише прикметник, past participle чи форму -ing. Підмет той самий, що в головному реченні."
+    }
+  },
+  "256": {
+    "explanation": "Were + subject + to-infinitive presents a condition as a remote, unlikely possibility. It is very formal and means the same as if + past simple.",
+    "examples": [
+      "Were I to choose, I would pick the last one.",
+      "Were you to need more information, please let me know.",
+      "Were they to refuse, we would need another plan."
+    ],
+    "uk": {
+      "explanation": "Were + subject + to-infinitive подає умову як віддалену, малоймовірну можливість. Це дуже офіційний зворот, який означає те саме, що if + past simple."
+    }
+  },
   "261": {
     "explanation": "In a list, put commas between the items and use and or or only before the last one. And adds all the items together; or gives a choice.",
     "examples": [
@@ -789,6 +1350,259 @@
     ],
     "uk": {
       "explanation": "In that означає «тому що» або «в тому сенсі, що». Цей зворот пояснює, у чому саме правдива головна частина речення, часто після загальної оцінки: The job is ideal in that it lets me work from home. Це книжний зворот, типовий для есе та звітів."
+    }
+  },
+  "1107": {
+    "explanation": "Use if + present simple for a real condition: something true now, true every time, or very likely. The main clause uses the present simple, can, or an imperative.",
+    "examples": [
+      "If I have free time, I read a book.",
+      "If you agree, we can go shopping after the film.",
+      "If you need help, call me."
+    ],
+    "uk": {
+      "explanation": "If + present simple вживаємо для реальної умови: того, що правда зараз, щоразу або дуже ймовірно. У головному реченні — present simple, can або наказовий спосіб."
+    }
+  },
+  "1108": {
+    "explanation": "Short if-clauses like if you want, if you like or if you prefer make an instruction, offer or suggestion softer. They leave the choice to the listener, so you sound friendly.",
+    "examples": [
+      "Bring some music if you want.",
+      "If you like, you can stay for dinner.",
+      "We can take the bus or, if you prefer, a taxi."
+    ],
+    "uk": {
+      "explanation": "Короткі if-речення на кшталт if you want, if you like чи if you prefer пом'якшують інструкцію, пропозицію чи пораду. Вони залишають вибір слухачеві, тому ви звучите дружньо."
+    }
+  },
+  "1109": {
+    "explanation": "For a possible future situation and its likely result, use if + present simple and will in the main clause. This is the first conditional. Don't use will in the if-clause.",
+    "examples": [
+      "If it rains, we'll stay at home.",
+      "Your parents will be happy if you visit them.",
+      "If we don't leave now, we won't catch the train."
+    ],
+    "uk": {
+      "explanation": "Для можливої ситуації в майбутньому та її ймовірного результату вживаємо if + present simple і will у головному реченні. Це first conditional. В if-реченні will не вживаємо."
+    }
+  },
+  "1110": {
+    "explanation": "Use if + present simple with a modal verb in the main clause when the result is possible, not certain. Use can for a possibility or permission, may or might when you are less sure, and should for advice.",
+    "examples": [
+      "If you come to Kyiv, you can stay with us.",
+      "If it rains tomorrow, the match might be cancelled.",
+      "If you feel ill, you should see a doctor."
+    ],
+    "uk": {
+      "explanation": "If + present simple з модальним дієсловом у головному реченні вживаємо, коли результат можливий, але не певний. Can — для можливості чи дозволу, may або might — коли ви менш упевнені, should — для поради."
+    }
+  },
+  "1111": {
+    "explanation": "The if-clause can use the present continuous or going to for someone's plan. The main clause then usually gives advice with should or an imperative.",
+    "examples": [
+      "If you are moving, you should think about it carefully.",
+      "If you're going to travel, choose your partner carefully.",
+      "If you are looking for a job, ask at the café."
+    ],
+    "uk": {
+      "explanation": "В if-реченні може стояти present continuous або going to, щоб говорити про чийсь план. Тоді головне речення зазвичай дає пораду з should або в наказовому способі."
+    }
+  },
+  "1112": {
+    "explanation": "For an imagined situation, something unreal now or unlikely in the future, use if + past simple and would in the main clause. This is the second conditional. The past form does not mean past time here; it shows the situation is imagined.",
+    "examples": [
+      "If I had more money, I would travel more.",
+      "It would be more fun if you came with us.",
+      "If you went on holiday, where would you go?"
+    ],
+    "uk": {
+      "explanation": "Для уявної ситуації — нереальної зараз або малоймовірної в майбутньому — вживаємо if + past simple і would у головному реченні. Це second conditional. Минула форма тут не означає минулий час; вона показує, що ситуація уявна."
+    }
+  },
+  "1113": {
+    "explanation": "If I were you + would is the usual way to give advice: you imagine yourself in the other person's place. In this fixed phrase, use were, not was.",
+    "examples": [
+      "If I were you, I would take the job.",
+      "If I were you, I'd call her today.",
+      "I wouldn't worry about it if I were you."
+    ],
+    "uk": {
+      "explanation": "If I were you + would — звичайний спосіб дати пораду: ви уявляєте себе на місці іншої людини. У цьому сталому звороті вживаємо were, а не was."
+    }
+  },
+  "1114": {
+    "explanation": "Unless means \"except if\" or \"if … not\". Use unless + present simple for the one situation in which the main clause is not true. The verb after unless is positive, because the negative idea is already in the word.",
+    "examples": [
+      "I'll pay in cash unless you accept cards.",
+      "Unless you hurry, you'll be late.",
+      "We can't go in unless we have tickets."
+    ],
+    "uk": {
+      "explanation": "Unless означає «хіба що» або «якщо не». Unless + present simple вживаємо для єдиної ситуації, в якій головне речення неправдиве. Дієслово після unless стверджувальне, бо заперечення вже є в самому слові."
+    }
+  },
+  "1115": {
+    "explanation": "Use if + past simple with could in the main clause to say what would be possible in an imagined situation. It is a gentle way to make a suggestion.",
+    "examples": [
+      "If you wanted to go outside, we could go fishing.",
+      "If you arrived early, we could have lunch together.",
+      "We could buy a bigger flat if we had more money."
+    ],
+    "uk": {
+      "explanation": "If + past simple з could у головному реченні показує, що було б можливо в уявній ситуації. Це м'який спосіб щось запропонувати."
+    }
+  },
+  "1116": {
+    "explanation": "To imagine a different past, something that did not happen, use if + past perfect and would have + past participle. This is the third conditional. It often shows regret or relief.",
+    "examples": [
+      "If you had asked me, I would have helped.",
+      "If I hadn't missed the bus, I wouldn't have been late.",
+      "We would have won if we had played better."
+    ],
+    "uk": {
+      "explanation": "Щоб уявити інше минуле — те, чого не сталося, — вживаємо if + past perfect і would have + past participle. Це third conditional. Воно часто виражає жаль або полегшення."
+    }
+  },
+  "1117": {
+    "explanation": "After a yes/no question, If not means \"if the answer is no\". It replaces a whole if-clause, so you don't repeat the question, and it usually offers another option.",
+    "examples": [
+      "Is Friday OK for you? If not, call me.",
+      "Do you work on Sundays? If not, let's meet then.",
+      "Check if the shop is open. If not, try the market."
+    ],
+    "uk": {
+      "explanation": "Після загального питання If not означає «якщо відповідь — ні». Воно замінює все if-речення, тож питання не треба повторювати, і зазвичай пропонує інший варіант."
+    }
+  },
+  "1118": {
+    "explanation": "After a yes/no question, If so means \"if the answer is yes\". It replaces a whole if-clause, so you don't need to repeat the question.",
+    "examples": [
+      "Can I pay by card? If so, which cards do you take?",
+      "Are you free tonight? If so, let's go out.",
+      "Did you like the book? If so, I have another one."
+    ],
+    "uk": {
+      "explanation": "Після загального питання If so означає «якщо відповідь — так». Воно замінює все if-речення, тож питання не треба повторювати."
+    }
+  },
+  "1119": {
+    "explanation": "As long as, provided (that) and providing (that) mean \"only if\": the main clause is true on this one condition. Like if, they take a present tense for a future condition. Provided sounds more formal.",
+    "examples": [
+      "You can borrow my car as long as you drive carefully.",
+      "Provided you book early, you'll get a discount.",
+      "Providing we follow the plan, sales will increase."
+    ],
+    "uk": {
+      "explanation": "As long as, provided (that) і providing (that) означають «лише якщо»: головне речення правдиве тільки за цієї умови. Як і після if, для майбутньої умови після них вживаємо теперішній час. Provided звучить офіційніше."
+    }
+  },
+  "1120": {
+    "explanation": "The third conditional can use other modal verbs instead of would: if + past perfect, then could have, might have or should have + past participle. Could have shows a lost possibility, and might have means you are not sure what would have happened.",
+    "examples": [
+      "All this could have been avoided if we had planned better.",
+      "I might have agreed if you had asked nicely.",
+      "If she had studied, she could have passed."
+    ],
+    "uk": {
+      "explanation": "У third conditional замість would можна вжити інші модальні дієслова: if + past perfect, а далі could have, might have чи should have + past participle. Could have показує втрачену можливість, а might have — що ви не впевнені, що було б."
+    }
+  },
+  "1122": {
+    "explanation": "If + should + base verb makes a condition sound less likely and more polite, like \"if, by any chance\". It is typical of formal letters, instructions and customer service.",
+    "examples": [
+      "If you should have any questions, please contact us.",
+      "If you should get lost, call this number.",
+      "If the machine should stop, press the red button."
+    ],
+    "uk": {
+      "explanation": "If + should + base verb робить умову менш імовірною і ввічливішою, на зразок «якщо раптом». Це типово для офіційних листів, інструкцій і обслуговування клієнтів."
+    }
+  },
+  "1124": {
+    "explanation": "In very formal English, you can drop if and put should before the subject: Should you + base verb. With would in the main clause, it talks about a possible future result, often in formal promises or warnings.",
+    "examples": [
+      "Should we win the prize, we would build a new school.",
+      "Should you fail to pay, we would have to take action.",
+      "Should the plan change, I would let you know at once."
+    ],
+    "uk": {
+      "explanation": "У дуже офіційній англійській можна пропустити if і поставити should перед підметом: Should you + base verb. З would у головному реченні це говорить про можливий майбутній результат, часто в офіційних обіцянках чи попередженнях."
+    }
+  },
+  "1125": {
+    "explanation": "In formal writing, you can drop if from a past imagined condition and put had before the subject: Had + subject + past participle. The main clause uses would have, could have or might have + past participle, and the meaning doesn't change.",
+    "examples": [
+      "Had we known, we would have come earlier.",
+      "Had he been more careful, he could have avoided the accident.",
+      "Had I left on time, I might have caught the train."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі в уявній умові про минуле можна пропустити if і поставити had перед підметом: Had + subject + past participle. У головному реченні — would have, could have чи might have + past participle, а значення не змінюється."
+    }
+  },
+  "1126": {
+    "explanation": "Were + subject + to-infinitive is a formal way to imagine an unlikely future situation. It means the same as if + past simple but sounds more distant and literary. The main clause usually has would.",
+    "examples": [
+      "Were I to win the scholarship, I would study in Japan.",
+      "Were you to compare the two, you would see many similarities.",
+      "Were this plan to fail, we would lose everything."
+    ],
+    "uk": {
+      "explanation": "Were + subject + to-infinitive — офіційний спосіб уявити малоймовірну майбутню ситуацію. Він означає те саме, що if + past simple, але звучить віддаленіше й літературніше. У головному реченні зазвичай would."
+    }
+  },
+  "1127": {
+    "explanation": "So long as, on condition that and in the event that are formal ways to introduce a condition. On condition that sets a strict condition, and in the event that means \"if this happens\". They work with past, present or future meaning.",
+    "examples": [
+      "I was allowed out on condition that I was home by ten.",
+      "You can stay so long as you keep quiet.",
+      "In the event that the flight is cancelled, you'll get a refund."
+    ],
+    "uk": {
+      "explanation": "So long as, on condition that та in the event that — офіційні способи ввести умову. On condition that задає сувору умову, а in the event that означає «у разі, якщо це станеться». Вони вживаються щодо минулого, теперішнього чи майбутнього."
+    }
+  },
+  "1128": {
+    "explanation": "Were it not for + noun phrase means \"without this person or thing\". It is a formal form of if it were not for, with if dropped and were moved to the front. Don't contract it: weren't it for is wrong.",
+    "examples": [
+      "Were it not for your help, I would have failed.",
+      "Were it not for the rain, we would go for a walk.",
+      "Were it not for her parents, she could not study abroad."
+    ],
+    "uk": {
+      "explanation": "Were it not for + іменникова група означає «якби не ця людина чи річ». Це офіційна форма if it were not for, де if пропущено, а were винесено наперед. Не скорочуйте: weren't it for — помилка."
+    }
+  },
+  "1129": {
+    "explanation": "If it weren't for (or if it were not for) + noun phrase means \"without this person or thing\". It says that one thing is the only reason the situation is how it is. With would have in the main clause, it talks about the past.",
+    "examples": [
+      "If it weren't for my friends, I would feel lonely.",
+      "If it weren't for that boy, I would have failed the exam.",
+      "If it were not for the internet, I couldn't work from home."
+    ],
+    "uk": {
+      "explanation": "If it weren't for (або if it were not for) + іменникова група означає «якби не ця людина чи річ». Цей зворот каже, що саме ця річ — єдина причина, чому ситуація така. З would have у головному реченні він стосується минулого."
+    }
+  },
+  "1130": {
+    "explanation": "If + subject + were + to-infinitive imagines an unlikely future situation in formal English. It keeps if, unlike the inverted form were I to. The main clause usually has would.",
+    "examples": [
+      "If it were to rain, the concert would move indoors.",
+      "The project would need more money if it were to succeed.",
+      "If he were to resign, who would replace him?"
+    ],
+    "uk": {
+      "explanation": "If + subject + were + to-infinitive в офіційній англійській уявляє малоймовірну майбутню ситуацію. На відміну від інвертованої форми were I to, тут if лишається. У головному реченні зазвичай would."
+    }
+  },
+  "1131": {
+    "explanation": "Whether or not says that the condition doesn't change the result: it is true in both cases. At the start of a sentence, a whether or not clause can be the subject, especially in formal essays.",
+    "examples": [
+      "Whether or not it rains, the match will go ahead.",
+      "Whether or not tourists should follow local customs is debatable.",
+      "It depends on them whether or not they go to university."
+    ],
+    "uk": {
+      "explanation": "Whether or not означає, що умова не змінює результату: він правдивий в обох випадках. На початку речення підрядне з whether or not може бути підметом, особливо в офіційних есе."
     }
   },
   "1132": {
