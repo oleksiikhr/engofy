@@ -922,12 +922,16 @@ won't have been + How long will…?, тривалість до точки в м�
 припущення про теперішнє C2 (vs must have been), таблиця will be doing/will have been doing/will have done + state verbs, common
 mistakes). Content — `will have been` + `-ing` (у питанні розділено: `will` … `have been`); підмет, by/for-фрази — `grammar`.
 
-### [ ] 86. Future — future perfect simple (`future-future-perfect-simple`) — рівень B2
+### [x] 86. Future — future perfect simple (`future-future-perfect-simple`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-future-perfect-simple`.
+7 EGP-рядків (375-381), 3 картки (377/379/380) inline; generic-блок не рендериться. 8 секцій (форма + by the time + present simple,
+won't have + питання C2, завершене до точки в майбутньому + by vs until + укр. доконаний майбутній, прислівники між will і have
+(already/just також після have — не помилка; probably перед won't), припущення As you will have heard (vs must have), ввічливість
+у листах, таблиця will do/will have done/will have been doing + state verbs, common mistakes). Content — `will have` + дієприкметник
+(з прислівником/у питанні розділено: `will` … `have`); підмет, by-фрази, прислівник — `grammar`.
 
 ### [ ] 87. Modality — dare (`modality-dare`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
