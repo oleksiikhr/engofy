@@ -130,10 +130,10 @@ not shift".
 
 `past-*` (47 з `egpIndex`), `present-*` (25).
 
-### [ ] 8. Контент: PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (63)
+### [x] 8. Контент: PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (63)
 - Branch: `grammar-translations-and-practice-08-pronouns-questions`
-- Base: `grammar-translations-and-practice-07-past-present`
-- PR: —
+- Base: `main`
+- PR: https://github.com/oleksiikhr/engofy/pull/165
 
 `pronouns-*` (42), `questions-*` (10), `reported-speech-*` (5), `verbs-*` (6).
 
