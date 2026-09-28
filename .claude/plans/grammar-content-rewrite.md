@@ -700,12 +700,14 @@ That's all разом, quantity + of, this one/these ones, those who/-ed/-ing, t
 mistakes). Content — сам демонстратив; `That's` — одна мітка (розділена `That`+`'s` виглядає як два слова).
 Не дублює `determiners-demonstratives` (там — перед іменником).
 
-### [ ] 64. Pronouns — generic use (`pronouns-generic-use`) — рівень A2
+### [x] 64. Pronouns — generic use (`pronouns-generic-use`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `pronouns-generic-use`.
+5 EGP-рядків (999-1003), усі USE, вплетені за `egpIndex` (два однакові guideword GENDER NEUTRAL). 7 секцій
+(you, one, we/us, they say — без EGP-рядка й картки, someone…they, he or she, common mistakes). Content —
+сам генеричний займенник; антецедент (`someone`/`a student`) — `grammar`.
 
 ### [ ] 65. Pronouns — possessive (`pronouns-possessive`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
