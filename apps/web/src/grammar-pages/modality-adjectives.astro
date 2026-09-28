@@ -1,0 +1,330 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 6 USE rows are inlined, matched by EGP index. The other 5 rows
+// (be sure + clause, it's important that, it's + adjective + for + object,
+// it + linking verb + adjective + clause, subject + be likely/sure to) are
+// plain FORM rows, written in full without a card. Sections go from the
+// learner's own certainty (I'm sure) through it + be + adjective patterns to
+// the B2 subject + be likely to and the C1 adverb + adjective modifiers.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const ifPossiblePoint = point(427);
+const itAdjToPoint = point(428);
+const hedgingThatPoint = point(431);
+const focusThatPoint = point(433);
+const modifyingHedgingPoint = point(434);
+const modifyingEmphasisPoint = point(435);
+
+const inlineUsagePointIds = [
+  ifPossiblePoint,
+  itAdjToPoint,
+  hedgingThatPoint,
+  focusThatPoint,
+  modifyingHedgingPoint,
+  modifyingEmphasisPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Adjectives that work like modal verbs: I'm sure that…, It's important that…, It's necessary to…, It's important for you to…, if possible, It is clear / likely that…, They are likely to…, and adverbs like almost certain or highly unlikely."
+  handcrafted
+  sections={[
+    { id: 'sure', title: "I'm sure (that)…: saying you are certain", open: true },
+    { id: 'important-that', title: "It's important that…", open: false },
+    { id: 'it-to', title: "It's necessary to… / It's impossible to…", open: false },
+    { id: 'for-object', title: "It's important for you to…", open: false },
+    { id: 'if-possible', title: 'If possible, …: polite requests', open: false },
+    { id: 'clear-that', title: 'It is clear / It seems obvious that…', open: false },
+    { id: 'likely-that', title: 'It is likely / possible that…: softer claims', open: false },
+    { id: 'likely-to', title: 'They are likely to… / We are sure to…', open: false },
+    { id: 'modifying', title: 'Almost certain, highly unlikely: adverb + adjective', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      Some adjectives do the same job as modal verbs: they say how certain, possible, necessary or important something is. <em>It's possible that he's late</em> means almost the same as <em>He might be late</em>; <em>It's necessary to book</em> is close to <em>You must book</em>. Most of these adjectives come after <em>it + be</em>, followed by a <em>that</em>-clause or <em>to</em> + verb.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I'm sure (that)…: saying you are certain" id="sure" open>
+    <p>
+      To say that you are certain about something, use <em>be sure</em> + a clause. <em>That</em> after sure is optional — in speech it is usually left out.
+    </p>
+    <GrammarFormula label="Be sure + clause" parts={['subject', 'be', 'sure', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="I'm sure + a clause about the future.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'m</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">can beat</mark> you at chess.
+    </GrammarExample>
+    <GrammarExample note="With that: a little more careful, common in writing.">
+      <mark data-role="grammar">I</mark><mark data-role="grammar">'m</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">will love</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Not sure + wh-word, then sure + clause: two opposite feelings in one sentence.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> not <mark data-role="content">sure</mark> what I want to do, but <mark data-role="grammar">I</mark> <mark data-role="grammar">am</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">will find</mark> something.
+    </GrammarExample>
+    <p>
+      <em>Not sure</em> is often followed by <em>what</em>, <em>where</em>, <em>if</em> or <em>whether</em>, not by <em>that</em>: <em>I'm not sure if she's at home.</em> <em>Certain</em> works the same way as sure but sounds a little more formal: <em>I'm certain that I left it here.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It's important that…" id="important-that" open={false}>
+    <p>
+      To say that something matters, start with <em>it</em>: <em>It's important that…</em> The <em>it</em> is empty — it just fills the subject position, and the real news comes in the clause at the end.
+    </p>
+    <GrammarFormula label="It + be + adjective + clause" parts={['it', 'be', 'important', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="Advice: what the listener should do.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">important</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">eat</mark> healthy food.
+    </GrammarExample>
+    <GrammarExample note="Two verbs in the clause: take … and don't work.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">important</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">take</mark> breaks and don't work all the time.
+    </GrammarExample>
+    <GrammarExample note="I think it's important that…: a softer way to give advice.">
+      I think <mark data-role="grammar">it</mark><mark data-role="grammar">'s</mark> <mark data-role="content">important</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">look</mark> at each point before you decide.
+    </GrammarExample>
+    <p>
+      Stronger adjectives work the same way: <em>It's essential that…</em>, <em>It's vital that…</em>, <em>It's crucial that…</em> Don't leave out <em>it</em> — English needs a subject: <em>It is important…</em>, not <em>Is important…</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It's necessary to… / It's impossible to…" id="it-to" open={false}>
+    <p>
+      When you don't need to say who does the action, use <em>it + be + adjective + to</em> + verb. The adjective shows how necessary or possible the action is. It sounds more general and less personal than a modal verb with <em>you</em>: <em>It's necessary to improve…</em> instead of <em>You must improve…</em>
+    </p>
+    <GrammarFormula label="It + be + adjective + to" parts={['it', 'be', 'adjective', 'to', 'base verb']} />
+    <GrammarExample note="Necessary: a general need, no person named.">
+      Our staff work on many international projects, so <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">necessary</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">improve</mark> their language skills.
+    </GrammarExample>
+    <GrammarExample note="Essential: stronger than necessary.">
+      But sometimes <mark data-role="grammar">it</mark><mark data-role="grammar">'s</mark> <mark data-role="content">essential</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">do</mark> what your parents want.
+    </GrammarExample>
+    <GrammarExample note="Possible: what people can do in a place.">
+      In the centre of town <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">possible</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">do</mark> more activities after school.
+    </GrammarExample>
+    <GrammarExample note="Impossible, in the past: was + impossible.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">was</mark> <mark data-role="content">impossible</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">install</mark> the system.
+    </GrammarExample>
+    {itAdjToPoint && <GrammarUsagePointCard usagePoint={itAdjToPoint} />}
+    <p>
+      Other common adjectives here: <em>easy</em>, <em>difficult</em>, <em>hard</em>, <em>useful</em>, <em>better</em>, <em>best</em> — <em>It's better to book early.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="It's important for you to…" id="for-object" open={false}>
+    <p>
+      To say who the action is for, add <em>for</em> + a person before <em>to</em>. After <em>for</em>, use an object pronoun: <em>for me</em>, <em>for him</em>, <em>for us</em>.
+    </p>
+    <GrammarFormula label="It + be + adjective + for + object + to" parts={['it', 'be', 'adjective', 'for', 'object', 'to', 'base verb']} />
+    <GrammarExample note="For you: the advice is for the reader.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">important</mark> <mark data-role="grammar">for</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">know</mark> what the schools are like.
+    </GrammarExample>
+    <GrammarExample note="For me: a polite way to say you can't come.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">impossible</mark> <mark data-role="grammar">for</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">meet</mark> you at six o'clock.
+    </GrammarExample>
+    <GrammarExample note="For everyone: a rule for a whole group.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">important</mark> <mark data-role="grammar">for</mark> <mark data-role="grammar">everyone</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">attend</mark> this meeting.
+    </GrammarExample>
+    <p>
+      The person is not the subject of the adjective: you can't say <em>I am impossible to meet you</em> — that means other people can't meet you because of your character! Say <em>It's impossible for me to meet you.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="If possible, …: polite requests" id="if-possible" open={false}>
+    <p>
+      Adding <em>if possible</em> or <em>if it's possible</em> to a request makes it softer: you show that you know the other person may not be able to do it. It's very common in emails and formal letters.
+    </p>
+    <GrammarFormula label="If possible" parts={['if (it is)', 'possible', 'request']} />
+    <GrammarExample note="At the start: if it is possible, then the request.">
+      <mark data-role="grammar">If it is</mark> <mark data-role="content">possible</mark>, <mark data-role="grammar">I would like</mark> to pay by credit card.
+    </GrammarExample>
+    <GrammarExample note="Short form: if possible, with no it is.">
+      <mark data-role="grammar">If</mark> <mark data-role="content">possible</mark>, <mark data-role="grammar">please send</mark> the goods again today.
+    </GrammarExample>
+    <GrammarExample note="With could you…?: a double polite request.">
+      <mark data-role="grammar">If it's</mark> <mark data-role="content">possible</mark>, <mark data-role="grammar">could you send</mark> the cards to my office?
+    </GrammarExample>
+    <GrammarExample note="At the end: the request first, then if it is possible.">
+      <mark data-role="grammar">I would prefer</mark> the 15th of July <mark data-role="grammar">if it is</mark> <mark data-role="content">possible</mark>.
+    </GrammarExample>
+    {ifPossiblePoint && <GrammarUsagePointCard usagePoint={ifPossiblePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It is clear / It seems obvious that…" id="clear-that" open={false}>
+    <p>
+      Instead of <em>be</em>, the verb can be <em>seem</em> or <em>appear</em> — linking verbs. <em>It seems clear that…</em> is a little less direct than <em>It is clear that…</em>: it presents the point as how things look to you.
+    </p>
+    <GrammarFormula label="It + linking verb + adjective + clause" parts={['it', 'be / seem', 'adjective', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="Seem + clear + to me: your own view.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">seems</mark> <mark data-role="content">clear</mark> to me <mark data-role="grammar">that</mark> <mark data-role="grammar">swimming</mark> <mark data-role="grammar">is</mark> good for the whole body.
+    </GrammarExample>
+    <GrammarExample note="Is + obvious: a fact most people agree with.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">obvious</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">some people</mark> <mark data-role="grammar">prefer</mark> reading books.
+    </GrammarExample>
+    <p>
+      In an essay or report, <em>It is clear that…</em>, <em>It is obvious that…</em> and <em>It is essential that…</em> point the reader at the main idea: the adjective comes first, so the reader knows the next clause is important.
+    </p>
+    <GrammarExample note="It is clear that: the conclusion of an argument.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">clear</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">can't live</mark> without computers today.
+    </GrammarExample>
+    <GrammarExample note="Crucial: this is the one thing the reader must do.">
+      Because of the new form, <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">crucial</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">take</mark> part.
+    </GrammarExample>
+    <GrammarExample note="No that: common in speech.">
+      <mark data-role="grammar">It</mark><mark data-role="grammar">'s</mark> <mark data-role="content">obvious</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">can't ride</mark> forty kilometres twice a day.
+    </GrammarExample>
+    {focusThatPoint && <GrammarUsagePointCard usagePoint={focusThatPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It is likely / possible that…: softer claims" id="likely-that" open={false}>
+    <p>
+      The same pattern with <em>likely</em>, <em>possible</em> or <em>probable</em> makes a statement less direct. Instead of saying <em>We will learn new words</em> as a fact, you say it is probable — so nobody can say you are wrong.
+    </p>
+    <GrammarFormula label="Hedging" parts={['it', 'be / seem', 'likely / possible', '(that)', 'subject', 'verb']} />
+    <GrammarExample note="Likely: probably true, but not certain.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">will learn</mark> some new words by reading books.
+    </GrammarExample>
+    <GrammarExample note="Possible: weaker than likely — it may happen.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="content">possible</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">only one computer</mark> <mark data-role="grammar">will do</mark> this.
+    </GrammarExample>
+    <GrammarExample note="Does not seem possible: a polite way to disagree.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">does not seem</mark> <mark data-role="content">possible</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">can live</mark> without any private life.
+    </GrammarExample>
+    {hedgingThatPoint && <GrammarUsagePointCard usagePoint={hedgingThatPoint} />}
+    <p>
+      From strongest to weakest: <em>certain</em> → <em>likely / probable</em> → <em>possible</em> → <em>unlikely</em> → <em>impossible</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="They are likely to… / We are sure to…" id="likely-to" open={false}>
+    <p>
+      With <em>likely</em>, <em>unlikely</em>, <em>sure</em>, <em>certain</em> and <em>bound</em>, the thing you are talking about can be the subject, followed by <em>to</em> + verb. <em>They are likely to arrive</em> means the same as <em>It is likely that they will arrive</em> — it's just shorter.
+    </p>
+    <GrammarFormula label="Subject + be + adjective + to" parts={['subject', 'be', 'likely / sure', 'to', 'base verb']} />
+    <GrammarExample note="Unlikely to: probably won't happen.">
+      <mark data-role="grammar">They</mark> <mark data-role="grammar">are</mark> <mark data-role="content">unlikely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">arrive</mark> on Friday.
+    </GrammarExample>
+    <GrammarExample note="Likely to: a general prediction about a situation.">
+      Whenever money is involved, <mark data-role="grammar">some problems</mark> <mark data-role="grammar">are</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">happen</mark>.
+    </GrammarExample>
+    <GrammarExample note="Sure to: the speaker is certain it will happen.">
+      <mark data-role="grammar">We</mark> <mark data-role="grammar">are</mark> <mark data-role="content">sure</mark> <mark data-role="grammar">to</mark> <mark data-role="grammar">increase</mark> our profit this year.
+    </GrammarExample>
+    <p>
+      For something that probably happened in the past, use <em>to have</em> + past participle.
+    </p>
+    <GrammarFormula label="Past" parts={['subject', 'be', 'likely', 'to have', 'past participle']} />
+    <GrammarExample note="Likely to have been made: a guess about the past.">
+      If you see a film today, <mark data-role="grammar">it</mark> <mark data-role="grammar">is</mark> <mark data-role="content">likely</mark> <mark data-role="grammar">to have</mark> <mark data-role="grammar">been made</mark> with computers.
+    </GrammarExample>
+    <p>
+      Careful with <em>sure</em>: <em>He is sure to win</em> means <em>I</em> am sure he will win; <em>He is sure that he will win</em> means <em>he</em> is sure. And <em>possible</em>, <em>necessary</em> and <em>important</em> don't work in this pattern: say <em>It's possible that he will come</em>, not <em>He is possible to come</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Almost certain, highly unlikely: adverb + adjective" id="modifying" open={false}>
+    <p>
+      An adverb before the adjective changes how strong it is. <em>Quite</em>, <em>almost</em>, <em>fairly</em> and <em>probably</em> make a claim softer and more careful.
+    </p>
+    <GrammarFormula label="Softer" parts={['adverb', 'adjective']} />
+    <GrammarExample note="Almost certain: very sure, but leaving a little room.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">almost</mark> <mark data-role="content">certain</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">we</mark><mark data-role="grammar">'ll have</mark> arguments in the future.
+    </GrammarExample>
+    <GrammarExample note="Quite probable, in brackets: a careful comment on the risk.">
+      If there's a transport strike (which is <mark data-role="grammar">quite</mark> <mark data-role="content">probable</mark>), you will have to take a taxi.
+    </GrammarExample>
+    {modifyingHedgingPoint && <GrammarUsagePointCard usagePoint={modifyingHedgingPoint} />}
+    <p>
+      <em>Highly</em>, <em>extremely</em>, <em>absolutely</em>, <em>painfully</em> and <em>perfectly</em> make the adjective stronger. Some pairs are fixed: <em>highly unlikely</em>, <em>highly likely</em>, <em>perfectly clear</em>, <em>absolutely essential</em>.
+    </p>
+    <GrammarFormula label="Stronger" parts={['adverb', 'adjective']} />
+    <GrammarExample note="Highly unlikely: the usual strong form of unlikely.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">highly</mark> <mark data-role="content">unlikely</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the goods</mark> <mark data-role="grammar">disappeared</mark> without anyone noticing.
+    </GrammarExample>
+    <GrammarExample note="Painfully obvious: so obvious that it's uncomfortable.">
+      <mark data-role="grammar">It</mark> <mark data-role="grammar">is</mark> <mark data-role="grammar">painfully</mark> <mark data-role="content">obvious</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the city</mark> <mark data-role="grammar">needs</mark> fewer cars.
+    </GrammarExample>
+    {modifyingEmphasisPoint && <GrammarUsagePointCard usagePoint={modifyingEmphasisPoint} />}
+    <p>
+      Not every adverb fits every adjective: <em>very</em> doesn't go with <em>impossible</em>, <em>essential</em> or <em>certain</em> — use <em>absolutely</em> or <em>almost</em> instead.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      English needs a subject, so the empty <em>it</em> can't be left out.
+    </p>
+    <GrammarContrast
+      bad={['Is important to study every day.', 'Is possible that he is ill.']}
+      good={['It is important to study every day.', 'It is possible that he is ill.']}
+    />
+    <p>
+      The person goes after <em>for</em>, not before <em>to</em> as the subject — and not as <em>you to</em>.
+    </p>
+    <GrammarContrast
+      bad={["I'm not possible to come on Monday.", "It's important you to know this."]}
+      good={["It's not possible for me to come on Monday.", "It's important for you to know this."]}
+    />
+    <p>
+      Only likely, unlikely, sure, certain and bound can have a person or thing as the subject + to.
+    </p>
+    <GrammarContrast
+      bad={['He is possible to arrive late.', 'The meeting is probable to start at 10.']}
+      good={['He is likely to arrive late.', 'It is probable that the meeting will start at 10.']}
+    />
+    <p>
+      After <em>to</em>, the verb is the base form; after <em>that</em>, it's a full clause with a subject.
+    </p>
+    <GrammarContrast
+      bad={["It's necessary to booking a table.", "It's possible that finish it today."]}
+      good={["It's necessary to book a table.", "It's possible that we'll finish it today."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-might',
+        name: 'might',
+        note: 'He might be late — the modal verb for what is possible.',
+      },
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: 'You must book / It must be true — necessity and certainty with a modal verb.',
+      },
+      {
+        slug: 'modality-adverbs',
+        name: 'modal adverbs',
+        note: 'probably, certainly, perhaps — the same meanings as adverbs.',
+      },
+      {
+        slug: 'focus-focus',
+        name: 'focus',
+        note: "It's great that… and other ways to point at the main idea.",
+      },
+      {
+        slug: 'adjectives-modifying',
+        name: 'modifying adjectives',
+        note: 'very, quite, really, absolutely + adjective in general.',
+      },
+    ]}
+  />
+</GrammarShell>
