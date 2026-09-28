@@ -668,12 +668,16 @@ quantity words A2+B1 разом, containers/a piece of, "uncountable in English"
 список іменників, злічуваних в українській (advice/news/furniture…), no article для загального, common
 mistakes).
 
-### [ ] 61. Passives — passives: form (`passives-passives-form`) — рівень A2
+### [x] 61. Passives — passives: form (`passives-passives-form`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `passives-passives-form`.
+32 EGP-рядки (703-734; 735 — порожній коментар), 22 чисті FORM без карток; 10 USE/FORM-USE вплетені за
+`egpIndex`. 12 секцій (form present/past + neg/questions, by (info/focus/relative), continuous (+ future,
+past), perfect, will + modals (+ summaries), infinitive, modal perfect, two objects, formal it, -ing forms,
+таблиця всіх форм, common mistakes). Розмітка: `be`-частина (is being / has been / could have been) —
+`grammar`, лише past participle — `content`, бо саме він незмінний у всіх часах.
 
 ### [ ] 62. Past — past continuous (`past-past-continuous`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
