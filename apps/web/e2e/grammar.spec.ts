@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { AUTHED_STATE } from './auth';
+import { blockScripts } from './block-scripts';
 import { GrammarConstructionPage } from './pages/grammar-construction-page';
 import { GrammarPage } from './pages/grammar-page';
 
@@ -297,6 +298,73 @@ test.describe('grammar construction detail', () => {
     );
     await expect(bare.getByTestId('usage-examples')).toHaveCount(0);
   });
+
+  test('switches a translated explanation to Ukrainian and remembers it', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openUsage();
+
+    const translated = construction.usageItem(0);
+    const english = translated.getByText('which of two past actions');
+    const ukrainian = translated.getByText('яка з двох минулих дій');
+    const uk = translated.getByRole('button', { name: 'УКР' });
+    await expect(english).toBeVisible();
+    await expect(ukrainian).toBeHidden();
+    await expect(uk).toHaveAttribute('aria-pressed', 'false');
+
+    await uk.click();
+    await expect(ukrainian).toBeVisible();
+    await expect(english).toBeHidden();
+    await expect(uk).toHaveAttribute('aria-pressed', 'true');
+    // No translation — no switch, English only.
+    await expect(
+      construction.usageItem(1).locator('[data-usage-lang]'),
+    ).toHaveCount(0);
+
+    await page.reload();
+    await construction.openUsage();
+    await expect(ukrainian).toBeVisible();
+    await expect(uk).toHaveAttribute('aria-pressed', 'true');
+    await translated.getByRole('button', { name: 'EN' }).click();
+    await expect(english).toBeVisible();
+  });
+
+  // The stored language is applied before first paint (boot script), so the
+  // card below the translated one sits where it will once scripts have run.
+  for (const [name, viewport] of [
+    ['desktop', { width: 1100, height: 700 }],
+    ['phone', { width: 390, height: 844 }],
+  ] as const) {
+    test(`a stored Ukrainian choice does not shift the cards when scripts run (${name})`, async ({
+      browser,
+    }) => {
+      const nextCardY = async (scripts: boolean) => {
+        const context = await browser.newContext({ viewport });
+        await context.addInitScript(() => {
+          localStorage.setItem('popup-lang', 'uk');
+        });
+        const page = await context.newPage();
+        if (!scripts) {
+          await blockScripts(page);
+        }
+        const construction = new GrammarConstructionPage(page);
+        await construction.goto('e2e-past-perfect');
+        await construction.openUsage();
+        await expect(
+          construction.usageItem(0).getByText('яка з двох минулих дій'),
+        ).toBeVisible();
+        const box = await construction.usageItem(1).boundingBox();
+        await context.close();
+        return box?.y;
+      };
+      const beforeScripts = await nextCardY(false);
+      const afterScripts = await nextCardY(true);
+      expect(beforeScripts).toBeDefined();
+      expect(beforeScripts).toBeCloseTo(afterScripts ?? -1, 0);
+    });
+  }
 
   test('anchors a usage point at its egpIndex and lets the visitor answer its exercise pool', async ({
     page,

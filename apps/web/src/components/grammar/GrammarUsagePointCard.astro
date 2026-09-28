@@ -18,14 +18,42 @@ const { usagePoint: up } = Astro.props;
 // from a non-EGP source, which has no anchor.
 const anchorId =
   up.egpIndex == null ? undefined : `usage-point-${up.egpIndex}`;
+// Ukrainian stands in for the English explanation when the learner picks
+// УКР; a card with no translation has no switch and always shows English.
+const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
 ---
 
 <div class="usage-item card" data-state={up.state} id={anchorId}>
   <div class="usage-item__head">
     <span class="badge">{up.cefrLevel}</span>
     <span class="usage-item__guide">{up.guideword}</span>
+    {
+      ukExplanation && (
+        <div
+          class="usage-item__lang"
+          role="group"
+          aria-label="Explanation language"
+        >
+          <button type="button" data-usage-lang="en" aria-pressed="true">
+            EN
+          </button>
+          <button type="button" data-usage-lang="uk" aria-pressed="false">
+            УКР
+          </button>
+        </div>
+      )
+    }
   </div>
-  <p class="usage-item__can">{up.explanation ?? up.canDoStatement}</p>
+  <p class="usage-item__can">
+    <span class="usage-item__en">{up.explanation ?? up.canDoStatement}</span>
+    {
+      ukExplanation && (
+        <span class="usage-item__uk" lang="uk">
+          {ukExplanation}
+        </span>
+      )
+    }
+  </p>
   {up.explanation && <p class="usage-item__cando">{up.canDoStatement}</p>}
   {
     up.examples.length > 0 && (
@@ -75,6 +103,40 @@ const anchorId =
   .usage-item__can {
     margin: 0 0 0.5rem;
     font-weight: 800;
+  }
+  /* Language comes from <html data-popup-lang> (boot script, before first
+     paint); aria-pressed is only synced for assistive tech afterwards. */
+  .usage-item__uk {
+    display: none;
+  }
+  :global(:root[data-popup-lang='uk']) .usage-item__uk {
+    display: inline;
+  }
+  :global(:root[data-popup-lang='uk']) .usage-item__en:has(~ .usage-item__uk) {
+    display: none;
+  }
+  .usage-item__lang {
+    display: inline-flex;
+    margin-left: auto;
+    padding: 2px;
+    border-radius: 999px;
+    background: var(--color-paper-soft);
+  }
+  .usage-item__lang button {
+    min-width: 2.25rem;
+    padding: 0.2rem 0.55rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink-soft);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  :global(:root:not([data-popup-lang='uk'])) .usage-item__lang [data-usage-lang='en'],
+  :global(:root[data-popup-lang='uk']) .usage-item__lang [data-usage-lang='uk'] {
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
   }
   .usage-item__cando {
     margin: 0 0 0.5rem;
@@ -142,7 +204,9 @@ const anchorId =
 </style>
 
 <script>
+  import { initGrammarLangToggle } from '../../lib/grammar-lang-toggle';
   import { initUsagePointExercises } from '../../lib/usage-point-exercises-client';
 
   initUsagePointExercises(document);
+  initGrammarLangToggle(document);
 </script>

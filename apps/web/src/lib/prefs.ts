@@ -21,8 +21,9 @@ export type ReaderDensity = (typeof READER_DENSITIES)[number];
 export const READER_HINTS = ['new', 'seen'] as const;
 export type ReaderHint = (typeof READER_HINTS)[number];
 
-// Language of the reader popup's definitions: English only, or a translation
-// alongside. Read when the popup opens, so it is not in the boot script.
+// Language of grammar/word explanations: English, or a translation in its
+// place. Shared by the reader popup and the grammar usage-point cards, whose
+// CSS picks the language from <html data-popup-lang> before first paint.
 export const TRANSLATION_LANGS = ['uk'] as const;
 export const POPUP_LANGS = ['en', ...TRANSLATION_LANGS] as const;
 export type PopupLang = (typeof POPUP_LANGS)[number];
@@ -168,9 +169,14 @@ export function bootScript(): string {
       values: READER_HINTS,
       off: DEFAULTS.readerHint,
     },
+    popupLang: {
+      ...SPEC.popupLang,
+      values: POPUP_LANGS,
+      off: DEFAULTS.popupLang,
+    },
   };
   return `try{var d=document.documentElement.dataset,s=${JSON.stringify(spec)},g=function(k){return localStorage.getItem(k)};
-["theme","readerDensity","readerHint"].forEach(function(n){var c=s[n],v=g(c.key);if(v&&v!==c.off&&c.values.indexOf(v)>-1)d[c.attr]=v});
+["theme","readerDensity","readerHint","popupLang"].forEach(function(n){var c=s[n],v=g(c.key);if(v&&v!==c.off&&c.values.indexOf(v)>-1)d[c.attr]=v});
 var m=g(s.readerModes.key);if(m){var l=m.split(" ").filter(Boolean);if(l.length&&l.every(function(x){return s.readerModes.values.indexOf(x)>-1}))d[s.readerModes.attr]=l.join(" ")}
 var z=g(s.readerSize.key);if(z&&z!==s.readerSize.off&&/^[0-9]+$/.test(z)&&+z<s.readerSize.steps)d[s.readerSize.attr]=z}catch(e){}`;
 }
