@@ -478,12 +478,15 @@ if so/not/needed, unless/as long as/whether or not, should, were to, if it weren
 let's/let's not, let me, let him/her/them, imperative + and, see above). Content — саме це слово
 (base verb лише в базовій секції; у `don't let` content — `let`, `don't` — grammar).
 
-### [ ] 43. Clauses — phrases/exclamations (`clauses-phrases-exclamations`) — рівень A2
+### [x] 43. Clauses — phrases/exclamations (`clauses-phrases-exclamations`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `clauses-phrases-exclamations`.
+7 EGP-рядків (214-220): 6 чистих FORM без карток; 1 FORM/USE (218, negative interrogative) вплетений
+за `egpIndex`. 5 секцій за словом, що відкриває вигук (what a, what a pity, how + adjective, how +
+clause C2, isn't it / wouldn't it). Додано what + plural/uncountable без `a` (не EGP-рядок, але
+головна пастка поруч із what a). Content — what (a)/how/заперечний допоміжний, grammar — решта слотів.
 
 ### [ ] 44. Clauses — relative (`clauses-relative`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
