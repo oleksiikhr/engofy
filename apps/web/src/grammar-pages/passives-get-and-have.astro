@@ -1,0 +1,322 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 5 FORM/USE rows are inlined, matched by EGP index. The other 2 rows
+// (get + -ed, get + reflexive pronoun + -ed) are plain FORM rows, written in
+// full without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const haveDonePoint = point(738);
+const getToPoint = point(739);
+const getDonePoint = point(740);
+const getIngPoint = point(741);
+const haveDoPoint = point(742);
+
+const inlineUsagePointIds = [haveDonePoint, getToPoint, getDonePoint, getIngPoint, haveDoPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Get and have: the get-passive (my car got stolen), get or be in the passive, get yourself hurt, have something done (I had my car serviced, I had my bag stolen), get something done, get someone to do something, get someone doing something, and the formal have someone do something."
+  handcrafted
+  sections={[
+    { id: 'get-passive', title: 'My car got stolen: get + past participle', open: true },
+    { id: 'get-or-be', title: 'Got broken or was broken?', open: false },
+    { id: 'reflexive', title: 'You could get yourself killed', open: false },
+    { id: 'have-done', title: 'I had my car serviced: have something done', open: false },
+    { id: 'get-done', title: 'I got it repaired: get something done', open: false },
+    { id: 'get-to', title: 'Get them to visit us: get someone to do', open: false },
+    { id: 'get-ing', title: 'It got me thinking: get someone doing', open: false },
+    { id: 'have-do', title: 'Have him fill out a form: have someone do', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Get</em> and <em>have</em> give you a few extra ways to talk about things that happen to people. <em>My phone got stolen</em> is an informal passive — like <em>was stolen</em>. <em>I had my hair cut</em> means someone else cut it for me. And <em>I got him to help me</em> means I persuaded him to help.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="My car got stolen: get + past participle" id="get-passive" open>
+    <p>
+      Instead of <em>be</em>, you can use <em>get</em> + past participle to make a passive. It is common in everyday speech and informal writing. Only <em>get</em> changes for the tense: <em>gets</em>, <em>got</em>, <em>will get</em>, <em>is getting</em>, <em>has got</em>.
+    </p>
+    <GrammarFormula label="Get-passive" parts={['subject', 'get (any form)', 'past participle']} />
+    <GrammarExample note="Got + stolen: the past simple. We don't know who stole it.">
+      Last week <mark data-role="grammar">my husband's car</mark> <mark data-role="content">got</mark> <mark data-role="content">stolen</mark> from our garage.
+    </GrammarExample>
+    <GrammarExample note="Will get + hurt: a warning about the future.">
+      You should be careful while you are crossing or <mark data-role="grammar">you</mark> <mark data-role="content">will get</mark> <mark data-role="content">hurt</mark>.
+    </GrammarExample>
+    <GrammarExample note="Got + broken: something happened to the mirror.">
+      I bought it because <mark data-role="grammar">mine</mark> <mark data-role="content">got</mark> <mark data-role="content">broken</mark>, so I need it to see myself in it.
+    </GrammarExample>
+    <GrammarExample note="Got + paid: a good thing can happen too.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">got</mark> <mark data-role="content">paid</mark> well and I managed to save money for my studies.
+    </GrammarExample>
+    <GrammarExample note="To get + trained: after want someone, with to.">
+      We want <mark data-role="grammar">our staff</mark> <mark data-role="content">to get</mark> <mark data-role="content">trained</mark> effectively.
+    </GrammarExample>
+    <p>
+      The get-passive usually describes something that <strong>happens</strong> to someone, often suddenly or by accident — and often something bad: <em>get hurt</em>, <em>get stolen</em>, <em>get lost</em>, <em>get broken</em>, <em>get caught</em>, <em>get sacked</em>. Good things are possible too: <em>get paid</em>, <em>get invited</em>, <em>get promoted</em>.
+    </p>
+    <p>
+      Because <em>get</em> is a normal verb, negatives and questions use <em>do / does / did</em>, not <em>be</em>.
+    </p>
+    <GrammarFormula label="Negative / question" parts={["didn't / did", 'subject', 'get', 'past participle']} />
+    <GrammarExample note="Didn't get + invited: the negative with did.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">didn't</mark> <mark data-role="content">get</mark> <mark data-role="content">invited</mark> to the party.
+    </GrammarExample>
+    <GrammarExample note="Did + anyone + get + hurt: a question with did.">
+      <mark data-role="grammar">Did</mark> <mark data-role="grammar">anyone</mark> <mark data-role="content">get</mark> <mark data-role="content">hurt</mark> in the accident?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Got broken or was broken?" id="get-or-be" open={false}>
+    <p>
+      The <em>be</em>-passive is correct in every style. The <em>get</em>-passive is more informal, and it puts more attention on the <strong>event</strong> — the moment of change. In formal writing (reports, essays, business letters), use <em>be</em>.
+    </p>
+    <GrammarExample note="Informal, spoken: got.">
+      <mark data-role="grammar">My bike</mark> <mark data-role="content">got</mark> <mark data-role="content">stolen</mark> outside the station!
+    </GrammarExample>
+    <GrammarExample note="Neutral or formal, e.g. in a police report: was.">
+      <mark data-role="grammar">The bicycle</mark> <mark data-role="grammar">was</mark> <mark data-role="content">stolen</mark> from outside the station.
+    </GrammarExample>
+    <p>
+      Use <em>get</em> only for actions and events — not for states, and not with verbs like <em>know</em>, <em>own</em>, <em>believe</em>, <em>situate</em>.
+    </p>
+    <GrammarContrast
+      bad={['The house gets owned by my uncle.', 'He got known as a good teacher by everyone.']}
+      good={['The house is owned by my uncle.', 'He was known as a good teacher by everyone.']}
+    />
+    <p>
+      Some <em>get</em> + past participle pairs are fixed everyday phrases that don't feel like a passive at all: <em>get married</em>, <em>get divorced</em>, <em>get dressed</em>, <em>get lost</em>, <em>get changed</em>, <em>get engaged</em>.
+    </p>
+    <GrammarExample note="Get married: a fixed phrase, not about someone else's action.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">got</mark> <mark data-role="content">married</mark> last summer.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="You could get yourself killed" id="reflexive" open={false}>
+    <p>
+      Put a reflexive pronoun (<em>myself</em>, <em>yourself</em>, <em>himself</em>…) between <em>get</em> and the past participle to show that the person caused it themselves, by their own actions. It is very often a warning about danger or trouble: <em>get yourself killed / hurt / arrested / into trouble</em>.
+    </p>
+    <GrammarFormula label="Reflexive" parts={['subject', 'get', 'myself / yourself / himself…', 'past participle']} />
+    <GrammarExample note="Get + yourself + killed: if you drive badly, it's your own fault.">
+      You must be very careful, because <mark data-role="grammar">you</mark> could <mark data-role="content">get</mark> <mark data-role="grammar">yourself</mark> <mark data-role="content">killed</mark> if you don't drive carefully enough.
+    </GrammarExample>
+    <GrammarExample note="Get + himself + involved: he chooses this, nobody forces him.">
+      Although he has a charming personality, <mark data-role="grammar">he</mark> uses it to <mark data-role="content">get</mark> <mark data-role="grammar">himself</mark> <mark data-role="content">involved</mark> in illegal activities.
+    </GrammarExample>
+    <GrammarExample note="Get + herself + arrested: the result of her own actions.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">got</mark> <mark data-role="grammar">herself</mark> <mark data-role="content">arrested</mark> at the protest.
+    </GrammarExample>
+    <p>
+      Neutral uses exist too: <em>get yourself organised</em>, <em>get yourself dressed</em> — you do it to yourself.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I had my car serviced: have something done" id="have-done" open={false}>
+    <p>
+      <em>Have</em> + object + past participle means someone else does a job for you — you usually pay or ask them. You don't say who did it: <em>I had my car serviced</em> = a mechanic serviced it. <em>Have</em> can be in any tense.
+    </p>
+    <GrammarFormula label="A service" parts={['subject', 'have (any form)', 'object', 'past participle']} />
+    <GrammarExample note="Had + my car + serviced: a mechanic did it, I arranged it.">
+      After I left you on Monday, <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">my car</mark> <mark data-role="content">serviced</mark> and visited Washington.
+    </GrammarExample>
+    <GrammarExample note="Am having + my room + redecorated: it's happening now.">
+      It's such a shame that <mark data-role="grammar">I</mark>'m <mark data-role="content">having</mark> <mark data-role="grammar">my room</mark> <mark data-role="content">redecorated</mark>, but the garden will be perfect.
+    </GrammarExample>
+    <GrammarExample note="Have + my hair + cut: the hairdresser cuts it.">
+      <mark data-role="grammar">I</mark> need to <mark data-role="content">have</mark> <mark data-role="grammar">my hair</mark> <mark data-role="content">cut</mark> before the wedding.
+    </GrammarExample>
+    <p>
+      The same form also describes something bad that <strong>happened to you</strong>, done by someone else — you didn't arrange it at all. The meaning is like a passive: <em>I had my purse stolen</em> = my purse was stolen.
+    </p>
+    <GrammarFormula label="Something bad happened" parts={['subject', 'have (any form)', 'object', 'stolen / broken / damaged…']} />
+    <GrammarExample note="Had + my purse + stolen: someone stole it from me.">
+      My plans fell through because <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">my purse</mark> <mark data-role="content">stolen</mark> and I had no money to continue my journey.
+    </GrammarExample>
+    <GrammarExample note="Had + my leg + broken: an accident, not a service.">
+      I had to stop playing because <mark data-role="grammar">I</mark> <mark data-role="content">had</mark> <mark data-role="grammar">my leg</mark> <mark data-role="content">broken</mark> in a car crash.
+    </GrammarExample>
+    <GrammarExample note="Having + your bike + stolen: after the risk of, use -ing.">
+      In a big city, the risk of <mark data-role="content">having</mark> <mark data-role="grammar">your bike</mark> <mark data-role="content">stolen</mark> is bigger.
+    </GrammarExample>
+    {haveDonePoint && <GrammarUsagePointCard usagePoint={haveDonePoint} />}
+    <p>
+      Word order matters. The object goes <strong>between</strong> <em>have</em> and the participle. If the participle comes straight after <em>had</em>, it's the past perfect — you did it yourself.
+    </p>
+    <GrammarContrast
+      good={['I had my hair cut. (the hairdresser cut it)', 'I had cut my hair. (past perfect — I cut it myself)']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="I got it repaired: get something done" id="get-done" open={false}>
+    <p>
+      <em>Get</em> + object + past participle means the same as <em>have something done</em>, but it is more informal. It often suggests some effort: you had to organise it, push for it, or do it yourself.
+    </p>
+    <GrammarFormula label="Get something done" parts={['subject', 'get (any form)', 'object', 'past participle']} />
+    <GrammarExample note="Get + it + repaired: it took hours to find someone and organise it.">
+      Our minibus broke down and it took hours to <mark data-role="content">get</mark> <mark data-role="grammar">it</mark> <mark data-role="content">repaired</mark>.
+    </GrammarExample>
+    <GrammarExample note="Getting + their orders + delivered: the orders didn't arrive on time.">
+      We received several complaints from customers about not <mark data-role="content">getting</mark> <mark data-role="grammar">their orders</mark> <mark data-role="content">delivered</mark> in time.
+    </GrammarExample>
+    <GrammarExample note="Get + my hair + cut = have my hair cut, but more informal.">
+      <mark data-role="grammar">I</mark>'m going to <mark data-role="content">get</mark> <mark data-role="grammar">my hair</mark> <mark data-role="content">cut</mark> tomorrow.
+    </GrammarExample>
+    <p>
+      <em>Get things done</em> is a common fixed phrase: to finish your work, to make things happen.
+    </p>
+    <GrammarExample note="Get + things + done: she makes sure the work is finished.">
+      I'm a bit lazy, but <mark data-role="grammar">she</mark> is always the one who tries to <mark data-role="content">get</mark> <mark data-role="grammar">things</mark> <mark data-role="content">done</mark>.
+    </GrammarExample>
+    {getDonePoint && <GrammarUsagePointCard usagePoint={getDonePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Get them to visit us: get someone to do" id="get-to" open={false}>
+    <p>
+      <em>Get</em> + person + <em>to</em>-infinitive means you persuade or cause someone to do something. It's often not easy — you need to convince them.
+    </p>
+    <GrammarFormula label="Persuade" parts={['subject', 'get (any form)', 'someone', 'to + base verb']} />
+    <GrammarExample note="Get + them + to visit: persuade our friends to come.">
+      We need to explain these things to our friends in order to <mark data-role="content">get</mark> <mark data-role="grammar">them</mark> <mark data-role="content">to visit</mark> us more often.
+    </GrammarExample>
+    <GrammarExample note="Get + them + to shop: make customers choose this store.">
+      It is a good way to <mark data-role="content">get</mark> <mark data-role="grammar">them</mark> <mark data-role="content">to shop</mark> at this particular store.
+    </GrammarExample>
+    <GrammarExample note="Get + these people + to go: it's hard to persuade them.">
+      I understand that it must be difficult to <mark data-role="content">get</mark> <mark data-role="grammar">these people</mark> <mark data-role="content">to go</mark> to the festival.
+    </GrammarExample>
+    {getToPoint && <GrammarUsagePointCard usagePoint={getToPoint} />}
+    <p>
+      Compare with <em>make</em>: <em>make someone do</em> (no <em>to</em>) is stronger — the person has no choice. <em>Get someone to do</em> — you persuade them.
+    </p>
+    <GrammarContrast
+      good={['I got my brother to help me. (I persuaded him)', 'My mum made my brother help me. (he had no choice)']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="It got me thinking: get someone doing" id="get-ing" open={false}>
+    <p>
+      <em>Get</em> + object + <em>-ing</em> means you cause someone or something to <strong>start</strong> doing something, and the activity continues. It is common with <em>thinking</em>, <em>moving</em>, <em>talking</em>, <em>going</em>, <em>laughing</em>.
+    </p>
+    <GrammarFormula label="Start an activity" parts={['subject', 'get (any form)', 'someone / something', 'verb + -ing']} />
+    <GrammarExample note="Got + me + thinking: the letter made me start thinking about it.">
+      I was very happy when I received your letter, although I must say that <mark data-role="grammar">your dilemma</mark> <mark data-role="content">got</mark> <mark data-role="grammar">me</mark> <mark data-role="content">thinking</mark>.
+    </GrammarExample>
+    <GrammarExample note="Got + me + yawning: the CDs were so boring.">
+      These CDs were so boring — <mark data-role="grammar">they</mark> <mark data-role="content">got</mark> <mark data-role="grammar">me</mark> <mark data-role="content">yawning</mark> from the very first minute.
+    </GrammarExample>
+    <GrammarExample note="Get + people + moving: make people start dancing.">
+      Both bands really know how to <mark data-role="content">get</mark> <mark data-role="grammar">people</mark> <mark data-role="content">moving</mark>.
+    </GrammarExample>
+    <GrammarExample note="Get + the engine + going: something, not someone.">
+      It was so cold that <mark data-role="grammar">we</mark> couldn't <mark data-role="content">get</mark> <mark data-role="grammar">the engine</mark> <mark data-role="content">going</mark>.
+    </GrammarExample>
+    {getIngPoint && <GrammarUsagePointCard usagePoint={getIngPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Have him fill out a form: have someone do" id="have-do" open={false}>
+    <p>
+      <em>Have</em> + person + base verb (no <em>to</em>) means you ask or instruct someone to do something — usually because it's their job or you are in charge. It sounds formal or businesslike: managers, teachers, doctors, hotels.
+    </p>
+    <GrammarFormula label="Instruct" parts={['subject', 'have (any form)', 'someone', 'base verb']} />
+    <GrammarExample note="Have + him + fill out: the school asks the student to do it.">
+      In assessing a student's skills, it is not enough to just <mark data-role="content">have</mark> <mark data-role="grammar">him</mark> <mark data-role="content">fill out</mark> a multiple-choice form.
+    </GrammarExample>
+    <GrammarExample note="Have + them + practise: we organise it so they practise.">
+      In order to attract people and <mark data-role="content">have</mark> <mark data-role="grammar">them</mark> <mark data-role="content">practise</mark> their English, we could point out the benefits.
+    </GrammarExample>
+    <GrammarExample note="Have + my assistant + call: a typical business phrase.">
+      <mark data-role="grammar">I</mark>'ll <mark data-role="content">have</mark> <mark data-role="grammar">my assistant</mark> <mark data-role="content">call</mark> you tomorrow.
+    </GrammarExample>
+    {haveDoPoint && <GrammarUsagePointCard usagePoint={haveDoPoint} />}
+    <p>
+      The difference from <em>get someone to do</em>: with <em>have</em>, the person does it because you tell them to (no persuading needed); with <em>get</em>, you have to persuade them. And only <em>get</em> takes <em>to</em>.
+    </p>
+    <GrammarContrast
+      good={["I'll have the porter carry your bags. (it's his job)", 'I finally got my son to tidy his room. (I persuaded him)']}
+    />
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After <em>get</em> or <em>have</em> + object, use the past participle when someone else does the action to the object. Don't use the base verb or the past simple form.
+    </p>
+    <GrammarContrast
+      bad={['I had my car repair yesterday.', 'I got my hair cutted.', 'My bag got steal on the train.']}
+      good={['I had my car repaired yesterday.', 'I got my hair cut.', 'My bag got stolen on the train.']}
+    />
+    <p>
+      Put the object between <em>have</em> and the participle. <em>I had cut my hair</em> means you did it yourself.
+    </p>
+    <GrammarContrast
+      bad={['I had repaired my bike at the shop. (you mean the shop did it)', "I'm going to cut my hair at the hairdresser's."]}
+      good={['I had my bike repaired at the shop.', "I'm going to have my hair cut at the hairdresser's."]}
+    />
+    <p>
+      <em>Get someone</em> takes <em>to</em>; <em>have someone</em> and <em>make someone</em> don't.
+    </p>
+    <GrammarContrast
+      bad={['I got him help me.', "I'll have him to call you back.", 'She made me to wait.']}
+      good={['I got him to help me.', "I'll have him call you back.", 'She made me wait.']}
+    />
+    <p>
+      The get-passive makes negatives and questions with <em>do</em>, not with <em>be</em>.
+    </p>
+    <GrammarContrast
+      bad={["I wasn't get invited.", 'Was he get hurt?']}
+      good={["I didn't get invited.", 'Did he get hurt?']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'passives-passives-form',
+        name: 'passive with be',
+        note: 'It was stolen — the neutral passive, correct in any style; get-passive is informal.',
+      },
+      {
+        slug: 'pronouns-reflexive',
+        name: 'reflexive pronouns',
+        note: 'Myself, yourself, himself… — used in get yourself hurt.',
+      },
+      {
+        slug: 'verbs-linking',
+        name: 'linking verbs',
+        note: 'Get tired, get angry — get + adjective, a change of state, not a passive.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'verb patterns with to and -ing',
+        note: 'Want someone to do, make someone do — other verb + object + verb patterns.',
+      },
+      {
+        slug: 'past-past-perfect-simple',
+        name: 'past perfect',
+        note: 'I had cut my hair (I did it) vs I had my hair cut (someone did it for me).',
+      },
+    ]}
+  />
+</GrammarShell>
