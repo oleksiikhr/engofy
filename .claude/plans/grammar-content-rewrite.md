@@ -769,12 +769,16 @@ alternative, 1014 hedging) вплетені за `egpIndex` — generic-блок
 ↘↗, +/+, right?, імператив/Let's…shall we, there + be, відповідь на тег — без EGP-рядка, common mistakes з калькою так?
 → isn't it). Content — сам тег; підмет + дієслово головного речення, яке тег копіює — `grammar`.
 
-### [ ] 71. Questions — wh- (`questions-wh`) — рівень A2
+### [x] 71. Questions — wh- (`questions-wh`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `questions-wh`.
+9 EGP-рядків (1023-1031): 7 чистих FORM без карток, 2 USE (1028 Why don't we…? suggestion, 1031 focus) вплетені за
+`egpIndex` — generic-блок не рендериться. 12 секцій (таблиця wh-слів з укр. відповідниками, be, do, aux be/have, модальні,
+how much/what time/which + noun, subject questions — коротко з посиланням на `clauses-interrogatives`, прийменник у кінці,
+Why don't we…?, негативні why can't/didn't, focus, common mistakes з калькою How do you think? → What). Content — wh-слово/фраза;
+допоміжне, підмет, дієслово — `grammar`. Таблиця з 4 колонками переповнювала контейнер на 375px — укр. переклад злито в колонку.
 
 ### [ ] 72. Reported speech — reported speech (`reported-speech-reported-speech`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
