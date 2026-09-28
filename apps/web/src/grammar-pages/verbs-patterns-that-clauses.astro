@@ -1,0 +1,249 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 5 EGP rows (1052-1056), all pure FORM, so no usage-point cards: verb +
+// that-clause (1052 A2, 1055 B1 wider range), that left out (1053), verb +
+// person + (that)-clause (1054), verb + to + person + that-clause (1056).
+// Content is the main verb (think, hope, told, explained); that, the listener
+// and the clause's subject and verb are grammar.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Verbs followed by a that-clause in English: I think (that) it's true, I hope you can come, She told me that she was busy, He explained to me that… When you can leave out that, which verbs need a person or to + person before the clause, I don't think vs I think … not, and I think so / I hope not."
+  handcrafted
+  sections={[
+    { id: 'think-that', title: 'I think that… Verb + that-clause', open: true },
+    { id: 'no-that', title: 'I think it’s true. Leaving out that', open: false },
+    { id: 'told-me', title: 'She told me that… Verb + person + clause', open: false },
+    { id: 'more-verbs', title: 'realise, explain, agree… More verbs', open: false },
+    { id: 'to-person', title: 'He explained to me that… Verb + to + person', open: false },
+    { id: 'negative', title: 'I don’t think it will rain. Negatives', open: false },
+    { id: 'think-so', title: 'I think so. I hope not. Short answers', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      Many verbs of thinking and saying — <em>think, know, hope, say, tell</em> — can be followed by a whole clause with its own subject and verb: <em>I think <strong>that the film starts at eight</strong>.</em> The clause is the object of the verb: it answers “think what?”. <em>That</em> works like Ukrainian <em>що</em>, but in English you can often leave it out.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="I think that… Verb + that-clause" id="think-that" open>
+    <p>
+      Put <em>that</em> straight after the verb, then a normal clause: subject + verb. The most common verbs here are <em>think, know, hope, say, hear</em> and <em>believe</em>.
+    </p>
+    <GrammarFormula label="Verb + that-clause" parts={['subject', 'think / know / hope / say', 'that', 'subject', 'verb …']} />
+    <GrammarExample note="hope + that: what you want to happen.">
+      I <mark data-role="content">hope</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you'll come</mark>.
+    </GrammarExample>
+    <GrammarExample note="think + that: your opinion or what you believe is true.">
+      I <mark data-role="content">think</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">begins</mark> on 20 or 21 May.
+    </GrammarExample>
+    <GrammarExample note="hear + that: news you got from someone else.">
+      I <mark data-role="content">heard</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">are</mark> quite busy right now.
+    </GrammarExample>
+    <GrammarExample note="say + that: reporting someone's words.">
+      My mother <mark data-role="content">said</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">can help</mark> us.
+    </GrammarExample>
+    <p>
+      Ukrainian puts a comma before <em>що</em>: <em>Я думаю, що він правий.</em> English never puts a comma before <em>that</em> here — <em>I think that he's right.</em>
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I think it’s true. Leaving out that" id="no-that">
+    <p>
+      In everyday speech and informal writing, <em>that</em> is usually left out, especially after <em>think, hope, know, say</em> and <em>guess</em>. The meaning doesn't change. The clause just follows the verb directly — with no comma.
+    </p>
+    <GrammarFormula label="Without that" parts={['subject', 'think / hope / know', 'subject', 'verb …']} />
+    <GrammarExample note="The most natural way to give advice in a message to a friend.">
+      I <mark data-role="content">think</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">should go</mark> and see the Twin Towers.
+    </GrammarExample>
+    <GrammarExample note="hope + clause, no that — informal.">
+      I <mark data-role="content">hope</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">can go</mark>, buddy.
+    </GrammarExample>
+    <GrammarExample note="know + clause, no that.">
+      I <mark data-role="content">know</mark> <mark data-role="grammar">it's</mark> impossible for you to come during the exams.
+    </GrammarExample>
+    <p>
+      Keep <em>that</em> in formal writing, and after less common verbs such as <em>reply, complain, shout, whisper</em> — <em>She replied <strong>that</strong> she was not interested</em> sounds right; without <em>that</em> it sounds odd.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="She told me that… Verb + person + clause" id="told-me">
+    <p>
+      Some verbs need a person — the listener — right after them, before the clause: <em>tell, promise, show, remind, warn, teach</em>. The person has no preposition: <em>tell <strong>me</strong></em>, <em>promise <strong>you</strong></em>. <em>That</em> is optional here too.
+    </p>
+    <GrammarFormula label="Verb + person + clause" parts={['subject', 'told / promised / reminded', 'person', '(that)', 'subject', 'verb …']} />
+    <GrammarExample note="tell always needs the listener: told me.">
+      Nisha <mark data-role="content">told</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">had</mark> an accident last week.
+    </GrammarExample>
+    <GrammarExample note="promise + person + that.">
+      You <mark data-role="content">promised</mark> <mark data-role="grammar">me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">would help</mark> me paint my bedroom.
+    </GrammarExample>
+    <GrammarExample note="remind + person: help someone remember.">
+      Can you <mark data-role="content">remind</mark> <mark data-role="grammar">him</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the meeting</mark> <mark data-role="grammar">starts</mark> at nine?
+    </GrammarExample>
+    <GrammarExample note="warn + person: tell them about a danger or problem.">
+      They <mark data-role="content">warned</mark> <mark data-role="grammar">us</mark> <mark data-role="grammar">the roads</mark> <mark data-role="grammar">were</mark> icy.
+    </GrammarExample>
+    <p>
+      <em>Say</em> works differently: it doesn't take a person straight after it. <em>She <strong>told me</strong> that…</em> or <em>She <strong>said</strong> that…</em> — never <em>said me</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="realise, explain, agree… More verbs" id="more-verbs">
+    <p>
+      At B1 you'll need a wider range of verbs with a <em>that</em>-clause. They fall into a few groups by meaning, and all of them work the same way: verb + <em>(that)</em> + subject + verb.
+    </p>
+    <table class="gp-table">
+      <thead>
+        <tr><th>Meaning</th><th>Verbs</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>thinking, believing</td><td><em>believe, suppose, guess, imagine, expect, feel</em></td></tr>
+        <tr><td>knowing, understanding</td><td><em>understand, realise, remember, forget, be sure</em></td></tr>
+        <tr><td>finding out</td><td><em>notice, find, discover, learn, read, see</em></td></tr>
+        <tr><td>saying</td><td><em>explain, mention, admit, reply, agree, complain, suggest</em></td></tr>
+        <tr><td>deciding, wanting</td><td><em>decide, hope, wish, pretend</em></td></tr>
+      </tbody>
+    </table>
+    <GrammarFormula label="Wider range" parts={['subject', 'realise / understand / explain …', '(that)', 'subject', 'verb …']} />
+    <GrammarExample note="realise: you suddenly understand something.">
+      When I got there, I <mark data-role="content">realised</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wasn't</mark> the only winner.
+    </GrammarExample>
+    <GrammarExample note="understand: you accept how someone feels.">
+      I totally <mark data-role="content">understand</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">don't want</mark> to go on holiday with your parents.
+    </GrammarExample>
+    <GrammarExample note="notice: you see something.">
+      I <mark data-role="content">noticed</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the door</mark> <mark data-role="grammar">was</mark> open.
+    </GrammarExample>
+    <GrammarExample note="agree: you have the same opinion.">
+      We all <mark data-role="content">agreed</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the trip</mark> <mark data-role="grammar">was</mark> too expensive.
+    </GrammarExample>
+    <p>
+      After a past verb (<em>realised, noticed, said</em>), the verb in the clause usually moves into the past too — <em>I realised I <strong>wasn't</strong>…</em>. The details are on the reported speech page.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="He explained to me that… Verb + to + person" id="to-person">
+    <p>
+      Many saying verbs — <em>say, explain, mention, admit, complain, suggest, point out</em> — can't take a person directly. If you want to name the listener, use <em>to</em> + person, and then the <em>that</em>-clause.
+    </p>
+    <GrammarFormula label="Verb + to + person" parts={['subject', 'said / explained / mentioned', 'to + person', 'that', 'subject', 'verb …']} />
+    <GrammarExample note="said to my friends: the listener comes after to.">
+      When I <mark data-role="content">said</mark> <mark data-role="grammar">to my friends</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">had met</mark> him, they didn't believe me.
+    </GrammarExample>
+    <GrammarExample note="Advice: tell your parents what you want.">
+      You should <mark data-role="content">say</mark> <mark data-role="grammar">to your parents</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">want</mark> to try something new.
+    </GrammarExample>
+    <GrammarExample note="explain to + person — not explain me.">
+      The teacher <mark data-role="content">explained</mark> <mark data-role="grammar">to us</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">the test</mark> <mark data-role="grammar">had been</mark> moved.
+    </GrammarExample>
+    <GrammarExample note="mention to + person: say it briefly.">
+      She <mark data-role="content">mentioned</mark> <mark data-role="grammar">to me</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">she</mark> <mark data-role="grammar">was</mark> leaving.
+    </GrammarExample>
+    <p>
+      Ukrainian <em>пояснив мені</em> has no preposition, so learners often write <em>explained me</em>. In English it's <em>explained <strong>to</strong> me</em> — or simply <em>told me</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="I don’t think it will rain. Negatives" id="negative">
+    <p>
+      With <em>think, believe, suppose, expect</em> and <em>imagine</em>, English makes the first verb negative, not the one in the clause. <em>I think it won't rain</em> is grammatical, but <em>I don't think it will rain</em> is what people normally say.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', 'don’t / doesn’t think', '(that)', 'subject', 'verb …']} />
+    <GrammarExample note="More natural than I think it won't rain.">
+      I <mark data-role="content">don't think</mark> <mark data-role="grammar">it</mark> <mark data-role="grammar">will rain</mark> today.
+    </GrammarExample>
+    <GrammarExample note="More natural than She believes he isn't guilty.">
+      She <mark data-role="content">doesn't believe</mark> <mark data-role="grammar">that</mark> <mark data-role="grammar">he</mark> <mark data-role="grammar">is</mark> guilty.
+    </GrammarExample>
+    <p>
+      <em>Hope</em> is the exception: the negative goes in the clause. <em>I hope it <strong>doesn't</strong> rain</em>, not <em>I don't hope it rains</em>.
+    </p>
+    <GrammarExample note="hope + negative clause.">
+      I <mark data-role="content">hope</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">don't mind</mark> me asking.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="I think so. I hope not. Short answers" id="think-so">
+    <p>
+      To answer without repeating the whole clause, replace it with <em>so</em> (yes) or <em>not</em> (no). This works with <em>think, hope, guess, suppose, expect</em> and <em>I'm afraid</em>.
+    </p>
+    <GrammarFormula label="Short answer" parts={['subject', 'think / hope / guess', 'so / not']} />
+    <GrammarExample note="“Is the shop open on Sunday?” — yes, probably.">
+      I <mark data-role="content">think</mark> <mark data-role="grammar">so</mark>.
+    </GrammarExample>
+    <GrammarExample note="“Will it rain tomorrow?” — you want the answer to be no.">
+      I <mark data-role="content">hope</mark> <mark data-role="grammar">not</mark>.
+    </GrammarExample>
+    <GrammarExample note="“Is there any cake left?” — a polite no.">
+      I<mark data-role="content">'m afraid</mark> <mark data-role="grammar">not</mark>.
+    </GrammarExample>
+    <p>
+      With <em>think</em>, the negative is usually <em>I don't think so</em>. Ukrainian <em>Думаю, так</em> is <em>I think so</em>, not <em>I think yes</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      No comma before <em>that</em> or before the clause — even though Ukrainian puts one before <em>що</em>.
+    </p>
+    <GrammarContrast bad={['I think, that he is right.', 'I hope, you are well.']} good={['I think that he is right.', 'I hope you are well.']} />
+    <p>
+      <em>Tell</em> needs a person; <em>say, explain</em> and <em>suggest</em> take <em>to</em> + person, or none.
+    </p>
+    <GrammarContrast bad={['She said me that she was busy.', 'He explained me that the bus was late.']} good={['She told me that she was busy.', 'He explained to me that the bus was late.']} />
+    <p>
+      Make <em>think</em> negative, not the clause after it.
+    </p>
+    <GrammarContrast bad={['I think it isn’t a good idea.']} good={['I don’t think it’s a good idea.']} />
+    <p>
+      Use <em>so</em> in short answers, not <em>yes</em> or <em>that</em>.
+    </p>
+    <GrammarContrast bad={['I think yes.', 'I hope that.']} good={['I think so.', 'I hope so.']} />
+    <p>
+      The clause after <em>that</em> is a normal statement — no question word order.
+    </p>
+    <GrammarContrast bad={['I know that is she at home.']} good={['I know that she is at home.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'reported-speech-reported-speech',
+        name: 'reported speech',
+        note: 'said that, told me that, asked if — the tense shift and time words when you retell someone’s words.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'verbs + to / -ing',
+        note: 'want to go, enjoy going — the other things that can follow a verb instead of a clause.',
+      },
+      {
+        slug: 'clauses-subordinated',
+        name: 'subordinate clauses',
+        note: 'because, when, if — clauses that add time, reason or condition, not the object of the verb.',
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: 'the film that we saw — here that describes a noun, not a verb’s object.',
+      },
+    ]}
+  />
+</GrammarShell>
