@@ -583,12 +583,16 @@ common mistakes. Content — сам модальний прислівник; sub
 ability, requests, permission, suggestions, possibility, could have: past possibility / past guess /
 regret+criticism, reported, common mistakes). Content — сам could / couldn't / could have.
 
-### [ ] 53. Modality — expressions with be (`modality-expressions-with-be`) — рівень A2
+### [x] 53. Modality — expressions with be (`modality-expressions-with-be`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-expressions-with-be`.
+23 EGP-рядки (464-486): 5 чистих FORM (465/466/470/471/485) без карток; 18 USE вплетені за
+`egpIndex`. 14 секцій (form, will be able / modal + be able, was able, allowed, supposed + was supposed,
+hearsay, meant, likely + more/less likely, sure/certain/bound, imperative be sure to, due/be to/set,
+obliged/forced, + that-clause hedging, not + adj + to vs adj + not + to) + common mistakes. Content —
+сам прикметник/дієприкметник (able/allowed/supposed…); be/modal/subject/to/verb/not — grammar.
 
 ### [ ] 54. Modality — have (got) to (`modality-have-got-to`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
