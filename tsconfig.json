@@ -25,5 +25,5 @@
     "verbatimModuleSyntax": true,
     "useDefineForClassFields": true
   },
-  "exclude": ["node_modules", "dist", "apps"]
+  "exclude": ["node_modules", "dist", ".e2e-build", "apps"]
 }

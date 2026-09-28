@@ -4,6 +4,7 @@
     "node_modules",
     "test",
     "dist",
+    ".e2e-build",
     "apps",
     "**/*.spec.ts",
     "**/*.ispec.ts"
