@@ -541,12 +541,16 @@ grammar — subject + verb і фокусована частина.
 з be / інші дієслова, adverbs mid-position + перед дієсловом, was going to…but, future in the past +
 reporting, common mistakes). Content — сам `going to` (як `will` на сторінці will); be/subject/verb/adverb — grammar.
 
-### [ ] 49. Future — present continuous for future use (`future-present-continuous-for-future-use`) — рівень A2
+### [x] 49. Future — present continuous for future use (`future-present-continuous-for-future-use`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `future-present-continuous-for-future-use`.
+13 EGP-рядків (412-424): 4 чисті FORM (when, as soon as, by the time, only when + інверсія) без карток;
+9 USE вплетені за `egpIndex`. EGP кладе сюди й present simple для майбутнього (418-424) — тому сторінка
+покриває обидва часи: 9 секцій (arrangements, more verbs + контраст із going to, questions, timetables,
+I hope, time clauses, only when, suggest that, common mistakes). Content — -ing-дієслово / present
+simple дієслово; be/subject/час/when/that — grammar.
 
 ### [ ] 50. Modality — adjectives (`modality-adjectives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
