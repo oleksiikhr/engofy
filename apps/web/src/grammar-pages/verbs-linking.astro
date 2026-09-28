@@ -1,0 +1,167 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 3 EGP rows (1102-1104: 'be' + complement A1, an increasing range of
+// linking verbs A2, a wide range B2) are plain FORM rows — no usage points,
+// so no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Verbs like be, look, feel, seem and become that connect the subject to a description or a new identity instead of showing an action — and why the word after them is an adjective, not an adverb."
+  handcrafted
+  sections={[
+    { id: 'be', title: "Am, is, are: 'be' + complement", open: true },
+    { id: 'senses', title: 'Look, feel, sound, taste, smell: the senses', open: false },
+    { id: 'change', title: 'Become, get, turn, grow: change', open: false },
+    { id: 'state', title: 'Remain, stay, appear, seem: staying or seeming', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      A linking verb doesn't show an action — it connects the subject to a word that describes it or renames it. <em>Be</em> is the main one, but <em>look</em>, <em>feel</em>, <em>seem</em> and <em>become</em> work the same way: the word after them describes the <em>subject</em>, not the verb, so it's an adjective, not an adverb.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Am, is, are: 'be' + complement" id="be" open>
+    <p>
+      <em>Be</em> is the most basic linking verb. After it comes a complement: an adjective that describes the subject, a noun that renames it, or a phrase like <em>from Poland</em> that says where someone's from.
+    </p>
+    <GrammarFormula label="'be' + complement" parts={['subject', 'am / is / are', 'adjective / noun']} />
+    <GrammarExample note="Adjective: describes the subject.">
+      <mark data-role="grammar">My house</mark> <mark data-role="content">is</mark> <mark data-role="grammar">very clean</mark>.
+    </GrammarExample>
+    <GrammarExample note="Noun: renames the subject.">
+      <mark data-role="grammar">My father</mark> <mark data-role="content">is</mark> <mark data-role="grammar">a teacher</mark>.
+    </GrammarExample>
+    <GrammarExample note="Phrase: where the subject is from.">
+      <mark data-role="grammar">Martin</mark> <mark data-role="content">is</mark> <mark data-role="grammar">from Poland</mark>.
+    </GrammarExample>
+    <p>
+      Nothing happens to the subject here — <em>is</em> just joins it to information about it.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Look, feel, sound, taste, smell: the senses" id="senses" open={false}>
+    <p>
+      These verbs describe how something seems to one of the senses. After them, use an adjective, the same way you'd use one after <em>be</em>.
+    </p>
+    <GrammarFormula label="Senses" parts={['subject', 'look / feel / sound / taste / smell', 'adjective']} />
+    <GrammarExample note="Look: how something appears.">
+      <mark data-role="grammar">It</mark> <mark data-role="content">looks</mark> <mark data-role="grammar">good</mark> on you.
+    </GrammarExample>
+    <GrammarExample note="Feel: how someone feels, not what they do.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">feel</mark> <mark data-role="grammar">sorry</mark> for you.
+    </GrammarExample>
+    <GrammarExample note="Smell: not what someone is doing with their nose.">
+      <mark data-role="grammar">This soup</mark> <mark data-role="content">smells</mark> <mark data-role="grammar">amazing</mark>.
+    </GrammarExample>
+    <GrammarExample note="Sound: how something is heard.">
+      <mark data-role="grammar">The music</mark> <mark data-role="content">sounds</mark> <mark data-role="grammar">strange</mark>.
+    </GrammarExample>
+    <p>
+      The same words can also be action verbs with a different meaning — <em>look at</em> the sky, <em>smell</em> the flowers, <em>taste</em> the soup — and then they behave like ordinary verbs, not linking verbs.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Become, get, turn, grow: change" id="change" open={false}>
+    <p>
+      These verbs link the subject to the state or identity it's changing into. The complement can be an adjective or a noun, just like with <em>be</em>.
+    </p>
+    <GrammarFormula label="Change" parts={['subject', 'become / get / turn / grow', 'adjective / noun']} />
+    <GrammarExample note="Become + noun: a new identity.">
+      <mark data-role="grammar">We</mark> will really <mark data-role="content">become</mark> <mark data-role="grammar">good pen-friends</mark>.
+    </GrammarExample>
+    <GrammarExample note="Get + adjective: an everyday change.">
+      <mark data-role="grammar">It</mark>'s <mark data-role="content">getting</mark> <mark data-role="grammar">dark</mark> outside.
+    </GrammarExample>
+    <GrammarExample note="Turn + adjective: often a colour or a sudden change.">
+      <mark data-role="grammar">Her face</mark> <mark data-role="content">turned</mark> <mark data-role="grammar">red</mark> with embarrassment.
+    </GrammarExample>
+    <GrammarExample note="Grow + adjective: a slow, gradual change.">
+      <mark data-role="grammar">My little brother</mark> has <mark data-role="content">grown</mark> <mark data-role="grammar">very tall</mark> this year.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Remain, stay, appear, seem: staying or seeming" id="state" open={false}>
+    <p>
+      <em>Remain</em> and <em>stay</em> link the subject to a state that continues; <em>appear</em> and <em>seem</em> link it to an impression rather than a fact.
+    </p>
+    <GrammarFormula label="Staying / seeming" parts={['subject', 'remain / stay / appear / seem', 'adjective / noun']} />
+    <GrammarExample note="Remain: a state that doesn't change.">
+      <mark data-role="grammar">Alice</mark> was so unhappy that she <mark data-role="content">remained</mark> <mark data-role="grammar">silent</mark> for a long time.
+    </GrammarExample>
+    <GrammarExample note="Stay: similar to remain, more everyday.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">stayed</mark> <mark data-role="grammar">calm</mark> despite the pressure.
+    </GrammarExample>
+    <GrammarExample note="Appear: an impression, not a certain fact.">
+      Now <mark data-role="grammar">the whole house</mark> <mark data-role="content">appeared</mark> <mark data-role="grammar">very unfamiliar</mark> to me.
+    </GrammarExample>
+    <GrammarExample note="Seem: also an impression, very common.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">seem</mark> <mark data-role="grammar">tired</mark> today.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't forget <em>be</em> before an adjective — some languages don't need a verb here, but English always does.
+    </p>
+    <GrammarContrast
+      bad={['I happy today.', 'The weather cold in winter.']}
+      good={['I am happy today.', 'The weather is cold in winter.']}
+    />
+    <p>
+      After a linking verb, the word describes the <em>subject</em>, not the verb — so it's an adjective, not an <em>-ly</em> adverb.
+    </p>
+    <GrammarContrast
+      bad={['You look nicely.', 'This soup tastes badly.', 'He felt badly about the mistake.']}
+      good={['You look nice.', 'This soup tastes bad.', 'He felt bad about the mistake.']}
+    />
+    <p>
+      The verb still agrees with the subject, exactly as with any other verb.
+    </p>
+    <GrammarContrast
+      bad={['The results seems promising.', 'Everybody seem happy.']}
+      good={['The results seem promising.', 'Everybody seems happy.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'adjectives-position',
+        name: 'adjective position',
+        note: "attributive before a noun vs predicative after 'be'/linking verbs like look and feel.",
+      },
+      {
+        slug: 'adverbs-adverbs-as-modifiers',
+        name: 'adverbs as modifiers',
+        note: 'manner adverbs describe an action verb — not the same job as an adjective after a linking verb.',
+      },
+      {
+        slug: 'nouns-noun-phrases-grammatical-functions',
+        name: 'noun phrase functions',
+        note: "a noun phrase after 'be' (he's a student) — the same noun-complement pattern as become/remain.",
+      },
+      {
+        slug: 'verbs-types',
+        name: 'types of verbs',
+        note: 'where linking verbs fit among action, auxiliary and modal verbs.',
+      },
+    ]}
+  />
+</GrammarShell>

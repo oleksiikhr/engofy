@@ -1,0 +1,235 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 16 EGP rows (922-937): 15 pure FORM rows (subject/object forms in
+// statements, questions, after prepositions, plus 'it' for a first-person
+// speaker, empty 'it', ellipsis, dummy 'it' to introduce, generic 'one',
+// cleft 'it') written without a card; 1 FORM/USE row (936, 'it' + passive)
+// inlined, matched by egpIndex.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const itPassiveC1 = point(936);
+
+const inlineUsagePointIds = [itPassiveC1].filter((p) => p !== undefined).map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Subject pronouns (I, you, he, she, it, we, they) and object pronouns (me, you, him, her, it, us, them) in English: which form goes where, plus the special jobs 'it' does on its own — standing for the speaker, filling an empty subject slot, introducing a longer subject, or starting a passive or cleft sentence."
+  handcrafted
+  sections={[
+    { id: 'form', title: 'Form', open: true },
+    { id: 'object-it', title: "'It' for a thing or situation", open: false },
+    { id: 'its-me', title: "'It's me' — 'it' for the speaker", open: false },
+    { id: 'empty-it', title: "Empty 'it': weather, time, feelings", open: false },
+    { id: 'introducing-it', title: "'It' to introduce what comes later", open: false },
+    { id: 'ellipsis', title: 'Dropping the subject pronoun', open: false },
+    { id: 'generic-one', title: "Generic 'one'", open: false },
+    { id: 'it-passive', title: "'It' + passive", open: false },
+    { id: 'cleft', title: "Cleft 'it was... who...'", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      English pronouns change form depending on their job in the sentence: <em>I</em>, <em>you</em>, <em>he</em>, <em>she</em>, <em>it</em>, <em>we</em>, <em>they</em> go before the verb as the subject; <em>me</em>, <em>you</em>, <em>him</em>, <em>her</em>, <em>it</em>, <em>us</em>, <em>them</em> go after a verb or preposition as the object. <em>It</em> also has several jobs that don't refer to a real thing at all — filling a subject slot the grammar needs, even when there's nothing concrete to point to.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Form" id="form" open>
+    <p>
+      Match the pronoun to its job: subject before the verb, object after it (or after a preposition).
+    </p>
+    <GrammarFormula label="Subject" parts={['I', 'you', 'he/she/it', 'we', 'they']} />
+    <GrammarFormula label="Object" parts={['me', 'you', 'him/her/it', 'us', 'them']} />
+    <GrammarExample note="928 A1: subject pronouns before the verb in statements.">
+      <mark data-role="content">I</mark> like shopping, and <mark data-role="content">she</mark> lives near my home.
+    </GrammarExample>
+    <GrammarExample note="928 A1: 'it' and 'they' as subject.">
+      <mark data-role="content">It</mark> has a big garden, and <mark data-role="content">they</mark>'re nice people.
+    </GrammarExample>
+    <GrammarExample note="926 A1: subject pronouns after an auxiliary or modal in questions.">
+      <mark data-role="grammar">Can</mark> <mark data-role="content">I</mark> help you? What do <mark data-role="content">you</mark> think?
+    </GrammarExample>
+    <GrammarExample note="927 A1: 'you' and 'it' as subject after 'be' in questions.">
+      How <mark data-role="grammar">are</mark> <mark data-role="content">you</mark>? <mark data-role="grammar">Is</mark> <mark data-role="content">it</mark> OK?
+    </GrammarExample>
+    <GrammarExample note="923 A1: object pronouns straight after a verb.">
+      I'm very happy that you want to see <mark data-role="content">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="924 A1: object pronouns after a preposition.">
+      It's very important <mark data-role="grammar">for</mark> <mark data-role="content">me</mark>. Sometimes I go <mark data-role="grammar">with</mark> <mark data-role="content">her</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="'It' for a thing or situation" id="object-it">
+    <p>
+      As an object, <em>it</em> stands for a thing, an idea, or a whole situation already mentioned — the same way <em>him</em> or <em>her</em> stands for a person.
+    </p>
+    <GrammarFormula label="Verb + it" parts={['verb / preposition', 'it']} />
+    <GrammarExample note="922 A1: 'it' as the object of a verb, referring back to a subject already named.">
+      The maths is boring and I don't like <mark data-role="content">it</mark>.
+    </GrammarExample>
+    <GrammarExample note="922 A1: 'it' as the object of 'call', standing for an unnamed problem.">
+      If you can't find it, call <mark data-role="content">me</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="'It's me' — 'it' for the speaker" id="its-me">
+    <p>
+      To identify yourself, English uses <em>it</em> as the subject of <em>be</em>, not <em>I</em> — the natural way to answer "who is this?" or open a message.
+    </p>
+    <GrammarFormula label="Identifying the speaker" parts={["It's", 'name']} />
+    <GrammarExample note="925 A1: 'it' + 'be' to introduce the speaker, opening a message.">
+      Hello Mrs Bishop. <mark data-role="content">It's</mark> Clarisse.
+    </GrammarExample>
+    <GrammarExample note="925 A1: same pattern, opening a letter.">
+      Dear Cris, <mark data-role="content">it's</mark> me, Paarth.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Empty 'it': weather, time, feelings" id="empty-it">
+    <p>
+      Every English sentence needs a subject, even when there's nothing to name — <em>it</em> fills that slot for weather, time, and (at a higher level) for how a situation seems, without referring to any actual thing.
+    </p>
+    <GrammarFormula label="Empty 'it' — weather/time" parts={['It', "'s/was", 'warm / 3 pm / Monday']} />
+    <GrammarExample note="930 A2: empty 'it' for weather.">
+      <mark data-role="content">It</mark>'s warm and windy.
+    </GrammarExample>
+    <GrammarExample note="930 A2: empty 'it' for time.">
+      Now <mark data-role="content">it</mark>'s 3 pm.
+    </GrammarExample>
+    <GrammarFormula label="Empty 'it' — seeming" parts={['It', 'appears / feels / looks / seems', 'that... / to-infinitive']} />
+    <GrammarExample note="934 B2: empty 'it' with 'seems', introducing what the situation seems to be.">
+      When you watch a film, <mark data-role="content">it</mark> <mark data-role="grammar">seems</mark> to be that you are inside it.
+    </GrammarExample>
+    <GrammarExample note="934 B2: empty 'it' with 'appears', in a formal report.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">appears</mark> that there was an error with the older computer system.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="'It' to introduce what comes later" id="introducing-it">
+    <p>
+      <em>It</em> can also stand in as subject or object for a longer piece of information that's coming later in the sentence — the real subject or object is postponed, and <em>it</em> holds its place.
+    </p>
+    <GrammarFormula label="It + be + adjective + to-infinitive" parts={['It', 'is/was', 'adjective', 'to + base verb']} />
+    <GrammarExample note="931 B1: dummy 'it' as subject, postponing the real subject (a to-infinitive clause).">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is</mark> best to spend your time in the countryside.
+    </GrammarExample>
+    <GrammarExample note="931 B1: same pattern, postponing a to-infinitive clause after 'boring'.">
+      <mark data-role="content">It</mark>'s boring to be at home when you have a lot of free time.
+    </GrammarExample>
+    <GrammarFormula label="Verb + it + adjective + to-infinitive" parts={['make', 'it', 'adjective', 'to + base verb']} />
+    <GrammarExample note="932 B2: 'it' as object after 'make', postponing the real object (a to-infinitive clause).">
+      This shyness <mark data-role="grammar">makes</mark> <mark data-role="content">it</mark> hard for me to speak in public.
+    </GrammarExample>
+    <GrammarExample note="932 B2: same pattern, postponing a to-infinitive clause after 'impossible'.">
+      Cheaper prices <mark data-role="grammar">make</mark> <mark data-role="content">it</mark> impossible for us to do business.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Dropping the subject pronoun" id="ellipsis">
+    <p>
+      In informal spoken English, the subject pronoun (usually <em>I</em>) can be left out at the start of a sentence, when it's still obvious who's meant — with <em>hope</em>, and with a small set of common expressions.
+    </p>
+    <GrammarFormula label="(I) hope" parts={['(I)', 'hope', 'to-infinitive / clause']} />
+    <GrammarExample note="929 A2: 'I' dropped before 'hope'.">
+      Hope to see you soon.
+    </GrammarExample>
+    <GrammarExample note="929 A2: same ellipsis, opening a message.">
+      Hi! How are you? Hope you are fine.
+    </GrammarExample>
+    <GrammarFormula label="(I) + fixed informal verb" parts={['(I)', 'must/can/have to', 'verb']} />
+    <GrammarExample note="933 B2: 'I' dropped before 'must', informal spoken style.">
+      Must rush now because I have to go out with Paul.
+    </GrammarExample>
+    <GrammarExample note="933 B2: 'I' dropped before 'can't', a fixed informal expression.">
+      Can't wait to hear about your exam.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Generic 'one'" id="generic-one">
+    <p>
+      In formal writing, <em>one</em> can be used as a subject pronoun meaning "people in general", including the speaker — a more formal alternative to generic <em>you</em>.
+    </p>
+    <GrammarFormula label="Generic 'one'" parts={['One', 'verb (+ can/should)']} />
+    <GrammarExample note="935 B2: 'one' as a generic subject, referring to people in general.">
+      If <mark data-role="content">one</mark> doesn't live close enough to walk to work, <mark data-role="content">one</mark> can choose to get there by bicycle.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="'It' + passive" id="it-passive">
+    <p>
+      In formal writing, <em>it</em> can be the subject of a passive verb when who did the action is unknown or unimportant — the focus stays on the fact, not on who's responsible for it.
+    </p>
+    <GrammarFormula label="It + passive + that-clause" parts={['It', 'is/was + past participle', 'that-clause']} />
+    <GrammarExample note="936 C1: empty 'it' with a passive verb, avoiding naming who considered it.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">was considered</mark> to be the most important thing to supply every computer with Internet access.
+    </GrammarExample>
+    <GrammarExample note="936 C1: same pattern with 'is hoped', a formal recommendation.">
+      <mark data-role="content">It</mark> <mark data-role="grammar">is hoped</mark> that this report will help the club to improve.
+    </GrammarExample>
+    {itPassiveC1 && <GrammarUsagePointCard usagePoint={itPassiveC1} />}
+  </GrammarSection>
+
+  <GrammarSection title="Cleft 'it was... who...'" id="cleft">
+    <p>
+      Splitting a sentence in two around <em>it was/is</em> puts one part — often the subject — under heavy emphasis, singling it out from every alternative.
+    </p>
+    <GrammarFormula label="Cleft construction" parts={['It was/is', 'emphasised element', 'who/that + rest of clause']} />
+    <GrammarExample note="937 C2: cleft construction emphasising the subject with 'who'.">
+      <mark data-role="content">It was</mark> my father <mark data-role="grammar">who took</mark> all this away from me.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      After a verb or a preposition, English needs the object form, never the subject form — even when the subject form is what a translation from your language would suggest.
+    </p>
+    <GrammarContrast bad={['I want to see he.', 'Give the book to I.']} good={['I want to see him.', 'Give the book to me.']} />
+    <p>
+      To identify yourself on the phone or in a message, English says <em>it's me</em>, not <em>it's I</em> or <em>I am</em> on its own.
+    </p>
+    <GrammarContrast bad={["It's I, Clarisse.", 'Hello, I am Clarisse, on the phone.']} good={["It's me, Clarisse."]} />
+    <p>
+      Weather, time and "it seems" sentences need <em>it</em> as a subject — English never leaves the subject slot empty, even when nothing concrete fills it.
+    </p>
+    <GrammarContrast bad={['Is raining.', 'Seems that he left.']} good={["It's raining.", 'It seems that he left.']} />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'pronouns-indefinite-thing-one-body-etc',
+        name: 'pronouns — indefinite',
+        note: 'something, everyone, nobody — pronouns that stand for an unspecified person or thing, not a specific one already named.',
+      },
+      {
+        slug: 'pronouns-possessive',
+        name: 'pronouns — possessive',
+        note: 'mine, yours, hers — pronouns that replace a possessive noun phrase, not a subject or object.',
+      },
+      {
+        slug: 'determiners-articles',
+        name: 'determiners — articles',
+        note: 'a, an, the, used before a noun instead of standing alone as a pronoun.',
+      },
+    ]}
+  />
+</GrammarShell>

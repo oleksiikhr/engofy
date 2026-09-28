@@ -1,0 +1,169 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 4 EGP rows (1048-1051: a limited then increasing range of verb +
+// preposition + object A1/B1, stranded preposition B2, an adverb between
+// verb and preposition B2) are plain FORM rows — no usage points, no cards.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Verbs like listen to, look after and depend on that always pair with one fixed preposition — not a free choice of meaning — plus what happens to that preposition when it's stranded, split by an adverb, or followed by -ing instead of a to-infinitive."
+  handcrafted
+  sections={[
+    { id: 'form-basics', title: 'Listen to, look after: verb + preposition + object', open: true },
+    { id: 'wider-range', title: 'Deal with, depend on: a wider range', open: false },
+    { id: 'stranding', title: 'The difficulty we should deal with: stranded preposition', open: false },
+    { id: 'adverb-preposition', title: 'Look carefully at: an adverb between verb and preposition', open: false },
+    { id: 'preposition-ing', title: "Look forward to, be used to: preposition + -ing", open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      Many English verbs always pair with one specific preposition — you <em>listen to</em> music, not <em>listen music</em>; you <em>depend on</em> someone, not <em>depend someone</em>. The preposition isn't chosen for its own meaning — it's fixed to the verb, learned as one unit, and often doesn't match the preposition your own language would use.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Listen to, look after: verb + preposition + object" id="form-basics" open>
+    <p>
+      A prepositional verb is a verb plus a preposition that always goes with it, followed by an object. The preposition doesn't add its usual meaning of place or direction here — it's just the word this particular verb happens to need.
+    </p>
+    <GrammarFormula label="Verb + preposition + object" parts={['subject', 'verb', 'preposition', 'object']} />
+    <GrammarExample note="listen to: A1, one of the first prepositional verbs learners meet.">
+      <mark data-role="grammar">I</mark> <mark data-role="grammar">listen</mark> <mark data-role="content">to</mark> <mark data-role="grammar">music</mark> in the living room.
+    </GrammarExample>
+    <GrammarExample note="look after: A1, meaning 'take care of' — nothing to do with looking.">
+      <mark data-role="grammar">I</mark> can <mark data-role="grammar">look</mark> <mark data-role="content">after</mark> <mark data-role="grammar">her</mark> if she needs to do shopping.
+    </GrammarExample>
+    <GrammarExample note="look for: A1, meaning 'search for' — a different preposition from look after.">
+      <mark data-role="grammar">I</mark> like to walk in the woods and <mark data-role="grammar">look</mark> <mark data-role="content">for</mark> <mark data-role="grammar">mushrooms</mark>.
+    </GrammarExample>
+    <p>
+      <em>Look</em> alone already shows the problem: change the preposition and the meaning changes completely — <em>look after</em>, <em>look for</em>, <em>look at</em>. There's no shortcut to this: each verb's preposition has to be learned with the verb, not guessed from a translation.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Deal with, depend on: a wider range" id="wider-range" open={false}>
+    <p>
+      By B1, the range of prepositional verbs you're expected to use grows a lot — many of them describe reacting to, relying on or talking about something.
+    </p>
+    <GrammarFormula label="Verb + preposition + object" parts={['subject', 'verb', 'preposition', 'object']} />
+    <GrammarExample note="look at: B1.">
+      Please <mark data-role="grammar">look</mark> <mark data-role="content">at</mark> <mark data-role="grammar">the information sheet</mark> at the entrance.
+    </GrammarExample>
+    <GrammarExample note="deal with: B1.">
+      Our company needs to <mark data-role="grammar">train</mark> staff on how to <mark data-role="grammar">deal</mark> <mark data-role="content">with</mark> <mark data-role="grammar">complaints</mark>.
+    </GrammarExample>
+    <p>
+      Others in this same range: <em>depend on</em> someone, <em>believe in</em> something, <em>care about</em> a person, <em>apologise for</em> a mistake, <em>agree with</em> an idea, <em>consist of</em> several parts. None of these prepositions can be swapped for a "more logical" one — <em>depend on</em> is fixed, even though another language might use the equivalent of <em>depend from</em> or <em>depend of</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="The difficulty we should deal with: stranded preposition" id="stranding" open={false}>
+    <p>
+      A prepositional verb keeps its fixed preposition even when the object moves to the front of the clause — in a relative clause, or after an adjective and a to-infinitive. The preposition is left stranded at the end, right where it would normally sit after the verb. (The general mechanics of stranding in wh-questions and relative clauses are covered in <a href="/grammar/prepositions-prepositions">prepositions</a>; here the point is simply that a prepositional verb's own preposition follows it exactly as always.)
+    </p>
+    <GrammarFormula label="Stranded preposition after a moved object" parts={['object (fronted)', 'subject', 'verb', 'preposition']} />
+    <GrammarExample note="deal with, stranded in a relative clause: B2.">
+      There is one <mark data-role="grammar">difficulty</mark> which we should <mark data-role="grammar">deal</mark> <mark data-role="content">with</mark>.
+    </GrammarExample>
+    <GrammarExample note="look at, stranded after an adjective + to-infinitive: B2.">
+      Our clothes have to be clean and nice to <mark data-role="grammar">look</mark> <mark data-role="content">at</mark>.
+    </GrammarExample>
+    <p>
+      Don't drop the preposition just because there's no object right after the verb any more — it still belongs to <em>deal</em> and <em>look</em>, it's just moved to the end of the clause instead of disappearing.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Look carefully at: an adverb between verb and preposition" id="adverb-preposition" open={false}>
+    <p>
+      An adverb of manner can slot in between a prepositional verb and its preposition, describing how the action is done. The preposition still comes straight after the adverb — it hasn't moved anywhere.
+    </p>
+    <GrammarFormula label="Verb + adverb + preposition + object" parts={['subject', 'verb', 'adverb', 'preposition', 'object']} />
+    <GrammarExample note="look carefully at: B2.">
+      <mark data-role="grammar">I</mark> hope you will <mark data-role="grammar">look</mark> <mark data-role="grammar">carefully</mark> <mark data-role="content">at</mark> <mark data-role="grammar">the enclosed papers</mark>.
+    </GrammarExample>
+    <GrammarExample note="deal properly with: B2.">
+      <mark data-role="grammar">We</mark> should <mark data-role="grammar">deal</mark> <mark data-role="grammar">properly</mark> <mark data-role="content">with</mark> <mark data-role="grammar">customer complaints</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Look forward to, be used to: preposition + -ing" id="preposition-ing" open={false}>
+    <p>
+      A few prepositional verbs end in <em>to</em> — and that <em>to</em> is still the fixed preposition, not the infinitive marker, even though the two look identical. Because it's a preposition, the verb straight after it takes the <em>-ing</em> form, never the bare <em>to</em>-infinitive.
+    </p>
+    <GrammarFormula label="Verb + preposition 'to' + -ing" parts={['subject', "look forward / be used", "'to'", 'verb-ing']} />
+    <GrammarExample note="look forward to + -ing: B1.">
+      I'm <mark data-role="grammar">looking forward</mark> <mark data-role="content">to</mark> <mark data-role="grammar">hearing</mark> from you soon.
+    </GrammarExample>
+    <GrammarExample note="be used to + -ing: B1, being accustomed to something — not the same 'used to' as past habits.">
+      <mark data-role="grammar">I</mark>'m not <mark data-role="grammar">used</mark> <mark data-role="content">to</mark> <mark data-role="grammar">getting</mark> up so early.
+    </GrammarExample>
+    <p>
+      Compare this <em>to</em> with the ordinary infinitive marker in verbs like <em>want to go</em> or <em>hope to pass</em> — there, <em>to</em> is followed by the base form, not <em>-ing</em>, because it isn't a preposition at all.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Don't drop the preposition just because your own language expresses the same idea without one.
+    </p>
+    <GrammarContrast
+      bad={['I listen music every day.', 'She depends her parents for everything.']}
+      good={['I listen to music every day.', 'She depends on her parents for everything.']}
+    />
+    <p>
+      Don't drop the preposition when the object has moved to the front, either — the verb still needs it, wherever the object went.
+    </p>
+    <GrammarContrast
+      bad={["That's something I've never thought."]}
+      good={["That's something I've never thought about."]}
+    />
+    <p>
+      After <em>look forward to</em> and <em>be used to</em>, use <em>-ing</em>, not the bare infinitive — that <em>to</em> is a preposition, not the infinitive marker.
+    </p>
+    <GrammarContrast
+      bad={['I look forward to meet you.', "I'm not used to work such long hours."]}
+      good={['I look forward to meeting you.', "I'm not used to working such long hours."]}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'prepositions-prepositions',
+        name: 'prepositions',
+        note: 'the general mechanics of stranding and preposition + -ing, for any preposition — not just a fixed verb pairing.',
+      },
+      {
+        slug: 'verbs-patterns-with-to-and-ing',
+        name: 'to-infinitive or -ing after a verb',
+        note: "want to go, enjoy going — the ordinary to-infinitive/-ing choice, where 'to' is not a preposition.",
+      },
+      {
+        slug: 'modality-used-to',
+        name: "'used to'",
+        note: "used to smoke (habitual past, + bare infinitive) vs be used to smoking (accustomed, preposition + -ing) here.",
+      },
+      {
+        slug: 'verbs-phrasal',
+        name: 'phrasal verbs',
+        note: 'look up, give up — a particle that changes the verb’s meaning and can often move, unlike a fixed prepositional verb.',
+      },
+    ]}
+  />
+</GrammarShell>

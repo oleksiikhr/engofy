@@ -1,0 +1,178 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// All 10 EGP rows (1066-1075: main verbs, linking verb 'be', auxiliary verb
+// 'be', modal auxiliaries on two ranges, auxiliaries 'have'/'do', linking
+// verbs + adjective, semi-modals 'have (got) to'/'used to'/'ought to'/
+// 'dare'/'need') are plain FORM rows — no usage points, no cards. This page
+// is the overview that verbs-linking, modality-can/will/would and the other
+// verb-family pages already link back to.
+const { con, user } = Astro.props;
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="The five jobs a verb can do in English — main verb, linking verb, auxiliary verb, modal verb, semi-modal verb — and how to tell which one you're looking at."
+  handcrafted
+  sections={[
+    { id: 'main', title: 'Main verbs: what the subject does', open: true },
+    { id: 'linking', title: "Linking verbs: connecting, not doing", open: false },
+    { id: 'auxiliary', title: "Auxiliary verbs: helping another verb", open: false },
+    { id: 'modal', title: 'Modal verbs: attitude, not action', open: false },
+    { id: 'semi-modal', title: 'Semi-modal verbs: modal meaning, ordinary form', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+>
+  <Fragment slot="lede">
+    <p>
+      Not every verb behaves the same way. A <em>main verb</em> carries the meaning of the sentence on its own; a <em>linking verb</em> connects the subject to a description instead of showing an action; an <em>auxiliary verb</em> has no meaning of its own and just helps another verb form a tense, a question or a negative; a <em>modal</em> (or <em>semi-modal</em>) verb adds meaning like ability, permission or obligation on top of a main verb. Knowing which job a verb is doing tells you what can come after it and how to build questions and negatives with it.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Main verbs: what the subject does" id="main" open>
+    <p>
+      A main verb is the one that carries the real meaning — what the subject does, in the regular <em>-s</em>/<em>-ed</em> pattern or an irregular one that has to be learned by heart. Every ordinary sentence needs at least one.
+    </p>
+    <GrammarFormula label="Main verb" parts={['subject', 'verb (regular -s / -ed, or irregular)', 'object']} />
+    <GrammarExample note="Regular verb: -s for he/she/it.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">plays</mark> <mark data-role="grammar">the guitar</mark> every evening.
+    </GrammarExample>
+    <GrammarExample note="Irregular verb: 'go' becomes 'went', not 'goed'.">
+      <mark data-role="grammar">They</mark> <mark data-role="content">went</mark> <mark data-role="grammar">home</mark> early.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/present-present-simple">present simple</a> and <a href="/grammar/past-past-simple">past simple</a> for the full regular/irregular form rules.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Linking verbs: connecting, not doing" id="linking" open={false}>
+    <p>
+      A linking verb doesn't show an action — it joins the subject to a word that describes or renames it. <em>Be</em> is the basic one; an increasing range of other verbs (<em>look</em>, <em>feel</em>, <em>seem</em>, <em>become</em>…) work the same way, taking an adjective rather than an adverb after them.
+    </p>
+    <GrammarFormula label="Linking verb" parts={['subject', "be / look / feel / seem / become…", 'adjective / noun']} />
+    <GrammarExample note="'Be': the most basic linking verb.">
+      <mark data-role="grammar">My father</mark> <mark data-role="content">is</mark> <mark data-role="grammar">a teacher</mark>.
+    </GrammarExample>
+    <GrammarExample note="Another linking verb, same job as 'be'.">
+      <mark data-role="grammar">This soup</mark> <mark data-role="content">tastes</mark> <mark data-role="grammar">amazing</mark>.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/verbs-linking">linking verbs</a> for the full range (senses, change, staying/seeming) and why the word after them is an adjective, not an <em>-ly</em> adverb.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Auxiliary verbs: helping another verb" id="auxiliary" open={false}>
+    <p>
+      An auxiliary verb has no meaning of its own — it just helps a main verb build a tense, a question or a negative. <em>Be</em>, <em>have</em> and <em>do</em> are the three auxiliaries, each with its own job.
+    </p>
+    <GrammarFormula label="Auxiliary + main verb" parts={['subject', 'be / have / do', 'main verb (-ing / -ed / base)']} />
+    <GrammarExample note="'Be': builds the continuous.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">am</mark> <mark data-role="grammar">working</mark> right now.
+    </GrammarExample>
+    <GrammarExample note="'Have': builds the perfect.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">has</mark> <mark data-role="grammar">finished</mark> her homework.
+    </GrammarExample>
+    <GrammarExample note="'Do': builds questions and negatives for ordinary verbs.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">don't</mark> <mark data-role="grammar">like</mark> coffee.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/present-present-continuous">present continuous</a> for auxiliary <em>be</em> in detail, and <a href="/grammar/questions-yes-no">yes/no questions</a> for how <em>do</em>-support builds a question when there's no other auxiliary to move.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Modal verbs: attitude, not action" id="modal" open={false}>
+    <p>
+      A modal verb sits in front of a main verb and adds meaning like ability, possibility, permission or obligation — it never changes form for the subject and is always followed by the base form, with no <em>to</em>.
+    </p>
+    <GrammarFormula label="Modal + base verb" parts={['subject', "can / will / would / may / might / must / should / could…", 'base verb']} />
+    <GrammarExample note="'Can': ability, one of the first modals learners meet.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">can</mark> <mark data-role="grammar">swim</mark>.
+    </GrammarExample>
+    <GrammarExample note="'Would': part of the wider modal range.">
+      <mark data-role="grammar">I</mark> <mark data-role="content">would</mark> <mark data-role="grammar">like</mark> some tea, please.
+    </GrammarExample>
+    <p>
+      No <em>-s</em>, no <em>to</em>, no double modal: <em>she can swim</em>, not <em>she cans swim</em> or <em>she can to swim</em>. See <a href="/grammar/modality-can">can</a>, <a href="/grammar/modality-will">will</a> and <a href="/grammar/modality-would">would</a> for each modal's own meanings, and <a href="/grammar/future-future-simple-with-will-and-shall">future simple</a> for <em>will</em>/<em>shall</em> as a future-time marker rather than a modal of attitude.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Semi-modal verbs: modal meaning, ordinary form" id="semi-modal" open={false}>
+    <p>
+      A semi-modal expresses the same kind of meaning as a modal — obligation, habit, permission, necessity — but doesn't follow the modal's own strict form: it can take <em>-s</em>, <em>to</em>, or an auxiliary of its own where a true modal never would.
+    </p>
+    <GrammarFormula label="Semi-modal" parts={['subject', "have (got) to / used to / ought to / dare / need", 'base verb / to + base verb']} />
+    <GrammarExample note="'Have (got) to': obligation, but takes 's' and 'do'-support.">
+      <mark data-role="grammar">She</mark> <mark data-role="content">has to</mark> <mark data-role="grammar">leave</mark> early tomorrow.
+    </GrammarExample>
+    <GrammarExample note="'Used to': a past habit that's stopped, not a present modal.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">used to</mark> <mark data-role="grammar">live</mark> by the sea.
+    </GrammarExample>
+    <GrammarExample note="'Ought to': close to 'should', but with 'to' before the base verb.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">ought to</mark> <mark data-role="grammar">apologise</mark> to her.
+    </GrammarExample>
+    <p>
+      See <a href="/grammar/modality-have-got-to">have (got) to</a>, <a href="/grammar/modality-used-to">used to</a>, <a href="/grammar/modality-ought">ought to</a>, <a href="/grammar/modality-dare">dare</a> and <a href="/grammar/modality-need">need</a> for each one's own form and meaning — <em>dare</em> and <em>need</em> are unusual because they can behave like a true modal (<em>dare I ask?</em>) or like an ordinary main verb (<em>does he dare to ask?</em>) depending on the sentence.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Auxiliary <em>be</em>/<em>have</em>/<em>do</em> carry no meaning of their own — don't drop them just because the main verb already looks like it's doing the job.
+    </p>
+    <GrammarContrast
+      bad={['I working right now.', 'She finished already her homework.']}
+      good={["I am working right now.", 'She has already finished her homework.']}
+    />
+    <p>
+      A modal is never followed by <em>to</em>, and never takes <em>-s</em> for he/she/it — unlike the semi-modals it resembles in meaning.
+    </p>
+    <GrammarContrast
+      bad={['She can to swim.', 'He cans swim.', 'She musts leave now.']}
+      good={['She can swim.', 'He can swim.', 'She must leave now.']}
+    />
+    <p>
+      A modal never stacks with another modal — English says the idea a different way instead.
+    </p>
+    <GrammarContrast
+      bad={['I will can help you tomorrow.', 'She might can come.']}
+      good={['I will be able to help you tomorrow.', 'She might be able to come.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'verbs-linking',
+        name: 'linking verbs',
+        note: 'the full range of be/look/feel/seem/become and why the word after them is an adjective.',
+      },
+      {
+        slug: 'modality-can',
+        name: 'can',
+        note: 'the first modal most learners meet, worked through in full.',
+      },
+      {
+        slug: 'present-present-continuous',
+        name: 'present continuous',
+        note: "auxiliary 'be' + -ing in detail, with the full range of uses.",
+      },
+      {
+        slug: 'questions-yes-no',
+        name: 'yes/no questions',
+        note: "how 'do'-support steps in to build a question when there's no other auxiliary to move.",
+      },
+    ]}
+  />
+</GrammarShell>

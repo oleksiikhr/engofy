@@ -1,0 +1,253 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+// 15 EGP rows (836-850): 12 pure FORM (growing range of simple/complex
+// prepositions, 'just'/adverb + preposition, preposition + -ing, stranding
+// in wh-questions/relative clauses) written without a card; 3 FORM/USE
+// (848 preposition + wh-word to avoid stranding, 849/850 formal simple/
+// complex prepositions) get a usage-point card, all inlined below.
+const { con, user } = Astro.props;
+
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const whWordPoint = point(848);
+const formalSimplePoint = point(849);
+const formalComplexPoint = point(850);
+
+const inlineUsagePointIds = [whWordPoint, formalSimplePoint, formalComplexPoint]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Prepositions like to, in, opposite and in spite of link a noun phrase to the rest of the sentence, showing place, time, cause and dozens of other relationships — simple and complex prepositions, degree adverbs before a preposition, preposition + -ing, stranding at the end of a question or clause, and the more formal preposition + which/whom alternative."
+  handcrafted
+  sections={[
+    { id: 'form-basics', title: 'Preposition + noun phrase', open: true },
+    { id: 'simple-range', title: 'A wider range of simple prepositions', open: false },
+    { id: 'complex-prepositions', title: 'Complex prepositions: more than one word', open: false },
+    { id: 'degree-adverb', title: "Just, right, quite: an adverb before the preposition", open: false },
+    { id: 'ing-complement', title: 'Preposition + -ing', open: false },
+    { id: 'stranding', title: 'Who are you waiting for? Preposition at the end', open: false },
+    { id: 'wh-word-formal', title: 'The club of which you are secretary: the formal alternative', open: false },
+    { id: 'formal-register', title: 'Formal, literary and business prepositions', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      A preposition is a small word — <em>to</em>, <em>for</em>, <em>in</em>, <em>opposite</em>, <em>in spite of</em> — that connects a noun phrase to the rest of the sentence, usually showing place, time, direction or cause. Prepositions don't change form, and they rarely translate word-for-word, so most of the work is learning which preposition goes with which meaning — and which verb, adjective or noun.
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Preposition + noun phrase" id="form-basics" open>
+    <p>
+      A preposition combines with a noun phrase straight after it to form a <em>prepositional phrase</em>. The whole phrase then describes where, when or how something happens.
+    </p>
+    <GrammarFormula label="Prepositional phrase" parts={['preposition', 'noun phrase']} />
+    <GrammarExample note="in + Bognor Regis: place.">
+      He works <mark data-role="content">in</mark> <mark data-role="grammar">Bognor Regis</mark>.
+    </GrammarExample>
+    <GrammarExample note="to + the park, with + my dog: two prepositional phrases in one sentence.">
+      When I have free time, I go <mark data-role="content">to</mark> <mark data-role="grammar">the park</mark> <mark data-role="content">with</mark> <mark data-role="grammar">my dog</mark>.
+    </GrammarExample>
+    <p>
+      A handful of very common single-word prepositions cover most everyday relationships from the start: <em>to</em>, <em>for</em>, <em>in</em>, <em>with</em>, <em>on</em>, <em>at</em>.
+    </p>
+    <GrammarExample note="for + you: who benefits.">
+      I can cook some food <mark data-role="content">for</mark> <mark data-role="grammar">you</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="A wider range of simple prepositions" id="simple-range">
+    <p>
+      As your level grows, so does the range of single-word prepositions you can use precisely: <em>opposite</em>, <em>between</em>, <em>during</em>, <em>before</em> at A2, then less common ones like <em>through</em>, <em>along</em>, <em>beside</em>, <em>within</em>, <em>via</em> at B1.
+    </p>
+    <GrammarFormula label="Simple preposition" parts={['preposition (one word)', 'noun phrase']} />
+    <GrammarExample note="opposite + the post office: A2.">
+      My house is <mark data-role="content">opposite</mark> <mark data-role="grammar">the post office</mark>.
+    </GrammarExample>
+    <GrammarExample note="between + two teams: A2.">
+      The match was <mark data-role="content">between</mark> <mark data-role="grammar">Liverpool and Chelsea</mark>.
+    </GrammarExample>
+    <GrammarExample note="via + the internet: B1.">
+      I hate shopping <mark data-role="content">via</mark> <mark data-role="grammar">the internet</mark>.
+    </GrammarExample>
+    <GrammarExample note="within + the next 20 years: B1.">
+      I don't think this town will change much <mark data-role="content">within</mark> <mark data-role="grammar">the next twenty years</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Complex prepositions: more than one word" id="complex-prepositions">
+    <p>
+      A <em>complex preposition</em> is made of two or more words that work together as a single preposition: <em>near to</em>, <em>in front of</em>, <em>instead of</em> at A2; <em>due to</em>, <em>thanks to</em>, <em>out of</em> at B1; <em>in spite of</em>, <em>apart from</em>, <em>in addition to</em> at B2.
+    </p>
+    <GrammarFormula label="Complex preposition" parts={['preposition (2+ words)', 'noun phrase']} />
+    <GrammarExample note="near to: A2.">
+      We can meet <mark data-role="content">near to</mark> <mark data-role="grammar">the tennis club</mark> at seven.
+    </GrammarExample>
+    <GrammarExample note="instead of + -ing: B1.">
+      I decided to stay <mark data-role="content">instead of</mark> <mark data-role="grammar">flying home early</mark>.
+    </GrammarExample>
+    <GrammarExample note="thanks to: B1.">
+      We got the best seats <mark data-role="content">thanks to</mark> <mark data-role="grammar">my sister's connections</mark>.
+    </GrammarExample>
+    <GrammarExample note="in spite of: B2.">
+      The festival went ahead <mark data-role="content">in spite of</mark> <mark data-role="grammar">the terrible weather</mark>.
+    </GrammarExample>
+    <GrammarExample note="apart from: B2.">
+      Everybody enjoyed the trip, <mark data-role="content">apart from</mark> <mark data-role="grammar">the long queue at the entrance</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Just, right, quite: an adverb before the preposition" id="degree-adverb">
+    <p>
+      An adverb of degree — <em>just</em>, <em>right</em> at A2, or <em>quite</em>, <em>really</em> at B1 — can go directly in front of a preposition to make its meaning more exact.
+    </p>
+    <GrammarFormula label="Degree adverb + preposition" parts={['adverb', 'preposition', 'noun phrase']} />
+    <GrammarExample note="just + near: A2.">
+      It's <mark data-role="grammar">just</mark> <mark data-role="content">near</mark> <mark data-role="grammar">the cinema</mark>.
+    </GrammarExample>
+    <GrammarExample note="just + after: A2.">
+      My house is <mark data-role="grammar">just</mark> <mark data-role="content">after</mark> <mark data-role="grammar">the library</mark>.
+    </GrammarExample>
+    <GrammarExample note="right + behind: B1.">
+      Something moved <mark data-role="grammar">right</mark> <mark data-role="content">behind</mark> <mark data-role="grammar">me</mark>.
+    </GrammarExample>
+    <GrammarExample note="quite + near: B1.">
+      It's <mark data-role="grammar">quite</mark> <mark data-role="content">near</mark> <mark data-role="grammar">my house</mark>, so I walk there.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Preposition + -ing" id="ing-complement">
+    <p>
+      After a preposition, a verb takes the <em>-ing</em> form, never the bare infinitive — the preposition needs a noun-like complement, and <em>-ing</em> is what makes a verb behave like a noun here.
+    </p>
+    <GrammarFormula label="Preposition + -ing complement" parts={['preposition', 'verb-ing']} />
+    <GrammarExample note="for + replying.">
+      Thanks <mark data-role="content">for</mark> <mark data-role="grammar">replying</mark> so quickly.
+    </GrammarExample>
+    <GrammarExample note="about + playing.">
+      I was crazy <mark data-role="content">about</mark> <mark data-role="grammar">playing</mark> tennis every weekend as a kid.
+    </GrammarExample>
+    <GrammarExample note="by + bringing.">
+      You can help <mark data-role="content">by</mark> <mark data-role="grammar">bringing</mark> some drinks.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Who are you waiting for? Preposition at the end" id="stranding">
+    <p>
+      In everyday spoken and written English, a preposition often ends up stranded at the end of a <em>wh-</em> question, a reported question, or a relative clause — separated from the noun phrase it belongs with, which has moved to the front instead.
+    </p>
+    <GrammarFormula label="Stranded preposition" parts={['wh-word', 'subject', 'verb', 'preposition']} />
+    <GrammarExample note="A2: wh- question.">
+      <mark data-role="grammar">Who</mark> are you waiting <mark data-role="content">for</mark>?
+    </GrammarExample>
+    <GrammarExample note="A2: wh- question.">
+      <mark data-role="grammar">What</mark> are you looking <mark data-role="content">for</mark>?
+    </GrammarExample>
+    <GrammarExample note="B1: reported question.">
+      Everybody should ask <mark data-role="grammar">which company</mark> he works <mark data-role="content">for</mark>.
+    </GrammarExample>
+    <GrammarExample note="B1: relative clause.">
+      This is the festival <mark data-role="grammar">that</mark> I've always wanted to go <mark data-role="content">to</mark>.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="The club of which you are secretary: the formal alternative" id="wh-word-formal">
+    <p>
+      In formal writing, the preposition can move to the front instead, right before <em>which</em>, <em>whom</em> or <em>whose</em> — this avoids stranding it at the end, but sounds noticeably more formal than everyday speech.
+    </p>
+    <GrammarFormula label="Preposition + wh-word (formal)" parts={['preposition', 'which / whom / whose']} />
+    <GrammarExample note="of which — compare 'the club you are secretary of'.">
+      This is the club <mark data-role="content">of</mark> <mark data-role="grammar">which</mark> you are the secretary.
+    </GrammarExample>
+    <GrammarExample note="to whom — compare 'someone they can talk to'.">
+      Children need someone <mark data-role="content">to</mark> <mark data-role="grammar">whom</mark> they can talk about their problems.
+    </GrammarExample>
+    <GrammarExample note="in which — compare 'a vacancy I am very interested in'.">
+      Your advertisement mentions a vacancy <mark data-role="content">in</mark> <mark data-role="grammar">which</mark> I am very interested.
+    </GrammarExample>
+    {whWordPoint && <GrammarUsagePointCard usagePoint={whWordPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Formal, literary and business prepositions" id="formal-register">
+    <p>
+      Some prepositions are rarely used in everyday speech but appear often in formal, literary or business writing — a single word instead of a common phrase, or a longer phrase that replaces an even more common one.
+    </p>
+    <GrammarFormula label="Formal preposition" parts={['preposition (formal register)', 'noun phrase']} />
+    <GrammarExample note="upon (formal for 'on'): B2.">
+      Please act <mark data-role="content">upon</mark> <mark data-role="grammar">the advice</mark> you were given.
+    </GrammarExample>
+    <GrammarExample note="amongst (formal for 'among'): B2.">
+      A survey was carried out <mark data-role="content">amongst</mark> <mark data-role="grammar">the students and staff</mark>.
+    </GrammarExample>
+    {formalSimplePoint && <GrammarUsagePointCard usagePoint={formalSimplePoint} />}
+    <GrammarExample note="on account of (formal for 'because of'): C1.">
+      The meeting was postponed <mark data-role="content">on account of</mark> <mark data-role="grammar">the ongoing strike</mark>.
+    </GrammarExample>
+    <GrammarExample note="ahead of (formal for 'before'): C1.">
+      The company launched the product <mark data-role="content">ahead of</mark> <mark data-role="grammar">its competitors</mark>.
+    </GrammarExample>
+    {formalComplexPoint && <GrammarUsagePointCard usagePoint={formalComplexPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      Some verbs and adjectives need a specific preposition that doesn't match a word-for-word translation from other languages — leaving it out or swapping it for the wrong one is one of the most common preposition errors.
+    </p>
+    <GrammarContrast
+      bad={["I'm married with her.", 'This depends of the weather.', "I'm interested for languages."]}
+      good={["I'm married to her.", 'This depends on the weather.', "I'm interested in languages."]}
+    />
+    <p>
+      A preposition of time goes with a specific word, not a translated equivalent — and some time expressions need no preposition at all.
+    </p>
+    <GrammarContrast
+      bad={['See you in Monday.', 'I arrived to the airport at nine.', 'We met last week on Tuesday.']}
+      good={['See you on Monday.', 'I arrived at the airport at nine.', 'We met on Tuesday last week.']}
+    />
+    <p>
+      A stranded preposition still needs its noun phrase — don't drop the preposition just because the question already has a <em>wh-</em> word.
+    </p>
+    <GrammarContrast
+      bad={['Who are you waiting?', 'What is he talking?']}
+      good={['Who are you waiting for?', 'What is he talking about?']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'verbs-prepositional',
+        name: 'prepositional verbs',
+        note: "depend on, listen to — verbs that always need one specific preposition, not a free choice of meaning.",
+      },
+      {
+        slug: 'clauses-relative',
+        name: 'relative clauses',
+        note: "who/which/that clauses — the of which/to whom pattern is a relative clause with a fronted preposition.",
+      },
+      {
+        slug: 'adverbs-position',
+        name: 'adverb position',
+        note: 'where degree adverbs like really and quite go with adjectives and other adverbs.',
+      },
+    ]}
+  />
+</GrammarShell>
