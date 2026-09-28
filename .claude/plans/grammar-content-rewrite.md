@@ -436,12 +436,15 @@ Slug: `verbs-there-is-are`. Деталі виконання — див. `archive
 
 Slug: `verbs-types`. Деталі виконання — див. `archive/grammar-content-rewrite.md#38`.
 
-### [ ] 39. Adjectives — comparatives (`adjectives-comparatives`) — рівень A2
+### [x] 39. Adjectives — comparatives (`adjectives-comparatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `adjectives-comparatives`.
+18 EGP-рядків (13-30): 9 чистих FORM (-er/-ier/подвоєння/-e+r/irregular/more/than/перед
+іменником/після be) у 3 секціях без карток; 9 FORM/USE (22-30, усі вплетені за `egpIndex`) —
+модифікатори компаратива, згруповані за розміром різниці (much/a lot/even; a bit/slightly/not that
+much; bigger and bigger; no/not any), а не за рівнем.
 
 ### [ ] 40. Clauses — comparatives (`clauses-comparatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
