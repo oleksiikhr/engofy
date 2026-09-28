@@ -1,0 +1,399 @@
+---
+import GrammarCompare from '../components/grammar/GrammarCompare.astro';
+import GrammarContrast from '../components/grammar/GrammarContrast.astro';
+import GrammarExample from '../components/grammar/GrammarExample.astro';
+import GrammarFormula from '../components/grammar/GrammarFormula.astro';
+import GrammarSection from '../components/grammar/GrammarSection.astro';
+import GrammarShell from '../components/grammar/GrammarShell.astro';
+import GrammarUsagePointCard from '../components/grammar/GrammarUsagePointCard.astro';
+import type { CurrentUser, GrammarConstructionDetail } from '../lib/types';
+
+interface Props {
+  con: GrammarConstructionDetail;
+  user: CurrentUser | null;
+}
+
+const { con, user } = Astro.props;
+
+// All 12 USE and FORM/USE rows are inlined, matched by EGP index. The other
+// 7 rows (affirmative, negative, questions, should have + -ed, shouldn't have
+// + -ed, ellipsis, should be + -ing) are plain FORM rows, written in full
+// without a card.
+const point = (egpIndex: number) => con.usagePoints.find((p) => p.egpIndex === egpIndex);
+
+const advicePoint = point(580);
+const suggestionsPoint = point(581);
+const tagsPoint = point(582);
+const idealPoint = point(585);
+const likelihoodPoint = point(586);
+const narrativePoint = point(587);
+const regretPoint = point(588);
+const thankingPoint = point(589);
+const expectationsPoint = point(592);
+const obligationPoint = point(593);
+const ifPoint = point(594);
+const inversionPoint = point(595);
+
+const inlineUsagePointIds = [
+  advicePoint,
+  suggestionsPoint,
+  tagsPoint,
+  idealPoint,
+  likelihoodPoint,
+  narrativePoint,
+  regretPoint,
+  thankingPoint,
+  expectationsPoint,
+  obligationPoint,
+  ifPoint,
+  inversionPoint,
+]
+  .filter((p) => p !== undefined)
+  .map((p) => p.grammarUsagePointId);
+---
+
+<GrammarShell
+  con={con}
+  user={user}
+  description="Should: forms (should, shouldn't, Should I…?), giving advice, making suggestions and the tag shouldn't we?, ideal situations, it should be for what is likely, should have + past participle for regrets, You should have seen it! in stories, You shouldn't have! for thanks, short answers (I think you should), should be + -ing, and formal if… should / Should you…"
+  handcrafted
+  sections={[
+    { id: 'form', title: "Should, shouldn't, Should I…?", open: true },
+    { id: 'advice', title: 'You should see a doctor: advice', open: false },
+    { id: 'suggestions', title: 'We should meet at 2: suggestions', open: false },
+    { id: 'ideal', title: 'Everyone should learn to cook: the right way', open: false },
+    { id: 'likelihood', title: 'It should be fun: what is likely', open: false },
+    { id: 'regret', title: 'I should have told you: regrets', open: false },
+    { id: 'narrative', title: 'You should have seen it!: in stories', open: false },
+    { id: 'thanking', title: "You shouldn't have!: thanking for a gift", open: false },
+    { id: 'ellipsis', title: 'I think you should: short answers', open: false },
+    { id: 'continuous', title: 'Should be + -ing', open: false },
+    { id: 'formal-if', title: 'If you should… / Should you…: formal', open: false },
+    { id: 'common-mistake', title: 'Common mistakes', open: false },
+  ]}
+  inlineUsagePointIds={inlineUsagePointIds}
+>
+  <Fragment slot="lede">
+    <p>
+      <em>Should</em> is a modal verb for saying what is a good idea or the right thing to do: <em>You should try it.</em> It is softer than <em>must</em> — it is advice, not a rule. <em>Should</em> can also say what you expect to happen (<em>It should be sunny tomorrow</em>), and <em>should have</em> + past participle talks about the past: <em>I should have left earlier.</em>
+    </p>
+  </Fragment>
+
+  <GrammarSection title="Should, shouldn't, Should I…?" id="form" open>
+    <p>
+      <em>Should</em> is the same for every subject (no <em>-s</em>) and is followed by the base verb, without <em>to</em>.
+    </p>
+    <GrammarFormula label="Affirmative" parts={['subject', 'should', 'base verb']} />
+    <GrammarExample note="You + should + come: this is the best time.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should</mark> <mark data-role="grammar">come</mark> at 6 o'clock.
+    </GrammarExample>
+    <GrammarExample note="We + should + buy: a good plan.">
+      <mark data-role="grammar">We</mark> <mark data-role="content">should</mark> <mark data-role="grammar">buy</mark> two tickets.
+    </GrammarExample>
+    <p>
+      The negative is <em>should not</em>, short form <em>shouldn't</em>. In speech, <em>shouldn't</em> is much more common.
+    </p>
+    <GrammarFormula label="Negative" parts={['subject', "should not / shouldn't", 'base verb']} />
+    <GrammarExample note="Shouldn't + miss: it's too good to miss.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">shouldn't</mark> <mark data-role="grammar">miss</mark> it.
+    </GrammarExample>
+    <GrammarExample note="Should not + wear: I think it's a bad idea.">
+      I think <mark data-role="grammar">you</mark> <mark data-role="content">should not</mark> <mark data-role="grammar">wear</mark> your favourite clothes because they may get dirty.
+    </GrammarExample>
+    <p>
+      For a question, put <em>should</em> before the subject. <em>Should I…?</em> and <em>Should we…?</em> ask what the best thing to do is. A question word can come first: <em>What should I…?</em>
+    </p>
+    <GrammarFormula label="Question" parts={['(question word)', 'should', 'subject', 'base verb']} />
+    <GrammarExample note="Should + I + wear: asking what is right.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">wear</mark> special clothes?
+    </GrammarExample>
+    <GrammarExample note="Should + we + go: asking about the best way to travel.">
+      It's going to be in São Paulo. <mark data-role="content">Should</mark> <mark data-role="grammar">we</mark> <mark data-role="grammar">go</mark> by plane?
+    </GrammarExample>
+    <GrammarExample note="Question word + should + I: asking for advice.">
+      <mark data-role="grammar">What</mark> <mark data-role="content">should</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">do</mark>?
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="You should see a doctor: advice" id="advice" open={false}>
+    <p>
+      <em>You should…</em> tells someone what you think is a good idea for them. <em>You shouldn't…</em> says something is a bad idea. People often add <em>I think</em> or <em>maybe</em> to sound softer.
+    </p>
+    <GrammarFormula label="Advice" parts={['(I think) you', "should / shouldn't", 'base verb']} />
+    <GrammarExample note="Advice with a reason: because…">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should</mark> <mark data-role="grammar">take</mark> some money, because the ticket costs £4.
+    </GrammarExample>
+    <GrammarExample note="So you should…: advice that follows from a situation.">
+      You will have to stay in class for six hours, so <mark data-role="grammar">you</mark> <mark data-role="content">should</mark> <mark data-role="grammar">bring</mark> something to eat.
+    </GrammarExample>
+    <GrammarExample note="I think + you + should: softer advice.">
+      You look tired. I think <mark data-role="grammar">you</mark> <mark data-role="content">should</mark> <mark data-role="grammar">go</mark> to bed early tonight.
+    </GrammarExample>
+    <GrammarExample note="Shouldn't: advice not to do something.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">shouldn't</mark> <mark data-role="grammar">drink</mark> so much coffee.
+    </GrammarExample>
+    {advicePoint && <GrammarUsagePointCard usagePoint={advicePoint} />}
+    <p>
+      To say "don't do it" politely, <em>I don't think you should…</em> is more natural than <em>I think you shouldn't…</em>
+    </p>
+    <GrammarExample note="I don't think + you + should: polite negative advice.">
+      I don't think <mark data-role="grammar">you</mark> <mark data-role="content">should</mark> <mark data-role="grammar">tell</mark> him.
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="We should meet at 2: suggestions" id="suggestions" open={false}>
+    <p>
+      <em>We should…</em> suggests a plan for you and other people. <em>You should…</em> can also invite someone to do something with you.
+    </p>
+    <GrammarFormula label="Suggestion" parts={['(I think) we / you', 'should', 'base verb']} />
+    <GrammarExample note="I think + we + should: suggesting a time.">
+      I think <mark data-role="grammar">we</mark> <mark data-role="content">should</mark> <mark data-role="grammar">meet</mark> at 2 pm, and my mother will take us there.
+    </GrammarExample>
+    <GrammarExample note="You + should + bring: an idea for a party.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should</mark> <mark data-role="grammar">bring</mark> your guitar.
+    </GrammarExample>
+    <GrammarExample note="Someday + we + should: a plan for the future.">
+      Someday <mark data-role="grammar">we</mark> <mark data-role="content">should</mark> <mark data-role="grammar">go</mark> there together.
+    </GrammarExample>
+    {suggestionsPoint && <GrammarUsagePointCard usagePoint={suggestionsPoint} />}
+    <p>
+      Add the question tag <em>shouldn't we?</em> / <em>shouldn't I?</em> to the end of a suggestion to ask the other person if they agree.
+    </p>
+    <GrammarFormula label="Question tag" parts={['subject', 'should', 'verb …', "shouldn't", 'pronoun?']} />
+    <GrammarExample note="…, shouldn't we?: do you agree with my idea?">
+      When you come back, <mark data-role="grammar">we</mark> <mark data-role="content">should</mark> <mark data-role="grammar">rent</mark> some movies, <mark data-role="content">shouldn't</mark> <mark data-role="grammar">we</mark>?
+    </GrammarExample>
+    <GrammarExample note="…, shouldn't I?: asking for an opinion about your own plan.">
+      I think <mark data-role="grammar">I</mark> <mark data-role="content">should</mark> <mark data-role="grammar">write</mark> about the history of our company, <mark data-role="content">shouldn't</mark> <mark data-role="grammar">I</mark>?
+    </GrammarExample>
+    {tagsPoint && <GrammarUsagePointCard usagePoint={tagsPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Everyone should learn to cook: the right way" id="ideal" open={false}>
+    <p>
+      <em>Should</em> also describes how things ought to be in an ideal world — what is right or best for people in general, not advice for one person. It is common when giving opinions.
+    </p>
+    <GrammarFormula label="Ideal situation" parts={['people / everyone / the government…', "should / shouldn't", 'base verb']} />
+    <GrammarExample note="An opinion about what people in general ought to do.">
+      <mark data-role="grammar">British people</mark> <mark data-role="content">should</mark> <mark data-role="grammar">eat</mark> more vegetables and fruit and avoid fast food!
+    </GrammarExample>
+    <GrammarExample note="Everyone + should: how things ought to be.">
+      I think <mark data-role="grammar">everyone</mark> <mark data-role="content">should</mark> <mark data-role="grammar">learn</mark> to cook — you never know when you'll need it.
+    </GrammarExample>
+    <GrammarExample note="Shouldn't: this is not how things ought to be.">
+      <mark data-role="grammar">Children</mark> <mark data-role="content">shouldn't</mark> <mark data-role="grammar">spend</mark> all day in front of a screen.
+    </GrammarExample>
+    {idealPoint && <GrammarUsagePointCard usagePoint={idealPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="It should be fun: what is likely" id="likelihood" open={false}>
+    <p>
+      <em>Should</em> can say what you expect to happen, because it is normal or planned: "it will probably…". It is used for good or neutral things, not for bad news.
+    </p>
+    <GrammarFormula label="Likely" parts={['subject', 'should', 'be / base verb']} />
+    <GrammarExample note="It + should + be: I expect it to be good.">
+      Everyone is coming to the party. <mark data-role="grammar">It</mark> <mark data-role="content">should</mark> <mark data-role="grammar">be</mark> a good day!
+    </GrammarExample>
+    <GrammarExample note="We + should + be able to: it will probably be possible.">
+      The weather is still warm, so <mark data-role="grammar">we</mark> <mark data-role="content">should</mark> <mark data-role="grammar">be</mark> able to visit the beaches.
+    </GrammarExample>
+    <GrammarExample note="Shouldn't + be: I don't expect problems.">
+      It's a new flat, so <mark data-role="grammar">there</mark> <mark data-role="content">shouldn't</mark> <mark data-role="grammar">be</mark> any problems.
+    </GrammarExample>
+    <GrammarExample note="Should + arrive: according to the plan.">
+      <mark data-role="grammar">The parcel</mark> <mark data-role="content">should</mark> <mark data-role="grammar">arrive</mark> on Friday.
+    </GrammarExample>
+    {likelihoodPoint && <GrammarUsagePointCard usagePoint={likelihoodPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I should have told you: regrets" id="regret" open={false}>
+    <p>
+      <em>Should have</em> + past participle talks about the past: it was the right thing to do, but it didn't happen. With <em>I</em>, it usually means you are sorry about it. <em>Shouldn't have</em> means it happened, but it was wrong.
+    </p>
+    <GrammarFormula label="Past" parts={['subject', 'should have', 'past participle']} />
+    <GrammarExample note="Should have + written: I didn't write, and I'm sorry.">
+      I knew <mark data-role="grammar">I</mark> <mark data-role="content">should have</mark> <mark data-role="grammar">written</mark> before.
+    </GrammarExample>
+    <GrammarExample note="Should have + left: we didn't, so we missed the train.">
+      We missed the train. <mark data-role="grammar">We</mark> <mark data-role="content">should have</mark> <mark data-role="grammar">left</mark> earlier.
+    </GrammarExample>
+    <GrammarFormula label="Past negative" parts={['subject', "should not have / shouldn't have", 'past participle']} />
+    <GrammarExample note="Shouldn't have + taken: I did it, but it wasn't right.">
+      I know <mark data-role="grammar">I</mark> <mark data-role="content">shouldn't have</mark> <mark data-role="grammar">taken</mark> the appointment during school time, but I had no other choice.
+    </GrammarExample>
+    <GrammarExample note="Should not have + done: he is sorry for what he did.">
+      He wrote that he was sorry and that <mark data-role="grammar">he</mark> <mark data-role="content">should not have</mark> <mark data-role="grammar">done</mark> it.
+    </GrammarExample>
+    {regretPoint && <GrammarUsagePointCard usagePoint={regretPoint} />}
+    <p>
+      In speech, <em>should have</em> sounds like <em>should've</em> /ˈʃʊdəv/ and <em>shouldn't have</em> like <em>shouldn't've</em>.
+    </p>
+  </GrammarSection>
+
+  <GrammarSection title="You should have seen it!: in stories" id="narrative" open={false}>
+    <p>
+      When telling a story, <em>You should have seen / heard…!</em> is not a real regret. It means "it was amazing — I wish you had been there", and makes the story more exciting.
+    </p>
+    <GrammarFormula label="Story" parts={['you', 'should have', 'seen / heard / been…']} />
+    <GrammarExample note="It was very loud — you can't imagine it.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should have</mark> <mark data-role="grammar">heard</mark> the noise.
+    </GrammarExample>
+    <GrammarExample note="Emphasising how happy I was.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should have</mark> <mark data-role="grammar">seen</mark> my face — I was so happy.
+    </GrammarExample>
+    <GrammarExample note="It was so much fun — I wish you had come.">
+      <mark data-role="grammar">You</mark> <mark data-role="content">should have</mark> <mark data-role="grammar">been</mark> there with me, I had a great time.
+    </GrammarExample>
+    {narrativePoint && <GrammarUsagePointCard usagePoint={narrativePoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="You shouldn't have!: thanking for a gift" id="thanking" open={false}>
+    <p>
+      <em>You shouldn't have!</em> is a polite, warm reply when someone gives you a present or does something kind. It doesn't mean they did wrong — it means "Thank you, that's very kind, it wasn't necessary". You can say it with or without a verb.
+    </p>
+    <GrammarFormula label="Thanks" parts={['(thank you…)', 'you', "shouldn't have", '(+ past participle)']} />
+    <GrammarExample note="The short, fixed phrase.">
+      Thank you for the present you sent me — <mark data-role="grammar">you</mark> <mark data-role="content">shouldn't have</mark>!
+    </GrammarExample>
+    <GrammarExample note="With a past participle: sent it.">
+      Thank you for the money, <mark data-role="grammar">you</mark> <mark data-role="content">shouldn't have</mark> <mark data-role="grammar">sent</mark> it.
+    </GrammarExample>
+    {thankingPoint && <GrammarUsagePointCard usagePoint={thankingPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="I think you should: short answers" id="ellipsis" open={false}>
+    <p>
+      When the verb is clear from what was said before, you can stop after <em>should</em> or <em>shouldn't</em> and leave the verb out.
+    </p>
+    <GrammarFormula label="Short form" parts={['subject', "should / shouldn't", '(verb left out)']} />
+    <GrammarExample note="= I think you should check it.">
+      Have you ever checked your blood pressure? I think <mark data-role="grammar">you</mark> <mark data-role="content">should</mark>.
+    </GrammarExample>
+    <GrammarExample note="= He knew that he shouldn't meet her.">
+      He wanted to meet her again, but <mark data-role="grammar">he</mark> knew that <mark data-role="grammar">he</mark> <mark data-role="content">shouldn't</mark>.
+    </GrammarExample>
+    <GrammarExample note="A short answer to Should I…?">
+      "<mark data-role="content">Should</mark> <mark data-role="grammar">I</mark> <mark data-role="grammar">call</mark> her?" "Yes, <mark data-role="grammar">you</mark> <mark data-role="content">should</mark>."
+    </GrammarExample>
+  </GrammarSection>
+
+  <GrammarSection title="Should be + -ing" id="continuous" open={false}>
+    <p>
+      <em>Should be</em> + <em>-ing</em> talks about an action in progress — now, at a time in the future, or in general.
+    </p>
+    <GrammarFormula label="Continuous" parts={['subject', 'should be', '-ing form']} />
+    <GrammarExample note="Should be + reading: what we ought to be doing in our free time.">
+      I believe <mark data-role="grammar">we</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">reading</mark> books instead of watching television.
+    </GrammarExample>
+    <GrammarExample note="A joke: you ought to be very happy right now.">
+      Well, <mark data-role="grammar">you</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">bouncing</mark> up and down with joy!
+    </GrammarExample>
+    <p>
+      <strong>Expectations.</strong> Like <em>it should be fun</em>, <em>should be</em> + <em>-ing</em> says what you expect to be happening at a certain time.
+    </p>
+    <GrammarExample note="I expect them to work after the restart.">
+      <mark data-role="grammar">The computer systems</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">working</mark> again once you restart them.
+    </GrammarExample>
+    <GrammarExample note="A forecast for the next months.">
+      I think <mark data-role="grammar">the situation</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">improving</mark> in the next six months.
+    </GrammarExample>
+    {expectationsPoint && <GrammarUsagePointCard usagePoint={expectationsPoint} />}
+    <p>
+      <strong>The right thing, in general.</strong> <em>Should be</em> / <em>shouldn't be</em> + <em>-ing</em> can also say what is right or wrong to be doing — often when the real situation is different.
+    </p>
+    <GrammarExample note="Ideally they run free, but in reality they live in zoos.">
+      <mark data-role="grammar">Wild animals</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">running</mark> free.
+    </GrammarExample>
+    <GrammarExample note="Shouldn't be + driving: it's wrong for a tired driver to drive.">
+      If a driver is tired, <mark data-role="grammar">he</mark> <mark data-role="content">shouldn't be</mark> <mark data-role="grammar">driving</mark>.
+    </GrammarExample>
+    <GrammarExample note="Right now you are doing something else — and that's wrong.">
+      It's midnight! <mark data-role="grammar">You</mark> <mark data-role="content">should be</mark> <mark data-role="grammar">sleeping</mark>.
+    </GrammarExample>
+    {obligationPoint && <GrammarUsagePointCard usagePoint={obligationPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="If you should… / Should you…: formal" id="formal-if" open={false}>
+    <p>
+      In formal English, <em>should</em> after <em>if</em> makes a future situation sound less likely: "if by any chance…". It is common in instructions, letters and emails.
+    </p>
+    <GrammarFormula label="If + should" parts={['if', 'subject', 'should', 'base verb', ', …']} />
+    <GrammarExample note="If by chance you change your mind…">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">you</mark> <mark data-role="content">should</mark> <mark data-role="grammar">change</mark> your mind, you can call a taxi outside the airport.
+    </GrammarExample>
+    <GrammarExample note="In the unlikely case that something happens.">
+      <mark data-role="grammar">If</mark> <mark data-role="grammar">something</mark> <mark data-role="content">should</mark> <mark data-role="grammar">happen</mark>, call 112.
+    </GrammarExample>
+    {ifPoint && <GrammarUsagePointCard usagePoint={ifPoint} />}
+    <p>
+      Even more formally, drop <em>if</em> and put <em>should</em> before the subject. This is typical at the end of business letters and emails.
+    </p>
+    <GrammarFormula label="Inversion" parts={['should', 'subject', 'base verb', ', …']} />
+    <GrammarExample note="= If you need any further information…">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">need</mark> any further information, don't hesitate to contact us.
+    </GrammarExample>
+    <GrammarExample note="= If you withhold any information… — a formal warning.">
+      <mark data-role="content">Should</mark> <mark data-role="grammar">you</mark> <mark data-role="grammar">withhold</mark> any important information, this could stop any payment to you.
+    </GrammarExample>
+    {inversionPoint && <GrammarUsagePointCard usagePoint={inversionPoint} />}
+  </GrammarSection>
+
+  <GrammarSection title="Common mistakes" id="common-mistake" open={false}>
+    <p>
+      <em>Should</em> never changes: no <em>-s</em>, no <em>to</em> after it, and no <em>do</em> in questions or negatives.
+    </p>
+    <GrammarContrast
+      bad={['You should to go to the doctor.', 'She shoulds study more.', 'Do I should bring anything?', "You don't should worry."]}
+      good={['You should go to the doctor.', 'She should study more.', 'Should I bring anything?', "You shouldn't worry."]}
+    />
+    <p>
+      For the past, use <em>should have</em> + past participle — not the past simple, and not <em>of</em>. <em>Should of</em> is a spelling mistake: it only sounds like <em>should've</em>.
+    </p>
+    <GrammarContrast
+      bad={['I should went earlier.', 'You should have came with us.', 'I should of told you.']}
+      good={['I should have gone earlier.', 'You should have come with us.', "I should have told you. / I should've told you."]}
+    />
+    <p>
+      <em>Should have</em> doesn't mean "had to". For a past obligation that really happened, use <em>had to</em>.
+    </p>
+    <GrammarContrast
+      bad={['Yesterday I should have worked late, so I missed dinner.']}
+      good={['Yesterday I had to work late, so I missed dinner.']}
+    />
+  </GrammarSection>
+
+  <GrammarCompare
+    items={[
+      {
+        slug: 'modality-must',
+        name: 'must',
+        note: 'You must… — a strong obligation or rule; should is only advice.',
+      },
+      {
+        slug: 'modality-ought',
+        name: 'ought to',
+        note: 'You ought to… — almost the same as should, a little more formal.',
+      },
+      {
+        slug: 'modality-have-got-to',
+        name: 'have (got) to',
+        note: "I had to… — a past obligation that really happened; I should have… — it didn't happen.",
+      },
+      {
+        slug: 'modality-shall',
+        name: 'shall',
+        note: 'What shall I do? — asking for advice, the same as What should I do?',
+      },
+      {
+        slug: 'modality-could',
+        name: 'could',
+        note: "You could… — a softer suggestion, one possible option; could have… — it was possible but didn't happen.",
+      },
+      {
+        slug: 'clauses-conditional',
+        name: 'conditionals',
+        note: 'If you need… — the everyday form of Should you need…',
+      },
+    ]}
+  />
+</GrammarShell>
