@@ -562,12 +562,15 @@ simple дієслово; be/subject/час/when/that — grammar.
 if possible, it is clear/seems obvious that, it is likely that, subject + be likely/sure to, adverb +
 adjective). Content — сам модальний прикметник; it/be/seem/that/for/to/adverb і клауза — grammar.
 
-### [ ] 51. Modality — adverbs (`modality-adverbs`) — рівень A2
+### [x] 51. Modality — adverbs (`modality-adverbs`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-adverbs`.
+8 EGP-рядків (639-646): 1 чистий FORM (640, maybe/perhaps перед клаузою/еліпсисом) без картки; 7 USE
+вплетені за `egpIndex`. 7 секцій (start, mid position після be / перед main verb / перед won't, modal +
+adverb, emphasis, could … possibly, not necessarily, one-word answers — 645 і 646 в одній секції) +
+common mistakes. Content — сам модальний прислівник; subject/be/auxiliary/modal/main verb/not — grammar.
 
 ### [ ] 52. Modality — could (`modality-could`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
