@@ -21,11 +21,11 @@ export type ReaderDensity = (typeof READER_DENSITIES)[number];
 export const READER_HINTS = ['new', 'seen'] as const;
 export type ReaderHint = (typeof READER_HINTS)[number];
 
-// Language of grammar/word explanations: English, or a translation in its
-// place. Shared by the reader popup and the grammar usage-point cards, whose
-// CSS picks the language from <html data-popup-lang> before first paint.
-export const TRANSLATION_LANGS = ['uk'] as const;
-export const POPUP_LANGS = ['en', ...TRANSLATION_LANGS] as const;
+// Language of grammar/word explanations: English, or the learner's native
+// language (`nativeLang()`) in its place. Shared by the reader popup and the
+// grammar usage-point cards, whose CSS picks the language from
+// <html data-popup-lang> before first paint.
+export const POPUP_LANGS = ['en', 'native'] as const;
 export type PopupLang = (typeof POPUP_LANGS)[number];
 
 export const READER_SIZE_STEPS = 6;

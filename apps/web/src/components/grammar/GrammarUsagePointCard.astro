@@ -4,6 +4,7 @@
 // and handcrafted pages, which drop it inline inside the GrammarSection its
 // rule belongs to instead of leaving it stranded in the bottom list.
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
+import { NATIVE_LANG_LABEL, nativeLang } from '../../lib/native-lang';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
 import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
 import GrammarContrast from './GrammarContrast.astro';
@@ -18,9 +19,13 @@ const { usagePoint: up } = Astro.props;
 // from a non-EGP source, which has no anchor.
 const anchorId =
   up.egpIndex == null ? undefined : `usage-point-${up.egpIndex}`;
-// Ukrainian stands in for the English explanation when the learner picks
-// УКР; a card with no translation has no switch and always shows English.
-const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
+// The native-language explanation stands in for the English one when the
+// learner picks it; a card with no translation has no switch and always shows
+// English. Only the native language reaches the HTML, not every translation.
+const native = nativeLang();
+const nativeExplanation = up.explanation
+  ? up.translations[native]?.explanation
+  : null;
 ---
 
 <div class="usage-item card" data-state={up.state} id={anchorId}>
@@ -28,7 +33,7 @@ const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
     <span class="badge">{up.cefrLevel}</span>
     <span class="usage-item__guide">{up.guideword}</span>
     {
-      ukExplanation && (
+      nativeExplanation && (
         <div
           class="usage-item__lang"
           role="group"
@@ -37,8 +42,8 @@ const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
           <button type="button" data-usage-lang="en" aria-pressed="true">
             EN
           </button>
-          <button type="button" data-usage-lang="uk" aria-pressed="false">
-            УКР
+          <button type="button" data-usage-lang="native" aria-pressed="false">
+            {NATIVE_LANG_LABEL[native]}
           </button>
         </div>
       )
@@ -47,9 +52,9 @@ const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
   <p class="usage-item__can">
     <span class="usage-item__en">{up.explanation ?? up.canDoStatement}</span>
     {
-      ukExplanation && (
-        <span class="usage-item__uk" lang="uk">
-          {ukExplanation}
+      nativeExplanation && (
+        <span class="usage-item__native" lang={native}>
+          {nativeExplanation}
         </span>
       )
     }
@@ -106,13 +111,14 @@ const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
   }
   /* Language comes from <html data-popup-lang> (boot script, before first
      paint); aria-pressed is only synced for assistive tech afterwards. */
-  .usage-item__uk {
+  .usage-item__native {
     display: none;
   }
-  :global(:root[data-popup-lang='uk']) .usage-item__uk {
+  :global(:root[data-popup-lang='native']) .usage-item__native {
     display: inline;
   }
-  :global(:root[data-popup-lang='uk']) .usage-item__en:has(~ .usage-item__uk) {
+  :global(:root[data-popup-lang='native'])
+    .usage-item__en:has(~ .usage-item__native) {
     display: none;
   }
   .usage-item__lang {
@@ -133,8 +139,12 @@ const ukExplanation = up.explanation ? up.translations.uk?.explanation : null;
     font-weight: 800;
     cursor: pointer;
   }
-  :global(:root:not([data-popup-lang='uk'])) .usage-item__lang [data-usage-lang='en'],
-  :global(:root[data-popup-lang='uk']) .usage-item__lang [data-usage-lang='uk'] {
+  :global(:root:not([data-popup-lang='native']))
+    .usage-item__lang
+    [data-usage-lang='en'],
+  :global(:root[data-popup-lang='native'])
+    .usage-item__lang
+    [data-usage-lang='native'] {
     background: var(--color-brand-wash);
     color: var(--color-brand-strong);
   }

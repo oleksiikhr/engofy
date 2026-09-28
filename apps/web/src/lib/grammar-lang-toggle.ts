@@ -1,6 +1,6 @@
 import { POPUP_LANGS, type PopupLang, readPref, writePref } from './prefs';
 
-// EN / УКР switch on the grammar usage-point cards. The visible language is
+// EN / native switch on the grammar usage-point cards. The visible language is
 // pure CSS off <html data-popup-lang> (set before first paint by the boot
 // script), so this only persists the choice and keeps aria-pressed in step on
 // every card's switch.

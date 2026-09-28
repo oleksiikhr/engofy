@@ -1,3 +1,4 @@
+import { NATIVE_LANG_LABEL, nativeLang } from './native-lang';
 import {
   constructionLabel,
   guidewordLabel,
@@ -5,13 +6,12 @@ import {
   posLabel,
   shortExample,
 } from './popup-labels';
-import { type PopupLang, TRANSLATION_LANGS } from './prefs';
+import type { PopupLang } from './prefs';
 import type {
   CefrLevel,
   EffectiveState,
   GrammarTranslations,
   LexiconTranslations,
-  TranslationLang,
 } from './types';
 
 // Popup content for the reader's word, phrase and grammar labels — shared by
@@ -209,24 +209,27 @@ export function reportRowHtml(target: LexiconTarget, slugId: string): string {
 export const REPORT_DONE_HTML =
   '<span class="lex-report lex-report--done" role="status">Thanks — reported.</span>';
 
-const LANG_LABEL: Record<PopupLang, string> = { en: 'EN', uk: 'УКР' };
-
-// The translation languages some section on screen has text for.
-function availableLangs(
+// Whether some section on screen has native-language text to show.
+function hasTranslation(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
-): TranslationLang[] {
-  return TRANSLATION_LANGS.filter(
-    (code) => lexical?.translations[code] || grammar?.translations[code],
+): boolean {
+  const native = nativeLang();
+  return Boolean(
+    lexical?.translations[native] || grammar?.translations[native],
   );
 }
 
-// The EN / УКР switch for the popup's definitions. Only offered when some
+// The EN / native switch for the popup's definitions. Only offered when some
 // section on screen has a translation to show.
-function langToggleHtml(lang: PopupLang, langs: TranslationLang[]): string {
+function langToggleHtml(lang: PopupLang): string {
+  const label: Record<PopupLang, string> = {
+    en: 'EN',
+    native: NATIVE_LANG_LABEL[nativeLang()],
+  };
   const button = (value: PopupLang) =>
-    `<button type="button" class="lex-popup__lang-btn" data-popup-lang="${value}" aria-pressed="${lang === value}">${LANG_LABEL[value]}</button>`;
-  return `<div class="lex-popup__lang" role="group" aria-label="Definition language">${['en' as const, ...langs].map(button).join('')}</div>`;
+    `<button type="button" class="lex-popup__lang-btn" data-lex-lang="${value}" aria-pressed="${lang === value}">${label[value]}</button>`;
+  return `<div class="lex-popup__lang" role="group" aria-label="Definition language">${(['en', 'native'] as const).map(button).join('')}</div>`;
 }
 
 function topRowHtml(kicker: string, toggle: string): string {
@@ -269,7 +272,7 @@ function lexiconSectionHtml(
       : ['Phrase', phraseTypeLabel(entry.type)].filter(Boolean).join(' · ');
   const sub = entry.kind === 'word' ? (entry.phonetic ?? '') : '';
   const translation =
-    lang === 'en' ? null : entry.translations[lang]?.translation;
+    lang === 'en' ? null : entry.translations[nativeLang()]?.translation;
   const cefr = entry.cefrLevel
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
     : '';
@@ -281,7 +284,7 @@ function lexiconSectionHtml(
     <button type="button" class="lex-popup__speak" data-speak="${esc(term)}" aria-label="Pronounce ${esc(term)}">${SPEAK_ICON}</button>
   </div>
   ${sub ? `<p class="lex-popup__sub">${esc(sub)}</p>` : ''}
-  ${translation ? `<p class="lex-popup__translation" lang="${esc(lang)}">${esc(translation)}</p>` : ''}
+  ${translation ? `<p class="lex-popup__translation" lang="${nativeLang()}">${esc(translation)}</p>` : ''}
   ${entry.definition ? `<p class="lex-popup__def">${esc(entry.definition)}</p>` : ''}
   ${entry.example ? exampleHtml(entry.example) : ''}
   ${footerHtml({ kind: entry.kind, id: entry.id }, entry.state, slugId, demo)}
@@ -307,7 +310,7 @@ function usagePickerHtml(entry: GrammarLexiconEntry, lang: PopupLang): string {
     .map((point) => {
       const guideword = guidewordLabel(point.guideword);
       const translated =
-        lang === 'en' ? null : point.translations[lang]?.explanation;
+        lang === 'en' ? null : point.translations[nativeLang()]?.explanation;
       const detail = translated ?? point.explanation ?? point.canDoStatement;
       const example = shortExample(point.examples[0] ?? '');
       const href = practiceHref(entry.constructionSlug, point.egpIndex);
@@ -326,9 +329,9 @@ function grammarSectionHtml(
 ): string {
   const guideword = guidewordLabel(entry.guideword);
   const translated =
-    lang === 'en' ? null : entry.translations[lang]?.explanation;
+    lang === 'en' ? null : entry.translations[nativeLang()]?.explanation;
   const explanation = translated
-    ? `<p class="lex-popup__def" lang="${esc(lang)}">${esc(translated)}</p>`
+    ? `<p class="lex-popup__def" lang="${nativeLang()}">${esc(translated)}</p>`
     : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;
   // A construction with only this one usage point has no "other cases" to
   // switch between.
@@ -389,8 +392,7 @@ export function readerPopupHtml(
   if (fallback) {
     return tokenFallbackHtml(fallback);
   }
-  const langs = availableLangs(lexical, grammar);
-  const toggle = langs.length > 0 ? langToggleHtml(lang, langs) : '';
+  const toggle = hasTranslation(lexical, grammar) ? langToggleHtml(lang) : '';
   return [
     lexical ? lexiconSectionHtml(lexical, slugId, lang, toggle, demo) : '',
     grammar

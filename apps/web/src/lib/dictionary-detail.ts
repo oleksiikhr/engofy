@@ -1,4 +1,5 @@
 import { STATE_LABEL, STATE_TONE } from './dictionary-state';
+import { nativeLang } from './native-lang';
 import { postUrl } from './post-url';
 import type {
   EffectiveState,
@@ -114,13 +115,14 @@ export function senseActionsHtml(
   );
 }
 
-// The learner's saved uk translation, when one exists — same field the
-// reader popup shows via its EN/УКР toggle (`reader-lexicon.ts`), surfaced
-// here unconditionally since the dictionary page has no such toggle.
+// The native-language translation, when one exists — same field the reader
+// popup shows via its EN / native toggle (`reader-lexicon.ts`), surfaced here
+// unconditionally since the dictionary page has no such toggle.
 function translationHtml(translations: LexiconTranslations): string {
-  const translation = translations.uk?.translation;
+  const native = nativeLang();
+  const translation = translations[native]?.translation;
   return translation
-    ? `<p class="wd-sense__translation" lang="uk">${esc(translation)}</p>`
+    ? `<p class="wd-sense__translation" lang="${native}">${esc(translation)}</p>`
     : '';
 }
 

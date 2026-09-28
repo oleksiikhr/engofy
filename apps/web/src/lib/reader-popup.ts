@@ -378,8 +378,8 @@ export function initReaderPopup(root: HTMLElement, data: LexiconData): void {
       (anchor as HTMLElement | null)?.focus();
       return;
     }
-    const langButton = (event.target as Element).closest('[data-popup-lang]');
-    const next = langButton?.getAttribute('data-popup-lang');
+    const langButton = (event.target as Element).closest('[data-lex-lang]');
+    const next = langButton?.getAttribute('data-lex-lang');
     if (
       current &&
       (POPUP_LANGS as readonly (string | null | undefined)[]).includes(next)
