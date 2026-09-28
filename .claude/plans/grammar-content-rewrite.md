@@ -456,12 +456,17 @@ much; bigger and bigger; no/not any), а не за рівнем.
 as … as, the same as, rather than, superlative + clause, as if, too/enough/so … that), content-мітка —
 саме це слово, решта слотів — grammar (компаратив теж grammar, бо тема сторінки — зв'язка, не форма).
 
-### [ ] 41. Clauses — conditional (`clauses-conditional`) — рівень A2
+### [x] 41. Clauses — conditional (`clauses-conditional`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `clauses-conditional`.
+27 EGP-рядків (1105-1131): 4 чисті FORM (1105/1106/1121/1123) без карток; 23 FORM/USE/USE — усі
+вплетені за `egpIndex`. 10 секцій за типом умови (real, imperative+hedging, first, second, third,
+if so/not/needed, unless/as long as/whether or not, should, were to, if it weren't for); інверсії
+(had/should/were) — у секції свого значення, а не окремим блоком. Додано короткий mixed conditional
+(не EGP-рядок) — його обіцяють GrammarCompare-посилання 4 інших сторінок. Content — маркер умови
+(if/unless/had/should/were…), grammar — решта слотів.
 
 ### [ ] 42. Clauses — imperatives (`clauses-imperatives`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
