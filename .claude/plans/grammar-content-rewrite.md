@@ -943,10 +943,13 @@ won't have + питання C2, завершене до точки в майбу
 dare! (без EGP-рядка), How dare…!, I dare say, common mistakes). Content — `dare`/`daren't`/`dare not`/`didn't dare`/`dare say`
 (to при didn't dare — у `grammar` разом із дієсловом); підмет, how, об'єкт — `grammar`.
 
-### [ ] 88. Modality — need (`modality-need`) — рівень B2
+### [x] 88. Modality — need (`modality-need`) — рівень B2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-need`.
+5 EGP-рядків (551-555), 2 картки (552/555) inline; generic-блок не рендериться. 6 секцій (needn't + base verb, звичайне дієслово
+need to/don't need to/Do I need to…? + need + noun (без EGP-рядка), таблиця needn't/don't need to/don't have to/mustn't, needn't have
+done C1 + таблиця vs didn't need to, Need I…? C2 + риторичні питання, common mistakes). Content — `needn't`/`need not`/`needn't have`/
+`need(s)`/`don't need` (to при звичайному need — у `grammar` разом із дієсловом); підмет, do, дієслово — `grammar`.
 
