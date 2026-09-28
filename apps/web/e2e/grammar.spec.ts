@@ -331,6 +331,24 @@ test.describe('grammar construction detail', () => {
     await expect(english).toBeVisible();
   });
 
+  test('ignores a stored language value it does not know', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('popup-lang', 'uk');
+    });
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openUsage();
+
+    const translated = construction.usageItem(0);
+    await expect(page.locator('html')).not.toHaveAttribute('data-popup-lang');
+    await expect(
+      translated.getByText('which of two past actions'),
+    ).toBeVisible();
+    await expect(
+      translated.getByRole('button', { name: 'EN' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  });
+
   // The stored language is applied before first paint (boot script), so the
   // card below the translated one sits where it will once scripts have run.
   for (const [name, viewport] of [
@@ -343,7 +361,7 @@ test.describe('grammar construction detail', () => {
       const nextCardY = async (scripts: boolean) => {
         const context = await browser.newContext({ viewport });
         await context.addInitScript(() => {
-          localStorage.setItem('popup-lang', 'uk');
+          localStorage.setItem('popup-lang', 'native');
         });
         const page = await context.newPage();
         if (!scripts) {
