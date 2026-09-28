@@ -841,12 +841,15 @@ was/were, підмет, дієслово — `grammar`.
 desired states + there ought to be, likelihood, ought to have + -ed, еліпсис as much as they ought to, C2-формальні ought not to /
 oughtn't / Ought we not to…?, common mistakes). Content — `ought to`/`ought to have`/`ought not to` (у питанні розділено: `ought` … `not to`).
 
-### [ ] 78. Modality — used to (`modality-used-to`) — рівень B1
+### [x] 78. Modality — used to (`modality-used-to`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-used-to`.
+7 EGP-рядків (596-602), 2 картки (598/601) inline; generic-блок не рендериться. 9 секцій (форма, звички/стани "then, not now" +
+there used to be, didn't use to (+ didn't used to як поширений, але ризиковий варіант, never used to), питання did you use to,
+used to vs would vs past simple (без EGP-рядка), еліпсис, as she used to say C2, used not to C2, common mistakes з be used to + -ing).
+Content — `used to`/`use to`/`used not to`; did/didn't/never — `grammar`.
 
 ### [ ] 79. Passives — get and have (`passives-get-and-have`) — рівень B1
 - Branch: (немає — коміт прямо в `changes`)
