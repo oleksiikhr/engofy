@@ -594,12 +594,15 @@ hearsay, meant, likely + more/less likely, sure/certain/bound, imperative be sur
 obliged/forced, + that-clause hedging, not + adj + to vs adj + not + to) + common mistakes. Content —
 сам прикметник/дієприкметник (able/allowed/supposed…); be/modal/subject/to/verb/not — grammar.
 
-### [ ] 54. Modality — have (got) to (`modality-have-got-to`) — рівень A2
+### [x] 54. Modality — have (got) to (`modality-have-got-to`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
 - Base: `changes`
 - PR: — (не потрібен)
 
-Див. «Спільний процес» вище. Slug: `modality-have-got-to`.
+10 EGP-рядків (487-496): 5 чистих FORM (487/488/489/492/494) без карток; 5 USE вплетені за
+`egpIndex`. 9 секцій (form + had to / will have to, obligation + must, don't have to vs mustn't,
+infinitive after verbs/modals, I have to admit, strong suggestion, deductions, have to have + -ed,
+common mistakes). Content — сам have to / has to / 've got to / had to; subject/do/not/verb — grammar.
 
 ### [ ] 55. Modality — may (`modality-may`) — рівень A2
 - Branch: (немає — коміт прямо в `changes`)
