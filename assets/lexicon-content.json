@@ -2148,5 +2148,1897 @@
         "translation": "кнопка, ґудзик"
       }
     }
+  },
+  "cake": {
+    "noun": {
+      "definition": "A sweet food made from flour, eggs and sugar, baked in an oven.",
+      "example": "She baked a chocolate cake for his birthday.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "торт, пиріг"
+      }
+    }
+  },
+  "calendar": {
+    "noun": {
+      "definition": "A list of the days, weeks and months of the year.",
+      "example": "Check the calendar before you choose a date.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "календар"
+      }
+    }
+  },
+  "calm": {
+    "adjective": {
+      "definition": "Quiet and relaxed, not angry, worried or excited.",
+      "example": "Stay calm and tell me what happened.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "спокійний, тихий"
+      }
+    },
+    "noun": {
+      "definition": "A peaceful, quiet state without worry or noise.",
+      "example": "This calm of the countryside helps me relax.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "спокій, тиша"
+      }
+    }
+  },
+  "camp": {
+    "noun": {
+      "definition": "A place where people stay in tents or simple buildings for a short time.",
+      "example": "The children spent a week at a summer camp.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "табір"
+      }
+    }
+  },
+  "camping": {
+    "verb": {
+      "definition": "Sleeping and living outside in a tent for a holiday.",
+      "example": "We went camping by the lake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кемпінг, похід з наметом"
+      }
+    }
+  },
+  "campus": {
+    "noun": {
+      "definition": "The land and buildings of a university or college.",
+      "example": "The campus has a library and a big park.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кампус, університетське містечко"
+      }
+    }
+  },
+  "cancel": {
+    "verb": {
+      "definition": "To decide that something planned will not happen.",
+      "example": "They cancelled the match because of the rain.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "скасовувати"
+      }
+    }
+  },
+  "canteen": {
+    "noun": {
+      "definition": "A place in a school or workplace where people can buy and eat meals.",
+      "example": "We have lunch in the school canteen.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "їдальня, кантина"
+      }
+    }
+  },
+  "cap": {
+    "noun": {
+      "definition": "A soft flat hat with a curved part at the front, or a small piece of land that goes into the sea.",
+      "example": "Bring a cap for the sun.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кепка, шапка"
+      }
+    }
+  },
+  "careful": {
+    "adjective": {
+      "definition": "Thinking about what you do so that you avoid mistakes or danger.",
+      "example": "Be careful with that hot cup.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "обережний, уважний"
+      }
+    }
+  },
+  "carefully": {
+    "adverb": {
+      "definition": "In a way that shows you are thinking about what you do.",
+      "example": "Read the instructions carefully.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "обережно, уважно"
+      }
+    }
+  },
+  "carnival": {
+    "noun": {
+      "definition": "A public festival with music, parades and colourful costumes.",
+      "example": "The carnival goes through the town every summer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "карнавал"
+      }
+    }
+  },
+  "castle": {
+    "noun": {
+      "definition": "A large old building with thick walls, where kings or lords once lived.",
+      "example": "We visited a castle on a hill.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "замок"
+      }
+    }
+  },
+  "casual": {
+    "adjective": {
+      "definition": "Relaxed and informal, not formal or serious.",
+      "example": "He wore casual clothes to the party.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "повсякденний, невимушений"
+      }
+    }
+  },
+  "cat": {
+    "noun": {
+      "definition": "A small furry animal that people keep as a pet.",
+      "example": "Our cat sleeps on the sofa.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кіт, кішка"
+      }
+    }
+  },
+  "catastrophic": {
+    "adjective": {
+      "definition": "Causing very great damage or suffering.",
+      "example": "The storm had catastrophic results for the town.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "катастрофічний"
+      }
+    }
+  },
+  "category": {
+    "noun": {
+      "definition": "A group of things that are similar in some way.",
+      "example": "Put the words into two categories.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "категорія"
+      }
+    }
+  },
+  "cd": {
+    "noun": {
+      "definition": "A small flat disc that stores music or data.",
+      "example": "I bought a new CD of her songs.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "компакт-диск"
+      }
+    }
+  },
+  "celebrate": {
+    "verb": {
+      "definition": "To do something special and enjoyable because of a good event or day.",
+      "example": "We celebrate my birthday with a big dinner.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "святкувати, відзначати"
+      }
+    }
+  },
+  "celebration": {
+    "noun": {
+      "definition": "A special event or party for a good reason.",
+      "example": "The whole family came to the celebration.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "святкування, свято"
+      }
+    }
+  },
+  "certainty": {
+    "adjective": {
+      "definition": "Completely sure; without any doubt.",
+      "example": "Certainty in your voice makes the listener trust you.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "впевненість, певний"
+      }
+    },
+    "noun": {
+      "definition": "The feeling of being completely sure, or something that will definitely happen.",
+      "example": "She said it with complete certainty.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "впевненість, певність"
+      }
+    }
+  },
+  "ch": {
+    "noun": {
+      "definition": "The two letters c and h written together, which often make one sound.",
+      "example": "Words that end in ch add -es in the plural.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "буквосполучення «ch»"
+      }
+    }
+  },
+  "chain": {
+    "noun": {
+      "definition": "A line of rings joined together, or a series of things that follow one another.",
+      "example": "A chain of events led to the accident.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ланцюг, ланцюжок"
+      }
+    },
+    "verb": {
+      "definition": "To fasten something with a chain, or to link things in a series.",
+      "example": "He chained his bike to the fence.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прив'язувати ланцюгом, з'єднувати"
+      }
+    }
+  },
+  "challenging": {
+    "adjective": {
+      "definition": "Difficult in a way that tests your skill or ability.",
+      "example": "It was a challenging exam.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "складний, який кидає виклик"
+      }
+    }
+  },
+  "chaos": {
+    "noun": {
+      "definition": "A situation with no order, where everything is confused.",
+      "example": "The airport was in chaos after the snow.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "хаос"
+      }
+    }
+  },
+  "chapter": {
+    "noun": {
+      "definition": "One of the main parts of a book.",
+      "example": "I read the first chapter last night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розділ, глава"
+      }
+    }
+  },
+  "characteristic": {
+    "adjective": {
+      "definition": "Typical of a person, place or thing.",
+      "example": "She answered with characteristic honesty.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "характерний, типовий"
+      }
+    }
+  },
+  "charity": {
+    "noun": {
+      "definition": "An organisation that raises money to help people in need.",
+      "example": "He gave money to a children's charity.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "благодійність, благодійна організація"
+      }
+    }
+  },
+  "charming": {
+    "adjective": {
+      "definition": "Very pleasant and attractive.",
+      "example": "They live in a charming little village.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чарівний, чудовий"
+      }
+    }
+  },
+  "chart": {
+    "noun": {
+      "definition": "A drawing or table that shows information clearly.",
+      "example": "The chart shows how prices went up.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "діаграма, графік"
+      }
+    }
+  },
+  "chase": {
+    "verb": {
+      "definition": "To run after someone or something to catch them.",
+      "example": "The dog chased the ball across the park.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переслідувати, ганятися"
+      }
+    }
+  },
+  "chat": {
+    "noun": {
+      "definition": "An informal, friendly conversation.",
+      "example": "We had a long chat over coffee.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "балачка, розмова"
+      }
+    },
+    "verb": {
+      "definition": "To talk in a friendly, informal way.",
+      "example": "Shall we chat for a few minutes?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "балакати, спілкуватися"
+      }
+    }
+  },
+  "cheap": {
+    "adjective": {
+      "definition": "Costing little money.",
+      "example": "These shoes were really cheap.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дешевий"
+      }
+    }
+  },
+  "checking": {
+    "verb": {
+      "definition": "Looking at something to make sure it is correct, safe or true.",
+      "example": "He is always checking his phone.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "перевіряти"
+      }
+    }
+  },
+  "chemical": {
+    "noun": {
+      "definition": "A substance used in or made by chemistry.",
+      "example": "The factory uses dangerous chemicals.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "хімікат, хімічна речовина"
+      }
+    }
+  },
+  "chess": {
+    "noun": {
+      "definition": "A board game for two players with sixteen pieces each.",
+      "example": "My grandfather taught me to play chess.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "шахи"
+      }
+    }
+  },
+  "childhood": {
+    "noun": {
+      "definition": "The time of your life when you are a child.",
+      "example": "She had a happy childhood in the country.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дитинство"
+      }
+    }
+  },
+  "chilli": {
+    "noun": {
+      "definition": "A small hot-tasting pepper used in cooking.",
+      "example": "He tried to eat the whole chilli.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "(гострий) перець чилі"
+      }
+    }
+  },
+  "chip": {
+    "noun": {
+      "definition": "A very small piece of electronic equipment inside a computer.",
+      "example": "Our new chip makes the phone much faster.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чип, мікросхема"
+      }
+    }
+  },
+  "chocolate": {
+    "noun": {
+      "definition": "A sweet brown food made from cocoa.",
+      "example": "She gave me a box of chocolates.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "шоколад"
+      }
+    }
+  },
+  "choir": {
+    "noun": {
+      "definition": "A group of people who sing together.",
+      "example": "My sister sings in the school choir.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "хор"
+      }
+    }
+  },
+  "choosing": {
+    "noun": {
+      "definition": "The act of picking one thing from several.",
+      "example": "Choosing the right job takes time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вибір, вибирання"
+      }
+    }
+  },
+  "cigarette": {
+    "noun": {
+      "definition": "A thin tube of paper filled with tobacco that people smoke.",
+      "example": "He put out his cigarette.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "сигарета"
+      }
+    }
+  },
+  "cinema": {
+    "noun": {
+      "definition": "A place where you go to watch films.",
+      "example": "Let's go to the cinema on Friday.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кінотеатр, кіно"
+      }
+    }
+  },
+  "circumstance": {
+    "noun": {
+      "definition": "A fact or condition that affects a situation or an action.",
+      "example": "In these circumstances, we cannot go.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обставина, умова"
+      }
+    }
+  },
+  "citizen": {
+    "noun": {
+      "definition": "A person who legally belongs to a country.",
+      "example": "She became a citizen of Canada.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "громадянин"
+      }
+    }
+  },
+  "classic": {
+    "adjective": {
+      "definition": "Very good and well known for a long time.",
+      "example": "It is a classic film that everyone should see.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "класичний"
+      }
+    }
+  },
+  "classical": {
+    "adjective": {
+      "definition": "Connected with the traditional style of Western music, art or ancient Greece and Rome.",
+      "example": "She likes classical music.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "класичний"
+      }
+    }
+  },
+  "classmate": {
+    "noun": {
+      "definition": "A person who is in the same class as you at school.",
+      "example": "My classmate helped me with the homework.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "однокласник, одногрупник"
+      }
+    }
+  },
+  "clause": {
+    "adjective": {
+      "definition": "Part of a sentence that has its own verb; used here to describe a group of words with a verb.",
+      "example": "Add a clause with its own subject and verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "речення-частина, підрядна частина"
+      }
+    },
+    "noun": {
+      "definition": "A group of words with a subject and a verb that forms part of a sentence.",
+      "example": "The main clause can come first or second.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "частина речення, клауза"
+      }
+    },
+    "verb": {
+      "definition": "Used in grammar talk for a group of words that has its own subject and verb.",
+      "example": "Each clause needs a subject and a verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "частина речення"
+      }
+    }
+  },
+  "cleaner": {
+    "noun": {
+      "definition": "A person whose job is to clean, or a shop that cleans clothes.",
+      "example": "She took her coat to the dry cleaner's.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прибиральник, хімчистка"
+      }
+    }
+  },
+  "cleanly": {
+    "adverb": {
+      "definition": "In a neat and tidy way, without leaving a mess.",
+      "example": "The knife cut cleanly through the bread.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "чисто, охайно"
+      }
+    }
+  },
+  "cleave": {
+    "verb": {
+      "definition": "To split or cut something into parts.",
+      "example": "The axe cleaved the log in two.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розколювати, розрубувати"
+      }
+    }
+  },
+  "cleft": {
+    "noun": {
+      "definition": "A sentence type that puts the focus on one part, for example \"It was Tom who called.\"",
+      "example": "A cleft sentence gives extra emphasis to one part.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розщеплене речення, щілина"
+      }
+    }
+  },
+  "clever": {
+    "adjective": {
+      "definition": "Quick at learning and understanding things.",
+      "example": "She is a clever student.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "розумний, кмітливий"
+      }
+    }
+  },
+  "click": {
+    "verb": {
+      "definition": "To press a button on a computer mouse.",
+      "example": "Click on the link to read more.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "клацати, натискати"
+      }
+    }
+  },
+  "client": {
+    "noun": {
+      "definition": "A person who pays for the services of a company or professional.",
+      "example": "The lawyer met a new client.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "клієнт"
+      }
+    }
+  },
+  "climate": {
+    "noun": {
+      "definition": "The usual weather conditions of a place over a long time.",
+      "example": "The climate here is warm and dry.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "клімат"
+      }
+    }
+  },
+  "climb": {
+    "noun": {
+      "definition": "A journey upwards, especially up a mountain or hill.",
+      "example": "It was a long climb to the top.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "підйом, сходження"
+      }
+    }
+  },
+  "climbing": {
+    "verb": {
+      "definition": "Going up something, especially a hill or mountain, using your hands and feet.",
+      "example": "Climbing is my favourite sport.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "скелелазіння, сходження"
+      }
+    }
+  },
+  "clock": {
+    "noun": {
+      "definition": "An object that shows the time.",
+      "example": "The clock on the wall is five minutes slow.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "годинник"
+      }
+    }
+  },
+  "closely": {
+    "adverb": {
+      "definition": "Very near, or with great attention.",
+      "example": "Watch closely and you will see how it works.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "уважно, близько"
+      }
+    }
+  },
+  "closing": {
+    "noun": {
+      "definition": "The end of something, such as a letter, a shop's day or a text.",
+      "example": "Yours sincerely is a polite closing for a letter.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "завершення, закінчення"
+      }
+    }
+  },
+  "clothe": {
+    "noun": {
+      "definition": "Used to talk about the things people wear, such as shirts and trousers.",
+      "example": "He bought some new clothes for the trip.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "одяг"
+      }
+    }
+  },
+  "clothing": {
+    "verb": {
+      "definition": "Things people wear, such as shirts, coats and trousers.",
+      "example": "The shop sells clothing for children.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "одяг"
+      }
+    }
+  },
+  "cloud": {
+    "noun": {
+      "definition": "A white or grey mass in the sky made of small drops of water.",
+      "example": "There wasn't a cloud in the sky.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "хмара"
+      }
+    }
+  },
+  "coke": {
+    "noun": {
+      "definition": "A sweet, dark fizzy drink; short for Coca-Cola.",
+      "example": "Can I have a coke, please?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кока-кола, кола"
+      }
+    }
+  },
+  "cola": {
+    "noun": {
+      "definition": "A sweet, dark fizzy drink with a brown colour.",
+      "example": "She ordered a cola with ice.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кола"
+      }
+    }
+  },
+  "colleague": {
+    "noun": {
+      "definition": "A person you work with.",
+      "example": "My colleagues invited me to lunch.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "колега"
+      }
+    }
+  },
+  "collect": {
+    "verb": {
+      "definition": "To bring things together, or to go and get something.",
+      "example": "I collect old stamps.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "збирати, колекціонувати"
+      }
+    }
+  },
+  "collective": {
+    "adjective": {
+      "definition": "Done or shared by all the people in a group.",
+      "example": "It was a collective decision.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "колективний, спільний"
+      }
+    }
+  },
+  "colon": {
+    "noun": {
+      "definition": "The punctuation mark (:) used before a list or an explanation.",
+      "example": "Put a colon before the list.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "двокрапка"
+      }
+    }
+  },
+  "colour": {
+    "noun": {
+      "definition": "Red, blue, green, yellow and so on; the way things look because of light.",
+      "example": "What is your favourite colour?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "колір"
+      }
+    }
+  },
+  "combination": {
+    "noun": {
+      "definition": "A mix of two or more things together.",
+      "example": "Rice and beans is a good combination.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поєднання, комбінація"
+      }
+    }
+  },
+  "combine": {
+    "verb": {
+      "definition": "To join two or more things together.",
+      "example": "Combine the flour and the eggs in a bowl.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поєднувати, змішувати"
+      }
+    }
+  },
+  "comfort": {
+    "verb": {
+      "definition": "To make someone feel less sad or worried.",
+      "example": "She comforted the crying child.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "втішати, заспокоювати"
+      }
+    }
+  },
+  "comfortable": {
+    "adjective": {
+      "definition": "Pleasant to wear, sit on or be in; making you feel relaxed.",
+      "example": "This sofa is very comfortable.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "зручний, комфортний"
+      }
+    }
+  },
+  "comma": {
+    "noun": {
+      "definition": "The punctuation mark (,) used to separate parts of a sentence or items in a list.",
+      "example": "Put a comma after the if-clause.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кома"
+      }
+    }
+  },
+  "command": {
+    "noun": {
+      "definition": "An order telling someone to do something.",
+      "example": "The soldiers obeyed the command.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наказ, команда"
+      }
+    },
+    "verb": {
+      "definition": "To tell someone officially to do something.",
+      "example": "The captain commanded the men to stop.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "наказувати, командувати"
+      }
+    }
+  },
+  "commas": {
+    "noun": {
+      "definition": "More than one comma, the punctuation marks (,) used to separate parts of a sentence.",
+      "example": "Use commas between the adjectives.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "коми"
+      }
+    }
+  },
+  "commentary": {
+    "noun": {
+      "definition": "A spoken description of an event, given while it happens.",
+      "example": "He listened to the football commentary on the radio.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "коментар, репортаж"
+      }
+    }
+  },
+  "commit": {
+    "verb": {
+      "definition": "To do something wrong or illegal, or to promise to do something.",
+      "example": "He committed a serious crime.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "скоювати, зобов'язуватися"
+      }
+    }
+  },
+  "commonly": {
+    "adverb": {
+      "definition": "Often, or by many people.",
+      "example": "English is commonly spoken in many countries.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "зазвичай, часто"
+      }
+    }
+  },
+  "communicate": {
+    "verb": {
+      "definition": "To share information, ideas or feelings with other people.",
+      "example": "They communicate by email.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "спілкуватися, повідомляти"
+      }
+    }
+  },
+  "comparative": {
+    "adjective": {
+      "definition": "Showing the difference between two things, or measured against something else.",
+      "example": "A comparative adjective compares two things.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "порівняльний"
+      }
+    },
+    "noun": {
+      "definition": "The form of an adjective or adverb that compares two things, such as \"bigger\".",
+      "example": "\"Better\" is the comparative of \"good\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вищий ступінь порівняння"
+      }
+    },
+    "verb": {
+      "definition": "Used in grammar for the form of a word that compares two things.",
+      "example": "Use the comparative form here.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "порівняльна форма"
+      }
+    }
+  },
+  "compare": {
+    "noun": {
+      "definition": "A word used in the phrase \"beyond compare\", meaning better than any other.",
+      "example": "Her cooking is beyond compare.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "порівняння"
+      }
+    },
+    "verb": {
+      "definition": "To look at two things to see how they are alike or different.",
+      "example": "Compare the two prices before you buy.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "порівнювати"
+      }
+    }
+  },
+  "comparison": {
+    "noun": {
+      "definition": "The act of looking at how two things are alike or different.",
+      "example": "In comparison, this hotel is much cheaper.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "порівняння"
+      }
+    }
+  },
+  "competitor": {
+    "noun": {
+      "definition": "A person or company that tries to win against others.",
+      "example": "Our main competitor has lowered its prices.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "конкурент, суперник"
+      }
+    }
+  },
+  "complain": {
+    "noun": {
+      "definition": "Used to talk about the act of saying you are not happy about something.",
+      "example": "I want to complain about the noise.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "скарга"
+      }
+    },
+    "verb": {
+      "definition": "To say that you are not happy about something.",
+      "example": "He complained to the manager about the food.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "скаржитися"
+      }
+    }
+  },
+  "complaint": {
+    "noun": {
+      "definition": "A statement that you are not satisfied with something.",
+      "example": "We made a complaint to the hotel.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "скарга"
+      }
+    }
+  },
+  "complement": {
+    "noun": {
+      "definition": "A word or phrase that completes the meaning of a verb, for example \"happy\" in \"She is happy\".",
+      "example": "The complement comes after the verb be.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "додаток, доповнення"
+      }
+    }
+  },
+  "complicated": {
+    "adjective": {
+      "definition": "Difficult to understand because it has many parts.",
+      "example": "The rules of the game are too complicated.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "складний, заплутаний"
+      }
+    }
+  },
+  "compose": {
+    "verb": {
+      "definition": "To write music, or to form something from several parts.",
+      "example": "He composed a song for her.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "складати, писати (музику)"
+      }
+    }
+  },
+  "compound": {
+    "noun": {
+      "definition": "A thing made of two or more parts, such as a compound word.",
+      "example": "\"Toothbrush\" is a compound noun.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "складне слово, суміш"
+      }
+    }
+  },
+  "compulsory": {
+    "adjective": {
+      "definition": "Required by a rule or law; you must do it.",
+      "example": "School is compulsory until the age of sixteen.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обов'язковий"
+      }
+    }
+  },
+  "concern": {
+    "verb": {
+      "definition": "To worry someone, or to be about a particular subject.",
+      "example": "The news concerns everyone in the town.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "турбувати, стосуватися"
+      }
+    }
+  },
+  "concerned": {
+    "adjective": {
+      "definition": "Worried about something, or interested in it.",
+      "example": "I'm concerned about my father's health.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стурбований, зацікавлений"
+      }
+    }
+  },
+  "concert": {
+    "noun": {
+      "definition": "A public performance of music.",
+      "example": "We went to a rock concert.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "концерт"
+      }
+    }
+  },
+  "concession": {
+    "noun": {
+      "definition": "Something you allow or give up in an argument or deal.",
+      "example": "Each side made a concession.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "поступка, поступливість"
+      }
+    }
+  },
+  "conch": {
+    "noun": {
+      "definition": "A large spiral shell that can be blown like a horn.",
+      "example": "The boy blew the conch to call everyone.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "раковина, мушля"
+      }
+    }
+  },
+  "conclude": {
+    "verb": {
+      "definition": "To decide something after thinking, or to end something.",
+      "example": "We concluded that he was telling the truth.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "робити висновок, завершувати"
+      }
+    }
+  },
+  "conclusion": {
+    "noun": {
+      "definition": "A final decision, or the end of something.",
+      "example": "In conclusion, I agree with the plan.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "висновок, завершення"
+      }
+    }
+  },
+  "concrete": {
+    "adjective": {
+      "definition": "Real and specific, not general or only an idea.",
+      "example": "Give me a concrete example.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "конкретний"
+      }
+    }
+  },
+  "conditional": {
+    "adjective": {
+      "definition": "Depending on something else happening first.",
+      "example": "The offer is conditional on your passing the test.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "умовний"
+      }
+    },
+    "noun": {
+      "definition": "A sentence type that uses \"if\" to talk about a possible or imagined situation.",
+      "example": "The second conditional talks about imagined situations.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "умовний період, умовне речення"
+      }
+    }
+  },
+  "confession": {
+    "noun": {
+      "definition": "A statement that you have done something wrong.",
+      "example": "He made a full confession to the police.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зізнання, визнання"
+      }
+    }
+  },
+  "confident": {
+    "adjective": {
+      "definition": "Sure that you can do something well.",
+      "example": "She felt confident before the interview.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "впевнений"
+      }
+    }
+  },
+  "confirm": {
+    "verb": {
+      "definition": "To say or show that something is true or certain.",
+      "example": "Please confirm your booking by email.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "підтверджувати"
+      }
+    }
+  },
+  "confuse": {
+    "verb": {
+      "definition": "To make someone unable to think clearly or to understand.",
+      "example": "Don't confuse me with all these numbers.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "збивати з пантелику, плутати"
+      }
+    }
+  },
+  "confused": {
+    "adjective": {
+      "definition": "Not able to think clearly or to understand something.",
+      "example": "I'm confused by these directions.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розгублений, збентежений"
+      }
+    }
+  },
+  "conjunction": {
+    "noun": {
+      "definition": "A word that joins words or clauses, such as \"and\" or \"but\".",
+      "example": "\"Because\" is a conjunction.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сполучник"
+      }
+    }
+  },
+  "connect": {
+    "verb": {
+      "definition": "To join two things together, or to link one thing with another.",
+      "example": "The bridge connects the two towns.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "з'єднувати, пов'язувати"
+      }
+    }
+  },
+  "connection": {
+    "noun": {
+      "definition": "A link between two people, things or ideas.",
+      "example": "There's a connection between sleep and health.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "зв'язок, з'єднання"
+      }
+    }
+  },
+  "conquer": {
+    "verb": {
+      "definition": "To take control of a place or people by force, or to defeat a problem.",
+      "example": "The army conquered the city.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "завойовувати, перемагати"
+      }
+    }
+  },
+  "consequence": {
+    "noun": {
+      "definition": "A result of something that happened before.",
+      "example": "Missing the bus had serious consequences.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наслідок"
+      }
+    }
+  },
+  "consequently": {
+    "adverb": {
+      "definition": "As a result of something; therefore.",
+      "example": "He was ill; consequently, he missed the class.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "отже, внаслідок цього"
+      }
+    }
+  },
+  "consist": {
+    "verb": {
+      "definition": "To be made up of certain parts.",
+      "example": "The team consists of eleven players.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "складатися (з)"
+      }
+    }
+  },
+  "consistent": {
+    "adjective": {
+      "definition": "Always behaving or happening in the same way; not changing.",
+      "example": "Her work is always consistent.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "послідовний, сталий"
+      }
+    }
+  },
+  "console": {
+    "verb": {
+      "definition": "To make someone feel better when they are sad.",
+      "example": "He tried to console her after the loss.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "втішати, утішати"
+      }
+    }
+  },
+  "consonant": {
+    "adjective": {
+      "definition": "Used to describe a sound or letter that is not a vowel.",
+      "example": "Add -er after a consonant letter.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "приголосний"
+      }
+    },
+    "noun": {
+      "definition": "A letter or sound that is not a vowel, such as b, c or d.",
+      "example": "Double the final consonant before -ing.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "приголосний (звук, літера)"
+      }
+    }
+  },
+  "constantly": {
+    "adverb": {
+      "definition": "All the time, or again and again.",
+      "example": "He is constantly checking his phone.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "постійно, безперервно"
+      }
+    }
+  },
+  "contain": {
+    "verb": {
+      "definition": "To have something inside; to include.",
+      "example": "The box contains old photographs.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "містити"
+      }
+    }
+  },
+  "container": {
+    "noun": {
+      "definition": "A box, bottle or other thing that holds something inside.",
+      "example": "Keep the soup in a plastic container.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "контейнер, ємність"
+      }
+    }
+  },
+  "context": {
+    "noun": {
+      "definition": "The situation or words around something that help you understand it.",
+      "example": "You can guess the meaning from the context.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "контекст"
+      }
+    }
+  },
+  "contexts": {
+    "noun": {
+      "definition": "More than one context; the situations or words around something.",
+      "example": "The word is used in many different contexts.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "контексти"
+      }
+    }
+  },
+  "continually": {
+    "adverb": {
+      "definition": "Again and again over a long period, with short breaks.",
+      "example": "The phone rang continually all morning.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "постійно, безупинно"
+      }
+    }
+  },
+  "continuous": {
+    "adjective": {
+      "definition": "Going on without stopping.",
+      "example": "A continuous line of cars stretched for miles.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неперервний, тривалий"
+      }
+    },
+    "noun": {
+      "definition": "A verb form that shows an action in progress, such as \"is going\".",
+      "example": "The present continuous is formed with be + -ing.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "тривала форма"
+      }
+    }
+  },
+  "continuously": {
+    "adverb": {
+      "definition": "Without stopping.",
+      "example": "It rained continuously for three days.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "безперервно"
+      }
+    }
+  },
+  "contraction": {
+    "noun": {
+      "definition": "A short form of two words, such as \"don't\" for \"do not\".",
+      "example": "\"Can't\" is a contraction of \"cannot\".",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "скорочення, стягнена форма"
+      }
+    }
+  },
+  "contrast": {
+    "noun": {
+      "definition": "A clear difference between two things.",
+      "example": "There is a big contrast between the two cities.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "контраст, відмінність"
+      }
+    },
+    "verb": {
+      "definition": "To show the differences between two things.",
+      "example": "The film contrasts rich and poor life.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "протиставляти, порівнювати"
+      }
+    }
+  },
+  "conversation": {
+    "noun": {
+      "definition": "A talk between two or more people.",
+      "example": "We had a long conversation about music.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "розмова"
+      }
+    }
+  },
+  "conversational": {
+    "adjective": {
+      "definition": "Typical of informal, everyday talk.",
+      "example": "She writes in a conversational style.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розмовний"
+      }
+    }
+  },
+  "convey": {
+    "verb": {
+      "definition": "To communicate an idea or feeling so that others understand it.",
+      "example": "His eyes conveyed great sadness.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "передавати, виражати"
+      }
+    }
+  },
+  "convince": {
+    "verb": {
+      "definition": "To make someone believe something or agree to do it.",
+      "example": "She convinced me to try the class.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переконувати"
+      }
+    }
+  },
+  "convinced": {
+    "adjective": {
+      "definition": "Completely sure that something is true.",
+      "example": "I'm convinced that he is right.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переконаний"
+      }
+    }
+  },
+  "cookbook": {
+    "noun": {
+      "definition": "A book with recipes that tell you how to cook food.",
+      "example": "She found the recipe in an old cookbook.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кулінарна книга"
+      }
+    }
+  },
+  "cooking": {
+    "verb": {
+      "definition": "Preparing food by heating it.",
+      "example": "The phone rang while I was cooking.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "готувати їжу"
+      }
+    }
+  },
+  "coordinate": {
+    "verb": {
+      "definition": "To make different parts work well together.",
+      "example": "She coordinates the work of ten people.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "координувати, узгоджувати"
+      }
+    }
+  },
+  "coordinated": {
+    "adjective": {
+      "definition": "Working together well, or matching in style.",
+      "example": "We need a coordinated plan.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "узгоджений, скоординований"
+      }
+    }
+  },
+  "coordination": {
+    "noun": {
+      "definition": "The act of making different parts work well together.",
+      "example": "The project needs better coordination.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "координація, узгодженість"
+      }
+    }
+  },
+  "copy": {
+    "noun": {
+      "definition": "Something made to look exactly like something else.",
+      "example": "Please make a copy of this letter.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "копія, примірник"
+      }
+    },
+    "verb": {
+      "definition": "To do or make something exactly like something else.",
+      "example": "Don't copy the sentence word for word.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "копіювати, наслідувати"
+      }
+    }
+  },
+  "core": {
+    "noun": {
+      "definition": "The most important or central part of something.",
+      "example": "Honesty is at the core of our work.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ядро, суть"
+      }
+    }
+  },
+  "corner": {
+    "noun": {
+      "definition": "The place where two lines, walls or streets meet.",
+      "example": "The shop is on the corner of the street.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кут, ріг"
+      }
+    }
+  },
+  "correct": {
+    "adjective": {
+      "definition": "Right, with no mistakes.",
+      "example": "Your answer is correct.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "правильний"
+      }
+    },
+    "verb": {
+      "definition": "To change something so that it is right.",
+      "example": "The teacher corrected our mistakes.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "виправляти, поправляти"
+      }
+    }
+  },
+  "correction": {
+    "noun": {
+      "definition": "A change that makes something right.",
+      "example": "She made a few corrections to the text.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "виправлення"
+      }
+    }
+  },
+  "correctly": {
+    "adverb": {
+      "definition": "In a way that is right, without mistakes.",
+      "example": "Did I spell your name correctly?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "правильно"
+      }
+    }
+  },
+  "correspondence": {
+    "noun": {
+      "definition": "Letters or emails sent between people, or a close link between things.",
+      "example": "He kept all their correspondence.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "листування, відповідність"
+      }
+    }
+  },
+  "costume": {
+    "noun": {
+      "definition": "Clothes worn by an actor, or for a special party or occasion.",
+      "example": "She wore a pirate costume to the party.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "костюм"
+      }
+    }
+  },
+  "cosy": {
+    "adjective": {
+      "definition": "Warm, comfortable and pleasant.",
+      "example": "We sat in a cosy little café.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "затишний"
+      }
+    }
+  },
+  "cotton": {
+    "noun": {
+      "definition": "A soft cloth or thread made from a plant, used for clothes.",
+      "example": "This shirt is made of cotton.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "бавовна"
+      }
+    }
+  },
+  "cough": {
+    "verb": {
+      "definition": "To push air out of your throat with a noise, often because you are ill.",
+      "example": "He coughed all night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кашляти"
+      }
+    }
+  },
+  "count": {
+    "noun": {
+      "definition": "The act of counting, or the total number that you find.",
+      "example": "At the last count, there were ten people.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підрахунок, лічба"
+      }
+    },
+    "verb": {
+      "definition": "To say numbers in order, or to add things to find the total.",
+      "example": "Count the chairs in the room.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "рахувати"
+      }
+    }
+  },
+  "countable": {
+    "adjective": {
+      "definition": "Used for nouns that can be counted, with a singular and a plural.",
+      "example": "\"Book\" is a countable noun.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "злічуваний"
+      }
+    }
+  },
+  "counter": {
+    "noun": {
+      "definition": "A long flat surface in a shop, bank or kitchen.",
+      "example": "He put the glass on the counter.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прилавок, стійка"
+      }
+    }
+  },
+  "countryside": {
+    "noun": {
+      "definition": "Land outside towns and cities, with fields, farms and villages.",
+      "example": "We live in the countryside.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "сільська місцевість"
+      }
+    }
+  },
+  "cousin": {
+    "noun": {
+      "definition": "A child of your aunt or uncle.",
+      "example": "My cousin lives in Canada.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "двоюрідний брат, двоюрідна сестра"
+      }
+    }
+  },
+  "cracker": {
+    "noun": {
+      "definition": "A thin dry biscuit that you eat with cheese.",
+      "example": "I had cheese and crackers for lunch.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "крекер"
+      }
+    }
+  },
+  "crash": {
+    "noun": {
+      "definition": "A sudden accident when a vehicle hits something.",
+      "example": "There was a bad crash on the motorway.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "аварія, зіткнення"
+      }
+    }
+  },
+  "cream": {
+    "noun": {
+      "definition": "A thick, white liquid from milk, or a soft substance you put on your skin.",
+      "example": "Would you like cream in your coffee?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вершки, крем"
+      }
+    }
+  },
+  "crew": {
+    "noun": {
+      "definition": "A group of people who work together on a ship, plane or film.",
+      "example": "The crew were very friendly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "команда, екіпаж"
+      }
+    }
+  },
+  "critical": {
+    "adjective": {
+      "definition": "Saying that something is wrong or bad; or very important.",
+      "example": "He was critical of the plan.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "критичний"
+      }
+    }
+  },
+  "criticise": {
+    "verb": {
+      "definition": "To say what you think is wrong or bad about someone or something.",
+      "example": "She criticised the government's decision.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "критикувати"
+      }
+    }
+  },
+  "criticism": {
+    "noun": {
+      "definition": "Comments that say what is wrong or bad about someone or something.",
+      "example": "He didn't like the criticism.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "критика"
+      }
+    }
+  },
+  "crowd": {
+    "noun": {
+      "definition": "A large number of people together in one place.",
+      "example": "A big crowd waited outside the theatre.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "натовп"
+      }
+    }
+  },
+  "crowded": {
+    "adjective": {
+      "definition": "Full of people.",
+      "example": "The train was very crowded.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "переповнений, людний"
+      }
+    }
+  },
+  "crucial": {
+    "adjective": {
+      "definition": "Extremely important, because everything depends on it.",
+      "example": "Good sleep is crucial for your health.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "вирішальний, надзвичайно важливий"
+      }
+    }
+  },
+  "cruel": {
+    "adjective": {
+      "definition": "Causing pain or suffering to others on purpose.",
+      "example": "It is cruel to leave a dog alone all day.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "жорстокий"
+      }
+    }
+  },
+  "cry": {
+    "verb": {
+      "definition": "To have tears coming from your eyes, or to shout loudly.",
+      "example": "The baby cried all night.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "плакати, кричати"
+      }
+    }
+  },
+  "curiously": {
+    "adverb": {
+      "definition": "In a way that shows you want to know or learn something; or strangely.",
+      "example": "She looked at the box curiously.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "цікаво, допитливо"
+      }
+    }
+  },
+  "curtain": {
+    "noun": {
+      "definition": "A piece of cloth that hangs at a window or in a theatre.",
+      "example": "Please close the curtains.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "штора, завіса"
+      }
+    }
+  },
+  "custom": {
+    "noun": {
+      "definition": "A traditional way of behaving in a particular society.",
+      "example": "It is a custom to give flowers on this day.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "звичай, традиція"
+      }
+    }
+  },
+  "customer": {
+    "noun": {
+      "definition": "A person who buys goods or services from a shop or a company.",
+      "example": "The shop has many regular customers.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "клієнт, покупець"
+      }
+    }
+  },
+  "cycle": {
+    "verb": {
+      "definition": "To ride a bicycle.",
+      "example": "I always cycle to work.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "їздити на велосипеді"
+      }
+    }
+  },
+  "cycling": {
+    "noun": {
+      "definition": "The sport or activity of riding a bicycle.",
+      "example": "Cycling is good for your health.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "їзда на велосипеді, велоспорт"
+      }
+    },
+    "verb": {
+      "definition": "Riding a bicycle.",
+      "example": "We went cycling in the mountains.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "їздити на велосипеді"
+      }
+    }
+  },
+  "cyclist": {
+    "noun": {
+      "definition": "A person who rides a bicycle.",
+      "example": "The cyclist stopped at the red light.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "велосипедист"
+      }
+    }
   }
 }
