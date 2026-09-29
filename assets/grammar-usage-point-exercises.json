@@ -1,4 +1,5078 @@
 {
+  "12": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Tired, hungry ____ cold, the climbers reached the hut.",
+        "answer": "and",
+        "options": ["and", "but", "or"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The house – dark, empty and ____ – waited for us.",
+        "answer": "silent",
+        "options": ["silently", "silent", "silence"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence lists adjectives correctly in formal writing? ____",
+        "options": [
+          "Clever funny kind she was loved by all.",
+          "Clever, funny and kind, she was loved by all.",
+          "Clever and funny, and kind she was loved by all."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Cold, wet ____ tired, we finally got home.",
+        "answer": "and",
+        "options": ["and", "or", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The old castle – ____ – stood on the hill.",
+        "options": [
+          "dark silent empty",
+          "dark, silent and empty",
+          "darkly, silently and emptily"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Young, talented and ____, the singer quickly became famous.",
+        "answer": "ambitious",
+        "options": ["ambition", "ambitiously", "ambitious"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct punctuation: The room, ____ smelled of flowers.",
+        "options": [
+          "bright, warm and quiet,",
+          "bright warm and quiet",
+          "bright, warm, and, quiet"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Brave, clever ____ kind, the hero saved the village.",
+        "answer": "and",
+        "options": ["so", "and", "but"]
+      }
+    }
+  ],
+  "22": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My new flat is ____ bigger than the old one.",
+        "answer": "much",
+        "options": ["many", "more", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The test was so ____ easier than I expected.",
+        "answer": "much",
+        "options": ["more", "much", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Life in the village is ____ quieter than in the city.",
+        "options": ["many", "very", "most", "much"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This phone is much ____ than my old one.",
+        "answer": "faster",
+        "options": ["faster", "fast", "fastest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Your idea is much better.",
+          "Your idea is much good.",
+          "Your idea is very better."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The weather today is much ____ than yesterday. (warm)",
+        "answer": "warmer",
+        "options": ["warmer", "warm", "warmest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The second film was so ____ better than the first.",
+        "options": ["much", "many", "very", "more"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Trains are ____ faster than buses here.",
+        "answer": "much",
+        "options": ["much", "very", "many"]
+      }
+    }
+  ],
+  "23": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's a ____ older than me.",
+        "answer": "bit",
+        "options": ["lot", "few", "bit"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Today is a little bit ____ than yesterday. (warm)",
+        "answer": "warmer",
+        "options": ["warmer", "warm", "warmest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The second lesson was ____ shorter than the first.",
+        "options": ["a bit", "a few", "very", "a many"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you speak a ____ louder, please?",
+        "answer": "bit",
+        "options": ["few", "many", "bit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "This bag is a bit heavy than that.",
+          "This bag is a bit more heavier.",
+          "This bag is a bit heavier."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My brother is a little ____ taller than me.",
+        "answer": "bit",
+        "options": ["few", "more", "bit"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was a bit ____ than we expected. (expensive)",
+        "answer": "more expensive",
+        "options": ["expensiver", "most expensive", "more expensive"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I feel a little ____ today.",
+        "options": ["good", "best", "better", "more better"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "24": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The days are getting longer ____ longer.",
+        "answer": "and",
+        "options": ["or", "but", "and"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Flats are becoming more and ____ expensive.",
+        "answer": "more",
+        "options": ["much", "more", "most"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The music got ____.",
+        "options": [
+          "loud and louder",
+          "louder and louder",
+          "louder or louder",
+          "more louder and louder"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's getting ____ and colder every day. (cold)",
+        "answer": "colder",
+        "options": ["cold", "coldest", "colder"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Life is getting difficulter and difficulter.",
+          "Life is getting more and more difficult.",
+          "Life is getting more difficult and difficult."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The traffic is getting worse ____ worse.",
+        "answer": "and",
+        "options": ["and", "or", "than"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "His English is becoming better and ____.",
+        "answer": "better",
+        "options": ["good", "best", "better"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Prices are going up. Food is becoming ____.",
+        "options": [
+          "expensiver and expensiver",
+          "most and most expensive",
+          "more and more expensive"
+        ],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "25": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The first film was good, but the second was ____ better.",
+        "answer": "even",
+        "options": ["ever", "very", "even"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "After the rain, the road got even ____. (bad)",
+        "answer": "worse",
+        "options": ["worse", "bad", "worst"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Her new job is ____ more interesting than the old one.",
+        "options": ["even", "ever", "very", "such"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was tired, and after the walk I felt even ____. (tired)",
+        "answer": "more tired",
+        "options": ["most tired", "more tired", "tireder"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Today is even colder than yesterday.",
+          "Today is even cold than yesterday.",
+          "Today is even more colder than yesterday."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The pizza was great, but the dessert was ____ better.",
+        "answer": "even",
+        "options": ["even", "very", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was hot yesterday, and today it's even ____. (hot)",
+        "answer": "hotter",
+        "options": ["hot", "hottest", "hotter"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My old laptop was slow, but this one is ____ slower!",
+        "options": ["very", "ever", "too", "even"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "26": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A bike is a ____ cheaper than a car.",
+        "answer": "lot",
+        "options": ["lots", "many", "lot"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It would be a lot ____ to go by train. (easy)",
+        "answer": "easier",
+        "options": ["easiest", "easier", "easy"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I feel ____ better today.",
+        "options": ["a lots", "a many", "very", "a lot"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This road is a lot ____ than the old one. (safe)",
+        "answer": "safer",
+        "options": ["safe", "safest", "safer"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The new flat is a lot big.",
+          "The new flat is a lot of bigger.",
+          "The new flat is a lot bigger."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My sister is a ____ taller than me.",
+        "answer": "lot",
+        "options": ["many", "lot", "lots"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The exam was a lot ____ than I thought. (difficult)",
+        "answer": "more difficult",
+        "options": ["difficulter", "most difficult", "more difficult"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Summer here is ____ hotter than in the north.",
+        "options": ["a lot", "a lot of", "much of", "many"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "27": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is a ____ better plan than mine.",
+        "answer": "much",
+        "options": ["lot", "many", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We need a much ____ table for the party. (big)",
+        "answer": "bigger",
+        "options": ["biggest", "bigger", "big"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They moved to a ____ quieter area.",
+        "options": ["much", "lot", "many", "more"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's a much better idea.",
+          "It's a lot better idea.",
+          "It's a much good idea."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She found a ____ cheaper flat near work.",
+        "answer": "much",
+        "options": ["many", "much", "lot"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'd like a much ____ room, please. (large)",
+        "answer": "larger",
+        "options": ["largest", "larger", "large"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He bought a ____ faster car.",
+        "options": ["lot", "lots", "much", "many"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's a much more ____ question. (interesting)",
+        "answer": "interesting",
+        "options": ["interesting", "interested", "interest"]
+      }
+    }
+  ],
+  "28": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The second-hand phone was only ____ cheaper.",
+        "answer": "slightly",
+        "options": ["slight", "slighter", "slightly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This room is slightly ____ than the other one. (large)",
+        "answer": "larger",
+        "options": ["larger", "large", "largest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Prices are ____ higher in summer.",
+        "options": ["slight", "slighter", "slightest", "slightly"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Temperatures were slightly ____ than last year. (low)",
+        "answer": "lower",
+        "options": ["low", "lowest", "lower"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The results were slightly better.",
+          "The results were slight better.",
+          "The results were slightly more better."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new model is ____ heavier than the old one.",
+        "answer": "slightly",
+        "options": ["slightly", "slight", "lots"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Her second essay was slightly ____. (long)",
+        "answer": "longer",
+        "options": ["longest", "longer", "long"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Sales were ____ lower in March than in February.",
+        "options": ["slight", "a slightly", "slightest", "slightly"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "29": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new system is ____ faster than the old one.",
+        "answer": "no",
+        "options": ["no", "not", "none"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We are not ____ happier with more money.",
+        "answer": "any",
+        "options": ["any", "some", "no"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The water was ____ higher than my knees.",
+        "options": ["not", "none", "no", "nothing"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This hotel is no ____ than the other one. (cheap)",
+        "answer": "cheaper",
+        "options": ["cheapest", "cheaper", "cheap"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The new version isn't no better.",
+          "The new version is any better.",
+          "The new version isn't any better."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My English is no ____ than last year. (good)",
+        "answer": "better",
+        "options": ["best", "better", "good"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The train was ____ quicker than the bus.",
+        "answer": "no",
+        "options": ["none", "no", "not"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "After the rest, she didn't feel ____ better.",
+        "options": ["some", "no", "none", "any"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "30": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's not that ____ older than me.",
+        "answer": "much",
+        "options": ["many", "lot", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was not that much ____ in winter. (cheap)",
+        "answer": "cheaper",
+        "options": ["cheap", "cheapest", "cheaper"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My new laptop isn't ____ faster.",
+        "options": ["that many", "that lot", "that much", "that more"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The test wasn't that much ____ than the last one. (hard)",
+        "answer": "harder",
+        "options": ["hardest", "harder", "hard"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's not that much cold today.",
+          "It's not that much colder today.",
+          "It's not that many colder today."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new route isn't that ____ shorter.",
+        "answer": "much",
+        "options": ["many", "lot", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Is the city that much ____ than your town? (big)",
+        "answer": "bigger",
+        "options": ["bigger", "big", "biggest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't worry — the price is not ____ higher.",
+        "options": ["that many", "that more", "that much", "so many"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "46": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ reason is the price.",
+        "answer": "main",
+        "options": ["mainly", "most", "main"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is the ____ person I know here.",
+        "answer": "only",
+        "options": ["one", "only", "alone"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ problem was the weather.",
+        "options": ["alone", "lonely", "one", "only"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "That road is main.",
+          "That is the mainly road.",
+          "That is the main road."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ entrance is on the left.",
+        "answer": "main",
+        "options": ["main", "mainly", "most"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was the ____ student who passed.",
+        "answer": "only",
+        "options": ["only", "alone", "single"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Money is not the ____ thing in life.",
+        "options": ["mainly", "mostly", "main", "chiefly"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is my ____ chance to see her.",
+        "answer": "only",
+        "options": ["alone", "lonely", "only"]
+      }
+    }
+  ],
+  "53": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Parking is a ____ problem in our town.",
+        "answer": "real",
+        "options": ["real", "really", "reality"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The party was a ____ disaster.",
+        "answer": "complete",
+        "options": ["completion", "complete", "completely"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He's an ____ genius with computers.",
+        "options": ["absolutely", "absolute", "absolutes", "absolution"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was a completely mess.",
+          "It was a complete mess.",
+          "The mess was complete genius."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That film was a ____ waste of time.",
+        "answer": "total",
+        "options": ["totally", "totals", "total"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's a ____ expert in this area.",
+        "answer": "real",
+        "options": ["real", "really", "realise"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The trip was an ____ nightmare.",
+        "options": ["absolutely", "absolute", "absolve", "absolutes"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You're a ____ star — thank you!",
+        "answer": "real",
+        "options": ["real", "really", "reality"]
+      }
+    }
+  ],
+  "56": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel is in the ____ centre of the city.",
+        "answer": "very",
+        "options": ["so", "very", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ luck that we met.",
+        "answer": "sheer",
+        "options": ["sheer", "shear", "sheerly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ problem is the lack of time.",
+        "options": ["majority", "majorly", "mayor", "major"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was utter nonsense.",
+          "It was utterly nonsense.",
+          "The nonsense was utter much."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were in ____ darkness.",
+        "answer": "total",
+        "options": ["totals", "total", "totally"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That was the ____ thing I needed!",
+        "answer": "very",
+        "options": ["so", "very", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The plan was a ____ failure.",
+        "options": ["totally", "totals", "total", "totality"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Her success was due to ____ hard work.",
+        "answer": "sheer",
+        "options": ["sheer", "sheerly", "share"]
+      }
+    }
+  ],
+  "58": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the ____ zoo in the world. (big)",
+        "answer": "biggest",
+        "options": ["biggest", "bigger", "big"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Those were the ____ days of my life. (happy)",
+        "answer": "happiest",
+        "options": ["happy", "happiest", "happier"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He's the ____ boy in our class.",
+        "options": ["taller", "tallest", "most tall", "tall"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the ____ day of the year. (short)",
+        "answer": "shortest",
+        "options": ["shorter", "short", "shortest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's the oldest building in the city.",
+          "It's the older building in the city.",
+          "It's oldest building in city."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is the ____ runner in the team. (fast)",
+        "answer": "fastest",
+        "options": ["faster", "fast", "fastest"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That was the ____ meal of my life. (good)",
+        "answer": "best",
+        "options": ["better", "goodest", "best"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This is the ____ street in town.",
+        "options": ["longer", "long", "more long", "longest"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "59": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the biggest room ____ the house.",
+        "answer": "in",
+        "options": ["at", "in", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the cheapest shop ____ town.",
+        "answer": "in",
+        "options": ["on", "in", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Everest is the highest mountain ____ the world.",
+        "options": ["of", "in", "at", "on"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's the best player ____ the team.",
+        "answer": "in",
+        "options": ["of", "at", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's the tallest building of Kyiv.",
+          "It's the taller building in Kyiv.",
+          "It's the tallest building in Kyiv."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He's the youngest student ____ our class.",
+        "answer": "in",
+        "options": ["on", "in", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the oldest café ____ the city.",
+        "answer": "in",
+        "options": ["in", "of", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which is the longest river ____ Europe?",
+        "options": ["of", "at", "in", "from"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "60": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was the best project ____ all.",
+        "answer": "of",
+        "options": ["of", "in", "from"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Surfing was the best part ____ the trip.",
+        "answer": "of",
+        "options": ["at", "of", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's the shortest day ____ the year.",
+        "options": ["in", "at", "of", "on"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That was the happiest day ____ my life.",
+        "answer": "of",
+        "options": ["of", "in", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She's the youngest in the three sisters.",
+          "She's the youngest of the three sisters.",
+          "She's youngest of three sisters."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's the oldest ____ my friends.",
+        "answer": "of",
+        "options": ["at", "of", "in"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was the tallest ____ all the boys.",
+        "answer": "of",
+        "options": ["in", "at", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Monday is the worst day ____ the week.",
+        "options": ["in", "of", "on", "at"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "69": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Yesterday was the ____ exciting day of my life.",
+        "answer": "most",
+        "options": ["more", "very", "most"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Health is the most ____ thing in life. (important)",
+        "answer": "important",
+        "options": ["importantly", "important", "importance"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's the ____ beautiful beach on the island.",
+        "options": ["more", "much", "most", "very"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the ____ interesting book I have.",
+        "answer": "most",
+        "options": ["more", "much", "most"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was the most difficult exam.",
+          "It was the difficultest exam.",
+          "It was the more difficult exam."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is the most ____ person I know. (generous)",
+        "answer": "generous",
+        "options": ["generosity", "generous", "generously"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's the ____ expensive car in the shop.",
+        "answer": "most",
+        "options": ["much", "most", "more"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It was the ____ boring film of the year.",
+        "options": ["more", "much", "very", "most"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "70": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the best present I've ____ had.",
+        "answer": "ever",
+        "options": ["never", "every", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That was the best game I've ever ____. (play)",
+        "answer": "played",
+        "options": ["playing", "played", "play"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This is the worst coffee I've ever ____.",
+        "options": ["taste", "tasting", "tasted", "tastes"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's the kindest person I've ____ met.",
+        "answer": "ever",
+        "options": ["never", "every", "ever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's the best book I ever have read.",
+          "It's the better book I've ever read.",
+          "It's the best book I've ever read."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the ____ film I've ever seen. (funny)",
+        "answer": "funniest",
+        "options": ["funniest", "funnier", "funny"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was the worst trip we had ever ____. (take)",
+        "answer": "taken",
+        "options": ["take", "taken", "took"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "That's the ____ pizza I've ever eaten.",
+        "options": ["better", "best", "good", "most good"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "74": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is ____ far the most beautiful forest I've seen.",
+        "answer": "by",
+        "options": ["too", "by", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Christmas was by ____ the best time of year.",
+        "answer": "far",
+        "options": ["far", "much", "more"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She is the fastest runner ____.",
+        "options": ["by much", "by far", "by many", "so far"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's by far the ____ option. (cheap)",
+        "answer": "cheapest",
+        "options": ["cheapest", "cheaper", "cheap"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He's by far best player.",
+          "He's by far the best player.",
+          "He's by far the better player."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This was by far the ____ exam of the year. (hard)",
+        "answer": "hardest",
+        "options": ["hardest", "harder", "hard"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Kyiv is ____ far the biggest city in Ukraine.",
+        "answer": "by",
+        "options": ["by", "so", "as"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "That was ____ the worst meal I've had.",
+        "options": ["very far", "by far", "so far", "too far"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "77": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We aim for the highest ____ quality.",
+        "answer": "possible",
+        "options": ["possibility", "possible", "possibly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please reply at the earliest possible ____.",
+        "answer": "date",
+        "options": ["day", "dated", "date"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They chose the best ____ location.",
+        "options": ["possible", "possibly", "possibility", "impossible"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We offer the lowest ____ prices.",
+        "answer": "possible",
+        "options": ["possibly", "possibility", "possible"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We want the best possible result.",
+          "We want the possible best result.",
+          "We want the best possibly result."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She found the shortest ____ route.",
+        "answer": "possible",
+        "options": ["possibility", "possible", "possibly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He gave the clearest possible ____.",
+        "answer": "answer",
+        "options": ["answered", "answering", "answer"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The team did the ____ possible job.",
+        "options": ["better", "good", "best", "well"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "78": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We want to finish in the shortest time ____.",
+        "answer": "possible",
+        "options": ["possible", "possibly", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was the worst storm ____.",
+        "answer": "ever",
+        "options": ["ever", "never", "already"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She gave the best answer ____.",
+        "options": ["by far", "by much", "so far", "too far"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Get there in the fastest way ____.",
+        "answer": "possible",
+        "options": ["ever", "possible", "possibly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was the hottest ever summer ever.",
+          "It was the hotter summer ever.",
+          "It was the hottest summer ever."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That was the best concert ____!",
+        "answer": "ever",
+        "options": ["never", "once", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the cheapest option by ____.",
+        "answer": "far",
+        "options": ["much", "more", "far"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the lowest price ____.",
+        "options": ["possible", "possibly", "possibles", "possibility"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "79": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't the ____ idea where he is.",
+        "answer": "faintest",
+        "options": ["faintest", "fainter", "faint"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She didn't show the ____ interest.",
+        "answer": "slightest",
+        "options": ["slight", "slightest", "slighter"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "There isn't the ____ chance of rain.",
+        "options": ["slighter", "slight", "slightest", "slightly"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't have the slightest ____ what you mean.",
+        "answer": "idea",
+        "options": ["ideas", "ideal", "idea"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I have the faintest idea.",
+          "I haven't the faintest idea.",
+          "I haven't the faint idea."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He didn't make the ____ effort to help.",
+        "answer": "slightest",
+        "options": ["slightly", "slightest", "slighter"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They haven't the faintest ____ of how it works.",
+        "answer": "idea",
+        "options": ["ideal", "idea", "ideas"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It doesn't make the ____ difference.",
+        "options": ["slighter", "slight", "slightly", "slightest"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "80": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Thanks for dinner. See you ____!",
+        "answer": "soon",
+        "options": ["now", "soon", "late"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Get well ____, Anna!",
+        "answer": "soon",
+        "options": ["soon", "fast", "early"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Bye for now. See you ____.",
+        "options": ["soon", "last", "ago", "yet"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll call you ____.",
+        "answer": "soon",
+        "options": ["ago", "yesterday", "soon"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the best ending for a get-well card: Get well ____!",
+        "options": ["sooner", "soonly", "soon", "soon ago"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The bus will be here ____.",
+        "answer": "soon",
+        "options": ["ago", "yet", "soon"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "See you ____ — have a good trip!",
+        "answer": "soon",
+        "options": ["ago", "soon", "before"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Hope you feel better. Get well ____!",
+        "options": ["late", "ago", "never", "soon"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "81": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I live ____ with my family.",
+        "answer": "here",
+        "options": ["there's", "here", "hear"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Put your coat over ____, by the door.",
+        "answer": "there",
+        "options": ["their", "they're", "there"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Come ____, please — I want to show you something.",
+        "options": ["there's", "hear", "where", "here"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My friend lives in Paris. I often go ____.",
+        "answer": "there",
+        "options": ["where", "there", "here"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": ["I work here.", "I here work.", "Here I work am."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Is anybody ____? — Yes, I'm in the kitchen!",
+        "answer": "here",
+        "options": ["where", "here", "hear"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I can see the station over ____.",
+        "answer": "there",
+        "options": ["their", "where", "there"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Wait ____ — I'll be back in a minute.",
+        "options": ["here", "hear", "where", "their"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "82": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ drink coffee in the morning.",
+        "answer": "always",
+        "options": ["always", "ever", "once"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ play football after school, but not every day.",
+        "answer": "sometimes",
+        "options": ["never", "sometimes", "always"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She is ____ happy — she smiles all the time.",
+        "options": ["every", "ever", "always", "all"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ walks to work when the weather is good.",
+        "answer": "sometimes",
+        "options": ["sometimes", "some", "sometime"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I get always up early.",
+          "Always I get up early always.",
+          "I always get up early."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They are ____ late for class — every single day!",
+        "answer": "always",
+        "options": ["always", "sometimes", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ eat meat, but usually I eat fish.",
+        "answer": "sometimes",
+        "options": ["every", "sometimes", "always"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My dad ____ reads the news at breakfast, every day.",
+        "options": ["sometimes", "ever", "always", "never"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "83": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's ____ cold today.",
+        "answer": "very",
+        "options": ["very", "much", "many"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He's a very ____ man. (good)",
+        "answer": "good",
+        "options": ["goodly", "good", "well"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My room is ____ small.",
+        "options": ["very", "much", "many", "a lot"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film was ____ interesting.",
+        "answer": "very",
+        "options": ["very", "much", "lot"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The soup is hot very.",
+          "The soup is very hot.",
+          "The soup is very much hot."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This book is very ____. (long)",
+        "answer": "long",
+        "options": ["length", "long", "longly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Thank you — you're ____ kind.",
+        "answer": "very",
+        "options": ["many", "very", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The test was ____ easy.",
+        "options": ["much", "lots", "very", "many"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "84": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ like this song.",
+        "answer": "really",
+        "options": ["really", "very", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We love our new house very ____.",
+        "answer": "much",
+        "options": ["lot", "much", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ loves chocolate.",
+        "options": ["very", "much", "lot", "really"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like tennis very ____.",
+        "answer": "much",
+        "options": ["more", "much", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I really like pizza.",
+          "I very like pizza.",
+          "I like very much pizza."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ enjoy their English lessons.",
+        "answer": "really",
+        "options": ["really", "very", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I love my job very ____.",
+        "answer": "much",
+        "options": ["many", "much", "lot"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I ____ want to see that film.",
+        "options": ["really", "very", "much", "many"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "85": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I went shopping with my sister.",
+        "answer": "Yesterday",
+        "options": ["Tomorrow", "Now", "Yesterday"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've ____ finished my homework — look!",
+        "answer": "just",
+        "options": ["yet", "ago", "just"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She's ____ left the office.",
+        "options": ["yet", "already", "ago", "since"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What are you doing ____? — I'm cooking.",
+        "answer": "now",
+        "options": ["yesterday", "ago", "now"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I have eaten already yet.",
+          "I already have yesterday eaten.",
+          "I have already eaten."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We met ____ — it was Sunday.",
+        "answer": "yesterday",
+        "options": ["tomorrow", "now", "yesterday"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He has ____ arrived — he's taking his coat off.",
+        "answer": "just",
+        "options": ["just", "yet", "ever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm busy ____. Can I call you later?",
+        "options": ["yesterday", "ago", "already", "now"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "86": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ get up at seven.",
+        "answer": "usually",
+        "options": ["use", "usually", "usual"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____ remember anything! It's so annoying.",
+        "answer": "never",
+        "options": ["ever", "always", "never"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We clean the flat ____ — every Saturday.",
+        "options": ["weeks", "week", "weekly", "weekend"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ goes to the gym — three times a week.",
+        "answer": "often",
+        "options": ["often", "ever", "once"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She often is late.",
+          "She is often late.",
+          "Often she late is."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The newspaper comes out ____ — every day.",
+        "answer": "daily",
+        "options": ["day", "days", "daily"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ drink coffee — I don't like it.",
+        "answer": "never",
+        "options": ["often", "never", "always"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They ____ eat out on Fridays.",
+        "options": ["usually", "usual", "usualy", "use"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "87": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ beautiful!",
+        "answer": "so",
+        "options": ["so", "such", "too much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The test was ____ easy — not hard, but not very easy.",
+        "answer": "quite",
+        "options": ["quit", "quite", "quiet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This coffee is ____ hot to drink.",
+        "options": ["so", "quite", "such", "too"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ happy to see you!",
+        "answer": "so",
+        "options": ["such", "too", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The bag is too heavy to carry.",
+          "The bag is too much heavy to carry.",
+          "The bag is so heavy to carry."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The shoes are ____ small — I can't wear them.",
+        "answer": "too",
+        "options": ["so", "quite", "too"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film was ____ good, but not great.",
+        "answer": "quite",
+        "options": ["too", "so", "quite"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's ____ cold — let's stay at home.",
+        "options": ["such", "quite much", "too much", "so"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "88": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We danced a ____ that night.",
+        "answer": "lot",
+        "options": ["many", "lot", "lots"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I miss my family so ____.",
+        "answer": "much",
+        "options": ["much", "many", "lot"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Thank you so ____ for your help.",
+        "options": ["many", "lot", "much", "lots"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She laughed a ____ at the film.",
+        "answer": "lot",
+        "options": ["much of", "lot", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I so much miss you.",
+          "I miss so much you.",
+          "I miss you so much."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We walked a ____ on holiday.",
+        "answer": "lot",
+        "options": ["lots", "many", "lot"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He talks so ____!",
+        "answer": "much",
+        "options": ["much", "many", "lot"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They travel ____ for work.",
+        "options": ["a lots", "a lot", "a many", "lot of"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "89": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Both players played ____.",
+        "answer": "well",
+        "options": ["good", "goodly", "well"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please speak ____. (slow)",
+        "answer": "slowly",
+        "options": ["slowness", "slowly", "slow"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She opened the door ____.",
+        "options": ["careful", "carefuly", "care", "carefully"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He runs very ____. (fast)",
+        "answer": "fast",
+        "options": ["fastly", "faster", "fast"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He drives careful.",
+          "He drives carefully.",
+          "He carefully drives careful."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The children played ____ in the garden. (happy)",
+        "answer": "happily",
+        "options": ["happy", "happiness", "happily"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You speak English very ____.",
+        "answer": "well",
+        "options": ["good", "best", "well"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Please walk ____ — the floor is wet.",
+        "options": ["slow", "slowness", "slowlily", "slowly"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "90": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't like green. ____, blue would work well.",
+        "answer": "However",
+        "options": ["So", "Also", "However"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was raining, ____ we stayed at home.",
+        "answer": "so",
+        "options": ["so", "also", "however"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I speak English, and I ____ speak a little French.",
+        "options": ["also", "so", "however", "too much"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was cheap. ____, it was very clean.",
+        "answer": "However",
+        "options": ["Too", "However", "So"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I was tired, so I went to bed.",
+          "I was tired, however I went to bed so.",
+          "I was tired, also so I went to bed."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She plays the piano. She ____ sings.",
+        "answer": "also",
+        "options": ["so", "however", "also"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The shop was closed, ____ we went home.",
+        "answer": "so",
+        "options": ["however", "so", "also"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The flat is small. ____, it's in a great area.",
+        "options": ["So", "However", "Also", "Because"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "91": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's ____ two hours by train.",
+        "answer": "only",
+        "options": ["only", "alone", "lonely"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ want a cup of tea, nothing else.",
+        "answer": "just",
+        "options": ["ever", "just", "yet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ Tom knows the answer — nobody else does.",
+        "options": ["Alone", "Lonely", "Once", "Only"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have ____ five minutes left.",
+        "answer": "only",
+        "options": ["single", "only", "alone"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I need just a pen just.",
+          "Just I need need a pen.",
+          "I just need a pen."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It costs ____ ten pounds — very cheap!",
+        "answer": "just",
+        "options": ["ever", "just", "yet"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ drinks water, never juice.",
+        "answer": "only",
+        "options": ["only", "alone", "once"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was ____ joking — don't be angry!",
+        "options": ["alone", "lonely", "only", "single"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "92": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, we had dinner at a restaurant.",
+        "answer": "First",
+        "options": ["First", "Then", "After that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we went to the cinema.",
+        "answer": "Then",
+        "options": ["First", "Before", "Then"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "After the film we were tired. ____, we took a taxi home.",
+        "options": ["Before", "First of", "After that", "At first that"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "First, open the box. ____, take out the phone.",
+        "answer": "Then",
+        "options": ["First", "Before", "Then"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct order: ____",
+        "options": [
+          "Then, wash your hands. First, eat.",
+          "First, wash your hands. Then, eat.",
+          "After that, wash your hands. First, eat."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, mix the eggs and flour. Then add milk.",
+        "answer": "First",
+        "options": ["Then", "Last", "First"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We visited the museum. ____ that, we had lunch.",
+        "answer": "After",
+        "options": ["First", "After", "Then"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Put the steps in order: Boil the water. ____ add the pasta.",
+        "options": ["First", "Before", "Then", "Firstly"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "93": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I left it in your living room.",
+        "answer": "Perhaps",
+        "options": ["Probably", "Surely", "Perhaps"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we can meet on Friday?",
+        "answer": "Maybe",
+        "options": ["Maybe", "May be", "Must"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ she's at home — I'm not sure.",
+        "options": ["Maybe", "May be", "Must", "Might be"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm not sure. ____ it will rain later.",
+        "answer": "Perhaps",
+        "options": ["Surely", "Certainly", "Perhaps"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Maybe he is ill.",
+          "May be he is ill.",
+          "He maybe is ill be."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we should take a taxi — it's late.",
+        "answer": "Maybe",
+        "options": ["May be", "Must", "Maybe"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the keys are in the car.",
+        "answer": "Perhaps",
+        "options": ["Surely", "Certain", "Perhaps"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I don't know. ____ tomorrow.",
+        "options": ["May be", "Mustn't", "Surely", "Maybe"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "94": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, my team lost.",
+        "answer": "Unfortunately",
+        "options": ["Of course", "Unfortunately", "Luckily"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Of ____, you can use my phone.",
+        "answer": "course",
+        "options": ["cause", "course", "curse"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I don't like pizza very much. (to tell the truth)",
+        "options": ["Actual", "Actually", "Actuality", "Act"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the museum is closed today — sorry.",
+        "answer": "Unfortunately",
+        "options": ["Unfortunately", "Luckily", "Happily"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Of curse I'll help you.",
+          "Course of I'll help you.",
+          "Of course I'll help you."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I thought she was French. ____, she's Belgian.",
+        "answer": "Actually",
+        "options": ["Luckily", "Of course", "Actually"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can I come too? — Of ____!",
+        "answer": "course",
+        "options": ["course", "cause", "coarse"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We missed the bus. ____, a friend drove us.",
+        "options": ["Unluckily", "Unfortunately", "Luckily", "Sadly"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "95": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ called her to check. (at once)",
+        "answer": "immediately",
+        "options": ["recently", "lately", "immediately"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Have you seen any good films ____?",
+        "answer": "recently",
+        "options": ["eventually", "recently", "immediately"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ found the hotel after midnight.",
+        "options": ["recently", "finally", "lately", "immediately"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't been sleeping well ____.",
+        "answer": "lately",
+        "options": ["finally", "immediately", "lately"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She passed finally finally her test.",
+          "She finally passed her driving test.",
+          "She finallied passed her test."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "After many tries, he ____ found a job.",
+        "answer": "eventually",
+        "options": ["recently", "lately", "eventually"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Call the police ____!",
+        "answer": "immediately",
+        "options": ["immediately", "lately", "recently"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Have you been to the cinema ____?",
+        "options": ["recently", "immediately", "finally", "eventually"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "96": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He went ____ to open the door.",
+        "answer": "downstairs",
+        "options": ["nearby", "downstairs", "abroad"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My grandparents live far ____.",
+        "answer": "away",
+        "options": ["away", "abroad", "out"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I need cash but don't want to walk far. Is there a bank ____?",
+        "options": ["abroad", "far away", "overseas", "nearby"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's studying ____, in Canada.",
+        "answer": "abroad",
+        "options": ["abroad", "nearby", "upstairs"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The bedrooms are upstairs.",
+          "The bedrooms are at upstairs.",
+          "The bedrooms upstairs are is."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Go ____ and get your shoes — they're in your room.",
+        "answer": "upstairs",
+        "options": ["upstairs", "abroad", "nearby"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We'd love to travel ____ next year.",
+        "answer": "abroad",
+        "options": ["nearby", "downstairs", "abroad"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Our office is ____, just five minutes away.",
+        "options": ["abroad", "far away", "nearby", "overseas"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "97": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I can understand a ____.",
+        "answer": "little",
+        "options": ["few", "lot", "little"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you move a ____ to the left?",
+        "answer": "bit",
+        "options": ["few", "many", "bit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I relaxed a ____ after the exam.",
+        "options": ["few", "lot of", "bit", "many"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She speaks a ____ Spanish.",
+        "answer": "little",
+        "options": ["little", "few", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I slept a few on the train.",
+          "I a little slept on the train.",
+          "I slept a little on the train."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you turn the music down a ____?",
+        "answer": "bit",
+        "options": ["lot of", "bit", "few"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We walked a ____ after dinner.",
+        "answer": "little",
+        "options": ["few", "many", "little"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Could you wait a ____?",
+        "options": ["few", "bit", "lot", "many"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "98": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think it is really ____ boring.",
+        "answer": "really",
+        "options": ["really", "very", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I really really ____ to see that concert.",
+        "answer": "want",
+        "options": ["want", "wants", "wanting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The food was ____ good.",
+        "options": [
+          "very very much",
+          "really really",
+          "much much",
+          "really very very"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is really ____ important!",
+        "answer": "really",
+        "options": ["really", "very", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I very very like it.",
+          "I really really like it.",
+          "I like really really it."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's really really ____. (nice)",
+        "answer": "nice",
+        "options": ["nicely", "nicer", "nice"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had a really ____ good time.",
+        "answer": "really",
+        "options": ["very", "much", "really"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm ____ sorry!",
+        "options": [
+          "very very much",
+          "much much",
+          "really really",
+          "so very very"
+        ],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "99": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Wherever you go, you'll fit in ____. (easy)",
+        "answer": "easily",
+        "options": ["easily", "easy", "easier"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He closed the door ____. (quiet)",
+        "answer": "quietly",
+        "options": ["quite", "quietly", "quiet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She works very ____.",
+        "options": ["hardly", "hardy", "hard", "harder-ly"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please do your homework ____. (proper)",
+        "answer": "properly",
+        "options": ["proper", "property", "properly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They think differently.",
+          "They think different-ly way.",
+          "They think differently way."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The children sat ____ during the concert. (silent)",
+        "answer": "silently",
+        "options": ["silently", "silent", "silence"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He passed the test ____. (easy)",
+        "answer": "easily",
+        "options": ["easily", "easy", "easiness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I've been working ____ all week.",
+        "options": ["hardly", "hardness", "hardily", "hard"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "100": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You don't like big cities. ____, I suggest a small town.",
+        "answer": "Therefore",
+        "options": ["Therefore", "Otherwise", "Furthermore"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Take an umbrella. ____, you'll get wet.",
+        "answer": "Otherwise",
+        "options": ["Furthermore", "Otherwise", "Therefore"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The hotel is cheap. ____, it's close to the beach.",
+        "options": ["Furthermore", "Otherwise", "Therefore", "However so"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was ill. ____, he couldn't come to work.",
+        "answer": "Therefore",
+        "options": ["Furthermore", "Therefore", "Otherwise"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Hurry up. Therefore, we'll be late.",
+          "Hurry up. Furthermore, we'll be late.",
+          "Hurry up. Otherwise, we'll be late."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plan is cheap. ____, it's easy to start.",
+        "answer": "Furthermore",
+        "options": ["Therefore", "Furthermore", "Otherwise"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Write it down. ____, you'll forget it.",
+        "answer": "Otherwise",
+        "options": ["Otherwise", "Therefore", "Furthermore"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Sales fell. ____, the company closed two shops.",
+        "options": ["Otherwise", "Unless", "Therefore", "Unlike"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "101": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I love nature programmes, ____ about animals.",
+        "answer": "especially",
+        "options": ["especially", "specially-ly", "special"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The city is busy, ____ in summer.",
+        "answer": "particularly",
+        "options": ["particular", "particulars", "particularly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I ____ liked the last song.",
+        "options": ["especial", "especially", "specialise", "specially-much"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She enjoys sports, ____ tennis.",
+        "answer": "especially",
+        "options": ["especial", "special", "especially"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I like fruit, especial apples.",
+          "I like fruit, especially apples.",
+          "I especially like fruit apples especially."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The roads are dangerous, ____ at night.",
+        "answer": "particularly",
+        "options": ["part", "particularly", "particular"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ enjoyed the boat trip.",
+        "answer": "particularly",
+        "options": ["particularly", "particular", "partly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Prices are high here, ____ for food.",
+        "options": ["especial", "specialty", "specially-for", "especially"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "102": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, visit both schools.",
+        "answer": "Firstly",
+        "options": ["Firstly", "Finally", "Secondly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, ask about class sizes.",
+        "answer": "Secondly",
+        "options": ["Firstly", "Lastly", "Secondly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, talk to some of the parents.",
+        "options": ["Finally", "Firstly", "Secondly", "First of"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Firstly, it's cheap. ____, it's near the station.",
+        "answer": "Secondly",
+        "options": ["Secondly", "Finally", "Firstly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the best start for your last point: ____",
+        "options": [
+          "Firstly, it is good for the environment.",
+          "Secondly, it is good for the environment.",
+          "Finally, it is good for the environment."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There are three reasons. ____, the price.",
+        "answer": "Firstly",
+        "options": ["Firstly", "Finally", "Lastly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Firstly, check the date. Secondly, the time. ____, the place.",
+        "answer": "Finally",
+        "options": ["Finally", "Firstly", "Then first"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I want to thank my teachers.",
+        "options": [
+          "Finally lastly",
+          "Firstly",
+          "Secondly first",
+          "Last firstly"
+        ],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "103": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I will ____ give you the bike by 5.30 — I promise.",
+        "answer": "definitely",
+        "options": ["definitely", "probably", "maybe"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She'll ____ be late again — she usually is.",
+        "answer": "probably",
+        "options": ["probably", "definitely", "certainly not"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ won't come tonight, but I'm not sure.",
+        "options": ["definitely", "certainly", "surely not", "probably"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It will ____ rain — look at those black clouds!",
+        "answer": "definitely",
+        "options": ["definitely", "maybe", "perhaps"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She'll call probably later probably.",
+          "She probably'll call later.",
+          "She'll probably call later."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll ____ be there — don't worry.",
+        "answer": "certainly",
+        "options": ["certainly", "probably", "maybe"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ won't win, but they might.",
+        "answer": "probably",
+        "options": ["definitely", "certainly", "probably"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "You should ____ see this film — it's brilliant!",
+        "options": ["probably not", "maybe not", "definitely", "perhaps not"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "104": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's ____ more fun to travel with friends.",
+        "answer": "obviously",
+        "options": ["obviously", "obvious", "obviousness"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the weather will be better tomorrow.",
+        "answer": "Hopefully",
+        "options": ["Hopeful", "Hope", "Hopefully"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, the old cinema has closed.",
+        "options": ["Sad", "Sadness", "Sadly", "Saddly"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, nobody was hurt in the accident.",
+        "answer": "Luckily",
+        "options": ["Luck", "Luckily", "Lucky"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Honest, I didn't like it much honestly.",
+          "Honestly, I didn't like it.",
+          "Honestly, I didn't liked it."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, I don't know what to do.",
+        "answer": "Honestly",
+        "options": ["Honesty", "Honestly", "Honest"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, we'll finish before dark. (I hope)",
+        "answer": "Hopefully",
+        "options": ["Hopeful", "Hoping", "Hopefully"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ didn't want to talk to me.",
+        "options": ["obvious", "obviousness", "obviously", "obviousy"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "105": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ recognised the voice. (at once)",
+        "answer": "instantly",
+        "options": ["instantly", "previously", "shortly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ working in a bank. (now)",
+        "answer": "currently",
+        "options": ["currently", "previously", "instantly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The film will start ____.",
+        "options": ["currently", "previously", "instantly ago", "shortly"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had ____ worked as a teacher. (before)",
+        "answer": "previously",
+        "options": ["previously", "currently", "shortly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The train will arrive shortly.",
+          "The train shortly arrived will.",
+          "The train will arrive shortly ago."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Dinner will be ready ____ — in five minutes.",
+        "answer": "shortly",
+        "options": ["shortly", "previously", "currently"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The number is ____ unavailable — try later.",
+        "answer": "currently",
+        "options": ["currently", "previously", "shortly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He left ____ after the call.",
+        "options": ["currently", "previously", "lately", "immediately"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "106": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Volunteers are needed ____. (urgent)",
+        "answer": "urgently",
+        "options": ["urgent", "urgency", "urgently"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The meeting went ____. (smooth)",
+        "answer": "smoothly",
+        "options": ["smoothly", "smooth", "smoothness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ ignored my message.",
+        "options": [
+          "deliberate",
+          "deliberately",
+          "deliberation",
+          "deliberately-ly"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new system works very ____. (efficient)",
+        "answer": "efficiently",
+        "options": ["efficiency", "efficiently", "efficient"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She deliberate broke the rules.",
+          "She broke deliberately the rules deliberately.",
+          "She deliberately broke the rules."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The team worked ____ to finish on time. (tireless)",
+        "answer": "tirelessly",
+        "options": ["tired", "tirelessly", "tireless"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please drive ____. (careful)",
+        "answer": "carefully",
+        "options": ["care", "carefully", "careful"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The work was done ____.",
+        "options": [
+          "professional",
+          "profession",
+          "professionally",
+          "professionals"
+        ],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "107": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is ____ important that the project is finished on time.",
+        "answer": "extremely",
+        "options": ["extreme", "extremes", "extremely"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was ____ disappointed with the result.",
+        "answer": "deeply",
+        "options": ["depth", "deeply", "deep"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The view from the top was ____ amazing.",
+        "options": ["very absolute", "absolutely", "absolute", "absolutes"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is a ____ respected doctor.",
+        "answer": "highly",
+        "options": ["high", "height", "highly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The test was fair easy.",
+          "The test was fairly easy.",
+          "The test was fairly easily."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The results were ____ better than last year. (slight)",
+        "answer": "slightly",
+        "options": ["slight", "slighter", "slightly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was an ____ difficult decision.",
+        "answer": "incredibly",
+        "options": ["incredible", "incredibility", "incredibly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He was ____ upset by the news.",
+        "options": ["deep", "deeply", "depth", "deeper-ly"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "108": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ an unforgettable experience. (no doubt)",
+        "answer": "undoubtedly",
+        "options": ["doubtfully", "undoubtedly", "undoubted"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is ____ the best player in the team. (it can be argued)",
+        "answer": "arguably",
+        "options": ["argument", "arguably", "arguable"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, the train has been cancelled. (I suppose)",
+        "options": ["Presume", "Presumably", "Presumption", "Presumed"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, it's the best book of the year. (possibly)",
+        "answer": "Arguably",
+        "options": ["Argument", "Arguably", "Argue"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He is undoubtedly talented.",
+          "He is undoubted talented.",
+          "He undoubtedly is talent."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That is ____ the most important decision of your life.",
+        "answer": "possibly",
+        "options": ["possible", "possibility", "possibly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, they'll arrive after lunch. (I assume)",
+        "answer": "Presumably",
+        "options": ["Presume", "Presumption", "Presumably"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It was ____ the worst storm in years.",
+        "options": ["undoubtedly", "undoubted", "doubtful", "doubtless-ly"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "109": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, someone made a mistake with the details. (I heard)",
+        "answer": "Apparently",
+        "options": ["Apparently", "Apparent", "Appear"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the hotel was expensive, but it was worth it.",
+        "answer": "Admittedly",
+        "options": ["Admitted", "Admittedly", "Admit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I don't care what they think.",
+        "options": ["Frank", "Frankly", "Frankness", "Franked"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, she was upset when she heard the news. (as expected)",
+        "answer": "Naturally",
+        "options": ["Nature", "Naturally", "Natural"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Surprising, nobody complained.",
+          "Surprisingly, nobody didn't complain.",
+          "Surprisingly, nobody complained."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, he's moving to Australia. (people say)",
+        "answer": "Apparently",
+        "options": ["Appearance", "Apparently", "Apparent"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, I made a mistake, but it wasn't serious.",
+        "answer": "Admittedly",
+        "options": ["Admission", "Admittedly", "Admit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, the film was better than the book.",
+        "options": ["Surprising", "Surprise", "Surprised", "Surprisingly"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "110": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The company ____ hid the losses from investors.",
+        "answer": "allegedly",
+        "options": ["allegation", "allegedly", "alleged"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He joined the university, ____, to study economics.",
+        "answer": "supposedly",
+        "options": ["supposed", "suppose", "supposedly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The singer is ____ planning a world tour.",
+        "options": ["reported", "report", "reporter", "reportedly"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The minister ____ accepted the money. (it is claimed)",
+        "answer": "allegedly",
+        "options": ["allege", "allegedly", "alleged"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The painting is supposed very old.",
+          "The painting is supposedly very old.",
+          "The painting supposedly is very oldly."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The actor is ____ getting married next year.",
+        "answer": "reportedly",
+        "options": ["reported", "report", "reportedly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This restaurant is ____ the best in town.",
+        "answer": "supposedly",
+        "options": ["suppose", "supposedly", "supposed"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The man ____ stole a car.",
+        "options": ["allegedly", "alleged", "allegation", "allege"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "120": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, nobody was hurt.",
+        "answer": "Luckily",
+        "options": ["Luckily", "Lucky", "Luck"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the museum is closed on Mondays.",
+        "answer": "Unfortunately",
+        "options": ["Fortune", "Unfortunately", "Unfortunate"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I didn't like the film.",
+        "options": ["Honest", "Honesty", "Honestly-ly", "Honestly"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, we found a taxi straight away.",
+        "answer": "Fortunately",
+        "options": ["Fortune", "Fortunately", "Fortunate"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Sadly, the shop has closed.",
+          "Sad, the shop has closed.",
+          "Sadly, the shop has close."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, I think you're right. (to be honest)",
+        "answer": "Honestly",
+        "options": ["Honest", "Honesty", "Honestly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, it started to rain.",
+        "answer": "Unfortunately",
+        "options": ["Unfortunately", "Unfortunate", "Unfortunateness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, the tickets were still available.",
+        "options": ["Lucky", "Luck", "Luckily", "Luckless"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "138": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ I seen such a beautiful sunset.",
+        "answer": "have",
+        "options": ["had", "did", "have"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never have I ____ so proud. (feel)",
+        "answer": "felt",
+        "options": ["felt", "feel", "feeling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never ____ she been so tired.",
+        "options": ["has", "have", "did", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ I heard such a strange story.",
+        "answer": "have",
+        "options": ["do", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Never I have eaten so much.",
+          "Never have eaten I so much.",
+          "Never have I eaten so much."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never had they ____ such a big crowd. (see)",
+        "answer": "seen",
+        "options": ["saw", "see", "seen"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ we been so happy.",
+        "answer": "have",
+        "options": ["did", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never ____ I felt so lonely as that winter.",
+        "options": ["have", "did", "had", "was"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "139": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hardly ____ she sat down when the phone rang.",
+        "answer": "had",
+        "options": ["had", "has", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hardly had we ____ when it started to rain. (arrive)",
+        "answer": "arrived",
+        "options": ["arriving", "arrived", "arrive"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Hardly ____ I believe my eyes.",
+        "options": ["could", "can't", "couldn't", "did not"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hardly had he left ____ she called.",
+        "answer": "when",
+        "options": ["then", "when", "than"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Hardly I had opened the door when the dog ran out.",
+          "Hardly had I opened the door when the dog ran out.",
+          "Hardly had I opened the door than the dog ran out."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hardly ____ the film started when the lights went out.",
+        "answer": "had",
+        "options": ["was", "had", "has"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hardly had she ____ asleep when the alarm rang. (fall)",
+        "answer": "fallen",
+        "options": ["fallen", "fell", "falling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Hardly ____ they finished when it began to snow.",
+        "options": ["have", "did", "were", "had"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "140": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The fire was ____ started on purpose. (it is claimed)",
+        "answer": "allegedly",
+        "options": ["alleged", "allege", "allegedly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new policy ____ fixes the problem completely. (it seems)",
+        "answer": "apparently",
+        "options": ["apparently", "apparent", "appear"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The painting is ____ worth millions.",
+        "options": ["supposed", "suppose", "supposedly", "supposition"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ knows the president. (people say)",
+        "answer": "supposedly",
+        "options": ["supposed", "suppose", "supposedly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She apparently left early.",
+          "She apparent left early.",
+          "Apparently she left early apparently."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The documents were ____ destroyed. (it is claimed)",
+        "answer": "allegedly",
+        "options": ["allegedly", "alleged", "allegation"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The bridge is ____ safe, but I'm not sure.",
+        "answer": "supposedly",
+        "options": ["suppose", "supposedly", "supposed"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The manager ____ knew about the problem.",
+        "options": ["apparent", "appearance", "appears", "apparently"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "146": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ enough, the repair only took an hour.",
+        "answer": "Surprisingly",
+        "options": ["Surprising", "Surprise", "Surprisingly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Funnily ____, I was thinking about you this morning.",
+        "answer": "enough",
+        "options": ["enough", "so", "too"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Interestingly ____, nobody asked about the price.",
+        "options": ["so", "too", "much", "enough"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ enough, it was my birthday too! (strange)",
+        "answer": "Strangely",
+        "options": ["Stranger", "Strangely", "Strange"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Enough oddly, the door was open.",
+          "Oddly enough of, the door was open.",
+          "Oddly enough, the door was open."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Surprisingly ____, the shop was empty.",
+        "answer": "enough",
+        "options": ["too", "enough", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ enough, the cheapest wine won. (funny)",
+        "answer": "Funnily",
+        "options": ["Fun", "Funnily", "Funny"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Curiously ____, the letter had no stamp.",
+        "options": ["too", "much", "so", "enough"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "147": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Luckily ____ you, the shop was still open.",
+        "answer": "for",
+        "options": ["for", "to", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Unfortunately ____ the team, their best player was injured.",
+        "answer": "for",
+        "options": ["for", "to", "with"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Each student worked independently ____ the others.",
+        "options": ["of", "from", "to", "with"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Fortunately ____ us, the rain stopped.",
+        "answer": "for",
+        "options": ["at", "for", "to"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Sadly to her, she missed the train.",
+          "Sadly for her, she missed the train.",
+          "Sadly of her, she missed the train."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Luckily ____ me, I had an umbrella.",
+        "answer": "for",
+        "options": ["to", "by", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The two cities developed independently ____ each other.",
+        "answer": "of",
+        "options": ["from", "to", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Unluckily ____ them, the museum was closed.",
+        "options": ["to", "of", "for", "with"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "261": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We need eggs, milk ____ bread.",
+        "answer": "and",
+        "options": ["and", "but", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Would you like tea, coffee ____ juice?",
+        "answer": "or",
+        "options": ["or", "and", "but"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I have a cat, a dog ____ a rabbit.",
+        "options": ["and", "but", "so", "because"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You can pay by cash ____ card.",
+        "answer": "or",
+        "options": ["or", "and", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I bought apples and, pears and, grapes.",
+          "I bought apples, pears and grapes.",
+          "I bought apples, pears, grapes and, too."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She speaks English, French ____ Spanish.",
+        "answer": "and",
+        "options": ["and", "or", "but"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you want pizza, pasta ____ salad?",
+        "answer": "or",
+        "options": ["or", "and", "but"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We visited Rome, Paris ____ Berlin.",
+        "options": ["or", "but", "and", "so"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "262": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My flat is very small, ____ it's easy to clean.",
+        "answer": "but",
+        "options": ["and", "or", "but"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like tea, ____ I don't like coffee.",
+        "answer": "but",
+        "options": ["and", "so", "but"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's cold, ____ it's sunny.",
+        "options": ["and", "but", "or", "so"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was cheap ____ very clean.",
+        "answer": "but",
+        "options": ["so", "but", "or"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He's rich, but he isn't happy.",
+          "He's rich, and but he isn't happy.",
+          "He's rich but, he isn't happy but."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I studied hard, ____ I failed the test.",
+        "answer": "but",
+        "options": ["and", "so", "but"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's friendly, ____ a bit shy.",
+        "answer": "but",
+        "options": ["but", "or", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wanted to come, ____ I was ill.",
+        "options": ["but", "and", "or", "because"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "265": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The flat is close to my office. ____, it's really cheap.",
+        "answer": "Plus",
+        "options": ["Plus", "But", "Although"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I love this café. Plus, the staff ____ really friendly.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's a great job, ____ I can work from home.",
+        "options": ["but", "although", "plus", "unless"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The bike is light. ____, it's easy to fold.",
+        "answer": "Plus",
+        "options": ["Unless", "Plus", "But"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The course is useful. Plus it's, free.",
+          "The course is useful plus, it's free plus.",
+          "The course is useful. Plus, it's free."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We'll save money. ____, it's better for the environment.",
+        "answer": "Plus",
+        "options": ["Although", "Plus", "But"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The room is big. Plus, it has a great ____. (view)",
+        "answer": "view",
+        "options": ["view", "views", "viewing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The hotel has a pool. ____, breakfast is included.",
+        "options": ["But", "Plus", "Although", "Unless"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "267": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ my sister and my brother live abroad.",
+        "answer": "Both",
+        "options": ["Both", "Either", "Neither"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She speaks both English ____ French.",
+        "answer": "and",
+        "options": ["or", "nor", "and"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The city has ____ beautiful beaches and great museums.",
+        "options": ["both", "either", "neither", "also"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Both my parents ____ doctors.",
+        "answer": "are",
+        "options": ["be", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Both Tom or Anna are coming.",
+          "Both Tom and Anna are coming.",
+          "Both Tom and Anna is coming."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like both tea ____ coffee.",
+        "answer": "and",
+        "options": ["and", "or", "also"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the teachers and the students were happy.",
+        "answer": "Both",
+        "options": ["Either", "Each", "Both"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The film was ____ funny and sad.",
+        "options": ["either", "neither", "also", "both"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "268": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the bus nor the train was on time.",
+        "answer": "Neither",
+        "options": ["Both", "Neither", "Either"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We can neither eat ____ drink during the lesson.",
+        "answer": "nor",
+        "options": ["nor", "or", "and"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ called nor sent a message.",
+        "options": ["neither", "either", "both", "not"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Neither Tom ____ Anna came to the party.",
+        "answer": "nor",
+        "options": ["nor", "or", "and"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Neither my mum nor my dad speaks English.",
+          "Neither my mum or my dad speaks English.",
+          "Neither my mum nor my dad doesn't speak English."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was ____ clean nor cheap.",
+        "answer": "neither",
+        "options": ["neither", "either", "both"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ smiled nor spoke.",
+        "answer": "neither",
+        "options": ["either", "both", "neither"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I like neither football ____ tennis.",
+        "options": ["or", "and", "but", "nor"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "269": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Television can ____ entertain and educate.",
+        "answer": "both",
+        "options": ["either", "neither", "both"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The band is popular both at home ____ abroad.",
+        "answer": "and",
+        "options": ["nor", "and", "or"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The course is both useful for work ____ fun.",
+        "options": ["or", "nor", "and", "but"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She both writes ____ sings her own songs.",
+        "answer": "and",
+        "options": ["and", "or", "nor"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He both cooks or cleans.",
+          "He cooks both and cleans.",
+          "He both cooks and cleans."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plan is ____ cheap and quick.",
+        "answer": "both",
+        "options": ["both", "either", "neither"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Exercise is good both for the body ____ for the mind.",
+        "answer": "and",
+        "options": ["and", "or", "nor"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The job is ____ interesting and well paid.",
+        "options": ["either", "both", "neither", "also"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "270": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plan was simple ____ effective.",
+        "answer": "yet",
+        "options": ["or", "yet", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He trained for months, and ____ he lost in the first round.",
+        "answer": "yet",
+        "options": ["yet", "so", "still than"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The room was small ____ comfortable.",
+        "options": ["so", "or", "yet", "for"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's a cheap ____ reliable car.",
+        "answer": "yet",
+        "options": ["so", "for", "yet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The test was short yet so difficult yet.",
+          "The test was short yet difficult.",
+          "The test was short, so yet difficult."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was tired, ____ she kept working.",
+        "answer": "yet",
+        "options": ["yet", "so", "or"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A quiet ____ powerful speech.",
+        "answer": "yet",
+        "options": ["or", "yet", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The food was simple ____ delicious.",
+        "options": ["so", "or", "yet", "nor"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "272": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This book is not only a guide but ____ a workbook.",
+        "answer": "also",
+        "options": ["too", "as well", "also"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is not ____ talented but also very hard-working.",
+        "answer": "only",
+        "options": ["just so", "alone", "only"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Moving offices would not only save money ____ give us space.",
+        "options": ["and also not", "or also", "but also", "but too"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The trip was not only fun but also ____. (cheap)",
+        "answer": "cheap",
+        "options": ["cheaper than", "cheap", "cheaply"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He not only sings but also dances.",
+          "He not only sings and also dances.",
+          "He not only sings but dances also too."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The app is not only free ____ also easy to use.",
+        "answer": "but",
+        "options": ["but", "and", "or"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only the students ____ also the teachers enjoyed it.",
+        "answer": "but",
+        "options": ["and", "so", "but"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She speaks not only English ____ German.",
+        "options": ["and also", "or", "but too", "but also"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "273": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ we miss the bus, but we also got lost.",
+        "answer": "did",
+        "options": ["had", "did", "we"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only is it cheap, but it's ____ fast.",
+        "answer": "also",
+        "options": ["too", "so", "also"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only ____ he lose, but he also got injured.",
+        "options": ["he did", "did", "was", "had he"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ she clever, but she is also kind.",
+        "answer": "is",
+        "options": ["is", "she", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Not only it was late, but it was also cold.",
+          "Not only was it late, but also it cold was.",
+          "Not only was it late, but it was also cold."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ they win, but they also broke the record.",
+        "answer": "did",
+        "options": ["they", "had", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only have prices risen, but wages ____ also fallen.",
+        "answer": "have",
+        "options": ["did", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only ____ he forget my birthday, he also lied.",
+        "options": ["he", "did", "was", "has did"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "274": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel wasn't clean. ____ was the food any good.",
+        "answer": "Nor",
+        "options": ["Nor", "Or", "Either"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plan isn't cheap. Nor ____ it very practical.",
+        "answer": "is",
+        "options": ["does", "is", "it"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She didn't apologise. ____ did she explain why.",
+        "options": ["Either", "Neither", "Also", "So"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't like horror films. — ____ do I.",
+        "answer": "Neither",
+        "options": ["Neither", "Either", "So"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He can't swim. Nor his sister can.",
+          "He can't swim. Nor can his sister.",
+          "He can't swim. Nor can't his sister."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We didn't see the museum. Nor ____ we visit the castle.",
+        "answer": "did",
+        "options": ["did", "we", "do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The shop wasn't open. ____ was the café.",
+        "answer": "Nor",
+        "options": ["Or", "Neither not", "Nor"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I haven't finished. ____ has Tom.",
+        "options": ["Neither", "Either", "Also not", "So"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "275": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Everyone told her it was impossible. And ____ she did it.",
+        "answer": "yet",
+        "options": ["still than", "yet", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The evidence seems clear. And yet many experts ____ unconvinced.",
+        "answer": "remain",
+        "options": ["remains", "remaining", "remain"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He had every advantage. ____ he failed.",
+        "options": ["And so", "And yet", "Because", "Therefore"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was a small team. And ____ they won the league.",
+        "answer": "yet",
+        "options": ["so", "then", "yet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The film was long. And yet nobody left.",
+          "The film was long. And yet nobody didn't leave.",
+          "The film was long and yet, nobody yet left."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was the youngest. ____ yet she was the best.",
+        "answer": "And",
+        "options": ["So", "But yet", "And"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The price was high. And ____ people bought it.",
+        "answer": "yet",
+        "options": ["yet", "so", "because"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They had no money. ____ they were happy.",
+        "options": ["And so", "So that", "Because", "And yet"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "281": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you choose, you'll have to share it.",
+        "answer": "Whatever",
+        "options": ["Whatever", "Whoever", "Wherever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you go in the city, there are tourists.",
+        "answer": "Wherever",
+        "options": ["Whatever", "Whenever", "Wherever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ hard I try, I can't remember his name.",
+        "options": ["Whatever", "However", "Whenever", "Wherever"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ calls, tell them I'm busy.",
+        "answer": "Whoever",
+        "options": ["Wherever", "Whoever", "Whatever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Whenever I will see her, she smiles.",
+          "Whatever I see her, she smiles.",
+          "Whenever I see her, she smiles."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you do, don't tell Mum.",
+        "answer": "Whatever",
+        "options": ["Whenever", "However", "Whatever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Come ____ you like — the door is open.",
+        "answer": "whenever",
+        "options": ["whenever", "whatever", "whoever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ wins, it will be a great game.",
+        "options": ["Whatever", "However", "Whoever", "Wherever"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "282": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The job is ideal ____ that it lets me work from home.",
+        "answer": "in",
+        "options": ["at", "in", "on"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Professional sport can be harmful in ____ it involves hard training.",
+        "answer": "that",
+        "options": ["that", "which", "what"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The two cities differ ____ that one is much older.",
+        "options": ["in", "on", "at", "for"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plan is risky in that it ____ a lot of money. (need)",
+        "answer": "needs",
+        "options": ["needing", "needs", "need"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The book is unusual on that it has no ending.",
+          "The book is unusual in that it has no ending.",
+          "The book is unusual in which it has no ending."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film is special ____ that it has no dialogue.",
+        "answer": "in",
+        "options": ["in", "on", "by"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was lucky in ____ he had good teachers.",
+        "answer": "that",
+        "options": ["that", "what", "which"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The system is unfair ____ that it favours the rich.",
+        "options": ["at", "on", "in", "by"],
+        "answerIndex": 2
+      }
+    }
+  ],
   "822": [
     {
       "type": "fill_blank",
@@ -105,6 +5179,791 @@
           "already booked have",
           "has already booked"
         ],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1132": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As you ____, my parents are leaving for Spain tomorrow.",
+        "answer": "know",
+        "options": ["know", "knew", "knows"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I can't come because, ____ you know, I live in England now.",
+        "answer": "as",
+        "options": ["so", "as", "like"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ you know, the shop closes early on Sundays.",
+        "options": ["Like", "So", "As", "While"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As you know, the meeting ____ at nine. (start)",
+        "answer": "starts",
+        "options": ["starts", "start", "starting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "As you know, I'm moving house.",
+          "Like you know, I'm moving house.",
+          "As you knows, I'm moving house."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The trip, ____ you know, was cancelled.",
+        "answer": "as",
+        "options": ["like", "which", "as"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As you ____, prices have gone up. (can see)",
+        "answer": "can see",
+        "options": ["can see", "see can", "seen"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ you know, Anna has a new job.",
+        "options": ["Like", "As", "Since", "What"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1133": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll be free at three. ____, I'll come at half past.",
+        "answer": "So",
+        "options": ["Or", "So", "But"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, what do you think?",
+        "answer": "So",
+        "options": ["Or", "So", "But"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I have a dentist appointment. ____, I'm sorry, but I can't come.",
+        "options": ["But", "Or", "So", "Because"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The bus is late. ____ let's take a taxi.",
+        "answer": "So",
+        "options": ["Or", "So", "But"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "So, where we shall meet?",
+          "So where, shall we meet so?",
+          "So, where shall we meet?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's raining. ____, we'll stay in.",
+        "answer": "So",
+        "options": ["But", "Or", "So"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, tell me about your trip!",
+        "answer": "So",
+        "options": ["But", "Or", "So"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're all here. ____, let's start.",
+        "options": ["But", "So", "Or", "Although"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1134": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ of all, I must thank you for your letter.",
+        "answer": "First",
+        "options": ["Firstly", "At first", "First"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, we need good materials.",
+        "answer": "Secondly",
+        "options": ["Secondly", "Firstly", "Lastly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, don't forget to bring your passport.",
+        "options": ["Lastly", "Firstly", "First of", "At first"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Firstly, it's too far. ____, it's too expensive.",
+        "answer": "Secondly",
+        "options": ["Secondly", "Firstly", "Lastly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the best start for your first point: ____",
+        "options": [
+          "Lastly, I'd like to welcome everyone first.",
+          "First of all, I'd like to welcome everyone.",
+          "Secondly of all, I'd like to welcome everyone."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "First of all, check the date. ____, check the time.",
+        "answer": "Secondly",
+        "options": ["Last of all", "Secondly", "Firstly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, thank you all for coming. (last point)",
+        "answer": "Lastly",
+        "options": ["Secondly", "Lastly", "Firstly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, choose a topic. Secondly, do your research.",
+        "options": ["Firstly", "Lastly", "Finally", "Secondly"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1135": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The hotel was expensive. ____, the rooms were beautiful.",
+        "answer": "However",
+        "options": ["Moreover", "Therefore", "However"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A big school has more clubs. On the other ____, a small school is quieter.",
+        "answer": "hand",
+        "options": ["way", "hand", "side"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My old flat was dark. ____, this one is very bright.",
+        "options": ["In addition", "Moreover", "In contrast", "Therefore"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film was long. ____, it was never boring.",
+        "answer": "However",
+        "options": ["Therefore", "However", "Moreover"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's cheap. However, it's slow.",
+          "It's cheap. However it's, slow.",
+          "It's cheap however, it's slow however."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "City life is exciting. On the ____ hand, it's noisy.",
+        "answer": "other",
+        "options": ["second", "other", "another"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Tom loves sport. ____ contrast, his sister prefers books.",
+        "answer": "In",
+        "options": ["By", "In", "On"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The car is fast. ____, it uses a lot of fuel.",
+        "options": ["However", "Moreover", "Furthermore", "Therefore"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1136": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The flat is cheap. In ____, it's near the station.",
+        "answer": "addition",
+        "options": ["addition", "add", "adding"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, you're 18 now — you aren't a baby any more.",
+        "answer": "Besides",
+        "options": ["Besides", "However", "Although"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The job is well paid. ____, the staff are very friendly.",
+        "options": ["However", "Although", "Moreover", "Otherwise"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's a good plan. What is ____, it's cheap.",
+        "answer": "more",
+        "options": ["much", "more", "most"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The hotel is modern. Moreover, it's not cheap however.",
+          "The hotel is modern moreover it's cheap moreover.",
+          "The hotel is modern. Moreover, it's cheap."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't want to go. ____, it's too late now.",
+        "answer": "Besides",
+        "options": ["Therefore", "Besides", "However"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The bike is light. In addition, it's ____ to fold. (easy)",
+        "answer": "easy",
+        "options": ["easily", "easier than", "easy"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The course is short. ____, it's free.",
+        "options": ["What is more", "However", "Otherwise", "Although"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1137": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'd love to come. The ____ is, I have an exam.",
+        "answer": "thing",
+        "options": ["things", "matter of", "thing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____, the park is the only green place near us.",
+        "answer": "see",
+        "options": ["saw", "seeing", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I've lost my keys again.",
+        "options": [
+          "The thing is",
+          "The things are",
+          "Things is",
+          "Thing is that"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I can't lend you money. You ____, I'm a bit broke.",
+        "answer": "see",
+        "options": ["watch", "see", "look"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The thing is, I haven't time is.",
+          "The thing is, I don't have time.",
+          "Thing is the, I don't have time."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ is, nobody told me.",
+        "answer": "thing",
+        "options": ["thing", "things", "matter"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____, my phone was dead.",
+        "answer": "see",
+        "options": ["saw", "look", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm sorry I'm late. ____, the bus broke down.",
+        "options": ["You see", "You look", "You watch", "You saw"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1138": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We missed the last bus. ____, a friend drove us home.",
+        "answer": "Luckily",
+        "options": ["Sadly", "Unfortunately", "Luckily"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the suitcase was Lucy's. (nobody expected it)",
+        "answer": "Surprisingly",
+        "options": ["Surprisingly", "Luckily", "Obviously"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I don't have much time to watch TV.",
+        "options": [
+          "Luckily yes",
+          "Surprisingly not",
+          "Obviously yes",
+          "Actually"
+        ],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the concert was cancelled.",
+        "answer": "Unfortunately",
+        "options": ["Luckily", "Fortunately", "Unfortunately"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Sadly, the shop has closed.",
+          "Sad, the shop has closed.",
+          "Sadly the shop, has closed."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, nobody was hurt.",
+        "answer": "Fortunately",
+        "options": ["Sadly", "Fortunately", "Unfortunately"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, it's the best option. (clearly)",
+        "answer": "Obviously",
+        "options": ["Obviously", "Obvious", "Obviousness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, the tickets were sold out.",
+        "options": ["Luckily", "Fortunately", "Happily", "Unfortunately"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1139": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Prices rose in the city. ____, rents went up in the suburbs.",
+        "answer": "Similarly",
+        "options": ["However", "Otherwise", "Similarly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Children need sleep. ____, adults need regular rest.",
+        "answer": "Likewise",
+        "options": ["Likewise", "However", "Instead"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Letters show feelings. ____, diaries do.",
+        "options": ["In contrast", "However", "In the same way", "Otherwise"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Doctors must be careful. ____, nurses must check every dose.",
+        "answer": "Similarly",
+        "options": ["However", "Instead", "Similarly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Cats need care. Likewise dogs, need attention likewise.",
+          "Cats need care. Like wise, dogs need attention.",
+          "Cats need care. Likewise, dogs need attention."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The first test was easy. ____, the second one was simple.",
+        "answer": "Similarly",
+        "options": ["Similarly", "However", "Otherwise"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In the same ____, teachers learn from students.",
+        "answer": "way",
+        "options": ["way", "time", "day"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Tom works hard. ____, his sister never stops.",
+        "options": ["Likewise", "However", "Instead", "Otherwise"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1140": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "To ____ with, I want to thank you all for coming.",
+        "answer": "begin",
+        "options": ["start", "began", "begin"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "For a ____, the tickets are far too expensive.",
+        "answer": "start",
+        "options": ["beginning", "start", "begin"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, zoos are not cruel if animals are well cared for.",
+        "options": [
+          "To begin with",
+          "In conclusion",
+          "For a start",
+          "First of all"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In ____, I believe the plan will work.",
+        "answer": "conclusion",
+        "options": ["concluding", "conclusion", "conclude"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "To beginning with, let's look at the facts.",
+          "To begin with, let's look at the facts.",
+          "For begin, let's look at the facts."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ a start, it's too far from the city.",
+        "answer": "For",
+        "options": ["To", "In", "For"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "To begin ____, the room was too small.",
+        "answer": "with",
+        "options": ["for", "with", "by"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, both sides have good arguments. (last paragraph)",
+        "options": ["To begin with", "In conclusion", "For a start", "Firstly"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1141": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In ____, most students are willing to help.",
+        "answer": "summary",
+        "options": ["summary", "sum", "summarise"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "To sum ____, both options have clear advantages.",
+        "answer": "up",
+        "options": ["up", "out", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "In ____, the project was a success.",
+        "options": ["shortly", "short", "shorter", "shortest"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the results were positive. (in general)",
+        "answer": "Overall",
+        "options": ["All over", "Overall", "Overalls"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "To sum up, we need more time.",
+          "To summing up, we need more time.",
+          "To sum, up we need more time."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "To ____ up, the plan is good but expensive.",
+        "answer": "sum",
+        "options": ["summer", "sum", "some"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In ____, it was a great year.",
+        "answer": "short",
+        "options": ["shortly", "shorten", "short"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, customers were happy with the service.",
+        "options": ["Over all of", "All over", "Overally", "Overall"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1142": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As mentioned ____, we could negotiate better contracts.",
+        "answer": "above",
+        "options": ["up", "above", "over"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As ____ earlier, I have already asked for information.",
+        "answer": "mentioned",
+        "options": ["mentioning", "mentioned", "mention"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "As ____ in the table below, sales have risen.",
+        "options": ["showed", "showing", "show", "shown"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As mentioned ____, the deadline is Friday.",
+        "answer": "earlier",
+        "options": ["early", "ago", "earlier"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "As mentioning above, costs are rising.",
+          "As mention above, costs are rising.",
+          "As mentioned above, costs are rising."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As ____ below, the numbers are small.",
+        "answer": "shown",
+        "options": ["showed", "show", "shown"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As I ____ earlier, the plan has changed.",
+        "answer": "mentioned",
+        "options": ["mentions", "mentioned", "mention"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "As ____ above, the results are clear.",
+        "options": ["stated", "stating", "state", "states"],
         "answerIndex": 0
       }
     }
