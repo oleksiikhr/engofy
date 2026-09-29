@@ -22,12 +22,12 @@ construction's cheat sheet.
 
 ## `grammar-usage-point-exercises.json`
 
-Reusable exercise bank per `grammar_usage_point` (~10 exercises per usage point,
-~574 usage points) — distinct from the per-post `exercises` table, which is
-generated bespoke from one post's sentences. Content is written in a Claude
-Code session, without an AI API call from this codebase; for now it covers
-only an MVP sample (present perfect, egpIndex 822 and 824) awaiting a quality
-check before it is scaled. `import-usage-point-exercises` seeds it
+Reusable exercise bank per `grammar_usage_point` (~8-9 `fill_blank` /
+`multiple_choice` exercises per usage point, all 574 usage points) — distinct
+from the per-post `exercises` table, which is generated bespoke from one post's
+sentences. Content is written in a Claude Code session, without an AI API call
+from this codebase; `usage-point-exercise-seed.spec.ts` checks the file covers
+exactly the EGP records that become usage points. `import-usage-point-exercises` seeds it
 idempotently **per usage point** — a usage point that already has any
 exercises is left untouched; re-running only fills in usage points seeded for
 the first time (schema: `src/modules/post/domain/usage-point-exercise-seed.ts`).
@@ -104,7 +104,10 @@ Shape: a JSON object keyed by `egpIndex`:
     "examples": ["I walk to work every day.", "She plays tennis on Sundays."],
     "uk": {
       "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works.",
-      "examples": ["Я щодня ходжу на роботу пішки.", "Вона грає в теніс щонеділі."]
+      "examples": [
+        "Я щодня ходжу на роботу пішки.",
+        "Вона грає в теніс щонеділі."
+      ]
     }
   }
 }
