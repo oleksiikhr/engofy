@@ -4040,5 +4040,2127 @@
         "translation": "велосипедист"
       }
     }
+  },
+  "extreme": {
+    "adjective": {
+      "definition": "Very great in degree, or far beyond what is usual.",
+      "example": "The extreme cold closed the roads.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "надзвичайний, крайній"
+      }
+    }
+  },
+  "dancing": {
+    "verb": {
+      "definition": "Moving your body to music.",
+      "example": "They were dancing at the party all night.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "танцювати"
+      }
+    }
+  },
+  "danger": {
+    "noun": {
+      "definition": "The possibility that someone may be harmed or killed.",
+      "example": "The sign warns of danger ahead.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "небезпека"
+      }
+    }
+  },
+  "dangerous": {
+    "adjective": {
+      "definition": "Able or likely to cause harm.",
+      "example": "It is dangerous to swim here.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "небезпечний"
+      }
+    }
+  },
+  "dare": {
+    "noun": {
+      "definition": "A challenge to do something risky to prove you are brave.",
+      "example": "He jumped in the river for a dare.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виклик, «слабо»"
+      }
+    },
+    "verb": {
+      "definition": "To be brave enough to do something risky.",
+      "example": "I didn't dare to ask him for more money.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наважуватися, сміти"
+      }
+    }
+  },
+  "daresay": {
+    "verb": {
+      "definition": "Used to say that you think something is probably true.",
+      "example": "I daresay you are right.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "гадаю, ймовірно"
+      }
+    }
+  },
+  "dash": {
+    "noun": {
+      "definition": "A short line (–) used in writing to separate parts of a sentence.",
+      "example": "Put a dash before the last word.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "тире"
+      }
+    }
+  },
+  "datum": {
+    "noun": {
+      "definition": "A single piece of information; the singular of 'data'.",
+      "example": "Each datum was checked twice.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "дані (одиничний факт)"
+      }
+    }
+  },
+  "deadline": {
+    "noun": {
+      "definition": "The time or day by which something must be finished.",
+      "example": "The deadline for the report is Friday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кінцевий термін, дедлайн"
+      }
+    }
+  },
+  "debatable": {
+    "adjective": {
+      "definition": "Not certain, because people can disagree about it.",
+      "example": "It is debatable whether the plan will work.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "спірний, сумнівний"
+      }
+    }
+  },
+  "debate": {
+    "noun": {
+      "definition": "A discussion in which people give different opinions.",
+      "example": "There was a long debate about the new law.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дебати, обговорення"
+      }
+    }
+  },
+  "decide": {
+    "verb": {
+      "definition": "To choose something after thinking about it.",
+      "example": "We decided to stay at home.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вирішувати"
+      }
+    }
+  },
+  "declarative": {
+    "adjective": {
+      "definition": "Used to describe a sentence that makes a statement.",
+      "example": "'She lives here' is a declarative sentence.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розповідний"
+      }
+    }
+  },
+  "deduce": {
+    "verb": {
+      "definition": "To reach a conclusion from the facts you have.",
+      "example": "I deduced from his voice that he was tired.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "робити висновок, виводити"
+      }
+    }
+  },
+  "deduction": {
+    "noun": {
+      "definition": "A conclusion that you reach from the facts you have.",
+      "example": "Her deduction turned out to be correct.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "висновок, дедукція"
+      }
+    }
+  },
+  "deeply": {
+    "adverb": {
+      "definition": "Very much or very strongly.",
+      "example": "She was deeply sorry for what she said.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "глибоко, дуже"
+      }
+    }
+  },
+  "default": {
+    "noun": {
+      "definition": "What happens or is chosen when nothing else is decided.",
+      "example": "The default language of the phone is English.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "типове значення, за замовчуванням"
+      }
+    }
+  },
+  "defend": {
+    "verb": {
+      "definition": "To protect someone or something from attack or criticism.",
+      "example": "He defended his friend when they laughed at her.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "захищати"
+      }
+    }
+  },
+  "define": {
+    "verb": {
+      "definition": "To say exactly what a word or idea means.",
+      "example": "Can you define the word 'freedom'?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "визначати, давати визначення"
+      }
+    }
+  },
+  "defining": {
+    "adjective": {
+      "definition": "Used to describe a clause that tells which person or thing you mean.",
+      "example": "'Who lives next door' is a defining clause in that sentence.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "означальний, обмежувальний"
+      }
+    }
+  },
+  "definite": {
+    "adjective": {
+      "definition": "Clear and certain, not likely to change.",
+      "example": "We have no definite plans for the weekend.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "певний, чіткий"
+      }
+    }
+  },
+  "delay": {
+    "noun": {
+      "definition": "A time when something happens later than planned.",
+      "example": "There was a two-hour delay at the airport.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "затримка"
+      }
+    }
+  },
+  "deliberately": {
+    "adverb": {
+      "definition": "On purpose, not by accident.",
+      "example": "He deliberately left the door open.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "навмисно"
+      }
+    }
+  },
+  "delicious": {
+    "adjective": {
+      "definition": "Tasting or smelling very good.",
+      "example": "The soup was absolutely delicious.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "смачний"
+      }
+    }
+  },
+  "delighted": {
+    "adjective": {
+      "definition": "Very pleased and happy.",
+      "example": "I was delighted to hear your news.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "у захваті, дуже радий"
+      }
+    }
+  },
+  "deliver": {
+    "verb": {
+      "definition": "To take something to a person or place.",
+      "example": "They deliver pizza to your door.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "доставляти"
+      }
+    }
+  },
+  "delivery": {
+    "noun": {
+      "definition": "The act of bringing goods or letters to a person or place.",
+      "example": "The delivery will arrive tomorrow morning.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "доставка"
+      }
+    }
+  },
+  "demanding": {
+    "adjective": {
+      "definition": "Needing a lot of effort, time or attention.",
+      "example": "She has a very demanding job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вимогливий, виснажливий"
+      }
+    }
+  },
+  "demonstrate": {
+    "noun": {
+      "definition": "To show clearly that something is true or how it works.",
+      "example": "The teacher demonstrated how to use the machine.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "демонструвати, показувати"
+      }
+    },
+    "verb": {
+      "definition": "To show clearly that something is true or how it works.",
+      "example": "The teacher demonstrated how to use the machine.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "демонструвати, показувати"
+      }
+    }
+  },
+  "demonstrative": {
+    "adjective": {
+      "definition": "Used to describe words like 'this' and 'that' that point to a person or thing.",
+      "example": "'This' is a demonstrative pronoun.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вказівний"
+      }
+    },
+    "noun": {
+      "definition": "A word like 'this', 'that', 'these' or 'those' that points to a person or thing.",
+      "example": "'That' is a demonstrative in this sentence.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вказівний займенник"
+      }
+    }
+  },
+  "dentist": {
+    "noun": {
+      "definition": "A doctor who looks after your teeth.",
+      "example": "I have an appointment with the dentist today.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "стоматолог"
+      }
+    }
+  },
+  "deny": {
+    "verb": {
+      "definition": "To say that something is not true.",
+      "example": "He denied taking the money.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заперечувати"
+      }
+    }
+  },
+  "departure": {
+    "noun": {
+      "definition": "The act of leaving a place.",
+      "example": "The departure of the train was delayed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відправлення, від'їзд"
+      }
+    }
+  },
+  "depend": {
+    "noun": {
+      "definition": "To be decided by something else; to rely on someone or something.",
+      "example": "It depends on the weather.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "залежати, покладатися"
+      }
+    },
+    "verb": {
+      "definition": "To be decided by something else; to rely on someone or something.",
+      "example": "It depends on how much it costs.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "залежати, покладатися"
+      }
+    }
+  },
+  "dependent": {
+    "adjective": {
+      "definition": "Needing someone or something else for support or to exist.",
+      "example": "Young children are dependent on their parents.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "залежний"
+      }
+    }
+  },
+  "depth": {
+    "noun": {
+      "definition": "The distance from the top of something to the bottom.",
+      "example": "The depth of the lake is ten metres.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "глибина"
+      }
+    }
+  },
+  "describe": {
+    "noun": {
+      "definition": "To say what someone or something is like.",
+      "example": "Can you describe the man you saw?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "описувати"
+      }
+    },
+    "verb": {
+      "definition": "To say what someone or something is like.",
+      "example": "Can you describe your room?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "описувати"
+      }
+    }
+  },
+  "description": {
+    "noun": {
+      "definition": "A piece of writing or speech that says what someone or something is like.",
+      "example": "She gave the police a description of the thief.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "опис"
+      }
+    }
+  },
+  "deserve": {
+    "verb": {
+      "definition": "To have a right to something because of what you have done.",
+      "example": "You deserve a holiday after all that work.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заслуговувати"
+      }
+    }
+  },
+  "desire": {
+    "verb": {
+      "definition": "To want something very much.",
+      "example": "They desire nothing more than peace.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "бажати, жадати"
+      }
+    }
+  },
+  "desk": {
+    "noun": {
+      "definition": "A table where you sit to read, write or work.",
+      "example": "She put her books on the desk.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "письмовий стіл, парта"
+      }
+    }
+  },
+  "desperate": {
+    "adjective": {
+      "definition": "Willing to do anything because your situation is very bad.",
+      "example": "He was desperate for a job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відчайдушний"
+      }
+    }
+  },
+  "despise": {
+    "noun": {
+      "definition": "To hate someone or something and think they are worth nothing.",
+      "example": "She despises people who lie.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "зневажати, ненавидіти"
+      }
+    }
+  },
+  "destroy": {
+    "verb": {
+      "definition": "To damage something so badly that it no longer exists.",
+      "example": "The fire destroyed the old house.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "руйнувати, знищувати"
+      }
+    }
+  },
+  "detail": {
+    "noun": {
+      "definition": "A small fact or piece of information about something.",
+      "example": "Please give me all the details of the trip.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "деталь, подробиця"
+      }
+    }
+  },
+  "determination": {
+    "noun": {
+      "definition": "The quality of not giving up when you want to do something.",
+      "example": "She showed great determination to win.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "рішучість, наполегливість"
+      }
+    }
+  },
+  "determiner": {
+    "noun": {
+      "definition": "A word like 'the', 'a' or 'my' that comes before a noun.",
+      "example": "'The' is the most common determiner in English.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "детермінатив"
+      }
+    }
+  },
+  "develop": {
+    "verb": {
+      "definition": "To grow or change into something bigger or better.",
+      "example": "The children develop quickly at this age.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розвиватися, розробляти"
+      }
+    }
+  },
+  "device": {
+    "noun": {
+      "definition": "A small machine or tool made for a particular job.",
+      "example": "He turned off his electronic device.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пристрій"
+      }
+    }
+  },
+  "devise": {
+    "verb": {
+      "definition": "To think of a new plan or way of doing something.",
+      "example": "They devised a clever plan to save money.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вигадувати, розробляти"
+      }
+    }
+  },
+  "devolve": {
+    "verb": {
+      "definition": "To pass power or work down to a lower level.",
+      "example": "The government devolved more power to local councils.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "передавати (повноваження)"
+      }
+    }
+  },
+  "diary": {
+    "noun": {
+      "definition": "A book in which you write about what happens to you each day.",
+      "example": "She writes in her diary every night.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "щоденник"
+      }
+    }
+  },
+  "dictionary": {
+    "adjective": {
+      "definition": "Found in a dictionary; used about the basic form of a word.",
+      "example": "The dictionary form of 'went' is 'go'.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "словниковий"
+      }
+    },
+    "noun": {
+      "definition": "A book that lists words and explains what they mean.",
+      "example": "Look up the word in a dictionary.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "словник"
+      }
+    }
+  },
+  "diet": {
+    "noun": {
+      "definition": "The kind of food that a person usually eats.",
+      "example": "A healthy diet includes fruit and vegetables.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дієта, харчування"
+      }
+    }
+  },
+  "differ": {
+    "verb": {
+      "definition": "To be different from something else.",
+      "example": "Our opinions differ on this subject.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відрізнятися"
+      }
+    }
+  },
+  "differently": {
+    "adverb": {
+      "definition": "In a way that is not the same.",
+      "example": "Everyone thinks differently about money.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "по-іншому, інакше"
+      }
+    }
+  },
+  "difficulty": {
+    "noun": {
+      "definition": "A problem, or the state of being hard to do.",
+      "example": "She has difficulty reading small print.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "труднощі"
+      }
+    }
+  },
+  "digital": {
+    "adjective": {
+      "definition": "Using computers and electronic signals to store or show information.",
+      "example": "I bought a digital camera.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "цифровий"
+      }
+    }
+  },
+  "dilemma": {
+    "noun": {
+      "definition": "A situation in which you must choose between two bad or difficult things.",
+      "example": "He is in a dilemma about which job to take.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "дилема"
+      }
+    }
+  },
+  "dining": {
+    "noun": {
+      "definition": "The act of eating a meal, especially dinner.",
+      "example": "We sat in the dining room.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "обід, вживання їжі"
+      }
+    }
+  },
+  "dinner": {
+    "noun": {
+      "definition": "The main meal of the day, usually eaten in the evening.",
+      "example": "What are we having for dinner?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "вечеря, обід"
+      }
+    }
+  },
+  "directness": {
+    "noun": {
+      "definition": "The quality of saying things in a clear and honest way.",
+      "example": "I like the directness of her questions.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "прямота"
+      }
+    }
+  },
+  "dirty": {
+    "adjective": {
+      "definition": "Not clean.",
+      "example": "His shoes were dirty after the walk.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "брудний"
+      }
+    }
+  },
+  "disadvantage": {
+    "noun": {
+      "definition": "Something that makes a situation harder or worse.",
+      "example": "The main disadvantage of the flat is the noise.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "недолік, невигода"
+      }
+    }
+  },
+  "disagree": {
+    "verb": {
+      "definition": "To have a different opinion from someone.",
+      "example": "I disagree with you about this.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "не погоджуватися"
+      }
+    }
+  },
+  "disagreement": {
+    "noun": {
+      "definition": "A situation in which people have different opinions.",
+      "example": "They had a disagreement about money.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розбіжність, суперечка"
+      }
+    }
+  },
+  "disallow": {
+    "verb": {
+      "definition": "To officially refuse to accept something.",
+      "example": "The referee disallowed the goal.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "забороняти, не визнавати"
+      }
+    }
+  },
+  "disappear": {
+    "verb": {
+      "definition": "To go away so that you can no longer be seen.",
+      "example": "The cat disappeared under the bed.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "зникати"
+      }
+    }
+  },
+  "disappoint": {
+    "verb": {
+      "definition": "To make someone unhappy because something is not as good as they hoped.",
+      "example": "I don't want to disappoint my parents.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розчаровувати"
+      }
+    }
+  },
+  "disappointed": {
+    "adjective": {
+      "definition": "Sad because something was not as good as you hoped.",
+      "example": "She was disappointed with her exam results.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розчарований"
+      }
+    }
+  },
+  "disappointment": {
+    "noun": {
+      "definition": "A feeling of sadness because something was not as good as you hoped.",
+      "example": "The result was a big disappointment.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розчарування"
+      }
+    }
+  },
+  "disapproval": {
+    "noun": {
+      "definition": "A feeling that someone or something is bad or wrong.",
+      "example": "He shook his head in disapproval.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "несхвалення"
+      }
+    }
+  },
+  "disapprove": {
+    "verb": {
+      "definition": "To think that something or someone is bad or wrong.",
+      "example": "My parents disapprove of my friends.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "не схвалювати"
+      }
+    }
+  },
+  "disapprovingly": {
+    "adverb": {
+      "definition": "In a way that shows you think something is bad or wrong.",
+      "example": "She looked at him disapprovingly.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "несхвально"
+      }
+    }
+  },
+  "disaster": {
+    "noun": {
+      "definition": "An event that causes great damage or suffering.",
+      "example": "The flood was a terrible disaster.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "катастрофа, лихо"
+      }
+    }
+  },
+  "disco": {
+    "noun": {
+      "definition": "A place or party where people dance to recorded music.",
+      "example": "We went to a disco on Saturday night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дискотека"
+      }
+    }
+  },
+  "disconnect": {
+    "noun": {
+      "definition": "A gap between two things that should be connected.",
+      "example": "There is a disconnect between what he says and does.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розрив, невідповідність"
+      }
+    }
+  },
+  "discount": {
+    "noun": {
+      "definition": "A lower price than usual.",
+      "example": "You get a discount if you buy two.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "знижка"
+      }
+    }
+  },
+  "discourage": {
+    "verb": {
+      "definition": "To try to stop someone from doing something.",
+      "example": "The high price discouraged many buyers.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відмовляти, стримувати"
+      }
+    }
+  },
+  "discourse": {
+    "adjective": {
+      "definition": "Connected with the way connected speech or writing is organised.",
+      "example": "'However' is a discourse marker.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "дискурсивний"
+      }
+    },
+    "noun": {
+      "definition": "Spoken or written language used to talk about a subject.",
+      "example": "He studies political discourse.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "дискурс, мовлення"
+      }
+    }
+  },
+  "discover": {
+    "verb": {
+      "definition": "To find or learn something for the first time.",
+      "example": "She discovered a small café near the station.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "відкривати, дізнаватися"
+      }
+    }
+  },
+  "discuss": {
+    "verb": {
+      "definition": "To talk about something with other people.",
+      "example": "We need to discuss the plan.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "обговорювати"
+      }
+    }
+  },
+  "discussion": {
+    "noun": {
+      "definition": "A conversation about a subject.",
+      "example": "We had a long discussion about music.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "обговорення"
+      }
+    }
+  },
+  "dish": {
+    "noun": {
+      "definition": "Food prepared in a particular way, or the plate or bowl it is served in.",
+      "example": "Pasta is my favourite dish.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "страва, тарілка"
+      }
+    }
+  },
+  "disk": {
+    "noun": {
+      "definition": "A flat round object used to store computer information.",
+      "example": "Save the file to the disk.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "диск"
+      }
+    }
+  },
+  "dismissive": {
+    "adjective": {
+      "definition": "Showing that you think something is not worth your attention.",
+      "example": "He gave a dismissive wave of his hand.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "зневажливий"
+      }
+    }
+  },
+  "distant": {
+    "adjective": {
+      "definition": "Far away in space or time.",
+      "example": "The mountains were distant and blue.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "далекий"
+      }
+    }
+  },
+  "divide": {
+    "verb": {
+      "definition": "To split something into parts.",
+      "example": "Divide the cake into eight pieces.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ділити"
+      }
+    }
+  },
+  "diving": {
+    "verb": {
+      "definition": "Jumping into water head first, or swimming under water.",
+      "example": "They were diving into the pool.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пірнати, стрибати у воду"
+      }
+    }
+  },
+  "divorce": {
+    "verb": {
+      "definition": "To end a marriage by law.",
+      "example": "They divorced last year.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розлучатися"
+      }
+    }
+  },
+  "dj": {
+    "noun": {
+      "definition": "A person who plays recorded music at a party or on the radio.",
+      "example": "The DJ played my favourite song.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "діджей"
+      }
+    }
+  },
+  "document": {
+    "noun": {
+      "definition": "A paper or file that contains official information.",
+      "example": "Please sign this document.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "документ"
+      }
+    }
+  },
+  "doe": {
+    "noun": {
+      "definition": "The form of 'do' used with he, she and it in the present simple.",
+      "example": "She doesn't like coffee.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "робить (форма «does»)"
+      }
+    }
+  },
+  "doll": {
+    "noun": {
+      "definition": "A toy that looks like a small person.",
+      "example": "The girl held her doll tightly.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "лялька"
+      }
+    }
+  },
+  "dollar": {
+    "noun": {
+      "definition": "The unit of money used in the United States and some other countries.",
+      "example": "This book costs ten dollars.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "долар"
+      }
+    }
+  },
+  "doom": {
+    "verb": {
+      "definition": "To make certain that something bad will happen.",
+      "example": "The plan was doomed to fail.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "прирікати"
+      }
+    }
+  },
+  "downstair": {
+    "noun": {
+      "definition": "On or to a lower floor of a building.",
+      "example": "The kitchen is downstairs.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "униз, унизу"
+      }
+    }
+  },
+  "downstairs": {
+    "adverb": {
+      "definition": "On or to a lower floor of a building.",
+      "example": "She ran downstairs to open the door.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "униз, унизу"
+      }
+    }
+  },
+  "dramatic": {
+    "adjective": {
+      "definition": "Sudden and very great, or exciting like a play.",
+      "example": "There was a dramatic change in the weather.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "драматичний, різкий"
+      }
+    }
+  },
+  "dramatically": {
+    "adverb": {
+      "definition": "In a sudden and very great way.",
+      "example": "Prices have risen dramatically.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "різко, драматично"
+      }
+    }
+  },
+  "draw": {
+    "verb": {
+      "definition": "To make a picture with a pencil or pen.",
+      "example": "The children drew pictures of animals.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "малювати"
+      }
+    }
+  },
+  "dress": {
+    "noun": {
+      "definition": "A piece of clothing for women or girls that covers the body and legs.",
+      "example": "She wore a red dress to the party.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сукня"
+      }
+    },
+    "verb": {
+      "definition": "To put clothes on yourself or another person.",
+      "example": "He dressed quickly and left the house.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "одягатися, одягати"
+      }
+    }
+  },
+  "dressed": {
+    "adjective": {
+      "definition": "Wearing clothes.",
+      "example": "She was dressed in black.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "одягнений"
+      }
+    }
+  },
+  "driver": {
+    "noun": {
+      "definition": "A person who drives a car, bus or train.",
+      "example": "The bus driver stopped at the corner.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "водій"
+      }
+    }
+  },
+  "dry": {
+    "adjective": {
+      "definition": "Not wet.",
+      "example": "Is the washing dry yet?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сухий"
+      }
+    }
+  },
+  "duck": {
+    "noun": {
+      "definition": "A bird with a flat beak that lives near water.",
+      "example": "The ducks swam across the pond.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "качка"
+      }
+    }
+  },
+  "dummy": {
+    "adjective": {
+      "definition": "Not real, but made to look like the real thing.",
+      "example": "The shop window had dummy chocolates.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "несправжній, бутафорський"
+      }
+    }
+  },
+  "dump": {
+    "noun": {
+      "definition": "A place where rubbish is taken and left.",
+      "example": "We took the old sofa to the dump.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "смітник, звалище"
+      }
+    }
+  },
+  "duration": {
+    "noun": {
+      "definition": "The length of time that something lasts.",
+      "example": "The duration of the film is two hours.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "тривалість"
+      }
+    }
+  },
+  "dutch": {
+    "adjective": {
+      "definition": "Of or from the Netherlands.",
+      "example": "Dutch cheese is famous around the world.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "голландський"
+      }
+    }
+  },
+  "echo": {
+    "verb": {
+      "definition": "To be heard again after a sound has bounced off a surface.",
+      "example": "Her voice echoed in the empty hall.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відлунювати, повторювати"
+      }
+    }
+  },
+  "educate": {
+    "verb": {
+      "definition": "To teach someone, especially at a school or college.",
+      "example": "She was educated in London.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "навчати, освічувати"
+      }
+    }
+  },
+  "educational": {
+    "adjective": {
+      "definition": "Connected with teaching and learning.",
+      "example": "The museum has many educational programmes.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "освітній, навчальний"
+      }
+    }
+  },
+  "effectively": {
+    "adverb": {
+      "definition": "In a way that gets the result you want.",
+      "example": "She used her time very effectively.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ефективно"
+      }
+    }
+  },
+  "efficiently": {
+    "adverb": {
+      "definition": "In a way that works well without wasting time or energy.",
+      "example": "The new machine works more efficiently.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ефективно, продуктивно"
+      }
+    }
+  },
+  "egg": {
+    "noun": {
+      "definition": "An oval object laid by a bird, often eaten as food.",
+      "example": "I had two eggs for breakfast.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "яйце"
+      }
+    }
+  },
+  "electric": {
+    "adjective": {
+      "definition": "Using or producing electricity.",
+      "example": "He drives an electric car.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "електричний"
+      }
+    }
+  },
+  "elegant": {
+    "adjective": {
+      "definition": "Graceful and attractive in style.",
+      "example": "She wore an elegant black dress.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "елегантний"
+      }
+    }
+  },
+  "element": {
+    "noun": {
+      "definition": "One basic part of something larger.",
+      "example": "Honesty is an important element of friendship.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "елемент, складова"
+      }
+    }
+  },
+  "ellipsis": {
+    "noun": {
+      "definition": "The leaving out of words that are understood without being said.",
+      "example": "'Want some?' is an example of ellipsis.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "еліпсис, пропуск слів"
+      }
+    }
+  },
+  "ellipted": {
+    "adjective": {
+      "definition": "Left out of a sentence because the meaning is clear without it.",
+      "example": "The ellipted verb is easy to guess.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "пропущений (в еліпсисі)"
+      }
+    }
+  },
+  "email": {
+    "noun": {
+      "definition": "A message sent by computer.",
+      "example": "I got an email from my boss.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "електронний лист"
+      }
+    },
+    "verb": {
+      "definition": "To send a message by computer.",
+      "example": "I'll email you the details tonight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "надсилати електронною поштою"
+      }
+    }
+  },
+  "embarrassment": {
+    "noun": {
+      "definition": "A feeling of being shy or ashamed in front of other people.",
+      "example": "He blushed with embarrassment.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "збентеження, ніяковість"
+      }
+    }
+  },
+  "emotion": {
+    "noun": {
+      "definition": "A strong feeling such as love, anger or fear.",
+      "example": "She couldn't hide her emotions.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "емоція, почуття"
+      }
+    }
+  },
+  "emotional": {
+    "adjective": {
+      "definition": "Connected with feelings, or showing strong feelings.",
+      "example": "It was an emotional goodbye.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "емоційний"
+      }
+    }
+  },
+  "emphasis": {
+    "noun": {
+      "definition": "Special importance given to something.",
+      "example": "The school puts great emphasis on reading.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наголос, акцент"
+      }
+    }
+  },
+  "emphasise": {
+    "verb": {
+      "definition": "To show that something is especially important.",
+      "example": "The teacher emphasised the need to practise.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підкреслювати, наголошувати"
+      }
+    }
+  },
+  "emphatic": {
+    "adjective": {
+      "definition": "Said or done in a strong and clear way.",
+      "example": "Her answer was an emphatic no.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "виразний, категоричний"
+      }
+    }
+  },
+  "emphatically": {
+    "adverb": {
+      "definition": "In a strong and clear way.",
+      "example": "He emphatically denied the story.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "категорично, наголошено"
+      }
+    }
+  },
+  "employee": {
+    "noun": {
+      "definition": "A person who is paid to work for a company or another person.",
+      "example": "The company has fifty employees.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "працівник, службовець"
+      }
+    }
+  },
+  "employer": {
+    "noun": {
+      "definition": "A person or company that pays people to work for them.",
+      "example": "My employer gives me two weeks' holiday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "роботодавець"
+      }
+    }
+  },
+  "empty": {
+    "adjective": {
+      "definition": "With nothing inside.",
+      "example": "The fridge was empty.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "порожній"
+      }
+    }
+  },
+  "enclose": {
+    "verb": {
+      "definition": "To put something inside an envelope or package with a letter.",
+      "example": "I enclose a copy of the bill.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "додавати (до листа)"
+      }
+    }
+  },
+  "encourage": {
+    "verb": {
+      "definition": "To give someone confidence or support to do something.",
+      "example": "My teacher encouraged me to apply.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заохочувати, підбадьорювати"
+      }
+    }
+  },
+  "endanger": {
+    "verb": {
+      "definition": "To put someone or something in a dangerous situation.",
+      "example": "Smoking endangers your health.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "наражати на небезпеку"
+      }
+    }
+  },
+  "ending": {
+    "noun": {
+      "definition": "The last part of a story, film or event.",
+      "example": "I didn't like the ending of the book.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кінцівка, закінчення"
+      }
+    }
+  },
+  "engage": {
+    "verb": {
+      "definition": "To take part in something, or to attract someone's interest.",
+      "example": "The teacher engaged the students in a discussion.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "залучати, брати участь"
+      }
+    }
+  },
+  "engineer": {
+    "noun": {
+      "definition": "A person who designs or builds machines, roads or buildings.",
+      "example": "My brother is an engineer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "інженер"
+      }
+    }
+  },
+  "engineering": {
+    "noun": {
+      "definition": "The work of designing and building machines, roads or buildings.",
+      "example": "She studies civil engineering.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "інженерія"
+      }
+    }
+  },
+  "enjoyable": {
+    "adjective": {
+      "definition": "Giving you pleasure.",
+      "example": "We had a very enjoyable evening.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "приємний"
+      }
+    }
+  },
+  "enter": {
+    "verb": {
+      "definition": "To go or come into a place.",
+      "example": "Please enter the room quietly.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "входити"
+      }
+    }
+  },
+  "entertain": {
+    "verb": {
+      "definition": "To give people something enjoyable to watch, hear or do.",
+      "example": "The clown entertained the children.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розважати"
+      }
+    }
+  },
+  "entertainment": {
+    "noun": {
+      "definition": "Films, music and other things that people enjoy watching or doing.",
+      "example": "There is live entertainment every night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розваги"
+      }
+    }
+  },
+  "enthusiasm": {
+    "noun": {
+      "definition": "A strong feeling of interest and excitement.",
+      "example": "He spoke with great enthusiasm about his trip.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ентузіазм"
+      }
+    }
+  },
+  "enthusiastic": {
+    "adjective": {
+      "definition": "Very interested and excited about something.",
+      "example": "She is enthusiastic about learning English.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "захоплений, ентузіастичний"
+      }
+    }
+  },
+  "entirely": {
+    "adverb": {
+      "definition": "Completely.",
+      "example": "I entirely agree with you.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "цілком, повністю"
+      }
+    }
+  },
+  "entity": {
+    "noun": {
+      "definition": "Something that exists as a separate thing.",
+      "example": "The company is a separate legal entity.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "сутність, одиниця"
+      }
+    }
+  },
+  "entrance": {
+    "noun": {
+      "definition": "The place where you go into a building.",
+      "example": "Meet me at the main entrance.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вхід"
+      }
+    }
+  },
+  "envelope": {
+    "noun": {
+      "definition": "A paper cover in which you put a letter.",
+      "example": "She put the card in an envelope.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "конверт"
+      }
+    }
+  },
+  "equal": {
+    "adjective": {
+      "definition": "The same in size, amount or value.",
+      "example": "The two teams are equal in strength.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рівний"
+      }
+    },
+    "noun": {
+      "definition": "A person who has the same rights or ability as another.",
+      "example": "She treats everyone as her equal.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "рівний, ровесник"
+      }
+    }
+  },
+  "equally": {
+    "adverb": {
+      "definition": "In the same way or to the same degree.",
+      "example": "Both answers are equally good.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "однаково, порівну"
+      }
+    }
+  },
+  "equivalent": {
+    "noun": {
+      "definition": "Something that has the same value, meaning or use as something else.",
+      "example": "'Cheers' is the British equivalent of 'thanks'.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "еквівалент, відповідник"
+      }
+    }
+  },
+  "era": {
+    "noun": {
+      "definition": "A long period of time in history.",
+      "example": "It was an era of great change.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ера, епоха"
+      }
+    }
+  },
+  "eraser": {
+    "noun": {
+      "definition": "A small piece of rubber used for removing pencil marks.",
+      "example": "Can I borrow your eraser?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гумка"
+      }
+    }
+  },
+  "error": {
+    "noun": {
+      "definition": "A mistake.",
+      "example": "There is an error in your answer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "помилка"
+      }
+    }
+  },
+  "escape": {
+    "verb": {
+      "definition": "To get away from a place or from danger.",
+      "example": "The prisoner escaped last night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "втікати, рятуватися"
+      }
+    }
+  },
+  "essay": {
+    "noun": {
+      "definition": "A short piece of writing on one subject.",
+      "example": "We have to write an essay on climate change.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "твір, есе"
+      }
+    }
+  },
+  "essential": {
+    "adjective": {
+      "definition": "Completely necessary.",
+      "example": "Water is essential for life.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "необхідний, суттєвий"
+      }
+    }
+  },
+  "establish": {
+    "verb": {
+      "definition": "To start something that will last, such as a company.",
+      "example": "The school was established in 1900.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "засновувати, створювати"
+      }
+    }
+  },
+  "eternally": {
+    "adverb": {
+      "definition": "For ever, without ending.",
+      "example": "He is eternally grateful for your help.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вічно, безкінечно"
+      }
+    }
+  },
+  "evaluate": {
+    "verb": {
+      "definition": "To think carefully about something to decide how good it is.",
+      "example": "The teacher will evaluate your work.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "оцінювати"
+      }
+    }
+  },
+  "evaluation": {
+    "noun": {
+      "definition": "A careful judgement about how good or bad something is.",
+      "example": "The evaluation of the course was positive.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "оцінка, оцінювання"
+      }
+    }
+  },
+  "everyday": {
+    "adjective": {
+      "definition": "Used or happening regularly, as a normal part of life.",
+      "example": "She wears simple everyday clothes.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "щоденний, повсякденний"
+      }
+    },
+    "adverb": {
+      "definition": "On every day; each day.",
+      "example": "I walk to work everyday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "щодня"
+      }
+    },
+    "noun": {
+      "definition": "Used or happening regularly, as a normal part of life.",
+      "example": "She wrote about the everyday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "повсякденність"
+      }
+    }
+  },
+  "everywhere": {
+    "adverb": {
+      "definition": "In or to every place.",
+      "example": "I looked everywhere for my keys.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "скрізь"
+      }
+    }
+  },
+  "evolution": {
+    "noun": {
+      "definition": "The slow change of living things over many generations.",
+      "example": "Darwin wrote about the evolution of species.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "еволюція"
+      }
+    }
+  },
+  "exact": {
+    "adjective": {
+      "definition": "Completely correct in every detail.",
+      "example": "What is the exact time?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "точний"
+      }
+    }
+  },
+  "exaggerate": {
+    "verb": {
+      "definition": "To make something seem bigger or better than it really is.",
+      "example": "Don't exaggerate — it wasn't that bad.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "перебільшувати"
+      }
+    }
+  },
+  "exaggeration": {
+    "noun": {
+      "definition": "A statement that makes something seem bigger or better than it is.",
+      "example": "It's no exaggeration to say she is a genius.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перебільшення"
+      }
+    }
+  },
+  "exam": {
+    "noun": {
+      "definition": "A formal test of what you know.",
+      "example": "I have an English exam tomorrow.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "іспит"
+      }
+    }
+  },
+  "examination": {
+    "noun": {
+      "definition": "A formal test of what you know, or a careful look at something.",
+      "example": "The doctor gave her a full examination.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "іспит, огляд"
+      }
+    }
+  },
+  "excel": {
+    "verb": {
+      "definition": "To be very good at something.",
+      "example": "She excels at maths.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відзначатися, видатно вміти"
+      }
+    }
+  },
+  "excellent": {
+    "adjective": {
+      "definition": "Extremely good.",
+      "example": "The food at this restaurant is excellent.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "відмінний"
+      }
+    }
+  },
+  "exception": {
+    "noun": {
+      "definition": "Someone or something that is not included in a general rule.",
+      "example": "Most students passed, but there was one exception.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "виняток"
+      }
+    },
+    "verb": {
+      "definition": "To object to something or be offended by it (in 'take exception to').",
+      "example": "She took exception to his rude remark.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "заперечувати, ображатися"
+      }
+    }
+  },
+  "exceptionally": {
+    "adverb": {
+      "definition": "Much more than usual.",
+      "example": "The weather was exceptionally warm.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виключно, надзвичайно"
+      }
+    }
+  },
+  "excessive": {
+    "adjective": {
+      "definition": "More than is needed or reasonable.",
+      "example": "The prices are excessive for such a small room.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "надмірний"
+      }
+    }
+  },
+  "excite": {
+    "verb": {
+      "definition": "To make someone feel happy and full of energy.",
+      "example": "The idea of the trip really excited him.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "хвилювати, збуджувати"
+      }
+    }
+  },
+  "excited": {
+    "adjective": {
+      "definition": "Feeling happy and full of energy about something.",
+      "example": "The children are excited about the trip.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "схвильований, у захваті"
+      }
+    }
+  },
+  "excitement": {
+    "noun": {
+      "definition": "A feeling of being happy and full of energy.",
+      "example": "There was great excitement before the match.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "хвилювання, збудження"
+      }
+    }
+  },
+  "exciting": {
+    "adjective": {
+      "definition": "Making you feel happy and interested.",
+      "example": "It was an exciting football match.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "захопливий, цікавий"
+      }
+    }
+  },
+  "exclamation": {
+    "noun": {
+      "definition": "A short word or phrase that shows strong feeling, like 'Oh!' or 'Wow!'.",
+      "example": "'Ouch!' is an exclamation of pain.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "вигук"
+      }
+    }
+  },
+  "exclusively": {
+    "adverb": {
+      "definition": "Only, and not including anyone or anything else.",
+      "example": "This room is used exclusively by staff.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "виключно, тільки"
+      }
+    }
+  },
+  "excursion": {
+    "noun": {
+      "definition": "A short trip made for pleasure or education.",
+      "example": "We went on an excursion to the castle.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "екскурсія"
+      }
+    }
+  },
+  "excuse": {
+    "verb": {
+      "definition": "To forgive someone for a small mistake.",
+      "example": "Please excuse my bad handwriting.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вибачати, пробачати"
+      }
+    }
+  },
+  "exercise": {
+    "noun": {
+      "definition": "Physical activity that keeps you fit, or a task to practise a skill.",
+      "example": "I do exercise every morning.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вправа, фізичне навантаження"
+      }
+    },
+    "verb": {
+      "definition": "To do physical activity to stay healthy.",
+      "example": "She exercises three times a week.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "займатися спортом, тренуватися"
+      }
+    }
+  },
+  "exhaust": {
+    "verb": {
+      "definition": "To make someone very tired.",
+      "example": "The long walk exhausted us.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виснажувати"
+      }
+    }
+  },
+  "exhausted": {
+    "adjective": {
+      "definition": "Extremely tired.",
+      "example": "I was exhausted after the trip.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "виснажений, знесилений"
+      }
+    }
+  },
+  "exhibition": {
+    "noun": {
+      "definition": "A public show of paintings, photographs or other objects.",
+      "example": "We saw an exhibition of modern art.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "виставка"
+      }
+    }
+  },
+  "exist": {
+    "verb": {
+      "definition": "To be real or alive.",
+      "example": "Dinosaurs no longer exist.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "існувати"
+      }
+    }
+  },
+  "existence": {
+    "noun": {
+      "definition": "The state of being real or alive.",
+      "example": "Many people believe in the existence of life on other planets.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "існування"
+      }
+    }
+  },
+  "exotic": {
+    "adjective": {
+      "definition": "Unusual and exciting because it comes from another country.",
+      "example": "The shop sells exotic fruits.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "екзотичний"
+      }
+    }
+  },
+  "expectation": {
+    "noun": {
+      "definition": "A belief that something will happen or be good.",
+      "example": "The film did not live up to my expectations.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "очікування"
+      }
+    }
+  },
+  "expensive": {
+    "adjective": {
+      "definition": "Costing a lot of money.",
+      "example": "This watch is too expensive for me.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дорогий"
+      }
+    }
+  },
+  "experienced": {
+    "adjective": {
+      "definition": "Having a lot of skill because you have done something for a long time.",
+      "example": "He is an experienced teacher.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "досвідчений"
+      }
+    }
+  },
+  "expert": {
+    "noun": {
+      "definition": "A person with a lot of special knowledge or skill.",
+      "example": "She is an expert on computers.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "експерт, фахівець"
+      }
+    }
+  },
+  "explanation": {
+    "noun": {
+      "definition": "Something you say to make an idea or a reason clear.",
+      "example": "He gave no explanation for being late.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пояснення"
+      }
+    }
+  },
+  "explanatory": {
+    "adjective": {
+      "definition": "Giving reasons or information that makes something clear.",
+      "example": "There is an explanatory note at the end.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "пояснювальний"
+      }
+    }
+  },
+  "express": {
+    "verb": {
+      "definition": "To show what you think or feel in words or actions.",
+      "example": "She found it hard to express her feelings.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "висловлювати"
+      }
+    }
+  },
+  "expression": {
+    "noun": {
+      "definition": "A word or phrase, or a look that shows how you feel.",
+      "example": "'Piece of cake' is a common expression.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вираз"
+      }
+    }
+  },
+  "extend": {
+    "verb": {
+      "definition": "To make something longer or bigger, or to last longer.",
+      "example": "They extended the road to the next town.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розширювати, продовжувати"
+      }
+    }
+  },
+  "external": {
+    "adjective": {
+      "definition": "On or from the outside.",
+      "example": "There is an external staircase at the back.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зовнішній"
+      }
+    }
+  },
+  "extremely": {
+    "adverb": {
+      "definition": "To a very great degree.",
+      "example": "The exam was extremely difficult.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "надзвичайно, дуже"
+      }
+    }
   }
 }
