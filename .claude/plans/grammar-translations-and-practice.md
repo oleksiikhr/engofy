@@ -225,7 +225,7 @@ shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` 
 → asset + seed; фрази — ручна розмітка в asset. Спани рендерить SSR (відоме до paint — без CLS),
 popup — той самий `lib/reader-popup.ts`. Зрізи 20-23.
 
-### [ ] 19. Practice MVP: банк вправ на 1-2 usage points + агрегат на сторінці
+### [x] 19. Practice MVP: банк вправ на 1-2 usage points + агрегат на сторінці
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
@@ -235,6 +235,12 @@ points у `assets/grammar-usage-point-exercises.json` (формат — `assets/
 патерном точки (`canDoStatement`/`explanation` + рівень + EGP-приклади як few-shot). Секція
 `Practice` у `GrammarShell.astro` — агрегат вправ усіх usage points сторінки. Зупинитися на
 перевірку якості користувачем, потім дописати зрізи масштабування по категоріях.
+
+Зроблено: 13 вправ на 822 (досвід, ever/never) і 824 (already). Якість прийнято (користувач: «зроби
+як краще»). Вправи показуються лише в секції `Practice`, згруповані по usage point
+(`#practice-{egpIndex}`), картка має посилання «Practice · N» — без дублювання на сторінці.
+Виправлено: промпти мали `___`, а веб ділить за `____` (`BLANK`) — схема сиду тепер вимагає рівно
+один `____`. Масштабування — зрізи 24-29 (~10 вправ на точку, після 20-23).
 
 ### [ ] 20. Бекенд: токенізація тексту сторінок правил
 - Branch: `grammar-translations-and-practice-09-modality-1`
@@ -269,3 +275,38 @@ SSR обгортає слова текстових блоків ручної с�
 
 Ручна розмітка сталих виразів на сторінках (asset + seed: фраза, визначення, `uk`) →
 `[data-phrase-id]` спани в SSR.
+
+### [ ] 24. Банк вправ: ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (83)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 25. Банк вправ: CLAUSES (74)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 26. Банк вправ: DETERMINERS, FOCUS, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (77)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 27. Банк вправ: FUTURE, PAST (90, крім уже наявних 822/824)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 28. Банк вправ: PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (88)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 29. Банк вправ: MODALITY (162; близнюки `could` отримують ті самі вправи) + повнота
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+Для 24-29: ~10 вправ на usage point у `assets/grammar-usage-point-exercises.json`, `fill_blank`
+основний тип + `multiple_choice`, одна однозначна відповідь (підказка форми в дужках, коли
+потрібно), речення за патерном точки й її прикладами, лексика рівня точки або нижче. У зрізі 29 —
+тест на повноту банку (кожна USE-точка з `egp.json` має вправи).
