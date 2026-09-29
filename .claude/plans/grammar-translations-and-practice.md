@@ -137,28 +137,30 @@ not shift".
 
 `pronouns-*` (42), `questions-*` (10), `reported-speech-*` (5), `verbs-*` (6).
 
-### [ ] 9. Контент: MODALITY I (56)
+### [x] 9. Контент: MODALITY I (56)
 - Branch: `grammar-translations-and-practice-09-modality-1`
-- Base: `grammar-translations-and-practice-08-pronouns-questions`
-- PR: —
+- Base: `main`
+- PR: — (один PR на весь залишок плану, відкривається після останнього зрізу)
 
 `modality-adjectives` (6), `-adverbs` (7), `-can` (13), `-could` (26), `-dare` (4).
 
-### [ ] 10. Контент: MODALITY II (56)
-- Branch: `grammar-translations-and-practice-10-modality-2`
-- Base: `grammar-translations-and-practice-09-modality-1`
-- PR: —
+### [x] 10. Контент: MODALITY II (56)
+- Branch: `grammar-translations-and-practice-09-modality-1` (спільна гілка зі зрізом 9)
+- Base: `main`
+- PR: — (див. зріз 9)
 
 `modality-expressions-with-be` (18), `-have-got-to` (5), `-may` (12), `-might` (9), `-must` (10),
 `-need` (2).
 
-### [ ] 11. Контент: MODALITY III (50)
-- Branch: `grammar-translations-and-practice-11-modality-3`
-- Base: `grammar-translations-and-practice-10-modality-2`
-- PR: —
+### [x] 11. Контент: MODALITY III (50)
+- Branch: `grammar-translations-and-practice-09-modality-1` (спільна гілка зі зрізом 9)
+- Base: `main`
+- PR: — (див. зріз 9)
 
 `modality-ought` (6), `-shall` (7), `-should` (12), `-used-to` (2), `-will` (10), `-would` (13).
 Після зрізу перевірити, що всі 575 точок з `egpIndex` покриті (парсер/тест на повноту).
+Зроблено: реальних EGP-точок 574 (575 у БД включало dev-фікстуру) — усі покриті, тест
+`usage-point-content-seed.spec.ts` звіряє ключі файлу з USE-рядками `egp.json`.
 
 ### [ ] 12. Переклад прози ручних сторінок (дослідницький)
 - Branch: `grammar-translations-and-practice-12-page-prose`
