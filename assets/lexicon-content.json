@@ -4041,16 +4041,6 @@
       }
     }
   },
-  "extreme": {
-    "adjective": {
-      "definition": "Very great in degree, or far beyond what is usual.",
-      "example": "The extreme cold closed the roads.",
-      "cefrLevel": "B2",
-      "uk": {
-        "translation": "надзвичайний, крайній"
-      }
-    }
-  },
   "dancing": {
     "verb": {
       "definition": "Moving your body to music.",
@@ -6150,6 +6140,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "зовнішній"
+      }
+    }
+  },
+  "extreme": {
+    "adjective": {
+      "definition": "Very great in degree, or far beyond what is usual.",
+      "example": "The extreme cold closed the roads.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "надзвичайний, крайній"
       }
     }
   },
@@ -14456,6 +14456,2500 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "поспішати, кидатися"
+      }
+    }
+  },
+  "sack": {
+    "verb": {
+      "definition": "To dismiss someone from their job.",
+      "example": "He was sacked for being late every day.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "звільнити"
+      }
+    }
+  },
+  "sad": {
+    "adjective": {
+      "definition": "Unhappy or showing sorrow.",
+      "example": "It is sad that you have to move away.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сумний"
+      }
+    }
+  },
+  "sadly": {
+    "adverb": {
+      "definition": "In a way that shows sadness; unfortunately.",
+      "example": "Sadly, the shop is closed today.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "на жаль; сумно"
+      }
+    }
+  },
+  "sail": {
+    "noun": {
+      "definition": "A large piece of cloth on a boat that catches the wind.",
+      "example": "The boat has a white sail.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вітрило"
+      }
+    }
+  },
+  "sailing": {
+    "noun": {
+      "definition": "The sport or activity of travelling on a boat with sails.",
+      "example": "Sailing is my favourite summer sport.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "парусний спорт"
+      }
+    }
+  },
+  "sake": {
+    "noun": {
+      "definition": "Purpose or reason; used in \"for the sake of\".",
+      "example": "She moved to the city for the sake of her children.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заради; користь"
+      }
+    }
+  },
+  "salad": {
+    "noun": {
+      "definition": "A cold dish of mixed raw vegetables.",
+      "example": "Would you like a salad with your lunch?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "салат"
+      }
+    }
+  },
+  "salary": {
+    "noun": {
+      "definition": "Money you get every month from your job.",
+      "example": "Her salary is higher than mine.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "зарплата"
+      }
+    }
+  },
+  "salt": {
+    "noun": {
+      "definition": "A white powder used to give flavour to food.",
+      "example": "Pass me the salt, please.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сіль"
+      }
+    }
+  },
+  "sample": {
+    "noun": {
+      "definition": "A small part of a group used to show what the whole is like.",
+      "example": "The survey asked a sample of 500 people.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вибірка; зразок"
+      }
+    }
+  },
+  "sandwich": {
+    "noun": {
+      "definition": "Two pieces of bread with food between them.",
+      "example": "I had a cheese sandwich for lunch.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сендвіч, бутерброд"
+      }
+    }
+  },
+  "sarcastic": {
+    "adjective": {
+      "definition": "Saying the opposite of what you mean to make fun of someone.",
+      "example": "He gave a sarcastic reply.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "саркастичний"
+      }
+    }
+  },
+  "sauce": {
+    "noun": {
+      "definition": "A thick liquid served with food to add flavour.",
+      "example": "The pasta comes with a tomato sauce.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "соус"
+      }
+    }
+  },
+  "saving": {
+    "noun": {
+      "definition": "Money you do not spend, or the act of not spending it.",
+      "example": "The saving adds up over the year.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заощадження, економія"
+      }
+    }
+  },
+  "scale": {
+    "noun": {
+      "definition": "A range of levels from small to large, or the size of something.",
+      "example": "Rate the film on a scale of one to ten.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шкала; масштаб"
+      }
+    },
+    "verb": {
+      "definition": "To change the size or amount of something up or down.",
+      "example": "You can scale the recipe up for more people.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "змінювати масштаб"
+      }
+    }
+  },
+  "scar": {
+    "verb": {
+      "definition": "To leave a permanent mark on skin, or to badly affect someone's feelings.",
+      "example": "The accident scarred him for life.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "залишати шрам"
+      }
+    }
+  },
+  "scarf": {
+    "noun": {
+      "definition": "A long piece of cloth worn around the neck.",
+      "example": "She wore a warm scarf in winter.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "шарф"
+      }
+    }
+  },
+  "schedule": {
+    "noun": {
+      "definition": "A plan that lists when things will happen.",
+      "example": "My schedule is very busy this week.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розклад"
+      }
+    },
+    "verb": {
+      "definition": "To plan that something will happen at a particular time.",
+      "example": "The meeting is scheduled for Monday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "планувати, призначати"
+      }
+    }
+  },
+  "scholarship": {
+    "noun": {
+      "definition": "Money given to a student to pay for their studies.",
+      "example": "She won a scholarship to study in Canada.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стипендія"
+      }
+    }
+  },
+  "schoolmate": {
+    "noun": {
+      "definition": "A person who goes to the same school as you.",
+      "example": "A schoolmate invited me to her party.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шкільний друг, однокласник"
+      }
+    }
+  },
+  "schoolwork": {
+    "noun": {
+      "definition": "Work that students do at school or for school.",
+      "example": "My schoolwork takes a lot of time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "шкільні завдання"
+      }
+    }
+  },
+  "scissor": {
+    "noun": {
+      "definition": "A tool with two blades for cutting paper; usually used as \"scissors\".",
+      "example": "Pass me the scissors, please.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ножиці"
+      }
+    }
+  },
+  "score": {
+    "noun": {
+      "definition": "The number of points a person or team gets in a game or test.",
+      "example": "She got the highest score in the class.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рахунок; бал"
+      }
+    },
+    "verb": {
+      "definition": "To get a point or goal in a game.",
+      "example": "He scored two goals in the match.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "забивати; набирати очки"
+      }
+    }
+  },
+  "scrap": {
+    "noun": {
+      "definition": "A very small piece of something.",
+      "example": "There was not a scrap of food left.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "шматок, крихта"
+      }
+    }
+  },
+  "seafood": {
+    "noun": {
+      "definition": "Fish and other animals from the sea that you eat.",
+      "example": "Paella is a rice dish with seafood.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "морепродукти"
+      }
+    }
+  },
+  "seaside": {
+    "noun": {
+      "definition": "An area next to the sea where people go on holiday.",
+      "example": "We spent a week at the seaside.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "узбережжя, морський курорт"
+      }
+    }
+  },
+  "seat": {
+    "noun": {
+      "definition": "Something you sit on, or a place where you can sit.",
+      "example": "There were no seats left on the bus.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "місце, сидіння"
+      }
+    }
+  },
+  "secondly": {
+    "adverb": {
+      "definition": "Used to introduce the second point in a list.",
+      "example": "Firstly it is cheap, and secondly it is fast.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "по-друге"
+      }
+    }
+  },
+  "sector": {
+    "noun": {
+      "definition": "A part of the economy or of a business area.",
+      "example": "He works in the public sector.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сектор, галузь"
+      }
+    }
+  },
+  "seek": {
+    "verb": {
+      "definition": "To look for something or try to get it.",
+      "example": "They are seeking advice from a lawyer.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "шукати, прагнути"
+      }
+    }
+  },
+  "segment": {
+    "noun": {
+      "definition": "One of the parts that something is divided into.",
+      "example": "The talk was divided into three segments.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "сегмент, частина"
+      }
+    }
+  },
+  "seller": {
+    "noun": {
+      "definition": "A person who sells something.",
+      "example": "The seller lowered the price.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "продавець"
+      }
+    }
+  },
+  "semi": {
+    "adjective": {
+      "definition": "Partly, or half; used at the start of words like \"semi-modal\".",
+      "example": "A semi-modal verb behaves partly like a modal verb.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "напів-, частково"
+      }
+    },
+    "noun": {
+      "definition": "Short for a semi-detached house, or a semi-final.",
+      "example": "They live in a semi on our street.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "напівзалежний; півфінал"
+      }
+    }
+  },
+  "semicolon": {
+    "noun": {
+      "definition": "The punctuation mark ( ; ) used to separate parts of a sentence.",
+      "example": "Use a semicolon to join two related sentences.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "крапка з комою"
+      }
+    }
+  },
+  "seminar": {
+    "noun": {
+      "definition": "A class or meeting where a small group discusses a subject.",
+      "example": "The seminar starts at ten o'clock.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "семінар"
+      }
+    }
+  },
+  "sens": {
+    "noun": {
+      "definition": "A part of the word \"sense\": the way you feel or notice things.",
+      "example": "Sight and smell are two of the five senses.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відчуття, орган чуття"
+      }
+    }
+  },
+  "sensible": {
+    "adjective": {
+      "definition": "Showing good judgment; reasonable.",
+      "example": "It is sensible to wear a helmet.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розсудливий, розумний"
+      }
+    }
+  },
+  "sentence": {
+    "noun": {
+      "definition": "A group of words that makes a complete statement.",
+      "example": "Write a sentence with the new word.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "речення"
+      }
+    }
+  },
+  "separable": {
+    "adjective": {
+      "definition": "Able to be divided into parts.",
+      "example": "A separable phrasal verb can have an object in the middle.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "роздільний"
+      }
+    }
+  },
+  "separate": {
+    "adjective": {
+      "definition": "Not joined to something else; different.",
+      "example": "We slept in separate rooms.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "окремий"
+      }
+    },
+    "verb": {
+      "definition": "To divide things or move them apart.",
+      "example": "A comma separates the quote from the rest.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відокремлювати"
+      }
+    }
+  },
+  "sequence": {
+    "noun": {
+      "definition": "A series of things that follow each other in order.",
+      "example": "Tell me the sequence of events.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "послідовність"
+      }
+    },
+    "verb": {
+      "definition": "To put things in a particular order.",
+      "example": "Sequencing markers help the reader follow the steps.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розташовувати в послідовності"
+      }
+    }
+  },
+  "shade": {
+    "noun": {
+      "definition": "A slightly different form of a colour or meaning.",
+      "example": "She chose a darker shade of blue.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відтінок"
+      }
+    }
+  },
+  "shadow": {
+    "noun": {
+      "definition": "A dark shape made when something blocks the light.",
+      "example": "The tree cast a long shadow.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "тінь"
+      }
+    }
+  },
+  "shame": {
+    "noun": {
+      "definition": "A sad or disappointing situation; \"What a shame!\".",
+      "example": "It is a shame that you can't come.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "шкода; сором"
+      }
+    }
+  },
+  "shape": {
+    "noun": {
+      "definition": "The outside form of something.",
+      "example": "The cake has the shape of a heart.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "форма"
+      }
+    }
+  },
+  "shared": {
+    "adjective": {
+      "definition": "Used or owned by more than one person.",
+      "example": "We have a shared kitchen.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "спільний"
+      }
+    }
+  },
+  "sharp": {
+    "adjective": {
+      "definition": "Very sudden and large, or able to cut well.",
+      "example": "There was a sharp rise in prices.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "різкий; гострий"
+      }
+    }
+  },
+  "sharpen": {
+    "verb": {
+      "definition": "To make something sharper or more exact.",
+      "example": "A postmodifier can sharpen the meaning.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "загострювати, уточнювати"
+      }
+    }
+  },
+  "sharply": {
+    "adverb": {
+      "definition": "Suddenly and by a large amount.",
+      "example": "Prices fell sharply last month.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "різко"
+      }
+    }
+  },
+  "sheep": {
+    "noun": {
+      "definition": "A farm animal with thick wool.",
+      "example": "The sheep are in the field.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вівця, вівці"
+      }
+    }
+  },
+  "sheer": {
+    "adjective": {
+      "definition": "Complete, and nothing else; used to make a noun stronger.",
+      "example": "It was sheer luck that we met.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "цілковитий, суцільний"
+      }
+    }
+  },
+  "sheet": {
+    "noun": {
+      "definition": "A thin, flat piece of paper, or cloth for a bed.",
+      "example": "Please read the information sheet.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "аркуш; простирадло"
+      }
+    }
+  },
+  "shift": {
+    "noun": {
+      "definition": "A change in position or direction.",
+      "example": "There was a shift in the tense of the verb.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зміна, зсув"
+      }
+    },
+    "verb": {
+      "definition": "To change or move from one position to another.",
+      "example": "The tense does not shift in the quote.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "змінюватися, пересуватися"
+      }
+    }
+  },
+  "shirt": {
+    "noun": {
+      "definition": "A piece of clothing for the top of the body, with a collar.",
+      "example": "He wore a white shirt.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сорочка"
+      }
+    }
+  },
+  "shopping": {
+    "noun": {
+      "definition": "The activity of buying things in shops.",
+      "example": "We do the shopping on Saturdays.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "покупки, шопінг"
+      }
+    },
+    "verb": {
+      "definition": "Buying things in shops; used after \"like\" or \"go\".",
+      "example": "He asked if I liked shopping.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ходити по магазинах"
+      }
+    }
+  },
+  "shortcut": {
+    "noun": {
+      "definition": "A quicker way to do or reach something.",
+      "example": "There is no shortcut to learning a language.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "короткий шлях"
+      }
+    }
+  },
+  "shorten": {
+    "noun": {
+      "definition": "To make something shorter; here used for a shortened form.",
+      "example": "In speech, \"is\" usually shortens to \"'s\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "скорочувати"
+      }
+    },
+    "verb": {
+      "definition": "To make something shorter.",
+      "example": "The negative is not usually shortened.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "скорочувати"
+      }
+    }
+  },
+  "shorthand": {
+    "noun": {
+      "definition": "A quick or short way of saying something.",
+      "example": "\"Film showing\" is shorthand for \"film that is showing\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "скорочений запис, скорочення"
+      }
+    }
+  },
+  "shortly": {
+    "adverb": {
+      "definition": "In a short time from now; soon.",
+      "example": "The train will leave shortly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "незабаром"
+      }
+    }
+  },
+  "shout": {
+    "noun": {
+      "definition": "A loud cry.",
+      "example": "We heard a shout from outside.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "крик"
+      }
+    },
+    "verb": {
+      "definition": "To say something very loudly.",
+      "example": "He shouted to his friend across the street.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кричати"
+      }
+    }
+  },
+  "shower": {
+    "noun": {
+      "definition": "A wash where water falls from above; or a short fall of rain.",
+      "example": "I was in the shower when you called.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "душ; злива"
+      }
+    }
+  },
+  "shrink": {
+    "verb": {
+      "definition": "To become smaller.",
+      "example": "The sweater shrank in the wash.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "скорочуватися, зменшуватися"
+      }
+    }
+  },
+  "shyness": {
+    "noun": {
+      "definition": "The feeling of being nervous around other people.",
+      "example": "Her shyness makes it hard to speak in public.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сором'язливість"
+      }
+    }
+  },
+  "signal": {
+    "noun": {
+      "definition": "A sign that gives information or a warning.",
+      "example": "A red light is a signal to stop.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сигнал"
+      }
+    },
+    "verb": {
+      "definition": "To show or tell something by a sign.",
+      "example": "A full stop signals the end of a sentence.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сигналізувати, вказувати"
+      }
+    }
+  },
+  "significantly": {
+    "adverb": {
+      "definition": "In a large or important way.",
+      "example": "Prices have risen significantly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "значно"
+      }
+    }
+  },
+  "signing": {
+    "noun": {
+      "definition": "The act of writing your name; used in \"signing off\".",
+      "example": "Use \"soon\" as a signing-off phrase.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підписання; завершення"
+      }
+    }
+  },
+  "signpost": {
+    "noun": {
+      "definition": "A sign by the road, or something that shows the way.",
+      "example": "\"Note\" is a signpost that says \"look at this\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "дороговказ"
+      }
+    }
+  },
+  "silence": {
+    "noun": {
+      "definition": "A time with no noise or speech.",
+      "example": "There was a long silence.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "тиша, мовчання"
+      }
+    }
+  },
+  "silent": {
+    "adjective": {
+      "definition": "Not making any sound or not speaking.",
+      "example": "Alice stayed silent for a long time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "тихий, мовчазний"
+      }
+    }
+  },
+  "silver": {
+    "adjective": {
+      "definition": "Having the grey-white colour of the metal silver.",
+      "example": "The house with the silver gates is mine.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "срібний"
+      }
+    }
+  },
+  "similarity": {
+    "noun": {
+      "definition": "A way in which two things are alike.",
+      "example": "There are many similarities between the two plans.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "схожість"
+      }
+    }
+  },
+  "similarly": {
+    "adverb": {
+      "definition": "In a like way.",
+      "example": "Prices rose in the city; similarly, rents went up.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "подібним чином"
+      }
+    }
+  },
+  "sing": {
+    "verb": {
+      "definition": "To make music with your voice.",
+      "example": "I sing in a choir.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "співати"
+      }
+    }
+  },
+  "singer": {
+    "noun": {
+      "definition": "A person who sings, especially as a job.",
+      "example": "He is my favourite singer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "співак"
+      }
+    }
+  },
+  "singular": {
+    "adjective": {
+      "definition": "Meaning one only, not more than one.",
+      "example": "\"Every\" is followed by a singular noun.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "однина; в однині"
+      }
+    },
+    "noun": {
+      "definition": "The form of a word that means one.",
+      "example": "\"Child\" is the singular of \"children\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "однина"
+      }
+    }
+  },
+  "situate": {
+    "adjective": {
+      "definition": "Placed in a certain position; a form of \"situated\".",
+      "example": "The hotel is situated near the beach.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розташований"
+      }
+    },
+    "verb": {
+      "definition": "To put or build something in a place.",
+      "example": "The school is situated in the town centre.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розташовувати"
+      }
+    }
+  },
+  "skill": {
+    "noun": {
+      "definition": "An ability to do something well.",
+      "example": "Good language skills help you at work.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "навичка, вміння"
+      }
+    }
+  },
+  "skirt": {
+    "noun": {
+      "definition": "A piece of clothing for women that hangs from the waist.",
+      "example": "I bought a pink skirt.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "спідниця"
+      }
+    }
+  },
+  "slight": {
+    "adjective": {
+      "definition": "Small in size or amount.",
+      "example": "There is a slight chance of rain.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "незначний"
+      }
+    }
+  },
+  "slightly": {
+    "adverb": {
+      "definition": "A little.",
+      "example": "This way is slightly faster.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "трохи, злегка"
+      }
+    }
+  },
+  "slip": {
+    "noun": {
+      "definition": "A small mistake.",
+      "example": "Forgetting the word order is a common slip.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "помилка, промах"
+      }
+    }
+  },
+  "slippery": {
+    "adjective": {
+      "definition": "Smooth or wet so that it is hard to hold or stand on.",
+      "example": "The roads are slippery in the snow.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "слизький"
+      }
+    }
+  },
+  "slot": {
+    "noun": {
+      "definition": "A place in a structure where something fits.",
+      "example": "Each pronoun has its own slot in the sentence.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "місце, позиція"
+      }
+    },
+    "verb": {
+      "definition": "To fit into a small space or position.",
+      "example": "An adverb can slot in between the verb and the preposition.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "вставляти, вміщатися"
+      }
+    }
+  },
+  "slowly": {
+    "adverb": {
+      "definition": "At a low speed; not quickly.",
+      "example": "We swayed slowly to the music.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "повільно"
+      }
+    }
+  },
+  "smell": {
+    "verb": {
+      "definition": "To have a particular smell.",
+      "example": "This soup smells amazing.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пахнути"
+      }
+    }
+  },
+  "smile": {
+    "noun": {
+      "definition": "A happy look on your face where your mouth curves up.",
+      "example": "She has a lovely smile.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "усмішка"
+      }
+    },
+    "verb": {
+      "definition": "To show happiness with your mouth.",
+      "example": "Jenny smiled at him.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "усміхатися"
+      }
+    }
+  },
+  "smoke": {
+    "verb": {
+      "definition": "To breathe in smoke from a cigarette.",
+      "example": "He stopped smoking two years ago.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "курити"
+      }
+    }
+  },
+  "smoking": {
+    "verb": {
+      "definition": "Breathing in smoke from cigarettes; the habit.",
+      "example": "He gave up smoking.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "куріння"
+      }
+    }
+  },
+  "smoothly": {
+    "adverb": {
+      "definition": "Without problems or sudden stops.",
+      "example": "The meeting went smoothly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "плавно, гладко"
+      }
+    }
+  },
+  "snack": {
+    "noun": {
+      "definition": "A small meal between main meals.",
+      "example": "I ate a snack before the film.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "перекус"
+      }
+    }
+  },
+  "sneaker": {
+    "noun": {
+      "definition": "A soft shoe for sport or everyday wear.",
+      "example": "I bought a pair of sneakers.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кросівок"
+      }
+    }
+  },
+  "snow": {
+    "noun": {
+      "definition": "Soft white pieces of frozen water that fall from the sky.",
+      "example": "The snow is deep this year.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сніг"
+      }
+    },
+    "verb": {
+      "definition": "To fall as snow.",
+      "example": "It snowed all morning.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "іти (про сніг)"
+      }
+    }
+  },
+  "soap": {
+    "noun": {
+      "definition": "A substance you use with water to wash.",
+      "example": "Wash your hands with soap.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "мило; серіал"
+      }
+    }
+  },
+  "sociable": {
+    "adjective": {
+      "definition": "Friendly and enjoying being with other people.",
+      "example": "I used not to be very sociable.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "товариський"
+      }
+    }
+  },
+  "sock": {
+    "noun": {
+      "definition": "A soft piece of clothing worn on your foot inside a shoe.",
+      "example": "He leaves his socks on the floor.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "шкарпетка"
+      }
+    }
+  },
+  "sofa": {
+    "noun": {
+      "definition": "A long soft seat for two or more people.",
+      "example": "The new sofa arrives on Friday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "диван"
+      }
+    }
+  },
+  "soften": {
+    "verb": {
+      "definition": "To make something less strong or less harsh.",
+      "example": "Add \"please\" to soften the request.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "пом'якшувати"
+      }
+    }
+  },
+  "softer": {
+    "adverb": {
+      "definition": "More gently; a form of \"softly\".",
+      "example": "\"Probably\" makes advice sound softer.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "м'якше"
+      }
+    },
+    "verb": {
+      "definition": "Making something gentler or less strong; a form of \"soften\".",
+      "example": "Adding \"if possible\" makes a request softer.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "м'якший; пом'якшувати"
+      }
+    }
+  },
+  "softly": {
+    "adverb": {
+      "definition": "In a quiet or gentle way.",
+      "example": "\"Shall we go?\" asks the same thing more softly.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "тихо, м'яко"
+      }
+    }
+  },
+  "software": {
+    "noun": {
+      "definition": "Programs that run on a computer.",
+      "example": "Good accounting software saves time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "програмне забезпечення"
+      }
+    }
+  },
+  "solution": {
+    "noun": {
+      "definition": "An answer to a problem.",
+      "example": "We need to find a solution.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рішення"
+      }
+    }
+  },
+  "solve": {
+    "verb": {
+      "definition": "To find an answer to a problem.",
+      "example": "We solved the problem together.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розв'язувати"
+      }
+    }
+  },
+  "someday": {
+    "adverb": {
+      "definition": "At some time in the future.",
+      "example": "Someday we should go there together.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "колись"
+      }
+    }
+  },
+  "sometime": {
+    "adverb": {
+      "definition": "At an unknown or unspecified time.",
+      "example": "Let's meet for coffee sometime.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "колись, якось"
+      }
+    }
+  },
+  "somewhere": {
+    "adverb": {
+      "definition": "In or to a place that is not named.",
+      "example": "I left my keys somewhere.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "десь, кудись"
+      }
+    }
+  },
+  "soup": {
+    "noun": {
+      "definition": "A hot liquid food made with vegetables or meat.",
+      "example": "This soup tastes bad.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "суп"
+      }
+    }
+  },
+  "spaghetti": {
+    "noun": {
+      "definition": "Long thin pasta.",
+      "example": "My favourite meal is spaghetti with garlic bread.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "спагеті"
+      }
+    }
+  },
+  "span": {
+    "verb": {
+      "definition": "To cover a period of time or a range.",
+      "example": "The pair spans both clauses.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "охоплювати"
+      }
+    }
+  },
+  "spanish": {
+    "adjective": {
+      "definition": "From or about Spain.",
+      "example": "I'd like some Spanish food.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "іспанський"
+      }
+    }
+  },
+  "spare": {
+    "adjective": {
+      "definition": "Not being used; extra.",
+      "example": "I read when I have spare time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вільний, запасний"
+      }
+    }
+  },
+  "sparingly": {
+    "adverb": {
+      "definition": "In small amounts; not often.",
+      "example": "Use this word sparingly in formal essays.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "ощадливо, рідко"
+      }
+    }
+  },
+  "speaker": {
+    "noun": {
+      "definition": "A person who is speaking.",
+      "example": "The speaker knows it is beautiful.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "мовець, спікер"
+      }
+    }
+  },
+  "specialised": {
+    "adjective": {
+      "definition": "Trained or made for one particular purpose.",
+      "example": "Some children need specialised help.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "спеціалізований"
+      }
+    }
+  },
+  "specie": {
+    "noun": {
+      "definition": "A form of \"species\": a kind of animal or plant.",
+      "example": "We saw marvellous species of fish.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вид (тварин, рослин)"
+      }
+    }
+  },
+  "specified": {
+    "adjective": {
+      "definition": "Stated clearly and exactly.",
+      "example": "Be there at the specified time.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "зазначений, визначений"
+      }
+    }
+  },
+  "specify": {
+    "verb": {
+      "definition": "To say something clearly and exactly.",
+      "example": "Please specify the date.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "уточнювати, вказувати"
+      }
+    }
+  },
+  "speculate": {
+    "verb": {
+      "definition": "To guess about something without knowing all the facts.",
+      "example": "People speculate about what happened.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "припускати, міркувати"
+      }
+    }
+  },
+  "spell": {
+    "verb": {
+      "definition": "To say or write the letters of a word in order.",
+      "example": "How do you spell your name?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "писати по літерах"
+      }
+    }
+  },
+  "spelling": {
+    "noun": {
+      "definition": "The correct order of letters in a word.",
+      "example": "\"Should of\" is a spelling mistake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "правопис, написання"
+      }
+    },
+    "verb": {
+      "definition": "Saying or writing the letters of a word.",
+      "example": "Spelling follows the same rules as -er.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "написання"
+      }
+    }
+  },
+  "spicy": {
+    "adjective": {
+      "definition": "Having a strong, hot taste.",
+      "example": "The soup was hot, spicy and delicious.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гострий (про їжу)"
+      }
+    }
+  },
+  "spite": {
+    "noun": {
+      "definition": "Used in \"in spite of\": without being stopped by something.",
+      "example": "We went out in spite of the rain.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "злість; попри"
+      }
+    }
+  },
+  "splendid": {
+    "adjective": {
+      "definition": "Very good or beautiful.",
+      "example": "The building looks splendid.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чудовий, розкішний"
+      }
+    }
+  },
+  "split": {
+    "noun": {
+      "definition": "A division into parts.",
+      "example": "There is a split between the two groups.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розділення, розкол"
+      }
+    },
+    "verb": {
+      "definition": "To divide into two or more parts.",
+      "example": "The quote is split by a comma.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розділяти"
+      }
+    }
+  },
+  "spoil": {
+    "verb": {
+      "definition": "To make something worse or less good.",
+      "example": "The rain spoiled our picnic.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "псувати"
+      }
+    }
+  },
+  "spoken": {
+    "adjective": {
+      "definition": "Said aloud, not written.",
+      "example": "\"First of all\" is a more spoken way to begin.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "усний, розмовний"
+      }
+    }
+  },
+  "sponsor": {
+    "noun": {
+      "definition": "A person or company that pays for an event or project.",
+      "example": "We need a sponsor for the project.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "спонсор"
+      }
+    }
+  },
+  "sponsorship": {
+    "noun": {
+      "definition": "Money given to support an event or person.",
+      "example": "The letter asks for sponsorship.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "спонсорство"
+      }
+    }
+  },
+  "spontaneous": {
+    "adjective": {
+      "definition": "Done without planning.",
+      "example": "It was a spontaneous decision.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "спонтанний"
+      }
+    }
+  },
+  "sport": {
+    "noun": {
+      "definition": "A game or physical activity done for fun or exercise.",
+      "example": "What sports can we play here?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "спорт"
+      }
+    }
+  },
+  "spread": {
+    "verb": {
+      "definition": "To move over a larger area.",
+      "example": "The fire spread fast.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поширюватися"
+      }
+    }
+  },
+  "spy": {
+    "noun": {
+      "definition": "A person who secretly gets information about others.",
+      "example": "He was a spy for a foreign country.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шпигун"
+      }
+    }
+  },
+  "square": {
+    "noun": {
+      "definition": "An open area in a town with buildings around it.",
+      "example": "We met in the square.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "площа"
+      }
+    }
+  },
+  "stadium": {
+    "noun": {
+      "definition": "A large place where sports events take place.",
+      "example": "We watched a match at the stadium.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "стадіон"
+      }
+    }
+  },
+  "stance": {
+    "noun": {
+      "definition": "A person's opinion or attitude about something.",
+      "example": "A stance adverb shows your attitude.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "позиція, ставлення"
+      }
+    }
+  },
+  "stanislav": {
+    "adjective": {
+      "definition": "A man's first name, common in Ukraine and Poland.",
+      "example": "His name is Stanislav.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "Станіслав"
+      }
+    }
+  },
+  "statistic": {
+    "noun": {
+      "definition": "A number that shows a fact about something.",
+      "example": "Reports use statistics to show change.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "статистичні дані"
+      }
+    }
+  },
+  "stative": {
+    "adjective": {
+      "definition": "Describing a state, not an action.",
+      "example": "Stative verbs like \"know\" do not usually take -ing.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "стативний, статичний"
+      }
+    }
+  },
+  "steadily": {
+    "adverb": {
+      "definition": "At a regular speed and without sudden changes.",
+      "example": "The number of users grows steadily.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "стабільно, поступово"
+      }
+    }
+  },
+  "steady": {
+    "adjective": {
+      "definition": "Regular and not changing suddenly.",
+      "example": "Sales showed steady growth.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стабільний"
+      }
+    }
+  },
+  "steak": {
+    "noun": {
+      "definition": "A thick piece of meat or fish for cooking.",
+      "example": "I ordered a steak with chips.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стейк"
+      }
+    }
+  },
+  "steal": {
+    "verb": {
+      "definition": "To take something that belongs to someone else.",
+      "example": "Paul stole the money.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "красти"
+      }
+    }
+  },
+  "steep": {
+    "adjective": {
+      "definition": "Rising or falling sharply.",
+      "example": "The path gets steeper as you climb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "крутий"
+      }
+    }
+  },
+  "stick": {
+    "verb": {
+      "definition": "To become fixed to something; \"get stuck\" means be unable to move.",
+      "example": "We got stuck in traffic.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прилипати; застрягати"
+      }
+    }
+  },
+  "stiff": {
+    "adjective": {
+      "definition": "Not relaxed or natural; formal.",
+      "example": "In everyday English that sounds stiff.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "негнучкий; офіційний"
+      }
+    }
+  },
+  "storytelle": {
+    "verb": {
+      "definition": "A form of \"storytelling\": telling stories.",
+      "example": "Storytelling is a good way to practise speaking.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розповідати історії"
+      }
+    }
+  },
+  "straightforward": {
+    "adjective": {
+      "definition": "Simple and easy to understand.",
+      "example": "It is a straightforward choice between two options.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "простий, прямий"
+      }
+    }
+  },
+  "strand": {
+    "verb": {
+      "definition": "To leave someone in a place they cannot leave.",
+      "example": "We were stranded at the airport.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "залишати без допомоги"
+      }
+    }
+  },
+  "stranding": {
+    "verb": {
+      "definition": "Leaving a preposition at the end of a clause.",
+      "example": "Stranding is common in questions.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "розташування прийменника в кінці"
+      }
+    }
+  },
+  "strange": {
+    "adjective": {
+      "definition": "Unusual or unexpected.",
+      "example": "Everything was strange.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дивний"
+      }
+    }
+  },
+  "stranger": {
+    "noun": {
+      "definition": "A person you do not know.",
+      "example": "Do not talk to strangers.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "незнайомець"
+      }
+    }
+  },
+  "strategy": {
+    "noun": {
+      "definition": "A plan for achieving something.",
+      "example": "We need a new strategy.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стратегія"
+      }
+    }
+  },
+  "strawberry": {
+    "noun": {
+      "definition": "A small red fruit with seeds on its skin.",
+      "example": "I love strawberry juice.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "полуниця"
+      }
+    }
+  },
+  "strength": {
+    "noun": {
+      "definition": "The quality of being strong.",
+      "example": "He pushed with all his strength.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "сила"
+      }
+    }
+  },
+  "strengthen": {
+    "noun": {
+      "definition": "To make something stronger; here shown in a verb form.",
+      "example": "\"Extremely\" strengthens the adjective.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "посилювати"
+      }
+    },
+    "verb": {
+      "definition": "To make something stronger.",
+      "example": "\"Really\" strengthens the meaning.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "посилювати, зміцнювати"
+      }
+    }
+  },
+  "stress": {
+    "noun": {
+      "definition": "A feeling of worry, or extra force on a word.",
+      "example": "Put the stress on the first syllable.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стрес; наголос"
+      }
+    },
+    "verb": {
+      "definition": "To say that something is important; to give extra force.",
+      "example": "I want to stress the word \"not\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наголошувати"
+      }
+    }
+  },
+  "stressed": {
+    "adjective": {
+      "definition": "Feeling worried and unable to relax.",
+      "example": "She felt stressed before the exam.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "напружений, у стресі"
+      }
+    }
+  },
+  "stressful": {
+    "adjective": {
+      "definition": "Causing worry.",
+      "example": "This holiday was meant to be relaxing, not stressful.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стресовий"
+      }
+    }
+  },
+  "stretch": {
+    "noun": {
+      "definition": "A period of time or an area of land.",
+      "example": "It rained for a long stretch of time.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "проміжок, ділянка"
+      }
+    }
+  },
+  "strict": {
+    "adjective": {
+      "definition": "Following rules very carefully.",
+      "example": "The teacher is very strict.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "суворий, чіткий"
+      }
+    }
+  },
+  "strike": {
+    "noun": {
+      "definition": "A time when workers stop working as a protest.",
+      "example": "There is a transport strike today.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "страйк"
+      }
+    }
+  },
+  "striking": {
+    "adjective": {
+      "definition": "Very noticeable or surprising.",
+      "example": "It was a striking difference.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "вражаючий, помітний"
+      }
+    }
+  },
+  "string": {
+    "noun": {
+      "definition": "A line or series of things joined together.",
+      "example": "A long string of clauses is hard to read.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "низка; мотузка"
+      }
+    }
+  },
+  "stronger": {
+    "adverb": {
+      "definition": "With more force or effect; a form of \"strongly\".",
+      "example": "\"Really\" makes the advice sound stronger.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сильніше"
+      }
+    }
+  },
+  "strongly": {
+    "adverb": {
+      "definition": "In a very firm or powerful way.",
+      "example": "I strongly disagree with that idea.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "сильно, рішуче"
+      }
+    }
+  },
+  "structure": {
+    "noun": {
+      "definition": "The way parts are arranged in a whole.",
+      "example": "The sentence has a passive structure.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "структура"
+      }
+    }
+  },
+  "structured": {
+    "adjective": {
+      "definition": "Organised in a clear way.",
+      "example": "Berlin has a well-structured subway.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "структурований"
+      }
+    }
+  },
+  "studying": {
+    "noun": {
+      "definition": "The activity of learning about a subject.",
+      "example": "The studying fills my morning.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "навчання"
+      }
+    },
+    "verb": {
+      "definition": "Learning about a subject.",
+      "example": "I'd better get on with my studying.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вчитися"
+      }
+    }
+  },
+  "submerge": {
+    "verb": {
+      "definition": "To cover something completely with water.",
+      "example": "Miles of coast will be submerged.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "занурювати, затоплювати"
+      }
+    }
+  },
+  "subordinate": {
+    "adjective": {
+      "definition": "Less important; depending on a main part.",
+      "example": "A subordinate clause cannot stand alone.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "підрядний"
+      }
+    },
+    "verb": {
+      "definition": "To treat something as less important than another.",
+      "example": "A conjunction subordinates one clause to another.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "підпорядковувати"
+      }
+    }
+  },
+  "subordinating": {
+    "noun": {
+      "definition": "Joining a dependent clause to a main clause.",
+      "example": "\"Because\" is a subordinating word.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "підрядний зв'язок"
+      }
+    }
+  },
+  "subordination": {
+    "noun": {
+      "definition": "The joining of a dependent clause to a main clause.",
+      "example": "Use subordination rather than coordination.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "підрядність"
+      }
+    }
+  },
+  "substitute": {
+    "adjective": {
+      "definition": "Used in place of another.",
+      "example": "A substitute word can replace the noun.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "заміщувальний"
+      }
+    },
+    "noun": {
+      "definition": "A person or thing that takes the place of another.",
+      "example": "\"That one\" is a substitute for a noun.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "заміна"
+      }
+    },
+    "verb": {
+      "definition": "To use something in place of another.",
+      "example": "\"Or not\" substitutes for a clause.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "замінювати"
+      }
+    }
+  },
+  "subtitle": {
+    "noun": {
+      "definition": "A second title, or words at the bottom of a film screen.",
+      "example": "I watch films with English subtitles.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "підзаголовок; субтитри"
+      }
+    }
+  },
+  "suburb": {
+    "noun": {
+      "definition": "An area outside the centre of a city.",
+      "example": "Rents went up in the suburbs.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "передмістя"
+      }
+    }
+  },
+  "subway": {
+    "noun": {
+      "definition": "An underground railway in a city.",
+      "example": "Berlin has a good subway.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "метро"
+      }
+    }
+  },
+  "succeed": {
+    "verb": {
+      "definition": "To do what you wanted to do.",
+      "example": "Everyone tried, but few succeeded.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "досягти успіху"
+      }
+    }
+  },
+  "sudden": {
+    "adjective": {
+      "definition": "Happening quickly and unexpectedly.",
+      "example": "The weather made a sudden change.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "раптовий"
+      }
+    }
+  },
+  "suddenly": {
+    "adverb": {
+      "definition": "Quickly and without warning.",
+      "example": "I suddenly understood.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "раптово"
+      }
+    }
+  },
+  "sugar": {
+    "noun": {
+      "definition": "A sweet substance used in food and drinks.",
+      "example": "The doctor told him to cut down on sugar.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "цукор"
+      }
+    }
+  },
+  "suggest": {
+    "noun": {
+      "definition": "To offer an idea; here a form of the verb \"suggest\".",
+      "example": "After \"suggest\", use \"that\" and a verb.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пропонувати"
+      }
+    },
+    "verb": {
+      "definition": "To offer an idea or plan for someone to consider.",
+      "example": "I suggest we go now.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пропонувати"
+      }
+    }
+  },
+  "suggestion": {
+    "noun": {
+      "definition": "An idea or plan that you offer to someone.",
+      "example": "Do you have a suggestion?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пропозиція"
+      }
+    }
+  },
+  "suit": {
+    "noun": {
+      "definition": "A jacket and trousers or skirt made from the same cloth.",
+      "example": "He wears a suit to work.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "костюм"
+      }
+    },
+    "verb": {
+      "definition": "To be convenient or right for someone.",
+      "example": "July suits me best.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "підходити"
+      }
+    }
+  },
+  "suitcase": {
+    "noun": {
+      "definition": "A bag with a handle used to carry clothes when you travel.",
+      "example": "I lost my suitcase at the airport.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "валіза"
+      }
+    }
+  },
+  "sum": {
+    "verb": {
+      "definition": "Used in \"sum up\": to give the main points briefly.",
+      "example": "To sum up, the plan is good.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "підсумовувати"
+      }
+    }
+  },
+  "summarise": {
+    "verb": {
+      "definition": "To give the main points of something in a short way.",
+      "example": "Let me summarise what we discussed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підсумовувати"
+      }
+    }
+  },
+  "summarising": {
+    "adjective": {
+      "definition": "Giving the main points in a short way.",
+      "example": "Use a summarising phrase at the end.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підсумковий"
+      }
+    }
+  },
+  "summary": {
+    "noun": {
+      "definition": "A short account of the main points.",
+      "example": "Write a short summary of the text.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підсумок, резюме"
+      }
+    }
+  },
+  "sunbathe": {
+    "verb": {
+      "definition": "To lie in the sun to get a tan.",
+      "example": "Some people were sunbathing on the beach.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "засмагати"
+      }
+    }
+  },
+  "sunbathing": {
+    "verb": {
+      "definition": "Lying in the sun to get a tan.",
+      "example": "We spent the day sunbathing.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "засмага"
+      }
+    }
+  },
+  "sunny": {
+    "adjective": {
+      "definition": "With a lot of light from the sun.",
+      "example": "It is a hot and sunny day.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сонячний"
+      }
+    }
+  },
+  "sunset": {
+    "noun": {
+      "definition": "The time in the evening when the sun goes down.",
+      "example": "We watched the sunset from the beach.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "захід сонця"
+      }
+    }
+  },
+  "superb": {
+    "adjective": {
+      "definition": "Extremely good.",
+      "example": "The concert was superb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чудовий, першокласний"
+      }
+    }
+  },
+  "superficial": {
+    "adjective": {
+      "definition": "Not deep or thorough; only on the surface.",
+      "example": "The argument sounds superficial.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "поверховий"
+      }
+    }
+  },
+  "superficiality": {
+    "noun": {
+      "definition": "The quality of not being deep or serious.",
+      "example": "She was tired of his superficiality.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "поверховість"
+      }
+    }
+  },
+  "superlative": {
+    "adjective": {
+      "definition": "Of the highest degree; describing the best or most.",
+      "example": "\"Best\" is a superlative form.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "найвищий; найвищого ступеня"
+      }
+    },
+    "noun": {
+      "definition": "The form of an adjective that means the most.",
+      "example": "\"Biggest\" is the superlative of \"big\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "найвищий ступінь порівняння"
+      }
+    }
+  },
+  "supermarket": {
+    "noun": {
+      "definition": "A big shop that sells food and other goods.",
+      "example": "The supermarket is open until ten.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "супермаркет"
+      }
+    }
+  },
+  "supplier": {
+    "noun": {
+      "definition": "A person or company that provides goods.",
+      "example": "This supplier offers everything we need.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "постачальник"
+      }
+    }
+  },
+  "supply": {
+    "verb": {
+      "definition": "To provide something that is needed.",
+      "example": "They supply every school with computers.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "постачати"
+      }
+    }
+  },
+  "suppose": {
+    "verb": {
+      "definition": "To think that something is probably true.",
+      "example": "I suppose you are right.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "припускати"
+      }
+    }
+  },
+  "supposedly": {
+    "adverb": {
+      "definition": "According to what people say, though it may not be true.",
+      "example": "He supposedly studied economics.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нібито"
+      }
+    }
+  },
+  "supposition": {
+    "noun": {
+      "definition": "Something that you think is true without proof.",
+      "example": "That is only a supposition.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "припущення"
+      }
+    }
+  },
+  "surely": {
+    "adverb": {
+      "definition": "Used when you are almost certain something is true.",
+      "example": "Surely you know the answer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "напевно, звісно"
+      }
+    }
+  },
+  "surf": {
+    "verb": {
+      "definition": "To ride on waves on a board.",
+      "example": "I have never surfed before.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "займатися серфінгом"
+      }
+    }
+  },
+  "surgery": {
+    "noun": {
+      "definition": "A doctor's office, or medical treatment that cuts the body.",
+      "example": "I have an appointment at the surgery.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лікарня, операція"
+      }
+    }
+  },
+  "surprise": {
+    "noun": {
+      "definition": "Something unexpected; the feeling it causes.",
+      "example": "The party was a big surprise.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "сюрприз, подив"
+      }
+    },
+    "verb": {
+      "definition": "To cause someone to feel that something is unexpected.",
+      "example": "The news surprised everyone.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дивувати"
+      }
+    }
+  },
+  "surprised": {
+    "adjective": {
+      "definition": "Feeling that something is unexpected.",
+      "example": "She sounded surprised.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "здивований"
+      }
+    }
+  },
+  "surprising": {
+    "adjective": {
+      "definition": "Unexpected and causing surprise.",
+      "example": "That is a surprising fact.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дивовижний, несподіваний"
+      }
+    }
+  },
+  "surprisingly": {
+    "adverb": {
+      "definition": "In a way that is unexpected.",
+      "example": "Surprisingly, the exam was easy.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "на диво, несподівано"
+      }
+    }
+  },
+  "surround": {
+    "verb": {
+      "definition": "To be or go all around something.",
+      "example": "The house is surrounded by trees.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "оточувати"
+      }
+    }
+  },
+  "survey": {
+    "noun": {
+      "definition": "A set of questions asked to many people to get information.",
+      "example": "The survey asked 500 people.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "опитування"
+      }
+    },
+    "verb": {
+      "definition": "To ask many people questions to get information.",
+      "example": "87% of those surveyed liked the store.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "опитувати"
+      }
+    }
+  },
+  "survive": {
+    "verb": {
+      "definition": "To stay alive after a dangerous event.",
+      "example": "Very few people managed to survive.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вижити"
+      }
+    }
+  },
+  "swap": {
+    "noun": {
+      "definition": "An exchange of one thing for another.",
+      "example": "That swap makes the sentence a question.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "обмін, заміна"
+      }
+    },
+    "verb": {
+      "definition": "To exchange one thing for another.",
+      "example": "Can we swap seats?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обмінюватися, міняти"
+      }
+    }
+  },
+  "sway": {
+    "verb": {
+      "definition": "To move slowly from side to side.",
+      "example": "The trees swayed in the wind.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "хитатися"
+      }
+    }
+  },
+  "sweetheart": {
+    "noun": {
+      "definition": "A word used to talk to someone you love.",
+      "example": "\"Forgive me, sweetheart,\" he said.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "любий, кохана людина"
+      }
+    }
+  },
+  "swim": {
+    "noun": {
+      "definition": "A time spent swimming.",
+      "example": "We went for a swim in the lake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "плавання, купання"
+      }
+    },
+    "verb": {
+      "definition": "To move through water using your arms and legs.",
+      "example": "She can swim, can't she?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "плавати"
+      }
+    }
+  },
+  "swimmer": {
+    "noun": {
+      "definition": "A person who swims.",
+      "example": "I'm not a good swimmer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "плавець"
+      }
+    }
+  },
+  "swimming": {
+    "noun": {
+      "definition": "The sport or activity of moving through water.",
+      "example": "Swimming is good for the whole body.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "плавання"
+      }
+    },
+    "verb": {
+      "definition": "Moving through water using your arms and legs.",
+      "example": "He likes swimming in the sea.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "плавання"
+      }
+    }
+  },
+  "swimsuit": {
+    "noun": {
+      "definition": "Clothing you wear for swimming.",
+      "example": "Bring your swimsuit to the pool.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "купальник"
+      }
+    }
+  },
+  "swiss": {
+    "adjective": {
+      "definition": "From or about Switzerland.",
+      "example": "A colleague told me about a Swiss hotel.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "швейцарський"
+      }
+    }
+  },
+  "switch": {
+    "verb": {
+      "definition": "To change from one thing to another; \"switch off\" means to turn off.",
+      "example": "Please switch off the light.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "перемикати, вимикати"
+      }
+    }
+  },
+  "syllable": {
+    "noun": {
+      "definition": "A part of a word with one vowel sound.",
+      "example": "\"Water\" has two syllables.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "склад (у слові)"
+      }
+    }
+  },
+  "sympathy": {
+    "noun": {
+      "definition": "A feeling of care for someone who is unhappy.",
+      "example": "I feel a lot of sympathy for him.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "співчуття"
+      }
+    }
+  },
+  "systematically": {
+    "adverb": {
+      "definition": "Following a fixed plan or method.",
+      "example": "She checks the work systematically.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "систематично"
       }
     }
   }
