@@ -315,7 +315,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
-### [ ] 29. Банк вправ: MODALITY (162; близнюки `could` отримують ті самі вправи) + повнота
+### [x] 29. Банк вправ: MODALITY (162; близнюки `could` отримують ті самі вправи) + повнота
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
