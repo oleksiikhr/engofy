@@ -256,7 +256,7 @@ WordDefinition за lemma+POS (`upsertWordDefinition`) → `grammar_page_lex_blo
 `GET /grammar/:slug` віддає `lexicon: { blocks, words }` (стан слова для глядача через
 `LexiconViewService`, спільний із ридером). Фразові дієслова не групуються — зріз 23.
 
-### [ ] 21. Web: клікабельні слова на ручних сторінках
+### [x] 21. Web: клікабельні слова на ручних сторінках
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
