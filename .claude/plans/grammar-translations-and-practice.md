@@ -290,7 +290,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 де їх групує spaCy, тож хибні розбори й "go on holiday" без спану) + `words import-phrase-content`.
 Після зміни списку — `annotate-pages --refresh`.
 
-### [ ] 24. Банк вправ: ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (83)
+### [x] 24. Банк вправ: ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (83)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
