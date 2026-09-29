@@ -295,7 +295,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
-### [ ] 25. Банк вправ: CLAUSES (74)
+### [x] 25. Банк вправ: CLAUSES (74)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
