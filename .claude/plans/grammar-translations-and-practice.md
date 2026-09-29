@@ -195,7 +195,7 @@ not shift".
 shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` (13),
 `discourse-markers-*` (11), `clauses-*` (74).
 
-### [ ] 15. `uk.examples`: DETERMINERS, FOCUS, FUTURE, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (120)
+### [x] 15. `uk.examples`: DETERMINERS, FOCUS, FUTURE, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (120)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
