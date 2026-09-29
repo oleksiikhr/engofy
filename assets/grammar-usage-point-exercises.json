@@ -14931,6 +14931,2741 @@
       }
     }
   ],
+  "745": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ a shower when the phone rang. (have)",
+        "answer": "was having",
+        "options": ["had", "have had", "was having"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It ____ raining when we left the cinema.",
+        "answer": "was",
+        "options": ["is", "was", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "While she was cooking, the lights ____.",
+        "options": ["were going out", "went out", "have gone out", "go out"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were watching TV when the doorbell ____. (ring)",
+        "answer": "rang",
+        "options": ["rings", "rang", "was ringing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I was reading when he was coming in.",
+          "I was reading when he came in.",
+          "I read when he came in."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ tennis when it started to rain. (play)",
+        "answer": "were playing",
+        "options": ["are playing", "were playing", "played"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I fell asleep while I ____ a book.",
+        "options": ["was reading", "read", "am reading", "have read"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The children were sleeping when we ____ home. (get)",
+        "answer": "got",
+        "options": ["were getting", "get", "got"]
+      }
+    }
+  ],
+  "746": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At eight o'clock we ____ dinner. (have)",
+        "answer": "were having",
+        "options": ["have", "were having", "had"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What ____ you doing last night at ten?",
+        "answer": "were",
+        "options": ["did", "were", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It ____ all morning, so we stayed at home.",
+        "options": ["was snowing", "snowed", "is snowing", "has snowed"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At noon yesterday she ____ in the garden. (work)",
+        "answer": "was working",
+        "options": ["is working", "was working", "worked"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They were playing football at six.",
+          "They was playing football at six.",
+          "They were play football at six."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where ____ he going when you saw him?",
+        "answer": "was",
+        "options": ["did", "was", "were"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ TV at nine last night. (not watch)",
+        "answer": "wasn't watching",
+        "options": ["didn't watching", "not watching", "wasn't watching"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This time last year we ____ in Spain.",
+        "options": ["were living", "lived", "are living", "have lived"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "750": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I didn't answer because I ____. (drive)",
+        "answer": "was driving",
+        "options": ["drove", "am driving", "was driving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She was tired because she ____ late every night.",
+        "options": ["worked", "was working", "is working", "has worked"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He didn't hear the phone because he ____ music. (listen to)",
+        "answer": "was listening to",
+        "options": ["listens to", "was listening to", "listened to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As we ____ past the shop, we decided to go in. (walk)",
+        "answer": "were walking",
+        "options": ["were walking", "walked", "are walking"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I was late because I waiting for a bus.",
+          "I was late because I am waiting for a bus.",
+          "I was late because I was waiting for a bus."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They were angry because we ____ too much noise. (make)",
+        "answer": "were making",
+        "options": ["were making", "made", "make"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I couldn't talk to you because I ____ in a meeting.",
+        "options": ["sat", "was sitting", "am sitting", "have sat"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She fell because she ____ on her phone. (look)",
+        "answer": "was looking",
+        "options": ["was looking", "looked", "is looking"]
+      }
+    }
+  ],
+  "751": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In winter it was always ____. (rain)",
+        "answer": "raining",
+        "options": ["raining", "rain", "rained"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ always talking about football.",
+        "options": ["is", "were", "did", "was"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My grandmother was always ____ something. (bake)",
+        "answer": "baking",
+        "options": ["baked", "baking", "bake"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When we were kids, we were always ____ games. (play)",
+        "answer": "playing",
+        "options": ["play", "played", "playing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She always was sing in the shower.",
+          "She was always singing in the shower.",
+          "She was sing always in the shower."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My brother ____ always borrowing my things.",
+        "answer": "was",
+        "options": ["was", "were", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They were always ____ to the beach in summer.",
+        "options": ["go", "went", "to go", "going"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At school, he was always ____ questions. (ask)",
+        "answer": "asking",
+        "options": ["asked", "asking", "ask"]
+      }
+    }
+  ],
+  "753": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ wondering if you could help me.",
+        "answer": "was",
+        "options": ["were", "am", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was thinking we ____ meet on Friday.",
+        "options": ["can", "will", "are", "could"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was ____ if I could borrow your car. (wonder)",
+        "answer": "wondering",
+        "options": ["wondering", "wonder", "wondered"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the more polite sentence: ____",
+        "options": [
+          "I was wondering if you could open the window.",
+          "Open the window.",
+          "Can you open the window now?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ thinking of asking you a favour. (be)",
+        "answer": "was",
+        "options": ["am", "was", "were"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was wondering if you ____ like to join us. (would)",
+        "answer": "would",
+        "options": ["can", "would", "will"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was hoping you ____ give me a lift.",
+        "options": ["can", "will", "are", "could"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were ____ whether you had time to talk. (wonder)",
+        "answer": "wondering",
+        "options": ["wondering", "wonder", "wondered"]
+      }
+    }
+  ],
+  "754": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was constantly ____ me. (interrupt)",
+        "answer": "interrupting",
+        "options": ["interrupting", "interrupt", "interrupted"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ always losing her keys.",
+        "options": ["is", "was", "were", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They were always ____ about money. (argue)",
+        "answer": "arguing",
+        "options": ["arguing", "argue", "argued"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My old boss was constantly ____ to call me at night. (try)",
+        "answer": "trying",
+        "options": ["tried", "trying", "try"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He was always leave his socks on the floor.",
+          "He always was leaving his socks on the floor, he was.",
+          "He was always leaving his socks on the floor."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Our neighbours ____ always playing loud music.",
+        "answer": "were",
+        "options": ["was", "are", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She was constantly ____ about the weather.",
+        "options": ["complaining", "complain", "complained", "to complain"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was always ____ my phone at home. (forget)",
+        "answer": "forgetting",
+        "options": ["forget", "forgot", "forgetting"]
+      }
+    }
+  ],
+  "756": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had been ____ for hours when it started to rain. (walk)",
+        "answer": "walking",
+        "options": ["walked", "walk", "walking"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ sleeping when the alarm went off.",
+        "options": ["has been", "was been", "had", "had been"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had been ____ a long time when he finally called. (wait)",
+        "answer": "waiting",
+        "options": ["waiting", "waited", "wait"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ been driving for hours when the car stopped.",
+        "answer": "had",
+        "options": ["had", "have", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He had been run when he fell.",
+          "He had been running when he fell.",
+          "He has been running when he fell."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It ____ been raining all day when we got home.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "When she arrived, we ____ for an hour.",
+        "options": [
+          "had been talking",
+          "were talked",
+          "have been talking",
+          "talked"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had been ____ in the garden when I heard a noise. (work)",
+        "answer": "working",
+        "options": ["work", "working", "worked"]
+      }
+    }
+  ],
+  "757": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He had been ____ there for ten years. (work)",
+        "answer": "working",
+        "options": ["worked", "work", "working"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They had been living in Lviv ____ 2015.",
+        "options": ["since", "for", "from", "in"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had been ____ English for two years before the trip. (learn)",
+        "answer": "learning",
+        "options": ["learning", "learned", "learn"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She had been waiting ____ an hour when the bus came.",
+        "answer": "for",
+        "options": ["for", "since", "during"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We had been dating for a year when we got married.",
+          "We had been date for a year when we got married.",
+          "We have been dating for a year when we got married."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ been living alone since 2010 when he met her.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "By June, I had been studying here ____ three years.",
+        "options": ["since", "for", "from", "during"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They had been ____ since morning. (travel)",
+        "answer": "travelling",
+        "options": ["travelling", "travelled", "travel"]
+      }
+    }
+  ],
+  "758": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The man who had been ____ next to me got off. (sit)",
+        "answer": "sitting",
+        "options": ["sat", "sit", "sitting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The dog, which ____ barking all night, was finally quiet.",
+        "options": ["has been", "was been", "had been", "have been"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I met a woman who had been ____ for a year. (travel)",
+        "answer": "travelling",
+        "options": ["travelled", "travel", "travelling"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The girl who ____ been crying stood up.",
+        "answer": "had",
+        "options": ["has", "was", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The boys who had been play outside came in.",
+          "The boys who have been playing outside came in yesterday.",
+          "The boys who had been playing outside came in."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The road that they had been ____ was closed. (use)",
+        "answer": "using",
+        "options": ["use", "using", "used"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The workers who ____ repairing the road went home.",
+        "options": ["had been", "was been", "have been", "had"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The teacher, who had been ____ all day, was tired. (talk)",
+        "answer": "talking",
+        "options": ["talk", "talking", "talked"]
+      }
+    }
+  ],
+  "759": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "After we had been ____ for an hour, we stopped for coffee. (drive)",
+        "answer": "driving",
+        "options": ["driving", "drove", "driven"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She was exhausted. She ____ studying for months.",
+        "options": ["has been", "had been", "was been", "had"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Since he ____ been feeling ill, he stayed at home.",
+        "answer": "had",
+        "options": ["has", "was", "had"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "After they had been ____ for hours, they were tired. (dance)",
+        "answer": "dancing",
+        "options": ["dancing", "danced", "dance"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "After she had been work for hours, she took a break.",
+          "After she had been working for hours, she took a break.",
+          "After she has been working for hours, she took a break yesterday."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When I had been ____ for a while, I felt better. (rest)",
+        "answer": "resting",
+        "options": ["resting", "rested", "rest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "After they ____ shopping for hours, they went home.",
+        "options": ["have been", "had been", "were been", "had"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Since we had been ____ all night, we slept late. (travel)",
+        "answer": "travelling",
+        "options": ["travelled", "travel", "travelling"]
+      }
+    }
+  ],
+  "762": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Her eyes were red because she had been ____. (cry)",
+        "answer": "crying",
+        "options": ["cried", "cry", "crying"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ground was wet. It ____ raining.",
+        "options": ["was been", "had been", "has been", "had"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was tired because he had been ____. (run)",
+        "answer": "running",
+        "options": ["running", "ran", "run"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The kitchen smelled great. She ____ been cooking.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "His hands were dirty because he had been working in the garden.",
+          "His hands were dirty because he had been work in the garden.",
+          "His hands were dirty because he has been working in the garden."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were hot because we had been ____ football. (play)",
+        "answer": "playing",
+        "options": ["playing", "played", "play"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Her voice was weak. She ____ shouting all day.",
+        "options": ["had been", "has been", "was been", "had"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The floor was white. They had been ____ the walls. (paint)",
+        "answer": "painting",
+        "options": ["painted", "paint", "painting"]
+      }
+    }
+  ],
+  "764": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If I ____ known, I would have called you. (have)",
+        "answer": "had",
+        "options": ["had", "have", "would have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If we had left earlier, we ____ missed the bus.",
+        "options": ["wouldn't have", "didn't", "wouldn't", "hadn't"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If she had asked me, I would have ____ her. (help)",
+        "answer": "helped",
+        "options": ["help", "helping", "helped"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If they ____ studied harder, they would have passed.",
+        "answer": "had",
+        "options": ["would", "have", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "If I would have seen him, I would have said hello.",
+          "If I had seen him, I would have said hello.",
+          "If I saw him, I would have said hello."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If you had told me, I would ____ come. (have)",
+        "answer": "have",
+        "options": ["has", "have", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We would have won if we ____ better.",
+        "options": ["played", "would play", "had played", "have played"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If he ____ taken the train, he would have arrived on time. (have)",
+        "answer": "had",
+        "options": ["had", "has", "would have"]
+      }
+    }
+  ],
+  "768": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When we arrived, the film ____ already started. (have)",
+        "answer": "had",
+        "options": ["was", "had", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I ____ never seen snow before that winter.",
+        "options": ["have", "was", "did", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She had ____ her work by six. (finish)",
+        "answer": "finished",
+        "options": ["finished", "finish", "finishing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By the time he came, we ____ eaten.",
+        "answer": "had",
+        "options": ["have", "were", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They had left before I got there.",
+          "They had left after I got there yesterday.",
+          "They have left before I got there."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had never ____ sushi until last year. (try)",
+        "answer": "tried",
+        "options": ["try", "trying", "tried"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "When I woke up, my brother ____ already left.",
+        "options": ["has", "was", "did", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had ____ dinner before the guests arrived. (cook)",
+        "answer": "cooked",
+        "options": ["cook", "cooking", "cooked"]
+      }
+    }
+  ],
+  "769": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was hungry because I ____ eaten all day. (not)",
+        "answer": "hadn't",
+        "options": ["haven't", "wasn't", "hadn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He failed because he ____ studied.",
+        "options": ["didn't", "haven't", "wasn't", "hadn't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were late because we had ____ the train. (miss)",
+        "answer": "missed",
+        "options": ["missing", "missed", "miss"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was angry because he ____ forgotten her birthday.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The road was wet because it has rained.",
+          "The road was wet because it had rain.",
+          "The road was wet because it had rained."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I couldn't get in because I had ____ my key. (lose)",
+        "answer": "lost",
+        "options": ["lost", "lose", "losing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They were tired because they ____ slept well.",
+        "options": ["didn't have", "haven't", "weren't", "hadn't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was upset because he ____ lost the game.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    }
+  ],
+  "770": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wish I ____ studied harder. (have)",
+        "answer": "had",
+        "options": ["had", "have", "would"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If only we ____ a table!",
+        "options": ["book", "had booked", "booked", "would book"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She wishes she hadn't ____ that. (say)",
+        "answer": "said",
+        "options": ["say", "saying", "said"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wish I ____ gone to bed earlier.",
+        "answer": "had",
+        "options": ["have", "was", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He wishes he would listened.",
+          "He wishes he had listened.",
+          "He wishes he has listened."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only I hadn't ____ so much! (eat)",
+        "answer": "eaten",
+        "options": ["eat", "eaten", "ate"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wish they ____ told me about the problem.",
+        "options": ["have", "had", "would", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We wish we ____ stayed longer. (have)",
+        "answer": "had",
+        "options": ["would", "had", "have"]
+      }
+    }
+  ],
+  "771": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never before ____ I seen such a crowd.",
+        "answer": "had",
+        "options": ["have", "did", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never ____ she felt so alone.",
+        "options": ["has", "did", "had", "was"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never before had the city ____ so beautiful. (look)",
+        "answer": "looked",
+        "options": ["look", "looking", "looked"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ they seen anything like it.",
+        "answer": "had",
+        "options": ["have", "were", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Never had I heard such a beautiful song.",
+          "Never I had heard such a beautiful song.",
+          "Never had heard I such a beautiful song."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never had he ____ so tired. (feel)",
+        "answer": "felt",
+        "options": ["feeling", "felt", "feel"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never before ____ we tasted food this good.",
+        "options": ["did", "had", "have", "were"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never had I ____ such a strange story. (hear)",
+        "answer": "heard",
+        "options": ["heard", "hear", "hearing"]
+      }
+    }
+  ],
+  "772": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "No sooner ____ I sat down than the phone rang.",
+        "answer": "had",
+        "options": ["did", "had", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "No sooner had we arrived ____ it started to rain.",
+        "options": ["when", "that", "than", "then"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "No sooner had she left than he ____. (call)",
+        "answer": "called",
+        "options": ["calls", "had called", "called"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "No sooner ____ he opened the door than the dog ran out.",
+        "answer": "had",
+        "options": ["has", "had", "did"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "No sooner I had left than it began to snow.",
+          "No sooner had I left that it began to snow.",
+          "No sooner had I left than it began to snow."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "No sooner had we ____ than they arrived. (sit)",
+        "answer": "sat",
+        "options": ["sit", "sitting", "sat"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "No sooner ____ she finished than the bell rang.",
+        "options": ["did", "had", "has", "was"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "No sooner had they ____ home than it got dark. (reach)",
+        "answer": "reached",
+        "options": ["reaching", "reached", "reach"]
+      }
+    }
+  ],
+  "776": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I returned the book that I had ____. (borrow)",
+        "answer": "borrowed",
+        "options": ["borrowed", "borrow", "borrowing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We visited the town where my father ____ grown up.",
+        "options": ["has", "was", "did", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The man who had ____ us was gone. (help)",
+        "answer": "helped",
+        "options": ["helped", "help", "helping"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She found the wallet that she ____ lost.",
+        "answer": "had",
+        "options": ["has", "was", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The film that we had see was great.",
+          "The film that we had seen was great.",
+          "The film that we have seen was great last night."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They thanked the woman who had ____ them. (invite)",
+        "answer": "invited",
+        "options": ["invite", "inviting", "invited"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I met the people who ____ bought our old house.",
+        "options": ["have", "had", "was", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He showed me the photo that he had ____. (take)",
+        "answer": "taken",
+        "options": ["taken", "took", "take"]
+      }
+    }
+  ],
+  "777": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ always lived in the city, but then we moved.",
+        "answer": "had",
+        "options": ["was", "had", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She had never ____ fish, but now she loves it.",
+        "options": ["like", "likes", "liking", "liked"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had ____ a picnic, but it rained. (plan)",
+        "answer": "planned",
+        "options": ["planning", "planned", "plan"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ never smoked until he lost his job.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I had never cooked, but then I learned.",
+          "I had never cook, but then I learned.",
+          "I have never cooked, but then I learned."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They had ____ in a small flat, but then they bought a house. (live)",
+        "answer": "lived",
+        "options": ["living", "lived", "live"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ always been shy, but then she joined a drama club.",
+        "options": ["has", "had", "was", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had ____ to leave, but then I stayed. (decide)",
+        "answer": "decided",
+        "options": ["decided", "decide", "deciding"]
+      }
+    }
+  ],
+  "778": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She asked me if I had ____ the film. (see)",
+        "answer": "seen",
+        "options": ["saw", "see", "seen"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He wanted to know where I ____ been.",
+        "options": ["have", "had", "was", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They asked if we ____ finished.",
+        "answer": "had",
+        "options": ["have", "were", "had"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She asked him whether he had ____ lunch. (eat)",
+        "answer": "eaten",
+        "options": ["eat", "eaten", "ate"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He asked me if I have met her before.",
+          "He asked me had I met her before.",
+          "He asked me if I had met her before."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They wanted to know who had ____ the window. (break)",
+        "answer": "broken",
+        "options": ["broke", "break", "broken"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She asked us why we ____ left early.",
+        "options": ["have", "did", "had", "were"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I asked her if she had ____ the email. (send)",
+        "answer": "sent",
+        "options": ["sending", "sent", "send"]
+      }
+    }
+  ],
+  "779": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She said she ____ lost her phone.",
+        "answer": "had",
+        "options": ["had", "has", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He told me he had already ____.",
+        "options": ["eaten", "ate", "eat", "eating"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They said they had never ____ to Kyiv. (be)",
+        "answer": "been",
+        "options": ["been", "was", "being"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He said that he ____ finished his homework.",
+        "answer": "had",
+        "options": ["has", "was", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She told me she has forgotten her keys.",
+          "She told me she had forgotten her keys.",
+          "She told me she had forget her keys."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Tom said he had ____ the doctor. (see)",
+        "answer": "seen",
+        "options": ["saw", "see", "seen"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They told us they ____ moved to Lviv.",
+        "options": ["have", "were", "did", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She said she had ____ the letter. (not / read)",
+        "answer": "not read",
+        "options": ["hasn't read", "not read", "didn't read"]
+      }
+    }
+  ],
+  "780": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I known, I would have come earlier.",
+        "answer": "Had",
+        "options": ["Had", "Have", "Did"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Had we left on time, we ____ caught the train.",
+        "options": ["would", "will have", "had", "would have"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Had she ____, I would have helped her. (ask)",
+        "answer": "asked",
+        "options": ["asked", "ask", "asking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Had they ____ the news, they would have called. (hear)",
+        "answer": "heard",
+        "options": ["hearing", "heard", "hear"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Had he known, he would have told us.",
+          "Had he know, he would have told us.",
+          "Did he known, he would have told us."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you told me, I would have gone with you.",
+        "answer": "Had",
+        "options": ["Have", "Did", "Had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Had I seen the sign, I ____ stopped.",
+        "options": ["would", "will have", "would have", "had"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Had we ____ earlier, we wouldn't have been late. (leave)",
+        "answer": "left",
+        "options": ["leaving", "left", "leave"]
+      }
+    }
+  ],
+  "781": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only I ____ said that!",
+        "answer": "hadn't",
+        "options": ["didn't", "hadn't", "haven't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If only we hadn't ____ the house.",
+        "options": ["sell", "sale", "sold", "selling"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only she ____ missed the train.",
+        "answer": "hadn't",
+        "options": ["haven't", "wasn't", "hadn't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only he hadn't ____ the door open. (leave)",
+        "answer": "left",
+        "options": ["leave", "leaving", "left"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "If only I haven't lost my phone!",
+          "If only I hadn't lose my phone!",
+          "If only I hadn't lost my phone!"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only they ____ argued so much.",
+        "answer": "hadn't",
+        "options": ["hadn't", "haven't", "didn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If only she hadn't ____ the message!",
+        "options": ["send", "sending", "sent", "sends"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If only we hadn't ____ so late. (go)",
+        "answer": "gone",
+        "options": ["go", "gone", "went"]
+      }
+    }
+  ],
+  "785": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ TV last night. (watch)",
+        "answer": "watched",
+        "options": ["watches", "watched", "watch"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ to the park yesterday.",
+        "options": ["go", "goed", "gone", "went"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ happy. (be)",
+        "answer": "was",
+        "options": ["were", "is", "was"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ a great film on Saturday. (see)",
+        "answer": "saw",
+        "options": ["seen", "saw", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He buyed a new bike last week.",
+          "He bought a new bike last week.",
+          "He buys a new bike last week."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ my homework yesterday evening. (do)",
+        "answer": "did",
+        "options": ["done", "did", "do"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ pizza for dinner last night.",
+        "options": ["have", "has", "had", "haves"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My parents ____ at home yesterday. (be)",
+        "answer": "were",
+        "options": ["was", "are", "were"]
+      }
+    }
+  ],
+  "793": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ by the sea when I was small. (live)",
+        "answer": "lived",
+        "options": ["lived", "live", "lives"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ to school every day.",
+        "options": ["walk", "walked", "walks", "has walked"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ football every weekend. (play)",
+        "answer": "played",
+        "options": ["plays", "played", "play"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When she was young, she ____ a lot of books. (read)",
+        "answer": "read",
+        "options": ["reading", "read", "reads"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "My grandfather worked in a factory when he was young.",
+          "My grandfather works in a factory when he was young.",
+          "My grandfather work in a factory when he was young."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Every summer we ____ to our grandparents. (go)",
+        "answer": "went",
+        "options": ["gone", "went", "go"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "As a child, I ____ apples every day.",
+        "options": ["eat", "eaten", "ate", "eating"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ to bed at nine every night as a child. (go)",
+        "answer": "went",
+        "options": ["goes", "gone", "went"]
+      }
+    }
+  ],
+  "794": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If I ____ more money, I would buy a car. (have)",
+        "answer": "had",
+        "options": ["had", "have", "would have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If you asked him, he ____ help.",
+        "options": ["would", "will", "can", "did"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If we ____ closer, we would visit more often. (live)",
+        "answer": "lived",
+        "options": ["live", "would live", "lived"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If she ____ harder, she would pass the exam. (study)",
+        "answer": "studied",
+        "options": ["would study", "studied", "studies"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "If I am rich, I would travel the world.",
+          "If I would be rich, I would travel the world.",
+          "If I were rich, I would travel the world."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What would you do if you ____ a million euros? (win)",
+        "answer": "won",
+        "options": ["win", "would win", "won"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "If it ____ sunny, we would go to the beach.",
+        "options": ["is", "was", "will be", "would be"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I would help you if I ____ the answer. (know)",
+        "answer": "knew",
+        "options": ["would know", "knew", "know"]
+      }
+    }
+  ],
+  "795": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He opened the door, ____ in and smiled. (look)",
+        "answer": "looked",
+        "options": ["looks", "look", "looked"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "First we had lunch, ____ we went to the beach.",
+        "options": ["unless", "which", "then"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She got up, dressed and ____. (leave)",
+        "answer": "left",
+        "options": ["left", "leaves", "leave"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I woke up, ____ a shower and had breakfast. (take)",
+        "answer": "took",
+        "options": ["taking", "took", "take"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He came home, eats dinner and went to bed.",
+          "He came home, ate dinner and went to bed.",
+          "He came home, eat dinner and go to bed."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We arrived at the hotel, ____ our bags and went to our room. (leave)",
+        "answer": "left",
+        "options": ["leave", "leaves", "left"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "First she read the email, and ____ she called him.",
+        "options": ["before", "unless", "then"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ the door, went in and sat down. (open)",
+        "answer": "opened",
+        "options": ["open", "opens", "opened"]
+      }
+    }
+  ],
+  "796": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wish I ____ a bigger flat. (have)",
+        "answer": "had",
+        "options": ["have", "would have", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wish I ____ the answer.",
+        "options": ["know", "will know", "knew", "known"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She wishes she ____ near the sea. (live)",
+        "answer": "lived",
+        "options": ["would live", "lived", "lives"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wish it ____ warmer today. (be)",
+        "answer": "were",
+        "options": ["will be", "were", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I wish I had more free time.",
+          "I wish I have more free time.",
+          "I wish I would have more free time."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He wishes he ____ taller. (be)",
+        "answer": "were",
+        "options": ["is", "will be", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wish we ____ a car.",
+        "options": ["have", "would have", "having", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wish I ____ how to swim. (know)",
+        "answer": "knew",
+        "options": ["knew", "know", "known"]
+      }
+    }
+  ],
+  "801": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I would be grateful if you ____ me the details. (send)",
+        "answer": "sent",
+        "options": ["send", "will send", "sent"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It would be great if you ____ me back.",
+        "options": ["call", "will call", "calling", "called"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I would appreciate it if you ____ soon. (reply)",
+        "answer": "replied",
+        "options": ["will reply", "replied", "reply"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We would be happy if you ____ us your answer. (give)",
+        "answer": "gave",
+        "options": ["will give", "gave", "give"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I would be grateful if you will answer by Friday.",
+          "I would be grateful if you answer by Friday.",
+          "I would be grateful if you answered by Friday."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It would be helpful if you ____ the form today. (fill in)",
+        "answer": "filled in",
+        "options": ["filled in", "fill in", "will fill in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I would be very pleased if you ____ to our party.",
+        "options": ["come", "will come", "coming", "came"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It would be great if you ____ me know. (let)",
+        "answer": "let",
+        "options": ["lets", "will let", "let"]
+      }
+    }
+  ],
+  "802": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ if you could help me. (wonder)",
+        "answer": "wondered",
+        "options": ["wonder", "am wondered", "wondered"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I ____ to thank you for the flowers.",
+        "options": ["want", "wanted", "wants", "will want"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wondered if you ____ free on Friday. (be)",
+        "answer": "were",
+        "options": ["were", "are", "will be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I wanted to ____ you for your help. (thank)",
+        "answer": "thank",
+        "options": ["thanks", "thanked", "thank"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the more polite sentence: ____",
+        "options": [
+          "Give me a pen.",
+          "I want a pen now.",
+          "I wondered if you could lend me a pen."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ to ask if you had a minute. (want)",
+        "answer": "wanted",
+        "options": ["want", "wants", "wanted"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wondered if you ____ come to dinner.",
+        "options": ["could", "can", "will", "are"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ if I could ask you a question. (wonder)",
+        "answer": "wondered",
+        "options": ["wondering", "wondered", "wonder"]
+      }
+    }
+  ],
+  "805": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As soon as she ____ him, she started to cry. (see)",
+        "answer": "saw",
+        "options": ["sees", "seen", "saw"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The moment I opened the door, the dog ____ out.",
+        "options": ["ran", "runs", "run", "running"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Once we ____, we left the restaurant. (pay)",
+        "answer": "paid",
+        "options": ["pays", "paid", "pay"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By the time we ____ home, it was dark. (get)",
+        "answer": "got",
+        "options": ["get", "gets", "got"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "As soon as he arrived, he called his mum.",
+          "As soon as he arrives, he called his mum.",
+          "As soon as he will arrive, he called his mum."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The moment she ____ the news, she smiled. (hear)",
+        "answer": "heard",
+        "options": ["hears", "hear", "heard"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Once the film ____, we went home.",
+        "options": ["ends", "end", "ending", "ended"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As soon as the bell ____, the students ran out. (ring)",
+        "answer": "rang",
+        "options": ["rang", "rings", "ring"]
+      }
+    }
+  ],
+  "806": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ call you, but you didn't answer. (do)",
+        "answer": "did",
+        "options": ["did", "do", "done"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She did ____ the report in the end.",
+        "options": ["finish", "finished", "finishes", "finishing"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We did ____ the party. (enjoy)",
+        "answer": "enjoy",
+        "options": ["enjoy", "enjoyed", "enjoys"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ tell me about it, I remember!",
+        "answer": "did",
+        "options": ["does", "did", "do"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I did locked the door, honestly.",
+          "I do lock the door, honestly.",
+          "I did lock the door, honestly."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They did ____ us last week. (visit)",
+        "answer": "visit",
+        "options": ["visits", "visit", "visited"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "You didn't ring me. — I ____ ring you!",
+        "options": ["did", "do", "was", "have"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She did ____ the truth. (tell)",
+        "answer": "tell",
+        "options": ["tells", "tell", "told"]
+      }
+    }
+  ],
+  "807": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ we could go for a walk. (think)",
+        "answer": "thought",
+        "options": ["am thinking", "thought", "think"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I thought you ____ like this book.",
+        "options": ["can", "will", "must", "might"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I thought it ____ be nice to invite them. (would)",
+        "answer": "would",
+        "options": ["would", "will", "can"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I thought we ____ have lunch together. (could)",
+        "answer": "could",
+        "options": ["can", "will", "could"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the more polite sentence: ____",
+        "options": [
+          "Have some tea.",
+          "You want tea.",
+          "I thought you might like some tea."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ you might want to sit down. (think)",
+        "answer": "thought",
+        "options": ["thinking", "thought", "think"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I thought we ____ start early.",
+        "options": ["could", "can", "will", "are"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I thought you ____ need some help. (might)",
+        "answer": "might",
+        "options": ["may be", "will", "might"]
+      }
+    }
+  ],
+  "810": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've been ____ to the gym a lot lately. (go)",
+        "answer": "going",
+        "options": ["went", "going", "go"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ been calling me every day.",
+        "options": ["has", "have", "is", "was"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We've been ____ on Fridays since May. (meet)",
+        "answer": "meeting",
+        "options": ["meet", "met", "meeting"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ been playing tennis every weekend this summer.",
+        "answer": "has",
+        "options": ["has", "have", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They've been visit us every Sunday.",
+          "They've been visiting us every Sunday.",
+          "They have visited us every Sunday since a month."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've been ____ a lot of coffee this week. (drink)",
+        "answer": "drinking",
+        "options": ["drinking", "drink", "drank"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My sister ____ texting me all day.",
+        "options": ["has been", "is been", "have been", "was"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ been seeing each other a lot recently.",
+        "answer": "have",
+        "options": ["are", "have", "has"]
+      }
+    }
+  ],
+  "811": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've been ____ for an hour. (wait)",
+        "answer": "waiting",
+        "options": ["waiting", "wait", "waited"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She has been living here ____ 2020.",
+        "options": ["since", "for", "from", "in"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How long have you been ____ English? (learn)",
+        "answer": "learning",
+        "options": ["learning", "learn", "learned"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He has been working here ____ three years.",
+        "answer": "for",
+        "options": ["from", "for", "since"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We have been waiting for two hours.",
+          "We have been wait for two hours.",
+          "We are waiting for two hours since."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ been studying since morning.",
+        "answer": "have",
+        "options": ["have", "has", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "How long ____ she been sleeping?",
+        "options": ["have", "is", "has", "does"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It has been ____ since noon. (rain)",
+        "answer": "raining",
+        "options": ["rained", "raining", "rain"]
+      }
+    }
+  ],
+  "814": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm tired because I've been ____. (run)",
+        "answer": "running",
+        "options": ["run", "ran", "running"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Your eyes are red. ____ you been crying?",
+        "options": ["Did", "Have", "Are", "Has"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's been ____ — the street is wet. (rain)",
+        "answer": "raining",
+        "options": ["raining", "rain", "rained"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's covered in paint. She ____ been painting.",
+        "answer": "has",
+        "options": ["has", "have", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "You look hot. Did you been running?",
+          "You look hot. Are you been running?",
+          "You look hot. Have you been running?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He smells of smoke. He's been ____. (cook)",
+        "answer": "cooking",
+        "options": ["cooking", "cook", "cooked"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The room is a mess. The kids ____ playing here.",
+        "options": ["has been", "have been", "are been", "were been"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My hands are dirty. I've been ____ in the garden. (work)",
+        "answer": "working",
+        "options": ["work", "worked", "working"]
+      }
+    }
+  ],
+  "815": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ prices been rising, but wages have also fallen.",
+        "answer": "have",
+        "options": ["has", "did", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only ____ she been working, but she's been studying too.",
+        "options": ["have", "has", "is", "does"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only have they been ____ us, but they have also lied. (ignore)",
+        "answer": "ignoring",
+        "options": ["ignored", "ignoring", "ignore"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only has he been ____, but he has also been shouting. (complain)",
+        "answer": "complaining",
+        "options": ["complained", "complaining", "complain"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Not only we have been waiting, but we have also been standing.",
+          "Not only have we been waiting, but we have also been standing.",
+          "Not only have we waiting, but we have also been standing."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ it been raining, but it has also been windy.",
+        "answer": "has",
+        "options": ["has", "have", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only have they been ____, but they have also been cleaning.",
+        "options": ["cook", "cooking", "cooked", "cooks"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only has she been ____ hard, but she has also been saving money. (work)",
+        "answer": "working",
+        "options": ["work", "worked", "working"]
+      }
+    }
+  ],
+  "816": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't seen her ____ years.",
+        "answer": "for",
+        "options": ["from", "for", "since"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We haven't eaten out ____ a month.",
+        "options": ["since", "during", "in", "for"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He hasn't ____ me for weeks. (call)",
+        "answer": "called",
+        "options": ["called", "call", "calling"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ written to me for a year.",
+        "answer": "hasn't",
+        "options": ["hasn't", "haven't", "didn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They haven't visited us for a long time.",
+          "They haven't visited us since a long time.",
+          "They didn't visit us for a long time until now."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't ____ the dentist for two years. (see)",
+        "answer": "seen",
+        "options": ["seen", "saw", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My brother ____ phoned for three days.",
+        "options": ["hasn't", "haven't", "didn't", "isn't"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We haven't ____ a holiday for ages. (have)",
+        "answer": "had",
+        "options": ["had", "have", "having"]
+      }
+    }
+  ],
+  "817": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't finished my homework ____.",
+        "answer": "yet",
+        "options": ["already", "still", "yet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The bus ____ come yet.",
+        "options": ["haven't", "didn't", "isn't", "hasn't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She hasn't ____ yet. (reply)",
+        "answer": "replied",
+        "options": ["reply", "replying", "replied"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ decided yet where to go.",
+        "answer": "haven't",
+        "options": ["haven't", "hasn't", "didn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He hasn't yet arrive.",
+          "He didn't arrived yet.",
+          "He hasn't arrived yet."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I haven't ____ lunch yet. (have)",
+        "answer": "had",
+        "options": ["having", "had", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They ____ told us the answer yet.",
+        "options": ["hasn't", "didn't", "aren't", "haven't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film hasn't ____ yet. (start)",
+        "answer": "started",
+        "options": ["starting", "started", "start"]
+      }
+    }
+  ],
   "822": [
     {
       "type": "fill_blank",
@@ -14987,6 +17722,76 @@
       }
     }
   ],
+  "823": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've lived here ____ 2020.",
+        "answer": "since",
+        "options": ["from", "since", "for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We have known each other ____ school.",
+        "options": ["for", "from", "since", "during"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She has ____ here since March. (work)",
+        "answer": "worked",
+        "options": ["worked", "work", "working"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They have been friends ____ ten years.",
+        "answer": "for",
+        "options": ["from", "for", "since"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I know him since 2015.",
+          "I have known him since 2015.",
+          "I knew him since 2015."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He has ____ in Kyiv since he was a child. (live)",
+        "answer": "lived",
+        "options": ["living", "lived", "live"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She has had this phone ____ last year.",
+        "options": ["since", "for", "from", "in"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ owned this house since 2010.",
+        "answer": "have",
+        "options": ["has", "are", "have"]
+      }
+    }
+  ],
   "824": [
     {
       "type": "fill_blank",
@@ -15038,6 +17843,356 @@
           "has already booked"
         ],
         "answerIndex": 0
+      }
+    }
+  ],
+  "829": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've ____ finished my lunch. (just)",
+        "answer": "just",
+        "options": ["ago", "yet", "just"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She has just ____.",
+        "options": ["arrive", "arriving", "arrives", "arrived"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Oh no, I've ____ my keys! (lose)",
+        "answer": "lost",
+        "options": ["lost", "lose", "losing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They've just ____ home. (get)",
+        "answer": "got",
+        "options": ["get", "getting", "got"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He has just left the office.",
+          "He has just leaving the office.",
+          "He just has leave the office."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ just heard the news.",
+        "answer": "have",
+        "options": ["are", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I've ____ seen your brother in the shop.",
+        "options": ["ago", "yet", "just", "since"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The train has ____ left. (just)",
+        "answer": "just",
+        "options": ["yet", "ago", "just"]
+      }
+    }
+  ],
+  "830": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've ____ loved music. (always)",
+        "answer": "always",
+        "options": ["ago", "yet", "always"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "People ____ lived here for centuries.",
+        "options": ["has", "are", "have", "did"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She has been my best friend ____ years.",
+        "answer": "for",
+        "options": ["ago", "for", "since"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They have ____ in this town all their lives. (live)",
+        "answer": "lived",
+        "options": ["lived", "live", "living"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We are always enjoy walking.",
+          "We have always enjoyed walking.",
+          "We have always enjoying walking."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He has never ____ his job. (leave)",
+        "answer": "left",
+        "options": ["left", "leave", "leaving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "My family ____ owned this shop for ages.",
+        "options": ["have", "is", "has", "were"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've known her ____ I was a child.",
+        "answer": "since",
+        "options": ["during", "since", "for"]
+      }
+    }
+  ],
+  "831": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the best film I've ever ____. (see)",
+        "answer": "seen",
+        "options": ["seen", "saw", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This is the worst meal I've ever ____.",
+        "options": ["ate", "eat", "eating", "eaten"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's the kindest person I've ever ____. (meet)",
+        "answer": "met",
+        "options": ["met", "meet", "meeting"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the most beautiful city I have ____ visited.",
+        "answer": "ever",
+        "options": ["ever", "never", "yet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "This is the funniest story I have ever heard.",
+          "This is the funniest story I ever have heard.",
+          "This is the funniest story I have ever hear."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's the longest book I've ever ____. (read)",
+        "answer": "read",
+        "options": ["reading", "read", "reads"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He is the fastest runner we ____ ever seen.",
+        "options": ["has", "have", "are", "did"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the scariest film I've ever ____. (watch)",
+        "answer": "watched",
+        "options": ["watch", "watching", "watched"]
+      }
+    }
+  ],
+  "832": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ haven't got my money back.",
+        "answer": "still",
+        "options": ["yet", "already", "still"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He still ____ called me.",
+        "options": ["haven't", "hasn't", "didn't", "isn't"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We still haven't ____ a flat. (find)",
+        "answer": "found",
+        "options": ["found", "find", "finding"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She still ____ answered my email.",
+        "answer": "hasn't",
+        "options": ["haven't", "didn't", "hasn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They haven't still arrived.",
+          "They still didn't arrived.",
+          "They still haven't arrived."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I still haven't ____ the bill. (pay)",
+        "answer": "paid",
+        "options": ["paid", "pay", "paying"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The plumber ____ hasn't come.",
+        "options": ["already", "ago", "just", "still"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My brother still ____ finished his homework.",
+        "answer": "hasn't",
+        "options": ["haven't", "doesn't", "hasn't"]
+      }
+    }
+  ],
+  "835": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A new bridge has ____ in the city centre. (open)",
+        "answer": "opened",
+        "options": ["opened", "open", "opening"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Scientists ____ found water on the planet.",
+        "options": ["has", "are", "did", "have"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The president has ____ in Kyiv. (arrive)",
+        "answer": "arrived",
+        "options": ["arrived", "arrive", "arriving"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Police ____ arrested two men.",
+        "answer": "have",
+        "options": ["are", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct news headline: ____",
+        "options": [
+          "Prices have risen again.",
+          "Prices has rise again.",
+          "Prices are rise again."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A famous singer has ____ at the age of 80. (die)",
+        "answer": "died",
+        "options": ["dying", "died", "die"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The government ____ announced new rules.",
+        "options": ["have", "is", "has", "did"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Two people have been ____ in a car crash. (injure)",
+        "answer": "injured",
+        "options": ["injured", "injure", "injuring"]
       }
     }
   ],
