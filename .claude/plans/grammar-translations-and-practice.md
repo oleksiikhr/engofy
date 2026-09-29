@@ -213,17 +213,17 @@ shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` 
 `uk.examples` стає обов'язковим у схемі сиду; `usage-point-content-seed.spec.ts` перевіряє, що
 кожна точка має переклад кожного прикладу.
 
-### [ ] 18. Клік по слову на сторінках правил — дизайн (дослідницький)
+### [x] 18. Клік по слову на сторінках правил — дизайн (дослідницький)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
 
-У статтях клікабельні спани `[data-word-definition-id]`/`[data-phrase-id]` (`lib/reader-popup.ts`)
-мають контекстний сенс з AI-пайплайну; сторінки правил — статичні `.astro`, таких id немає.
-Єдиний пошук — `GET /dictionary/words/:lemma` (лише для залогінених, усі сенси леми). Порівняти:
-(а) build-time/seed-time анотація тексту сторінки через наявний пайплайн (контекстний сенс, як у
-статтях); (б) runtime-пошук за лемою через `nlp-service` (усі сенси, лише слова, що вже є в БД).
-Врахувати гостьовий доступ і CLS. Після рішення з користувачем — дописати зрізи.
+Рішення (з користувачем, 2026-09-29): анотація як у статтях, але без Claude API — контент пишеться
+вручну в сесії. Сенс = (lemma, POS): `word_definitions` унікальні за `(word_id, pos)`, тож вибір
+сенсу AI не потрібен — lemma і POS кожного токена дає локальний spaCy (`nlp-service`, як
+`spacy-parse-post`). Визначення/CEFR/приклад/`uk` для lemma+POS, яких ще немає в БД, пишуться вручну
+→ asset + seed; фрази — ручна розмітка в asset. Спани рендерить SSR (відоме до paint — без CLS),
+popup — той самий `lib/reader-popup.ts`. Зрізи 20-23.
 
 ### [ ] 19. Practice MVP: банк вправ на 1-2 usage points + агрегат на сторінці
 - Branch: `grammar-translations-and-practice-09-modality-1`
@@ -235,3 +235,37 @@ points у `assets/grammar-usage-point-exercises.json` (формат — `assets/
 патерном точки (`canDoStatement`/`explanation` + рівень + EGP-приклади як few-shot). Секція
 `Practice` у `GrammarShell.astro` — агрегат вправ усіх usage points сторінки. Зупинитися на
 перевірку якості користувачем, потім дописати зрізи масштабування по категоріях.
+
+### [ ] 20. Бекенд: токенізація тексту сторінок правил
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+Кеш `grammar_page_tokens` (slug, hash текстового блоку, токени). На промах — spaCy через
+`nlp-service`, Word/WordDefinition за lemma+POS (створюються без визначення, як у статтях).
+Ендпоінт: текстові блоки сторінки → спани (`wordDefinitionId`) + LexiconData; доступний гостям.
+
+### [ ] 21. Web: клікабельні слова на ручних сторінках
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+SSR обгортає слова текстових блоків ручної сторінки в `[data-word-definition-id]` спани, popup —
+`initReaderPopup` з LexiconData сторінки. e2e: клік по слову відкриває popup; "does not shift".
+
+### [ ] 22. Контент словника для сторінок правил
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+Визначення, CEFR, приклад і `uk`-переклад для lemma+POS зі сторінок правил, яких ще немає в БД —
+вручну в сесії, asset + seed-команда (сид авторитетний, `enrich-lexicon` такі пропускає). Обсяг
+порахувати після зрізу 20 і розбити на партії окремими зрізами.
+
+### [ ] 23. Фрази на сторінках правил
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+Ручна розмітка сталих виразів на сторінках (asset + seed: фраза, визначення, `uk`) →
+`[data-phrase-id]` спани в SSR.
