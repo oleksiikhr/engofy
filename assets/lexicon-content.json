@@ -6162,5 +6162,1919 @@
         "translation": "надзвичайно, дуже"
       }
     }
+  },
+  "factor": {
+    "noun": {
+      "definition": "One of the things that influence a result or decision.",
+      "example": "Price is an important factor when buying a car.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чинник, фактор"
+      }
+    }
+  },
+  "factory": {
+    "noun": {
+      "definition": "A building where goods are made in large quantities.",
+      "example": "He works in a car factory.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "фабрика, завод"
+      }
+    }
+  },
+  "fail": {
+    "verb": {
+      "definition": "To not succeed in doing something or in passing a test.",
+      "example": "She failed her driving test twice.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "зазнати невдачі, провалити"
+      }
+    }
+  },
+  "failure": {
+    "noun": {
+      "definition": "A lack of success, or something that does not succeed.",
+      "example": "The plan ended in failure.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "невдача, провал"
+      }
+    }
+  },
+  "faint": {
+    "adjective": {
+      "definition": "Not strong or clear; hard to see, hear or smell.",
+      "example": "We heard a faint noise from the attic.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "слабкий, ледь помітний"
+      }
+    }
+  },
+  "fairly": {
+    "adverb": {
+      "definition": "To a moderate degree; quite.",
+      "example": "The film was fairly good.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "досить, доволі"
+      }
+    }
+  },
+  "fairy": {
+    "noun": {
+      "definition": "A small imaginary creature with magic powers.",
+      "example": "The children love stories about fairies.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "фея"
+      }
+    }
+  },
+  "fake": {
+    "adjective": {
+      "definition": "Not real; made to look like something valuable or genuine.",
+      "example": "He was carrying a fake passport.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "підроблений, фальшивий"
+      }
+    },
+    "verb": {
+      "definition": "To make something false look real in order to trick people.",
+      "example": "She faked an illness to stay home.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "підробляти, симулювати"
+      }
+    }
+  },
+  "familiar": {
+    "adjective": {
+      "definition": "Well known to you; easy to recognise.",
+      "example": "Her face looks familiar to me.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "знайомий, звичний"
+      }
+    }
+  },
+  "fantastic": {
+    "adjective": {
+      "definition": "Extremely good; wonderful.",
+      "example": "We had a fantastic holiday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "фантастичний, чудовий"
+      }
+    }
+  },
+  "farm": {
+    "noun": {
+      "definition": "An area of land with buildings, used for growing crops or keeping animals.",
+      "example": "They live on a farm in the countryside.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ферма, господарство"
+      }
+    }
+  },
+  "fascinating": {
+    "adjective": {
+      "definition": "Extremely interesting.",
+      "example": "The documentary was absolutely fascinating.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "захоплюючий, чарівний"
+      }
+    }
+  },
+  "fashion": {
+    "noun": {
+      "definition": "The style of clothes and appearance that is popular at a particular time.",
+      "example": "She works in the fashion industry.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "мода"
+      }
+    }
+  },
+  "fashionable": {
+    "adjective": {
+      "definition": "Popular at a particular time; in the current style.",
+      "example": "Long coats are fashionable this winter.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "модний"
+      }
+    }
+  },
+  "fashioned": {
+    "adjective": {
+      "definition": "Made or shaped in a particular way, often used in compounds such as old-fashioned.",
+      "example": "The table was fashioned from a single piece of oak.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "виготовлений, зроблений"
+      }
+    }
+  },
+  "fatty": {
+    "adjective": {
+      "definition": "Containing a lot of fat.",
+      "example": "Doctors advise against eating too much fatty food.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "жирний"
+      }
+    }
+  },
+  "fault": {
+    "noun": {
+      "definition": "A mistake, or the responsibility for something bad that happens.",
+      "example": "It was my fault that we missed the train.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "провина, вада"
+      }
+    }
+  },
+  "favour": {
+    "noun": {
+      "definition": "A kind act that you do to help someone.",
+      "example": "Could you do me a favour and close the window?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "послуга, ласка"
+      }
+    }
+  },
+  "favourite": {
+    "adjective": {
+      "definition": "Liked more than any other of the same kind.",
+      "example": "Blue is my favourite colour.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "улюблений"
+      }
+    },
+    "noun": {
+      "definition": "A person or thing that you like more than the others.",
+      "example": "This song is my favourite.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "улюбленець, улюблене"
+      }
+    }
+  },
+  "feature": {
+    "noun": {
+      "definition": "An important or noticeable part of something.",
+      "example": "The car has several safety features.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "особливість, риса"
+      }
+    }
+  },
+  "feed": {
+    "verb": {
+      "definition": "To give food to a person or an animal.",
+      "example": "She feeds the cat twice a day.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "годувати"
+      }
+    }
+  },
+  "festival": {
+    "noun": {
+      "definition": "A series of events or performances, often held once a year.",
+      "example": "We went to a music festival in the summer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "фестиваль, свято"
+      }
+    }
+  },
+  "fetch": {
+    "verb": {
+      "definition": "To go and get something or someone and bring them back.",
+      "example": "Can you fetch my glasses from the bedroom?",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "піти по, принести"
+      }
+    }
+  },
+  "fiction": {
+    "noun": {
+      "definition": "Stories about imaginary people and events, not real ones.",
+      "example": "He mostly reads science fiction.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "художня література, вигадка"
+      }
+    }
+  },
+  "file": {
+    "noun": {
+      "definition": "A collection of information or documents stored together.",
+      "example": "Save the file on your computer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "файл, папка"
+      }
+    }
+  },
+  "filing": {
+    "noun": {
+      "definition": "The act of putting documents in order in files.",
+      "example": "The office assistant does the filing.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "підшивання документів, архівування"
+      }
+    }
+  },
+  "fill": {
+    "verb": {
+      "definition": "To make something full, or to become full.",
+      "example": "Please fill the glass with water.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "наповнювати, заповнювати"
+      }
+    }
+  },
+  "finishing": {
+    "noun": {
+      "definition": "The last stage of making something, which gives it a neat surface or look.",
+      "example": "The finishing on the table is beautiful.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "оздоблення, завершення"
+      }
+    }
+  },
+  "finite": {
+    "adjective": {
+      "definition": "Having a limit or an end; in grammar, showing tense and agreeing with a subject.",
+      "example": "\"Walks\" is a finite verb form.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "скінченний, особовий"
+      }
+    },
+    "noun": {
+      "definition": "A finite verb form, one that shows tense and agrees with its subject.",
+      "example": "A finite must agree with its subject.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "особова форма дієслова"
+      }
+    }
+  },
+  "firm": {
+    "adjective": {
+      "definition": "Hard or solid, or not likely to change.",
+      "example": "We need a firm decision by Friday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "твердий, непохитний"
+      }
+    },
+    "noun": {
+      "definition": "A business or company.",
+      "example": "She works for a law firm.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "фірма, компанія"
+      }
+    }
+  },
+  "firmly": {
+    "adverb": {
+      "definition": "Strongly and with force, or in a determined way.",
+      "example": "She held the rope firmly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "міцно, твердо"
+      }
+    }
+  },
+  "firstly": {
+    "adverb": {
+      "definition": "Used to introduce the first of a list of points.",
+      "example": "Firstly, I would like to thank you all for coming.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "по-перше"
+      }
+    }
+  },
+  "fix": {
+    "noun": {
+      "definition": "A solution to a problem, or an act of repairing something.",
+      "example": "There is no quick fix for this problem.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "виправлення, вихід"
+      }
+    },
+    "verb": {
+      "definition": "To repair something, or to decide or arrange something.",
+      "example": "Can you fix my bike?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "лагодити, вирішувати"
+      }
+    }
+  },
+  "fixed": {
+    "adjective": {
+      "definition": "Set in one position or not able to be changed.",
+      "example": "The meeting is at a fixed time each week.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "фіксований, встановлений"
+      }
+    }
+  },
+  "flabby": {
+    "adjective": {
+      "definition": "Soft and loose in a way that is not firm or muscular.",
+      "example": "He was worried about his flabby arms.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "в'ялий, обвислий"
+      }
+    }
+  },
+  "flat": {
+    "adjective": {
+      "definition": "Smooth and level, with no bumps.",
+      "example": "The road is completely flat.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "плоский, рівний"
+      }
+    },
+    "noun": {
+      "definition": "A set of rooms for living in on one floor of a building.",
+      "example": "They rent a small flat in the city centre.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "квартира"
+      }
+    }
+  },
+  "flexible": {
+    "adjective": {
+      "definition": "Able to change or be changed easily to suit new conditions.",
+      "example": "I have flexible working hours.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "гнучкий"
+      }
+    }
+  },
+  "flip": {
+    "verb": {
+      "definition": "To turn something over quickly, or to make it move with a quick action.",
+      "example": "He flipped the pancake in the pan.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перевертати, підкидати"
+      }
+    }
+  },
+  "flour": {
+    "noun": {
+      "definition": "A powder made from grain, used for baking bread and cakes.",
+      "example": "Mix the flour with the eggs and milk.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "борошно"
+      }
+    }
+  },
+  "flower": {
+    "noun": {
+      "definition": "The colourful part of a plant.",
+      "example": "She gave me a bunch of flowers.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "квітка"
+      }
+    }
+  },
+  "fluctuation": {
+    "noun": {
+      "definition": "A change, often repeated, in the level or amount of something.",
+      "example": "There are big fluctuations in the price of oil.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "коливання, флуктуація"
+      }
+    }
+  },
+  "fly": {
+    "verb": {
+      "definition": "To move through the air, or to travel by plane.",
+      "example": "We fly to Rome tomorrow.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "літати"
+      }
+    }
+  },
+  "focused": {
+    "adjective": {
+      "definition": "Giving your full attention to one thing.",
+      "example": "He stayed focused on his work all day.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зосереджений"
+      }
+    }
+  },
+  "fog": {
+    "noun": {
+      "definition": "Thick cloud close to the ground that makes it hard to see.",
+      "example": "Flights were cancelled because of thick fog.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "туман"
+      }
+    }
+  },
+  "foolish": {
+    "adjective": {
+      "definition": "Not sensible; showing a lack of good judgment.",
+      "example": "It was foolish of me to trust him.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нерозумний, безглуздий"
+      }
+    }
+  },
+  "forbid": {
+    "noun": {
+      "definition": "Used in the phrase \"God forbid\" to say that you hope something will not happen.",
+      "example": "God forbid anything should happen to him.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "не дай Боже"
+      }
+    },
+    "verb": {
+      "definition": "To order that something must not be done.",
+      "example": "The law forbids smoking in public buildings.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "забороняти"
+      }
+    }
+  },
+  "forced": {
+    "adjective": {
+      "definition": "Done because you have no choice, or not natural.",
+      "example": "She gave a forced smile.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "вимушений, натягнутий"
+      }
+    }
+  },
+  "forcefully": {
+    "adverb": {
+      "definition": "In a strong and determined way.",
+      "example": "He argued forcefully for the change.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "наполегливо, енергійно"
+      }
+    }
+  },
+  "forecast": {
+    "noun": {
+      "definition": "A statement about what is likely to happen, especially with the weather.",
+      "example": "The forecast says it will rain tomorrow.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прогноз"
+      }
+    }
+  },
+  "foresee": {
+    "verb": {
+      "definition": "To know or expect that something will happen before it does.",
+      "example": "Nobody could have foreseen the problem.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "передбачати"
+      }
+    }
+  },
+  "forest": {
+    "noun": {
+      "definition": "A large area covered with trees.",
+      "example": "We went for a walk in the forest.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ліс"
+      }
+    }
+  },
+  "forever": {
+    "adverb": {
+      "definition": "For all time; without ever ending.",
+      "example": "I will remember this day forever.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "назавжди, вічно"
+      }
+    }
+  },
+  "forgive": {
+    "verb": {
+      "definition": "To stop being angry with someone for something they did wrong.",
+      "example": "Please forgive me for being late.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пробачати"
+      }
+    }
+  },
+  "forgot": {
+    "verb": {
+      "definition": "Past simple of forget: to fail to remember something.",
+      "example": "I forgot her name.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "забув"
+      }
+    }
+  },
+  "formal": {
+    "adjective": {
+      "definition": "Serious and correct, not relaxed or friendly.",
+      "example": "You must wear formal clothes to the ceremony.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "офіційний, формальний"
+      }
+    }
+  },
+  "formally": {
+    "adverb": {
+      "definition": "In an official or serious way.",
+      "example": "The contract was formally signed yesterday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "офіційно, формально"
+      }
+    }
+  },
+  "fortunate": {
+    "adjective": {
+      "definition": "Having good luck.",
+      "example": "We were fortunate to find a room.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "щасливий, вдалий"
+      }
+    }
+  },
+  "fortunately": {
+    "adverb": {
+      "definition": "Used to say that something good happened by luck.",
+      "example": "Fortunately, no one was hurt.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "на щастя"
+      }
+    }
+  },
+  "fourth": {
+    "adjective": {
+      "definition": "Coming after the third of a series.",
+      "example": "This is the fourth time I have called you.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "четвертий"
+      }
+    }
+  },
+  "fox": {
+    "noun": {
+      "definition": "A wild animal like a small dog with red-brown fur and a thick tail.",
+      "example": "A fox ran across the road.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "лисиця"
+      }
+    }
+  },
+  "frame": {
+    "noun": {
+      "definition": "A border that goes around a picture, or the structure that supports something.",
+      "example": "She put the photo in a silver frame.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "рамка, каркас"
+      }
+    }
+  },
+  "frankly": {
+    "adverb": {
+      "definition": "Used to say something in an honest and direct way.",
+      "example": "Frankly, I don't think it will work.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відверто, чесно кажучи"
+      }
+    }
+  },
+  "freely": {
+    "adverb": {
+      "definition": "Without being controlled or limited.",
+      "example": "Everyone can speak freely here.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вільно, безперешкодно"
+      }
+    }
+  },
+  "freezing": {
+    "adjective": {
+      "definition": "Extremely cold.",
+      "example": "It's freezing in here!",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дуже холодний, крижаний"
+      }
+    }
+  },
+  "frequency": {
+    "adjective": {
+      "definition": "Used before another noun to describe how often something happens, as in frequency adverbs.",
+      "example": "Adverbs of frequency include \"always\" and \"never\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "частотний"
+      }
+    },
+    "noun": {
+      "definition": "The number of times something happens in a period of time.",
+      "example": "The frequency of the trains has increased.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "частота"
+      }
+    }
+  },
+  "frequent": {
+    "adjective": {
+      "definition": "Happening often.",
+      "example": "She is a frequent visitor to our house.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "частий"
+      }
+    }
+  },
+  "frequently": {
+    "adverb": {
+      "definition": "Often; many times.",
+      "example": "He frequently visits his grandparents.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "часто"
+      }
+    }
+  },
+  "fresher": {
+    "adjective": {
+      "definition": "Comparative of fresh: newer, cleaner or more recently made.",
+      "example": "The bread is fresher in the morning.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "свіжіший"
+      }
+    }
+  },
+  "fridge": {
+    "noun": {
+      "definition": "A cold cabinet in which food is kept fresh.",
+      "example": "Put the milk back in the fridge.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "холодильник"
+      }
+    }
+  },
+  "friendly": {
+    "adjective": {
+      "definition": "Kind and pleasant towards other people.",
+      "example": "The neighbours are very friendly.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дружній, привітний"
+      }
+    }
+  },
+  "friendship": {
+    "noun": {
+      "definition": "A relationship between people who are friends.",
+      "example": "Their friendship has lasted for many years.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дружба"
+      }
+    }
+  },
+  "frightening": {
+    "adjective": {
+      "definition": "Making you feel afraid.",
+      "example": "It was a frightening experience.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лячний, жахливий"
+      }
+    }
+  },
+  "fronted": {
+    "adjective": {
+      "definition": "Placed at the front of a sentence, for emphasis.",
+      "example": "A fronted adverbial comes before the subject.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "винесений на початок"
+      }
+    }
+  },
+  "fronting": {
+    "noun": {
+      "definition": "Moving a word or phrase to the front of a sentence for emphasis.",
+      "example": "Fronting is common in spoken English.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "винесення на початок речення"
+      }
+    },
+    "verb": {
+      "definition": "Present participle of front: putting a word or phrase at the beginning of a clause.",
+      "example": "Fronting an adverb can change the emphasis.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "виносячи на початок"
+      }
+    }
+  },
+  "fruit": {
+    "noun": {
+      "definition": "The sweet part of a plant that contains seeds, such as an apple.",
+      "example": "I eat fruit every day.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "фрукт, плід"
+      }
+    }
+  },
+  "fulfil": {
+    "verb": {
+      "definition": "To do or achieve something that was hoped for or promised.",
+      "example": "She fulfilled her dream of becoming a doctor.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виконувати, здійснювати"
+      }
+    }
+  },
+  "fuller": {
+    "noun": {
+      "definition": "Comparative of full: containing more than something else.",
+      "example": "This glass is fuller than that one.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "повніший"
+      }
+    }
+  },
+  "function": {
+    "noun": {
+      "definition": "The purpose that something has, or the job it does.",
+      "example": "The function of the heart is to pump blood.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "функція, призначення"
+      }
+    }
+  },
+  "funeral": {
+    "noun": {
+      "definition": "A ceremony held after a person has died.",
+      "example": "Many people came to his funeral.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "похорон"
+      }
+    }
+  },
+  "funniest": {
+    "noun": {
+      "definition": "Superlative of funny: the most amusing.",
+      "example": "That was the funniest film I have seen.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "найсмішніший"
+      }
+    }
+  },
+  "funnily": {
+    "adverb": {
+      "definition": "In a way that is strange or amusing.",
+      "example": "Funnily enough, I was thinking of you.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "дивним чином, смішно"
+      }
+    }
+  },
+  "furious": {
+    "adjective": {
+      "definition": "Extremely angry.",
+      "example": "He was furious when he saw the mess.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розлючений, скажений"
+      }
+    }
+  },
+  "furniture": {
+    "noun": {
+      "definition": "Things such as tables, chairs and beds that you put in a room.",
+      "example": "We bought some new furniture for the living room.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "меблі"
+      }
+    }
+  },
+  "furthermore": {
+    "adverb": {
+      "definition": "Used to add another point to what you have just said.",
+      "example": "The plan is cheap; furthermore, it is quick.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "більше того, крім того"
+      }
+    }
+  },
+  "fuse": {
+    "verb": {
+      "definition": "To join together to form a single thing.",
+      "example": "The two companies fused into one.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "зливатися, з'єднувати"
+      }
+    }
+  },
+  "gain": {
+    "verb": {
+      "definition": "To get something useful or wanted, or to increase in something.",
+      "example": "He gained a lot of experience abroad.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "здобувати, набувати"
+      }
+    }
+  },
+  "garage": {
+    "noun": {
+      "definition": "A building for keeping a car in, or a place where cars are repaired.",
+      "example": "She parked the car in the garage.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гараж, автомайстерня"
+      }
+    }
+  },
+  "garden": {
+    "noun": {
+      "definition": "A piece of land next to a house where plants are grown.",
+      "example": "They sat in the garden all afternoon.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сад, город"
+      }
+    }
+  },
+  "garlic": {
+    "adjective": {
+      "definition": "Tasting or smelling of garlic, the strong-smelling plant used in cooking.",
+      "example": "We had garlic bread with the pasta.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "часниковий"
+      }
+    }
+  },
+  "gate": {
+    "noun": {
+      "definition": "A door in a fence or wall outside, or the place where you board a plane.",
+      "example": "Please close the gate behind you.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ворота, хвіртка"
+      }
+    }
+  },
+  "gender": {
+    "noun": {
+      "definition": "The fact of being male or female, or the class of a noun in some languages.",
+      "example": "The form does not ask for your gender.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стать, рід"
+      }
+    }
+  },
+  "generic": {
+    "adjective": {
+      "definition": "Relating to a whole group of things, not specific.",
+      "example": "\"Vehicle\" is a generic term for cars and buses.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "загальний, родовий"
+      }
+    }
+  },
+  "generous": {
+    "adjective": {
+      "definition": "Happy to give more of something than is usual or expected.",
+      "example": "She is very generous with her time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "щедрий"
+      }
+    }
+  },
+  "genius": {
+    "noun": {
+      "definition": "A person with unusually great ability or intelligence.",
+      "example": "Einstein was a genius.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "геній"
+      }
+    }
+  },
+  "gentle": {
+    "adjective": {
+      "definition": "Kind and calm, not rough or violent.",
+      "example": "He has a gentle voice.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лагідний, ніжний"
+      }
+    }
+  },
+  "gently": {
+    "adverb": {
+      "definition": "In a soft and careful way.",
+      "example": "She gently put the baby to bed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ніжно, обережно"
+      }
+    }
+  },
+  "genuine": {
+    "adjective": {
+      "definition": "Real, and not false or pretended.",
+      "example": "This is a genuine leather bag.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "справжній, щирий"
+      }
+    }
+  },
+  "ghost": {
+    "noun": {
+      "definition": "The spirit of a dead person that some people believe they can see.",
+      "example": "They say a ghost lives in the old house.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "привид"
+      }
+    }
+  },
+  "gift": {
+    "noun": {
+      "definition": "Something you give to someone without asking for payment.",
+      "example": "He gave her a gift for her birthday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "подарунок"
+      }
+    }
+  },
+  "girlfriend": {
+    "noun": {
+      "definition": "A woman or girl with whom someone has a romantic relationship.",
+      "example": "He is having dinner with his girlfriend.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дівчина, подруга"
+      }
+    }
+  },
+  "gladly": {
+    "adverb": {
+      "definition": "In a willing and happy way.",
+      "example": "I will gladly help you move.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "охоче, із задоволенням"
+      }
+    }
+  },
+  "goodbye": {
+    "noun": {
+      "definition": "A word or act used when leaving someone.",
+      "example": "She said goodbye and left.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "прощання"
+      }
+    }
+  },
+  "gorilla": {
+    "noun": {
+      "definition": "A very large, strong ape with black hair.",
+      "example": "We saw a gorilla at the zoo.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "горила"
+      }
+    }
+  },
+  "gradable": {
+    "adjective": {
+      "definition": "Able to be measured in degrees, so that it can be used with words like \"very\".",
+      "example": "\"Cold\" is a gradable adjective; \"frozen\" is not.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "градуйований, що має ступені"
+      }
+    }
+  },
+  "grade": {
+    "noun": {
+      "definition": "A level of quality or a mark given for school work.",
+      "example": "She got good grades in all her subjects.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "оцінка, рівень"
+      }
+    }
+  },
+  "gradual": {
+    "adjective": {
+      "definition": "Happening slowly over a long period.",
+      "example": "There has been a gradual improvement in her health.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "поступовий"
+      }
+    }
+  },
+  "graduate": {
+    "verb": {
+      "definition": "To finish a course of study at a university or school.",
+      "example": "He graduated from university last year.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "закінчувати навчання"
+      }
+    }
+  },
+  "grammar": {
+    "noun": {
+      "definition": "The rules for how words are combined into sentences in a language.",
+      "example": "English grammar can be difficult.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "граматика"
+      }
+    }
+  },
+  "grammatical": {
+    "adjective": {
+      "definition": "Relating to grammar, or following its rules.",
+      "example": "That is not a grammatical sentence.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "граматичний"
+      }
+    }
+  },
+  "grammatically": {
+    "adverb": {
+      "definition": "In a way that follows the rules of grammar.",
+      "example": "The sentence is grammatically correct.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "граматично"
+      }
+    }
+  },
+  "grandchild": {
+    "noun": {
+      "definition": "The child of your son or daughter.",
+      "example": "She has five grandchildren.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "онук, онука"
+      }
+    }
+  },
+  "grandfather": {
+    "noun": {
+      "definition": "The father of your mother or father.",
+      "example": "My grandfather lives in the country.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дідусь"
+      }
+    }
+  },
+  "grandma": {
+    "noun": {
+      "definition": "A informal word for grandmother.",
+      "example": "Grandma made us a cake.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "бабуся"
+      }
+    }
+  },
+  "grandmother": {
+    "noun": {
+      "definition": "The mother of your mother or father.",
+      "example": "My grandmother tells great stories.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "бабуся"
+      }
+    }
+  },
+  "grandpa": {
+    "noun": {
+      "definition": "An informal word for grandfather.",
+      "example": "Grandpa taught me to fish.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дідусь"
+      }
+    }
+  },
+  "grandparent": {
+    "noun": {
+      "definition": "The parent of your mother or father.",
+      "example": "I visit my grandparents every weekend.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дідусь або бабуся"
+      }
+    }
+  },
+  "graph": {
+    "noun": {
+      "definition": "A drawing that shows how two sets of numbers are related.",
+      "example": "The graph shows how sales have grown.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "графік, діаграма"
+      }
+    }
+  },
+  "grateful": {
+    "adjective": {
+      "definition": "Feeling thankful for something someone has done.",
+      "example": "I am grateful for your help.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вдячний"
+      }
+    }
+  },
+  "greeting": {
+    "noun": {
+      "definition": "A polite word or gesture used when you meet someone.",
+      "example": "They exchanged greetings at the door.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "привітання"
+      }
+    }
+  },
+  "guard": {
+    "noun": {
+      "definition": "A person whose job is to protect a place or watch people.",
+      "example": "A guard stood at the gate.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "охоронець, вартовий"
+      }
+    }
+  },
+  "guest": {
+    "noun": {
+      "definition": "A person who is invited to visit your home or an event.",
+      "example": "We have guests coming for dinner.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гість"
+      }
+    }
+  },
+  "guide": {
+    "noun": {
+      "definition": "A person who shows the way or gives information to visitors.",
+      "example": "The guide showed us around the castle.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "гід, путівник"
+      }
+    },
+    "verb": {
+      "definition": "To show someone the way, or to help them make decisions.",
+      "example": "She guided us through the old town.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вести, направляти"
+      }
+    }
+  },
+  "guidebook": {
+    "noun": {
+      "definition": "A book that gives information for visitors to a place.",
+      "example": "We bought a guidebook to Rome.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "путівник"
+      }
+    }
+  },
+  "guilty": {
+    "adjective": {
+      "definition": "Feeling ashamed because you have done something wrong, or having broken the law.",
+      "example": "I feel guilty about forgetting her birthday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "винний, винуватий"
+      }
+    }
+  },
+  "guitar": {
+    "noun": {
+      "definition": "A musical instrument with strings that you play with your fingers.",
+      "example": "He plays the guitar in a band.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гітара"
+      }
+    }
+  },
+  "gunshot": {
+    "noun": {
+      "definition": "The sound of a gun being fired.",
+      "example": "We heard a gunshot in the distance.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "постріл"
+      }
+    }
+  },
+  "gym": {
+    "noun": {
+      "definition": "A place with equipment where people exercise.",
+      "example": "She goes to the gym three times a week.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "спортзал"
+      }
+    }
+  },
+  "habitual": {
+    "adjective": {
+      "definition": "Done regularly or as a habit.",
+      "example": "He is a habitual liar.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "звичний, постійний"
+      }
+    }
+  },
+  "hairdresser": {
+    "noun": {
+      "definition": "A person whose job is to cut and style hair.",
+      "example": "I have an appointment at the hairdresser.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "перукар, перукарня"
+      }
+    }
+  },
+  "handful": {
+    "noun": {
+      "definition": "A small number of people or things.",
+      "example": "Only a handful of people came.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "жменя, кілька"
+      }
+    }
+  },
+  "handle": {
+    "verb": {
+      "definition": "To deal with a situation, a task or a person.",
+      "example": "She handled the problem calmly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "впоратися, обходитися"
+      }
+    }
+  },
+  "hang": {
+    "verb": {
+      "definition": "To fix something at the top so that it is not supported from below.",
+      "example": "Hang your coat on the hook.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вішати, висіти"
+      }
+    }
+  },
+  "happiness": {
+    "noun": {
+      "definition": "The feeling of being happy.",
+      "example": "Money cannot buy happiness.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "щастя"
+      }
+    }
+  },
+  "harbour": {
+    "noun": {
+      "definition": "An area of water next to land where ships can stay safely.",
+      "example": "Fishing boats filled the harbour.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "гавань, порт"
+      }
+    }
+  },
+  "hardly": {
+    "adverb": {
+      "definition": "Almost not; only just.",
+      "example": "I could hardly hear what she said.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ледве, майже не"
+      }
+    }
+  },
+  "harmful": {
+    "adjective": {
+      "definition": "Causing damage or hurting someone.",
+      "example": "Smoking is harmful to your health.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шкідливий"
+      }
+    }
+  },
+  "hat": {
+    "noun": {
+      "definition": "A covering that you wear on your head.",
+      "example": "He wore a woolly hat.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "капелюх, шапка"
+      }
+    },
+    "verb": {
+      "definition": "To put a hat on someone.",
+      "example": "She hatted the child before they went out.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "надівати капелюх"
+      }
+    }
+  },
+  "headache": {
+    "noun": {
+      "definition": "A pain in your head.",
+      "example": "I've got a terrible headache.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "головний біль"
+      }
+    }
+  },
+  "heading": {
+    "noun": {
+      "definition": "A title at the top of a piece of writing or a section.",
+      "example": "Write the heading at the top of the page.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заголовок"
+      }
+    }
+  },
+  "headline": {
+    "noun": {
+      "definition": "The title of a newspaper story, printed in large letters.",
+      "example": "The headline read \"Storm hits coast\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заголовок, газетний заголовок"
+      }
+    }
+  },
+  "healthy": {
+    "adjective": {
+      "definition": "Fit and well, or good for your body.",
+      "example": "Eating fruit is healthy.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "здоровий, корисний"
+      }
+    }
+  },
+  "hearsay": {
+    "noun": {
+      "definition": "Information that you have heard but do not know to be true.",
+      "example": "The story is only hearsay.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "чутки, пересуди"
+      }
+    }
+  },
+  "heating": {
+    "noun": {
+      "definition": "A system that makes buildings warm.",
+      "example": "The heating is broken again.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "опалення"
+      }
+    }
+  },
+  "hedge": {
+    "verb": {
+      "definition": "To avoid giving a clear answer or promise.",
+      "example": "He hedged when asked about the date.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "ухилятися від відповіді"
+      }
+    }
+  },
+  "hedging": {
+    "verb": {
+      "definition": "Present participle of hedge: avoiding a clear answer or using cautious language.",
+      "example": "She kept hedging about her plans.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "ухиляючись, застерігаючись"
+      }
+    }
+  },
+  "heel": {
+    "noun": {
+      "definition": "The back part of the foot, or of a shoe.",
+      "example": "These shoes hurt my heel.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "п'ята, каблук"
+      }
+    }
+  },
+  "helmet": {
+    "noun": {
+      "definition": "A hard hat that protects your head.",
+      "example": "You must wear a helmet when you ride a bike.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "шолом, каска"
+      }
+    }
+  },
+  "helper": {
+    "noun": {
+      "definition": "A person who helps someone do something.",
+      "example": "Every helper gets a free lunch.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "помічник"
+      }
+    }
+  },
+  "hence": {
+    "adverb": {
+      "definition": "For this reason; from now.",
+      "example": "The road is closed, hence the delay.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "звідси, тому"
+      }
+    }
+  },
+  "hero": {
+    "noun": {
+      "definition": "A person admired for being brave or doing something good.",
+      "example": "The firefighter was a hero.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "герой"
+      }
+    }
+  },
+  "hesitate": {
+    "verb": {
+      "definition": "To pause before doing something because you are not sure.",
+      "example": "Don't hesitate to call me.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вагатися, зволікати"
+      }
+    }
+  },
+  "hide": {
+    "verb": {
+      "definition": "To put something where it cannot easily be seen or found.",
+      "example": "She hid the present in the cupboard.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ховати, ховатися"
+      }
+    }
+  },
+  "highlight": {
+    "noun": {
+      "definition": "The best or most interesting part of something.",
+      "example": "The highlight of the trip was the boat ride.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "найцікавіший момент"
+      }
+    },
+    "verb": {
+      "definition": "To make something easy to notice, or to mark it with a bright pen.",
+      "example": "The report highlights several problems.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "виділяти, підкреслювати"
+      }
+    }
+  },
+  "hill": {
+    "noun": {
+      "definition": "A raised area of land, smaller than a mountain.",
+      "example": "We walked up the hill.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пагорб, узгір'я"
+      }
+    }
+  },
+  "hire": {
+    "verb": {
+      "definition": "To pay to use something for a short time, or to give someone a job.",
+      "example": "We hired a car for the weekend.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "наймати, брати в оренду"
+      }
+    }
+  },
+  "historic": {
+    "adjective": {
+      "definition": "Important in history.",
+      "example": "It was a historic moment for the country.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "історичний, доленосний"
+      }
+    }
+  },
+  "hoarse": {
+    "adjective": {
+      "definition": "Having a rough, dry voice.",
+      "example": "I was hoarse after the concert.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "захриплий"
+      }
+    }
+  },
+  "hobby": {
+    "noun": {
+      "definition": "An activity that you enjoy doing in your free time.",
+      "example": "My hobby is painting.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "хобі"
+      }
+    }
+  },
+  "hockey": {
+    "noun": {
+      "definition": "A team game played on grass or ice with sticks and a ball or puck.",
+      "example": "She plays hockey for the school.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "хокей"
+      }
+    }
+  },
+  "hole": {
+    "noun": {
+      "definition": "An empty space or opening in something.",
+      "example": "There is a hole in my sock.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "діра, отвір"
+      }
+    }
+  },
+  "holiday": {
+    "noun": {
+      "definition": "A period of time when you do not work or go to school.",
+      "example": "We are going on holiday next week.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "відпустка, свято"
+      }
+    }
+  },
+  "homework": {
+    "noun": {
+      "definition": "Schoolwork that a student does at home.",
+      "example": "I have a lot of homework tonight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "домашнє завдання"
+      }
+    }
+  },
+  "honest": {
+    "adjective": {
+      "definition": "Telling the truth and not cheating.",
+      "example": "He is an honest man.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "чесний"
+      }
+    }
+  },
+  "honestly": {
+    "adverb": {
+      "definition": "In a truthful way, or used to emphasise what you say.",
+      "example": "Honestly, I don't know where it is.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чесно, справді"
+      }
+    }
+  },
+  "hop": {
+    "verb": {
+      "definition": "To move by jumping on one foot, or to move quickly and easily.",
+      "example": "The rabbit hopped across the grass.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "стрибати, скакати"
+      }
+    }
+  },
+  "hopefully": {
+    "adverb": {
+      "definition": "Used to say that you hope something will happen.",
+      "example": "Hopefully, the weather will be nice.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сподіваюся, будемо сподіватися"
+      }
+    }
+  },
+  "horrible": {
+    "adjective": {
+      "definition": "Very unpleasant or bad.",
+      "example": "The food was horrible.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "жахливий, огидний"
+      }
+    }
+  },
+  "horror": {
+    "noun": {
+      "definition": "A strong feeling of fear and shock.",
+      "example": "She screamed in horror.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "жах"
+      }
+    }
+  },
+  "hotter": {
+    "adjective": {
+      "definition": "Comparative of hot: having a higher temperature.",
+      "example": "Today is hotter than yesterday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "спекотніший, гарячіший"
+      }
+    }
+  },
+  "housewife": {
+    "noun": {
+      "definition": "A woman who works at home and looks after her family.",
+      "example": "Her mother was a housewife.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "домогосподарка"
+      }
+    }
+  },
+  "hug": {
+    "verb": {
+      "definition": "To hold someone tightly in your arms.",
+      "example": "She hugged her mother goodbye.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обіймати"
+      }
+    }
+  },
+  "humanity": {
+    "noun": {
+      "definition": "All people, or the quality of being kind.",
+      "example": "The disease is a threat to humanity.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "людство, гуманність"
+      }
+    }
+  },
+  "humorous": {
+    "adjective": {
+      "definition": "Funny and amusing.",
+      "example": "He wrote a humorous story.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "жартівливий, смішний"
+      }
+    }
+  },
+  "humour": {
+    "noun": {
+      "definition": "The quality of being funny.",
+      "example": "She has a good sense of humour.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "гумор"
+      }
+    }
+  },
+  "hundred": {
+    "noun": {
+      "definition": "The number 100.",
+      "example": "There were a hundred people at the party.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сотня, сто"
+      }
+    }
+  },
+  "hungry": {
+    "adjective": {
+      "definition": "Wanting to eat.",
+      "example": "I'm hungry; what's for dinner?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "голодний"
+      }
+    }
+  },
+  "hurry": {
+    "noun": {
+      "definition": "A need to do something quickly.",
+      "example": "I'm in a hurry.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "поспіх"
+      }
+    },
+    "verb": {
+      "definition": "To move or act quickly.",
+      "example": "Hurry up, or we'll be late.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "поспішати"
+      }
+    }
+  },
+  "hyperbole": {
+    "noun": {
+      "definition": "A way of speaking that greatly exaggerates something.",
+      "example": "\"I'm starving\" is often hyperbole.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "гіпербола, перебільшення"
+      }
+    }
+  },
+  "hyphen": {
+    "noun": {
+      "definition": "A short line (-) used to join words or parts of words.",
+      "example": "\"Well-known\" is written with a hyphen.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "дефіс"
+      }
+    }
+  },
+  "hyphenate": {
+    "verb": {
+      "definition": "To join two words with a hyphen.",
+      "example": "You should hyphenate this compound.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "писати через дефіс"
+      }
+    }
+  },
+  "hypothetical": {
+    "adjective": {
+      "definition": "Based on an imagined situation, not a real one.",
+      "example": "Let's discuss a hypothetical case.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "гіпотетичний"
+      }
+    }
   }
 }
