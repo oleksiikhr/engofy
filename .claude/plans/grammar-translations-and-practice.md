@@ -277,13 +277,18 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 алфавітом: зрізи 30-37. Визначення — сенс, у якому слово вжите на сторінці (для хибного POS від spaCy
 — все одно реальне значення).
 
-### [ ] 23. Фрази на сторінках правил
+### [x] 23. Фрази на сторінках правил
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
 
 Ручна розмітка сталих виразів на сторінках (asset + seed: фраза, визначення, `uk`) →
 `[data-phrase-id]` спани в SSR.
+
+Зроблено: спан блоку — слово або фраза (`grammar_page_lex_blocks.spans`). `assets/phrase-content.json`
+(98 ідіом/сталих виразів — буквальний збіг; 120 фразових дієслів з `"type": "phrasal_verb"` — лише
+де їх групує spaCy, тож хибні розбори й "go on holiday" без спану) + `words import-phrase-content`.
+Після зміни списку — `annotate-pages --refresh`.
 
 ### [ ] 24. Банк вправ: ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS (83)
 - Branch: `grammar-translations-and-practice-09-modality-1`
