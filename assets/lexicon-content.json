@@ -8076,5 +8076,2433 @@
         "translation": "гіпотетичний"
       }
     }
+  },
+  "icy": {
+    "adjective": {
+      "definition": "Very cold, or covered with ice.",
+      "example": "The icy wind made my face hurt.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "крижаний, обледенілий"
+      }
+    }
+  },
+  "ideal": {
+    "adjective": {
+      "definition": "Perfect, or the best possible for a purpose.",
+      "example": "This is an ideal place for a picnic.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ідеальний"
+      }
+    },
+    "noun": {
+      "definition": "A standard or principle that you try to live by or reach.",
+      "example": "Equality is an ideal many people believe in.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ідеал"
+      }
+    }
+  },
+  "ideally": {
+    "adverb": {
+      "definition": "In the best possible situation; if everything could be perfect.",
+      "example": "Ideally, we should leave before eight.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "в ідеалі, ідеально"
+      }
+    }
+  },
+  "identical": {
+    "adjective": {
+      "definition": "Exactly the same in every way.",
+      "example": "The twins wore identical jackets.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ідентичний, однаковий"
+      }
+    }
+  },
+  "identify": {
+    "verb": {
+      "definition": "To recognise someone or something and say who or what they are.",
+      "example": "Can you identify the man in the photo?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "впізнавати, визначати"
+      }
+    }
+  },
+  "identity": {
+    "noun": {
+      "definition": "Who a person is, or the qualities that make a person or group different from others.",
+      "example": "The police checked his identity before letting him in.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "особистість, ідентичність"
+      }
+    }
+  },
+  "idiom": {
+    "noun": {
+      "definition": "A fixed group of words whose meaning is different from the meanings of the separate words.",
+      "example": "\"It's raining cats and dogs\" is an idiom.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ідіома"
+      }
+    }
+  },
+  "ignorant": {
+    "adjective": {
+      "definition": "Not knowing something that you should know, or rude because of not knowing.",
+      "example": "He was ignorant of the rules.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "необізнаний, невіглас"
+      }
+    }
+  },
+  "ignore": {
+    "verb": {
+      "definition": "To pay no attention to someone or something on purpose.",
+      "example": "She ignored my message all day.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ігнорувати, не зважати"
+      }
+    }
+  },
+  "ill": {
+    "adjective": {
+      "definition": "Not well; suffering from a disease or health problem.",
+      "example": "He stayed at home because he was ill.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "хворий"
+      }
+    }
+  },
+  "illegal": {
+    "adjective": {
+      "definition": "Not allowed by the law.",
+      "example": "It is illegal to drive without a licence.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "незаконний, нелегальний"
+      }
+    }
+  },
+  "illustrate": {
+    "verb": {
+      "definition": "To explain or make something clear by giving examples or pictures.",
+      "example": "The teacher used a diagram to illustrate the rule.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ілюструвати, пояснювати"
+      }
+    },
+    "adjective": {
+      "definition": "Serving as an example that makes something clearer.",
+      "example": "This diagram is an illustrative case.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "показовий, наочний"
+      }
+    },
+    "noun": {
+      "definition": "A picture or example that helps explain something.",
+      "example": "Each page has an illustration.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ілюстрація, приклад"
+      }
+    }
+  },
+  "imagination": {
+    "noun": {
+      "definition": "The ability to form pictures or ideas in your mind of things that are not real or present.",
+      "example": "Children have a wonderful imagination.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "уява, фантазія"
+      }
+    }
+  },
+  "imagined": {
+    "adjective": {
+      "definition": "Existing only in your mind, not real.",
+      "example": "The noise was only an imagined danger.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "уявний, вигаданий"
+      }
+    }
+  },
+  "imago": {
+    "noun": {
+      "definition": "The fully grown adult form of an insect.",
+      "example": "The butterfly is the imago of the caterpillar.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "імаго, доросла комаха"
+      }
+    }
+  },
+  "immediacy": {
+    "noun": {
+      "definition": "The quality of happening at once or feeling very close and direct.",
+      "example": "The immediacy of the news made people react quickly.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "негайність, безпосередність"
+      }
+    }
+  },
+  "immediate": {
+    "adjective": {
+      "definition": "Happening at once, without delay.",
+      "example": "The doctor needs to take immediate action.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "негайний, невідкладний"
+      }
+    }
+  },
+  "impatience": {
+    "noun": {
+      "definition": "The feeling of being annoyed because you have to wait or something is slow.",
+      "example": "He tapped his foot in impatience.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нетерпіння"
+      }
+    }
+  },
+  "impatient": {
+    "adjective": {
+      "definition": "Annoyed because you have to wait or because something is slow.",
+      "example": "Don't be so impatient; dinner will be ready soon.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нетерплячий"
+      }
+    },
+    "noun": {
+      "definition": "Used for a person who cannot wait calmly.",
+      "example": "The impatient in the queue began to shout.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нетерплячий (той, хто не може чекати)"
+      }
+    }
+  },
+  "imperative": {
+    "adjective": {
+      "definition": "Very important and needing action at once.",
+      "example": "It is imperative that you arrive on time.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "обов'язковий, нагальний"
+      }
+    },
+    "noun": {
+      "definition": "The verb form used to give an order or instruction.",
+      "example": "\"Sit down!\" is an imperative.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наказовий спосіб"
+      }
+    }
+  },
+  "imply": {
+    "verb": {
+      "definition": "To suggest something without saying it directly.",
+      "example": "Are you implying that I made a mistake?",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "натякати, мати на увазі"
+      }
+    }
+  },
+  "importance": {
+    "noun": {
+      "definition": "The quality of being very useful, valuable or necessary.",
+      "example": "Teachers explain the importance of sleep.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "важливість, значення"
+      }
+    }
+  },
+  "impossible": {
+    "adjective": {
+      "definition": "Not able to happen or be done.",
+      "example": "It is impossible to finish this in an hour.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "неможливий"
+      }
+    }
+  },
+  "impress": {
+    "verb": {
+      "definition": "To make someone feel admiration or respect.",
+      "example": "Her singing really impressed the judges.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вражати, справляти враження"
+      }
+    }
+  },
+  "impressed": {
+    "adjective": {
+      "definition": "Feeling admiration and respect for someone or something.",
+      "example": "I was very impressed by her English.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вражений"
+      }
+    }
+  },
+  "impression": {
+    "noun": {
+      "definition": "The opinion or feeling you get about someone or something.",
+      "example": "He made a good impression on my parents.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "враження"
+      }
+    }
+  },
+  "impressive": {
+    "adjective": {
+      "definition": "Causing admiration because of being very good, large or skilful.",
+      "example": "That is an impressive result.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вражаючий, гідний захоплення"
+      }
+    }
+  },
+  "improve": {
+    "verb": {
+      "definition": "To become better, or to make something better.",
+      "example": "My English is improving every month.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "покращувати, покращуватися"
+      }
+    }
+  },
+  "improvement": {
+    "noun": {
+      "definition": "A change that makes something better, or the process of getting better.",
+      "example": "There has been a big improvement in your work.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "покращення, поліпшення"
+      }
+    }
+  },
+  "inability": {
+    "noun": {
+      "definition": "The fact of not being able to do something.",
+      "example": "His inability to swim worried his parents.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нездатність, неспроможність"
+      }
+    }
+  },
+  "incessantly": {
+    "adverb": {
+      "definition": "Without stopping, in an annoying way.",
+      "example": "The baby cried incessantly all night.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "безперестанку, безупинно"
+      }
+    }
+  },
+  "incredible": {
+    "adjective": {
+      "definition": "Very good, very big, or very surprising; hard to believe.",
+      "example": "The view from the top was incredible.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неймовірний, дивовижний"
+      }
+    }
+  },
+  "incredibly": {
+    "adverb": {
+      "definition": "Extremely, or in a way that is hard to believe.",
+      "example": "The film was incredibly funny.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неймовірно, надзвичайно"
+      }
+    }
+  },
+  "indeed": {
+    "adverb": {
+      "definition": "Used to emphasise a statement or to add a stronger point; really.",
+      "example": "Thank you very much indeed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "справді, дійсно"
+      }
+    }
+  },
+  "indefinite": {
+    "adjective": {
+      "definition": "Not clear or fixed; without a set end or limit.",
+      "example": "The trip has been postponed for an indefinite period.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "невизначений, безстроковий"
+      }
+    }
+  },
+  "independently": {
+    "adverb": {
+      "definition": "Without help or control from other people.",
+      "example": "She learned to work independently.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "самостійно, незалежно"
+      }
+    }
+  },
+  "indicate": {
+    "verb": {
+      "definition": "To show or point out that something exists or is true.",
+      "example": "The signs indicate that the road is closed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вказувати, свідчити"
+      }
+    }
+  },
+  "indifferent": {
+    "adjective": {
+      "definition": "Not interested in someone or something and not caring about it.",
+      "example": "He seemed indifferent to the news.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "байдужий"
+      }
+    }
+  },
+  "indirect": {
+    "adjective": {
+      "definition": "Not straight or direct; not said or done in a simple way.",
+      "example": "An indirect question sounds more polite.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "непрямий"
+      }
+    }
+  },
+  "indoor": {
+    "noun": {
+      "definition": "Used with a word to mean something done or found inside a building.",
+      "example": "The kids play an indoor game when it rains.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "(що відбувається) у приміщенні"
+      }
+    }
+  },
+  "industrial": {
+    "adjective": {
+      "definition": "Connected with industry and the making of goods in factories.",
+      "example": "They live in an industrial town.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "промисловий"
+      }
+    }
+  },
+  "inevitable": {
+    "adjective": {
+      "definition": "Certain to happen and impossible to avoid.",
+      "example": "A delay was inevitable because of the snow.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "неминучий, неуникний"
+      }
+    }
+  },
+  "inevitably": {
+    "adverb": {
+      "definition": "In a way that cannot be avoided.",
+      "example": "Inevitably, the meeting ran late.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "неминуче"
+      }
+    }
+  },
+  "infinitive": {
+    "adjective": {
+      "definition": "Relating to the basic form of a verb, usually with \"to\".",
+      "example": "\"To go\" is an infinitive form.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "інфінітивний"
+      }
+    },
+    "noun": {
+      "definition": "The basic form of a verb, often used with \"to\".",
+      "example": "\"To eat\" is an infinitive.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "інфінітив"
+      }
+    },
+    "verb": {
+      "definition": "Used for a verb form that is the basic form, without changes for person or tense.",
+      "example": "Use the bare infinitive after a modal verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "у формі інфінітива"
+      }
+    }
+  },
+  "influence": {
+    "verb": {
+      "definition": "To have an effect on what someone does or thinks, or on how something develops.",
+      "example": "Friends can influence the choices we make.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "впливати"
+      }
+    }
+  },
+  "inform": {
+    "verb": {
+      "definition": "To tell someone something officially or formally.",
+      "example": "Please inform us of any changes.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "повідомляти, інформувати"
+      }
+    }
+  },
+  "informal": {
+    "adjective": {
+      "definition": "Relaxed and friendly, not formal.",
+      "example": "We wrote an informal email to a friend.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "неформальний"
+      }
+    },
+    "verb": {
+      "definition": "Used for a word or phrase that is used in relaxed, friendly speech.",
+      "example": "Some phrases are informal and used only in speech.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "у неформальному стилі"
+      }
+    }
+  },
+  "informally": {
+    "adverb": {
+      "definition": "In a relaxed and friendly way, not in an official way.",
+      "example": "We chatted informally after the meeting.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неформально"
+      }
+    }
+  },
+  "ing": {
+    "adjective": {
+      "definition": "Used for an adjective form that ends in -ing.",
+      "example": "An -ing adjective describes what causes a feeling.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "(прикметник) із закінченням -ing"
+      }
+    },
+    "noun": {
+      "definition": "Used for a noun form that ends in -ing.",
+      "example": "Some -ing words work like nouns.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "(іменник) із закінченням -ing"
+      }
+    },
+    "verb": {
+      "definition": "Used for a verb form that ends in -ing.",
+      "example": "The -ing form of \"run\" is \"running\".",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "(дієслово) у формі на -ing"
+      }
+    }
+  },
+  "initial": {
+    "adjective": {
+      "definition": "Happening at the beginning; first.",
+      "example": "My initial reaction was surprise.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "початковий, перший"
+      }
+    }
+  },
+  "injure": {
+    "verb": {
+      "definition": "To hurt a person or animal physically.",
+      "example": "He injured his knee playing football.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поранити, травмувати"
+      }
+    }
+  },
+  "insert": {
+    "noun": {
+      "definition": "Used for something placed inside or into something else.",
+      "example": "Put the insert into the envelope.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вставка, вкладка"
+      }
+    }
+  },
+  "insist": {
+    "verb": {
+      "definition": "To say very firmly that something is true or must be done.",
+      "example": "She insisted on paying for dinner.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "наполягати"
+      }
+    }
+  },
+  "install": {
+    "verb": {
+      "definition": "To put a piece of equipment or software in place so it is ready to use.",
+      "example": "I need to install a new program.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "встановлювати"
+      }
+    }
+  },
+  "instantly": {
+    "adverb": {
+      "definition": "At once; immediately.",
+      "example": "The fire alarm made everyone stop instantly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "миттєво, негайно"
+      }
+    }
+  },
+  "institutional": {
+    "adjective": {
+      "definition": "Relating to a large organisation such as a school, bank or hospital.",
+      "example": "The school needs institutional support.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "інституційний"
+      }
+    }
+  },
+  "instruct": {
+    "verb": {
+      "definition": "To tell someone to do something, or to teach someone.",
+      "example": "The teacher instructed us to open our books.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "доручати, інструктувати"
+      }
+    }
+  },
+  "instruction": {
+    "noun": {
+      "definition": "A piece of information telling you how to do something, or an order.",
+      "example": "Read the instructions before you start.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "інструкція, вказівка"
+      }
+    }
+  },
+  "instrument": {
+    "noun": {
+      "definition": "A tool for doing a particular job, or an object used for playing music.",
+      "example": "She plays a musical instrument.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "інструмент, прилад"
+      }
+    }
+  },
+  "intelligence": {
+    "noun": {
+      "definition": "The ability to learn, understand and think about things.",
+      "example": "A dog's intelligence often surprises people.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "інтелект, розум"
+      }
+    }
+  },
+  "intend": {
+    "verb": {
+      "definition": "To plan or want to do something.",
+      "example": "I intend to call her tomorrow.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "мати намір, планувати"
+      }
+    }
+  },
+  "intensifi": {
+    "adjective": {
+      "definition": "Used as the start of the word for something that makes a meaning stronger.",
+      "example": "An intensifi word makes an adjective stronger.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "підсилювальний (початок слова)"
+      }
+    }
+  },
+  "intensifier": {
+    "noun": {
+      "definition": "A word such as \"very\" or \"extremely\" that makes another word stronger.",
+      "example": "\"Very\" is a common intensifier.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "підсилювач (слово)"
+      }
+    }
+  },
+  "intensify": {
+    "verb": {
+      "definition": "To become stronger or more serious, or to make something so.",
+      "example": "The storm will intensify overnight.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "посилювати, посилюватися"
+      }
+    }
+  },
+  "intensity": {
+    "noun": {
+      "definition": "The strength or force of something, such as a feeling or an activity.",
+      "example": "She was surprised by the intensity of his anger.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "інтенсивність, сила"
+      }
+    }
+  },
+  "intention": {
+    "noun": {
+      "definition": "A plan or aim to do something.",
+      "example": "I have no intention of leaving.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "намір"
+      }
+    }
+  },
+  "interchangeable": {
+    "adjective": {
+      "definition": "Able to be used in place of each other without a change in meaning.",
+      "example": "These two words are interchangeable in this sentence.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "взаємозамінний"
+      }
+    }
+  },
+  "interestingly": {
+    "adverb": {
+      "definition": "Used to introduce a fact that is unusual or worth noticing.",
+      "example": "Interestingly, he never asked about the price.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "цікаво, що"
+      }
+    }
+  },
+  "interfere": {
+    "verb": {
+      "definition": "To get involved in a situation in a way that is not wanted or that causes problems.",
+      "example": "Please don't interfere in my business.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "втручатися, заважати"
+      }
+    }
+  },
+  "intermediate": {
+    "adjective": {
+      "definition": "In the middle level between beginner and advanced.",
+      "example": "I'm at an intermediate level in English.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "середній, проміжний"
+      }
+    }
+  },
+  "interrogative": {
+    "adjective": {
+      "definition": "Used for a word or form that asks a question.",
+      "example": "\"What\" and \"who\" are interrogative words.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "питальний"
+      }
+    }
+  },
+  "interrupt": {
+    "noun": {
+      "definition": "Used for a sudden stop in something that was continuing.",
+      "example": "The interrupt in the call was annoying.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "перерва, переривання"
+      }
+    },
+    "verb": {
+      "definition": "To stop someone who is speaking or doing something by saying or doing something yourself.",
+      "example": "Sorry to interrupt, but can I ask a question?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "перебивати, переривати"
+      }
+    }
+  },
+  "intonation": {
+    "noun": {
+      "definition": "The way your voice goes up and down when you speak.",
+      "example": "Rising intonation often shows a question.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "інтонація"
+      }
+    }
+  },
+  "introduce": {
+    "verb": {
+      "definition": "To tell people who someone is when they meet for the first time, or to bring something new into use.",
+      "example": "Let me introduce my sister.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "представляти, вводити"
+      }
+    },
+    "noun": {
+      "definition": "The act of bringing in or presenting something new.",
+      "example": "The introduction of the rule was popular.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "введення, представлення"
+      }
+    }
+  },
+  "introduction": {
+    "noun": {
+      "definition": "The act of presenting someone or something, or the first part of a piece of writing.",
+      "example": "The introduction of the book is short.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вступ, знайомство"
+      }
+    }
+  },
+  "inversion": {
+    "noun": {
+      "definition": "A change of the normal word order, for example putting the verb before the subject.",
+      "example": "\"Never have I seen it\" is an example of inversion.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "інверсія, зворотний порядок слів"
+      }
+    }
+  },
+  "invert": {
+    "verb": {
+      "definition": "To turn something upside down or change it to the opposite order.",
+      "example": "You invert the subject and the verb in a question.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перевертати, інвертувати"
+      }
+    },
+    "noun": {
+      "definition": "Something that has been turned upside down or into the opposite order.",
+      "example": "The mirror shows an inverted picture.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "перевернуте, інвертоване"
+      }
+    }
+  },
+  "inverted": {
+    "adjective": {
+      "definition": "Turned upside down or into the opposite order.",
+      "example": "Questions use an inverted word order.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перевернутий, інвертований"
+      }
+    }
+  },
+  "investor": {
+    "noun": {
+      "definition": "A person who puts money into something in order to make a profit.",
+      "example": "The investor bought shares in a new company.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "інвестор"
+      }
+    }
+  },
+  "invitation": {
+    "noun": {
+      "definition": "A request to come to an event or to do something.",
+      "example": "I got an invitation to her party.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "запрошення"
+      }
+    }
+  },
+  "invite": {
+    "verb": {
+      "definition": "To ask someone to come to an event or to do something.",
+      "example": "We invited ten friends to dinner.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "запрошувати"
+      }
+    }
+  },
+  "inviting": {
+    "verb": {
+      "definition": "Asking someone to come to an event or to do something.",
+      "example": "She is inviting us to her wedding.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "запрошуючи"
+      }
+    }
+  },
+  "involve": {
+    "verb": {
+      "definition": "To include someone or something as a necessary part.",
+      "example": "The job involves a lot of travel.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "включати, залучати"
+      }
+    }
+  },
+  "ironic": {
+    "adjective": {
+      "definition": "Strange or funny because it is the opposite of what you expect.",
+      "example": "It's ironic that the fire station burned down.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "іронічний"
+      }
+    }
+  },
+  "irony": {
+    "noun": {
+      "definition": "A situation that is strange or funny because it is the opposite of what you expect, or the use of words to mean the opposite.",
+      "example": "The irony is that he was late for his own party.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "іронія"
+      }
+    }
+  },
+  "irregular": {
+    "adjective": {
+      "definition": "Not following the usual rule or pattern.",
+      "example": "\"Go\" is an irregular verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неправильний, нерегулярний"
+      }
+    }
+  },
+  "irritated": {
+    "adjective": {
+      "definition": "Slightly angry or annoyed.",
+      "example": "She felt irritated by the noise.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "роздратований"
+      }
+    }
+  },
+  "italian": {
+    "adjective": {
+      "definition": "Relating to Italy, its people or its language.",
+      "example": "We had an Italian meal.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "італійський"
+      }
+    }
+  },
+  "item": {
+    "noun": {
+      "definition": "One thing in a list, group or collection.",
+      "example": "Please check every item on the list.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "предмет, пункт"
+      }
+    }
+  },
+  "jacket": {
+    "noun": {
+      "definition": "A short coat.",
+      "example": "He took off his jacket because it was warm.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "піджак, куртка"
+      }
+    }
+  },
+  "jam": {
+    "noun": {
+      "definition": "A sweet, sticky food made from fruit and sugar.",
+      "example": "I like bread with strawberry jam.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "джем, варення"
+      }
+    }
+  },
+  "jazz": {
+    "noun": {
+      "definition": "A kind of music with strong rhythm that is often played without written music.",
+      "example": "They listened to jazz in the café.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "джаз"
+      }
+    }
+  },
+  "jealous": {
+    "adjective": {
+      "definition": "Unhappy because you want what someone else has, or afraid of losing someone's love.",
+      "example": "He was jealous of his brother's new bike.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "заздрісний, ревнивий"
+      }
+    }
+  },
+  "jean": {
+    "noun": {
+      "definition": "Used for a piece of trousers made of strong cotton cloth (usually \"jeans\").",
+      "example": "She bought a new pair of jeans.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "джинси"
+      }
+    }
+  },
+  "jeep": {
+    "noun": {
+      "definition": "A strong car that can drive on rough ground.",
+      "example": "We drove into the desert in a jeep.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "джип, позашляховик"
+      }
+    }
+  },
+  "jog": {
+    "verb": {
+      "definition": "To run slowly and steadily for exercise.",
+      "example": "I jog in the park every morning.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бігати підтюпцем"
+      }
+    }
+  },
+  "joint": {
+    "adjective": {
+      "definition": "Shared by or done together by two or more people.",
+      "example": "They made a joint decision.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "спільний"
+      }
+    }
+  },
+  "joke": {
+    "noun": {
+      "definition": "Something you say to make people laugh.",
+      "example": "He told a funny joke.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "жарт, анекдот"
+      }
+    },
+    "verb": {
+      "definition": "To say things that are not serious in order to make people laugh.",
+      "example": "I was only joking; I'm not angry.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "жартувати"
+      }
+    }
+  },
+  "journalist": {
+    "noun": {
+      "definition": "A person who writes news for newspapers, websites, radio or television.",
+      "example": "The journalist interviewed the mayor.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "журналіст"
+      }
+    }
+  },
+  "journey": {
+    "noun": {
+      "definition": "The act of travelling from one place to another.",
+      "example": "The journey to the coast takes two hours.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "подорож, поїздка"
+      }
+    }
+  },
+  "joy": {
+    "noun": {
+      "definition": "A feeling of great happiness.",
+      "example": "The children jumped for joy.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "радість"
+      }
+    }
+  },
+  "judgement": {
+    "noun": {
+      "definition": "An opinion or decision about someone or something, or the ability to make good decisions.",
+      "example": "I trust her judgement.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "судження, рішення"
+      }
+    }
+  },
+  "juice": {
+    "noun": {
+      "definition": "The liquid from fruit or vegetables that you can drink.",
+      "example": "I'd like a glass of orange juice.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сік"
+      }
+    }
+  },
+  "jump": {
+    "noun": {
+      "definition": "A movement in which you push yourself off the ground into the air.",
+      "example": "That was a great jump!",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стрибок"
+      }
+    },
+    "verb": {
+      "definition": "To push yourself off the ground into the air using your legs.",
+      "example": "The cat jumped onto the table.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "стрибати"
+      }
+    }
+  },
+  "jumper": {
+    "noun": {
+      "definition": "A warm piece of clothing with long sleeves that you pull over your head.",
+      "example": "Put on a jumper; it's cold.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "светр, джемпер"
+      }
+    }
+  },
+  "junk": {
+    "noun": {
+      "definition": "Old things that have little value or that you do not want.",
+      "example": "The garage is full of junk.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "мотлох, непотріб"
+      }
+    }
+  },
+  "justify": {
+    "verb": {
+      "definition": "To show or explain that something is reasonable or right.",
+      "example": "How can you justify spending so much money?",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виправдовувати, обґрунтовувати"
+      }
+    }
+  },
+  "keen": {
+    "adjective": {
+      "definition": "Very interested in something or eager to do it.",
+      "example": "She is keen on tennis.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "захоплений, охочий"
+      }
+    }
+  },
+  "kilo": {
+    "noun": {
+      "definition": "A unit of weight equal to 1,000 grams.",
+      "example": "I bought a kilo of apples.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кілограм, кіло"
+      }
+    }
+  },
+  "kilometre": {
+    "noun": {
+      "definition": "A unit of length equal to 1,000 metres.",
+      "example": "The school is two kilometres from here.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кілометр"
+      }
+    }
+  },
+  "kiss": {
+    "noun": {
+      "definition": "A touch made with the lips as a sign of love or greeting.",
+      "example": "She gave him a kiss on the cheek.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "поцілунок"
+      }
+    },
+    "verb": {
+      "definition": "To touch someone with your lips as a sign of love or greeting.",
+      "example": "He kissed his mother goodbye.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "цілувати"
+      }
+    }
+  },
+  "kitchen": {
+    "noun": {
+      "definition": "A room where food is prepared and cooked.",
+      "example": "She is cooking dinner in the kitchen.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кухня"
+      }
+    }
+  },
+  "km": {
+    "noun": {
+      "definition": "Short form of kilometre, a unit of length.",
+      "example": "The town is 5 km from here.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "км, кілометр"
+      }
+    }
+  },
+  "knee": {
+    "noun": {
+      "definition": "The joint in the middle of your leg.",
+      "example": "He hurt his knee playing football.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "коліно"
+      }
+    }
+  },
+  "knife": {
+    "noun": {
+      "definition": "A tool with a sharp edge used for cutting.",
+      "example": "Cut the bread with a knife.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ніж"
+      }
+    }
+  },
+  "knock": {
+    "verb": {
+      "definition": "To hit a door or surface to make a noise, often to get attention.",
+      "example": "Please knock before you come in.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "стукати"
+      }
+    }
+  },
+  "knowledgeable": {
+    "adjective": {
+      "definition": "Knowing a lot about a subject.",
+      "example": "Our guide was very knowledgeable about history.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "обізнаний, знаючий"
+      }
+    }
+  },
+  "korean": {
+    "adjective": {
+      "definition": "Relating to Korea, its people or its language.",
+      "example": "I love Korean food.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "корейський"
+      }
+    }
+  },
+  "lake": {
+    "noun": {
+      "definition": "A large area of water surrounded by land.",
+      "example": "We swam in the lake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "озеро"
+      }
+    }
+  },
+  "laptop": {
+    "noun": {
+      "definition": "A small computer that you can carry with you.",
+      "example": "She works on her laptop in cafés.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ноутбук"
+      }
+    }
+  },
+  "lasting": {
+    "adjective": {
+      "definition": "Continuing for a long time.",
+      "example": "They formed a lasting friendship.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "тривалий, міцний"
+      }
+    }
+  },
+  "lastly": {
+    "adverb": {
+      "definition": "Used to introduce the final point or item.",
+      "example": "Lastly, I'd like to thank everyone.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нарешті, насамкінець"
+      }
+    }
+  },
+  "lately": {
+    "adverb": {
+      "definition": "In the recent past; recently.",
+      "example": "I've been very tired lately.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "останнім часом"
+      }
+    }
+  },
+  "laugh": {
+    "verb": {
+      "definition": "To make sounds with your voice that show you think something is funny.",
+      "example": "We laughed at his jokes.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сміятися"
+      }
+    }
+  },
+  "launch": {
+    "noun": {
+      "definition": "The start of something new, such as a product or a project.",
+      "example": "The launch of the new phone was a success.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "запуск, презентація"
+      }
+    },
+    "verb": {
+      "definition": "To start something new, or to send something such as a rocket into the air.",
+      "example": "The company will launch a new app in May.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "запускати, розпочинати"
+      }
+    }
+  },
+  "lawyer": {
+    "noun": {
+      "definition": "A person whose job is to give legal advice and speak for people in court.",
+      "example": "The lawyer explained the contract.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "юрист, адвокат"
+      }
+    }
+  },
+  "layer": {
+    "noun": {
+      "definition": "A single thickness of something that lies over or under another.",
+      "example": "Put a layer of cheese on top.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шар"
+      }
+    }
+  },
+  "lazy": {
+    "adjective": {
+      "definition": "Not willing to work or be active.",
+      "example": "He is too lazy to clean his room.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "лінивий"
+      }
+    }
+  },
+  "leaf": {
+    "noun": {
+      "definition": "A flat green part of a plant that grows from a stem.",
+      "example": "A leaf fell from the tree.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "листок, листя"
+      }
+    }
+  },
+  "leak": {
+    "verb": {
+      "definition": "To let liquid or gas escape through a hole.",
+      "example": "The roof leaks when it rains.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "протікати, пропускати"
+      }
+    }
+  },
+  "learner": {
+    "noun": {
+      "definition": "A person who is learning something.",
+      "example": "She is a fast learner.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "той, хто вчиться; учень"
+      }
+    }
+  },
+  "lecture": {
+    "noun": {
+      "definition": "A talk given to a group of people, often at a university, to teach them about a subject.",
+      "example": "The lecture on history lasted an hour.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лекція"
+      }
+    }
+  },
+  "leg": {
+    "noun": {
+      "definition": "One of the parts of the body used for walking.",
+      "example": "He broke his leg skiing.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "нога"
+      }
+    }
+  },
+  "legally": {
+    "adverb": {
+      "definition": "In a way that is allowed by the law.",
+      "example": "You must legally wear a seat belt.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "легально, за законом"
+      }
+    }
+  },
+  "leisure": {
+    "noun": {
+      "definition": "Free time when you are not working.",
+      "example": "What do you do in your leisure time?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дозвілля"
+      }
+    }
+  },
+  "lend": {
+    "verb": {
+      "definition": "To give something to someone for a short time, expecting it back.",
+      "example": "Can you lend me your pen?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "позичати (комусь)"
+      }
+    }
+  },
+  "length": {
+    "noun": {
+      "definition": "How long something is from one end to the other.",
+      "example": "Measure the length of the table.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "довжина"
+      }
+    }
+  },
+  "lesson": {
+    "noun": {
+      "definition": "A period of time when a teacher teaches something.",
+      "example": "We have an English lesson at nine.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "урок"
+      }
+    }
+  },
+  "lift": {
+    "noun": {
+      "definition": "A machine that carries people up and down in a building; or a free ride in a car.",
+      "example": "Take the lift to the third floor.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ліфт, підвезення"
+      }
+    }
+  },
+  "likeable": {
+    "adjective": {
+      "definition": "Pleasant and easy to like.",
+      "example": "He is a very likeable person.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "симпатичний, приємний"
+      }
+    }
+  },
+  "likewise": {
+    "adverb": {
+      "definition": "In the same way; also.",
+      "example": "\"Enjoy your meal.\" \"Likewise!\"",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "так само, також"
+      }
+    }
+  },
+  "liking": {
+    "verb": {
+      "definition": "Enjoying or finding someone or something pleasant.",
+      "example": "She is liking her new job.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "люблячи, вподобавши"
+      }
+    }
+  },
+  "limit": {
+    "verb": {
+      "definition": "To keep something at or below a fixed amount.",
+      "example": "The school limits classes to twenty students.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обмежувати"
+      }
+    }
+  },
+  "linking": {
+    "noun": {
+      "definition": "The act of connecting things together.",
+      "example": "The linking of the two towns by a new road helped trade.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "з'єднання, зв'язок"
+      }
+    }
+  },
+  "listener": {
+    "noun": {
+      "definition": "A person who listens.",
+      "example": "She is a good listener.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "слухач"
+      }
+    }
+  },
+  "literal": {
+    "adjective": {
+      "definition": "Following the exact, basic meaning of a word, not a figure of speech.",
+      "example": "The literal meaning of the word is different.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "буквальний"
+      }
+    }
+  },
+  "literary": {
+    "adjective": {
+      "definition": "Connected with literature and books.",
+      "example": "She likes literary prizes.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "літературний"
+      }
+    }
+  },
+  "load": {
+    "noun": {
+      "definition": "Something heavy that is being carried.",
+      "example": "The truck carried a heavy load.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вантаж, ноша"
+      }
+    }
+  },
+  "loaf": {
+    "noun": {
+      "definition": "Bread that is baked in one piece.",
+      "example": "I bought a loaf of bread.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "буханець"
+      }
+    }
+  },
+  "lock": {
+    "verb": {
+      "definition": "To close something with a key so that others cannot open it.",
+      "example": "Don't forget to lock the door.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "замикати"
+      }
+    }
+  },
+  "logic": {
+    "noun": {
+      "definition": "A way of thinking that uses clear, reasonable steps.",
+      "example": "There is no logic in his argument.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "логіка"
+      }
+    }
+  },
+  "logical": {
+    "adjective": {
+      "definition": "Reasonable and following clear thinking.",
+      "example": "It is the logical thing to do.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "логічний"
+      }
+    }
+  },
+  "lonely": {
+    "adjective": {
+      "definition": "Unhappy because you have no friends or people near you.",
+      "example": "She felt lonely in the new city.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "самотній"
+      }
+    }
+  },
+  "lottery": {
+    "noun": {
+      "definition": "A game in which people buy numbered tickets and win money if their numbers are chosen.",
+      "example": "He won the lottery.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лотерея"
+      }
+    }
+  },
+  "loud": {
+    "adjective": {
+      "definition": "Making a lot of noise; easily heard.",
+      "example": "The music was too loud.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гучний"
+      }
+    }
+  },
+  "louder": {
+    "adverb": {
+      "definition": "With more noise or volume.",
+      "example": "Please speak louder.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "голосніше"
+      }
+    }
+  },
+  "lovely": {
+    "adjective": {
+      "definition": "Very nice or beautiful.",
+      "example": "What a lovely day!",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "чудовий, милий"
+      }
+    }
+  },
+  "lover": {
+    "noun": {
+      "definition": "A person who enjoys something very much.",
+      "example": "He is a music lover.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "любитель, коханець"
+      }
+    }
+  },
+  "loyal": {
+    "adjective": {
+      "definition": "Always supporting a person, group or idea.",
+      "example": "A dog is a loyal friend.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відданий, вірний"
+      }
+    }
+  },
+  "luckily": {
+    "adverb": {
+      "definition": "Used to say that something good happened by chance.",
+      "example": "Luckily, I had an umbrella.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "на щастя"
+      }
+    }
+  },
+  "lucky": {
+    "adjective": {
+      "definition": "Having good things happen to you by chance.",
+      "example": "You are lucky to have such good friends.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "щасливий, вдалий"
+      }
+    }
+  },
+  "luggage": {
+    "noun": {
+      "definition": "Bags and cases that you take with you when you travel.",
+      "example": "We put our luggage in the car.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "багаж"
+      }
+    }
+  },
+  "lunch": {
+    "noun": {
+      "definition": "The meal that you eat in the middle of the day.",
+      "example": "What did you have for lunch?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "обід"
+      }
+    }
+  },
+  "lunchtime": {
+    "noun": {
+      "definition": "The time in the middle of the day when people eat lunch.",
+      "example": "We meet at lunchtime.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "обідній час"
+      }
+    }
+  },
+  "luxury": {
+    "noun": {
+      "definition": "Great comfort and expensive things, or something expensive that you do not really need.",
+      "example": "They stayed in a luxury hotel.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розкіш"
+      }
+    }
+  },
+  "magazine": {
+    "noun": {
+      "definition": "A thin book with articles and pictures that is published every week or month.",
+      "example": "She reads a fashion magazine.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "журнал"
+      }
+    }
+  },
+  "magic": {
+    "adjective": {
+      "definition": "Having special powers that seem impossible.",
+      "example": "The boy found a magic stone.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "чарівний, магічний"
+      }
+    }
+  },
+  "mail": {
+    "noun": {
+      "definition": "Letters and packages that are sent and delivered, or email.",
+      "example": "I checked my mail this morning.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пошта, листи"
+      }
+    }
+  },
+  "mainly": {
+    "adverb": {
+      "definition": "In most cases; mostly.",
+      "example": "The audience was mainly young people.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "переважно, головним чином"
+      }
+    }
+  },
+  "manage": {
+    "verb": {
+      "definition": "To succeed in doing something difficult, or to be in charge of a business or a team.",
+      "example": "I managed to finish on time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вдаватися, керувати"
+      }
+    }
+  },
+  "manner": {
+    "noun": {
+      "definition": "The way something is done or happens.",
+      "example": "She spoke in a friendly manner.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "манера, спосіб"
+      }
+    }
+  },
+  "manufacture": {
+    "verb": {
+      "definition": "To make goods in large numbers, usually in a factory.",
+      "example": "They manufacture cars in this city.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виготовляти, виробляти"
+      }
+    }
+  },
+  "map": {
+    "noun": {
+      "definition": "A drawing of an area that shows towns, roads, rivers and other features.",
+      "example": "Look at the map to find the road.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "карта"
+      }
+    }
+  },
+  "marker": {
+    "noun": {
+      "definition": "An object or word that shows a position or a feature.",
+      "example": "\"However\" is a discourse marker.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "маркер, покажчик"
+      }
+    }
+  },
+  "marketing": {
+    "verb": {
+      "definition": "Advertising and selling a product.",
+      "example": "The company is marketing a new drink.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "просувати на ринку"
+      }
+    }
+  },
+  "marry": {
+    "verb": {
+      "definition": "To become the husband or wife of someone.",
+      "example": "They married last summer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "одружуватися"
+      }
+    }
+  },
+  "marvellous": {
+    "adjective": {
+      "definition": "Extremely good; wonderful.",
+      "example": "We had a marvellous holiday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "чудовий, дивовижний"
+      }
+    }
+  },
+  "matching": {
+    "adjective": {
+      "definition": "Having the same colour or pattern as something else.",
+      "example": "She wore a hat and matching gloves.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відповідний, у тон"
+      }
+    }
+  },
+  "math": {
+    "noun": {
+      "definition": "The study of numbers and shapes (American short form of mathematics).",
+      "example": "He is good at math.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "математика"
+      }
+    }
+  },
+  "mature": {
+    "adjective": {
+      "definition": "Fully grown, or behaving in a sensible adult way.",
+      "example": "She is very mature for her age.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зрілий, дорослий"
+      }
+    }
+  },
+  "meal": {
+    "noun": {
+      "definition": "Food that you eat at a particular time, such as breakfast or dinner.",
+      "example": "We had a big meal together.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "їжа, страва"
+      }
+    }
+  },
+  "meat": {
+    "noun": {
+      "definition": "The flesh of animals eaten as food.",
+      "example": "I don't eat meat.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "м'ясо"
+      }
+    }
+  },
+  "mechanic": {
+    "noun": {
+      "definition": "A person whose job is to repair machines, especially cars.",
+      "example": "The mechanic fixed my car.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "механік"
+      }
+    }
+  },
+  "mediator": {
+    "noun": {
+      "definition": "A person who helps two sides to agree with each other.",
+      "example": "A mediator helped end the argument.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "посередник"
+      }
+    }
+  },
+  "medicine": {
+    "noun": {
+      "definition": "A substance you take to cure an illness, or the study of illness and its treatment.",
+      "example": "Take this medicine twice a day.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ліки, медицина"
+      }
+    }
+  },
+  "medium": {
+    "noun": {
+      "definition": "A means used to communicate or express ideas.",
+      "example": "Television is a powerful medium.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "засіб, середовище"
+      }
+    }
+  },
+  "melt": {
+    "verb": {
+      "definition": "To change from solid to liquid because of heat.",
+      "example": "The ice cream melted in the sun.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "танути, розтоплювати"
+      }
+    }
+  },
+  "membership": {
+    "noun": {
+      "definition": "The state of belonging to a group or club.",
+      "example": "Membership of the gym costs ten pounds a month.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "членство"
+      }
+    }
+  },
+  "memoir": {
+    "noun": {
+      "definition": "A written account of a person's own life and experiences.",
+      "example": "She wrote a memoir about her childhood.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "мемуари, спогади"
+      }
+    }
+  },
+  "memory": {
+    "noun": {
+      "definition": "The ability to remember, or something that you remember.",
+      "example": "I have happy memories of that summer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пам'ять, спогад"
+      }
+    }
+  },
+  "mental": {
+    "adjective": {
+      "definition": "Connected with the mind.",
+      "example": "Exercise is good for your mental health.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розумовий, психічний"
+      }
+    }
+  },
+  "mention": {
+    "verb": {
+      "definition": "To say something briefly without giving many details.",
+      "example": "She didn't mention the price.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "згадувати"
+      }
+    }
+  },
+  "mess": {
+    "noun": {
+      "definition": "A dirty or untidy state or place.",
+      "example": "Your room is a mess.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "безлад, розгардіяш"
+      }
+    }
+  },
+  "messy": {
+    "adjective": {
+      "definition": "Dirty or untidy.",
+      "example": "His desk is always messy.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неохайний, безладний"
+      }
+    }
+  },
+  "mid": {
+    "adjective": {
+      "definition": "Used for the middle part of a period of time or a range.",
+      "example": "She is in her mid thirties.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "середній"
+      }
+    },
+    "noun": {
+      "definition": "Used for the middle point of something.",
+      "example": "The mid of the month is payday.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "середина"
+      }
+    }
+  },
+  "midday": {
+    "noun": {
+      "definition": "Twelve o'clock in the middle of the day.",
+      "example": "We meet at midday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "полудень"
+      }
+    }
+  },
+  "midnight": {
+    "noun": {
+      "definition": "Twelve o'clock at night.",
+      "example": "The film ended at midnight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "північ"
+      }
+    }
+  },
+  "mild": {
+    "adjective": {
+      "definition": "Not strong or severe; gentle.",
+      "example": "The winter here is very mild.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "м'який, помірний"
+      }
+    }
+  },
+  "milder": {
+    "noun": {
+      "definition": "Used for something that is less strong than another.",
+      "example": "The milder of the two sauces is better for children.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "м'якше (щось менш сильне)"
+      }
+    }
+  },
+  "mile": {
+    "noun": {
+      "definition": "A unit of distance equal to about 1.6 kilometres.",
+      "example": "The shop is a mile from here.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "миля"
+      }
+    }
+  },
+  "milk": {
+    "noun": {
+      "definition": "A white liquid that comes from cows and is drunk as a drink.",
+      "example": "I'd like some milk in my coffee.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "молоко"
+      }
+    }
+  },
+  "minibus": {
+    "noun": {
+      "definition": "A small bus for a small group of people.",
+      "example": "The team travelled in a minibus.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "мікроавтобус"
+      }
+    }
+  },
+  "mirror": {
+    "noun": {
+      "definition": "A piece of glass in which you can see yourself.",
+      "example": "She looked at herself in the mirror.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дзеркало"
+      }
+    }
+  },
+  "mistake": {
+    "noun": {
+      "definition": "Something you do or think that is wrong.",
+      "example": "I made a mistake in the test.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "помилка"
+      }
+    }
+  },
+  "mix": {
+    "noun": {
+      "definition": "A combination of different things.",
+      "example": "The room has a mix of old and new furniture.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "суміш"
+      }
+    },
+    "verb": {
+      "definition": "To combine different things so they become one.",
+      "example": "Mix the flour and the eggs.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "змішувати"
+      }
+    }
+  },
+  "mixed": {
+    "adjective": {
+      "definition": "Made of different kinds of things.",
+      "example": "The weather is mixed today.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "змішаний, різний"
+      }
+    }
+  },
+  "modal": {
+    "adjective": {
+      "definition": "Relating to the kind of verb that shows possibility, ability or need.",
+      "example": "\"Can\" is a modal verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "модальний"
+      }
+    },
+    "noun": {
+      "definition": "A verb such as can, must or should that shows possibility, ability or need.",
+      "example": "\"Must\" is a modal.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "модальне дієслово"
+      }
+    }
+  },
+  "modest": {
+    "adjective": {
+      "definition": "Not talking proudly about yourself; or fairly small in size or amount.",
+      "example": "She is modest about her success.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "скромний"
+      }
+    }
+  },
+  "modifie": {
+    "noun": {
+      "definition": "Used as the start of the word for a word that describes or limits another word.",
+      "example": "The modifie comes before the noun.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "означення (початок слова)"
+      }
+    }
+  },
+  "modifier": {
+    "adjective": {
+      "definition": "Used for a word that describes or limits the meaning of another word.",
+      "example": "A modifier word can go before a noun.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "що уточнює, означальний"
+      }
+    },
+    "noun": {
+      "definition": "A word or phrase that gives more information about another word.",
+      "example": "\"Red\" is a modifier in \"a red car\".",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "означення, модифікатор"
+      }
+    }
+  },
+  "modify": {
+    "verb": {
+      "definition": "To change something slightly, or to give more detail about another word.",
+      "example": "\"Very\" modifies the adjective \"big\".",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "змінювати, уточнювати"
+      }
+    }
+  },
+  "monster": {
+    "noun": {
+      "definition": "An imaginary, frightening creature.",
+      "example": "The children were afraid of the monster in the film.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "монстр, чудовисько"
+      }
+    }
+  },
+  "monthly": {
+    "adverb": {
+      "definition": "Once a month; every month.",
+      "example": "The magazine is published monthly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "щомісяця"
+      }
+    }
+  },
+  "mood": {
+    "noun": {
+      "definition": "The way you feel at a particular time.",
+      "example": "He is in a good mood today.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "настрій"
+      }
+    }
+  },
+  "moor": {
+    "noun": {
+      "definition": "A wide area of high, open land covered with rough grass.",
+      "example": "We walked across the moor.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вересовище, пустир"
+      }
+    }
+  },
+  "moreover": {
+    "adverb": {
+      "definition": "Used to add a further, stronger point.",
+      "example": "The plan is cheap; moreover, it is simple.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "крім того, більше того"
+      }
+    }
+  },
+  "mostly": {
+    "adverb": {
+      "definition": "In most cases; mainly.",
+      "example": "The students are mostly from Spain.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "здебільшого, переважно"
+      }
+    }
+  },
+  "mountain": {
+    "noun": {
+      "definition": "A very high hill.",
+      "example": "We climbed a mountain last summer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гора"
+      }
+    }
+  },
+  "mouse": {
+    "noun": {
+      "definition": "A small furry animal with a long tail, or a device used to control a computer.",
+      "example": "A mouse ran across the floor.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "миша"
+      }
+    }
+  },
+  "mum": {
+    "noun": {
+      "definition": "A mother (informal, mainly British).",
+      "example": "My mum makes great soup.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "мама"
+      }
+    }
+  },
+  "murderer": {
+    "noun": {
+      "definition": "A person who has killed someone on purpose.",
+      "example": "The police caught the murderer.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вбивця"
+      }
+    }
+  },
+  "museum": {
+    "noun": {
+      "definition": "A building where interesting objects are kept and shown to the public.",
+      "example": "We visited a museum in Paris.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "музей"
+      }
+    }
+  },
+  "mushroom": {
+    "noun": {
+      "definition": "A small, soft plant, often eaten as food, with a round top on a stem.",
+      "example": "I like mushrooms on pizza.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гриб"
+      }
+    }
+  },
+  "mutual": {
+    "adjective": {
+      "definition": "Felt or done equally by two or more people.",
+      "example": "They have a mutual friend.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "взаємний, спільний"
+      }
+    }
+  },
+  "mysterious": {
+    "adjective": {
+      "definition": "Strange and not explained or understood.",
+      "example": "A mysterious noise came from the attic.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "таємничий"
+      }
+    }
+  },
+  "mystery": {
+    "noun": {
+      "definition": "Something strange that is not explained or understood.",
+      "example": "The disappearance is still a mystery.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "таємниця, загадка"
+      }
+    }
   }
 }
