@@ -242,14 +242,19 @@ points у `assets/grammar-usage-point-exercises.json` (формат — `assets/
 Виправлено: промпти мали `___`, а веб ділить за `____` (`BLANK`) — схема сиду тепер вимагає рівно
 один `____`. Масштабування — зрізи 24-29 (~10 вправ на точку, після 20-23).
 
-### [ ] 20. Бекенд: токенізація тексту сторінок правил
+### [x] 20. Бекенд: токенізація тексту сторінок правил
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
 
-Кеш `grammar_page_tokens` (slug, hash текстового блоку, токени). На промах — spaCy через
-`nlp-service`, Word/WordDefinition за lemma+POS (створюються без визначення, як у статтях).
-Ендпоінт: текстові блоки сторінки → спани (`wordDefinitionId`) + LexiconData; доступний гостям.
+Фінальний дизайн: публічний ендпоінт, що токенізує довільний текст, дозволяв би будь-кому
+створювати рядки словника, тож запис робить лише довірений CLI. `grammar annotate-pages [--web-url]`
+бере текстові блоки всіх ручних сторінок з веба (`GET /grammar/lex-blocks.json`, зріз 21) →
+`AnnotateGrammarPageCommand`: spaCy + правило словесного шару статей (`buildLexBlockWords`), Word/
+WordDefinition за lemma+POS (`upsertWordDefinition`) → `grammar_page_lex_blocks` (construction,
+`lexBlockHash` = sha256 hex[:32], спани). Незмінені блоки не перепарсюються, зниклі видаляються.
+`GET /grammar/:slug` віддає `lexicon: { blocks, words }` (стан слова для глядача через
+`LexiconViewService`, спільний із ридером). Фразові дієслова не групуються — зріз 23.
 
 ### [ ] 21. Web: клікабельні слова на ручних сторінках
 - Branch: `grammar-translations-and-practice-09-modality-1`
