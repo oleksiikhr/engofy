@@ -1,0 +1,2152 @@
+{
+  "abroad": {
+    "adverb": {
+      "definition": "In or to a foreign country.",
+      "example": "She has lived abroad for five years.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "за кордоном, за кордон"
+      }
+    }
+  },
+  "absent": {
+    "adjective": {
+      "definition": "Not in the place where you should be, for example at school or work.",
+      "example": "Three students were absent today.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "відсутній"
+      }
+    }
+  },
+  "absolute": {
+    "adjective": {
+      "definition": "Complete and total; used to make a noun stronger.",
+      "example": "The party was an absolute disaster.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "абсолютний, цілковитий"
+      }
+    },
+    "verb": {
+      "definition": "Complete and total; used before a noun to make it stronger.",
+      "example": "It was an absolute pleasure to meet you.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "абсолютний, цілковитий"
+      }
+    }
+  },
+  "abstract": {
+    "adjective": {
+      "definition": "About ideas or feelings, not about things you can see or touch.",
+      "example": "Love and fear are abstract ideas.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "абстрактний"
+      }
+    }
+  },
+  "absurd": {
+    "adjective": {
+      "definition": "So silly or strange that it makes no sense.",
+      "example": "It's absurd to pay that much for a sandwich.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "абсурдний, безглуздий"
+      }
+    }
+  },
+  "academic": {
+    "adjective": {
+      "definition": "Connected with studying at a university or with serious study.",
+      "example": "She reads a lot of academic articles.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "академічний, науковий"
+      }
+    }
+  },
+  "acceptable": {
+    "adjective": {
+      "definition": "Good enough, or allowed in a situation.",
+      "example": "Is it acceptable to wear jeans to work?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прийнятний, допустимий"
+      }
+    }
+  },
+  "acceptance": {
+    "noun": {
+      "definition": "The act of taking something that is offered, or of agreeing to it.",
+      "example": "She sent a letter of acceptance for the job.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "прийняття, згода"
+      }
+    }
+  },
+  "accident": {
+    "noun": {
+      "definition": "Something bad that happens by chance, often causing injury or damage.",
+      "example": "He broke his leg in a car accident.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "аварія, нещасний випадок"
+      }
+    }
+  },
+  "accommodation": {
+    "noun": {
+      "definition": "A place to live or stay, such as a room, flat or hotel.",
+      "example": "The price includes flights and accommodation.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "житло, проживання"
+      }
+    }
+  },
+  "accord": {
+    "verb": {
+      "definition": "In 'according to': as said or shown by someone or something.",
+      "example": "According to the forecast, it will rain tomorrow.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "згідно з, за словами"
+      }
+    }
+  },
+  "accordance": {
+    "noun": {
+      "definition": "In 'in accordance with': following a rule, law or wish.",
+      "example": "The work was done in accordance with the rules.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відповідність"
+      }
+    }
+  },
+  "accounting": {
+    "noun": {
+      "definition": "The job of keeping or checking the financial records of a business.",
+      "example": "She works in accounting at a large bank.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "бухгалтерія, облік"
+      }
+    }
+  },
+  "accurate": {
+    "adjective": {
+      "definition": "Correct and exact, with no mistakes.",
+      "example": "The map was very accurate.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "точний"
+      }
+    }
+  },
+  "accustom": {
+    "verb": {
+      "definition": "In 'be accustomed to': to be used to something because it is familiar.",
+      "example": "I'm not accustomed to getting up so early.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "звикати, привчати"
+      }
+    }
+  },
+  "achieve": {
+    "verb": {
+      "definition": "To succeed in doing something good, usually after a lot of effort.",
+      "example": "She achieved her dream of becoming a doctor.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "досягати"
+      }
+    }
+  },
+  "achievement": {
+    "noun": {
+      "definition": "Something good that you have done after a lot of effort.",
+      "example": "Winning the prize was a great achievement.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "досягнення"
+      }
+    }
+  },
+  "actress": {
+    "noun": {
+      "definition": "A woman who acts in films, plays or TV shows.",
+      "example": "She is a famous Hollywood actress.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "акторка"
+      }
+    }
+  },
+  "adjective": {
+    "adjective": {
+      "definition": "A word that describes a noun, such as big, old or happy.",
+      "example": "In 'a red car', red is an adjective.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прикметник"
+      }
+    },
+    "noun": {
+      "definition": "A word that describes a noun, such as big, old or happy.",
+      "example": "Put the adjective before the noun: a new phone.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прикметник"
+      }
+    }
+  },
+  "admire": {
+    "noun": {
+      "definition": "To like and respect someone or something very much.",
+      "example": "I admire people who help others.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "захоплюватися, поважати"
+      }
+    },
+    "verb": {
+      "definition": "To like and respect someone or something very much.",
+      "example": "I really admire my grandmother.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "захоплюватися, поважати"
+      }
+    }
+  },
+  "admirer": {
+    "noun": {
+      "definition": "A person who likes and respects someone or something very much.",
+      "example": "He is a great admirer of her music.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "шанувальник, прихильник"
+      }
+    }
+  },
+  "admiring": {
+    "adjective": {
+      "definition": "Showing that you like and respect someone or something.",
+      "example": "She gave him an admiring look.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "захоплений, сповнений захвату"
+      }
+    }
+  },
+  "admit": {
+    "noun": {
+      "definition": "To agree, often unwillingly, that something is true.",
+      "example": "He admitted that he was wrong.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "визнавати"
+      }
+    },
+    "verb": {
+      "definition": "To agree, often unwillingly, that something is true.",
+      "example": "I must admit the film was better than I thought.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "визнавати"
+      }
+    }
+  },
+  "admittedly": {
+    "adverb": {
+      "definition": "Used to say that something is true, although it weakens your point.",
+      "example": "Admittedly, the hotel was expensive, but it was lovely.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "щоправда, треба визнати"
+      }
+    }
+  },
+  "adrenaline": {
+    "noun": {
+      "definition": "A chemical your body makes when you are excited or afraid.",
+      "example": "Skydiving gives you a rush of adrenaline.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "адреналін"
+      }
+    }
+  },
+  "adult": {
+    "noun": {
+      "definition": "A person who is fully grown, not a child.",
+      "example": "Tickets cost ten pounds for adults.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дорослий"
+      }
+    }
+  },
+  "advance": {
+    "noun": {
+      "definition": "In 'in advance': before the time when something happens.",
+      "example": "Please book your tickets in advance.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "заздалегідь; прогрес"
+      }
+    },
+    "verb": {
+      "definition": "To develop or improve; to move forward.",
+      "example": "Medicine has advanced a lot in the last century.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "розвиватися, просуватися"
+      }
+    }
+  },
+  "advanced": {
+    "adjective": {
+      "definition": "At a high level, or more developed than others.",
+      "example": "She's in the advanced English class.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "просунутий, високого рівня"
+      }
+    }
+  },
+  "advantage": {
+    "noun": {
+      "definition": "Something that helps you or makes a situation better.",
+      "example": "One advantage of city life is good transport.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "перевага"
+      }
+    }
+  },
+  "adventure": {
+    "noun": {
+      "definition": "An exciting and unusual experience, sometimes a dangerous one.",
+      "example": "Our trip to the jungle was a real adventure.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пригода"
+      }
+    }
+  },
+  "adverb": {
+    "adjective": {
+      "definition": "A word that tells you how, when or where something happens, such as slowly or here.",
+      "example": "In 'she sings well', well is an adverb.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прислівник"
+      }
+    },
+    "adverb": {
+      "definition": "A word that tells you how, when or where something happens, such as slowly or here.",
+      "example": "Many adverbs end in -ly: quickly, carefully.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прислівник"
+      }
+    },
+    "noun": {
+      "definition": "A word that tells you how, when or where something happens, such as slowly or here.",
+      "example": "Put the adverb after the verb: he runs fast.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прислівник"
+      }
+    },
+    "verb": {
+      "definition": "A word that tells you how, when or where something happens, such as slowly or here.",
+      "example": "Really and quite are common adverbs.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прислівник"
+      }
+    }
+  },
+  "advert": {
+    "noun": {
+      "definition": "A picture, film or short text that tries to make people buy something.",
+      "example": "I saw an advert for the job online.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "реклама, оголошення"
+      }
+    }
+  },
+  "advertisement": {
+    "noun": {
+      "definition": "A picture, film or short text that tries to make people buy something.",
+      "example": "The advertisement promised free delivery.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "реклама, оголошення"
+      }
+    }
+  },
+  "advertising": {
+    "verb": {
+      "definition": "The business of telling people about products so that they buy them.",
+      "example": "He has a job in advertising.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "реклама, рекламна справа"
+      }
+    }
+  },
+  "advise": {
+    "verb": {
+      "definition": "To tell someone what you think they should do.",
+      "example": "The doctor advised me to rest.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "радити"
+      }
+    }
+  },
+  "affair": {
+    "noun": {
+      "definition": "In 'state of affairs': the situation as it is at a particular time.",
+      "example": "This is a worrying state of affairs.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "справа, стан справ"
+      }
+    }
+  },
+  "affect": {
+    "verb": {
+      "definition": "To change or influence something or someone.",
+      "example": "The rain affected our plans.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "впливати"
+      }
+    }
+  },
+  "affirmation": {
+    "noun": {
+      "definition": "A statement that something is true, said strongly.",
+      "example": "Her words were an affirmation of her support.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "ствердження, підтвердження"
+      }
+    }
+  },
+  "affirmative": {
+    "adjective": {
+      "definition": "In grammar, saying yes; not negative or a question.",
+      "example": "'She works' is an affirmative sentence.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стверджувальний"
+      }
+    },
+    "noun": {
+      "definition": "In grammar, the form of a sentence that says yes, not no.",
+      "example": "Put the sentence into the affirmative.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стверджувальна форма"
+      }
+    }
+  },
+  "afford": {
+    "verb": {
+      "definition": "To have enough money or time to do or buy something.",
+      "example": "We can't afford a new car.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "могти собі дозволити"
+      }
+    }
+  },
+  "afraid": {
+    "adjective": {
+      "definition": "Frightened; in 'I'm afraid', used to say something politely that is not good news.",
+      "example": "I'm afraid I can't come tomorrow.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "наляканий; на жаль"
+      }
+    }
+  },
+  "afternoon": {
+    "noun": {
+      "definition": "The part of the day between midday and evening.",
+      "example": "We play football every Saturday afternoon.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "день, пообідній час"
+      }
+    }
+  },
+  "afterwards": {
+    "adverb": {
+      "definition": "Later, after something else has happened.",
+      "example": "We had dinner and afterwards went for a walk.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "потім, згодом"
+      }
+    }
+  },
+  "agricultural": {
+    "adjective": {
+      "definition": "Connected with farming.",
+      "example": "Most of the land is used for agricultural purposes.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сільськогосподарський"
+      }
+    }
+  },
+  "aim": {
+    "noun": {
+      "definition": "What you hope to achieve by doing something.",
+      "example": "The aim of the course is to improve your speaking.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "мета, ціль"
+      }
+    },
+    "verb": {
+      "definition": "To try or plan to achieve something.",
+      "example": "We aim to finish the work by Friday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прагнути, мати на меті"
+      }
+    }
+  },
+  "alarm": {
+    "noun": {
+      "definition": "A clock or device that makes a loud noise to wake you or warn you.",
+      "example": "I set my alarm for six o'clock.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "будильник, сигналізація"
+      }
+    }
+  },
+  "alike": {
+    "adverb": {
+      "definition": "In the same way; used to say something is true of two groups.",
+      "example": "The film is popular with children and adults alike.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "однаково"
+      }
+    }
+  },
+  "alive": {
+    "adjective": {
+      "definition": "Living; not dead.",
+      "example": "Are your grandparents still alive?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "живий"
+      }
+    }
+  },
+  "allegedly": {
+    "adverb": {
+      "definition": "Used to say that people claim something is true, but it is not proved.",
+      "example": "He allegedly stole the money from his boss.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нібито, як стверджують"
+      }
+    }
+  },
+  "alligator": {
+    "noun": {
+      "definition": "A large animal like a crocodile that lives in rivers in America and China.",
+      "example": "We saw an alligator in the swamp.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "алігатор"
+      }
+    }
+  },
+  "aloud": {
+    "adverb": {
+      "definition": "In a voice that other people can hear.",
+      "example": "The teacher read the story aloud.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "уголос, вголос"
+      }
+    }
+  },
+  "alter": {
+    "verb": {
+      "definition": "To change something, usually a little.",
+      "example": "We had to alter our plans because of the weather.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "змінювати"
+      }
+    }
+  },
+  "alternative": {
+    "adjective": {
+      "definition": "Able to be used or done instead of something else.",
+      "example": "We need an alternative route home.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "альтернативний, інший"
+      }
+    },
+    "noun": {
+      "definition": "Something you can choose instead of something else.",
+      "example": "Cycling is a cheap alternative to driving.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "альтернатива, варіант"
+      }
+    }
+  },
+  "altogether": {
+    "adverb": {
+      "definition": "Completely; or in total.",
+      "example": "I stopped eating meat altogether.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "зовсім, повністю; загалом"
+      }
+    }
+  },
+  "amazed": {
+    "adjective": {
+      "definition": "Very surprised.",
+      "example": "I was amazed at how quickly she learned.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вражений, здивований"
+      }
+    }
+  },
+  "amazingly": {
+    "adverb": {
+      "definition": "In a very surprising way; to a surprising degree.",
+      "example": "Amazingly, nobody was hurt.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дивовижно, на диво"
+      }
+    }
+  },
+  "amid": {
+    "adverb": {
+      "definition": "In the middle of or during something, often something noisy or confused.",
+      "example": "The concert went on amid heavy rain.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "серед, посеред"
+      }
+    }
+  },
+  "amongst": {
+    "noun": {
+      "definition": "Among; in the middle of a group of people or things.",
+      "example": "The book was found amongst her papers.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "серед, між"
+      }
+    }
+  },
+  "ancient": {
+    "adjective": {
+      "definition": "From a very long time ago.",
+      "example": "We visited the ancient temples of Greece.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стародавній, давній"
+      }
+    }
+  },
+  "angel": {
+    "noun": {
+      "definition": "A spirit from God; also used for a very kind person.",
+      "example": "Thank you, you're an angel!",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ангел"
+      }
+    }
+  },
+  "anger": {
+    "noun": {
+      "definition": "A strong feeling of being very annoyed about something.",
+      "example": "She couldn't hide her anger.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "гнів, злість"
+      }
+    }
+  },
+  "angry": {
+    "adjective": {
+      "definition": "Having a strong feeling of being very annoyed.",
+      "example": "My dad was angry because I was late.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "сердитий, розлючений"
+      }
+    }
+  },
+  "animal": {
+    "noun": {
+      "definition": "A living creature that is not a plant or a person.",
+      "example": "The zoo has animals from all over the world.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "тварина"
+      }
+    }
+  },
+  "announce": {
+    "verb": {
+      "definition": "To tell people something officially or publicly.",
+      "example": "They announced the winner on the radio.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "оголошувати"
+      }
+    }
+  },
+  "announcement": {
+    "noun": {
+      "definition": "An official statement that gives people information.",
+      "example": "There was an announcement about the delayed train.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "оголошення"
+      }
+    }
+  },
+  "announcer": {
+    "noun": {
+      "definition": "A person who reads news or introduces programmes on radio or TV.",
+      "example": "The radio announcer read the news.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "диктор, ведучий"
+      }
+    }
+  },
+  "annoy": {
+    "verb": {
+      "definition": "To make someone feel a little angry.",
+      "example": "It annoys me when people are late.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дратувати"
+      }
+    }
+  },
+  "annoyance": {
+    "noun": {
+      "definition": "The feeling of being a little angry.",
+      "example": "To my annoyance, the shop was closed.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "роздратування"
+      }
+    }
+  },
+  "annoyed": {
+    "adjective": {
+      "definition": "A little angry.",
+      "example": "She was annoyed with me for forgetting.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "роздратований"
+      }
+    }
+  },
+  "annoying": {
+    "adjective": {
+      "definition": "Making you feel a little angry.",
+      "example": "That noise is really annoying.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дратівливий, надокучливий"
+      }
+    }
+  },
+  "anywhere": {
+    "adverb": {
+      "definition": "In, at or to any place.",
+      "example": "I can't find my keys anywhere.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "будь-де, ніде"
+      }
+    }
+  },
+  "apart": {
+    "adverb": {
+      "definition": "In 'apart from': except for, or as well as.",
+      "example": "Apart from Tom, everyone came.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "окрім, крім"
+      }
+    }
+  },
+  "apologise": {
+    "noun": {
+      "definition": "To say that you are sorry for something you did.",
+      "example": "He apologised for being rude.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вибачатися"
+      }
+    },
+    "verb": {
+      "definition": "To say that you are sorry for something you did.",
+      "example": "I apologise for the delay.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вибачатися"
+      }
+    }
+  },
+  "apology": {
+    "noun": {
+      "definition": "Something you say or write to show you are sorry.",
+      "example": "She sent me an apology by email.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вибачення"
+      }
+    }
+  },
+  "apostrophe": {
+    "noun": {
+      "definition": "The sign ' used in short forms like don't and to show owning, as in Anna's.",
+      "example": "Don't forget the apostrophe in 'it's'.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "апостроф"
+      }
+    }
+  },
+  "apparently": {
+    "adverb": {
+      "definition": "Used to say that you have heard something but are not sure it is true.",
+      "example": "Apparently, the shop is closing next month.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "схоже, мабуть, кажуть"
+      }
+    }
+  },
+  "appeal": {
+    "noun": {
+      "definition": "A serious or urgent request for help, money or support.",
+      "example": "The charity made an appeal for help.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "звернення, заклик"
+      }
+    }
+  },
+  "apply": {
+    "verb": {
+      "definition": "To ask formally for something, such as a job or a place at a school.",
+      "example": "I've applied for a job at the bank.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "подавати заяву"
+      }
+    }
+  },
+  "appoint": {
+    "verb": {
+      "definition": "To choose someone officially for a job.",
+      "example": "They appointed a new manager last week.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "призначати"
+      }
+    }
+  },
+  "appointment": {
+    "noun": {
+      "definition": "An arrangement to meet someone at a certain time.",
+      "example": "I have a dentist appointment at three.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "запис, домовлена зустріч"
+      }
+    }
+  },
+  "appreciate": {
+    "verb": {
+      "definition": "To be grateful for something, or to enjoy it because you see its value.",
+      "example": "I really appreciate your help.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "цінувати, бути вдячним"
+      }
+    }
+  },
+  "architect": {
+    "noun": {
+      "definition": "A person whose job is to design buildings.",
+      "example": "The architect designed a modern library.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "архітектор"
+      }
+    }
+  },
+  "architecture": {
+    "noun": {
+      "definition": "The design and style of buildings.",
+      "example": "I love the old architecture in Lviv.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "архітектура"
+      }
+    }
+  },
+  "arguably": {
+    "adverb": {
+      "definition": "Used to say that something may be true and can be supported.",
+      "example": "He is arguably the best player in the world.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "можливо, мабуть"
+      }
+    }
+  },
+  "argue": {
+    "noun": {
+      "definition": "To give reasons for an opinion; or to disagree angrily.",
+      "example": "The author argues that cities need more parks.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "стверджувати, сперечатися"
+      }
+    },
+    "verb": {
+      "definition": "To give reasons for an opinion; or to disagree angrily.",
+      "example": "My brothers argue about everything.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "сперечатися, стверджувати"
+      }
+    }
+  },
+  "argument": {
+    "noun": {
+      "definition": "A reason or set of reasons for an opinion; or an angry disagreement.",
+      "example": "There are good arguments on both sides.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "аргумент; суперечка"
+      }
+    }
+  },
+  "arise": {
+    "verb": {
+      "definition": "To start to happen or exist, usually a problem or question.",
+      "example": "Problems may arise if we don't plan.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виникати"
+      }
+    }
+  },
+  "armchair": {
+    "noun": {
+      "definition": "A comfortable chair with supports for your arms.",
+      "example": "Grandpa sat in his armchair reading.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "крісло"
+      }
+    }
+  },
+  "arrange": {
+    "verb": {
+      "definition": "To plan or organise something.",
+      "example": "We arranged to meet at the station.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "домовлятися, організовувати"
+      }
+    }
+  },
+  "arranged": {
+    "adjective": {
+      "definition": "Planned and agreed in advance.",
+      "example": "We have an arranged meeting at ten.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "домовлений, запланований"
+      }
+    }
+  },
+  "arrangement": {
+    "noun": {
+      "definition": "A plan or agreement for something to happen.",
+      "example": "We made arrangements to visit my aunt.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "домовленість, план"
+      }
+    }
+  },
+  "arrest": {
+    "verb": {
+      "definition": "When the police take someone away because they may have done a crime.",
+      "example": "The police arrested two men.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "заарештовувати"
+      }
+    }
+  },
+  "arrive": {
+    "adjective": {
+      "definition": "To get to a place, especially at the end of a journey.",
+      "example": "The train arrives at six.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "прибувати, приїжджати"
+      }
+    }
+  },
+  "artistic": {
+    "adjective": {
+      "definition": "Connected with art, or good at art.",
+      "example": "She's very artistic and paints every day.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "мистецький, художній"
+      }
+    }
+  },
+  "aside": {
+    "adverb": {
+      "definition": "To one side; in 'aside', not counting something.",
+      "example": "Money aside, it's a great job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "осторонь, окрім"
+      }
+    }
+  },
+  "assertion": {
+    "noun": {
+      "definition": "A statement that you say is true.",
+      "example": "His assertion that the plan would fail was wrong.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "твердження"
+      }
+    }
+  },
+  "assess": {
+    "verb": {
+      "definition": "To judge how good, big or important something is.",
+      "example": "Teachers assess the students' work every term.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "оцінювати"
+      }
+    }
+  },
+  "assistant": {
+    "noun": {
+      "definition": "A person whose job is to help someone else.",
+      "example": "Ask the shop assistant for help.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "помічник, асистент"
+      }
+    }
+  },
+  "assume": {
+    "verb": {
+      "definition": "To believe something is true without being sure.",
+      "example": "I assume you're coming to the party.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "припускати"
+      }
+    }
+  },
+  "assumption": {
+    "noun": {
+      "definition": "Something you believe is true without proof.",
+      "example": "Don't make assumptions about people.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "припущення"
+      }
+    }
+  },
+  "assure": {
+    "verb": {
+      "definition": "To tell someone firmly that something is true so they don't worry.",
+      "example": "I assure you everything will be fine.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "запевняти"
+      }
+    }
+  },
+  "astonish": {
+    "verb": {
+      "definition": "To surprise someone very much.",
+      "example": "The news astonished everyone.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дивувати, вражати"
+      }
+    }
+  },
+  "athlete": {
+    "noun": {
+      "definition": "A person who is very good at sport, especially running or jumping.",
+      "example": "Olympic athletes train every day.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "спортсмен, атлет"
+      }
+    }
+  },
+  "attach": {
+    "verb": {
+      "definition": "To fix or join one thing to another; to add a file to an email.",
+      "example": "I've attached my CV to this email.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прикріплювати, додавати"
+      }
+    }
+  },
+  "attached": {
+    "adjective": {
+      "definition": "Added to an email or letter.",
+      "example": "Please read the attached document.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "доданий, прикріплений"
+      }
+    }
+  },
+  "attend": {
+    "verb": {
+      "definition": "To go to an event, such as a meeting, class or wedding.",
+      "example": "Over a hundred people attended the wedding.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "відвідувати, бути присутнім"
+      }
+    }
+  },
+  "attitude": {
+    "noun": {
+      "definition": "What you think and feel about something, and how you show it.",
+      "example": "She has a positive attitude to work.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ставлення"
+      }
+    }
+  },
+  "attract": {
+    "noun": {
+      "definition": "To make people interested and want to come or look.",
+      "example": "The festival attracts thousands of tourists.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "приваблювати"
+      }
+    },
+    "verb": {
+      "definition": "To make people interested and want to come or look.",
+      "example": "Bright colours attract attention.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "приваблювати"
+      }
+    }
+  },
+  "attractive": {
+    "adjective": {
+      "definition": "Pleasant to look at, or interesting and worth having.",
+      "example": "The job offers an attractive salary.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "привабливий"
+      }
+    }
+  },
+  "attributive": {
+    "adjective": {
+      "definition": "In grammar, used directly before a noun, like old in 'an old house'.",
+      "example": "'Main' is only used in attributive position.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "атрибутивний, означальний"
+      }
+    }
+  },
+  "attributively": {
+    "adverb": {
+      "definition": "In grammar, directly before a noun.",
+      "example": "Some adjectives are only used attributively.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "атрибутивно, перед іменником"
+      }
+    }
+  },
+  "audience": {
+    "noun": {
+      "definition": "The people who watch or listen to a show, film or talk.",
+      "example": "The audience clapped at the end.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "публіка, глядачі"
+      }
+    }
+  },
+  "aunt": {
+    "noun": {
+      "definition": "The sister of your mother or father, or your uncle's wife.",
+      "example": "My aunt lives in Kharkiv.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "тітка"
+      }
+    }
+  },
+  "auxiliary": {
+    "adjective": {
+      "definition": "In grammar, describing a helping verb such as be, have or do.",
+      "example": "'Do' is an auxiliary verb in 'Do you know?'.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "допоміжний"
+      }
+    },
+    "noun": {
+      "definition": "In grammar, a helping verb such as be, have or do.",
+      "example": "Questions put the auxiliary before the subject.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "допоміжне дієслово"
+      }
+    }
+  },
+  "awake": {
+    "adjective": {
+      "definition": "Not sleeping.",
+      "example": "I was awake all night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бадьорий, що не спить"
+      }
+    }
+  },
+  "awful": {
+    "adjective": {
+      "definition": "Very bad or unpleasant.",
+      "example": "The weather was awful yesterday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "жахливий"
+      }
+    }
+  },
+  "background": {
+    "noun": {
+      "definition": "Information that helps you understand a situation; or the area behind the main thing.",
+      "example": "Let me give you some background first.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "контекст, тло, фон"
+      }
+    }
+  },
+  "backshift": {
+    "noun": {
+      "definition": "In grammar, changing a verb to a past form in reported speech.",
+      "example": "'She said she was tired' shows backshift.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зсув часів"
+      }
+    }
+  },
+  "badly": {
+    "adverb": {
+      "definition": "In a bad way; not well.",
+      "example": "He did badly in the exam.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "погано"
+      }
+    }
+  },
+  "baggage": {
+    "noun": {
+      "definition": "The bags and cases you take on a journey.",
+      "example": "Please collect your baggage here.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "багаж"
+      }
+    }
+  },
+  "bake": {
+    "verb": {
+      "definition": "To cook food such as bread or cake in an oven.",
+      "example": "My mum bakes bread every Sunday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пекти"
+      }
+    }
+  },
+  "balance": {
+    "noun": {
+      "definition": "In 'on balance': after thinking about all the facts.",
+      "example": "On balance, I think the plan is good.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "баланс, рівновага"
+      }
+    },
+    "verb": {
+      "definition": "To give the right amount of time or attention to different things.",
+      "example": "It's hard to balance work and family.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поєднувати, балансувати"
+      }
+    }
+  },
+  "balloon": {
+    "noun": {
+      "definition": "A small rubber bag filled with air; or a very large one that carries people.",
+      "example": "We flew over the valley in a hot-air balloon.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "повітряна куля"
+      }
+    }
+  },
+  "ban": {
+    "noun": {
+      "definition": "An official rule that says something is not allowed.",
+      "example": "There is a ban on smoking in restaurants.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заборона"
+      }
+    }
+  },
+  "banquet": {
+    "noun": {
+      "definition": "A large formal dinner for many people.",
+      "example": "The wedding banquet lasted all evening.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "бенкет, банкет"
+      }
+    }
+  },
+  "barbecue": {
+    "noun": {
+      "definition": "A meal cooked outside over a fire, or the equipment for it.",
+      "example": "We had a barbecue in the garden.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "барбекю, гриль"
+      }
+    }
+  },
+  "bare": {
+    "adjective": {
+      "definition": "In grammar, a bare verb is the basic form with no 'to', like go.",
+      "example": "After 'can', use the bare verb.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "голий, без 'to'"
+      }
+    }
+  },
+  "bark": {
+    "verb": {
+      "definition": "When a dog makes its loud short sound.",
+      "example": "The neighbour's dog barks all night.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "гавкати"
+      }
+    }
+  },
+  "basically": {
+    "adverb": {
+      "definition": "Used to give the most important or simple point.",
+      "example": "Basically, we need more time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "по суті, загалом"
+      }
+    }
+  },
+  "bathroom": {
+    "noun": {
+      "definition": "A room with a bath or shower, and often a toilet.",
+      "example": "The flat has two bathrooms.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ванна кімната"
+      }
+    }
+  },
+  "battery": {
+    "noun": {
+      "definition": "An object that gives electricity to things like phones and toys.",
+      "example": "My phone battery is almost dead.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "батарейка, акумулятор"
+      }
+    }
+  },
+  "bavarian": {
+    "adjective": {
+      "definition": "From or connected with Bavaria, a region in the south of Germany.",
+      "example": "We tried some Bavarian sausages in Munich.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "баварський"
+      }
+    }
+  },
+  "bear": {
+    "verb": {
+      "definition": "In 'be born': to start life.",
+      "example": "I was born in Odesa in 2001.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "народжуватися"
+      }
+    }
+  },
+  "beautifully": {
+    "adverb": {
+      "definition": "In a very beautiful or very good way.",
+      "example": "She sings beautifully.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "гарно, чудово"
+      }
+    }
+  },
+  "bedroom": {
+    "noun": {
+      "definition": "A room for sleeping in.",
+      "example": "My bedroom is next to the kitchen.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "спальня"
+      }
+    },
+    "verb": {
+      "definition": "A room for sleeping in.",
+      "example": "The flat has two bedrooms.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "спальня"
+      }
+    }
+  },
+  "behave": {
+    "verb": {
+      "definition": "To act in a certain way; to be polite and do what is expected.",
+      "example": "The children behaved very well.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "поводитися"
+      }
+    }
+  },
+  "behaviour": {
+    "noun": {
+      "definition": "The way someone acts.",
+      "example": "His behaviour in class has improved.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "поведінка"
+      }
+    }
+  },
+  "belief": {
+    "noun": {
+      "definition": "A feeling that something is true or real.",
+      "example": "It's a common belief that carrots help your eyes.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переконання, віра"
+      }
+    }
+  },
+  "belong": {
+    "verb": {
+      "definition": "To be in the right place; or to be owned by someone.",
+      "example": "This bag belongs to my sister.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "належати"
+      }
+    }
+  },
+  "benefit": {
+    "noun": {
+      "definition": "Something good that you get from a situation.",
+      "example": "Exercise has many health benefits.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "користь, перевага"
+      }
+    },
+    "verb": {
+      "definition": "To be helped by something, or to help someone.",
+      "example": "Everyone will benefit from the new park.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "отримувати користь"
+      }
+    }
+  },
+  "beside": {
+    "adverb": {
+      "definition": "Next to, at the side of.",
+      "example": "Come and sit beside me.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "поруч, біля"
+      }
+    }
+  },
+  "besides": {
+    "adverb": {
+      "definition": "Also; used to add another reason.",
+      "example": "It's too late. Besides, I'm tired.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "до того ж, крім того"
+      }
+    }
+  },
+  "bet": {
+    "verb": {
+      "definition": "In 'I bet': used to say you are almost sure something is true.",
+      "example": "I bet you'll love the film.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "закладатися; бути певним"
+      }
+    }
+  },
+  "bicycle": {
+    "noun": {
+      "definition": "A vehicle with two wheels that you ride by moving your legs.",
+      "example": "I go to school by bicycle.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "велосипед"
+      }
+    }
+  },
+  "bike": {
+    "noun": {
+      "definition": "A bicycle; sometimes a motorbike.",
+      "example": "Someone stole my bike last night.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "велосипед"
+      }
+    }
+  },
+  "bind": {
+    "verb": {
+      "definition": "In 'be bound to': to be certain to happen.",
+      "example": "It's bound to rain at the weekend.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неодмінно, напевно"
+      }
+    }
+  },
+  "binding": {
+    "adjective": {
+      "definition": "That must be obeyed, especially by law.",
+      "example": "The contract is legally binding.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "обов'язковий, зобов'язальний"
+      }
+    }
+  },
+  "bird": {
+    "noun": {
+      "definition": "An animal with wings and feathers that can usually fly.",
+      "example": "The birds sing early in the morning.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "птах"
+      }
+    }
+  },
+  "birth": {
+    "noun": {
+      "definition": "The time when a baby is born.",
+      "example": "What is your date of birth?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "народження"
+      }
+    }
+  },
+  "birthday": {
+    "noun": {
+      "definition": "The day each year when you celebrate being born.",
+      "example": "It's my birthday on Friday.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "день народження"
+      }
+    }
+  },
+  "bite": {
+    "verb": {
+      "definition": "To cut into something with your teeth.",
+      "example": "The dog bit my brother.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кусати"
+      }
+    }
+  },
+  "blame": {
+    "noun": {
+      "definition": "Responsibility for something bad that happened.",
+      "example": "He always puts the blame on others.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "провина"
+      }
+    },
+    "verb": {
+      "definition": "To say that someone is responsible for something bad.",
+      "example": "Don't blame me for your mistakes.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "звинувачувати"
+      }
+    }
+  },
+  "blessing": {
+    "noun": {
+      "definition": "Something that is lucky or helpful.",
+      "example": "The rain was a blessing for the farmers.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "благо, благословення"
+      }
+    }
+  },
+  "blockbuster": {
+    "noun": {
+      "definition": "A very successful and popular film or book.",
+      "example": "The film was the summer's biggest blockbuster.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "блокбастер"
+      }
+    }
+  },
+  "blow": {
+    "verb": {
+      "definition": "To push air out of your mouth; when wind moves.",
+      "example": "She blew out the candles on her cake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дмухати, дути"
+      }
+    }
+  },
+  "boil": {
+    "verb": {
+      "definition": "When a liquid gets so hot that it bubbles.",
+      "example": "The water is boiling — add the pasta.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кипіти, кип'ятити"
+      }
+    }
+  },
+  "boiling": {
+    "noun": {
+      "definition": "Very hot.",
+      "example": "It's boiling in here — open a window.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дуже гарячий, спекотний"
+      }
+    }
+  },
+  "booking": {
+    "verb": {
+      "definition": "An arrangement to have a seat, room or table at a certain time.",
+      "example": "I made a booking for two at the restaurant.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бронювання"
+      }
+    }
+  },
+  "bookshop": {
+    "noun": {
+      "definition": "A shop that sells books.",
+      "example": "I bought this novel in a small bookshop.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "книгарня"
+      }
+    }
+  },
+  "boot": {
+    "noun": {
+      "definition": "A strong shoe that covers your foot and part of your leg.",
+      "example": "Wear boots — it's muddy outside.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "черевик, чобіт"
+      }
+    }
+  },
+  "bore": {
+    "verb": {
+      "definition": "To make someone feel tired and not interested.",
+      "example": "Long speeches bore me.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "набридати, нудити"
+      }
+    }
+  },
+  "bored": {
+    "adjective": {
+      "definition": "Tired and not interested because nothing is happening.",
+      "example": "I'm bored — let's go out.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "знуджений"
+      }
+    }
+  },
+  "boring": {
+    "adjective": {
+      "definition": "Not interesting.",
+      "example": "The lesson was really boring.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "нудний"
+      }
+    }
+  },
+  "borne": {
+    "verb": {
+      "definition": "In 'be born': to start life.",
+      "example": "She was born in a small village.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "народитися"
+      }
+    }
+  },
+  "borrow": {
+    "verb": {
+      "definition": "To take and use something that belongs to someone else, and give it back later.",
+      "example": "Can I borrow your pen?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "позичати (у когось)"
+      }
+    }
+  },
+  "boss": {
+    "noun": {
+      "definition": "The person who is in charge of you at work.",
+      "example": "My boss let me leave early.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "начальник, бос"
+      }
+    }
+  },
+  "bossy": {
+    "adjective": {
+      "definition": "Always telling other people what to do.",
+      "example": "My older sister is very bossy.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "владний, що любить командувати"
+      }
+    }
+  },
+  "bother": {
+    "verb": {
+      "definition": "To annoy someone or interrupt them.",
+      "example": "Sorry to bother you, but can I ask something?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "турбувати, заважати"
+      }
+    }
+  },
+  "bottle": {
+    "noun": {
+      "definition": "A container, usually glass or plastic, for drinks and other liquids.",
+      "example": "Could I have a bottle of water?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "пляшка"
+      }
+    }
+  },
+  "bounce": {
+    "verb": {
+      "definition": "To move up and down, or to hit a surface and move away.",
+      "example": "The kids were bouncing on the bed.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стрибати, підскакувати"
+      }
+    }
+  },
+  "bound": {
+    "adjective": {
+      "definition": "In 'bound to': certain to happen.",
+      "example": "You're bound to feel nervous before an exam.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неодмінно, напевно"
+      }
+    }
+  },
+  "bow": {
+    "noun": {
+      "definition": "A knot with two loops, used to tie ribbons or shoelaces.",
+      "example": "She tied a red bow on the present.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "бант"
+      }
+    }
+  },
+  "bowl": {
+    "noun": {
+      "definition": "A round deep dish for food.",
+      "example": "I had a bowl of soup for lunch.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "миска"
+      }
+    }
+  },
+  "boyfriend": {
+    "noun": {
+      "definition": "A man or boy that someone is having a romantic relationship with.",
+      "example": "Her boyfriend is from Italy.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "хлопець (коханий)"
+      }
+    }
+  },
+  "bracket": {
+    "noun": {
+      "definition": "One of the signs ( ) used around extra words in a text.",
+      "example": "Put the extra information in brackets.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дужка"
+      }
+    }
+  },
+  "brand": {
+    "noun": {
+      "definition": "The name of a product made by a particular company.",
+      "example": "What brand of phone do you have?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бренд, марка"
+      }
+    }
+  },
+  "brave": {
+    "adjective": {
+      "definition": "Ready to do dangerous or difficult things without showing fear.",
+      "example": "The firefighters were very brave.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "сміливий, хоробрий"
+      }
+    }
+  },
+  "bravery": {
+    "noun": {
+      "definition": "The quality of being brave.",
+      "example": "She got a medal for her bravery.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "хоробрість, сміливість"
+      }
+    }
+  },
+  "breakdown": {
+    "noun": {
+      "definition": "In 'nervous breakdown': a time of serious mental illness caused by stress.",
+      "example": "He had a nervous breakdown after years of stress.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нервовий зрив; поломка"
+      }
+    }
+  },
+  "breakfast": {
+    "noun": {
+      "definition": "The first meal of the day.",
+      "example": "I have eggs for breakfast.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "сніданок"
+      }
+    }
+  },
+  "brick": {
+    "noun": {
+      "definition": "A block of baked clay used for building walls.",
+      "example": "The old house is made of red bricks.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "цеглина"
+      }
+    }
+  },
+  "bridge": {
+    "noun": {
+      "definition": "A structure that goes over a river or road so people can cross it.",
+      "example": "We walked across the bridge.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "міст"
+      }
+    }
+  },
+  "briefly": {
+    "adverb": {
+      "definition": "For a short time, or using only a few words.",
+      "example": "Let me explain briefly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "коротко, стисло"
+      }
+    }
+  },
+  "bright": {
+    "adjective": {
+      "definition": "Full of light; or having a strong colour.",
+      "example": "The room is bright and sunny.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "світлий, яскравий"
+      }
+    }
+  },
+  "brilliant": {
+    "adjective": {
+      "definition": "Very good; excellent.",
+      "example": "We had a brilliant time at the concert.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "чудовий, блискучий"
+      }
+    }
+  },
+  "bringing": {
+    "verb": {
+      "definition": "Taking something or someone with you to a place.",
+      "example": "Thanks for bringing the cake!",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "приносити, привозити"
+      }
+    }
+  },
+  "broaden": {
+    "verb": {
+      "definition": "To make something wider, or to make your experience greater.",
+      "example": "Travel broadens the mind.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розширювати"
+      }
+    }
+  },
+  "brochure": {
+    "noun": {
+      "definition": "A thin book with pictures and information about a product or place.",
+      "example": "I picked up a holiday brochure.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "брошура, буклет"
+      }
+    }
+  },
+  "brush": {
+    "noun": {
+      "definition": "A tool with hairs or wires on a handle, used for painting, cleaning or hair.",
+      "example": "She painted the wall with a big brush.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "щітка, пензель"
+      }
+    },
+    "verb": {
+      "definition": "To clean or tidy something with a brush.",
+      "example": "Brush your teeth before bed.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "чистити щіткою, розчісувати"
+      }
+    }
+  },
+  "budget": {
+    "noun": {
+      "definition": "The amount of money you have to spend on something.",
+      "example": "We're travelling on a small budget.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бюджет"
+      }
+    }
+  },
+  "builder": {
+    "noun": {
+      "definition": "A person whose job is to build or repair houses.",
+      "example": "The builders are working on our roof.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "будівельник"
+      }
+    }
+  },
+  "bunch": {
+    "noun": {
+      "definition": "A group of things or people; flowers held together.",
+      "example": "He gave her a bunch of flowers.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "букет, в'язка, купа"
+      }
+    }
+  },
+  "burglar": {
+    "noun": {
+      "definition": "A person who enters a building to steal things.",
+      "example": "A burglar broke into our house.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "грабіжник, злодій"
+      }
+    }
+  },
+  "burn": {
+    "verb": {
+      "definition": "To be on fire; or to hurt or damage something with fire or heat.",
+      "example": "I burned my hand on the oven.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "горіти, обпікати"
+      }
+    }
+  },
+  "burst": {
+    "verb": {
+      "definition": "To break open suddenly.",
+      "example": "The balloon burst with a loud bang.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "лопнути, розірватися"
+      }
+    }
+  },
+  "bus": {
+    "noun": {
+      "definition": "A large vehicle that carries many passengers on a fixed route.",
+      "example": "I take the bus to work.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "автобус"
+      }
+    }
+  },
+  "businesslike": {
+    "adjective": {
+      "definition": "Serious and efficient, as in business.",
+      "example": "Her emails are short and businesslike.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "діловий"
+      }
+    }
+  },
+  "busy": {
+    "adjective": {
+      "definition": "Having a lot to do; or full of people.",
+      "example": "I'm too busy to help today.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "зайнятий; людний"
+      }
+    }
+  },
+  "button": {
+    "noun": {
+      "definition": "A small part you press on a machine; or a small round thing on clothes.",
+      "example": "Press the green button to start.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кнопка, ґудзик"
+      }
+    }
+  }
+}

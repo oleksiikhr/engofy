@@ -174,6 +174,7 @@ seed: ## Seed grammar and word reference data
 	pnpm cli words import-frequency
 	pnpm cli grammar import-usage-point-exercises
 	pnpm cli grammar import-usage-point-content
+	pnpm cli words import-lexicon-content
 
 .PHONY: grammar-pages
 grammar-pages: ## Link the words of every handcrafted grammar page to the dictionary (needs the web app and nlp-service running)

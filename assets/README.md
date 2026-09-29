@@ -122,6 +122,37 @@ Shape: a JSON object keyed by `egpIndex`:
   shown under each English example when the learner switches to the native
   language.
 
+## `lexicon-content.json`
+
+Hand-written dictionary entries for the words of the handcrafted grammar pages
+(the ones `grammar annotate-pages` links), the same fields the enrichment job
+writes for a `word_definition`. Written in a Claude Code session, no AI API
+call. `words import-lexicon-content` (part of `make seed`) creates the Word /
+WordDefinition by lemma + part of speech when missing and overwrites the
+listed fields, so edits are picked up on re-run; the enrichment job skips a
+sense that already has its translation (schema:
+`src/modules/post/domain/lexicon-content-seed.ts`).
+
+Shape: lowercase lemma → part of speech (`PartOfSpeech` value) → entry:
+
+```json
+{
+  "cartographer": {
+    "noun": {
+      "definition": "A person whose job is to draw maps.",
+      "example": "The cartographer drew a map of the coast.",
+      "cefrLevel": "C1",
+      "uk": { "translation": "картограф" }
+    }
+  }
+}
+```
+
+- `definition` — one short plain-English sentence, as a learner's dictionary
+  would phrase it, without the headword; the sense the pages use.
+- `example` — one natural sentence with the word in that sense.
+- `uk.translation` — one to three common Ukrainian equivalents, comma-separated.
+
 ## `irregular-verbs.json`
 
 ~164 English irregular verbs (`base_form`, `past_simple[]`,
