@@ -310,7 +310,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
-### [ ] 28. Банк вправ: PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (88)
+### [x] 28. Банк вправ: PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (88)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
