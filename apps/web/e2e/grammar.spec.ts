@@ -456,6 +456,51 @@ test.describe('grammar construction detail', () => {
     await expect(page.getByTestId('page-practice')).toHaveCount(0);
   });
 
+  test('a word on a handcrafted page opens the dictionary popup', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+
+    const word = construction.handcrafted
+      .locator('[data-word-definition-id]', { hasText: 'lost' })
+      .first();
+    await word.click();
+    const popup = page.locator('.lex-popup');
+    await expect(popup).toBeVisible();
+    await expect(popup).toContainText('To be unable to find something.');
+    // No post behind a grammar page — nothing to report against.
+    await expect(
+      popup.getByRole('button', { name: 'Report a mistake' }),
+    ).toHaveCount(0);
+  });
+
+  // The words are wrapped on the server, so they are there before first
+  // paint and the text below them doesn't move when scripts run.
+  test('clickable words do not shift the page when scripts run', async ({
+    browser,
+  }) => {
+    const compareY = async (scripts: boolean) => {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      if (!scripts) {
+        await blockScripts(page);
+      }
+      const construction = new GrammarConstructionPage(page);
+      await construction.goto('past-present-perfect-simple');
+      await expect(
+        construction.handcrafted.locator('[data-word-definition-id]').first(),
+      ).toBeAttached();
+      const box = await construction.compare.boundingBox();
+      await context.close();
+      return box?.y;
+    };
+    const beforeScripts = await compareY(false);
+    const afterScripts = await compareY(true);
+    expect(beforeScripts).toBeDefined();
+    expect(beforeScripts).toBeCloseTo(afterScripts ?? -1, 0);
+  });
+
   test('renders a handcrafted page with its compare links', async ({
     page,
   }) => {

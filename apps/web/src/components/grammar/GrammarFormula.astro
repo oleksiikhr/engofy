@@ -8,7 +8,7 @@ interface Props {
 const { label, parts } = Astro.props;
 ---
 
-<p class="gp-formula">
+<p class="gp-formula" data-no-lex>
   {label && <span class="gp-formula__label">{label}</span>}
   {
     parts.map((part, i) => (

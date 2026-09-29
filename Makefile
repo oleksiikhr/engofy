@@ -175,6 +175,10 @@ seed: ## Seed grammar and word reference data
 	pnpm cli grammar import-usage-point-exercises
 	pnpm cli grammar import-usage-point-content
 
+.PHONY: grammar-pages
+grammar-pages: ## Link the words of every handcrafted grammar page to the dictionary (needs the web app and nlp-service running)
+	pnpm cli grammar annotate-pages
+
 .PHONY: dev-seed
 dev-seed: ## Seed deterministic reader-page fixtures (posts/tokens) on the dev DB for manual QA
 	pnpm cli post dev-seed

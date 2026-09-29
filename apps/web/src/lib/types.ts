@@ -1,3 +1,4 @@
+import type { LexWord } from './lex-blocks';
 // Mirrors the Nest read-API response DTOs (Slice 8a). Kept hand-written and
 // minimal rather than generated — the surface is small and stable.
 
@@ -314,6 +315,13 @@ export interface GrammarConstructionDetail {
   usagePoints: GrammarConstructionUsagePoint[];
   // Easiest level first; absent for a guest.
   levelProgress?: GrammarLevelProgress[];
+  // Clickable words of the handcrafted page (`grammar annotate-pages`): word
+  // spans per text block keyed by `lexBlockHash`, and the words' popup data.
+  // Absent from an API still on the previous release.
+  lexicon?: {
+    blocks: Record<string, LexWord[]>;
+    words: Record<string, WordAnnotation>;
+  };
 }
 
 // --- dictionary ---

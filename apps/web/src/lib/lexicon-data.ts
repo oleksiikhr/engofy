@@ -1,5 +1,5 @@
 import type { GrammarSiblingUsagePoint, LexiconData } from './reader-lexicon';
-import type { GrammarAnnotation, PostDetail } from './types';
+import type { GrammarAnnotation, PostDetail, WordAnnotation } from './types';
 
 // The "why this, not that" explanation the grammar_contrastive exercise
 // generated for each usage point (the first one when a point has several).
@@ -49,18 +49,17 @@ function buildSiblings(
     : others.map((p) => toSibling(p, false));
 }
 
-// The popup data for every span `renderDoc` labels, whatever its state.
-export function buildLexiconData(
-  annotations: PostDetail['annotations'],
-  exercises: PostDetail['exercises'],
-): LexiconData {
-  const contrast = contrastByUsagePoint(exercises);
-  const data: LexiconData = { words: {}, phrases: {}, grammar: {} };
-  for (const w of Object.values(annotations.words)) {
+// Popup entries for word spans, keyed by wordDefinitionId. A proper noun
+// gets no entry (nothing to learn).
+export function wordLexiconEntries(
+  words: Record<string, WordAnnotation>,
+): LexiconData['words'] {
+  const out: LexiconData['words'] = {};
+  for (const w of Object.values(words)) {
     if (w.pos === 'proper_noun') {
       continue;
     }
-    data.words[w.wordDefinitionId] = {
+    out[w.wordDefinitionId] = {
       kind: 'word',
       id: w.wordDefinitionId,
       lemma: w.lemma,
@@ -74,6 +73,20 @@ export function buildLexiconData(
       state: w.state,
     };
   }
+  return out;
+}
+
+// The popup data for every span `renderDoc` labels, whatever its state.
+export function buildLexiconData(
+  annotations: PostDetail['annotations'],
+  exercises: PostDetail['exercises'],
+): LexiconData {
+  const contrast = contrastByUsagePoint(exercises);
+  const data: LexiconData = {
+    words: wordLexiconEntries(annotations.words),
+    phrases: {},
+    grammar: {},
+  };
   for (const p of Object.values(annotations.phrases)) {
     data.phrases[p.phraseId] = {
       kind: 'phrase',

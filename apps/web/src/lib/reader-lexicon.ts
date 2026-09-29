@@ -253,9 +253,12 @@ function footerHtml(
   slugId: string,
   demo: boolean,
 ): string {
-  return demo
-    ? DEMO_FOOTER_HTML
-    : `${lexiconActionsHtml(target, state)}\n  ${reportRowHtml(target, slugId)}`;
+  if (demo) {
+    return DEMO_FOOTER_HTML;
+  }
+  // A report is filed against a post; a grammar page has none.
+  const report = slugId ? `\n  ${reportRowHtml(target, slugId)}` : '';
+  return `${lexiconActionsHtml(target, state)}${report}`;
 }
 
 function lexiconSectionHtml(
