@@ -2,6 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import { grammarMetaDescription } from '../../lib/grammar-seo';
 import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
+import {
+  phraseLexiconEntries,
+  wordLexiconEntries,
+} from '../../lib/lexicon-data';
+import { LEX_ROOT_END, LEX_ROOT_START, wrapLexWords } from '../../lib/lex-blocks';
+import { escapeJson } from '../../lib/seo';
+import { pagePracticeHtml } from '../../lib/usage-point-exercises';
 import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
 import GrammarSection from './GrammarSection.astro';
@@ -47,6 +54,25 @@ const inlineIds = new Set(inlineUsagePointIds);
 const remainingUsagePoints = con.usagePoints.filter(
   (up) => !inlineIds.has(up.grammarUsagePointId),
 );
+
+// Practice: the only place a page's exercises are listed, grouped by usage
+// point; each card links to its group. GrammarUsagePointCard's script (every
+// usage point is rendered as a card on the page) binds it.
+const practiceHtml = pagePracticeHtml(con.usagePoints);
+
+// A handcrafted page's words are wrapped server-side (known before paint),
+// between markers `/grammar/lex-blocks.json` reads the page's text from.
+const bodyHtml = handcrafted
+  ? `${LEX_ROOT_START}${wrapLexWords(
+      await Astro.slots.render('default'),
+      con.lexicon?.blocks ?? {},
+    )}${LEX_ROOT_END}`
+  : null;
+const lexiconJson = escapeJson({
+  words: wordLexiconEntries(con.lexicon?.words ?? {}),
+  phrases: phraseLexiconEntries(con.lexicon?.phrases ?? {}),
+  grammar: {},
+});
 
 const progressSections: Section[] = [
   ...sections,
@@ -102,20 +128,57 @@ const jsonLd = jsonLdGraph([
 
   <GrammarSectionProgress sections={progressSections} />
 
-  <div class="con-body" data-handcrafted={handcrafted ? 'true' : undefined}>
-    <slot />
+  <div
+    class="con-body"
+    data-handcrafted={handcrafted ? 'true' : undefined}
+    data-guest={user ? undefined : ''}
+  >
+    {bodyHtml === null ? <slot /> : <Fragment set:html={bodyHtml} />}
   </div>
+  {
+    bodyHtml !== null && (
+      <script
+        is:inline
+        type="application/json"
+        id="grammar-lexicon"
+        set:html={lexiconJson}
+      />
+    )
+  }
 
   <GrammarUsagePoints sectionId="use" usagePoints={remainingUsagePoints} />
 
   <GrammarSection title="Practice" id="practice" open={false}>
-    <p>
-      Exercises for this rule are on the way — we're building them as a
-      separate step. For now, use the usage points above to track what
-      you've learned.
-    </p>
+    {
+      practiceHtml ? (
+        <div data-testid="page-practice" set:html={practiceHtml} />
+      ) : (
+        <p>
+          Exercises for this rule are on the way — we're building them as a
+          separate step. For now, use the usage points above to track what
+          you've learned.
+        </p>
+      )
+    }
   </GrammarSection>
 </Layout>
+
+<script>
+  import type { LexiconData } from '../../lib/reader-lexicon';
+  import { initReaderPopup } from '../../lib/reader-popup';
+
+  const body = document.querySelector<HTMLElement>('.con-body');
+  const raw = document.getElementById('grammar-lexicon')?.textContent;
+  if (body && raw) {
+    const lexicon = JSON.parse(raw) as LexiconData;
+    if (
+      Object.keys(lexicon.words).length > 0 ||
+      Object.keys(lexicon.phrases).length > 0
+    ) {
+      initReaderPopup(body, lexicon);
+    }
+  }
+</script>
 
 <style>
   .crumb {
@@ -188,5 +251,42 @@ const jsonLd = jsonLdGraph([
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-ink-faint);
+  }
+  /* Clickable words (lib/lex-blocks.ts), injected via set:html: a dotted
+     underline only, so wrapping them never moves the text. */
+  .con-body :is([data-word-definition-id], [data-phrase-id]) {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+  }
+  .con-body :is([data-word-definition-id], [data-phrase-id]):hover,
+  .con-body :is([data-word-definition-id], [data-phrase-id]):focus-visible {
+    background: var(--color-word);
+  }
+  /* Practice groups are injected via set:html. */
+  .upp__group + .upp__group {
+    margin-top: 1.5rem;
+  }
+  .upp__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+  .upe__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .upe__item {
+    padding: 1rem;
   }
 </style>

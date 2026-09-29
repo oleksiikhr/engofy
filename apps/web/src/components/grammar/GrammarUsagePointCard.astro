@@ -6,7 +6,10 @@
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
 import { NATIVE_LANG_LABEL, nativeLang } from '../../lib/native-lang';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
-import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
+import {
+  practiceAnchorId,
+  usagePointDrillSteps,
+} from '../../lib/usage-point-exercises';
 import GrammarContrast from './GrammarContrast.astro';
 
 interface Props {
@@ -26,10 +29,15 @@ const native = nativeLang();
 const nativeExplanation = up.explanation
   ? up.translations[native]?.explanation
   : null;
+// The exercises themselves live in the page's Practice section.
+const exerciseCount = usagePointDrillSteps(up.exercises).length;
+const nativeExamples = nativeExplanation
+  ? up.translations[native]?.examples
+  : undefined;
 ---
 
 <div class="usage-item card" data-state={up.state} id={anchorId}>
-  <div class="usage-item__head">
+  <div class="usage-item__head" data-no-lex>
     <span class="badge">{up.cefrLevel}</span>
     <span class="usage-item__guide">{up.guideword}</span>
     {
@@ -63,7 +71,12 @@ const nativeExplanation = up.explanation
   {
     up.examples.length > 0 && (
       <div data-testid="usage-examples">
-        <GrammarContrast good={up.examples} />
+        <GrammarContrast
+          good={up.examples}
+          goodNative={
+            nativeExamples && { lang: native, texts: nativeExamples }
+          }
+        />
       </div>
     )
   }
@@ -75,7 +88,13 @@ const nativeExplanation = up.explanation
       up.assumedKnown,
     )}
   />
-  <Fragment set:html={usagePointExercisesHtml(up.exercises)} />
+  {
+    exerciseCount > 0 && (
+      <a class="usage-item__practice" href={`#${practiceAnchorId(up)}`}>
+        Practice · {exerciseCount}
+      </a>
+    )
+  }
 </div>
 
 <style>
@@ -153,25 +172,12 @@ const nativeExplanation = up.explanation
     font-size: 0.85rem;
     color: var(--color-ink-faint);
   }
-  .upe {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-  .upe__title {
-    margin: 0 0 0.75rem;
-    font-size: 0.95rem;
+  .usage-item__practice {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
     font-weight: 800;
-  }
-  .upe__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.75rem;
-  }
-  .upe__item {
-    padding: 1rem;
+    color: var(--color-brand-strong);
   }
 </style>
 

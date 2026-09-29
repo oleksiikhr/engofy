@@ -5,15 +5,17 @@ import { factories } from '../../../../../test/factories/factories.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { Disposition } from '../../../learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../../learning/enums/learning-card-state.enum.js';
+import { GrammarPageLexBlock } from '../../entities/grammar-page-lex-block.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
+import { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
 import { PostModule } from '../../post.module.js';
 import { GetGrammarConstructionQuery } from './get-grammar-construction.query.js';
 
 function seedConstruction(
   em: EntityManager,
   slug: string,
-): { a2PointId: string; b1PointId: string } {
+): { constructionId: string; a2PointId: string; b1PointId: string } {
   const category = factories(em).grammarCategory.makeOne({
     name: `TENSES-${uuidv7().slice(0, 8)}`,
     sortOrder: 1,
@@ -38,7 +40,11 @@ function seedConstruction(
     guideword: 'USE: RECENT PAST',
     canDoStatement: 'Can talk about recent events.',
   });
-  return { a2PointId: a2.id, b1PointId: b1.id };
+  return {
+    constructionId: construction.id,
+    a2PointId: a2.id,
+    b1PointId: b1.id,
+  };
 }
 
 describe('GetGrammarConstructionHandler', () => {
@@ -101,6 +107,45 @@ describe('GetGrammarConstructionHandler', () => {
       examples: [],
       translations: {},
     });
+  });
+
+  it('returns the page lexicon: word spans per block and their popup data', async () => {
+    const slug = `present-perfect-${uuidv7().slice(0, 8)}`;
+    const { constructionId } = seedConstruction(suite.orm.em, slug);
+    const word = suite.factories.word.makeOne({ lemma: 'cartographer' });
+    const definition = suite.factories.wordDefinition.makeOne({
+      wordId: word.id,
+      pos: PartOfSpeech.Noun,
+      definition: 'A person who draws maps.',
+    });
+    const block = new GrammarPageLexBlock();
+    block.constructionId = constructionId;
+    block.textHash = 'hash-1';
+    block.spans = [{ start: 4, end: 16, wordDefinitionId: definition.id }];
+    suite.orm.em.persist(block);
+    await suite.orm.em.flush();
+    suite.orm.em.clear();
+
+    const view = await suite.query(new GetGrammarConstructionQuery(slug));
+
+    expect(view?.lexicon.blocks).toEqual({ 'hash-1': block.spans });
+    expect(view?.lexicon.words[definition.id]).toMatchObject({
+      lemma: 'cartographer',
+      pos: PartOfSpeech.Noun,
+      definition: 'A person who draws maps.',
+      state: 'new',
+    });
+  });
+
+  it('returns an empty lexicon for a page that was not annotated', async () => {
+    const slug = `present-perfect-${uuidv7().slice(0, 8)}`;
+    seedConstruction(suite.orm.em, slug);
+    await suite.orm.em.flush();
+    suite.orm.em.clear();
+
+    const view = await suite.query(new GetGrammarConstructionQuery(slug));
+
+    expect(view?.lexicon).toEqual({ blocks: {}, words: {}, phrases: {} });
   });
 
   describe('per-point state (grammar-page-redesign зріз 1)', () => {

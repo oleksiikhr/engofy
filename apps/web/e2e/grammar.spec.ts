@@ -285,7 +285,7 @@ test.describe('grammar construction detail', () => {
     await expect(enriched).toContainText('which of two past actions');
     await expect(
       enriched.getByTestId('usage-examples').locator('li'),
-    ).toHaveText([
+    ).toContainText([
       'She had drawn the map before he arrived.',
       'I had eaten when they called.',
     ]);
@@ -309,14 +309,20 @@ test.describe('grammar construction detail', () => {
     const translated = construction.usageItem(0);
     const english = translated.getByText('which of two past actions');
     const ukrainian = translated.getByText('яка з двох минулих дій');
+    const example = translated.getByText('She had drawn the map');
+    const exampleUk = translated.getByText('Вона намалювала мапу');
     const uk = translated.getByRole('button', { name: 'УКР' });
     await expect(english).toBeVisible();
     await expect(ukrainian).toBeHidden();
+    await expect(exampleUk).toBeHidden();
     await expect(uk).toHaveAttribute('aria-pressed', 'false');
 
     await uk.click();
     await expect(ukrainian).toBeVisible();
     await expect(english).toBeHidden();
+    // The English example stays; its translation appears under it.
+    await expect(example).toBeVisible();
+    await expect(exampleUk).toBeVisible();
     await expect(uk).toHaveAttribute('aria-pressed', 'true');
     // No translation — no switch, English only.
     await expect(
@@ -373,6 +379,9 @@ test.describe('grammar construction detail', () => {
         await expect(
           construction.usageItem(0).getByText('яка з двох минулих дій'),
         ).toBeVisible();
+        await expect(
+          construction.usageItem(0).getByText('Вона намалювала мапу'),
+        ).toBeVisible();
         const box = await construction.usageItem(1).boundingBox();
         await context.close();
         return box?.y;
@@ -394,8 +403,13 @@ test.describe('grammar construction detail', () => {
     const construction = new GrammarConstructionPage(page);
     await expect(page.locator('#usage-point-90012')).toBeVisible();
 
+    // The card links to its group in Practice, which holds the exercises.
     const enriched = construction.usageItem(0);
-    const exercise = enriched.locator('.upe__item').first();
+    await expect(enriched.locator('.upe')).toHaveCount(0);
+    await enriched.getByRole('link', { name: 'Practice · 1' }).click();
+    const group = page.locator('#practice-90012');
+    await expect(group).toBeVisible();
+    const exercise = group.locator('.upe__item').first();
     await expect(exercise).toContainText('By the time he arrived');
     await exercise.locator('[data-upe-input]').fill('had drawn');
     await exercise.locator('[data-upe-check]').click();
@@ -403,9 +417,108 @@ test.describe('grammar construction detail', () => {
       'Correct',
     );
 
-    // The "Reported" point has no seeded pool yet — no exercises section.
+    // The "Reported" point has no seeded pool yet — no Practice link.
     const bare = construction.usageItem(1);
-    await expect(bare.locator('.upe')).toHaveCount(0);
+    await expect(bare.getByRole('link', { name: /Practice/ })).toHaveCount(0);
+  });
+
+  test("gathers the page's exercises in Practice and checks an answer", async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openPractice();
+
+    const exercise = page
+      .getByTestId('page-practice')
+      .locator('.upe__item')
+      .first();
+    await expect(exercise).toContainText('By the time he arrived');
+    // The ____ blank splits the prompt: the input sits inside the sentence.
+    await expect(exercise.locator('.qc__prompt [data-upe-input]')).toHaveCount(
+      1,
+    );
+    await exercise.locator('[data-upe-input]').fill('had drawn');
+    await exercise.locator('[data-upe-check]').click();
+    await expect(exercise.locator('[data-upe-feedback]')).toContainText(
+      'Correct',
+    );
+  });
+
+  test('keeps the Practice placeholder on a page with no exercises', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-present-simple');
+    await construction.openPractice();
+
+    await expect(construction.practiceSection).toContainText('on the way');
+    await expect(page.getByTestId('page-practice')).toHaveCount(0);
+  });
+
+  test('a word on a handcrafted page opens the dictionary popup', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+
+    const word = construction.handcrafted
+      .locator('[data-word-definition-id]', { hasText: 'lost' })
+      .first();
+    await word.click();
+    const popup = page.locator('.lex-popup');
+    await expect(popup).toBeVisible();
+    await expect(popup).toContainText('To be unable to find something.');
+    // No post behind a grammar page — nothing to report against.
+    await expect(
+      popup.getByRole('button', { name: 'Report a mistake' }),
+    ).toHaveCount(0);
+  });
+
+  test('a phrase on a handcrafted page opens its own popup', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+
+    const phrase = construction.handcrafted
+      .locator('[data-phrase-id]', { hasText: 'so far' })
+      .first();
+    // Its section starts closed.
+    await phrase.evaluate((el) => {
+      const section = el.closest('details');
+      if (section) {
+        section.open = true;
+      }
+    });
+    await phrase.click();
+    await expect(page.locator('.lex-popup')).toContainText('Until now.');
+  });
+
+  // The words are wrapped on the server, so they are there before first
+  // paint and the text below them doesn't move when scripts run.
+  test('clickable words do not shift the page when scripts run', async ({
+    browser,
+  }) => {
+    const compareY = async (scripts: boolean) => {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      if (!scripts) {
+        await blockScripts(page);
+      }
+      const construction = new GrammarConstructionPage(page);
+      await construction.goto('past-present-perfect-simple');
+      await expect(
+        construction.handcrafted.locator('[data-word-definition-id]').first(),
+      ).toBeAttached();
+      const box = await construction.compare.boundingBox();
+      await context.close();
+      return box?.y;
+    };
+    const beforeScripts = await compareY(false);
+    const afterScripts = await compareY(true);
+    expect(beforeScripts).toBeDefined();
+    expect(beforeScripts).toBeCloseTo(afterScripts ?? -1, 0);
   });
 
   test('renders a handcrafted page with its compare links', async ({

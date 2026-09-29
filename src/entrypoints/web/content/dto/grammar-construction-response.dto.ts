@@ -1,7 +1,11 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
 import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
-import type { PostGrammarTranslationDto } from './post-detail-response.dto.js';
+import type {
+  PostGrammarTranslationDto,
+  PostPhraseAnnotationDto,
+  PostWordAnnotationDto,
+} from './post-detail-response.dto.js';
 
 type ConstructionGrammarTranslations = Partial<
   Record<ContentLanguage, PostGrammarTranslationDto>
@@ -65,4 +69,32 @@ export class GrammarConstructionResponseDto {
 
   // Resolved / total usage points per level, easiest first. Absent for a guest.
   readonly levelProgress?: ConstructionLevelProgressDto[];
+
+  readonly lexicon!: GrammarPageLexiconDto;
+}
+
+export class GrammarPageLexSpanDto {
+  // Half-open char range in the block's text.
+  readonly start!: number;
+
+  readonly end!: number;
+
+  // Exactly one of the two is set.
+  readonly wordDefinitionId?: string;
+
+  readonly phraseId?: string;
+}
+
+// Clickable words and phrases of the handcrafted page; empty until `grammar
+// annotate-pages` has run for it.
+export class GrammarPageLexiconDto {
+  // Spans per text block, keyed by the hash of the block's text (sha256 hex,
+  // first 32 chars).
+  readonly blocks!: Record<string, GrammarPageLexSpanDto[]>;
+
+  // Keyed by wordDefinitionId.
+  readonly words!: Record<string, PostWordAnnotationDto>;
+
+  // Keyed by phraseId.
+  readonly phrases!: Record<string, PostPhraseAnnotationDto>;
 }

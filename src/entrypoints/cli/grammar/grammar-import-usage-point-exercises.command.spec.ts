@@ -13,7 +13,7 @@ const seed = {
     {
       type: ExerciseType.FillBlank,
       payload: {
-        prompt: 'I ___ to work.',
+        prompt: 'I ____ to work.',
         answer: 'go',
         options: ['go', 'goes'],
       },
@@ -21,7 +21,7 @@ const seed = {
     {
       type: ExerciseType.MultipleChoice,
       payload: {
-        prompt: 'She ___ football.',
+        prompt: 'She ____ football.',
         options: ['play', 'plays'],
         answerIndex: 1,
       },

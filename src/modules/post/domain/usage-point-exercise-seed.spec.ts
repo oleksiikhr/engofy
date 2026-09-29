@@ -1,10 +1,15 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ExerciseType } from '../enums/exercise-type.enum.js';
+import { classifyEgpRecord, parseEgpRecords } from './egp.js';
 import { parseUsagePointExerciseSeedFile } from './usage-point-exercise-seed.js';
+
+const BLANK_RE = /exactly one blank/;
 
 const fillBlank = {
   type: ExerciseType.FillBlank,
   payload: {
-    prompt: 'I ___ to work by bus.',
+    prompt: 'I ____ to work by bus.',
     answer: 'go',
     options: ['go', 'goes'],
   },
@@ -12,7 +17,7 @@ const fillBlank = {
 const multipleChoice = {
   type: ExerciseType.MultipleChoice,
   payload: {
-    prompt: 'She ___ football.',
+    prompt: 'She ____ football.',
     options: ['play', 'plays'],
     answerIndex: 1,
   },
@@ -52,13 +57,38 @@ describe('parseUsagePointExerciseSeedFile', () => {
     expect(() => parseUsagePointExerciseSeedFile({ '2': [] })).toThrow();
   });
 
+  it.each([
+    ['no blank', 'I go to work.'],
+    ['a three-underscore blank', 'I ___ to work.'],
+    ['two blanks', 'I ____ to ____.'],
+  ])('rejects a fill_blank prompt with %s', (_, prompt) => {
+    expect(() =>
+      parseUsagePointExerciseSeedFile({
+        '2': [{ ...fillBlank, payload: { ...fillBlank.payload, prompt } }],
+      }),
+    ).toThrow(BLANK_RE);
+  });
+
+  it('rejects a multiple_choice prompt without the blank', () => {
+    expect(() =>
+      parseUsagePointExerciseSeedFile({
+        '2': [
+          {
+            ...multipleChoice,
+            payload: { ...multipleChoice.payload, prompt: 'She plays.' },
+          },
+        ],
+      }),
+    ).toThrow(BLANK_RE);
+  });
+
   it('rejects multiple_choice with an out-of-range answerIndex', () => {
     expect(() =>
       parseUsagePointExerciseSeedFile({
         '2': [
           {
             type: ExerciseType.MultipleChoice,
-            payload: { prompt: 'x', options: ['a', 'b'], answerIndex: 2 },
+            payload: { prompt: 'x ____', options: ['a', 'b'], answerIndex: 2 },
           },
         ],
       }),
@@ -84,5 +114,28 @@ describe('parseUsagePointExerciseSeedFile', () => {
         '2': [{ type: ExerciseType.GrammarContrastive, payload: {} }],
       }),
     ).toThrow();
+  });
+});
+
+describe('assets/grammar-usage-point-exercises.json', () => {
+  it('parses and has exercises for exactly the EGP records that become usage points', async () => {
+    const exercises = parseUsagePointExerciseSeedFile(
+      JSON.parse(
+        await readFile(
+          join(process.cwd(), 'assets', 'grammar-usage-point-exercises.json'),
+          'utf8',
+        ),
+      ),
+    );
+    const useIndexes = parseEgpRecords(
+      JSON.parse(
+        await readFile(join(process.cwd(), 'assets', 'egp.json'), 'utf8'),
+      ),
+    )
+      .filter((record) => classifyEgpRecord(record) === 'use')
+      .map((record) => String(record.index))
+      .sort();
+
+    expect(Object.keys(exercises).sort()).toEqual(useIndexes);
   });
 });

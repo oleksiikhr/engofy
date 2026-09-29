@@ -2,7 +2,6 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import { DateTime } from 'luxon';
-import { v7 as uuidv7 } from 'uuid';
 import {
   AI_CLIENT,
   type AiClient,
@@ -33,6 +32,10 @@ import {
   spliceSpansIntoListItem,
 } from '../../domain/splice-spans.js';
 import { upsertPhraseId } from '../../domain/upsert-phrase-id.js';
+import {
+  upsertWordDefinition,
+  type WordRef,
+} from '../../domain/upsert-word-definition.js';
 import type { Annotation } from '../../domain/validate-annotations.js';
 import { validateAnnotations } from '../../domain/validate-annotations.js';
 import { loadWordFrequencyRanks } from '../../domain/word-frequency.js';
@@ -42,7 +45,6 @@ import { PostPart } from '../../entities/post-part.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
-import { WordDefinition } from '../../entities/word-definition.entity.js';
 import type { PartOfSpeech } from '../../enums/part-of-speech.enum.js';
 import { PhraseType } from '../../enums/phrase-type.enum.js';
 import { PostPartKind } from '../../enums/post-part-kind.enum.js';
@@ -52,11 +54,6 @@ import { PostStatus } from '../../enums/post-status.enum.js';
 import { SpacyLayerMissingError } from '../../errors/spacy-layer-missing.error.js';
 import type { PostAiEnrichmentJobData } from '../enrich-lexicon/enrich-lexicon.handler.js';
 import { AnnotatePostCommand } from './annotate-post.command.js';
-
-interface WordRef {
-  wordId: string;
-  wordDefinitionId: string;
-}
 
 export interface AnnotationCaches {
   wordRefByKey: Map<string, WordRef>;
@@ -465,43 +462,9 @@ export class AnnotatePostHandler
     if (cached) {
       return cached;
     }
-
-    const wordId = await this.upsertWordId(lemma);
-
-    // word_definitions has a real (word_id, pos) unique constraint, so
-    // em.upsert() targets it directly — an atomic insert-or-fetch immune to
-    // the concurrent-job race. 'ignore' keeps an existing definition's
-    // cefrLevel/definition untouched. `id` must be passed explicitly (the
-    // entity's field initializer only runs via `new`). cefrLevel is filled
-    // in later by the word-definition enrichment job, not here.
-    const definition = await this.em.upsert(
-      WordDefinition,
-      { id: uuidv7(), wordId, pos },
-      { onConflictFields: ['wordId', 'pos'], onConflictAction: 'ignore' },
-    );
-
-    const ref: WordRef = { wordId, wordDefinitionId: definition.id };
+    const ref = await upsertWordDefinition(this.em, lemma, pos);
     cache.set(key, ref);
     return ref;
-  }
-
-  // Word.lemma's uniqueness is a lower(lemma) expression index, which
-  // em.upsert()'s onConflictFields can't target, so this is raw SQL. Two
-  // concurrent jobs racing the same lemma resolve atomically at the DB
-  // level; the no-op DO UPDATE lets the one round trip return the existing
-  // row's id on conflict.
-  private async upsertWordId(lemma: string): Promise<string> {
-    const rows = await this.em.getConnection().execute<{ id: string }[]>(
-      `INSERT INTO words (id, lemma, created_at, updated_at)
-         VALUES (?, ?, now(), now())
-         ON CONFLICT (lower(lemma)) DO UPDATE SET lemma = words.lemma
-         RETURNING id`,
-      [uuidv7(), lemma],
-      'all',
-      this.em.getTransactionContext(),
-    );
-
-    return (rows[0] as { id: string }).id;
   }
 
   private async findOrCreatePhraseId(

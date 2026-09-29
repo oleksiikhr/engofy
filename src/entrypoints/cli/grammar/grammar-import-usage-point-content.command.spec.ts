@@ -11,7 +11,10 @@ const seed = {
   '2': {
     explanation: 'We use the present simple for habits.',
     examples: ['I walk to work.', 'She reads every night.'],
-    uk: { explanation: 'Present simple вживаємо для звичок.' },
+    uk: {
+      explanation: 'Present simple вживаємо для звичок.',
+      examples: ['Я ходжу на роботу пішки.', 'Вона читає щовечора.'],
+    },
   },
 };
 
@@ -55,6 +58,31 @@ describe('GrammarImportUsagePointContentCommand', () => {
       },
     });
     expect(flush).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects an entry without translated examples', async () => {
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({
+        '2': { ...seed['2'], uk: { explanation: seed['2'].uk.explanation } },
+      }),
+    );
+
+    await expect(command.run([], {})).rejects.toThrow();
+    expect(find).not.toHaveBeenCalled();
+  });
+
+  it('rejects translated examples that do not match the examples', async () => {
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({
+        '2': {
+          ...seed['2'],
+          uk: { ...seed['2'].uk, examples: ['Лише один.'] },
+        },
+      }),
+    );
+
+    await expect(command.run([], {})).rejects.toThrow();
+    expect(find).not.toHaveBeenCalled();
   });
 
   it('throws when the seed references an egpIndex with no matching usage point', async () => {

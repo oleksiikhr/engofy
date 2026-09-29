@@ -10,6 +10,7 @@
       "**",
       "!src/metadata.ts",
       "!src/core/database/migrations/*.json",
+      "!assets/grammar-usage-point-exercises.json",
       "!apps"
     ]
   },

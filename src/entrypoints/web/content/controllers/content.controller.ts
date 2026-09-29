@@ -20,7 +20,11 @@ import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor
 import { PostService } from '../../../../modules/post/post.service.js';
 import type { GrammarConstructionView } from '../../../../modules/post/queries/get-grammar-construction/grammar-construction-view.js';
 import type { GrammarReferenceView } from '../../../../modules/post/queries/get-grammar-reference/grammar-reference-view.js';
-import type { PostDetailView } from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
+import type {
+  PhraseAnnotationView,
+  PostDetailView,
+  WordAnnotationView,
+} from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
 import type {
   PostsListItemView,
   PostsListView,
@@ -32,6 +36,8 @@ import { GrammarReferenceResponseDto } from '../dto/grammar-reference-response.d
 import {
   PostAnnotationsDto,
   PostDetailResponseDto,
+  type PostPhraseAnnotationDto,
+  type PostWordAnnotationDto,
 } from '../dto/post-detail-response.dto.js';
 import { PostSuggestionsQueryDto } from '../dto/post-suggestions-query.dto.js';
 import { PostSuggestionsResponseDto } from '../dto/post-suggestions-response.dto.js';
@@ -311,29 +317,8 @@ function toAnnotationsDto(
   annotations: PostDetailView['annotations'],
 ): PostAnnotationsDto {
   return {
-    words: mapRecord(annotations.words, (word) => ({
-      wordDefinitionId: word.wordDefinitionId,
-      wordId: word.wordId,
-      lemma: word.lemma,
-      pos: word.pos,
-      definition: word.definition,
-      phonetic: word.phonetic,
-      example: word.example,
-      translations: word.translations,
-      cefrLevel: word.cefrLevel,
-      frequencyRank: word.frequencyRank,
-      state: word.state,
-    })),
-    phrases: mapRecord(annotations.phrases, (phrase) => ({
-      phraseId: phrase.phraseId,
-      text: phrase.text,
-      type: phrase.type,
-      definition: phrase.definition,
-      example: phrase.example,
-      translations: phrase.translations,
-      cefrLevel: phrase.cefrLevel,
-      state: phrase.state,
-    })),
+    words: mapRecord(annotations.words, toWordAnnotationDto),
+    phrases: mapRecord(annotations.phrases, toPhraseAnnotationDto),
     grammar: mapRecord(annotations.grammar, (entry) => ({
       slug: entry.slug,
       name: entry.name,
@@ -421,6 +406,42 @@ function toGrammarConstructionResponse(
       assumedKnown: point.assumedKnown,
     })),
     levelProgress: view.levelProgress,
+    lexicon: {
+      blocks: view.lexicon.blocks,
+      words: mapRecord(view.lexicon.words, toWordAnnotationDto),
+      phrases: mapRecord(view.lexicon.phrases, toPhraseAnnotationDto),
+    },
+  };
+}
+
+function toPhraseAnnotationDto(
+  phrase: PhraseAnnotationView,
+): PostPhraseAnnotationDto {
+  return {
+    phraseId: phrase.phraseId,
+    text: phrase.text,
+    type: phrase.type,
+    definition: phrase.definition,
+    example: phrase.example,
+    translations: phrase.translations,
+    cefrLevel: phrase.cefrLevel,
+    state: phrase.state,
+  };
+}
+
+function toWordAnnotationDto(word: WordAnnotationView): PostWordAnnotationDto {
+  return {
+    wordDefinitionId: word.wordDefinitionId,
+    wordId: word.wordId,
+    lemma: word.lemma,
+    pos: word.pos,
+    definition: word.definition,
+    phonetic: word.phonetic,
+    example: word.example,
+    translations: word.translations,
+    cefrLevel: word.cefrLevel,
+    frequencyRank: word.frequencyRank,
+    state: word.state,
   };
 }
 

@@ -1,0 +1,1866 @@
+{
+  "according to": {
+    "definition": "As said or shown by someone or something.",
+    "example": "According to the news, the road is closed.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "згідно з, за словами"
+    }
+  },
+  "act on": {
+    "type": "phrasal_verb",
+    "definition": "To do something because of advice, information or a feeling.",
+    "example": "She acted on her doctor's advice.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "діяти згідно з"
+    }
+  },
+  "add up": {
+    "type": "phrasal_verb",
+    "definition": "To increase gradually until it becomes a large amount.",
+    "example": "Small savings soon add up.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "накопичуватися, складатися"
+    }
+  },
+  "after all": {
+    "definition": "Used to give a reason; or to say something happened despite what was expected.",
+    "example": "Let him sleep. After all, he's only a baby.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зрештою, адже"
+    }
+  },
+  "ahead of": {
+    "definition": "In front of; or before someone else.",
+    "example": "They launched the product ahead of their rivals.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "попереду, раніше за"
+    }
+  },
+  "all in all": {
+    "definition": "Used to give a general opinion after thinking about everything.",
+    "example": "All in all, it was a great holiday.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "загалом, усе ж таки"
+    }
+  },
+  "all of a sudden": {
+    "definition": "Very quickly and unexpectedly.",
+    "example": "All of a sudden, the lights went out.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "раптом, зненацька"
+    }
+  },
+  "allow in": {
+    "type": "phrasal_verb",
+    "definition": "To let someone enter a place.",
+    "example": "Dogs are not allowed in.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "впускати"
+    }
+  },
+  "allow out": {
+    "type": "phrasal_verb",
+    "definition": "To let someone go outside or leave.",
+    "example": "The kids aren't allowed out after dark.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "відпускати, випускати"
+    }
+  },
+  "any more": {
+    "definition": "Used in negatives to say something has stopped.",
+    "example": "I don't live there any more.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "більше не, вже не"
+    }
+  },
+  "apart from": {
+    "definition": "Except for; or as well as.",
+    "example": "Apart from Tom, everyone came.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "крім, окрім"
+    }
+  },
+  "as a result": {
+    "definition": "Because of this.",
+    "example": "He didn't study. As a result, he failed.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "у результаті, внаслідок"
+    }
+  },
+  "as if": {
+    "definition": "In a way that suggests something, often something not true.",
+    "example": "He talks as if he knows everything.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "ніби, наче"
+    }
+  },
+  "as long as": {
+    "definition": "Only if; on condition that.",
+    "example": "You can borrow it as long as you bring it back.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "за умови що, якщо тільки"
+    }
+  },
+  "as soon as": {
+    "definition": "Immediately after something happens.",
+    "example": "Call me as soon as you get home.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "щойно, як тільки"
+    }
+  },
+  "as though": {
+    "definition": "As if; in a way that suggests something.",
+    "example": "She looked as though she hadn't slept.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "ніби, наче"
+    }
+  },
+  "as usual": {
+    "definition": "In the way that happens most of the time.",
+    "example": "As usual, he was late.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "як завжди"
+    }
+  },
+  "as well as": {
+    "definition": "And also.",
+    "example": "She speaks French as well as English.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "а також, як і"
+    }
+  },
+  "at all": {
+    "definition": "Used in negatives and questions to make them stronger.",
+    "example": "I didn't sleep at all last night.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "зовсім, взагалі"
+    }
+  },
+  "at first": {
+    "definition": "At the beginning, before something changed.",
+    "example": "At first I didn't like him, but now we're friends.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "спочатку"
+    }
+  },
+  "at last": {
+    "definition": "Finally, after a long time.",
+    "example": "At last, the bus arrived.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "нарешті"
+    }
+  },
+  "at least": {
+    "definition": "Not less than; or used to add something positive.",
+    "example": "It will take at least an hour.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "принаймні, щонайменше"
+    }
+  },
+  "at once": {
+    "definition": "Immediately; or at the same time.",
+    "example": "Come here at once!",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "негайно; одночасно"
+    }
+  },
+  "at the end of the day": {
+    "definition": "Used to say what is most important after thinking about everything.",
+    "example": "At the end of the day, it's your decision.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "зрештою, врешті-решт"
+    }
+  },
+  "at the moment": {
+    "definition": "Now; at this time.",
+    "example": "She's busy at the moment.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "зараз, у цей момент"
+    }
+  },
+  "because of": {
+    "definition": "As a result of; for the reason of.",
+    "example": "We stayed inside because of the storm.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "через, з причини"
+    }
+  },
+  "break down": {
+    "type": "phrasal_verb",
+    "definition": "When a machine or car stops working.",
+    "example": "Our car broke down on the motorway.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зламатися"
+    }
+  },
+  "break in": {
+    "type": "phrasal_verb",
+    "definition": "To enter a building by force, usually to steal.",
+    "example": "Someone broke in and took the TV.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вдертися, проникнути"
+    }
+  },
+  "break up": {
+    "type": "phrasal_verb",
+    "definition": "To end a romantic relationship.",
+    "example": "They broke up after two years.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "розійтися, розлучитися"
+    }
+  },
+  "bring in": {
+    "type": "phrasal_verb",
+    "definition": "To introduce something new.",
+    "example": "The school brought in a new rule.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "запроваджувати"
+    }
+  },
+  "bring up": {
+    "type": "phrasal_verb",
+    "definition": "To care for a child until they are an adult.",
+    "example": "She was brought up by her grandparents.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "виховувати"
+    }
+  },
+  "build on": {
+    "type": "phrasal_verb",
+    "definition": "To use something as a base to develop further.",
+    "example": "We can build on last year's success.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "спиратися на, розвивати"
+    }
+  },
+  "build up": {
+    "type": "phrasal_verb",
+    "definition": "To increase or develop gradually.",
+    "example": "The tension built up slowly.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "наростати, накопичувати"
+    }
+  },
+  "by accident": {
+    "definition": "Without planning or intending it.",
+    "example": "I deleted the file by accident.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "випадково"
+    }
+  },
+  "by far": {
+    "definition": "By a very large amount; used with superlatives.",
+    "example": "She is by far the best student in the class.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "набагато, безперечно"
+    }
+  },
+  "by the time": {
+    "definition": "Not later than the moment when something happens.",
+    "example": "By the time we arrived, the film had started.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "на той час, як; поки"
+    }
+  },
+  "by the way": {
+    "definition": "Used to add a new topic or extra information.",
+    "example": "By the way, have you seen Anna?",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "до речі"
+    }
+  },
+  "call back": {
+    "type": "phrasal_verb",
+    "definition": "To phone someone again, or phone someone who called you.",
+    "example": "I'll call you back in ten minutes.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "передзвонити"
+    }
+  },
+  "call up": {
+    "type": "phrasal_verb",
+    "definition": "To phone someone.",
+    "example": "I called him up to say sorry.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зателефонувати"
+    }
+  },
+  "carry on": {
+    "type": "phrasal_verb",
+    "definition": "To continue doing something.",
+    "example": "Carry on with your work.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "продовжувати"
+    }
+  },
+  "carry out": {
+    "type": "phrasal_verb",
+    "definition": "To do a task, plan or piece of research.",
+    "example": "They carried out a survey of students.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "проводити, виконувати"
+    }
+  },
+  "carry over": {
+    "type": "phrasal_verb",
+    "definition": "To continue into a new situation or part.",
+    "example": "The subject carries over from the first clause.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "переходити, переноситися"
+    }
+  },
+  "catch up": {
+    "definition": "To reach someone who is ahead; or to do work you have not done yet.",
+    "example": "I have to catch up on my homework.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "наздоганяти, надолужувати"
+    }
+  },
+  "check out": {
+    "type": "phrasal_verb",
+    "definition": "To go and look at something interesting.",
+    "example": "You should check out the new café.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "подивитися, перевірити"
+    }
+  },
+  "clean up": {
+    "type": "phrasal_verb",
+    "definition": "To make a place completely clean and tidy.",
+    "example": "We cleaned up after the party.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "прибрати"
+    }
+  },
+  "close to": {
+    "definition": "Near in distance; or almost.",
+    "example": "Our flat is close to the station.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "близько до, поблизу"
+    }
+  },
+  "come along": {
+    "type": "phrasal_verb",
+    "definition": "To go somewhere with someone.",
+    "example": "We're going to the park — come along!",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "піти разом, приєднатися"
+    }
+  },
+  "come down": {
+    "type": "phrasal_verb",
+    "definition": "In 'when it comes down to it': when you think about what really matters.",
+    "example": "When it comes down to it, family is everything.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "зрештою, якщо розібратися"
+    }
+  },
+  "come in": {
+    "type": "phrasal_verb",
+    "definition": "To enter a room or building.",
+    "example": "Come in and sit down.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "заходити"
+    }
+  },
+  "come on": {
+    "type": "phrasal_verb",
+    "definition": "Used to encourage someone or to show you don't believe them.",
+    "example": "Come on, we'll be late!",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "та годі, ну ж бо"
+    }
+  },
+  "come out": {
+    "type": "phrasal_verb",
+    "definition": "To become available or known.",
+    "example": "Her new book comes out next week.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "виходити, з'являтися"
+    }
+  },
+  "come over": {
+    "type": "phrasal_verb",
+    "definition": "To visit someone at their home.",
+    "example": "Come over on Saturday for lunch.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "заходити в гості"
+    }
+  },
+  "come up": {
+    "type": "phrasal_verb",
+    "definition": "To happen or appear, often unexpectedly.",
+    "example": "Something came up, so I can't come.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "з'являтися, траплятися"
+    }
+  },
+  "come up with": {
+    "definition": "To think of an idea or plan.",
+    "example": "She came up with a great idea.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "придумати, вигадати"
+    }
+  },
+  "cut down": {
+    "type": "phrasal_verb",
+    "definition": "In 'cut down on': to do or use less of something.",
+    "example": "I'm trying to cut down on sugar.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "скорочувати, зменшувати"
+    }
+  },
+  "decide on": {
+    "type": "phrasal_verb",
+    "definition": "To choose something after thinking.",
+    "example": "Have you decided on a name?",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "вирішити, обрати"
+    }
+  },
+  "die out": {
+    "type": "phrasal_verb",
+    "definition": "To disappear completely.",
+    "example": "Many old traditions have died out.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вимирати, зникати"
+    }
+  },
+  "drop by": {
+    "type": "phrasal_verb",
+    "definition": "To visit someone for a short time without planning.",
+    "example": "Drop by if you're in the area.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "заскочити, зайти"
+    }
+  },
+  "due to": {
+    "definition": "Because of.",
+    "example": "The match was cancelled due to rain.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "через, завдяки"
+    }
+  },
+  "each other": {
+    "definition": "Used to show that each of two or more people does the same thing to the other.",
+    "example": "Anna and Tom help each other with homework.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "один одного"
+    }
+  },
+  "eat out": {
+    "type": "phrasal_verb",
+    "definition": "To eat in a restaurant.",
+    "example": "We eat out every Friday.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "їсти поза домом"
+    }
+  },
+  "eat up": {
+    "type": "phrasal_verb",
+    "definition": "To eat all of something.",
+    "example": "Eat up your vegetables!",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "доїдати, з'їдати"
+    }
+  },
+  "end up": {
+    "type": "phrasal_verb",
+    "definition": "To be in a situation you did not plan.",
+    "example": "We ended up staying at home.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зрештою опинитися"
+    }
+  },
+  "even though": {
+    "definition": "Although; used to show a surprising contrast.",
+    "example": "She went out even though it was raining.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "хоча, незважаючи на те що"
+    }
+  },
+  "face up": {
+    "type": "phrasal_verb",
+    "definition": "In 'face up to': to accept and deal with a difficult situation.",
+    "example": "You need to face up to your problems.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "визнати, дивитися в очі"
+    }
+  },
+  "fill in": {
+    "type": "phrasal_verb",
+    "definition": "To write information on a form; or to tell someone the latest news.",
+    "example": "Please fill in this form.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "заповнювати; розповісти"
+    }
+  },
+  "fill out": {
+    "type": "phrasal_verb",
+    "definition": "To write all the information on a form.",
+    "example": "Fill out the application online.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "заповнювати"
+    }
+  },
+  "find out": {
+    "type": "phrasal_verb",
+    "definition": "To learn a fact or discover information.",
+    "example": "I found out the truth yesterday.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "дізнаватися"
+    }
+  },
+  "first of all": {
+    "definition": "Used to introduce the first point or action.",
+    "example": "First of all, thank you for coming.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "перш за все, по-перше"
+    }
+  },
+  "fit in": {
+    "type": "phrasal_verb",
+    "definition": "To feel comfortable and accepted in a group.",
+    "example": "It took a while to fit in at my new school.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вписуватися, пасувати"
+    }
+  },
+  "for a while": {
+    "definition": "For some time.",
+    "example": "Let's sit here for a while.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "деякий час, ненадовго"
+    }
+  },
+  "for ages": {
+    "definition": "For a very long time.",
+    "example": "I haven't seen her for ages.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "цілу вічність, давно"
+    }
+  },
+  "for example": {
+    "definition": "Used to give an example.",
+    "example": "Many fruits, for example oranges, have vitamin C.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "наприклад"
+    }
+  },
+  "for good": {
+    "definition": "Forever; permanently.",
+    "example": "They left the city for good.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "назавжди"
+    }
+  },
+  "for sure": {
+    "definition": "Certainly; without any doubt.",
+    "example": "I'll be there for sure.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "напевно, точно"
+    }
+  },
+  "get along": {
+    "type": "phrasal_verb",
+    "definition": "To have a friendly relationship.",
+    "example": "I get along well with my colleagues.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "ладнати"
+    }
+  },
+  "get in": {
+    "type": "phrasal_verb",
+    "definition": "To enter a place, often with difficulty.",
+    "example": "The door was locked, but we got in.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "потрапити всередину"
+    }
+  },
+  "get off": {
+    "type": "phrasal_verb",
+    "definition": "To leave a bus, train or plane.",
+    "example": "Get off at the next stop.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "виходити (з транспорту)"
+    }
+  },
+  "get on": {
+    "type": "phrasal_verb",
+    "definition": "To have a good relationship; or to enter a bus or train.",
+    "example": "I get on well with my brother.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "ладнати; сідати (в транспорт)"
+    }
+  },
+  "get on with": {
+    "definition": "To have a friendly relationship with someone; or to continue doing something.",
+    "example": "I get on with my sister very well.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "ладнати з; продовжувати"
+    }
+  },
+  "get out": {
+    "type": "phrasal_verb",
+    "definition": "To leave a place, often quickly.",
+    "example": "Everyone got out before the fire spread.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вибиратися, виходити"
+    }
+  },
+  "give away": {
+    "type": "phrasal_verb",
+    "definition": "To give something to someone for free.",
+    "example": "She gave away all her old books.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "віддавати, роздавати"
+    }
+  },
+  "give back": {
+    "type": "phrasal_verb",
+    "definition": "To return something to its owner.",
+    "example": "Give me back my pen, please.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "повертати"
+    }
+  },
+  "go along": {
+    "type": "phrasal_verb",
+    "definition": "In 'go along with': to agree with or accept an idea.",
+    "example": "I'll go along with your plan.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "погоджуватися"
+    }
+  },
+  "go down": {
+    "type": "phrasal_verb",
+    "definition": "To become lower or less.",
+    "example": "Prices have gone down this month.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "знижуватися, падати"
+    }
+  },
+  "go in": {
+    "type": "phrasal_verb",
+    "definition": "To enter a place.",
+    "example": "It's cold — let's go in.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "заходити"
+    }
+  },
+  "go off": {
+    "type": "phrasal_verb",
+    "definition": "When an alarm or bomb suddenly makes a noise or explodes.",
+    "example": "My alarm went off at six.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "спрацювати, задзвонити"
+    }
+  },
+  "go on": {
+    "type": "phrasal_verb",
+    "definition": "To continue; or to happen.",
+    "example": "The meeting went on for hours.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "продовжуватися; відбуватися"
+    }
+  },
+  "go out": {
+    "type": "phrasal_verb",
+    "definition": "To leave home to do something social; or when a light stops shining.",
+    "example": "The lights went out during the storm.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "виходити, гаснути"
+    }
+  },
+  "go up": {
+    "type": "phrasal_verb",
+    "definition": "To become higher or more.",
+    "example": "Rents have gone up again.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "зростати, підвищуватися"
+    }
+  },
+  "grow up": {
+    "type": "phrasal_verb",
+    "definition": "To change from a child into an adult.",
+    "example": "I grew up in a small village.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "виростати, дорослішати"
+    }
+  },
+  "hand in": {
+    "type": "phrasal_verb",
+    "definition": "To give work to a teacher or person in charge.",
+    "example": "Hand in your essays on Monday.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "здавати"
+    }
+  },
+  "hand out": {
+    "type": "phrasal_verb",
+    "definition": "To give something to each person in a group.",
+    "example": "The teacher handed out the tests.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "роздавати"
+    }
+  },
+  "hang out": {
+    "type": "phrasal_verb",
+    "definition": "To spend time relaxing with friends.",
+    "example": "We usually hang out at the park.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "тусуватися, проводити час"
+    }
+  },
+  "help out": {
+    "type": "phrasal_verb",
+    "definition": "To help someone, often with a practical job.",
+    "example": "Can you help out in the kitchen?",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "допомагати"
+    }
+  },
+  "hurry up": {
+    "type": "phrasal_verb",
+    "definition": "To do something more quickly.",
+    "example": "Hurry up, or we'll miss the bus!",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "поквапитися"
+    }
+  },
+  "if only": {
+    "definition": "Used to say you strongly wish something were true or had happened.",
+    "example": "If only I had more free time!",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "якби ж, якби тільки"
+    }
+  },
+  "in a hurry": {
+    "definition": "Needing or trying to do something quickly.",
+    "example": "Sorry, I'm in a hurry.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "поспіхом, поспішаючи"
+    }
+  },
+  "in a row": {
+    "definition": "One after another, without a break.",
+    "example": "It rained for five days in a row.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "поспіль, підряд"
+    }
+  },
+  "in accordance with": {
+    "definition": "Following a rule, law or wish.",
+    "example": "The work was done in accordance with the law.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "відповідно до"
+    }
+  },
+  "in addition": {
+    "definition": "Also; used to add another point.",
+    "example": "The flat is cheap. In addition, it's near the park.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "крім того, до того ж"
+    }
+  },
+  "in addition to": {
+    "definition": "As well as.",
+    "example": "In addition to English, she speaks German.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "на додаток до, крім"
+    }
+  },
+  "in advance": {
+    "definition": "Before the time when something happens.",
+    "example": "Please pay in advance.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "заздалегідь"
+    }
+  },
+  "in case": {
+    "definition": "Because something might happen.",
+    "example": "Take an umbrella in case it rains.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "на випадок, якщо"
+    }
+  },
+  "in conclusion": {
+    "definition": "Used to start the last part of a speech or piece of writing.",
+    "example": "In conclusion, zoos can help protect animals.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "на завершення, отже"
+    }
+  },
+  "in fact": {
+    "definition": "Used to add something that is true, often surprising.",
+    "example": "I don't mind. In fact, I'm quite happy.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "насправді, фактично"
+    }
+  },
+  "in front of": {
+    "definition": "Close to the front part of something; facing it.",
+    "example": "I'll meet you in front of the cinema.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "перед, попереду"
+    }
+  },
+  "in general": {
+    "definition": "Usually, or when thinking about something as a whole.",
+    "example": "In general, people here are very friendly.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "загалом, взагалі"
+    }
+  },
+  "in my opinion": {
+    "definition": "Used to say what you think.",
+    "example": "In my opinion, the book is better than the film.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "на мою думку"
+    }
+  },
+  "in order to": {
+    "definition": "With the purpose of doing something.",
+    "example": "She saved money in order to buy a car.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "для того щоб, щоб"
+    }
+  },
+  "in spite of": {
+    "definition": "Although something is true; despite.",
+    "example": "We enjoyed the trip in spite of the rain.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "незважаючи на"
+    }
+  },
+  "in terms of": {
+    "definition": "Used to say which aspect of something you mean.",
+    "example": "In terms of price, it's the best option.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "з точки зору, щодо"
+    }
+  },
+  "in the end": {
+    "definition": "Finally, after a lot of changes or thought.",
+    "example": "In the end, we stayed at home.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зрештою, врешті"
+    }
+  },
+  "in the least": {
+    "definition": "Not at all; used in negatives for emphasis.",
+    "example": "I wasn't in the least surprised.",
+    "cefrLevel": "C2",
+    "uk": {
+      "translation": "анітрохи, зовсім"
+    }
+  },
+  "in the meantime": {
+    "definition": "In the time between two events.",
+    "example": "Dinner is at eight. In the meantime, relax.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "тим часом"
+    }
+  },
+  "instead of": {
+    "definition": "In the place of someone or something.",
+    "example": "Let's walk instead of taking the bus.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "замість"
+    }
+  },
+  "join in": {
+    "type": "phrasal_verb",
+    "definition": "To take part in an activity with others.",
+    "example": "Everyone joined in the singing.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "долучатися"
+    }
+  },
+  "leave out": {
+    "type": "phrasal_verb",
+    "definition": "To not include someone or something.",
+    "example": "Don't leave out any details.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "пропускати, не включати"
+    }
+  },
+  "let in": {
+    "type": "phrasal_verb",
+    "definition": "To allow someone to enter; in 'let someone in on': to tell them a secret.",
+    "example": "She let me in on a secret.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "впускати; посвятити"
+    }
+  },
+  "look down": {
+    "type": "phrasal_verb",
+    "definition": "In 'look down on': to think you are better than someone.",
+    "example": "Don't look down on people with less money.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "дивитися зверхньо"
+    }
+  },
+  "look forward to": {
+    "definition": "To feel happy and excited about something that is going to happen.",
+    "example": "I'm looking forward to the holidays.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "з нетерпінням чекати"
+    }
+  },
+  "look in": {
+    "type": "phrasal_verb",
+    "definition": "To look into a place; or to visit someone briefly.",
+    "example": "He looked in and smiled at us.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зазирнути"
+    }
+  },
+  "look out": {
+    "type": "phrasal_verb",
+    "definition": "In 'look out for': to watch carefully for someone or something.",
+    "example": "Look out for cars when you cross.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "стежити, остерігатися"
+    }
+  },
+  "look up": {
+    "type": "phrasal_verb",
+    "definition": "To find information in a dictionary or online.",
+    "example": "Look up the word in a dictionary.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "шукати (у словнику)"
+    }
+  },
+  "look up to": {
+    "definition": "To admire and respect someone.",
+    "example": "I've always looked up to my grandfather.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "поважати, рівнятися на"
+    }
+  },
+  "lose touch": {
+    "definition": "To stop being in contact with someone.",
+    "example": "We lost touch after school.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "втратити зв'язок"
+    }
+  },
+  "make sure": {
+    "definition": "To check that something is true or will happen.",
+    "example": "Make sure you lock the door.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "переконатися, простежити"
+    }
+  },
+  "make up": {
+    "type": "phrasal_verb",
+    "definition": "In 'make up your mind': to decide.",
+    "example": "I can't make up my mind.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вирішити; вигадати"
+    }
+  },
+  "mark out": {
+    "type": "phrasal_verb",
+    "definition": "To show that someone or something is different or special.",
+    "example": "Her talent marked her out from the others.",
+    "cefrLevel": "C2",
+    "uk": {
+      "translation": "виділяти, відзначати"
+    }
+  },
+  "meet up": {
+    "type": "phrasal_verb",
+    "definition": "To meet someone by arrangement.",
+    "example": "Let's meet up after work.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зустрітися"
+    }
+  },
+  "mix up": {
+    "type": "phrasal_verb",
+    "definition": "To think one thing or person is another.",
+    "example": "I always mix up the twins.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "плутати"
+    }
+  },
+  "more or less": {
+    "definition": "Almost; approximately.",
+    "example": "The work is more or less finished.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "більш-менш, майже"
+    }
+  },
+  "move back": {
+    "type": "phrasal_verb",
+    "definition": "To go back to an earlier position or place.",
+    "example": "They moved back to their home town.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "повертатися, зсуватися назад"
+    }
+  },
+  "move on": {
+    "type": "phrasal_verb",
+    "definition": "To start doing or talking about something new.",
+    "example": "Let's move on to the next point.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "переходити далі"
+    }
+  },
+  "narrow down": {
+    "type": "phrasal_verb",
+    "definition": "To make a list or group smaller.",
+    "example": "We narrowed down the choice to two hotels.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "звужувати"
+    }
+  },
+  "next to": {
+    "definition": "Very close to; at the side of.",
+    "example": "The bank is next to the post office.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "поруч із, біля"
+    }
+  },
+  "no longer": {
+    "definition": "Not any more.",
+    "example": "He no longer works here.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "більше не, вже не"
+    }
+  },
+  "no matter": {
+    "definition": "Used to say that something is true in every case.",
+    "example": "No matter what you say, I'll go.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "неважливо, байдуже"
+    }
+  },
+  "not at all": {
+    "definition": "Used to say no strongly, or to reply politely to thanks.",
+    "example": "Thanks for your help! — Not at all.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "зовсім ні; нема за що"
+    }
+  },
+  "of course": {
+    "definition": "Used to say yes strongly, or that something is obvious.",
+    "example": "Of course you can borrow my bike.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "звичайно, звісно"
+    }
+  },
+  "on account of": {
+    "definition": "Because of; used in formal English.",
+    "example": "The flight was delayed on account of fog.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "через, з огляду на"
+    }
+  },
+  "on balance": {
+    "definition": "After thinking about all the facts.",
+    "example": "On balance, I think the plan is good.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "зваживши все"
+    }
+  },
+  "on purpose": {
+    "definition": "Deliberately, not by accident.",
+    "example": "Did you break it on purpose?",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "навмисно"
+    }
+  },
+  "on the contrary": {
+    "definition": "Used to say that the opposite is true.",
+    "example": "It wasn't boring. On the contrary, it was great.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "навпаки"
+    }
+  },
+  "on the other hand": {
+    "definition": "Used to introduce a different or opposite point.",
+    "example": "It's cheap. On the other hand, it's very slow.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "з іншого боку"
+    }
+  },
+  "on the way": {
+    "definition": "During the journey to a place.",
+    "example": "I'll buy bread on the way home.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "дорогою, по дорозі"
+    }
+  },
+  "on the whole": {
+    "definition": "Generally; when you think about everything.",
+    "example": "On the whole, I'm happy with my job.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "загалом, в цілому"
+    }
+  },
+  "on time": {
+    "definition": "At the planned time; not late.",
+    "example": "The train left on time.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вчасно"
+    }
+  },
+  "one another": {
+    "definition": "Each other.",
+    "example": "The students helped one another.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "одне одного"
+    }
+  },
+  "out of nowhere": {
+    "definition": "Very suddenly and from an unknown place.",
+    "example": "A dog appeared out of nowhere.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "нізвідки, раптом"
+    }
+  },
+  "pass down": {
+    "type": "phrasal_verb",
+    "definition": "To give something to younger people in a family.",
+    "example": "The ring was passed down from my grandmother.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "передавати (у спадок)"
+    }
+  },
+  "pay attention": {
+    "definition": "To watch, listen or think about something carefully.",
+    "example": "Please pay attention to the instructions.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "звертати увагу"
+    }
+  },
+  "pick out": {
+    "type": "phrasal_verb",
+    "definition": "To choose one thing from a group.",
+    "example": "She picked out a red dress.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вибирати"
+    }
+  },
+  "pick up": {
+    "type": "phrasal_verb",
+    "definition": "To collect someone or something; or to lift something.",
+    "example": "I'll pick you up at eight.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "забрати, підняти"
+    }
+  },
+  "piece of cake": {
+    "definition": "Something that is very easy to do.",
+    "example": "The test was a piece of cake.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "простіше простого, дрібниця"
+    }
+  },
+  "point back": {
+    "type": "phrasal_verb",
+    "definition": "To refer to something said or shown earlier.",
+    "example": "'This' points back to the last sentence.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "відсилати назад"
+    }
+  },
+  "point out": {
+    "type": "phrasal_verb",
+    "definition": "To tell someone about a fact they may not have noticed.",
+    "example": "She pointed out a mistake in my essay.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "вказувати, звертати увагу"
+    }
+  },
+  "put down": {
+    "type": "phrasal_verb",
+    "definition": "In 'put something down to': to say what caused it.",
+    "example": "He put his success down to hard work.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "пояснювати (чимось)"
+    }
+  },
+  "put off": {
+    "type": "phrasal_verb",
+    "definition": "To move something to a later time.",
+    "example": "Don't put off your homework.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "відкладати"
+    }
+  },
+  "put on": {
+    "type": "phrasal_verb",
+    "definition": "To start wearing clothes; or to switch on.",
+    "example": "Put on your coat — it's cold.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вдягати, вмикати"
+    }
+  },
+  "put up": {
+    "type": "phrasal_verb",
+    "definition": "To let someone stay in your home.",
+    "example": "My aunt put us up for a week.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "прихистити, поселити"
+    }
+  },
+  "put up with": {
+    "definition": "To accept something unpleasant without complaining.",
+    "example": "I can't put up with this noise any longer.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "терпіти, миритися з"
+    }
+  },
+  "rather than": {
+    "definition": "Instead of.",
+    "example": "I'd like tea rather than coffee.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "а не, замість"
+    }
+  },
+  "rule out": {
+    "type": "phrasal_verb",
+    "definition": "To decide that something is not possible.",
+    "example": "The police ruled out an accident.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "виключати"
+    }
+  },
+  "run out": {
+    "type": "phrasal_verb",
+    "definition": "To be used until nothing is left.",
+    "example": "My phone battery has run out.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "закінчитися, вичерпатися"
+    }
+  },
+  "run out of": {
+    "definition": "To use all of something so there is none left.",
+    "example": "We've run out of milk.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "вичерпати, закінчитися"
+    }
+  },
+  "scale up": {
+    "type": "phrasal_verb",
+    "definition": "To make something bigger or stronger in degree.",
+    "example": "We plan to scale up production.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "збільшувати масштаб"
+    }
+  },
+  "sell out": {
+    "type": "phrasal_verb",
+    "definition": "When all of something has been sold.",
+    "example": "The tickets sold out in an hour.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "розпродати"
+    }
+  },
+  "set off": {
+    "type": "phrasal_verb",
+    "definition": "To start a journey.",
+    "example": "We set off early in the morning.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "вирушати"
+    }
+  },
+  "show up": {
+    "type": "phrasal_verb",
+    "definition": "To arrive or appear.",
+    "example": "He showed up an hour late.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "з'являтися, приходити"
+    }
+  },
+  "sign in": {
+    "type": "phrasal_verb",
+    "definition": "To write your name when you arrive, or to log in.",
+    "example": "Please sign in at reception.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зареєструватися, увійти"
+    }
+  },
+  "sign up": {
+    "type": "phrasal_verb",
+    "definition": "To agree to take part in something by giving your name.",
+    "example": "I signed up for a yoga class.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "записатися"
+    }
+  },
+  "single out": {
+    "type": "phrasal_verb",
+    "definition": "To choose one person or thing from a group for special attention.",
+    "example": "The teacher singled her out for praise.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "виокремлювати"
+    }
+  },
+  "sit down": {
+    "type": "phrasal_verb",
+    "definition": "To move into a sitting position.",
+    "example": "Please sit down.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "сідати"
+    }
+  },
+  "slot in": {
+    "type": "phrasal_verb",
+    "definition": "To fit something into a space or position.",
+    "example": "The new word slots in before the verb.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "вставляти, вписувати"
+    }
+  },
+  "slow down": {
+    "type": "phrasal_verb",
+    "definition": "To become slower.",
+    "example": "Slow down — you're driving too fast!",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "сповільнюватися"
+    }
+  },
+  "so far": {
+    "definition": "Until now.",
+    "example": "So far, the trip has been great.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "досі, поки що"
+    }
+  },
+  "so that": {
+    "definition": "In order to make something possible.",
+    "example": "Speak loudly so that everyone can hear.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "щоб, для того щоб"
+    }
+  },
+  "speed up": {
+    "type": "phrasal_verb",
+    "definition": "To become faster.",
+    "example": "The train speeded up.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "прискорюватися"
+    }
+  },
+  "stand in": {
+    "type": "phrasal_verb",
+    "definition": "To take someone's or something's place.",
+    "example": "Can you stand in for me tomorrow?",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "замінювати"
+    }
+  },
+  "stand out": {
+    "type": "phrasal_verb",
+    "definition": "To be very easy to notice.",
+    "example": "Her red coat stood out in the crowd.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "виділятися"
+    }
+  },
+  "stand up": {
+    "type": "phrasal_verb",
+    "definition": "To get onto your feet.",
+    "example": "Everyone stood up when she came in.",
+    "cefrLevel": "A1",
+    "uk": {
+      "translation": "вставати"
+    }
+  },
+  "stay out": {
+    "type": "phrasal_verb",
+    "definition": "To not come home, especially at night.",
+    "example": "Don't stay out too late.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "гуляти допізна"
+    }
+  },
+  "such as": {
+    "definition": "Used to give an example.",
+    "example": "I like fruit such as apples and pears.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "такий як, наприклад"
+    }
+  },
+  "sum up": {
+    "type": "phrasal_verb",
+    "definition": "To give the main points of something briefly.",
+    "example": "Let me sum up what we agreed.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "підсумовувати"
+    }
+  },
+  "swap around": {
+    "type": "phrasal_verb",
+    "definition": "To change the positions of two things.",
+    "example": "In questions, swap around the subject and verb.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "міняти місцями"
+    }
+  },
+  "switch off": {
+    "type": "phrasal_verb",
+    "definition": "To stop a machine or light working.",
+    "example": "Switch off the lights when you leave.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вимикати"
+    }
+  },
+  "take care of": {
+    "definition": "To look after someone or something.",
+    "example": "Can you take care of my cat this weekend?",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "піклуватися про, доглядати"
+    }
+  },
+  "take off": {
+    "type": "phrasal_verb",
+    "definition": "When a plane leaves the ground; or to remove clothes.",
+    "example": "The plane took off on time.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "злітати; знімати"
+    }
+  },
+  "take on": {
+    "type": "phrasal_verb",
+    "definition": "To accept work or responsibility.",
+    "example": "Don't take on too much work.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "брати на себе"
+    }
+  },
+  "take out": {
+    "type": "phrasal_verb",
+    "definition": "To remove something from a place.",
+    "example": "Take out your books.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "виймати, діставати"
+    }
+  },
+  "take part": {
+    "definition": "To be involved in an activity with other people.",
+    "example": "Twenty teams took part in the competition.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "брати участь"
+    }
+  },
+  "take place": {
+    "definition": "To happen, especially as planned.",
+    "example": "The concert will take place in the park.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "відбуватися"
+    }
+  },
+  "take up": {
+    "type": "phrasal_verb",
+    "definition": "To start a new hobby; in 'take someone up on': to accept an offer.",
+    "example": "I've taken up running.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "почати займатися; прийняти"
+    }
+  },
+  "team up": {
+    "type": "phrasal_verb",
+    "definition": "To join with someone to do something together.",
+    "example": "The two schools teamed up for the project.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "об'єднуватися"
+    }
+  },
+  "thanks to": {
+    "definition": "Because of someone or something, usually something good.",
+    "example": "Thanks to your help, we finished early.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "завдяки"
+    }
+  },
+  "these days": {
+    "definition": "Now, compared with the past.",
+    "example": "These days, everyone has a smartphone.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "нині, сьогодні"
+    }
+  },
+  "think over": {
+    "type": "phrasal_verb",
+    "definition": "To think carefully about something before deciding.",
+    "example": "Think it over and tell me tomorrow.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "обміркувати"
+    }
+  },
+  "to begin with": {
+    "definition": "Used to give the first point; or at the start.",
+    "example": "To begin with, the tickets are too expensive.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "по-перше, для початку"
+    }
+  },
+  "to sum up": {
+    "definition": "Used before giving a short summary of what you have said.",
+    "example": "To sum up, both options have their good points.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "підсумовуючи"
+    }
+  },
+  "trail off": {
+    "type": "phrasal_verb",
+    "definition": "When speech gradually becomes quieter and stops.",
+    "example": "Her voice trailed off.",
+    "cefrLevel": "C2",
+    "uk": {
+      "translation": "затихати, уриватися"
+    }
+  },
+  "try on": {
+    "type": "phrasal_verb",
+    "definition": "To put on clothes to see if they fit.",
+    "example": "Can I try on these jeans?",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "приміряти"
+    }
+  },
+  "turn around": {
+    "type": "phrasal_verb",
+    "definition": "To change the order or direction of something.",
+    "example": "You can turn the sentence around.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "перевернути, розвернути"
+    }
+  },
+  "turn down": {
+    "type": "phrasal_verb",
+    "definition": "To make sound or heat lower; or to refuse an offer.",
+    "example": "Please turn down the music.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "зменшувати; відхиляти"
+    }
+  },
+  "turn off": {
+    "type": "phrasal_verb",
+    "definition": "To stop a machine or light working.",
+    "example": "Turn off the TV, please.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вимикати"
+    }
+  },
+  "turn on": {
+    "type": "phrasal_verb",
+    "definition": "To start a machine or light working.",
+    "example": "Turn on the light.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "вмикати"
+    }
+  },
+  "turn out": {
+    "type": "phrasal_verb",
+    "definition": "To happen in a particular way, or be found to be true.",
+    "example": "The film turned out to be great.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "виявлятися"
+    }
+  },
+  "turn up": {
+    "type": "phrasal_verb",
+    "definition": "To make sound or heat higher; or to arrive.",
+    "example": "Turn up the heating — it's cold.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "збільшувати; з'являтися"
+    }
+  },
+  "up to now": {
+    "definition": "Until now.",
+    "example": "Up to now, we've had no problems.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "досі, до цього часу"
+    }
+  },
+  "use up": {
+    "type": "phrasal_verb",
+    "definition": "To use all of something.",
+    "example": "We've used up all the milk.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "використати повністю"
+    }
+  },
+  "walk in": {
+    "type": "phrasal_verb",
+    "definition": "To enter a room.",
+    "example": "Everyone went quiet when he walked in.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "заходити"
+    }
+  },
+  "wash up": {
+    "type": "phrasal_verb",
+    "definition": "To wash the dishes after a meal.",
+    "example": "I'll cook if you wash up.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "мити посуд"
+    }
+  },
+  "what is more": {
+    "definition": "Used to add a more important point.",
+    "example": "It's cheap, and what is more, it's very fast.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "більше того, ба більше"
+    }
+  },
+  "whether or not": {
+    "definition": "Used to say that something is true in either case.",
+    "example": "We'll go whether or not it rains.",
+    "cefrLevel": "B2",
+    "uk": {
+      "translation": "чи ні; незалежно від того, чи"
+    }
+  },
+  "with regard to": {
+    "definition": "About; used in formal writing.",
+    "example": "I am writing with regard to your order.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "щодо, стосовно"
+    }
+  },
+  "work out": {
+    "type": "phrasal_verb",
+    "definition": "To find the answer to a problem.",
+    "example": "I can't work out this puzzle.",
+    "cefrLevel": "B1",
+    "uk": {
+      "translation": "розібратися, вирішити"
+    }
+  },
+  "work through": {
+    "type": "phrasal_verb",
+    "definition": "To deal with something step by step until it is finished.",
+    "example": "We worked through the exercises together.",
+    "cefrLevel": "C1",
+    "uk": {
+      "translation": "опрацювати"
+    }
+  },
+  "write down": {
+    "type": "phrasal_verb",
+    "definition": "To write something on paper so you remember it.",
+    "example": "Write down my phone number.",
+    "cefrLevel": "A2",
+    "uk": {
+      "translation": "записувати"
+    }
+  }
+}

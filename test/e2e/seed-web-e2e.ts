@@ -30,10 +30,12 @@ import { UserSkillProgress } from '../../src/modules/learning/entities/user-skil
 import { Disposition } from '../../src/modules/learning/enums/disposition.enum.js';
 import { LearningCardState } from '../../src/modules/learning/enums/learning-card-state.enum.js';
 import { ReviewRating } from '../../src/modules/learning/enums/review-rating.enum.js';
+import { lexBlockHash } from '../../src/modules/post/domain/lex-block.js';
 import { Exercise } from '../../src/modules/post/entities/exercise.entity.js';
 import { GrammarCategory } from '../../src/modules/post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../src/modules/post/entities/grammar-construction.entity.js';
 import { GrammarMatch } from '../../src/modules/post/entities/grammar-match.entity.js';
+import { GrammarPageLexBlock } from '../../src/modules/post/entities/grammar-page-lex-block.entity.js';
 import { GrammarUsagePoint } from '../../src/modules/post/entities/grammar-usage-point.entity.js';
 import { GrammarUsagePointExercise } from '../../src/modules/post/entities/grammar-usage-point-exercise.entity.js';
 import { Phrase } from '../../src/modules/post/entities/phrase.entity.js';
@@ -67,6 +69,14 @@ export const E2E_GRAMMAR_SLUG_MUTABLE = 'e2e-conditionals';
 export const E2E_GRAMMAR_SLUG_EMPTY = 'e2e-empty-construction';
 // A real EGP slug with a handcrafted page in apps/web/src/grammar-pages.
 export const E2E_GRAMMAR_HANDCRAFTED_SLUG = 'past-present-perfect-simple';
+// A text block of that page (a GrammarExample) with one clickable word.
+export const E2E_LEX_BLOCK = 'I have lost my keys.';
+// Fixture-only lemma, so the seed never touches a real dictionary word.
+const LEX_WORD_LEMMA = 'lose-e2e';
+// A second block of that page with a phrase ("so far"), linked to a
+// fixture-only phrase.
+export const E2E_LEX_PHRASE_BLOCK = 'experience in your life so far';
+const LEX_PHRASE_TEXT = 'so far (e2e)';
 // Own user + session with no cards or dispositions, so specs can really save
 // words/phrases from the reader popup without touching the shared e2e user.
 export const E2E_DECK_USER_EMAIL = 'deck-e2e@engofy.test';
@@ -120,6 +130,7 @@ const ENTITIES = [
   GrammarUsagePoint,
   GrammarUsagePointExercise,
   GrammarMatch,
+  GrammarPageLexBlock,
 ];
 
 function sha256(value: string): string {
@@ -208,8 +219,14 @@ async function wipe(orm: MikroORM): Promise<void> {
     await em.nativeDelete(User, { id: loginUser.id });
   }
 
+  await em.nativeDelete(GrammarPageLexBlock, {
+    textHash: {
+      $in: [lexBlockHash(E2E_LEX_BLOCK), lexBlockHash(E2E_LEX_PHRASE_BLOCK)],
+    },
+  });
+  await em.nativeDelete(Phrase, { phraseText: LEX_PHRASE_TEXT });
   const words = await em.find(Word, {
-    lemma: { $in: [WORD_LEMMA, STUDY_WORD_LEMMA] },
+    lemma: { $in: [WORD_LEMMA, STUDY_WORD_LEMMA, LEX_WORD_LEMMA] },
   });
   if (words.length > 0) {
     const wordIds = words.map((w) => w.id);
@@ -325,6 +342,10 @@ async function seed(orm: MikroORM): Promise<void> {
       uk: {
         explanation:
           'Past perfect показує, яка з двох минулих дій сталася раніше. Утворюється за схемою had + past participle.',
+        examples: [
+          'Вона намалювала мапу ще до того, як він прийшов.',
+          'Я вже поїв, коли вони подзвонили.',
+        ],
       },
     },
     learnerExamples: [
@@ -347,7 +368,7 @@ async function seed(orm: MikroORM): Promise<void> {
     usagePointId: pastPerfectUp.id,
     type: ExerciseType.FillBlank,
     payload: {
-      prompt: 'By the time he arrived, she ___ the map.',
+      prompt: 'By the time he arrived, she ____ the map.',
       answer: 'had drawn',
     },
   });
@@ -402,11 +423,11 @@ async function seed(orm: MikroORM): Promise<void> {
 
   // The handcrafted page's construction: a dev DB that already imported the
   // EGP has the real one, so it is only created when missing.
-  const handcrafted = await em.findOne(GrammarConstruction, {
+  let handcrafted = await em.findOne(GrammarConstruction, {
     slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
   });
   if (!handcrafted) {
-    const seeded = factories(em).grammarConstruction.makeOne({
+    handcrafted = factories(em).grammarConstruction.makeOne({
       categoryId: category.id,
       name: 'present perfect simple',
       slug: E2E_GRAMMAR_HANDCRAFTED_SLUG,
@@ -414,7 +435,7 @@ async function seed(orm: MikroORM): Promise<void> {
       sortOrder: 3,
     });
     factories(em).grammarUsagePoint.makeOne({
-      constructionId: seeded.id,
+      constructionId: handcrafted.id,
       cefrLevel: CefrLevel.A2,
       guideword: 'USE: EXPERIENCES',
       canDoStatement:
@@ -422,6 +443,33 @@ async function seed(orm: MikroORM): Promise<void> {
       exampleText: 'I have never been to Lisbon.',
     });
   }
+
+  // One annotated block of the handcrafted page (`grammar annotate-pages`
+  // output): "lost" in E2E_LEX_BLOCK links to lose (verb).
+  const lose = factories(em).word.makeOne({ lemma: LEX_WORD_LEMMA });
+  const loseVerb = factories(em).wordDefinition.makeOne({
+    wordId: lose.id,
+    pos: PartOfSpeech.Verb,
+    definition: 'To be unable to find something.',
+    cefrLevel: CefrLevel.A2,
+    translations: { uk: { translation: 'губити, загубити' } },
+  });
+  const lexBlock = new GrammarPageLexBlock();
+  lexBlock.constructionId = handcrafted.id;
+  lexBlock.textHash = lexBlockHash(E2E_LEX_BLOCK);
+  lexBlock.spans = [{ start: 7, end: 11, wordDefinitionId: loseVerb.id }];
+  em.persist(lexBlock);
+  const soFar = factories(em).phrase.makeOne({
+    phraseText: LEX_PHRASE_TEXT,
+    definition: 'Until now.',
+    cefrLevel: CefrLevel.A2,
+    translations: { uk: { translation: 'досі, поки що' } },
+  });
+  const phraseBlock = new GrammarPageLexBlock();
+  phraseBlock.constructionId = handcrafted.id;
+  phraseBlock.textHash = lexBlockHash(E2E_LEX_PHRASE_BLOCK);
+  phraseBlock.spans = [{ start: 24, end: 30, phraseId: soFar.id }];
+  em.persist(phraseBlock);
 
   // --- reader post: node tree with word / phrase / grammar spans ---
   const readerSource = {

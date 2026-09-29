@@ -10,7 +10,7 @@ import { ExerciseType } from '../enums/exercise-type.enum.js';
 const CONTENT_POS = new Set(['NOUN', 'VERB', 'ADJ', 'ADV']);
 const WORD_RE = /^[A-Za-z][A-Za-z-]*$/;
 const IRREGULAR_BE_HAVE_DO = new Set(['be', 'have', 'do']);
-const BLANK = '____';
+export const BLANK = '____';
 
 // Per-type ceiling so a long post doesn't produce hundreds of near-identical
 // drills. The handler passes sentences in document order, so the first N of

@@ -1,6 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  type AnnotatedGrammarPageView,
+  AnnotateGrammarPageCommand,
+} from './commands/annotate-grammar-page/annotate-grammar-page.command.js';
 import { AnnotatePostCommand } from './commands/annotate-post/annotate-post.command.js';
 import { AssessComplexityCommand } from './commands/assess-complexity/assess-complexity.command.js';
 import { EnrichGrammarCommand } from './commands/enrich-grammar/enrich-grammar.command.js';
@@ -18,6 +22,7 @@ import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
 import { UnmarkPostReadCommand } from './commands/unmark-post-read/unmark-post-read.command.js';
+import type { LexBlockPhrases } from './domain/lex-block.js';
 import { GetGrammarConstructionQuery } from './queries/get-grammar-construction/get-grammar-construction.query.js';
 import type { GrammarConstructionView } from './queries/get-grammar-construction/grammar-construction-view.js';
 import {
@@ -104,6 +109,21 @@ export class PostService {
     usagePointId: string,
   ): Promise<UsagePointExercisesView> {
     return this.queryBus.execute(new GetUsagePointExercisesQuery(usagePointId));
+  }
+
+  async annotateGrammarPage(
+    slug: string,
+    blocks: string[],
+    phrases: LexBlockPhrases = { literal: [], phrasalVerbs: [] },
+    refresh = false,
+  ): Promise<AnnotatedGrammarPageView> {
+    const view = await this.commandBus.execute(
+      new AnnotateGrammarPageCommand(slug, blocks, phrases, refresh),
+    );
+
+    await this.em.flush();
+
+    return view;
   }
 
   async ingest(dto: IngestPostDto): Promise<IngestedPostView> {
