@@ -162,20 +162,76 @@ not shift".
 Зроблено: реальних EGP-точок 574 (575 у БД включало dev-фікстуру) — усі покриті, тест
 `usage-point-content-seed.spec.ts` звіряє ключі файлу з USE-рядками `egp.json`.
 
-### [ ] 12. Переклад прози ручних сторінок (дослідницький)
-- Branch: `grammar-translations-and-practice-12-page-prose`
-- Base: `grammar-translations-and-practice-11-modality-3`
-- PR: —
+### [x] 12. Переклад прози ручних сторінок (дослідницький)
+- Branch: `grammar-translations-and-practice-09-modality-1` (спільна гілка зі зрізом 9)
+- Base: `main`
+- PR: — (див. зріз 9)
 
-Відкрите питання до користувача: чи перекладати прозу 90 ручних сторінок (i18n-підхід для
-`.astro`) і чи потрібен переклад `examples`/`canDoStatement`. Після відповідей — дописати зрізи.
+Рішення користувача (2026-09-29): прозу 90 сторінок **не** перекладати. Натомість будь-яке слово
+на сторінці правила має бути клікабельним і показувати інформацію про слово/фразу, як у статтях
+(зріз 18). `examples` usage points — перекладати (зрізи 14-17); `canDoStatement` — ні.
 
-### [ ] 13. Аудит банку вправ і наповнення секції Practice (дослідницький)
-- Branch: `grammar-translations-and-practice-13-practice-audit`
+### [x] 13. Аудит банку вправ і наповнення секції Practice (дослідницький)
+- Branch: `grammar-translations-and-practice-09-modality-1` (спільна гілка зі зрізом 9)
+- Base: `main`
+- PR: — (див. зріз 9)
+
+Стан (локальна БД, 2026-09-29): `grammar_usage_point_exercises` — 0 рядків,
+`assets/grammar-usage-point-exercises.json` не існує; `uk`-переклад мають усі 574 EGP-точки.
+Рішення: секція `Practice` у `GrammarShell.astro` = агрегат вправ усіх usage points сторінки;
+спершу MVP-банк (зріз 19), після перевірки якості — зрізи масштабування.
+
+Усі наступні зрізи — на гілці `grammar-translations-and-practice-09-modality-1`, один PR після останнього зрізу.
+
+### [ ] 14. Інфраструктура `uk.examples` + контент ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS, CLAUSES (157)
+- Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
 
-Порахувати покриття банку вправ (скільки usage points/конструкцій мають вправи, скільки на кожен),
-перевірити якість вибірки згенерованих речень. Вирішити разом з користувачем, чим стає секція
-`Practice` на сторінці правила (агрегат вправ усіх usage points сторінки чи прибрати), і дописати
-зрізи на масштабування генерації.
+Сид: `uk.examples` у `usage-point-content-seed.ts` — масив тієї ж довжини, що `examples`
+(поки опційний, обов'язковим стає в зрізі 17), імпорт пише в `translations.uk.examples`; опис у
+`assets/README.md`. Бекенд: `examples` у `GrammarTranslations`/DTO. Фронт: переклад прикладу під
+тумблером EN/native у `GrammarUsagePointCard.astro` (CSS від `<html data-popup-lang>`), e2e "does not
+shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` (13),
+`discourse-markers-*` (11), `clauses-*` (74).
+
+### [ ] 15. `uk.examples`: DETERMINERS, FOCUS, FUTURE, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (120)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 16. `uk.examples`: PAST, PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (135)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 17. `uk.examples`: MODALITY (162) + повнота
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+`uk.examples` стає обов'язковим у схемі сиду; `usage-point-content-seed.spec.ts` перевіряє, що
+кожна точка має переклад кожного прикладу.
+
+### [ ] 18. Клік по слову на сторінках правил — дизайн (дослідницький)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+У статтях клікабельні спани `[data-word-definition-id]`/`[data-phrase-id]` (`lib/reader-popup.ts`)
+мають контекстний сенс з AI-пайплайну; сторінки правил — статичні `.astro`, таких id немає.
+Єдиний пошук — `GET /dictionary/words/:lemma` (лише для залогінених, усі сенси леми). Порівняти:
+(а) build-time/seed-time анотація тексту сторінки через наявний пайплайн (контекстний сенс, як у
+статтях); (б) runtime-пошук за лемою через `nlp-service` (усі сенси, лише слова, що вже є в БД).
+Врахувати гостьовий доступ і CLS. Після рішення з користувачем — дописати зрізи.
+
+### [ ] 19. Practice MVP: банк вправ на 1-2 usage points + агрегат на сторінці
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+10-15 вправ (`fill_blank` основний тип + `multiple_choice`, одна однозначна відповідь) на 1-2 usage
+points у `assets/grammar-usage-point-exercises.json` (формат — `assets/README.md`), речення за
+патерном точки (`canDoStatement`/`explanation` + рівень + EGP-приклади як few-shot). Секція
+`Practice` у `GrammarShell.astro` — агрегат вправ усіх usage points сторінки. Зупинитися на
+перевірку якості користувачем, потім дописати зрізи масштабування по категоріях.
