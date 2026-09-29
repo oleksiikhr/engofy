@@ -10451,6 +10451,3016 @@
       }
     }
   ],
+  "354": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At eight tomorrow I'll be ____. (work)",
+        "answer": "working",
+        "options": ["worked", "working", "work"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This time next week we'll ____ lying on the beach.",
+        "answer": "be",
+        "options": ["be", "being", "been"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't call at seven — I'll be ____ dinner.",
+        "options": ["having", "have", "had", "to have"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Come after four — I'll be ____ before then. (study)",
+        "answer": "studying",
+        "options": ["studying", "study", "studied"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "At noon tomorrow, I'll flying to Rome.",
+          "At noon tomorrow, I'll be flying to Rome.",
+          "At noon tomorrow, I'll be fly to Rome."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This time tomorrow, they'll be ____ home. (drive)",
+        "answer": "driving",
+        "options": ["driving", "drive", "drove"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll ____ waiting for you at the station.",
+        "answer": "be",
+        "options": ["been", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "In an hour, she'll be ____ her exam.",
+        "options": ["take", "took", "to take", "taking"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "358": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you be ____ for dinner? (stay)",
+        "answer": "staying",
+        "options": ["stay", "stayed", "staying"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How will you be ____, by card or in cash? (pay)",
+        "answer": "paying",
+        "options": ["paid", "paying", "pay"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you be ____ a taxi tomorrow?",
+        "options": ["need", "needed", "to need", "needing"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ using the car tonight?",
+        "answer": "be",
+        "options": ["been", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the most polite question: ____",
+        "options": [
+          "Will you join to us for lunch?",
+          "Will you be joining us for lunch?",
+          "Will you be join us for lunch?"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When will you be ____ the office? (leave)",
+        "answer": "leaving",
+        "options": ["leaving", "leave", "left"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you be ____ your passport with you? (bring)",
+        "answer": "bringing",
+        "options": ["brought", "bringing", "bring"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you ____ coming to the meeting?",
+        "options": ["being", "been", "to be", "be"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "359": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I might be ____ from home next week. (work)",
+        "answer": "working",
+        "options": ["worked", "working", "work"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Your boss may be ____ later tonight. (call)",
+        "answer": "calling",
+        "options": ["calling", "call", "called"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't ring at nine — we might ____ having dinner.",
+        "options": ["being", "been", "to be", "be"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We might be ____ to Spain this summer. (move)",
+        "answer": "moving",
+        "options": ["move", "moved", "moving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She may staying with us next week.",
+          "She may be stay with us next week.",
+          "She may be staying with us next week."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They may be ____ late — the traffic is bad. (arrive)",
+        "answer": "arriving",
+        "options": ["arrive", "arrived", "arriving"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I might ____ travelling a lot next year.",
+        "answer": "be",
+        "options": ["been", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He might be ____ a new job soon.",
+        "options": ["start", "started", "to start", "starting"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "363": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hurry up — the film is about ____ start.",
+        "answer": "to",
+        "options": ["for", "of", "to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm just ____ to go out.",
+        "answer": "about",
+        "options": ["going", "ready to", "about"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're about to ____ lunch. Join us!",
+        "options": ["having", "have", "had", "has"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The train is about to ____. (leave)",
+        "answer": "leave",
+        "options": ["left", "leave", "leaving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The shop is about closing.",
+          "The shop is about to close.",
+          "The shop is about close."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Quick! The bus is ____ to leave.",
+        "answer": "about",
+        "options": ["going", "ready", "about"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm about to ____ you a text. (send)",
+        "answer": "send",
+        "options": ["send", "sending", "sent"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She's just about ____ asleep.",
+        "options": ["to fall", "falling", "to falling", "fall"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "364": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____ to wait here until I come back.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All students are to ____ their passports. (bring)",
+        "answer": "bring",
+        "options": ["bringing", "brought", "bring"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Children are not ____ use the pool alone.",
+        "options": ["for", "of", "at", "to"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The president ____ to visit Kyiv next week.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct instruction: ____",
+        "options": [
+          "Guests are to leave their rooms by ten.",
+          "Guests are leave their rooms by ten.",
+          "Guests are to leaving their rooms by ten."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You are not to ____ the building. (leave)",
+        "answer": "leave",
+        "options": ["leave", "leaving", "left"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All staff ____ to wear a badge.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Visitors are to ____ at reception.",
+        "options": ["signing in", "sign in", "signed in", "signs in"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "365": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The train is due ____ arrive at 6.15.",
+        "answer": "to",
+        "options": ["at", "to", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The meeting is due to ____ at ten. (start)",
+        "answer": "start",
+        "options": ["started", "start", "starting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The report is ____ to be finished by Friday.",
+        "options": ["dues", "due to to", "due", "dew"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Her baby is due ____ March.",
+        "answer": "in",
+        "options": ["on", "at", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The flight is due land at noon.",
+          "The flight is due to landing at noon.",
+          "The flight is due to land at noon."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new shop is due to ____ next month. (open)",
+        "answer": "open",
+        "options": ["opening", "opened", "open"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When is the essay ____? (due)",
+        "answer": "due",
+        "options": ["due", "dues", "dew"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The concert is due to ____ at eight.",
+        "options": ["beginning", "began", "begins", "begin"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "366": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was going ____ call you, but my phone died.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were going to ____ at six. (meet)",
+        "answer": "meet",
+        "options": ["met", "meeting", "meet"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She didn't know what was going ____ happen.",
+        "options": ["for", "to", "that", "so"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ going to buy it, but it was too expensive.",
+        "answer": "was",
+        "options": ["were", "am", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "They was going to get married last year.",
+          "They were going to get married last year.",
+          "They were going get married last year."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was going to ____ the car, but he changed his mind. (sell)",
+        "answer": "sell",
+        "options": ["sell", "sold", "selling"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It looked like it was going to ____. (rain)",
+        "answer": "rain",
+        "options": ["rained", "raining", "rain"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ going to walk, but it rained.",
+        "options": ["were", "was", "are", "been"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "367": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I thought it ____ rain.",
+        "answer": "would",
+        "options": ["will", "did", "would"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She knew he would ____ late. (be)",
+        "answer": "be",
+        "options": ["be", "been", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We hoped the film ____ be good.",
+        "options": ["will", "would", "did", "does"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He promised he ____ call.",
+        "answer": "would",
+        "options": ["would", "will", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I knew you would like it.",
+          "I knew you will like it.",
+          "I knew you would liked it."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They said the shop would ____ at nine. (open)",
+        "answer": "open",
+        "options": ["opened", "opening", "open"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Nobody thought she ____ win.",
+        "answer": "would",
+        "options": ["would", "will", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was sure he ____ come.",
+        "options": ["will", "did", "does", "would"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "368": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was about to ____ when the phone rang. (leave)",
+        "answer": "leave",
+        "options": ["leaving", "left", "leave"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were just about ____ eat.",
+        "answer": "to",
+        "options": ["to", "for", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She was about to ____, but he stopped her.",
+        "options": ["answer", "answering", "answered", "answers"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ about to go to bed when the lights went out.",
+        "answer": "were",
+        "options": ["was", "are", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I was about calling you.",
+          "I was about to called you.",
+          "I was about to call you."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was about to ____ the door when it opened. (open)",
+        "answer": "open",
+        "options": ["opened", "opening", "open"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film ____ about to start when we arrived.",
+        "answer": "was",
+        "options": ["were", "is", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was just about to ____ you a message!",
+        "options": ["sending", "sent", "send", "sends"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "369": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was on the point ____ leaving when he called.",
+        "answer": "of",
+        "options": ["for", "of", "to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was on the point of ____ up. (give)",
+        "answer": "giving",
+        "options": ["give", "gave", "giving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They were on the point of ____ the house.",
+        "options": ["sell", "sold", "to sell", "selling"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He was on the ____ of saying yes.",
+        "answer": "point",
+        "options": ["point", "points", "pointing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We were on the point to leave.",
+          "We were on the point of leaving.",
+          "We were on the point of leave."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The company was on the point of ____. (close)",
+        "answer": "closing",
+        "options": ["closed", "closing", "close"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ on the point of crying.",
+        "answer": "was",
+        "options": ["was", "were", "am"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She was on the point ____ telling him the truth.",
+        "options": ["to", "for", "with", "of"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "370": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My plane was due ____ leave at eight.",
+        "answer": "to",
+        "options": ["to", "for", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The meeting was due to ____ an hour ago. (start)",
+        "answer": "start",
+        "options": ["start", "started", "starting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The factory was due to ____ built by the lake.",
+        "options": ["be", "being", "been", "to be"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The work ____ due to finish in May, but it's late.",
+        "answer": "was",
+        "options": ["were", "is", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The train was due to arrive at six.",
+          "The train was due arrive at six.",
+          "The train was due to arrived at six."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was due ____ start work on Monday.",
+        "answer": "to",
+        "options": ["to", "for", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The book was due to ____ last year. (come out)",
+        "answer": "come out",
+        "options": ["come out", "came out", "coming out"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We were due to ____ yesterday, but the flight was cancelled.",
+        "options": ["flying", "flew", "flown", "fly"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "373": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By June I'll have ____ working here for a year.",
+        "answer": "been",
+        "options": ["been", "being", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "In May we'll have been ____ here for ten years. (live)",
+        "answer": "living",
+        "options": ["live", "living", "lived"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "When we reach Lviv, we'll have been ____ for twelve hours.",
+        "options": ["travelling", "travelled", "travel", "to travel"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By then, she'll have ____ studying for five years.",
+        "answer": "been",
+        "options": ["been", "being", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "By next year, I'll have been teach for ten years.",
+          "By next year, I'll been teaching for ten years.",
+          "By next year, I'll have been teaching for ten years."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By six, we'll have been ____ for three hours. (walk)",
+        "answer": "walking",
+        "options": ["walked", "walk", "walking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Next month he'll ____ been running for a year.",
+        "answer": "have",
+        "options": ["had", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "By Friday, they'll have been ____ for a week.",
+        "options": ["working", "worked", "work", "to work"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "374": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You'll have been ____ why I called you here. (wonder)",
+        "answer": "wondering",
+        "options": ["wonder", "wondering", "wondered"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't phone them — they'll have ____ driving all night.",
+        "answer": "been",
+        "options": ["be", "been", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She'll have been ____ hard for this exam.",
+        "options": ["studied", "study", "to study", "studying"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They'll ____ been waiting for hours — let's hurry.",
+        "answer": "have",
+        "options": ["had", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct guess: ____",
+        "options": [
+          "He'll has been working all day, so he's tired.",
+          "He'll have been working all day, so he's tired.",
+          "He'll have working all day, so he's tired."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You'll have been ____ about the new rules. (hear)",
+        "answer": "hearing",
+        "options": ["hearing", "heard", "hear"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The kids will have been ____ all morning. (play)",
+        "answer": "playing",
+        "options": ["playing", "played", "play"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She'll have been ____ for us since noon.",
+        "options": ["waited", "wait", "to wait", "waiting"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "377": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By Friday I will have ____ the report. (finish)",
+        "answer": "finished",
+        "options": ["finish", "finishing", "finished"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The match will have ____ by six. (finish)",
+        "answer": "finished",
+        "options": ["finishing", "finished", "finish"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I won't have ____ my exams by June.",
+        "options": ["did", "done", "do", "doing"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By the time you arrive, we'll have ____ dinner. (eat)",
+        "answer": "eaten",
+        "options": ["ate", "eat", "eaten"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "By 2030, they will have built the bridge.",
+          "By 2030, they will have build the bridge.",
+          "By 2030, they will built the bridge."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By tomorrow, she ____ have left.",
+        "answer": "will",
+        "options": ["will", "would", "is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "By then, I'll have ____ enough money. (save)",
+        "answer": "saved",
+        "options": ["save", "saving", "saved"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you have ____ by nine?",
+        "options": ["finish", "finishing", "finished", "finishes"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "379": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "As you will have ____, the meeting is cancelled. (hear)",
+        "answer": "heard",
+        "options": ["hearing", "heard", "hear"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Many of you will have ____ the new signs. (notice)",
+        "answer": "noticed",
+        "options": ["notice", "noticing", "noticed"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't worry — Anna will have ____ the tickets.",
+        "options": ["booked", "book", "booking", "books"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He'll have ____ home by now. (get)",
+        "answer": "got",
+        "options": ["getting", "got", "get"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct guess: ____",
+        "options": [
+          "They'll have arrive by now.",
+          "They'll arrived by now.",
+          "They'll have arrived by now."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You will have ____ my email by now. (read)",
+        "answer": "read",
+        "options": ["read", "readed", "reading"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She'll ____ forgotten about it already.",
+        "answer": "have",
+        "options": ["has", "had", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "As you will have ____, prices have gone up.",
+        "options": ["saw", "see", "seen", "seeing"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "380": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope I will have ____ you. (reassure)",
+        "answer": "reassured",
+        "options": ["reassured", "reassure", "reassuring"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I trust this will have ____ your questions. (answer)",
+        "answer": "answered",
+        "options": ["answering", "answered", "answer"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I hope this letter will have ____ the situation.",
+        "options": ["explain", "explaining", "explained", "explains"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope this ____ have helped.",
+        "answer": "will",
+        "options": ["is", "will", "would"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the formal closing sentence: ____",
+        "options": [
+          "I trust this will clarified the matter.",
+          "I trust this will have clarify the matter.",
+          "I trust this will have clarified the matter."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope my answer will have been ____. (help)",
+        "answer": "helpful",
+        "options": ["help", "helping", "helpful"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I trust the information will have ____ useful. (be)",
+        "answer": "been",
+        "options": ["been", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I hope this will ____ answered your question.",
+        "options": ["have", "has", "had", "be"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "383": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll ____ you tonight. (call)",
+        "answer": "call",
+        "options": ["calling", "called", "call"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ bring a cake.",
+        "answer": "will",
+        "options": ["do", "will", "am"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We'll ____ you at the party.",
+        "options": ["seeing", "saw", "see", "sees"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's cold — I'll ____ the window. (close)",
+        "answer": "close",
+        "options": ["closing", "closed", "close"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'll help you with that.",
+          "I'll to help you with that.",
+          "I'll helping you with that."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm tired. I ____ go to bed now.",
+        "answer": "'ll",
+        "options": ["'ll", "'m", "'s"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "OK, I'll ____ the blue one. (take)",
+        "answer": "take",
+        "options": ["take", "taking", "took"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'll ____ you tomorrow, I promise.",
+        "options": ["texting", "text", "texted", "to text"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "387": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I open the window?",
+        "answer": "Shall",
+        "options": ["Shall", "Will", "Do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Shall I ____ your bag? (carry)",
+        "answer": "carry",
+        "options": ["carried", "carry", "carrying"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ I wait for you?",
+        "options": ["Do", "Am", "Shall", "Will you"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Shall I ____ you a taxi? (call)",
+        "answer": "call",
+        "options": ["called", "call", "calling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct offer: ____",
+        "options": [
+          "Shall I helping you?",
+          "Shall I to help you?",
+          "Shall I help you?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Shall ____ make some tea?",
+        "answer": "I",
+        "options": ["me", "my", "I"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's dark. Shall I ____ on the light? (turn)",
+        "answer": "turn",
+        "options": ["turn", "turning", "turned"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ I bring anything?",
+        "options": ["Do", "Shall", "Am", "Does"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "388": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ to the party? (come)",
+        "answer": "come",
+        "options": ["coming", "came", "come"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What time ____ you arrive?",
+        "answer": "will",
+        "options": ["will", "do you", "shall you"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you ____ at home tonight?",
+        "options": ["be", "being", "been", "are"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you be at the meeting?",
+        "answer": "Will",
+        "options": ["Will", "Do", "Are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question: ____",
+        "options": [
+          "Will you coming by train?",
+          "Will you come by train?",
+          "You will come by train will?"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When will you ____ back? (be)",
+        "answer": "be",
+        "options": ["are", "being", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ Anna tomorrow? (see)",
+        "answer": "see",
+        "options": ["seeing", "saw", "see"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "How long ____ you stay?",
+        "options": ["do", "are", "will", "shall"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "389": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ it for me? (send)",
+        "answer": "send",
+        "options": ["send", "sending", "sent"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ the door, please? (close)",
+        "answer": "close",
+        "options": ["close", "closing", "closed"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you ____ me with this?",
+        "options": ["helping", "help", "helped", "to help"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you pass the salt, please?",
+        "answer": "Will",
+        "options": ["Will", "Do", "Are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct request: ____",
+        "options": [
+          "Will you opening the window?",
+          "You will open the window?",
+          "Will you open the window?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ me later? (call)",
+        "answer": "call",
+        "options": ["calling", "called", "call"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Will you ____ the kids today? (pick up)",
+        "answer": "pick up",
+        "options": ["picked up", "pick up", "picking up"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Will you ____ quiet, please?",
+        "options": ["being", "are", "been", "be"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "390": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we go to the cinema?",
+        "answer": "Shall",
+        "options": ["Do", "Shall", "Will"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where shall we ____? (meet)",
+        "answer": "meet",
+        "options": ["met", "meet", "meeting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Shall we ____ out tonight?",
+        "options": ["eat", "eating", "ate", "to eat"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What shall we ____ tonight? (do)",
+        "answer": "do",
+        "options": ["do", "doing", "did"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct suggestion: ____",
+        "options": [
+          "Shall we having a break?",
+          "Shall we have a break?",
+          "Shall we to have a break?"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Shall ____ start?",
+        "answer": "we",
+        "options": ["our", "we", "us"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Shall we ____ a taxi? (take)",
+        "answer": "take",
+        "options": ["took", "take", "taking"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ we dance?",
+        "options": ["Do", "Shall", "Are", "Will"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "391": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My mother ____ drive us there.",
+        "answer": "will",
+        "options": ["will", "does", "is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't worry, I'll ____ you. (help)",
+        "answer": "help",
+        "options": ["helped", "help", "helping"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ listen to me.",
+        "options": ["don't", "isn't", "wouldn't to", "won't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll ____ the dishes. (wash)",
+        "answer": "wash",
+        "options": ["washing", "washed", "wash"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The door doesn't will open.",
+          "The door won't open.",
+          "The door won't to open."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The car ____ start — can you help?",
+        "answer": "won't",
+        "options": ["won't", "don't", "isn't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll ____ you some money. (lend)",
+        "answer": "lend",
+        "options": ["lent", "lend", "lending"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She ____ tell me her secret.",
+        "options": ["doesn't to", "isn't", "don't", "won't"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "392": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new shop will ____ on 1 June. (open)",
+        "answer": "open",
+        "options": ["open", "opened", "opening"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The work will ____ at 8 a.m. (start)",
+        "answer": "start",
+        "options": ["start", "starting", "started"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The concert will ____ at eleven.",
+        "options": ["finishing", "finished", "finish", "finishes"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The course ____ begin on Monday.",
+        "answer": "will",
+        "options": ["is", "does", "will"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The museum will close at six.",
+          "The museum will closes at six.",
+          "The museum will closing at six."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The train will ____ at platform 3. (arrive)",
+        "answer": "arrive",
+        "options": ["arrived", "arrive", "arriving"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The office will ____ closed on Friday. (be)",
+        "answer": "be",
+        "options": ["be", "is", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The meeting will ____ two hours.",
+        "options": ["lasting", "lasted", "lasts", "last"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "393": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm sure you'll ____ the city. (love)",
+        "answer": "love",
+        "options": ["loved", "love", "loving"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think it ____ be cold tomorrow.",
+        "answer": "will",
+        "options": ["does", "will", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They probably ____ come.",
+        "options": ["don't", "aren't", "won't", "wouldn't to"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think Brazil will ____ the match. (win)",
+        "answer": "win",
+        "options": ["win", "winning", "won"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct prediction: ____",
+        "options": [
+          "I think it rains later will.",
+          "I think it'll rain later.",
+          "I think it'll raining later."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You'll ____ this book. (like)",
+        "answer": "like",
+        "options": ["liked", "like", "liking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm sure she'll ____ the exam. (pass)",
+        "answer": "pass",
+        "options": ["passed", "pass", "passing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Prices ____ go up next year.",
+        "options": ["are", "do", "is", "will"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "394": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ have a meeting about this next week.",
+        "answer": "shall",
+        "options": ["are shall", "shall", "shall to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall ____ the work tomorrow. (finish)",
+        "answer": "finish",
+        "options": ["finished", "finish", "finishing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We shall not ____ your help.",
+        "options": ["forgetting", "forgot", "forget", "forgotten"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ write to you soon.",
+        "answer": "shall",
+        "options": ["shall to", "am shall", "shall"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct formal sentence: ____",
+        "options": [
+          "We shall replying within three days.",
+          "We shall to reply within three days.",
+          "We shall reply within three days."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall ____ at the station at noon. (be)",
+        "answer": "be",
+        "options": ["being", "am", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We shall ____ you know. (let)",
+        "answer": "let",
+        "options": ["lets", "let", "letting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I shall ____ you on Monday.",
+        "options": ["calling", "called", "call", "to call"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "396": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall ____ remember this city.",
+        "answer": "always",
+        "options": ["ever", "once", "always"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall never ____ hope. (lose)",
+        "answer": "lose",
+        "options": ["losing", "lost", "lose"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We shall ____ be grateful to you.",
+        "options": ["ever", "once", "yet", "always"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall ____ forget your kindness.",
+        "answer": "never",
+        "options": ["never", "ever", "always not"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I shall always love you.",
+          "I shall always loving you.",
+          "I always shall loving you."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We shall always ____ friends. (be)",
+        "answer": "be",
+        "options": ["are", "be", "being"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I shall ____ go back there — never!",
+        "answer": "never",
+        "options": ["always", "ever", "never"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They shall ____ forget this day.",
+        "options": ["ever", "always", "once", "never"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "397": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope we ____ meet in November.",
+        "answer": "shall",
+        "options": ["shall", "shall to", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We shall ____ have several more years here.",
+        "answer": "probably",
+        "options": ["probably", "probable", "probability"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I think we shall ____ big changes soon.",
+        "options": ["seeing", "see", "saw", "seen"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We shall ____ need more time. (probably)",
+        "answer": "probably",
+        "options": ["probability", "probably", "probable"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I think we shall winning.",
+          "I think we shall to win.",
+          "I think we shall win."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We shall ____ what happens.",
+        "answer": "see",
+        "options": ["see", "seeing", "saw"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I suppose we ____ be late.",
+        "answer": "shall",
+        "options": ["shall", "shall to", "are shall"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We shall ____ know the results soon.",
+        "options": ["probable", "probability", "probablely", "probably"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "400": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm going ____ visit my aunt on Saturday.",
+        "answer": "to",
+        "options": ["at", "to", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What are you going to ____? (wear)",
+        "answer": "wear",
+        "options": ["wore", "wear", "wearing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ going to take a taxi.",
+        "options": ["is", "am", "be", "are"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's going to ____ a new car. (buy)",
+        "answer": "buy",
+        "options": ["buy", "buying", "bought"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'm going study tonight.",
+          "I'm going to study tonight.",
+          "I'm going to studying tonight."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you going to come?",
+        "answer": "Are",
+        "options": ["Do", "Will", "Are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They're going to ____ in June. (marry)",
+        "answer": "get married",
+        "options": ["got married", "get married", "getting married"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He's going to ____ a doctor.",
+        "options": ["being", "been", "is", "be"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "401": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's going to ____ a nice day.",
+        "answer": "be",
+        "options": ["is", "be", "being"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The party is going to be ____. (great)",
+        "answer": "great",
+        "options": ["greater", "great", "greatly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Take a coat — you're going to ____ cold.",
+        "options": ["being", "are", "be", "been"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The exam is going to ____ hard.",
+        "answer": "be",
+        "options": ["be", "being", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's going to be fun.",
+          "It's going to being fun.",
+          "It's going be fun."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Tomorrow is going to be ____. (sunny)",
+        "answer": "sunny",
+        "options": ["sunnily", "sunny", "sun"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is going to ____ easy.",
+        "answer": "be",
+        "options": ["is", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The film is going to ____ amazing!",
+        "options": ["being", "be", "been", "is"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "405": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She didn't know what was going to ____. (happen)",
+        "answer": "happen",
+        "options": ["happened", "happening", "happen"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We knew it was going to ____ a hot day.",
+        "answer": "be",
+        "options": ["was", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I felt it was going ____ rain.",
+        "options": ["to", "for", "that", "so"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He knew he ____ going to be late.",
+        "answer": "was",
+        "options": ["is", "were", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I thought it is going to snowed.",
+          "I thought it was going snow.",
+          "I thought it was going to snow."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Nobody knew who was going to ____. (win)",
+        "answer": "win",
+        "options": ["won", "winning", "win"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was clear the plan was going to ____. (fail)",
+        "answer": "fail",
+        "options": ["fail", "failed", "failing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They knew the trip was going to ____ long.",
+        "options": ["being", "be", "been", "was"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "406": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm not going to ____ to school tomorrow. (go)",
+        "answer": "go",
+        "options": ["going", "went", "go"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ going to buy that car.",
+        "answer": "isn't",
+        "options": ["aren't", "isn't", "doesn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm not going ____ be able to come.",
+        "options": ["for", "to", "that", "so"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ going to wait any longer.",
+        "answer": "aren't",
+        "options": ["aren't", "isn't", "don't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He's not going call.",
+          "He's not going to call.",
+          "He not going to call."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They're not going to ____ the house. (sell)",
+        "answer": "sell",
+        "options": ["sell", "selling", "sold"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ going to tell anyone.",
+        "answer": "not",
+        "options": ["not", "no", "don't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It ____ going to rain today.",
+        "options": ["doesn't", "aren't", "won't", "isn't"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "407": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were going to meet at 11.30, but he ____ late.",
+        "answer": "was",
+        "options": ["was", "is", "were"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was going to ____ you, but I forgot. (call)",
+        "answer": "call",
+        "options": ["call", "called", "calling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They ____ going to get married last year.",
+        "options": ["was", "are", "have", "were"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was going to ____ the job, but she changed her mind. (take)",
+        "answer": "take",
+        "options": ["taking", "take", "took"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I was going to walk, but it rained.",
+          "I was going to walked, but it rained.",
+          "I was go to walk, but it rained."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We were going to ____ a party, but nobody came. (have)",
+        "answer": "have",
+        "options": ["had", "having", "have"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He ____ going to study, but he fell asleep.",
+        "answer": "was",
+        "options": ["was", "were", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I was going ____ phone you.",
+        "options": ["for", "that", "to", "so"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "408": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Look at those clouds — it's going ____ rain.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think you're going to ____ it. (like)",
+        "answer": "like",
+        "options": ["liked", "like", "liking"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're really going to ____ you.",
+        "options": ["missing", "miss", "missed", "misses"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Careful! You're going to ____! (fall)",
+        "answer": "fall",
+        "options": ["fell", "fall", "falling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct prediction: ____",
+        "options": [
+          "She's going to having a baby.",
+          "She's going to have a baby.",
+          "She's going have a baby."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ice is going to ____. (break)",
+        "answer": "break",
+        "options": ["break", "breaking", "broke"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Our team is going to ____ — look at the score! (lose)",
+        "answer": "lose",
+        "options": ["lose", "losing", "lost"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He's going to ____ late again.",
+        "options": ["being", "be", "been", "is"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "409": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He told me he was going ____ arrive tomorrow.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She said she ____ going to call.",
+        "answer": "was",
+        "options": ["was", "is", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They said it was going to ____ difficult.",
+        "options": ["being", "been", "is", "be"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Tom said he was going to ____ a new job. (look for)",
+        "answer": "look for",
+        "options": ["look for", "looking for", "looked for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct reported sentence: ____",
+        "options": [
+          "She said she is going to leaving.",
+          "She said she was going to leave.",
+          "She said she was go to leave."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They told us they ____ going to move.",
+        "answer": "were",
+        "options": ["were", "are", "was"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He said he was going to ____ us. (visit)",
+        "answer": "visit",
+        "options": ["visited", "visiting", "visit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She told me she was ____ to study law.",
+        "options": ["go", "going", "goes", "gone"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "412": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ Tom at six. (meet)",
+        "answer": "meeting",
+        "options": ["met", "meeting", "meet"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We're ____ dinner with Anna on Friday. (have)",
+        "answer": "having",
+        "options": ["having", "have", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She's ____ to my house tomorrow.",
+        "options": ["come", "came", "coming", "comes"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ____ flying to Rome on Monday.",
+        "answer": "are",
+        "options": ["is", "be", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'm seeing the dentist at ten.",
+          "I see the dentist at ten tomorrow will.",
+          "I'm see the dentist at ten."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What ____ you doing on Saturday?",
+        "answer": "are",
+        "options": ["are", "do", "is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He's ____ his parents at the weekend. (visit)",
+        "answer": "visiting",
+        "options": ["visited", "visiting", "visit"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're ____ a party on Friday.",
+        "options": ["having", "have", "had", "has"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "413": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What are you ____ tonight? (do)",
+        "answer": "doing",
+        "options": ["did", "doing", "do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you coming to the party?",
+        "answer": "Are",
+        "options": ["Do", "Is", "Are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Where are you ____ this summer?",
+        "options": ["go", "going", "went", "goes"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When ____ you leaving?",
+        "answer": "are",
+        "options": ["is", "are", "do"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question: ____",
+        "options": [
+          "Who are you meet tomorrow?",
+          "Who you are meeting tomorrow?",
+          "Who are you meeting tomorrow?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Is she ____ with us? (come)",
+        "answer": "coming",
+        "options": ["coming", "come", "came"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What time are they ____? (arrive)",
+        "answer": "arriving",
+        "options": ["arrive", "arrived", "arriving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ he working on Sunday?",
+        "options": ["Does", "Is", "Are", "Do"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "414": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is ____ the course on Friday. (join)",
+        "answer": "joining",
+        "options": ["join", "joined", "joining"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We're ____ a party on Saturday. (throw)",
+        "answer": "throwing",
+        "options": ["throw", "threw", "throwing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm ____ the doctor at ten tomorrow.",
+        "options": ["see", "saw", "seeing", "sees"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They're ____ their new flat next week. (move into)",
+        "answer": "moving into",
+        "options": ["moved into", "moving into", "move into"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He's start his new job on Monday.",
+          "He's starting his new job on Monday.",
+          "He starting his new job on Monday."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We're ____ married in June. (get)",
+        "answer": "getting",
+        "options": ["got", "getting", "get"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ my exam on Tuesday. (take)",
+        "answer": "taking",
+        "options": ["took", "taking", "take"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The team is ____ Madrid next week.",
+        "options": ["play", "playing", "played", "plays"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "415": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Why ____ you moving to a new area?",
+        "answer": "are",
+        "options": ["are", "do", "is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When is the festival ____? (start)",
+        "answer": "starting",
+        "options": ["start", "started", "starting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Are you ____ your parents at Christmas?",
+        "options": ["visit", "visiting", "visited", "visits"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who is ____ the meeting? (lead)",
+        "answer": "leading",
+        "options": ["leading", "lead", "led"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question: ____",
+        "options": [
+          "How are you getting to the airport?",
+          "How you are getting to the airport?",
+          "How are you get to the airport?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where ____ they staying?",
+        "answer": "are",
+        "options": ["do", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Is he ____ the car tomorrow? (use)",
+        "answer": "using",
+        "options": ["using", "use", "used"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What time is the plane ____?",
+        "options": ["leave", "left", "leaves", "leaving"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "416": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ a conference in Berlin next week. (attend)",
+        "answer": "attending",
+        "options": ["attend", "attended", "attending"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We're ____ a child very soon. (expect)",
+        "answer": "expecting",
+        "options": ["expect", "expected", "expecting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The company is ____ a new product in May.",
+        "options": ["launch", "launched", "launches", "launching"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They're ____ the house next month. (renovate)",
+        "answer": "renovating",
+        "options": ["renovate", "renovated", "renovating"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She presenting the report on Friday.",
+          "She's present the report on Friday.",
+          "She's presenting the report on Friday."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The mayor is ____ the new bridge tomorrow. (open)",
+        "answer": "opening",
+        "options": ["open", "opened", "opening"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm ____ my thesis next month. (submit)",
+        "answer": "submitting",
+        "options": ["submit", "submitted", "submitting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're ____ new staff in June.",
+        "options": ["hiring", "hire", "hired", "hires"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "417": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What kind of materials are you ____? (provide)",
+        "answer": "providing",
+        "options": ["provide", "provided", "providing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who is ____ at the meeting tomorrow? (present)",
+        "answer": "presenting",
+        "options": ["presented", "presenting", "present"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Are you ____ to visit Japan then?",
+        "options": ["plan", "planned", "plans", "planning"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How many guests are you ____? (invite)",
+        "answer": "inviting",
+        "options": ["invited", "inviting", "invite"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question: ____",
+        "options": [
+          "Which hotel you are booking?",
+          "Which hotel are you booking?",
+          "Which hotel are you book?"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Are you ____ the car or the train? (take)",
+        "answer": "taking",
+        "options": ["take", "took", "taking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What are they ____ at the event? (serve)",
+        "answer": "serving",
+        "options": ["serve", "served", "serving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Who ____ organising the trip?",
+        "options": ["is", "does", "are", "do"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "419": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope you ____ your holiday. (enjoy)",
+        "answer": "enjoy",
+        "options": ["enjoy", "enjoys", "will enjoying"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope you ____ to visit me soon. (come)",
+        "answer": "come",
+        "options": ["comes", "coming", "come"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I hope it ____ rain tomorrow.",
+        "options": ["isn't", "don't", "won't to", "doesn't"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope she ____ the job. (get)",
+        "answer": "gets",
+        "options": ["getting", "gets", "get"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I hope you feel better soon.",
+          "I hope you feeling better soon.",
+          "I hope you feels better soon."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope they ____ on time. (arrive)",
+        "answer": "arrive",
+        "options": ["arriving", "arrive", "arrives"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope we ____ again. (meet)",
+        "answer": "meet",
+        "options": ["meet", "meets", "meeting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I hope you ____ a good time.",
+        "options": ["having", "has", "had to", "have"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "420": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My train ____ at 7.15 tomorrow. (leave)",
+        "answer": "leaves",
+        "options": ["leave", "leaving", "leaves"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film ____ at eight. (start)",
+        "answer": "starts",
+        "options": ["starts", "start", "starting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The class ____ at 7 pm.",
+        "options": ["finish", "finishes", "finishing", "finished"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What time does the museum ____? (open)",
+        "answer": "open",
+        "options": ["open", "opens", "opening"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The bus leave at noon.",
+          "The bus leaving at noon.",
+          "The bus leaves at noon."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The shop ____ at nine tomorrow. (close)",
+        "answer": "closes",
+        "options": ["closes", "close", "closing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When does the concert ____? (begin)",
+        "answer": "begin",
+        "options": ["begin", "begins", "beginning"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Our flight ____ at six.",
+        "options": ["land", "landing", "lands", "landed"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "423": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I recommend that we ____ to the theatre. (go)",
+        "answer": "go",
+        "options": ["go", "goes", "went"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We suggest that the manager ____ a closer look. (take)",
+        "answer": "takes",
+        "options": ["took", "taking", "takes"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They insist that he ____ present.",
+        "options": ["is being", "was", "been", "be"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The doctor recommends that she ____ more. (rest)",
+        "answer": "rest",
+        "options": ["rest", "rested", "resting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct formal sentence: ____",
+        "options": [
+          "I suggest that he applies to for the job.",
+          "I suggest that he applying for the job.",
+          "I suggest that he apply for the job."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She insisted that we ____ for dinner. (stay)",
+        "answer": "stay",
+        "options": ["stayed", "staying", "stay"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We propose that the meeting ____ moved. (be)",
+        "answer": "be",
+        "options": ["been", "be", "being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It is essential that everyone ____ on time.",
+        "options": ["arriving", "arrived", "arrive", "to arrive"],
+        "answerIndex": 2
+      }
+    }
+  ],
   "659": [
     {
       "type": "fill_blank",

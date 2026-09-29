@@ -310,6 +310,13 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
+Прогрес: FUTURE (43) готово й закомічено; лишилось PAST (45 точок без вправ). Формат роботи:
+компактний текст (`#egpIndex`, `F|prompt ____|answer|bank`, `M|prompt ____|correct|wrong…`,
+роздільник опцій `,` без пробілу, `;` або `~` для речень з комами) → конвертер у
+`assets/grammar-usage-point-exercises.json` (≈8 вправ на точку, банк ротується, щоб правильна
+відповідь не стояла першою; близнюки `could` отримують ті самі вправи) → `biome format` →
+`grammar import-usage-point-exercises`.
+
 ### [ ] 28. Банк вправ: PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (88)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
