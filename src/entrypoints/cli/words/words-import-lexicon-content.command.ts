@@ -45,7 +45,6 @@ export class WordsImportLexiconContentCommand extends CliCommandRunner {
           lemma,
           pos as PartOfSpeech,
         );
-        // biome-ignore lint/performance/noAwaitInLoops: see above.
         const definition = await em.findOneOrFail(
           WordDefinition,
           wordDefinitionId,
