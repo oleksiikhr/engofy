@@ -1,14 +1,22 @@
 import { z } from 'zod';
 import { ExerciseType } from '../enums/exercise-type.enum.js';
+import { BLANK } from './build-exercises.js';
 
 // Seed format for the usage-point exercise bank (assets/grammar-usage-point-
 // -exercises.json, see assets/README.md): egpIndex -> array of exercises.
 // Content is written by another session (no AI call from this codebase) —
 // this schema is the contract that session's output must satisfy.
 
+// The web splits a prompt at BLANK to place the input / chosen option.
+const blankPrompt = z
+  .string()
+  .refine((prompt) => prompt.split(BLANK).length === 2, {
+    message: `must contain exactly one blank "${BLANK}"`,
+  });
+
 export const FillBlankPayloadSchema = z.object({
-  // Contains exactly one blank placeholder, e.g. "I ___ to work by bus.".
-  prompt: z.string().min(1),
+  // e.g. "I ____ to work by bus.".
+  prompt: blankPrompt,
   answer: z.string().min(1),
   // Word bank shown to the learner (answer + distractors); omitted means
   // free typing is the only mode.
@@ -17,7 +25,7 @@ export const FillBlankPayloadSchema = z.object({
 
 export const MultipleChoicePayloadSchema = z
   .object({
-    prompt: z.string().min(1),
+    prompt: blankPrompt,
     options: z.array(z.string().min(1)).min(2),
     answerIndex: z.number().int().min(0),
   })

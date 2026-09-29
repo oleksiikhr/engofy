@@ -351,7 +351,7 @@ async function seed(orm: MikroORM): Promise<void> {
     usagePointId: pastPerfectUp.id,
     type: ExerciseType.FillBlank,
     payload: {
-      prompt: 'By the time he arrived, she ___ the map.',
+      prompt: 'By the time he arrived, she ____ the map.',
       answer: 'had drawn',
     },
   });
