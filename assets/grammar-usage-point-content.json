@@ -4903,7 +4903,12 @@
       "While she was cooking, the lights went out."
     ],
     "uk": {
-      "explanation": "Past continuous вживаємо для довшої дії, яка відбувалася на тлі, а past simple — для головної події, що сталася посеред неї. Схема — was / were + -ing, часто з when або while."
+      "explanation": "Past continuous вживаємо для довшої дії, яка відбувалася на тлі, а past simple — для головної події, що сталася посеред неї. Схема — was / were + -ing, часто з when або while.",
+      "examples": [
+        "Я був у душі, коли задзвонив телефон.",
+        "Ішов дощ, коли ми вийшли з кінотеатру.",
+        "Поки вона готувала, згасло світло."
+      ]
     }
   },
   "746": {
@@ -4914,7 +4919,12 @@
       "It was snowing all morning."
     ],
     "uk": {
-      "explanation": "Past continuous вживаємо для дії, яка тривала в певний момент у минулому: вона вже почалася і ще не закінчилася. Схема — was / were + -ing."
+      "explanation": "Past continuous вживаємо для дії, яка тривала в певний момент у минулому: вона вже почалася і ще не закінчилася. Схема — was / were + -ing.",
+      "examples": [
+        "О восьмій ми вечеряли.",
+        "Що ти робив учора о десятій вечора?",
+        "Увесь ранок ішов сніг."
+      ]
     }
   },
   "750": {
@@ -4925,7 +4935,12 @@
       "As we were walking past, we decided to go in."
     ],
     "uk": {
-      "explanation": "Past continuous може пояснювати, чому щось сталося: причиною була ситуація, що тоді тривала. Часто стоїть після because або as: because + subject + was / were + -ing."
+      "explanation": "Past continuous може пояснювати, чому щось сталося: причиною була ситуація, що тоді тривала. Часто стоїть після because або as: because + subject + was / were + -ing.",
+      "examples": [
+        "Я не відповів, бо був за кермом.",
+        "Вона була втомлена, бо щовечора працювала допізна.",
+        "Проходячи повз, ми вирішили зайти."
+      ]
     }
   },
   "751": {
@@ -4936,7 +4951,12 @@
       "My grandmother was always baking something."
     ],
     "uk": {
-      "explanation": "Past continuous з always вживаємо, щоб сказати, що щось повторювалося знову і знову протягом певного часу в минулому. Always стоїть між was / were і дієсловом з -ing."
+      "explanation": "Past continuous з always вживаємо, щоб сказати, що щось повторювалося знову і знову протягом певного часу в минулому. Always стоїть між was / were і дієсловом з -ing.",
+      "examples": [
+        "Узимку постійно йшов дощ.",
+        "Він постійно говорив про футбол.",
+        "Моя бабуся завжди щось пекла."
+      ]
     }
   },
   "753": {
@@ -4947,7 +4967,12 @@
       "I was wondering if I could borrow your car."
     ],
     "uk": {
-      "explanation": "I was wondering if… та I was thinking… роблять прохання або пропозицію м'якшими й ввічливішими. Ідеться про теперішнє, але минула форма звучить менш прямо."
+      "explanation": "I was wondering if… та I was thinking… роблять прохання або пропозицію м'якшими й ввічливішими. Ідеться про теперішнє, але минула форма звучить менш прямо.",
+      "examples": [
+        "Я хотіла спитати, чи не могли б ви мені допомогти.",
+        "Я подумав, може, зустрінемося в п'ятницю.",
+        "Хотів спитати, чи можна позичити твою машину."
+      ]
     }
   },
   "754": {
@@ -4958,7 +4983,12 @@
       "They were always arguing about money."
     ],
     "uk": {
-      "explanation": "Past continuous з always або constantly вживаємо, щоб поскаржитися на те, що повторювалося знову і знову, дратувало або не піддавалося контролю. Схема — was / were + always / constantly + -ing."
+      "explanation": "Past continuous з always або constantly вживаємо, щоб поскаржитися на те, що повторювалося знову і знову, дратувало або не піддавалося контролю. Схема — was / were + always / constantly + -ing.",
+      "examples": [
+        "Він постійно мене перебивав.",
+        "Вона вічно губила ключі.",
+        "Вони весь час сварилися через гроші."
+      ]
     }
   },
   "756": {
@@ -4969,7 +4999,12 @@
       "I had been waiting a long time when he finally called."
     ],
     "uk": {
-      "explanation": "Past perfect continuous вживаємо для фонової дії, яка почалася раніше й досі тривала, коли сталася головна подія. Схема — had been + -ing; головна подія — у past simple."
+      "explanation": "Past perfect continuous вживаємо для фонової дії, яка почалася раніше й досі тривала, коли сталася головна подія. Схема — had been + -ing; головна подія — у past simple.",
+      "examples": [
+        "Ми йшли вже кілька годин, коли почався дощ.",
+        "Вона спала, коли спрацював будильник.",
+        "Я довго чекав, коли він нарешті подзвонив."
+      ]
     }
   },
   "757": {
@@ -4980,7 +5015,12 @@
       "I had been learning English for two years before the trip."
     ],
     "uk": {
-      "explanation": "Past perfect continuous вживаємо для дії, яка почалася до певного моменту в минулому і тривала аж до нього. Часто кажемо, як довго, з for або since: had been + -ing + for / since."
+      "explanation": "Past perfect continuous вживаємо для дії, яка почалася до певного моменту в минулому і тривала аж до нього. Часто кажемо, як довго, з for або since: had been + -ing + for / since.",
+      "examples": [
+        "На той час він працював там уже десять років.",
+        "Вони жили у Львові з 2015 року.",
+        "До поїздки я вивчала англійську вже два роки."
+      ]
     }
   },
   "758": {
@@ -4991,7 +5031,12 @@
       "I met a woman who had been travelling for a year."
     ],
     "uk": {
-      "explanation": "Past perfect continuous можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про когось чи щось. Схема — who / which / that + had been + -ing."
+      "explanation": "Past perfect continuous можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про когось чи щось. Схема — who / which / that + had been + -ing.",
+      "examples": [
+        "Чоловік, який сидів поруч зі мною, вийшов.",
+        "Собака, що гавкав усю ніч, нарешті затих.",
+        "Я познайомився з жінкою, яка подорожувала вже рік."
+      ]
     }
   },
   "759": {
@@ -5002,7 +5047,12 @@
       "Since he had been feeling ill, he stayed at home."
     ],
     "uk": {
-      "explanation": "Past perfect continuous можна вжити після слова часу, як-от after, when, since чи until, щоб дати фонову інформацію. Схема — after / when + subject + had been + -ing."
+      "explanation": "Past perfect continuous можна вжити після слова часу, як-от after, when, since чи until, щоб дати фонову інформацію. Схема — after / when + subject + had been + -ing.",
+      "examples": [
+        "Проїхавши годину, ми зупинилися випити кави.",
+        "Провчившись кілька місяців, вона нарешті склала іспит.",
+        "Оскільки він погано почувався, то залишився вдома."
+      ]
     }
   },
   "762": {
@@ -5013,7 +5063,12 @@
       "He was tired because he had been running."
     ],
     "uk": {
-      "explanation": "Past perfect continuous вживаємо для дії, яка вже закінчилася, але її наслідки ще було видно в пізніший момент у минулому. Схема — had been + -ing."
+      "explanation": "Past perfect continuous вживаємо для дії, яка вже закінчилася, але її наслідки ще було видно в пізніший момент у минулому. Схема — had been + -ing.",
+      "examples": [
+        "Її очі були червоні, бо вона плакала.",
+        "Земля була мокра. Ішов дощ.",
+        "Він був утомлений, бо бігав."
+      ]
     }
   },
   "764": {
@@ -5024,7 +5079,12 @@
       "If she had asked me, I would have helped."
     ],
     "uk": {
-      "explanation": "Past perfect після if вживаємо, щоб уявити інше минуле, часто коли шкодуємо про нього. Схема — if + had + past participle, would have + past participle."
+      "explanation": "Past perfect після if вживаємо, щоб уявити інше минуле, часто коли шкодуємо про нього. Схема — if + had + past participle, would have + past participle.",
+      "examples": [
+        "Якби я знала, то подзвонила б тобі.",
+        "Якби ми вийшли раніше, то не пропустили б автобус.",
+        "Якби вона мене попросила, я б допоміг."
+      ]
     }
   },
   "768": {
@@ -5035,7 +5095,12 @@
       "She had finished her work by six."
     ],
     "uk": {
-      "explanation": "Past perfect вживаємо, щоб показати, що одна подія сталася раніше за інший момент у минулому. Схема — had + past participle."
+      "explanation": "Past perfect вживаємо, щоб показати, що одна подія сталася раніше за інший момент у минулому. Схема — had + past participle.",
+      "examples": [
+        "Коли ми прийшли, фільм уже почався.",
+        "До тієї зими я ніколи не бачила снігу.",
+        "До шостої вона закінчила роботу."
+      ]
     }
   },
   "769": {
@@ -5046,7 +5111,12 @@
       "We were late because we had missed the train."
     ],
     "uk": {
-      "explanation": "Past perfect після because вживаємо, щоб пояснити ситуацію в минулому тим, що сталося ще раніше. Схема — because + subject + had + past participle."
+      "explanation": "Past perfect після because вживаємо, щоб пояснити ситуацію в минулому тим, що сталося ще раніше. Схема — because + subject + had + past participle.",
+      "examples": [
+        "Я був голодний, бо цілий день не їв.",
+        "Він провалився, бо не вчився.",
+        "Ми запізнилися, бо пропустили поїзд."
+      ]
     }
   },
   "770": {
@@ -5057,7 +5127,12 @@
       "She wishes she hadn't said that."
     ],
     "uk": {
-      "explanation": "Past perfect після wish або if only вживаємо, щоб сказати, що шкодуємо про щось у минулому. Схема — wish / if only + subject + had (not) + past participle."
+      "explanation": "Past perfect після wish або if only вживаємо, щоб сказати, що шкодуємо про щось у минулому. Схема — wish / if only + subject + had (not) + past participle.",
+      "examples": [
+        "Шкода, що я не вчилася старанніше.",
+        "Якби ж ми забронювали столик!",
+        "Вона шкодує, що це сказала."
+      ]
     }
   },
   "771": {
@@ -5068,7 +5143,12 @@
       "Never before had the city looked so beautiful."
     ],
     "uk": {
-      "explanation": "В офіційній англійській можна почати з never або never before, а потім поставити had перед підметом. Так показуємо, що подія була єдиною у своєму роді. Схема — never (before) + had + subject + past participle."
+      "explanation": "В офіційній англійській можна почати з never або never before, а потім поставити had перед підметом. Так показуємо, що подія була єдиною у своєму роді. Схема — never (before) + had + subject + past participle.",
+      "examples": [
+        "Ніколи раніше я не бачив такого натовпу.",
+        "Ніколи ще вона не почувалася такою самотньою.",
+        "Ніколи раніше місто не виглядало таким гарним."
+      ]
     }
   },
   "772": {
@@ -5079,7 +5159,12 @@
       "No sooner had she left than he called."
     ],
     "uk": {
-      "explanation": "No sooner … than показує, що одна подія сталася одразу після іншої. Це офіційний стиль, і had стоїть перед підметом: no sooner + had + subject + past participle + than + past simple."
+      "explanation": "No sooner … than показує, що одна подія сталася одразу після іншої. Це офіційний стиль, і had стоїть перед підметом: no sooner + had + subject + past participle + than + past simple.",
+      "examples": [
+        "Щойно я сів, як задзвонив телефон.",
+        "Не встигли ми приїхати, як почався дощ.",
+        "Щойно вона пішла, як він подзвонив."
+      ]
     }
   },
   "776": {
@@ -5090,7 +5175,12 @@
       "The man who had helped us was gone."
     ],
     "uk": {
-      "explanation": "Past perfect можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про те, що сталося раніше. Схема — who / which / that + had + past participle."
+      "explanation": "Past perfect можна вжити в підрядному означальному реченні, щоб додати фонову інформацію про те, що сталося раніше. Схема — who / which / that + had + past participle.",
+      "examples": [
+        "Я повернула книжку, яку позичала.",
+        "Ми відвідали місто, де виріс мій батько.",
+        "Чоловіка, який нам допоміг, уже не було."
+      ]
     }
   },
   "777": {
@@ -5101,7 +5191,12 @@
       "We had planned a picnic, but it rained."
     ],
     "uk": {
-      "explanation": "Past perfect вживаємо, щоб показати, що до зміни ситуація була іншою. Попередня ситуація — had + past participle, а зміна часто вводиться через but або then."
+      "explanation": "Past perfect вживаємо, щоб показати, що до зміни ситуація була іншою. Попередня ситуація — had + past participle, а зміна часто вводиться через but або then.",
+      "examples": [
+        "Я завжди жив у місті, але потім ми переїхали.",
+        "Вона ніколи не любила рибу, а тепер обожнює.",
+        "Ми запланували пікнік, але пішов дощ."
+      ]
     }
   },
   "778": {
@@ -5112,7 +5207,12 @@
       "They asked if we had finished."
     ],
     "uk": {
-      "explanation": "Коли переказуємо запитання з дієсловом у минулому, як-от asked чи wanted to know, запитання в past simple або present perfect часто переходить у past perfect. Схема — asked + if / wh-word + subject + had + past participle."
+      "explanation": "Коли переказуємо запитання з дієсловом у минулому, як-от asked чи wanted to know, запитання в past simple або present perfect часто переходить у past perfect. Схема — asked + if / wh-word + subject + had + past participle.",
+      "examples": [
+        "Вона спитала, чи бачив я цей фільм.",
+        "Він хотів знати, де я була.",
+        "Вони спитали, чи ми закінчили."
+      ]
     }
   },
   "779": {
@@ -5123,7 +5223,12 @@
       "They said they had never been to Kyiv."
     ],
     "uk": {
-      "explanation": "Коли переказуємо чиїсь слова з дієсловом у минулому, як-от said чи told, past simple або present perfect часто переходить у past perfect. Схема — said (that) + subject + had + past participle."
+      "explanation": "Коли переказуємо чиїсь слова з дієсловом у минулому, як-от said чи told, past simple або present perfect часто переходить у past perfect. Схема — said (that) + subject + had + past participle.",
+      "examples": [
+        "Вона сказала, що загубила телефон.",
+        "Він сказав мені, що вже поїв.",
+        "Вони сказали, що ніколи не були в Києві."
+      ]
     }
   },
   "780": {
@@ -5134,7 +5239,12 @@
       "Had she asked, I would have helped her."
     ],
     "uk": {
-      "explanation": "В офіційній англійській можна прибрати if і поставити had на початок, щоб уявити інше минуле, часто з жалем. Схема — had + subject + past participle, would have + past participle."
+      "explanation": "В офіційній англійській можна прибрати if і поставити had на початок, щоб уявити інше минуле, часто з жалем. Схема — had + subject + past participle, would have + past participle.",
+      "examples": [
+        "Якби я знав, то прийшов би раніше.",
+        "Якби ми вийшли вчасно, то встигли б на поїзд.",
+        "Якби вона попросила, я б їй допомогла."
+      ]
     }
   },
   "781": {
@@ -5145,7 +5255,12 @@
       "If only she hadn't missed the train."
     ],
     "uk": {
-      "explanation": "If only із заперечною формою past perfect вживаємо, щоб сказати, що дуже шкодуємо про те, що сталося. Схема — if only + subject + hadn't + past participle."
+      "explanation": "If only із заперечною формою past perfect вживаємо, щоб сказати, що дуже шкодуємо про те, що сталося. Схема — if only + subject + hadn't + past participle.",
+      "examples": [
+        "Якби ж я цього не сказав!",
+        "Якби ж ми не продали будинок.",
+        "Якби ж вона не спізнилася на поїзд."
+      ]
     }
   },
   "785": {
@@ -5156,7 +5271,12 @@
       "She was happy."
     ],
     "uk": {
-      "explanation": "Past simple вживаємо для того, що сталося або було правдою в минулому, у час, який уже закінчився. Правильні дієслова додають -ed; багато поширених дієслів — неправильні."
+      "explanation": "Past simple вживаємо для того, що сталося або було правдою в минулому, у час, який уже закінчився. Правильні дієслова додають -ed; багато поширених дієслів — неправильні.",
+      "examples": [
+        "Учора ввечері я дивилася телевізор.",
+        "Учора ми ходили в парк.",
+        "Вона була щаслива."
+      ]
     }
   },
   "793": {
@@ -5167,7 +5287,12 @@
       "I played football every weekend."
     ],
     "uk": {
-      "explanation": "Past simple вживаємо для звичок або станів, які були правдою певний час у минулому, але тепер уже ні. Дієслово — у past simple, часто з every day або when I was a child."
+      "explanation": "Past simple вживаємо для звичок або станів, які були правдою певний час у минулому, але тепер уже ні. Дієслово — у past simple, часто з every day або when I was a child.",
+      "examples": [
+        "Коли я був малим, ми жили біля моря.",
+        "Він щодня ходив до школи пішки.",
+        "Я щовихідних грав у футбол."
+      ]
     }
   },
   "794": {
@@ -5178,7 +5303,12 @@
       "If we lived closer, we would visit more often."
     ],
     "uk": {
-      "explanation": "Past simple після if вживаємо, щоб уявити ситуацію тепер або в майбутньому, яка не є реальною чи малоймовірна. Схема — if + past simple, would + verb."
+      "explanation": "Past simple після if вживаємо, щоб уявити ситуацію тепер або в майбутньому, яка не є реальною чи малоймовірна. Схема — if + past simple, would + verb.",
+      "examples": [
+        "Якби в мене було більше грошей, я купив би машину.",
+        "Якби ти його попросила, він би допоміг.",
+        "Якби ми жили ближче, то частіше приїжджали б."
+      ]
     }
   },
   "795": {
@@ -5189,7 +5319,12 @@
       "She got up, dressed and left."
     ],
     "uk": {
-      "explanation": "В оповіді ряд дієслів у past simple передає події в тому порядку, в якому вони сталися. Допомагають слова first, then і after that."
+      "explanation": "В оповіді ряд дієслів у past simple передає події в тому порядку, в якому вони сталися. Допомагають слова first, then і after that.",
+      "examples": [
+        "Він відчинив двері, зазирнув усередину й усміхнувся.",
+        "Спочатку ми пообідали, потім пішли на пляж.",
+        "Вона встала, вдяглася й пішла."
+      ]
     }
   },
   "796": {
@@ -5200,7 +5335,12 @@
       "She wishes she lived near the sea."
     ],
     "uk": {
-      "explanation": "Wish з past simple вживаємо, щоб сказати, що хочемо, аби щось у теперішньому було інакше. Схема — wish (that) + subject + past simple."
+      "explanation": "Wish з past simple вживаємо, щоб сказати, що хочемо, аби щось у теперішньому було інакше. Схема — wish (that) + subject + past simple.",
+      "examples": [
+        "Шкода, що в мене не більша квартира.",
+        "Хотів би я знати відповідь.",
+        "Вона хотіла б жити біля моря."
+      ]
     }
   },
   "801": {
@@ -5211,7 +5351,12 @@
       "I would appreciate it if you replied soon."
     ],
     "uk": {
-      "explanation": "У ввічливих листах і емейлах past simple після if робить прохання м'якшим. Схема — I would be grateful if you + past simple."
+      "explanation": "У ввічливих листах і емейлах past simple після if робить прохання м'якшим. Схема — I would be grateful if you + past simple.",
+      "examples": [
+        "Буду вдячний, якщо ви надішлете мені подробиці.",
+        "Було б чудово, якби ти мені передзвонила.",
+        "Буду вдячна за швидку відповідь."
+      ]
     }
   },
   "802": {
@@ -5222,7 +5367,12 @@
       "I wondered if you were free on Friday."
     ],
     "uk": {
-      "explanation": "I wondered if… та I wanted to… — ввічливі способи про щось попросити або подякувати. Ідеться про теперішнє, але минула форма звучить менш прямо."
+      "explanation": "I wondered if… та I wanted to… — ввічливі способи про щось попросити або подякувати. Ідеться про теперішнє, але минула форма звучить менш прямо.",
+      "examples": [
+        "Я хотіла спитати, чи не могли б ви мені допомогти.",
+        "Я хотів подякувати тобі за квіти.",
+        "Хотіла спитати, чи ти вільний у п'ятницю."
+      ]
     }
   },
   "805": {
@@ -5233,7 +5383,12 @@
       "Once we paid, we left the restaurant."
     ],
     "uk": {
-      "explanation": "У складніших оповідях past simple може впорядковувати події зі словами часу, як-от as soon as, once, the moment чи by the time. Дієслова в обох частинах зазвичай у past simple."
+      "explanation": "У складніших оповідях past simple може впорядковувати події зі словами часу, як-от as soon as, once, the moment чи by the time. Дієслова в обох частинах зазвичай у past simple.",
+      "examples": [
+        "Щойно вона його побачила, то заплакала.",
+        "Щойно я відчинив двері, собака вибіг надвір.",
+        "Щойно ми розрахувалися, то вийшли з ресторану."
+      ]
     }
   },
   "806": {
@@ -5244,7 +5399,12 @@
       "We did enjoy the party."
     ],
     "uk": {
-      "explanation": "Did перед основним дієсловом робить твердження про минуле сильнішим, часто коли хтось у ньому сумнівається. Схема — did + verb, наголос на did."
+      "explanation": "Did перед основним дієсловом робить твердження про минуле сильнішим, часто коли хтось у ньому сумнівається. Схема — did + verb, наголос на did.",
+      "examples": [
+        "Я ж тобі дзвонив, але ти не відповіла.",
+        "Зрештою вона таки закінчила звіт.",
+        "Нам справді сподобалася вечірка."
+      ]
     }
   },
   "807": {
@@ -5255,7 +5415,12 @@
       "I thought it would be nice to invite them."
     ],
     "uk": {
-      "explanation": "I thought… робить пропозицію чи думку м'якшою й менш прямою. Ідеться про теперішнє, але минула форма звучить ввічливіше."
+      "explanation": "I thought… робить пропозицію чи думку м'якшою й менш прямою. Ідеться про теперішнє, але минула форма звучить ввічливіше.",
+      "examples": [
+        "Я подумала, що ми могли б прогулятися.",
+        "Я подумав, що тобі може сподобатися ця книжка.",
+        "Я подумала, що було б гарно їх запросити."
+      ]
     }
   },
   "810": {
@@ -5266,7 +5431,12 @@
       "We've been meeting on Fridays since May."
     ],
     "uk": {
-      "explanation": "Present perfect continuous вживаємо для дії, яку робимо знову і знову від певного моменту в минулому дотепер. Схема — have / has been + -ing."
+      "explanation": "Present perfect continuous вживаємо для дії, яку робимо знову і знову від певного моменту в минулому дотепер. Схема — have / has been + -ing.",
+      "examples": [
+        "Останнім часом я часто ходжу в спортзал.",
+        "Вона дзвонить мені щодня.",
+        "З травня ми зустрічаємося щоп'ятниці."
+      ]
     }
   },
   "811": {
@@ -5277,7 +5447,12 @@
       "How long have you been learning English?"
     ],
     "uk": {
-      "explanation": "Present perfect continuous вживаємо для однієї дії, яка почалася в минулому й триває досі. Часто кажемо, як довго, з for або since: have / has been + -ing."
+      "explanation": "Present perfect continuous вживаємо для однієї дії, яка почалася в минулому й триває досі. Часто кажемо, як довго, з for або since: have / has been + -ing.",
+      "examples": [
+        "Я чекаю вже годину.",
+        "Вона живе тут з 2020 року.",
+        "Скільки часу ти вже вивчаєш англійську?"
+      ]
     }
   },
   "814": {
@@ -5288,7 +5463,12 @@
       "It's been raining — the street is wet."
     ],
     "uk": {
-      "explanation": "Present perfect continuous вживаємо для дії, яка щойно закінчилася, коли ще видно її наслідки. Схема — have / has been + -ing."
+      "explanation": "Present perfect continuous вживаємо для дії, яка щойно закінчилася, коли ще видно її наслідки. Схема — have / has been + -ing.",
+      "examples": [
+        "Я втомився, бо бігав.",
+        "У тебе червоні очі. Ти плакала?",
+        "Ішов дощ — вулиця мокра."
+      ]
     }
   },
   "815": {
@@ -5299,7 +5479,12 @@
       "Not only have they been ignoring us, but they have also lied."
     ],
     "uk": {
-      "explanation": "В офіційній англійській можна почати з not only і поставити have / has перед підметом, щоб виділити думку. Схема — not only + have / has + subject + been + -ing, but (also)…."
+      "explanation": "В офіційній англійській можна почати з not only і поставити have / has перед підметом, щоб виділити думку. Схема — not only + have / has + subject + been + -ing, but (also)….",
+      "examples": [
+        "Ціни не лише зростали, а й зарплати впали.",
+        "Вона не лише працювала, а й навчалася.",
+        "Вони не лише ігнорували нас, а й брехали."
+      ]
     }
   },
   "816": {
@@ -5310,7 +5495,12 @@
       "He hasn't called me for weeks."
     ],
     "uk": {
-      "explanation": "Заперечну форму present perfect з for вживаємо, щоб сказати, що щось не відбувалося протягом певного часу дотепер. Схема — haven't / hasn't + past participle + for + time."
+      "explanation": "Заперечну форму present perfect з for вживаємо, щоб сказати, що щось не відбувалося протягом певного часу дотепер. Схема — haven't / hasn't + past participle + for + time.",
+      "examples": [
+        "Я не бачила її багато років.",
+        "Ми вже місяць не їли поза домом.",
+        "Він не дзвонив мені кілька тижнів."
+      ]
     }
   },
   "817": {
@@ -5321,7 +5511,12 @@
       "She hasn't replied yet."
     ],
     "uk": {
-      "explanation": "Заперечну форму present perfect з yet вживаємо для того, що має статися, але поки що не сталося. Yet стоїть у кінці: haven't / hasn't + past participle + yet."
+      "explanation": "Заперечну форму present perfect з yet вживаємо для того, що має статися, але поки що не сталося. Yet стоїть у кінці: haven't / hasn't + past participle + yet.",
+      "examples": [
+        "Я ще не закінчив домашнє завдання.",
+        "Автобус ще не приїхав.",
+        "Вона ще не відповіла."
+      ]
     }
   },
   "822": {
@@ -5332,7 +5527,12 @@
       "She has visited Paris twice."
     ],
     "uk": {
-      "explanation": "Present perfect вживаємо, щоб розповісти про досвід у житті дотепер, коли точний час не важливий. Часто вживаємо ever і never: have / has + past participle."
+      "explanation": "Present perfect вживаємо, щоб розповісти про досвід у житті дотепер, коли точний час не важливий. Часто вживаємо ever і never: have / has + past participle.",
+      "examples": [
+        "Ти коли-небудь був у Лондоні?",
+        "Я ніколи не їла суші.",
+        "Вона двічі була в Парижі."
+      ]
     }
   },
   "823": {
@@ -5343,7 +5543,12 @@
       "She has worked here since March."
     ],
     "uk": {
-      "explanation": "Present perfect із since вживаємо, щоб сказати, коли почалася ситуація, яка триває досі. Схема — have / has + past participle + since + момент у часі."
+      "explanation": "Present perfect із since вживаємо, щоб сказати, коли почалася ситуація, яка триває досі. Схема — have / has + past participle + since + момент у часі.",
+      "examples": [
+        "Я живу тут з 2020 року.",
+        "Ми знайомі ще зі школи.",
+        "Вона працює тут із березня."
+      ]
     }
   },
   "824": {
@@ -5354,7 +5559,8 @@
       "Have you already eaten?"
     ],
     "uk": {
-      "explanation": "Present perfect з already вживаємо, щоб показати, що щось уже зроблено, часто раніше, ніж очікували. Already зазвичай стоїть між have / has і past participle."
+      "explanation": "Present perfect з already вживаємо, щоб показати, що щось уже зроблено, часто раніше, ніж очікували. Already зазвичай стоїть між have / has і past participle.",
+      "examples": ["Я вже зробив покупки.", "Вона вже пішла.", "Ти вже поїв?"]
     }
   },
   "829": {
@@ -5365,7 +5571,12 @@
       "Oh no, I've lost my keys!"
     ],
     "uk": {
-      "explanation": "Present perfect вживаємо для того, що сталося недавно і важливе зараз. Just часто стоїть між have / has і past participle."
+      "explanation": "Present perfect вживаємо для того, що сталося недавно і важливе зараз. Just часто стоїть між have / has і past participle.",
+      "examples": [
+        "Я щойно пообідала.",
+        "Вона щойно приїхала.",
+        "Ой ні, я загубив ключі!"
+      ]
     }
   },
   "830": {
@@ -5376,7 +5587,12 @@
       "She has been my best friend for years."
     ],
     "uk": {
-      "explanation": "Present perfect вживаємо для стану чи періоду, який почався в минулому і не має чіткого кінця — він досі правдивий. Схема — have / has + past participle."
+      "explanation": "Present perfect вживаємо для стану чи періоду, який почався в минулому і не має чіткого кінця — він досі правдивий. Схема — have / has + past participle.",
+      "examples": [
+        "Я завжди любила музику.",
+        "Люди живуть тут століттями.",
+        "Вона моя найкраща подруга вже багато років."
+      ]
     }
   },
   "831": {
@@ -5387,7 +5603,12 @@
       "She's the kindest person I've ever met."
     ],
     "uk": {
-      "explanation": "Present perfect після найвищого ступеня прикметника вживаємо, щоб сказати, що щось найкраще чи найгірше в нашому досвіді дотепер. Схема — the + superlative + noun + I have ever + past participle."
+      "explanation": "Present perfect після найвищого ступеня прикметника вживаємо, щоб сказати, що щось найкраще чи найгірше в нашому досвіді дотепер. Схема — the + superlative + noun + I have ever + past participle.",
+      "examples": [
+        "Це найкращий фільм, який я будь-коли бачив.",
+        "Це найгірша страва, яку я коли-небудь їла.",
+        "Вона найдобріша людина, яку я будь-коли зустрічав."
+      ]
     }
   },
   "832": {
@@ -5398,7 +5619,12 @@
       "We still haven't found a flat."
     ],
     "uk": {
-      "explanation": "Still із заперечною формою present perfect вживаємо, коли щось мало статися, але досі не сталося. Still стоїть перед haven't / hasn't: still + haven't / hasn't + past participle."
+      "explanation": "Still із заперечною формою present perfect вживаємо, коли щось мало статися, але досі не сталося. Still стоїть перед haven't / hasn't: still + haven't / hasn't + past participle.",
+      "examples": [
+        "Мені досі не повернули гроші.",
+        "Він досі мені не подзвонив.",
+        "Ми досі не знайшли квартиру."
+      ]
     }
   },
   "835": {
@@ -5409,7 +5635,12 @@
       "The president has arrived in Kyiv."
     ],
     "uk": {
-      "explanation": "Новини часто починаються з present perfect, щоб повідомити, що сталося щось нове. Подробиці далі зазвичай подаються в past simple."
+      "explanation": "Новини часто починаються з present perfect, щоб повідомити, що сталося щось нове. Подробиці далі зазвичай подаються в past simple.",
+      "examples": [
+        "У центрі міста відкрили новий міст.",
+        "Науковці знайшли на планеті воду.",
+        "Президент прибув до Києва."
+      ]
     }
   },
   "848": {
@@ -5468,7 +5699,8 @@
       "What are you doing?"
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для того, що відбувається зараз, у момент мовлення. Схема — am / is / are + -ing."
+      "explanation": "Present continuous вживаємо для того, що відбувається зараз, у момент мовлення. Схема — am / is / are + -ing.",
+      "examples": ["Я читаю книжку.", "Вона готує вечерю.", "Що ти робиш?"]
     }
   },
   "855": {
@@ -5479,7 +5711,12 @@
       "My sister is always borrowing my clothes."
     ],
     "uk": {
-      "explanation": "Present continuous з always вживаємо, щоб сказати, що щось стається дуже часто, зазвичай коли це дивує чи дратує. Always стоїть між am / is / are і дієсловом з -ing."
+      "explanation": "Present continuous з always вживаємо, щоб сказати, що щось стається дуже часто, зазвичай коли це дивує чи дратує. Always стоїть між am / is / are і дієсловом з -ing.",
+      "examples": [
+        "Він вічно губить телефон.",
+        "Ти вічно скаржишся!",
+        "Моя сестра постійно позичає мій одяг."
+      ]
     }
   },
   "856": {
@@ -5490,7 +5727,12 @@
       "Is it still raining outside?"
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для дій і ситуацій, що відбуваються зараз або приблизно в цей час. Схема — am / is / are + -ing, і вона працює з багатьма дієсловами."
+      "explanation": "Present continuous вживаємо для дій і ситуацій, що відбуваються зараз або приблизно в цей час. Схема — am / is / are + -ing, і вона працює з багатьма дієсловами.",
+      "examples": [
+        "Діти граються в саду.",
+        "Ми шукаємо нову квартиру.",
+        "Надворі ще йде дощ?"
+      ]
     }
   },
   "857": {
@@ -5501,7 +5743,12 @@
       "We're living in a small flat for now."
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для ситуації, яка правдива зараз, але лише на короткий час. Схема — am / is / are + -ing, часто з at the moment або this week."
+      "explanation": "Present continuous вживаємо для ситуації, яка правдива зараз, але лише на короткий час. Схема — am / is / are + -ing, часто з at the moment або this week.",
+      "examples": [
+        "Цього тижня я живу в тітки.",
+        "Зараз вона працює з дому.",
+        "Поки що ми живемо в маленькій квартирі."
+      ]
     }
   },
   "858": {
@@ -5512,7 +5759,12 @@
       "We're eating less meat at the moment."
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для того, що робимо регулярно, але лише обмежений час. Схема — am / is / are + -ing, часто з these days або this month."
+      "explanation": "Present continuous вживаємо для того, що робимо регулярно, але лише обмежений час. Схема — am / is / are + -ing, часто з these days або this month.",
+      "examples": [
+        "Цього місяця я щодня ходжу в спортзал.",
+        "Останнім часом він рано встає.",
+        "Зараз ми їмо менше м'яса."
+      ]
     }
   },
   "859": {
@@ -5523,7 +5775,12 @@
       "Prices are going up again."
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для дій і ситуацій, що тривають зараз, зокрема для довших змін. Схема — am / is / are + -ing, і вона працює з широким колом дієслів."
+      "explanation": "Present continuous вживаємо для дій і ситуацій, що тривають зараз, зокрема для довших змін. Схема — am / is / are + -ing, і вона працює з широким колом дієслів.",
+      "examples": [
+        "Місто дуже швидко росте.",
+        "Дедалі більше людей працюють з дому.",
+        "Ціни знову зростають."
+      ]
     }
   },
   "860": {
@@ -5534,7 +5791,12 @@
       "She's teaching at a school in Odesa for a year."
     ],
     "uk": {
-      "explanation": "Present continuous вживаємо для тимчасових ситуацій, а не постійних. Схема — am / is / are + -ing, і вона працює з широким колом дієслів."
+      "explanation": "Present continuous вживаємо для тимчасових ситуацій, а не постійних. Схема — am / is / are + -ing, і вона працює з широким колом дієслів.",
+      "examples": [
+        "Цього року мій брат навчається в Польщі.",
+        "Поки мій ноутбук у ремонті, я користуюся старим.",
+        "Рік вона викладає в школі в Одесі."
+      ]
     }
   },
   "861": {
@@ -5545,7 +5807,12 @@
       "She's continually changing her mind."
     ],
     "uk": {
-      "explanation": "Present continuous поєднується з прислівниками на кшталт constantly, continually та forever, щоб показати, що щось стається дуже часто, зазвичай дратівливо. Прислівник стоїть між am / is / are і дієсловом з -ing."
+      "explanation": "Present continuous поєднується з прислівниками на кшталт constantly, continually та forever, щоб показати, що щось стається дуже часто, зазвичай дратівливо. Прислівник стоїть між am / is / are і дієсловом з -ing.",
+      "examples": [
+        "Він постійно перевіряє телефон.",
+        "Вони вічно сваряться через гроші.",
+        "Вона без кінця передумує."
+      ]
     }
   },
   "862": {
@@ -5556,7 +5823,12 @@
       "Are you joking?"
     ],
     "uk": {
-      "explanation": "Можна поставити запитання в present continuous, яке не потребує відповіді, щоб висловити подив чи критику. Схема — question word + am / is / are + subject + -ing."
+      "explanation": "Можна поставити запитання в present continuous, яке не потребує відповіді, щоб висловити подив чи критику. Схема — question word + am / is / are + subject + -ing.",
+      "examples": [
+        "Що ти робиш? Це моя кава!",
+        "Це кого ти називаєш ледарем?",
+        "Ти жартуєш?"
+      ]
     }
   },
   "863": {
@@ -5567,7 +5839,12 @@
       "She's eternally worrying about something."
     ],
     "uk": {
-      "explanation": "Present continuous поєднується з багатьма прислівниками частоти, зокрема perpetually та incessantly, щоб показати, що щось стається дуже часто, дратує чи не піддається контролю. Прислівник стоїть між am / is / are і дієсловом з -ing."
+      "explanation": "Present continuous поєднується з багатьма прислівниками частоти, зокрема perpetually та incessantly, щоб показати, що щось стається дуже часто, дратує чи не піддається контролю. Прислівник стоїть між am / is / are і дієсловом з -ing.",
+      "examples": [
+        "Він безперестанку скаржиться на роботу.",
+        "Сусіди без упину сваряться.",
+        "Вона вічно через щось хвилюється."
+      ]
     }
   },
   "864": {
@@ -5578,7 +5855,12 @@
       "I'm wondering whether to accept the offer."
     ],
     "uk": {
-      "explanation": "Дієслова на кшталт hope, want чи wonder зазвичай не вживаються в тривалій формі, але present continuous робить прохання чи твердження м'якшим і менш прямим. Схема — I'm hoping / wondering / wanting + решта речення."
+      "explanation": "Дієслова на кшталт hope, want чи wonder зазвичай не вживаються в тривалій формі, але present continuous робить прохання чи твердження м'якшим і менш прямим. Схема — I'm hoping / wondering / wanting + решта речення.",
+      "examples": [
+        "Я сподіваюся, що ви зможете мені допомогти.",
+        "Ми б хотіли піти раніше, якщо можна.",
+        "Я вагаюся, чи приймати пропозицію."
+      ]
     }
   },
   "868": {
@@ -5589,7 +5871,12 @@
       "Water boils at 100 degrees."
     ],
     "uk": {
-      "explanation": "Present simple вживаємо для звичок, того, що повторюється, і загальних фактів. Після he, she, it додаємо -s або -es: she works."
+      "explanation": "Present simple вживаємо для звичок, того, що повторюється, і загальних фактів. Після he, she, it додаємо -s або -es: she works.",
+      "examples": [
+        "Я щодня встаю о сьомій.",
+        "Вона грає в теніс щонеділі.",
+        "Вода кипить при 100 градусах."
+      ]
     }
   },
   "869": {
@@ -5600,7 +5887,12 @@
       "If you want, I can help you."
     ],
     "uk": {
-      "explanation": "Present simple після if вживаємо для ситуації, яка справді може статися, і кажемо, що з цього вийде. Схема — if + present simple, will / can / imperative + verb."
+      "explanation": "Present simple після if вживаємо для ситуації, яка справді може статися, і кажемо, що з цього вийде. Схема — if + present simple, will / can / imperative + verb.",
+      "examples": [
+        "Якщо піде дощ, ми залишимося вдома.",
+        "Якщо ти голодний, з'їж щось.",
+        "Якщо хочеш, я можу тобі допомогти."
+      ]
     }
   },
   "875": {
@@ -5611,7 +5903,12 @@
       "You take the second street on the right."
     ],
     "uk": {
-      "explanation": "Present simple вживаємо, щоб пояснити кроки або показати дорогу. Кожен крок — дієслово в present simple, часто з you або з first і then."
+      "explanation": "Present simple вживаємо, щоб пояснити кроки або показати дорогу. Кожен крок — дієслово в present simple, часто з you або з first і then.",
+      "examples": [
+        "Біля банку повертаєте ліворуч.",
+        "Спочатку відкриваєте застосунок, потім натискаєте «Старт».",
+        "Звертаєте на другу вулицю праворуч."
+      ]
     }
   },
   "876": {
@@ -5622,7 +5919,12 @@
       "Do you know her name?"
     ],
     "uk": {
-      "explanation": "Дієслова мислення, як-от think, hope і know, зазвичай уживаються в present simple, а не в тривалій формі. Схема — subject + think / hope / know + решта речення."
+      "explanation": "Дієслова мислення, як-от think, hope і know, зазвичай уживаються в present simple, а не в тривалій формі. Схема — subject + think / hope / know + решта речення.",
+      "examples": [
+        "Думаю, це гарна ідея.",
+        "Сподіваюся, тобі скоро покращає.",
+        "Ти знаєш, як її звати?"
+      ]
     }
   },
   "877": {
@@ -5633,7 +5935,12 @@
       "We can meet later, if you like."
     ],
     "uk": {
-      "explanation": "Why don't you / we…? або if you want / if you like з present simple вживаємо, щоб дружньо щось запропонувати. Схема — Why don't you / we + verb?"
+      "explanation": "Why don't you / we…? або if you want / if you like з present simple вживаємо, щоб дружньо щось запропонувати. Схема — Why don't you / we + verb?",
+      "examples": [
+        "Чому б нам не піти в кіно?",
+        "Чому б тобі не спитати вчителя?",
+        "Можемо зустрітися пізніше, якщо хочеш."
+      ]
     }
   },
   "878": {
@@ -5644,7 +5951,12 @@
       "Don't you think it's too expensive?"
     ],
     "uk": {
-      "explanation": "Don't you think? або don't you agree? після своєї думки вживаємо, щоб попросити співрозмовника погодитися. Зазвичай стоїть у кінці, після коми."
+      "explanation": "Don't you think? або don't you agree? після своєї думки вживаємо, щоб попросити співрозмовника погодитися. Зазвичай стоїть у кінці, після коми.",
+      "examples": [
+        "Чудовий фільм, правда ж?",
+        "Вона дуже талановита, погодься?",
+        "Тобі не здається, що це задорого?"
+      ]
     }
   },
   "880": {
@@ -5655,7 +5967,12 @@
       "I don't believe his story."
     ],
     "uk": {
-      "explanation": "Дієслова про розумові процеси, як-от remember, understand і believe, зазвичай уживаються в present simple. Схема — subject + remember / understand / believe + решта речення."
+      "explanation": "Дієслова про розумові процеси, як-от remember, understand і believe, зазвичай уживаються в present simple. Схема — subject + remember / understand / believe + решта речення.",
+      "examples": [
+        "Я пам'ятаю нашу першу зустріч.",
+        "Ти розумієш запитання?",
+        "Я не вірю його історії."
+      ]
     }
   },
   "881": {
@@ -5666,7 +5983,12 @@
       "His letter says that he is fine."
     ],
     "uk": {
-      "explanation": "Present simple з дієсловами на кшталт say і show вживаємо, щоб передати, що каже текст, табличка чи малюнок. Схема — the sign / letter / map + says / shows + that."
+      "explanation": "Present simple з дієсловами на кшталт say і show вживаємо, щоб передати, що каже текст, табличка чи малюнок. Схема — the sign / letter / map + says / shows + that.",
+      "examples": [
+        "На знаку написано «Паркування заборонено».",
+        "Карта показує, де вокзал.",
+        "У листі він пише, що в нього все гаразд."
+      ]
     }
   },
   "882": {
@@ -5677,7 +5999,12 @@
       "I recommend the fish soup."
     ],
     "uk": {
-      "explanation": "Деякі дієслова виконують дію вже тим, що їх вимовляють, як-от suggest, apologise і recommend. Уживаємо їх у present simple з I: I suggest…, I apologise for…"
+      "explanation": "Деякі дієслова виконують дію вже тим, що їх вимовляють, як-от suggest, apologise і recommend. Уживаємо їх у present simple з I: I suggest…, I apologise for…",
+      "examples": [
+        "Пропоную взяти таксі.",
+        "Перепрошую за запізнення.",
+        "Раджу рибну юшку."
+      ]
     }
   },
   "884": {
@@ -5688,7 +6015,12 @@
       "I advise you to see a doctor."
     ],
     "uk": {
-      "explanation": "Багато дієслів, як-от agree, accept і advise, виконують дію вже тим, що їх вимовляють. Уживаємо їх у present simple з I або we: I agree…, I advise you to…."
+      "explanation": "Багато дієслів, як-от agree, accept і advise, виконують дію вже тим, що їх вимовляють. Уживаємо їх у present simple з I або we: I agree…, I advise you to….",
+      "examples": [
+        "Цілком з тобою згодна.",
+        "Ми приймаємо вашу пропозицію.",
+        "Раджу вам звернутися до лікаря."
+      ]
     }
   },
   "885": {
@@ -5699,7 +6031,12 @@
       "The hero wakes up and realises he is alone."
     ],
     "uk": {
-      "explanation": "Present simple можна вжити, щоб переказати історію, фільм чи подію з минулого, — так розповідь звучить живіше. Усі основні події подаються в present simple."
+      "explanation": "Present simple можна вжити, щоб переказати історію, фільм чи подію з минулого, — так розповідь звучить живіше. Усі основні події подаються в present simple.",
+      "examples": [
+        "У фільмі хлопчик знаходить собаку й забирає його додому.",
+        "1492 року Колумб пливе на захід і досягає Америки.",
+        "Герой прокидається й розуміє, що він сам."
+      ]
     }
   },
   "886": {
@@ -5710,7 +6047,12 @@
       "Don't we all need a holiday?"
     ],
     "uk": {
-      "explanation": "Заперечне запитання може переконати співрозмовника погодитися, бо натякає, що відповідь — так. Схема — Don't / Doesn't + subject + verb…?"
+      "explanation": "Заперечне запитання може переконати співрозмовника погодитися, бо натякає, що відповідь — так. Схема — Don't / Doesn't + subject + verb…?",
+      "examples": [
+        "Хіба ви не хочете бути здоровими?",
+        "Хіба не кожен заслуговує на другий шанс?",
+        "Хіба всім нам не потрібна відпустка?"
+      ]
     }
   },
   "887": {
@@ -5721,7 +6063,12 @@
       "Don't you agree that he was wrong?"
     ],
     "uk": {
-      "explanation": "Заперечне запитання може перевірити, чи поділяє співрозмовник нашу думку. Схема — Don't / Doesn't + subject + think / agree / find…?"
+      "explanation": "Заперечне запитання може перевірити, чи поділяє співрозмовник нашу думку. Схема — Don't / Doesn't + subject + think / agree / find…?",
+      "examples": [
+        "Тобі не здається, що ця музика трохи гучна?",
+        "Хіба вона не вважає, що вже запізно?",
+        "Ти не згоден, що він помилявся?"
+      ]
     }
   },
   "888": {
@@ -5732,7 +6079,12 @@
       "The author argues that cities need more parks."
     ],
     "uk": {
-      "explanation": "В академічному письмі present simple з дієсловами переказу, як-от demonstrate, illustrate і argue, вживаємо, щоб сказати, що показує дослідження чи автор. Схема — the study / author + demonstrates / argues + that."
+      "explanation": "В академічному письмі present simple з дієсловами переказу, як-от demonstrate, illustrate і argue, вживаємо, щоб сказати, що показує дослідження чи автор. Схема — the study / author + demonstrates / argues + that.",
+      "examples": [
+        "Дослідження доводить, що сон покращує пам'ять.",
+        "Цей приклад чітко ілюструє проблему.",
+        "Автор стверджує, що містам потрібно більше парків."
+      ]
     }
   },
   "903": {
@@ -5743,7 +6095,12 @@
       "I want this dream of mine to come true."
     ],
     "uk": {
-      "explanation": "This або that перед іменником + of + присвійний займенник показує ставлення до чиєїсь речі: that car of yours. Часто це звучить роздратовано, іронічно чи смішно, інколи тепло. Це типово для оповідей і розмовного мовлення."
+      "explanation": "This або that перед іменником + of + присвійний займенник показує ставлення до чиєїсь речі: that car of yours. Часто це звучить роздратовано, іронічно чи смішно, інколи тепло. Це типово для оповідей і розмовного мовлення.",
+      "examples": [
+        "Можеш поставити свій дорогоцінний джип отам.",
+        "Мені не сподобалася ця його нова дівчина.",
+        "Я хочу, щоб ця моя мрія здійснилася."
+      ]
     }
   },
   "909": {
@@ -5754,7 +6111,12 @@
       "She lives by herself in a small flat."
     ],
     "uk": {
-      "explanation": "By + myself, yourself, himself або herself означає «сам, наодинці» або «без жодної допомоги». Яке значення — видно з ситуації."
+      "explanation": "By + myself, yourself, himself або herself означає «сам, наодинці» або «без жодної допомоги». Яке значення — видно з ситуації.",
+      "examples": [
+        "Він спробував відчинити це сам.",
+        "Я вчитимуся вдома самостійно.",
+        "Вона живе сама в маленькій квартирі."
+      ]
     }
   },
   "912": {
@@ -5765,7 +6127,12 @@
       "The director himself showed us round the school."
     ],
     "uk": {
-      "explanation": "Myself, yourself, himself або herself підкреслюють, хто саме щось зробив: ця людина, а не хтось інший. Зазвичай стоїть у кінці частини речення або одразу після іменника: I made it myself."
+      "explanation": "Myself, yourself, himself або herself підкреслюють, хто саме щось зробив: ця людина, а не хтось інший. Зазвичай стоїть у кінці частини речення або одразу після іменника: I made it myself.",
+      "examples": [
+        "Торт був смачний. Сандра спекла його сама.",
+        "Тобі варто самому вирішити, що робити.",
+        "Сам директор провів нам екскурсію школою."
+      ]
     }
   },
   "913": {
@@ -5776,7 +6143,12 @@
       "Suddenly, the windows opened by themselves."
     ],
     "uk": {
-      "explanation": "By + ourselves, yourselves або themselves означає «самі, групою без інших» або «без жодної допомоги»: лише ми, ви чи вони, більше ніхто."
+      "explanation": "By + ourselves, yourselves або themselves означає «самі, групою без інших» або «без жодної допомоги»: лише ми, ви чи вони, більше ніхто.",
+      "examples": [
+        "Ми з другом плануємо відпустку самі.",
+        "Думаю, ви знайдете це самі.",
+        "Раптом вікна відчинилися самі собою."
+      ]
     }
   },
   "917": {
@@ -5787,7 +6159,12 @@
       "Spending time with family is important in itself."
     ],
     "uk": {
-      "explanation": "Сталий вираз in itself означає «сам по собі, без нічого іншого». Він підсилює думку й зазвичай стоїть після be + прикметник або після іменника."
+      "explanation": "Сталий вираз in itself означає «сам по собі, без нічого іншого». Він підсилює думку й зазвичай стоїть після be + прикметник або після іменника.",
+      "examples": [
+        "Будинок сам по собі гарний.",
+        "Автомобіль сам по собі не може бути шкідливим.",
+        "Проводити час із родиною важливо саме по собі."
+      ]
     }
   },
   "918": {
@@ -5798,7 +6175,12 @@
       "The town itself is small, but the area is huge."
     ],
     "uk": {
-      "explanation": "Itself одразу після іменника підкреслює саму річ, а не те, що довкола неї: the building itself."
+      "explanation": "Itself одразу після іменника підкреслює саму річ, а не те, що довкола неї: the building itself.",
+      "examples": [
+        "Сама будівля виглядає чудово.",
+        "Сама історія має бути добра.",
+        "Саме містечко невелике, але район величезний."
+      ]
     }
   },
   "919": {
@@ -5809,7 +6191,12 @@
       "Cars themselves are never dangerous."
     ],
     "uk": {
-      "explanation": "Ourselves, yourselves або themselves підкреслюють, хто саме щось зробив: ці люди, а не хтось інший. Ставте в кінці частини речення або одразу після іменника."
+      "explanation": "Ourselves, yourselves або themselves підкреслюють, хто саме щось зробив: ці люди, а не хтось інший. Ставте в кінці частини речення або одразу після іменника.",
+      "examples": [
+        "Іноді ми можемо щось приготувати самі.",
+        "Вони й самі були дуже зайняті.",
+        "Автомобілі самі по собі ніколи не небезпечні."
+      ]
     }
   },
   "920": {
@@ -5820,7 +6207,12 @@
       "Like yourselves, I live in a busy town."
     ],
     "uk": {
-      "explanation": "В офіційних листах та імейлах дехто вживає yourselves замість you, щоб увічливо звернутися до компанії чи організації. Просте you теж завжди правильне."
+      "explanation": "В офіційних листах та імейлах дехто вживає yourselves замість you, щоб увічливо звернутися до компанії чи організації. Просте you теж завжди правильне.",
+      "examples": [
+        "Відповідаю на оголошення, яке опублікували ви.",
+        "Наскільки я розумію, навчання проводитимете ви.",
+        "Як і ви, я живу в жвавому місті."
+      ]
     }
   },
   "921": {
@@ -5831,7 +6223,12 @@
       "As for myself, I prefer quiet holidays."
     ],
     "uk": {
-      "explanation": "As for myself на початку речення переводить увагу на вашу власну думку чи ситуацію після розповіді про інших людей. Це офіційний вираз; в усному мовленні частіше кажуть As for me."
+      "explanation": "As for myself на початку речення переводить увагу на вашу власну думку чи ситуацію після розповіді про інших людей. Це офіційний вираз; в усному мовленні частіше кажуть As for me.",
+      "examples": [
+        "Щодо мене, то я люблю брати на себе відповідальність.",
+        "Що стосується мене, я виріс з інтернетом.",
+        "Як на мене, я віддаю перевагу спокійному відпочинку."
+      ]
     }
   },
   "936": {
@@ -5842,7 +6239,12 @@
       "It is believed that the painting is very old."
     ],
     "uk": {
-      "explanation": "В офіційному письмі it може бути підметом пасивного дієслова, коли невідомо або неважливо, хто виконав дію. Увага лишається на самому факті: It is hoped that…, It was decided that…"
+      "explanation": "В офіційному письмі it може бути підметом пасивного дієслова, коли невідомо або неважливо, хто виконав дію. Увага лишається на самому факті: It is hoped that…, It was decided that…",
+      "examples": [
+        "Сподіваємося, що цей звіт допоможе клубу.",
+        "Було вирішено скасувати зустріч.",
+        "Вважається, що картина дуже стара."
+      ]
     }
   },
   "939": {
@@ -5853,7 +6255,12 @@
       "This is the plan: we meet at six."
     ],
     "uk": {
-      "explanation": "This без іменника вказує на одну річ, яку ви зараз покажете або поясните. Інформація часто йде одразу після нього, інколи після двокрапки: This is + інформація."
+      "explanation": "This без іменника вказує на одну річ, яку ви зараз покажете або поясните. Інформація часто йде одразу після нього, інколи після двокрапки: This is + інформація.",
+      "examples": [
+        "Мій номер телефону: 0754 567 7851.",
+        "Привіт, Томе! Це Анна.",
+        "План такий: зустрічаємося о шостій."
+      ]
     }
   },
   "940": {
@@ -5864,7 +6271,12 @@
       "I got a new bike. This is my favourite thing now."
     ],
     "uk": {
-      "explanation": "This без іменника вказує на те, що ви щойно згадали, щоб не повторювати іменник. Воно може означати одну річ або цілу групу речей: all this."
+      "explanation": "This без іменника вказує на те, що ви щойно згадали, щоб не повторювати іменник. Воно може означати одну річ або цілу групу речей: all this.",
+      "examples": [
+        "Який чудовий подарунок! Дякую тобі за нього.",
+        "Черевики, шкарпетки, капелюх — навіщо я все це купила?",
+        "У мене новий велосипед. Тепер це моя улюблена річ."
+      ]
     }
   },
   "941": {
@@ -5875,7 +6287,12 @@
       "This is just a short note to say thank you."
     ],
     "uk": {
-      "explanation": "This без іменника означає ситуацію, у якій ви зараз: вечірку, відпустку, лист, який пишете. Коли вона закінчилася, це вже that."
+      "explanation": "This без іменника означає ситуацію, у якій ви зараз: вечірку, відпустку, лист, який пишете. Коли вона закінчилася, це вже that.",
+      "examples": [
+        "Це найкраща відпустка в моєму житті!",
+        "Чудова вечірка!",
+        "Це лише коротка записка, щоб подякувати."
+      ]
     }
   },
   "943": {
@@ -5886,7 +6303,12 @@
       "\"I'm moving to Canada.\" \"When did you decide that?\""
     ],
     "uk": {
-      "explanation": "That без іменника вказує на щось уже згадане, часто давніше або те, що щойно сказав хтось інший. Дієслово після нього в однині: that is, that was."
+      "explanation": "That без іменника вказує на щось уже згадане, часто давніше або те, що щойно сказав хтось інший. Дієслово після нього в однині: that is, that was.",
+      "examples": [
+        "У ньому є камера, і мені це подобається.",
+        "Будь ласка, приходь після четвертої. До того мене не буде вдома.",
+        "«Я переїжджаю до Канади». — «Коли ти це вирішив?»"
+      ]
     }
   },
   "944": {
@@ -5897,7 +6319,12 @@
       "\"I'll help you tomorrow.\" \"That's very kind of you.\""
     ],
     "uk": {
-      "explanation": "That's + прикметник уживаємо, щоб відреагувати на новину, яку вам щойно розповіли. That вказує на їхню новину: That's great! That's a pity."
+      "explanation": "That's + прикметник уживаємо, щоб відреагувати на новину, яку вам щойно розповіли. That вказує на їхню новину: That's great! That's a pity.",
+      "examples": [
+        "«Я склала іспит з водіння!» — «Це чудово!»",
+        "«Я не зможу прийти на твою вечірку». — «Ой, шкода».",
+        "«Я допоможу тобі завтра». — «Це дуже мило з твого боку»."
+      ]
     }
   },
   "945": {
@@ -5908,7 +6335,12 @@
       "That's all from me. Love, Kate."
     ],
     "uk": {
-      "explanation": "That's all уживаємо, щоб закінчити лист, імейл або виступ. Це означає «більше мені нічого сказати». Часто разом із for now."
+      "explanation": "That's all уживаємо, щоб закінчити лист, імейл або виступ. Це означає «більше мені нічого сказати». Часто разом із for now.",
+      "examples": [
+        "Ну, поки що це все. Пиши!",
+        "Здається, це все. Побачимося в суботу!",
+        "Від мене все. Обіймаю, Кейт."
+      ]
     }
   },
   "946": {
@@ -5919,7 +6351,12 @@
       "Prices went up again. This made many people angry."
     ],
     "uk": {
-      "explanation": "This може вказувати назад на ціле речення чи думку, а не лише на річ. Воно тримає думку у фокусі, бо ви збираєтеся сказати про неї більше. Це поширено в есе й листах: because of this, after this."
+      "explanation": "This може вказувати назад на ціле речення чи думку, а не лише на річ. Воно тримає думку у фокусі, бо ви збираєтеся сказати про неї більше. Це поширено в есе й листах: because of this, after this.",
+      "examples": [
+        "Людям байдуже, скільки це коштує. Через це весілля дорогі.",
+        "Я їм багато фруктів. Думаю, тобі теж варто так робити.",
+        "Ціни знову зросли. Це розлютило багатьох."
+      ]
     }
   },
   "948": {
@@ -5930,7 +6367,12 @@
       "I found some old photos. These are from our trip."
     ],
     "uk": {
-      "explanation": "These без іменника вказує на кілька речей, які ви щойно згадали. Після нього часто йде are + іменник, який їх підсумовує: These are the things I like."
+      "explanation": "These без іменника вказує на кілька речей, які ви щойно згадали. Після нього часто йде are + іменник, який їх підсумовує: These are the things I like.",
+      "examples": [
+        "Я дивлюся дві вікторини. Це єдині передачі, які мені подобаються.",
+        "Він розумний і добрий, і саме це я в ньому люблю.",
+        "Я знайшла старі фото. Вони з нашої поїздки."
+      ]
     }
   },
   "950": {
@@ -5941,7 +6383,12 @@
       "Remember our school trips? Those were great days."
     ],
     "uk": {
-      "explanation": "Those без іменника вказує на кілька вже згаданих речей, часто віддаленіших у часі чи просторі. Дієслово після нього в множині: those are, those were."
+      "explanation": "Those без іменника вказує на кілька вже згаданих речей, часто віддаленіших у часі чи просторі. Дієслово після нього в множині: those are, those were.",
+      "examples": [
+        "Париж і Рим чудові. Я люблю такі міста.",
+        "Мій одяг зелений або помаранчевий. Це мої улюблені кольори.",
+        "Пам'ятаєш наші шкільні екскурсії? То були чудові дні."
+      ]
     }
   },
   "952": {
@@ -5952,7 +6399,12 @@
       "I don't like dresses, but I bought this one."
     ],
     "uk": {
-      "explanation": "One після this або that ставимо, щоб не повторювати злічуваний іменник в однині. Це дуже зручно, коли обираєте між речами: this one, that one."
+      "explanation": "One після this або that ставимо, щоб не повторювати злічуваний іменник в однині. Це дуже зручно, коли обираєте між речами: this one, that one.",
+      "examples": [
+        "«Який торт вам дати?» — «Отой, будь ласка»",
+        "Мій письмовий стіл дуже старий, тож треба його замінити.",
+        "Я не люблю сукні, але цю купила."
+      ]
     }
   },
   "953": {
@@ -5963,7 +6415,12 @@
       "These apples are fine, but those ones look fresher."
     ],
     "uk": {
-      "explanation": "These ones або those ones уживаємо, щоб не повторювати злічуваний іменник у множині, переважно в усному мовленні. На письмі these або those без ones зазвичай звучать краще."
+      "explanation": "These ones або those ones уживаємо, щоб не повторювати злічуваний іменник у множині, переважно в усному мовленні. На письмі these або those без ones зазвичай звучать краще.",
+      "examples": [
+        "«Тобі подобаються ці черевики?» — «Мені більше до вподоби оті».",
+        "Почнімо просто з цих.",
+        "Ці яблука непогані, але оті виглядають свіжішими."
+      ]
     }
   },
   "954": {
@@ -5974,7 +6431,12 @@
       "All those attending are asked to arrive on time."
     ],
     "uk": {
-      "explanation": "Those + опис означає «ті люди або речі, які…». Опис може бути підрядним реченням з who, which чи that або короткою формою на -ed чи -ing. Це типово для офіційного письма."
+      "explanation": "Those + опис означає «ті люди або речі, які…». Опис може бути підрядним реченням з who, which чи that або короткою формою на -ed чи -ing. Це типово для офіційного письма.",
+      "examples": [
+        "Для тих, хто не любить спорт, є чудові крамниці.",
+        "Більшість опитаних були задоволені обслуговуванням.",
+        "Усіх присутніх просимо прибути вчасно."
+      ]
     }
   },
   "965": {
@@ -5985,7 +6447,12 @@
       "Some prefer to study alone; others learn better in groups."
     ],
     "uk": {
-      "explanation": "У звітах, есе й опитуваннях few, many, most та others можуть означати людей без слова people. Many — це багато людей, few — майже ніхто. У розмові кажіть many people, most people."
+      "explanation": "У звітах, есе й опитуваннях few, many, most та others можуть означати людей без слова people. Many — це багато людей, few — майже ніхто. У розмові кажіть many people, most people.",
+      "examples": [
+        "Багато хто каже, що екстремальний спорт лише для любителів адреналіну.",
+        "Дехто зі студентів мав зауваження; більшість — щодо розкладу.",
+        "Одні воліють вчитися самі, інші краще вчаться в групах."
+      ]
     }
   },
   "969": {
@@ -5996,7 +6463,12 @@
       "Many are the students who never ask for help."
     ],
     "uk": {
-      "explanation": "В офіційному письмі можна поставити many на початок і перевернути речення для сильного фокусу: Many are the + noun + who/which… = There are many… Це звучить літературно, тож уживайте рідко, для ефекту."
+      "explanation": "В офіційному письмі можна поставити many на початок і перевернути речення для сильного фокусу: Many are the + noun + who/which… = There are many… Це звучить літературно, тож уживайте рідко, для ефекту.",
+      "examples": [
+        "Чимало причин призвели до того, що люди живуть довше.",
+        "Багато є дітей, які ненавидять читати.",
+        "Чимало є студентів, які ніколи не просять допомоги."
+      ]
     }
   },
   "972": {
@@ -6007,7 +6479,12 @@
       "The one I liked best was John's present."
     ],
     "uk": {
-      "explanation": "The one або the + прикметник + one із фразою чи підрядним реченням після нього точно показує, яку річ ви маєте на увазі: the one with…, the one on…, the one (that) I…"
+      "explanation": "The one або the + прикметник + one із фразою чи підрядним реченням після нього точно показує, яку річ ви маєте на увазі: the one with…, the one on…, the one (that) I…",
+      "examples": [
+        "Мій будинок — той, що зі срібними воротами.",
+        "Мій будинок — перший ліворуч.",
+        "Найбільше мені сподобався подарунок Джона."
+      ]
     }
   },
   "977": {
@@ -6018,7 +6495,12 @@
       "I like the ones with big windows."
     ],
     "uk": {
-      "explanation": "The ones із фразою чи підрядним реченням після нього точно показує, які саме речі ви маєте на увазі, щоб не повторювати іменник у множині: the ones in…, the ones (that) we…"
+      "explanation": "The ones із фразою чи підрядним реченням після нього точно показує, які саме речі ви маєте на увазі, щоб не повторювати іменник у множині: the ones in…, the ones (that) we…",
+      "examples": [
+        "Це не ті, що ми замовляли.",
+        "Весілля тут не такі, як в Англії.",
+        "Мені подобаються ті, що з великими вікнами."
+      ]
     }
   },
   "978": {
@@ -6029,7 +6511,12 @@
       "I prefer big cities to small ones."
     ],
     "uk": {
-      "explanation": "Прикметник + ones без the чи my говорить про такі речі загалом: new ones, small ones. Без прикметника ones окремо не вживають."
+      "explanation": "Прикметник + ones без the чи my говорить про такі речі загалом: new ones, small ones. Без прикметника ones окремо не вживають.",
+      "examples": [
+        "Наші комп'ютери повільні. Треба купити нові.",
+        "Великі школи часто кращі за маленькі.",
+        "Великі міста мені до вподоби більше, ніж маленькі."
+      ]
     }
   },
   "981": {
@@ -6040,7 +6527,12 @@
       "The one that will really help is better education."
     ],
     "uk": {
-      "explanation": "У ретельному письмі речення можна почати з The one that… або The ones that…, щоб підвести до головної інформації, яка йде після is або are. Ви вибираєте одну річ із багатьох і ставите її у фокус."
+      "explanation": "У ретельному письмі речення можна почати з The one that… або The ones that…, щоб підвести до головної інформації, яка йде після is або are. Ви вибираєте одну річ із багатьох і ставите її у фокус.",
+      "examples": [
+        "Найбільше мене вразив карнавал.",
+        "Він найбільше любив пригодницькі історії.",
+        "Що справді допоможе, так це краща освіта."
+      ]
     }
   },
   "987": {
@@ -6051,7 +6543,12 @@
       "Let's do something different this weekend."
     ],
     "uk": {
-      "explanation": "Прикметник одразу після something або anything уточнює, яку саме річ ви маєте на увазі: something new, anything wrong. Прикметник стоїть після займенника, а не перед ним."
+      "explanation": "Прикметник одразу після something або anything уточнює, яку саме річ ви маєте на увазі: something new, anything wrong. Прикметник стоїть після займенника, а не перед ним.",
+      "examples": [
+        "Мені потрібно щось нове з одягу.",
+        "Я не знайшов нічого поганого.",
+        "Зробімо цими вихідними щось інакше."
+      ]
     }
   },
   "988": {
@@ -6062,7 +6559,12 @@
       "Have you got something to read?"
     ],
     "uk": {
-      "explanation": "To-інфінітив після something або anything показує, для чого ця річ: something to drink, anything to wear."
+      "explanation": "To-інфінітив після something або anything показує, для чого ця річ: something to drink, anything to wear.",
+      "examples": [
+        "Будь ласка, принесіть щось попити.",
+        "Мені не було чого вдягнути.",
+        "У тебе є щось почитати?"
+      ]
     }
   },
   "990": {
@@ -6073,7 +6575,12 @@
       "Is he ill or something?"
     ],
     "uk": {
-      "explanation": "Or something у кінці речення означає «це або щось подібне». Це неофіційний спосіб не називати щось одне точно."
+      "explanation": "Or something у кінці речення означає «це або щось подібне». Це неофіційний спосіб не називати щось одне точно.",
+      "examples": [
+        "Після концерту можемо з'їсти піцу чи щось таке.",
+        "Принеси щось попити: сік, колу чи щось подібне.",
+        "Він захворів чи що?"
+      ]
     }
   },
   "993": {
@@ -6084,7 +6591,12 @@
       "Almost nobody came to the meeting."
     ],
     "uk": {
-      "explanation": "Слово на кшталт absolutely, almost чи nearly перед неозначеним займенником підсилює його. Absolutely означає 100%, а nearly чи almost — трохи менше за 100%: absolutely anything, nearly everyone."
+      "explanation": "Слово на кшталт absolutely, almost чи nearly перед неозначеним займенником підсилює його. Absolutely означає 100%, а nearly чи almost — трохи менше за 100%: absolutely anything, nearly everyone.",
+      "examples": [
+        "У тому магазині можна знайти абсолютно все.",
+        "Майже всі мої знайомі працюють за комп'ютером.",
+        "На зустріч майже ніхто не прийшов."
+      ]
     }
   },
   "995": {
@@ -6095,7 +6607,12 @@
       "Anything that helps you practise English is useful."
     ],
     "uk": {
-      "explanation": "Почніть речення з something, everything або anything + підрядне речення, щоб утворити довший підмет. Так думка опиняється у фокусі ще до того, як ви скажете, що це. Це офіційніше й поширене на письмі: Something that I like is…"
+      "explanation": "Почніть речення з something, everything або anything + підрядне речення, щоб утворити довший підмет. Так думка опиняється у фокусі ще до того, як ви скажете, що це. Це офіційніше й поширене на письмі: Something that I like is…",
+      "examples": [
+        "Що мені справді подобається, так це вчителі.",
+        "Усе, у що я вірив, змінилося.",
+        "Усе, що допомагає практикувати англійську, корисне."
+      ]
     }
   },
   "996": {
@@ -6106,7 +6623,12 @@
       "She's a teacher or something like that."
     ],
     "uk": {
-      "explanation": "Вирази на кшталт or something, or anything like that та or somewhere else допомагають говорити про речі нечітко. Вони означають «це або щось подібне» й поширені в усному мовленні."
+      "explanation": "Вирази на кшталт or something, or anything like that та or somewhere else допомагають говорити про речі нечітко. Вони означають «це або щось подібне» й поширені в усному мовленні.",
+      "examples": [
+        "Це застуда чи щось подібне?",
+        "Ми могли б посадити дерева тут або десь деінде.",
+        "Вона вчителька чи щось таке."
+      ]
     }
   },
   "997": {
@@ -6117,7 +6639,12 @@
       "Anything you say now will be remembered."
     ],
     "uk": {
-      "explanation": "Anything + підрядне речення або інші слова після нього може бути довгим підметом, що ставить думку у фокус. Дієслово в однині: Anything that… is…"
+      "explanation": "Anything + підрядне речення або інші слова після нього може бути довгим підметом, що ставить думку у фокус. Дієслово в однині: Anything that… is…",
+      "examples": [
+        "Усе, що змушує тебе говорити англійською, корисне.",
+        "Усе інше можна надіслати електронною поштою.",
+        "Усе, що ти зараз скажеш, запам'ятають."
+      ]
     }
   },
   "998": {
@@ -6128,7 +6655,12 @@
       "Anything you don't understand, write it down."
     ],
     "uk": {
-      "explanation": "Anything може починати частину речення, в якій пропущено if there is: Anything you need, ask me = If there is anything you need, ask me. Потім після коми йде головне речення."
+      "explanation": "Anything може починати частину речення, в якій пропущено if there is: Anything you need, ask me = If there is anything you need, ask me. Потім після коми йде головне речення.",
+      "examples": [
+        "Якщо ще щось знадобиться, звертайся до Сари.",
+        "Що б ти не хотіла дізнатися, просто подзвони мені.",
+        "Усе, чого не розумієш, записуй."
+      ]
     }
   },
   "999": {
@@ -6139,7 +6671,12 @@
       "With this phone you can take great pictures."
     ],
     "uk": {
-      "explanation": "You уживаємо, щоб говорити про людей загалом, а не лише про співрозмовника. Це звично в усному мовленні й неофіційному письмі, часто з can, can't, need to або have to."
+      "explanation": "You уживаємо, щоб говорити про людей загалом, а не лише про співрозмовника. Це звично в усному мовленні й неофіційному письмі, часто з can, can't, need to або have to.",
+      "examples": [
+        "Після 8-ї ранку тут не можна паркуватися.",
+        "Якщо хочеш поїхати до Китаю, потрібна віза.",
+        "Цим телефоном можна робити чудові фото."
+      ]
     }
   },
   "1000": {
@@ -6150,7 +6687,12 @@
       "In this city, one sees cats everywhere."
     ],
     "uk": {
-      "explanation": "One означає те саме, що you у значенні «будь-хто», але звучить офіційно. Уживайте його в есе, офіційних листах і промовах. Не змінюйте його в межах речення: one's, oneself."
+      "explanation": "One означає те саме, що you у значенні «будь-хто», але звучить офіційно. Уживайте його в есе, офіційних листах і промовах. Не змінюйте його в межах речення: one's, oneself.",
+      "examples": [
+        "Контракт слід завжди читати перед підписанням.",
+        "Треба дбати про своє здоров'я.",
+        "У цьому місті коти трапляються на кожному кроці."
+      ]
     }
   },
   "1001": {
@@ -6161,7 +6703,12 @@
       "Some of us find technology useful, while others don't."
     ],
     "uk": {
-      "explanation": "We та us уживаємо в значенні «люди загалом», коли хочемо включити й себе. Це поширено в есе та дискусіях і звучить особистіше, ніж one. Some of us, many of us ділять людей на групи."
+      "explanation": "We та us уживаємо в значенні «люди загалом», коли хочемо включити й себе. Це поширено в есе та дискусіях і звучить особистіше, ніж one. Some of us, many of us ділять людей на групи.",
+      "examples": [
+        "Усі ми знаємо, що бути письменником важко.",
+        "Зоопарки дають нам змогу зрозуміти природу.",
+        "Комусь із нас технології корисні, а комусь — ні."
+      ]
     }
   },
   "1002": {
@@ -6172,7 +6719,12 @@
       "If someone doesn't like the film, they can leave."
     ],
     "uk": {
-      "explanation": "Після someone, anyone, everyone або no one уживаємо they, them чи their, щоб повернутися до цієї людини. Так роблять, коли не знаємо або неважливо, чоловік це чи жінка. Дієслово після they лишається в множині: they are, they have."
+      "explanation": "Після someone, anyone, everyone або no one уживаємо they, them чи their, щоб повернутися до цієї людини. Так роблять, коли не знаємо або неважливо, чоловік це чи жінка. Дієслово після they лишається в множині: they are, they have.",
+      "examples": [
+        "Кожен має взяти з собою власний обід.",
+        "Якщо хтось подзвонить, скажи, що мене немає.",
+        "Якщо комусь не сподобається фільм, він може піти."
+      ]
     }
   },
   "1003": {
@@ -6183,7 +6735,12 @@
       "If a child is bored, they won't learn."
     ],
     "uk": {
-      "explanation": "Щоб повернутися до іменника на кшталт a student чи a person, коли не знаємо, чоловік це чи жінка, можна вжити he or she (him or her, his or her) або they. He or she офіційніше й потребує дієслова в однині. Лише he сьогодні звучить застаріло."
+      "explanation": "Щоб повернутися до іменника на кшталт a student чи a person, коли не знаємо, чоловік це чи жінка, можна вжити he or she (him or her, his or her) або they. He or she офіційніше й потребує дієслова в однині. Лише he сьогодні звучить застаріло.",
+      "examples": [
+        "Якщо учень захворів, він або вона має подзвонити до школи.",
+        "Хороший лікар слухає своїх пацієнтів.",
+        "Якщо дитині нудно, вона не вчитиметься."
+      ]
     }
   },
   "1005": {
@@ -6194,7 +6751,12 @@
       "Team members should respect one another's opinions."
     ],
     "uk": {
-      "explanation": "One another означає те саме, що each other: дві чи більше людей роблять одне одному те саме. Стоїть після дієслова або прийменника й звучить офіційніше, тому частіше трапляється на письмі."
+      "explanation": "One another означає те саме, що each other: дві чи більше людей роблять одне одному те саме. Стоїть після дієслова або прийменника й звучить офіційніше, тому частіше трапляється на письмі.",
+      "examples": [
+        "Тут студенти й працівники можуть зустрічатися одне з одним.",
+        "Відколи ми востаннє бачилися, багато що змінилося.",
+        "Члени команди мають поважати думку одне одного."
+      ]
     }
   },
   "1010": {
@@ -6205,7 +6767,12 @@
       "Poetry, history or something else?"
     ],
     "uk": {
-      "explanation": "Or something else у кінці запитання дає список ідей, але лишає вибір відкритим. Між варіантами ставте коми, а перед останнім — or: A, B or something else?"
+      "explanation": "Or something else у кінці запитання дає список ідей, але лишає вибір відкритим. Між варіантами ставте коми, а перед останнім — or: A, B or something else?",
+      "examples": [
+        "Купимо йому книжку, диск чи щось інше?",
+        "Хочеш піти поплавати чи зайнятися чимось іншим?",
+        "Поезія, історія чи щось інше?"
+      ]
     }
   },
   "1012": {
@@ -6216,7 +6783,12 @@
       "Are you coming or not?"
     ],
     "uk": {
-      "explanation": "Or not у кінці запитання замінює повторення цього ж запитання із запереченням: Did he pass or not? Воно вимагає чіткої відповіді й може звучати нетерпляче чи роздратовано."
+      "explanation": "Or not у кінці запитання замінює повторення цього ж запитання із запереченням: Did he pass or not? Воно вимагає чіткої відповіді й може звучати нетерпляче чи роздратовано.",
+      "examples": [
+        "Ти хочеш це робити чи ні?",
+        "Ти згоден зі мною чи ні?",
+        "Ти йдеш чи ні?"
+      ]
     }
   },
   "1013": {
@@ -6227,7 +6799,12 @@
       "Is social media helping us or destroying us?"
     ],
     "uk": {
-      "explanation": "В есе й аргументації другий варіант альтернативного запитання можна зробити крайнім: протилежністю, катастрофою, марнуванням грошей. Це не справжнє запитання; воно змушує читача засумніватися в першому варіанті."
+      "explanation": "В есе й аргументації другий варіант альтернативного запитання можна зробити крайнім: протилежністю, катастрофою, марнуванням грошей. Це не справжнє запитання; воно змушує читача засумніватися в першому варіанті.",
+      "examples": [
+        "Ця нова галузь — благо чи повна протилежність?",
+        "Ця реформа — справжній поступ чи просто марнування грошей?",
+        "Соцмережі нам допомагають чи нищать нас?"
+      ]
     }
   },
   "1014": {
@@ -6238,7 +6815,12 @@
       "Perhaps you could extend the trip or add another visit?"
     ],
     "uk": {
-      "explanation": "В альтернативному запитанні з двох частин спільний підмет і модальне дієслово в другій частині не повторюють: Could you A or B? Із maybe або perhaps + could це ввічливий спосіб запропонувати ідеї в офіційному письмі."
+      "explanation": "В альтернативному запитанні з двох частин спільний підмет і модальне дієслово в другій частині не повторюють: Could you A or B? Із maybe або perhaps + could це ввічливий спосіб запропонувати ідеї в офіційному письмі.",
+      "examples": [
+        "Може, ви могли б роздати іграшки або показати фільм?",
+        "Мені залишитися чи піти?",
+        "Може, ви могли б подовжити поїздку або додати ще одне відвідування?"
+      ]
     }
   },
   "1020": {
@@ -6249,7 +6831,12 @@
       "The film starts at eight, right?"
     ],
     "uk": {
-      "explanation": "У неофіційній розмові й повідомленнях right? у кінці речення перевіряє, чи щось правда. Воно ніколи не змінюється, тож це простіше за повний tag, але в офіційному письмі його уникайте."
+      "explanation": "У неофіційній розмові й повідомленнях right? у кінці речення перевіряє, чи щось правда. Воно ніколи не змінюється, тож це простіше за повний tag, але в офіційному письмі його уникайте.",
+      "examples": [
+        "Тобі ж 14 років, так?",
+        "Ти ж просив мене про допомогу, так?",
+        "Фільм починається о восьмій, так?"
+      ]
     }
   },
   "1021": {
@@ -6260,7 +6847,12 @@
       "Let's check together, shall we?"
     ],
     "uk": {
-      "explanation": "Tag після наказового речення робить наказ чи прохання м'якшим і дружнішим. Звичайний tag — will you?; would you? та can you? теж поширені. Після Let's… tag завжди shall we?"
+      "explanation": "Tag після наказового речення робить наказ чи прохання м'якшим і дружнішим. Звичайний tag — will you?; would you? та can you? теж поширені. Після Let's… tag завжди shall we?",
+      "examples": [
+        "Передай мені сіль, будь ласка.",
+        "Не запізнюйся, добре?",
+        "Перевірмо разом, гаразд?"
+      ]
     }
   },
   "1028": {
@@ -6271,7 +6863,12 @@
       "You still have a headache. Why don't you see a doctor?"
     ],
     "uk": {
-      "explanation": "Why don't we…? або Why don't you…? + дієслово вживаємо для дружньої пропозиції чи запрошення, а не щоб дізнатися причину. Відповідь — згода чи відмова: Good idea!"
+      "explanation": "Why don't we…? або Why don't you…? + дієслово вживаємо для дружньої пропозиції чи запрошення, а не щоб дізнатися причину. Відповідь — згода чи відмова: Good idea!",
+      "examples": [
+        "Може, подивимося фільм?",
+        "Чому б тобі не піти зі мною?",
+        "У тебе досі болить голова. Чому б тобі не піти до лікаря?"
+      ]
     }
   },
   "1031": {
@@ -6282,7 +6879,12 @@
       "Why does this matter? Because it affects everyone."
     ],
     "uk": {
-      "explanation": "В есе, виступі чи оповіді можна поставити wh-запитання й самому на нього відповісти. Відповіді ні від кого не чекають: запитання спрямовує читача до наступної думки. Одним таким запитанням починайте абзац, а не кількома поспіль."
+      "explanation": "В есе, виступі чи оповіді можна поставити wh-запитання й самому на нього відповісти. Відповіді ні від кого не чекають: запитання спрямовує читача до наступної думки. Одним таким запитанням починайте абзац, а не кількома поспіль.",
+      "examples": [
+        "То що робить подарунок добрим? Найкращі подарунки — особисті.",
+        "Але які є альтернативи? У місті хороше метро.",
+        "Чому це важливо? Бо це стосується всіх."
+      ]
     }
   },
   "1041": {
@@ -6293,7 +6895,12 @@
       "Wouldn't that be amazing?"
     ],
     "uk": {
-      "explanation": "Заперечне запитання yes/no вживаємо, коли ви вже думаєте, що відповідь «так», і хочете, щоб співрозмовник погодився: Isn't that great? Don't you think?"
+      "explanation": "Заперечне запитання yes/no вживаємо, коли ви вже думаєте, що відповідь «так», і хочете, щоб співрозмовник погодився: Isn't that great? Don't you think?",
+      "examples": [
+        "Кумедно! Хіба ні?",
+        "Хіба це не чудова ідея?",
+        "Хіба це не було б неймовірно?"
+      ]
     }
   },
   "1042": {
@@ -6304,7 +6911,12 @@
       "Should we not protect our forests?"
     ],
     "uk": {
-      "explanation": "В офіційному письмі й аргументації not можна лишити повним і поставити після підмета: Do we not…?, Is it not…? Так запитання стає наголошеною думкою, а не справжнім запитанням."
+      "explanation": "В офіційному письмі й аргументації not можна лишити повним і поставити після підмета: Do we not…?, Is it not…? Так запитання стає наголошеною думкою, а не справжнім запитанням.",
+      "examples": [
+        "Хіба ми не хочемо, щоб наші діти були щасливі?",
+        "Хіба не надто легко звинувачувати школи?",
+        "Хіба нам не слід захищати наші ліси?"
+      ]
     }
   },
   "1043": {
@@ -6315,7 +6927,12 @@
       "We're looking forward to the holidays."
     ],
     "uk": {
-      "explanation": "Look forward to + іменник або форма на -ing показує, що ви з нетерпінням чекаєте на щось. To тут — прийменник, тож після нього ніколи не ставте дієслово в початковій формі. Це поширено в кінці листа."
+      "explanation": "Look forward to + іменник або форма на -ing показує, що ви з нетерпінням чекаєте на щось. To тут — прийменник, тож після нього ніколи не ставте дієслово в початковій формі. Це поширено в кінці листа.",
+      "examples": [
+        "З нетерпінням чекаю зустрічі з тобою!",
+        "Чекаю на вашу відповідь.",
+        "Ми з нетерпінням чекаємо на канікули."
+      ]
     }
   },
   "1081": {
@@ -6326,7 +6943,12 @@
       "She'd love to visit Japan one day."
     ],
     "uk": {
-      "explanation": "Would love + to-інфінітив показує, що ви дуже хочете щось зробити. Це сильніше, ніж would like. В усному мовленні would зазвичай скорочують: I'd love to…"
+      "explanation": "Would love + to-інфінітив показує, що ви дуже хочете щось зробити. Це сильніше, ніж would like. В усному мовленні would зазвичай скорочують: I'd love to…",
+      "examples": [
+        "Я б залюбки подивилася на твою нову квартиру.",
+        "Я б дуже хотів піти з тобою на концерт.",
+        "Вона дуже хотіла б колись поїхати до Японії."
+      ]
     }
   },
   "1084": {
@@ -6337,7 +6959,12 @@
       "We'd prefer to meet in the afternoon."
     ],
     "uk": {
-      "explanation": "Would prefer + to-інфінітив увічливо показує, що ви хочете зробити, часто замість чогось іншого. В усному мовленні зазвичай скорочують: I'd prefer to…"
+      "explanation": "Would prefer + to-інфінітив увічливо показує, що ви хочете зробити, часто замість чогось іншого. В усному мовленні зазвичай скорочують: I'd prefer to…",
+      "examples": [
+        "Я волів би розрахуватися карткою, якщо можна.",
+        "Сьогодні ввечері я краще залишуся вдома.",
+        "Ми б воліли зустрітися пополудні."
+      ]
     }
   },
   "1092": {
@@ -6348,7 +6975,12 @@
       "She felt the rain falling on her face."
     ],
     "uk": {
-      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + форма на -ing показує дію, що вже триває і яку ви застали посередині: I heard someone shouting."
+      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + форма на -ing показує дію, що вже триває і яку ви застали посередині: I heard someone shouting.",
+      "examples": [
+        "Я почув, як хтось кричить на вулиці.",
+        "Ми дивилися, як діти граються в парку.",
+        "Вона відчувала, як дощ падає їй на обличчя."
+      ]
     }
   },
   "1093": {
@@ -6359,7 +6991,12 @@
       "She watched the plane take off and disappear."
     ],
     "uk": {
-      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + інфінітив без to показує всю дію від початку до кінця: I saw him cross the road."
+      "explanation": "Дієслово сприйняття на кшталт see, hear, watch чи feel + додаток + інфінітив без to показує всю дію від початку до кінця: I saw him cross the road.",
+      "examples": [
+        "Я бачила, як він перейшов дорогу й зайшов у магазин.",
+        "Ми почули, як за нами зачинилися двері.",
+        "Вона дивилася, як літак злетів і зник."
+      ]
     }
   },
   "1094": {
@@ -6370,7 +7007,12 @@
       "I would hate to think that you were unhappy."
     ],
     "uk": {
-      "explanation": "Would hate + to-інфінітив рішуче показує, що ви не хочете, щоб щось сталося. Часто стоїть перед see, think або lose: I would hate to see…"
+      "explanation": "Would hate + to-інфінітив рішуче показує, що ви не хочете, щоб щось сталося. Часто стоїть перед see, think або lose: I would hate to see…",
+      "examples": [
+        "Нам було б дуже шкода, якби вся ця робота пропала марно.",
+        "Мені б дуже не хотілося втратити старі фото.",
+        "Мені було б прикро думати, що ти нещаслива."
+      ]
     }
   },
   "1107": {
@@ -6925,7 +7567,12 @@
       "I wonder if they will come tomorrow."
     ],
     "uk": {
-      "explanation": "Wonder + wh-слово або if + підрядне речення передає запитання, яке ви ставите собі подумки. У підрядному реченні прямий порядок слів, а після wondered час зазвичай зсувається в минуле."
+      "explanation": "Wonder + wh-слово або if + підрядне речення передає запитання, яке ви ставите собі подумки. У підрядному реченні прямий порядок слів, а після wondered час зазвичай зсувається в минуле.",
+      "examples": [
+        "Мені було цікаво, що вона написала.",
+        "Я справді не знала, хто він.",
+        "Цікаво, чи вони прийдуть завтра."
+      ]
     }
   },
   "1152": {
@@ -6936,7 +7583,12 @@
       "She said she's coming tomorrow."
     ],
     "uk": {
-      "explanation": "Коли переказуєте чиїсь слова про майбутнє, will зазвичай стає would. Якщо переказуєте пізніше, змінюються й слова часу: tomorrow → the next day, next week → the following week. Якщо подія ще в майбутньому, will і tomorrow можна лишити."
+      "explanation": "Коли переказуєте чиїсь слова про майбутнє, will зазвичай стає would. Якщо переказуєте пізніше, змінюються й слова часу: tomorrow → the next day, next week → the following week. Якщо подія ще в майбутньому, will і tomorrow можна лишити.",
+      "examples": [
+        "Він сказав, що подзвонить мені наступного дня.",
+        "Вони сказали нам, що магазин відкриється наступного тижня.",
+        "Вона сказала, що приїде завтра."
+      ]
     }
   },
   "1157": {
@@ -6947,7 +7599,12 @@
       "It says the hotel has a swimming pool."
     ],
     "uk": {
-      "explanation": "Щоб переказати, що написано в тексті — оголошенні, листі, путівнику, — уживайте says у present simple. Текст і досі це «каже», тому дієслово в переказаній частині теж лишається в теперішньому часі."
+      "explanation": "Щоб переказати, що написано в тексті — оголошенні, листі, путівнику, — уживайте says у present simple. Текст і досі це «каже», тому дієслово в переказаній частині теж лишається в теперішньому часі.",
+      "examples": [
+        "У путівнику написано, що туди можна доїхати поїздом.",
+        "У вашому оголошенні сказано, що ви шукаєте помічників.",
+        "Тут написано, що в готелі є басейн."
+      ]
     }
   },
   "1158": {
@@ -6958,7 +7615,12 @@
       "I was wondering where to go next."
     ],
     "uk": {
-      "explanation": "I was wondering або I was thinking показують мислення як процес, що тривав якийсь час. Після них ідуть wh-підрядне речення або wh-слово + to-інфінітив: I was wondering what had happened."
+      "explanation": "I was wondering або I was thinking показують мислення як процес, що тривав якийсь час. Після них ідуть wh-підрядне речення або wh-слово + to-інфінітив: I was wondering what had happened.",
+      "examples": [
+        "Нам було цікаво, що сталося.",
+        "Поки він думав, як відповісти, Дженні всміхнулася.",
+        "Я думав, куди податися далі."
+      ]
     }
   },
   "1159": {
@@ -6969,7 +7631,12 @@
       "He said he had left his phone in a café."
     ],
     "uk": {
-      "explanation": "Коли пізніше переказуєте слова про минуле, зсуньте час на крок назад: past simple чи present perfect стає past perfect. Слова часу теж змінюються: yesterday → the day before, last week → the previous week."
+      "explanation": "Коли пізніше переказуєте слова про минуле, зсуньте час на крок назад: past simple чи present perfect стає past perfect. Слова часу теж змінюються: yesterday → the day before, last week → the previous week.",
+      "examples": [
+        "Вона сказала, що виграла в лотерею.",
+        "Ми сказали їй, що напередодні були в неї вдома.",
+        "Він сказав, що залишив телефон у кафе."
+      ]
     }
   },
   "1160": {

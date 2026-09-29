@@ -200,7 +200,7 @@ shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` 
 - Base: `main`
 - PR: —
 
-### [ ] 16. `uk.examples`: PAST, PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (135)
+### [x] 16. `uk.examples`: PAST, PRESENT, PRONOUNS, QUESTIONS, REPORTED SPEECH, VERBS (135)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
