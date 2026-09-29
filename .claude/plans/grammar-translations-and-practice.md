@@ -264,14 +264,18 @@ WordDefinition за lemma+POS (`upsertWordDefinition`) → `grammar_page_lex_blo
 SSR обгортає слова текстових блоків ручної сторінки в `[data-word-definition-id]` спани, popup —
 `initReaderPopup` з LexiconData сторінки. e2e: клік по слову відкриває popup; "does not shift".
 
-### [ ] 22. Контент словника для сторінок правил
+### [x] 22. Контент словника для сторінок правил: формат + a–b (219)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
 
-Визначення, CEFR, приклад і `uk`-переклад для lemma+POS зі сторінок правил, яких ще немає в БД —
-вручну в сесії, asset + seed-команда (сид авторитетний, `enrich-lexicon` такі пропускає). Обсяг
-порахувати після зрізу 20 і розбити на партії окремими зрізами.
+`assets/lexicon-content.json` (lemma → POS → definition/example/cefrLevel/`uk.translation`, схема
+`lexicon-content-seed.ts`, опис у `assets/README.md`) + `words import-lexicon-content` у `make seed`
+(створює Word/WordDefinition за lemma+POS, перезаписує поля; `enrich-lexicon` такі пропускає).
+Перед цим почищено правило слів (зріз 20-21): лише англійські слова ≥2 літер без апострофів, без
+proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсів без визначення (локальна БД). Батчі за
+алфавітом: зрізи 30-37. Визначення — сенс, у якому слово вжите на сторінці (для хибного POS від spaCy
+— все одно реальне значення).
 
 ### [ ] 23. Фрази на сторінках правил
 - Branch: `grammar-translations-and-practice-09-modality-1`
@@ -315,3 +319,47 @@ SSR обгортає слова текстових блоків ручної с�
 основний тип + `multiple_choice`, одна однозначна відповідь (підказка форми в дужках, коли
 потрібно), речення за патерном точки й її прикладами, лексика рівня точки або нижче. У зрізі 29 —
 тест на повноту банку (кожна USE-точка з `egp.json` має вправи).
+
+### [ ] 30. Словник сторінок правил: c (194)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 31. Словник сторінок правил: d–e (214)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 32. Словник сторінок правил: f–h (196)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 33. Словник сторінок правил: i–m (245)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 34. Словник сторінок правил: n–q (274)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 35. Словник сторінок правил: r (135)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 36. Словник сторінок правил: s (256)
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+### [ ] 37. Словник сторінок правил: t–z (235) + повнота
+- Branch: `grammar-translations-and-practice-09-modality-1`
+- Base: `main`
+- PR: —
+
+Для 30-37: сенси беруться зі свіжого `grammar annotate-pages` (слова без визначення), формат — як у
+зрізі 22. У зрізі 37 — тест на повноту: кожне слово в `grammar_page_lex_blocks` має запис у
+`lexicon-content.json` (або визначення в БД).
