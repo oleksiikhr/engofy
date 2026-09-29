@@ -2111,6 +2111,336 @@
       "explanation": "Після suggest, recommend, insist і propose + that наступне дієслово говорить про те, що має статися. У британській англійській тут часто present simple; в офіційному стилі та в американській — базова форма для будь-якого підмета."
     }
   },
+  "427": {
+    "explanation": "Add if possible or if it's possible to a request to make it softer and more polite. It shows you know the other person may not be able to do it. It can go at the start or the end: If possible, + request, or request + if it's possible.",
+    "examples": [
+      "If possible, I'd like to pay by card.",
+      "Could you call me back today, if it's possible?",
+      "If it is possible, please send the documents by Friday."
+    ],
+    "uk": {
+      "explanation": "Додайте if possible або if it's possible до прохання, щоб воно звучало м'якше й ввічливіше. Так ви показуєте, що розумієте: людина може й не мати такої змоги. Це може стояти на початку або в кінці: If possible, + прохання або прохання + if it's possible."
+    }
+  },
+  "428": {
+    "explanation": "Use it + be + adjective + to + verb to say how necessary, possible or important an action is without saying who does it. It sounds more general and less direct than a modal verb: It's necessary to book instead of You must book.",
+    "examples": [
+      "It's necessary to book a table at weekends.",
+      "It was impossible to sleep with all that noise.",
+      "It is essential to drink enough water."
+    ],
+    "uk": {
+      "explanation": "Конструкція it + be + adjective + to + verb показує, наскільки дія потрібна, можлива чи важлива, не називаючи, хто її виконує. Звучить загальніше й менш прямо, ніж модальне дієслово: It's necessary to book замість You must book."
+    }
+  },
+  "431": {
+    "explanation": "Use it + be or seem + likely or possible + (that) clause to make a claim less direct. Instead of stating something as a fact, you say it is probable, so the claim sounds careful: It is likely that prices will rise.",
+    "examples": [
+      "It is likely that the train will be late.",
+      "It seems possible that she forgot about the meeting.",
+      "It doesn't seem likely that they'll agree."
+    ],
+    "uk": {
+      "explanation": "Конструкція it + be або seem + likely чи possible + (that) clause робить твердження менш категоричним. Замість того щоб подавати щось як факт, ви кажете, що це ймовірно, і твердження звучить обережно: It is likely that prices will rise."
+    }
+  },
+  "433": {
+    "explanation": "Start with it + be or seem + an adjective like clear, obvious or essential + (that) clause to point the reader at your main idea. The adjective comes first, so the reader knows the next part is important. This is common in essays and reports.",
+    "examples": [
+      "It is clear that we need more time.",
+      "It is essential that everyone arrives on time.",
+      "It seems obvious that the plan won't work."
+    ],
+    "uk": {
+      "explanation": "Почніть з it + be або seem + прикметник на кшталт clear, obvious чи essential + (that) clause, щоб привернути увагу читача до головної думки. Прикметник стоїть першим, тож читач знає, що далі буде важливе. Так часто пишуть в есе та звітах."
+    }
+  },
+  "434": {
+    "explanation": "Put a degree adverb such as almost, quite or fairly before a modal adjective to make a claim softer and more careful. It is almost certain leaves a little room for doubt, while quite probable says something is likely but not sure.",
+    "examples": [
+      "It is almost certain that the shop will close.",
+      "A delay is quite probable, so leave early.",
+      "It's fairly likely that he'll call tonight."
+    ],
+    "uk": {
+      "explanation": "Прислівник ступеня, як-от almost, quite чи fairly, перед модальним прикметником робить твердження м'якшим і обережнішим. It is almost certain залишає трохи місця для сумніву, а quite probable означає, що щось імовірне, але не напевно."
+    }
+  },
+  "435": {
+    "explanation": "Put an adverb such as highly, absolutely or painfully before a modal adjective to make it stronger. Some pairs are fixed: highly unlikely, absolutely essential, perfectly clear.",
+    "examples": [
+      "It is highly unlikely that the parcel was stolen.",
+      "Good preparation is absolutely essential.",
+      "It was painfully obvious that he was lying."
+    ],
+    "uk": {
+      "explanation": "Прислівник на кшталт highly, absolutely чи painfully перед модальним прикметником підсилює його. Деякі пари сталі: highly unlikely, absolutely essential, perfectly clear."
+    }
+  },
+  "439": {
+    "explanation": "Use can + verb to say that you are able to do something. Use can't or cannot when you are not able. The verb after can has no to and no -s.",
+    "examples": [
+      "I can swim.",
+      "She can speak three languages.",
+      "I can't read this word."
+    ],
+    "uk": {
+      "explanation": "Can + verb кажемо, що вміємо або можемо щось зробити. Can't або cannot — коли не вміємо чи не можемо. Дієслово після can — без to і без -s."
+    }
+  },
+  "440": {
+    "explanation": "Use Can I + verb? or I can + verb to offer help. It is a friendly way to say you are happy to do something for someone.",
+    "examples": [
+      "Can I help you?",
+      "I can carry that bag for you.",
+      "What can I get you?"
+    ],
+    "uk": {
+      "explanation": "Can I + verb? або I can + verb — так пропонуємо допомогу. Це дружній спосіб сказати, що ви охоче щось зробите для людини."
+    }
+  },
+  "441": {
+    "explanation": "Use can + verb to say that something is possible, for example in a place or at a time. Use can't when it is not possible.",
+    "examples": [
+      "You can buy bread at that shop.",
+      "Sorry, I can't see you today.",
+      "You can see the sea from my window."
+    ],
+    "uk": {
+      "explanation": "Can + verb кажемо, що щось можливо, наприклад у певному місці чи в певний час. Can't — коли це неможливо."
+    }
+  },
+  "442": {
+    "explanation": "Use Can you + verb? to ask someone to do something. It is friendly and common with family and friends. Add please to be more polite.",
+    "examples": [
+      "Can you call me tonight?",
+      "Can you open the window, please?",
+      "Can you help me with my homework?"
+    ],
+    "uk": {
+      "explanation": "Can you + verb? — так просимо когось щось зробити. Це дружній варіант, поширений у розмові з рідними й друзями. Щоб прозвучати ввічливіше, додайте please."
+    }
+  },
+  "443": {
+    "explanation": "Use can + verb to say that something is allowed, and can't when it is not allowed. Ask for permission with Can I…?",
+    "examples": [
+      "You can park here after six.",
+      "You can't use your phone in the exam.",
+      "Can I sit here?"
+    ],
+    "uk": {
+      "explanation": "Can + verb кажемо, що щось дозволено, а can't — що заборонено. Дозволу питаємо так: Can I…?"
+    }
+  },
+  "446": {
+    "explanation": "Use can be + adjective to say that something is sometimes true or often happens. It describes a general tendency, not one fixed fact: Winter here can be very cold.",
+    "examples": [
+      "Living in a big city can be stressful.",
+      "Children can be very noisy.",
+      "This road can be dangerous at night."
+    ],
+    "uk": {
+      "explanation": "Can be + adjective кажемо, що щось іноді так буває або часто трапляється. Це описує загальну тенденцію, а не один незмінний факт: Winter here can be very cold."
+    }
+  },
+  "447": {
+    "explanation": "Use Can you believe…? or Can you believe it? to show that you are surprised by something. It isn't a real question — you don't expect an answer.",
+    "examples": [
+      "It cost fifty pounds! Can you believe that?",
+      "Can you believe she's only sixteen?",
+      "They won again. Can you believe it?"
+    ],
+    "uk": {
+      "explanation": "Can you believe…? або Can you believe it? показує, що вас щось здивувало. Це не справжнє запитання — відповіді ви не чекаєте."
+    }
+  },
+  "449": {
+    "explanation": "Use can + verb to say what sometimes happens or what something is able to cause in general. It shows a possible result, not one that always happens: Stress can cause headaches.",
+    "examples": [
+      "Too much sugar can cause health problems.",
+      "Some people can feel lonely in a new city.",
+      "Small mistakes can cost a lot of money."
+    ],
+    "uk": {
+      "explanation": "Can + verb кажемо, що іноді трапляється або що щось загалом здатне спричинити. Це можливий наслідок, а не той, що буває завжди: Stress can cause headaches."
+    }
+  },
+  "450": {
+    "explanation": "Use can't or cannot + be to say you are sure something is not true, based on what you know. It is the opposite of must be: That can't be Anna — she's abroad.",
+    "examples": [
+      "That can't be true.",
+      "You can't be hungry — you just ate!",
+      "He can't be the manager; he's too young."
+    ],
+    "uk": {
+      "explanation": "Can't або cannot + be кажемо, коли впевнені, що щось неправда, спираючись на те, що знаємо. Це протилежність must be: That can't be Anna — she's abroad."
+    }
+  },
+  "451": {
+    "explanation": "Use you can't + verb to tell someone strongly that they should not do something, or to criticise them. Can't you…? is an angry or worried question: Can't you see you're tired?",
+    "examples": [
+      "You can't keep working all night.",
+      "You can't talk to your mother like that!",
+      "Can't you see how tired you are?"
+    ],
+    "uk": {
+      "explanation": "You can't + verb — так рішуче кажемо комусь, що цього не варто робити, або дорікаємо. Can't you…? — сердите або стурбоване запитання: Can't you see you're tired?"
+    }
+  },
+  "452": {
+    "explanation": "Use can't have or cannot have + past participle to say you are sure something did not happen in the past, because it is impossible. It is the opposite of must have: She can't have left — her coat is here.",
+    "examples": [
+      "He can't have seen us — it was too dark.",
+      "You can't have finished already!",
+      "The bill can't have been this high."
+    ],
+    "uk": {
+      "explanation": "Can't have або cannot have + past participle кажемо, коли впевнені, що щось не сталося в минулому, бо це неможливо. Це протилежність must have: She can't have left — her coat is here."
+    }
+  },
+  "455": {
+    "explanation": "Use fixed phrases with can to focus the reader's attention or add emphasis: as you can see, as you can imagine, I can assure you that, I can't say that. They are common in formal letters and presentations.",
+    "examples": [
+      "As you can see, sales have gone up.",
+      "I can assure you that it won't happen again.",
+      "I can't say I enjoyed the film."
+    ],
+    "uk": {
+      "explanation": "Сталі вирази з can допомагають привернути увагу читача або підсилити думку: as you can see, as you can imagine, I can assure you that, I can't say that. Вони поширені в офіційних листах і презентаціях."
+    }
+  },
+  "456": {
+    "explanation": "Use How can + subject + verb? as a rhetorical question to reflect on a problem. You don't expect an answer; you want the reader to think: How can we improve if we never try?",
+    "examples": [
+      "How can we learn if we never make mistakes?",
+      "How can anyone stay calm in this traffic?",
+      "How can we expect children to read more?"
+    ],
+    "uk": {
+      "explanation": "How can + subject + verb? — риторичне запитання, щоб поміркувати над проблемою. Відповіді ви не чекаєте, а хочете, щоб читач замислився: How can we improve if we never try?"
+    }
+  },
+  "459": {
+    "explanation": "Use dare to talk about being brave enough to do something risky or frightening. It is most common in the negative: daren't or dare not + base verb, with no to.",
+    "examples": [
+      "I daren't tell him the truth.",
+      "Many people dare not walk there at night.",
+      "Do you dare jump into the lake?"
+    ],
+    "uk": {
+      "explanation": "Dare кажемо про те, чи вистачає сміливості зробити щось ризиковане чи страшне. Найчастіше — у запереченні: daren't або dare not + base verb, без to."
+    }
+  },
+  "460": {
+    "explanation": "Use the fixed expression I dare say to mean 'I think it's probably true'. It has nothing to do with being brave, is used only with I, and sounds a little formal.",
+    "examples": [
+      "I dare say you'll be tired after the trip.",
+      "I dare say the last option is the best.",
+      "It needs some work, I dare say."
+    ],
+    "uk": {
+      "explanation": "Сталий вираз I dare say означає «я думаю, що це, мабуть, правда». Зі сміливістю він не пов'язаний, уживається лише з I і звучить трохи офіційно."
+    }
+  },
+  "462": {
+    "explanation": "Use How dare + subject + base verb! to show that you are angry or offended because someone did something they had no right to do. It is an exclamation, not a real question.",
+    "examples": [
+      "How dare you read my messages!",
+      "How dare he speak to me like that!",
+      "How dare they call us lazy!"
+    ],
+    "uk": {
+      "explanation": "How dare + subject + base verb! показує, що ви розгнівані чи ображені, бо хтось зробив те, на що не мав права. Це вигук, а не справжнє запитання."
+    }
+  },
+  "463": {
+    "explanation": "Use didn't dare + verb to say someone was not brave enough to do something in the past. The verb can come with or without to: didn't dare (to) look.",
+    "examples": [
+      "She didn't dare look at him.",
+      "We didn't dare move.",
+      "I didn't dare to ask her age."
+    ],
+    "uk": {
+      "explanation": "Didn't dare + verb кажемо, що комусь не вистачило сміливості щось зробити в минулому. Дієслово може бути з to або без нього: didn't dare (to) look."
+    }
+  },
+  "639": {
+    "explanation": "Use probably to show you are not sure, and definitely to show you are sure. Put the adverb after be, or before the main verb: It's probably in the car. She definitely knows.",
+    "examples": [
+      "It's probably in the kitchen.",
+      "He definitely wants to come.",
+      "It's definitely going to rain."
+    ],
+    "uk": {
+      "explanation": "Probably показує, що ви не впевнені, а definitely — що впевнені. Прислівник ставимо після be або перед основним дієсловом: It's probably in the car. She definitely knows."
+    }
+  },
+  "641": {
+    "explanation": "Use adverbs like certainly, definitely and obviously to make a statement stronger. They show that you are completely sure or really mean it. Put them after be or an auxiliary, or before the main verb.",
+    "examples": [
+      "I will certainly call you on Friday.",
+      "I definitely recommend this hotel.",
+      "You obviously can't work all day."
+    ],
+    "uk": {
+      "explanation": "Прислівники на кшталт certainly, definitely й obviously роблять твердження сильнішим. Вони показують, що ви цілком упевнені або справді маєте це на увазі. Ставимо їх після be чи допоміжного дієслова або перед основним дієсловом."
+    }
+  },
+  "642": {
+    "explanation": "Put an adverb like probably, certainly or surely after a modal verb to change how strong it sounds. Probably makes advice or a prediction softer; certainly makes it stronger: modal verb + adverb + base verb.",
+    "examples": [
+      "You should probably take an umbrella.",
+      "You would certainly enjoy the trip.",
+      "We can surely find a cheaper hotel."
+    ],
+    "uk": {
+      "explanation": "Прислівник на кшталт probably, certainly чи surely після модального дієслова змінює, наскільки сильно воно звучить. Probably пом'якшує пораду чи прогноз, certainly — підсилює: modal verb + adverb + base verb."
+    }
+  },
+  "643": {
+    "explanation": "Add possibly after could + subject to make a request extra polite. It shows you know you are asking for something that may not be easy: Could you possibly…? or Could I possibly…?",
+    "examples": [
+      "Could you possibly help me with this form?",
+      "Could I possibly leave a bit early today?",
+      "Could we possibly meet on Thursday instead?"
+    ],
+    "uk": {
+      "explanation": "Додайте possibly після could + підмет, щоб прохання звучало особливо ввічливо. Так ви показуєте, що розумієте: просите про щось, що може бути непросто зробити: Could you possibly…? або Could I possibly…?"
+    }
+  },
+  "644": {
+    "explanation": "Use not necessarily to say that something is often true, but not in every case. It lets you disagree gently with a general idea by pointing to exceptions. Necessarily comes straight after not or a short negative: isn't necessarily, doesn't necessarily.",
+    "examples": [
+      "Expensive food isn't necessarily better.",
+      "A big city doesn't necessarily mean a better life.",
+      "Older people are not necessarily wiser."
+    ],
+    "uk": {
+      "explanation": "Not necessarily кажемо, коли щось часто правда, але не завжди. Так можна м'яко не погодитися із загальною думкою, вказавши на винятки. Necessarily стоїть одразу після not або короткого заперечення: isn't necessarily, doesn't necessarily."
+    }
+  },
+  "645": {
+    "explanation": "Not necessarily can be a complete answer on its own. It means 'no, not always' or 'that's not the only possibility', and it sounds softer than a simple no. The word not comes first.",
+    "examples": [
+      "Is the cheapest option the worst? Not necessarily.",
+      "So you'll need a car there? Not necessarily.",
+      "Does rain mean the match is cancelled? Not necessarily."
+    ],
+    "uk": {
+      "explanation": "Not necessarily може бути цілою відповіддю. Вона означає «ні, не завжди» або «це не єдиний варіант» і звучить м'якше, ніж просто no. Слово not стоїть першим."
+    }
+  },
+  "646": {
+    "explanation": "An adverb of certainty can be a full answer by itself: Definitely, Certainly, Absolutely, Probably. It is shorter and more natural than repeating the whole sentence. Add not for a negative answer: Probably not, Definitely not.",
+    "examples": [
+      "Would you go there again? Definitely.",
+      "Can I borrow your pen? Certainly.",
+      "Will they win tonight? Probably not."
+    ],
+    "uk": {
+      "explanation": "Прислівник упевненості може бути повною відповіддю: Definitely, Certainly, Absolutely, Probably. Це коротше й природніше, ніж повторювати все речення. Для заперечної відповіді додайте not: Probably not, Definitely not."
+    }
+  },
   "659": {
     "explanation": "For emphasis, use such a + adjective + singular noun, and such + adjective + plural or uncountable noun: such a nice day, such good friends. Such goes before a, not after it.",
     "examples": [
@@ -4529,6 +4859,292 @@
     ],
     "uk": {
       "explanation": "In the least після заперечного дієслова або перед прикметником у заперечному реченні означає «анітрохи»: I'm not in the least worried. Це емфатичний вираз."
+    }
+  },
+  "1212": {
+    "explanation": "Use couldn't + verb to say that you were not able to do something in the past, or that it was not possible. Couldn't is the past of can't.",
+    "examples": [
+      "I couldn't sleep last night.",
+      "We couldn't find the station.",
+      "She couldn't come to the party."
+    ],
+    "uk": {
+      "explanation": "Couldn't + verb кажемо, що в минулому не змогли щось зробити або це було неможливо. Couldn't — минула форма від can't."
+    }
+  },
+  "1213": {
+    "explanation": "Use couldn't + verb to say that you were not able to do something in the past, or that it was not possible. Couldn't is the past of can't.",
+    "examples": [
+      "I couldn't sleep last night.",
+      "We couldn't find the station.",
+      "She couldn't come to the party."
+    ],
+    "uk": {
+      "explanation": "Couldn't + verb кажемо, що в минулому не змогли щось зробити або це було неможливо. Couldn't — минула форма від can't."
+    }
+  },
+  "1214": {
+    "explanation": "Use Could you + verb? to ask someone to do something. It is more polite than Can you…? and good with people you don't know well.",
+    "examples": [
+      "Could you help me, please?",
+      "Could you open the door?",
+      "Could you send me the address?"
+    ],
+    "uk": {
+      "explanation": "Could you + verb? — так просимо когось щось зробити. Це ввічливіше, ніж Can you…?, і добре підходить для людей, яких ви мало знаєте."
+    }
+  },
+  "1215": {
+    "explanation": "Use Could you + verb? to ask someone to do something. It is more polite than Can you…? and good with people you don't know well.",
+    "examples": [
+      "Could you help me, please?",
+      "Could you open the door?",
+      "Could you send me the address?"
+    ],
+    "uk": {
+      "explanation": "Could you + verb? — так просимо когось щось зробити. Це ввічливіше, ніж Can you…?, і добре підходить для людей, яких ви мало знаєте."
+    }
+  },
+  "1216": {
+    "explanation": "Use We could + verb or You could + verb to suggest an idea. It sounds friendly: it is one possible plan, not an order.",
+    "examples": [
+      "We could go to the cinema tonight.",
+      "You could take the bus.",
+      "We could have dinner after that."
+    ],
+    "uk": {
+      "explanation": "We could + verb або You could + verb — так пропонуємо ідею. Звучить дружньо: це один із можливих варіантів, а не наказ."
+    }
+  },
+  "1217": {
+    "explanation": "Use We could + verb or You could + verb to suggest an idea. It sounds friendly: it is one possible plan, not an order.",
+    "examples": [
+      "We could go to the cinema tonight.",
+      "You could take the bus.",
+      "We could have dinner after that."
+    ],
+    "uk": {
+      "explanation": "We could + verb або You could + verb — так пропонуємо ідею. Звучить дружньо: це один із можливих варіантів, а не наказ."
+    }
+  },
+  "1218": {
+    "explanation": "Use could + verb to talk about a general ability in the past, or with sense verbs like see and hear. For one specific success, use was able to instead.",
+    "examples": [
+      "When I was five, I could swim.",
+      "We could hear music from next door.",
+      "From the hotel we could see the sea."
+    ],
+    "uk": {
+      "explanation": "Could + verb кажемо про загальне вміння в минулому або з дієсловами сприйняття, як-от see і hear. Про один конкретний успіх кажемо was able to."
+    }
+  },
+  "1219": {
+    "explanation": "Use could + verb to talk about a general ability in the past, or with sense verbs like see and hear. For one specific success, use was able to instead.",
+    "examples": [
+      "When I was five, I could swim.",
+      "We could hear music from next door.",
+      "From the hotel we could see the sea."
+    ],
+    "uk": {
+      "explanation": "Could + verb кажемо про загальне вміння в минулому або з дієсловами сприйняття, як-от see і hear. Про один конкретний успіх кажемо was able to."
+    }
+  },
+  "1220": {
+    "explanation": "Use Could I + verb? to ask for permission politely. It is softer than Can I…? The answer usually uses can: Yes, you can.",
+    "examples": [
+      "Could I use your phone?",
+      "Could I leave a bit early today?",
+      "Could I have a glass of water, please?"
+    ],
+    "uk": {
+      "explanation": "Could I + verb? — так ввічливо питаємо дозволу. Це м'якше, ніж Can I…? У відповіді зазвичай вживаємо can: Yes, you can."
+    }
+  },
+  "1221": {
+    "explanation": "Use Could I + verb? to ask for permission politely. It is softer than Can I…? The answer usually uses can: Yes, you can.",
+    "examples": [
+      "Could I use your phone?",
+      "Could I leave a bit early today?",
+      "Could I have a glass of water, please?"
+    ],
+    "uk": {
+      "explanation": "Could I + verb? — так ввічливо питаємо дозволу. Це м'якше, ніж Can I…? У відповіді зазвичай вживаємо can: Yes, you can."
+    }
+  },
+  "1222": {
+    "explanation": "Use could + verb to say that something is possible now or in the future, but you are not sure. It means almost the same as might: It could rain later.",
+    "examples": [
+      "Take a coat — it could get cold.",
+      "Your keys could be in the car.",
+      "This could be a great opportunity."
+    ],
+    "uk": {
+      "explanation": "Could + verb кажемо, що щось можливо зараз або в майбутньому, але напевно ви не знаєте. Це майже те саме, що might: It could rain later."
+    }
+  },
+  "1223": {
+    "explanation": "Use could + verb to say that something is possible now or in the future, but you are not sure. It means almost the same as might: It could rain later.",
+    "examples": [
+      "Take a coat — it could get cold.",
+      "Your keys could be in the car.",
+      "This could be a great opportunity."
+    ],
+    "uk": {
+      "explanation": "Could + verb кажемо, що щось можливо зараз або в майбутньому, але напевно ви не знаєте. Це майже те саме, що might: It could rain later."
+    }
+  },
+  "1224": {
+    "explanation": "Use could + any verb to give ideas and advice in a friendly way: You could join a gym. A question with could suggests a change politely: Could we meet at six?",
+    "examples": [
+      "You could ask your teacher for help.",
+      "We could meet in the café next to the station.",
+      "Could the meeting be on Monday instead?"
+    ],
+    "uk": {
+      "explanation": "Could + будь-яке дієслово — так дружньо даємо ідеї та поради: You could join a gym. Запитання з could ввічливо пропонує зміну: Could we meet at six?"
+    }
+  },
+  "1225": {
+    "explanation": "Use could + any verb to give ideas and advice in a friendly way: You could join a gym. A question with could suggests a change politely: Could we meet at six?",
+    "examples": [
+      "You could ask your teacher for help.",
+      "We could meet in the café next to the station.",
+      "Could the meeting be on Monday instead?"
+    ],
+    "uk": {
+      "explanation": "Could + будь-яке дієслово — так дружньо даємо ідеї та поради: You could join a gym. Запитання з could ввічливо пропонує зміну: Could we meet at six?"
+    }
+  },
+  "1228": {
+    "explanation": "Use could have + past participle to say that something was possible in the past, but it did not happen. Couldn't have + past participle says it was not possible.",
+    "examples": [
+      "You could have called me — I was at home.",
+      "The accident could have been much worse.",
+      "I couldn't have done it without your help."
+    ],
+    "uk": {
+      "explanation": "Could have + past participle кажемо, що щось було можливо в минулому, але не сталося. Couldn't have + past participle означає, що це було неможливо."
+    }
+  },
+  "1229": {
+    "explanation": "Use could have + past participle to say that something was possible in the past, but it did not happen. Couldn't have + past participle says it was not possible.",
+    "examples": [
+      "You could have called me — I was at home.",
+      "The accident could have been much worse.",
+      "I couldn't have done it without your help."
+    ],
+    "uk": {
+      "explanation": "Could have + past participle кажемо, що щось було можливо в минулому, але не сталося. Couldn't have + past participle означає, що це було неможливо."
+    }
+  },
+  "1230": {
+    "explanation": "Use could have + past participle to guess about the past when you don't know what happened. It gives one possible explanation and means the same as might have.",
+    "examples": [
+      "She could have missed the train.",
+      "Someone could have taken your bag by mistake.",
+      "Who could have sent this letter?"
+    ],
+    "uk": {
+      "explanation": "Could have + past participle — так робимо здогад про минуле, коли не знаємо, що сталося. Це одне з можливих пояснень, те саме, що might have."
+    }
+  },
+  "1231": {
+    "explanation": "Use could have + past participle to guess about the past when you don't know what happened. It gives one possible explanation and means the same as might have.",
+    "examples": [
+      "She could have missed the train.",
+      "Someone could have taken your bag by mistake.",
+      "Who could have sent this letter?"
+    ],
+    "uk": {
+      "explanation": "Could have + past participle — так робимо здогад про минуле, коли не знаємо, що сталося. Це одне з можливих пояснень, те саме, що might have."
+    }
+  },
+  "1232": {
+    "explanation": "Use I could have + past participle to express regret: there was a better option, and you didn't take it. After I wish, it says you wanted to do something, but it wasn't possible.",
+    "examples": [
+      "I could have studied harder for the exam.",
+      "I wish I could have stayed longer.",
+      "We could have taken a taxi instead."
+    ],
+    "uk": {
+      "explanation": "I could have + past participle виражає жаль: був кращий варіант, а ви ним не скористалися. Після I wish це означає, що ви хотіли щось зробити, але не мали змоги."
+    }
+  },
+  "1233": {
+    "explanation": "Use I could have + past participle to express regret: there was a better option, and you didn't take it. After I wish, it says you wanted to do something, but it wasn't possible.",
+    "examples": [
+      "I could have studied harder for the exam.",
+      "I wish I could have stayed longer.",
+      "We could have taken a taxi instead."
+    ],
+    "uk": {
+      "explanation": "I could have + past participle виражає жаль: був кращий варіант, а ви ним не скористалися. Після I wish це означає, що ви хотіли щось зробити, але не мали змоги."
+    }
+  },
+  "1234": {
+    "explanation": "When you report someone's words, can usually becomes could after said, told or asked. 'I can help you' becomes She said she could help me.",
+    "examples": [
+      "He said he could fix my bike.",
+      "I told them I couldn't come.",
+      "She asked if I could help her."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо чужі слова, can після said, told чи asked зазвичай стає could. 'I can help you' перетворюється на She said she could help me."
+    }
+  },
+  "1235": {
+    "explanation": "When you report someone's words, can usually becomes could after said, told or asked. 'I can help you' becomes She said she could help me.",
+    "examples": [
+      "He said he could fix my bike.",
+      "I told them I couldn't come.",
+      "She asked if I could help her."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо чужі слова, can після said, told чи asked зазвичай стає could. 'I can help you' перетворюється на She said she could help me."
+    }
+  },
+  "1236": {
+    "explanation": "Use you could have + past participle to criticise someone: they had a better option and didn't take it. It is softer than should have but still clear, and it's common in complaints.",
+    "examples": [
+      "You could have told me you were coming!",
+      "The hotel could have warned us about the noise.",
+      "They could have given us a better room."
+    ],
+    "uk": {
+      "explanation": "You could have + past participle — так критикуємо когось: людина мала кращий варіант і ним не скористалася. Це м'якше, ніж should have, але все одно зрозуміло; часто трапляється у скаргах."
+    }
+  },
+  "1237": {
+    "explanation": "Use you could have + past participle to criticise someone: they had a better option and didn't take it. It is softer than should have but still clear, and it's common in complaints.",
+    "examples": [
+      "You could have told me you were coming!",
+      "The hotel could have warned us about the noise.",
+      "They could have given us a better room."
+    ],
+    "uk": {
+      "explanation": "You could have + past participle — так критикуємо когось: людина мала кращий варіант і ним не скористалася. Це м'якше, ніж should have, але все одно зрозуміло; часто трапляється у скаргах."
+    }
+  },
+  "1238": {
+    "explanation": "Use couldn't have + past participle to say you are sure something did not happen, because it is impossible or makes no sense. It is the opposite of must have: Surely I couldn't have left it on the bus.",
+    "examples": [
+      "Surely I couldn't have left my keys at work.",
+      "She couldn't have known about the party.",
+      "He couldn't have driven there in an hour."
+    ],
+    "uk": {
+      "explanation": "Couldn't have + past participle кажемо, коли впевнені, що щось не сталося, бо це неможливо або не має сенсу. Це протилежність must have: Surely I couldn't have left it on the bus."
+    }
+  },
+  "1239": {
+    "explanation": "Use couldn't have + past participle to say you are sure something did not happen, because it is impossible or makes no sense. It is the opposite of must have: Surely I couldn't have left it on the bus.",
+    "examples": [
+      "Surely I couldn't have left my keys at work.",
+      "She couldn't have known about the party.",
+      "He couldn't have driven there in an hour."
+    ],
+    "uk": {
+      "explanation": "Couldn't have + past participle кажемо, коли впевнені, що щось не сталося, бо це неможливо або не має сенсу. Це протилежність must have: Surely I couldn't have left it on the bus."
     }
   }
 }
