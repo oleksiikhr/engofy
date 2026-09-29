@@ -804,11 +804,7 @@
   },
   "188": {
     "explanation": "Short imperatives are a friendly way to end a letter, a message or a conversation. They sound warm, not bossy.",
-    "examples": [
-      "Write to me soon.",
-      "Take care!",
-      "Have a nice weekend!"
-    ],
+    "examples": ["Write to me soon.", "Take care!", "Have a nice weekend!"],
     "uk": {
       "explanation": "Короткі наказові речення — дружній спосіб завершити лист, повідомлення чи розмову. Вони звучать тепло, а не владно."
     }
@@ -2978,6 +2974,556 @@
     ],
     "uk": {
       "explanation": "В офіційній дискусії запитання з need перед підметом часто риторичне: автор не чекає відповіді. Need I say more? означає «і так усе зрозуміло»."
+    }
+  },
+  "557": {
+    "explanation": "Use you ought to + verb to give advice. It means almost the same as you should, but it is a little more formal and less common. Don't forget to: ought to, not ought.",
+    "examples": [
+      "You ought to see a doctor.",
+      "You ought to call your mum more often.",
+      "You ought to get some sleep."
+    ],
+    "uk": {
+      "explanation": "You ought to + verb — так даємо пораду. Це майже те саме, що you should, але трохи офіційніше й рідше вживається. Не забувайте про to: ought to, а не ought."
+    }
+  },
+  "559": {
+    "explanation": "Use ought to + verb to talk about how things should be in an ideal world, often when the real situation is different.",
+    "examples": [
+      "Everyone ought to have a safe home.",
+      "Public transport ought to be cheaper.",
+      "Children ought to spend more time outside."
+    ],
+    "uk": {
+      "explanation": "Ought to + verb кажемо про те, як усе мало б бути в ідеальному світі, часто коли насправді ситуація інша."
+    }
+  },
+  "560": {
+    "explanation": "Use there ought to be + noun to say that something should exist but doesn't. It is common when you complain or suggest a change.",
+    "examples": [
+      "There ought to be more buses at night.",
+      "There ought to be a law against this.",
+      "There ought to be a café in the park."
+    ],
+    "uk": {
+      "explanation": "There ought to be + noun кажемо, що щось мало б існувати, але його немає. Так часто говорять, коли скаржаться або пропонують зміни."
+    }
+  },
+  "561": {
+    "explanation": "Add really before ought to, or between ought and to in formal writing, to make advice or an opinion stronger: really ought to.",
+    "examples": [
+      "You really ought to see this film.",
+      "We really ought to leave now.",
+      "They really ought to fix this road."
+    ],
+    "uk": {
+      "explanation": "Додайте really перед ought to — або, в офіційному письмі, між ought і to, — щоб порада чи думка звучала сильніше: really ought to."
+    }
+  },
+  "562": {
+    "explanation": "Use ought to have + past participle to say that something was the right thing to do in the past, but it didn't happen. It is close to should have.",
+    "examples": [
+      "You ought to have told me earlier.",
+      "We ought to have booked a table.",
+      "They ought to have asked for help."
+    ],
+    "uk": {
+      "explanation": "Ought to have + past participle кажемо, що в минулому варто було щось зробити, але цього не сталося. Це близько до should have."
+    }
+  },
+  "563": {
+    "explanation": "Use ought to + verb to say that something is likely or expected, because that is the normal result. It means the same as should: The parcel ought to arrive tomorrow.",
+    "examples": [
+      "The parcel ought to arrive tomorrow.",
+      "It's a short walk — it ought to take ten minutes.",
+      "With all that practice, she ought to win."
+    ],
+    "uk": {
+      "explanation": "Ought to + verb кажемо, що щось імовірне або очікуване, бо це звичайний результат. Це те саме, що should: The parcel ought to arrive tomorrow."
+    }
+  },
+  "569": {
+    "explanation": "Use Shall I + verb? to offer to do something for someone. It means 'Do you want me to…?'",
+    "examples": [
+      "Shall I open the window?",
+      "Shall I carry your bag?",
+      "Shall I call you a taxi?"
+    ],
+    "uk": {
+      "explanation": "Shall I + verb? — так пропонуємо щось зробити для когось. Це означає «Хочете, я…?»"
+    }
+  },
+  "570": {
+    "explanation": "Use Shall we + verb? to suggest doing something together. It means 'Do you want to…?' or 'Let's…'.",
+    "examples": [
+      "Shall we go to the cinema?",
+      "Shall we meet at six?",
+      "What shall we do tonight?"
+    ],
+    "uk": {
+      "explanation": "Shall we + verb? — так пропонуємо зробити щось разом. Це означає «Може, …?» або «Давайте…»."
+    }
+  },
+  "571": {
+    "explanation": "In statements, I shall or we shall + verb talks about plans, intentions and promises. It means the same as I will, but sounds formal and is common in letters and emails.",
+    "examples": [
+      "I shall be free on Sunday evening.",
+      "We shall send you the tickets next week.",
+      "I shall do my best."
+    ],
+    "uk": {
+      "explanation": "У ствердних реченнях I shall або we shall + verb кажемо про плани, наміри й обіцянки. Це те саме, що I will, але звучить офіційно й часто трапляється в листах."
+    }
+  },
+  "572": {
+    "explanation": "Use What shall I…? or Shall I…? to ask someone for advice about what to do.",
+    "examples": [
+      "What shall I wear to the party?",
+      "Where shall I put these boxes?",
+      "Shall I tell her the truth?"
+    ],
+    "uk": {
+      "explanation": "What shall I…? або Shall I…? — так просимо поради, що робити."
+    }
+  },
+  "574": {
+    "explanation": "In laws, contracts and official rules, shall with any subject gives an order or an obligation: it means must. Shall not means must not. You won't hear this in conversation.",
+    "examples": [
+      "The tenant shall pay the rent monthly.",
+      "Visitors shall not enter this area.",
+      "All members shall follow these rules."
+    ],
+    "uk": {
+      "explanation": "У законах, договорах і офіційних правилах shall з будь-яким підметом виражає наказ чи обов'язок: означає must. Shall not означає must not. У розмові так не кажуть."
+    }
+  },
+  "575": {
+    "explanation": "In formal writing, shall can replace will in the main clause after an if-clause, usually with I or we. It often sounds serious, like a warning: If…, we shall….",
+    "examples": [
+      "If we get no reply, we shall contact our lawyer.",
+      "If it rains, we shall stay inside.",
+      "If you are late, I shall start without you."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі shall може замінити will у головній частині після if-речення, зазвичай з I або we. Часто це звучить серйозно, як попередження: If…, we shall…."
+    }
+  },
+  "576": {
+    "explanation": "Shall + verb can say what you think will happen in the future, as a formal alternative to will. It is most natural with I and we; We shall see means 'we'll find out later'.",
+    "examples": [
+      "We shall see what happens.",
+      "I shall never forget that day.",
+      "We shall know the results soon."
+    ],
+    "uk": {
+      "explanation": "Shall + verb може передбачати майбутнє як офіційна альтернатива will. Найприродніше звучить з I та we; We shall see означає «побачимо згодом»."
+    }
+  },
+  "580": {
+    "explanation": "Use should + verb to give advice or say what is a good idea. Shouldn't means it is not a good idea. The verb after should has no to.",
+    "examples": [
+      "You should drink more water.",
+      "You shouldn't go to bed so late.",
+      "Should I buy this jacket?"
+    ],
+    "uk": {
+      "explanation": "Should + verb — так даємо пораду або кажемо, що щось добра ідея. Shouldn't означає, що це погана ідея. Дієслово після should — без to."
+    }
+  },
+  "581": {
+    "explanation": "Use should + verb, often with we, to suggest a plan or an idea: We should go to the beach. It sounds a bit stronger than We could….",
+    "examples": [
+      "We should go to the beach on Sunday.",
+      "Maybe we should take a taxi.",
+      "We should meet for coffee sometime."
+    ],
+    "uk": {
+      "explanation": "Should + verb, часто з we, — так пропонуємо план чи ідею: We should go to the beach. Це звучить трохи наполегливіше, ніж We could…."
+    }
+  },
+  "582": {
+    "explanation": "Add the question tag shouldn't we? or shouldn't I? to the end of a suggestion to ask if the other person agrees.",
+    "examples": [
+      "We should leave soon, shouldn't we?",
+      "I should call her, shouldn't I?",
+      "We should buy a present, shouldn't we?"
+    ],
+    "uk": {
+      "explanation": "Додайте розділове запитання shouldn't we? або shouldn't I? у кінці пропозиції, щоб спитати, чи співрозмовник погоджується."
+    }
+  },
+  "585": {
+    "explanation": "Use should + verb to say how things ought to be in an ideal world, often when the real situation is different.",
+    "examples": [
+      "Everyone should have the right to study.",
+      "Cities should have more parks.",
+      "Medicine should be free for children."
+    ],
+    "uk": {
+      "explanation": "Should + verb кажемо, як усе мало б бути в ідеальному світі, часто коли насправді ситуація інша."
+    }
+  },
+  "586": {
+    "explanation": "Use should + verb to say that something will probably happen, because that is what you expect. It should be fun means 'I expect it will be fun'.",
+    "examples": [
+      "It should be a great party.",
+      "The train should arrive at five.",
+      "This shouldn't take long."
+    ],
+    "uk": {
+      "explanation": "Should + verb кажемо, що щось, імовірно, станеться, бо ви цього очікуєте. It should be fun означає «гадаю, буде весело»."
+    }
+  },
+  "587": {
+    "explanation": "In a story, You should have seen or heard…! is not a real regret. It means 'it was amazing — I wish you had been there', and makes the story more exciting.",
+    "examples": [
+      "You should have seen his face!",
+      "You should have heard the noise!",
+      "You should have been there — it was brilliant."
+    ],
+    "uk": {
+      "explanation": "В розповіді You should have seen чи heard…! — не справжній жаль. Це означає «було неймовірно — шкода, що тебе там не було» і робить історію цікавішою."
+    }
+  },
+  "588": {
+    "explanation": "Use should have + past participle to say that something was the right thing to do in the past, but it didn't happen. Shouldn't have + past participle says something was a mistake.",
+    "examples": [
+      "I should have studied harder.",
+      "You shouldn't have said that.",
+      "We should have left earlier."
+    ],
+    "uk": {
+      "explanation": "Should have + past participle кажемо, що в минулому варто було щось зробити, але цього не сталося. Shouldn't have + past participle означає, що щось було помилкою."
+    }
+  },
+  "589": {
+    "explanation": "When someone gives you a present, say You shouldn't have! to thank them politely. It isn't criticism: it means 'thank you, that was very kind'.",
+    "examples": [
+      "Flowers? Oh, you shouldn't have!",
+      "Thank you for the present — you shouldn't have!",
+      "You shouldn't have spent so much on me."
+    ],
+    "uk": {
+      "explanation": "Коли вам дарують подарунок, You shouldn't have! — ввічлива подяка. Це не докір, а «дякую, це дуже мило»."
+    }
+  },
+  "592": {
+    "explanation": "Use should be + -ing to say what you expect to be happening at a certain time.",
+    "examples": [
+      "They should be arriving about now.",
+      "This time tomorrow we should be flying to Rome.",
+      "The kids should be sleeping by nine."
+    ],
+    "uk": {
+      "explanation": "Should be + -ing кажемо, що, як ми очікуємо, відбуватиметься в певний момент."
+    }
+  },
+  "593": {
+    "explanation": "Use should be or shouldn't be + -ing to say what is right or wrong to be doing, often when the real situation is different.",
+    "examples": [
+      "You should be studying, not watching TV.",
+      "He shouldn't be driving when he's so tired.",
+      "We should be doing more to help."
+    ],
+    "uk": {
+      "explanation": "Should be або shouldn't be + -ing кажемо, що правильно чи неправильно зараз робити, часто коли насправді відбувається інше."
+    }
+  },
+  "594": {
+    "explanation": "In formal English, put should after if to make a future situation sound less likely: 'if by any chance…'. It is common in instructions, letters and emails.",
+    "examples": [
+      "If you should need anything, just call me.",
+      "If something should happen, call 112.",
+      "If you should change your mind, let me know."
+    ],
+    "uk": {
+      "explanation": "В офіційній англійській should після if робить майбутню ситуацію менш імовірною: «якщо раптом…». Так часто пишуть в інструкціях і листах."
+    }
+  },
+  "595": {
+    "explanation": "Even more formally, drop if and put should before the subject: Should you need help, …. It is typical at the end of business letters and emails.",
+    "examples": [
+      "Should you have any questions, please contact me.",
+      "Should the flight be late, we will wait.",
+      "Should you need more information, call our office."
+    ],
+    "uk": {
+      "explanation": "Ще офіційніше — прибрати if і поставити should перед підметом: Should you need help, …. Так типово закінчують ділові листи."
+    }
+  },
+  "598": {
+    "explanation": "Use used to + base verb for things that happened again and again, or were true, in the past but are not true now. The negative is didn't use to.",
+    "examples": [
+      "I used to play football every weekend.",
+      "She used to live in Odesa.",
+      "We didn't use to have a car."
+    ],
+    "uk": {
+      "explanation": "Used to + base verb кажемо про те, що регулярно відбувалося або було правдою в минулому, але тепер уже ні. Заперечення — didn't use to."
+    }
+  },
+  "601": {
+    "explanation": "In a story, add as + pronoun + used to + verb to give background: how someone used to describe or name something. It often highlights something unusual: 'as she used to call him'.",
+    "examples": [
+      "He married Nellie, 'my angel' as he used to call her.",
+      "She worked for peanuts, as she used to say.",
+      "It was a dream, as my father used to say."
+    ],
+    "uk": {
+      "explanation": "В розповіді as + займенник + used to + verb додає тло: як хтось колись описував чи називав щось. Часто це підкреслює щось незвичне: «як вона його називала»."
+    }
+  },
+  "604": {
+    "explanation": "Use will + verb, often I'll, for a plan or decision you make at the moment of speaking. The verb after will has no to.",
+    "examples": [
+      "I'll call you tomorrow.",
+      "It's cold — I'll close the window.",
+      "I'll have the soup, please."
+    ],
+    "uk": {
+      "explanation": "Will + verb, часто I'll, кажемо про план чи рішення, яке ухвалюємо просто під час розмови. Дієслово після will — без to."
+    }
+  },
+  "605": {
+    "explanation": "Use if + present simple, then will + verb, to talk about a possible future situation and its result: If it rains, we'll stay home. Don't use will in the if-part.",
+    "examples": [
+      "If it rains, we'll stay at home.",
+      "If you study, you'll pass the exam.",
+      "I'll help you if I have time."
+    ],
+    "uk": {
+      "explanation": "If + present simple, а потім will + verb — так говоримо про можливу ситуацію в майбутньому та її наслідок: If it rains, we'll stay home. У частині з if will не вживаємо."
+    }
+  },
+  "608": {
+    "explanation": "Use Will you + verb? or a wh- word + will to ask about someone's plans or decisions for the future.",
+    "examples": [
+      "Will you come to my party?",
+      "What will you do after school?",
+      "When will you be back?"
+    ],
+    "uk": {
+      "explanation": "Will you + verb? або питальне слово + will — так питаємо про чиїсь плани чи рішення на майбутнє."
+    }
+  },
+  "609": {
+    "explanation": "Use I'll + verb to offer help or say you are happy to do something. Won't can mean someone refuses: He won't listen.",
+    "examples": [
+      "I'll carry that for you.",
+      "Don't worry, I'll pay.",
+      "The door won't open."
+    ],
+    "uk": {
+      "explanation": "I'll + verb — так пропонуємо допомогу або кажемо, що охоче щось зробимо. Won't може означати відмову: He won't listen."
+    }
+  },
+  "610": {
+    "explanation": "Use Will you + verb? to ask someone to do something. It is direct, so it is best with family and friends.",
+    "examples": [
+      "Will you help me with this box?",
+      "Will you close the door?",
+      "Will you call me later?"
+    ],
+    "uk": {
+      "explanation": "Will you + verb? — так просимо когось щось зробити. Це досить прямо, тож найкраще підходить для рідних і друзів."
+    }
+  },
+  "611": {
+    "explanation": "Use will + verb for fixed plans and timetabled events in the future, often with a date or time.",
+    "examples": [
+      "The meeting will start at 10 am.",
+      "The course will finish on 20th June.",
+      "The shop will be closed on Monday."
+    ],
+    "uk": {
+      "explanation": "Will + verb кажемо про тверді плани й події за розкладом у майбутньому, часто з датою чи часом."
+    }
+  },
+  "612": {
+    "explanation": "Use will + verb to say what you think will happen in the future. It often comes after I think or I'm sure.",
+    "examples": [
+      "I think it will rain tomorrow.",
+      "You'll love this book.",
+      "Prices will go up next year."
+    ],
+    "uk": {
+      "explanation": "Will + verb кажемо, що, на нашу думку, станеться в майбутньому. Часто стоїть після I think або I'm sure."
+    }
+  },
+  "613": {
+    "explanation": "Use Will you please + verb? or will you + verb at the end to make firm requests and commands. It can sound impatient.",
+    "examples": [
+      "Will you please be quiet?",
+      "Will you please send me the form?",
+      "Sit down, will you?"
+    ],
+    "uk": {
+      "explanation": "Will you please + verb? або will you наприкінці — так висловлюємо наполегливі прохання й накази. Це може звучати нетерпляче."
+    }
+  },
+  "614": {
+    "explanation": "Use will + verb to describe what someone usually does, or what something typically does, in general. Adverbs like often, usually and sometimes are common here.",
+    "examples": [
+      "My cat will sleep anywhere.",
+      "She'll often read until midnight.",
+      "Boys will be boys."
+    ],
+    "uk": {
+      "explanation": "Will + verb описує, що хтось зазвичай робить або що щось типово робить, загалом. Тут часто вживаються often, usually та sometimes."
+    }
+  },
+  "615": {
+    "explanation": "Use will + verb, stressed and not shortened, to describe someone's typical behaviour that you find annoying.",
+    "examples": [
+      "He will leave his socks on the floor!",
+      "She will talk during films.",
+      "They will keep calling me at night."
+    ],
+    "uk": {
+      "explanation": "Will + verb, з наголосом і без скорочення, описує типову поведінку, яка вас дратує."
+    }
+  },
+  "617": {
+    "explanation": "Use I would like to invite you to… to make a polite invitation, for example in a letter or email. The short form is I'd like to.",
+    "examples": [
+      "I'd like to invite you to my birthday party.",
+      "We would like to invite you to dinner.",
+      "I'd like to invite you to our wedding."
+    ],
+    "uk": {
+      "explanation": "I would like to invite you to… — так ввічливо запрошуємо, наприклад у листі. Коротка форма — I'd like to."
+    }
+  },
+  "618": {
+    "explanation": "Use would like + noun or would like to + verb to say what you want politely. It is softer than want. The short form is I'd like.",
+    "examples": [
+      "I'd like a cup of tea, please.",
+      "I would like to visit London.",
+      "Would you like some cake?"
+    ],
+    "uk": {
+      "explanation": "Would like + noun або would like to + verb — так ввічливо кажемо, чого хочемо. Це м'якше, ніж want. Коротка форма — I'd like."
+    }
+  },
+  "622": {
+    "explanation": "Use would + verb to talk about an imagined situation: something that is not real, or not happening now.",
+    "examples": [
+      "A holiday by the sea would be perfect.",
+      "I would never do that.",
+      "It would be nice to live near the park."
+    ],
+    "uk": {
+      "explanation": "Would + verb кажемо про уявну ситуацію: щось нереальне або таке, що зараз не відбувається."
+    }
+  },
+  "623": {
+    "explanation": "Use it would be + adjective + to + verb to make a suggestion politely: It would be nice to…, It would be better to….",
+    "examples": [
+      "It would be nice to meet on Saturday.",
+      "It would be better to take the train.",
+      "It would be great to see you again."
+    ],
+    "uk": {
+      "explanation": "It would be + adjective + to + verb — так ввічливо щось пропонуємо: It would be nice to…, It would be better to…."
+    }
+  },
+  "624": {
+    "explanation": "Use would + verbs like prefer, love or rather to talk about wishes and preferences politely: I'd prefer…, I'd love to…, I'd rather….",
+    "examples": [
+      "I'd prefer to stay at home tonight.",
+      "I'd love to come to your party.",
+      "I'd rather have tea than coffee."
+    ],
+    "uk": {
+      "explanation": "Would + дієслова на кшталт prefer, love чи rather — так ввічливо говоримо про бажання й уподобання: I'd prefer…, I'd love to…, I'd rather…."
+    }
+  },
+  "625": {
+    "explanation": "Use if + past simple, then would + verb, to talk about an imagined situation. It is common for advice: If I were you, I'd….",
+    "examples": [
+      "If I were you, I'd take the job.",
+      "If I had more time, I would learn Spanish.",
+      "What would you do if you won?"
+    ],
+    "uk": {
+      "explanation": "If + past simple, а потім would + verb — так говоримо про уявну ситуацію. Це поширено в порадах: If I were you, I'd…."
+    }
+  },
+  "630": {
+    "explanation": "Use would + verb to talk about the future from a point in the past: something that was still in the future then.",
+    "examples": [
+      "I knew she would be late.",
+      "He promised he would call.",
+      "We thought it would rain."
+    ],
+    "uk": {
+      "explanation": "Would + verb кажемо про майбутнє з погляду минулого: про те, що тоді ще мало статися."
+    }
+  },
+  "631": {
+    "explanation": "Use would have + past participle to talk about an imagined past: what was possible, but didn't happen, often after an if-clause.",
+    "examples": [
+      "I would have come, but I was ill.",
+      "If I'd known, I would have helped.",
+      "She would have loved this place."
+    ],
+    "uk": {
+      "explanation": "Would have + past participle кажемо про уявне минуле: про те, що було можливим, але не сталося, часто після if-речення."
+    }
+  },
+  "632": {
+    "explanation": "Use would with verbs like say, advise, recommend or imagine to make an opinion less direct and more polite: I would say…, I would recommend….",
+    "examples": [
+      "I would say it's the best option.",
+      "I'd recommend the fish.",
+      "I would imagine they're tired."
+    ],
+    "uk": {
+      "explanation": "Would з дієсловами на кшталт say, advise, recommend чи imagine робить думку менш прямою і ввічливішою: I would say…, I would recommend…."
+    }
+  },
+  "633": {
+    "explanation": "Use Would you + verb? to make a polite request. Would you mind + -ing? is even more polite.",
+    "examples": [
+      "Would you open the window, please?",
+      "Would you mind waiting a moment?",
+      "Would you mind helping me?"
+    ],
+    "uk": {
+      "explanation": "Would you + verb? — так ввічливо просимо. Would you mind + -ing? звучить ще ввічливіше."
+    }
+  },
+  "634": {
+    "explanation": "When you report what someone said, will usually becomes would after said, told or promised. 'I'll come' becomes She said she would come.",
+    "examples": [
+      "She said she would come on Friday.",
+      "He told me I would like it.",
+      "They promised they would help."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо чужі слова, will після said, told чи promised зазвичай стає would. 'I'll come' перетворюється на She said she would come."
+    }
+  },
+  "635": {
+    "explanation": "Use wouldn't + verb to say that someone refused to do something in the past, or that something didn't work.",
+    "examples": [
+      "The driver wouldn't wait for us.",
+      "My parents wouldn't let me go.",
+      "The car wouldn't start this morning."
+    ],
+    "uk": {
+      "explanation": "Wouldn't + verb кажемо, що хтось у минулому відмовлявся щось робити або що щось не працювало."
+    }
+  },
+  "636": {
+    "explanation": "Use would + verb to talk about things that happened again and again in the past, often in stories and memories. It works only for actions, not states.",
+    "examples": [
+      "My grandfather would sit in the garden for hours.",
+      "Every summer we would go to the sea.",
+      "She would always bring us sweets."
+    ],
+    "uk": {
+      "explanation": "Would + verb кажемо про те, що повторювалося в минулому, часто в розповідях і спогадах. Це працює лише для дій, не для станів."
     }
   },
   "639": {
