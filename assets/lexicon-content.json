@@ -10504,5 +10504,2669 @@
         "translation": "таємниця, загадка"
       }
     }
+  },
+  "naming": {
+    "noun": {
+      "definition": "The act of giving a name to someone or something.",
+      "example": "The naming of the baby took a long time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "іменування, називання"
+      }
+    }
+  },
+  "nap": {
+    "noun": {
+      "definition": "A short sleep during the day.",
+      "example": "I had a nap after lunch.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дрімота, короткий сон"
+      }
+    }
+  },
+  "narrate": {
+    "verb": {
+      "definition": "To tell a story or describe events.",
+      "example": "He narrates the story in the first person.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розповідати, оповідати"
+      }
+    }
+  },
+  "narrative": {
+    "adjective": {
+      "definition": "Telling a story or connected with telling a story.",
+      "example": "The book is written in a narrative style.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розповідний, оповідний"
+      }
+    },
+    "noun": {
+      "definition": "A story, or the way a story is told.",
+      "example": "The narrative follows a family over three generations.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розповідь, оповідь"
+      }
+    }
+  },
+  "narrow": {
+    "adjective": {
+      "definition": "Small in width; not wide.",
+      "example": "The street is too narrow for big cars.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "вузький"
+      }
+    },
+    "verb": {
+      "definition": "To become smaller in width or range.",
+      "example": "The road narrows near the bridge.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "звужуватися, звужувати"
+      }
+    }
+  },
+  "nasty": {
+    "adjective": {
+      "definition": "Very unpleasant or unkind.",
+      "example": "He said a nasty thing about her cooking.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "неприємний, поганий"
+      }
+    }
+  },
+  "nationality": {
+    "noun": {
+      "definition": "The legal status of belonging to a particular country.",
+      "example": "What nationality are you?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "національність, громадянство"
+      }
+    }
+  },
+  "naturally": {
+    "adverb": {
+      "definition": "As you would expect; of course.",
+      "example": "Naturally, she was upset when she heard the news.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "природно, звісно"
+      }
+    }
+  },
+  "nearby": {
+    "adverb": {
+      "definition": "Not far away.",
+      "example": "We live nearby, so we can walk.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "поблизу, неподалік"
+      }
+    }
+  },
+  "necessarily": {
+    "adverb": {
+      "definition": "In a way that cannot be avoided.",
+      "example": "Expensive shoes are not necessarily better.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "обов'язково, неодмінно"
+      }
+    }
+  },
+  "necessity": {
+    "noun": {
+      "definition": "Something that you must have.",
+      "example": "A car is a necessity in the countryside.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "необхідність, потреба"
+      }
+    }
+  },
+  "necklace": {
+    "noun": {
+      "definition": "A piece of jewellery worn around the neck.",
+      "example": "She wore a gold necklace.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "намисто, кольє"
+      }
+    }
+  },
+  "negate": {
+    "verb": {
+      "definition": "To make something have no effect or value.",
+      "example": "The bad weather negated all our plans.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "заперечувати, зводити нанівець"
+      }
+    }
+  },
+  "negation": {
+    "noun": {
+      "definition": "The act of saying that something is not true, or a word that does this.",
+      "example": "\"Not\" and \"never\" are common forms of negation.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "заперечення"
+      }
+    }
+  },
+  "negative": {
+    "adjective": {
+      "definition": "Saying no, or expressing a bad or unhappy feeling.",
+      "example": "A negative sentence has not or n't in it.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "негативний, заперечний"
+      }
+    },
+    "noun": {
+      "definition": "A word, statement or answer that says no.",
+      "example": "The answer was in the negative.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заперечення"
+      }
+    }
+  },
+  "negotiate": {
+    "verb": {
+      "definition": "To try to reach an agreement by discussion.",
+      "example": "They negotiated the price for an hour.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вести переговори, домовлятися"
+      }
+    }
+  },
+  "neither": {
+    "adverb": {
+      "definition": "Used to say that a second negative statement is also true.",
+      "example": "I don't like fish, and neither does my brother.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "також не, теж не"
+      }
+    }
+  },
+  "nervous": {
+    "adjective": {
+      "definition": "Worried or a little afraid.",
+      "example": "I always feel nervous before an exam.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "нервовий, стривожений"
+      }
+    }
+  },
+  "nervously": {
+    "adverb": {
+      "definition": "In a worried or anxious way.",
+      "example": "He waited nervously outside the office.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нервово, боязко"
+      }
+    }
+  },
+  "neutral": {
+    "adjective": {
+      "definition": "Not supporting either side; not showing strong feelings.",
+      "example": "Please use a neutral tone in the email.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нейтральний"
+      }
+    }
+  },
+  "newspaper": {
+    "noun": {
+      "definition": "A set of printed pages with the daily news.",
+      "example": "My father reads the newspaper every morning.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "газета"
+      }
+    }
+  },
+  "nicely": {
+    "adverb": {
+      "definition": "In a pleasant or kind way.",
+      "example": "She asked me very nicely to help.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "гарно, чемно"
+      }
+    }
+  },
+  "nickname": {
+    "noun": {
+      "definition": "An informal name used instead of a real name.",
+      "example": "His nickname at school was Tiny.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прізвисько"
+      }
+    }
+  },
+  "nightlife": {
+    "noun": {
+      "definition": "Entertainment and places to go in the evening.",
+      "example": "The city is famous for its nightlife.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нічне життя"
+      }
+    }
+  },
+  "noise": {
+    "noun": {
+      "definition": "A loud or unpleasant sound.",
+      "example": "The noise from the street woke me up.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "шум, галас"
+      }
+    }
+  },
+  "noisy": {
+    "adjective": {
+      "definition": "Making a lot of loud sound.",
+      "example": "The restaurant was too noisy to talk.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "шумний, галасливий"
+      }
+    }
+  },
+  "nominalisation": {
+    "noun": {
+      "definition": "The use of a verb or adjective as a noun.",
+      "example": "\"Decision\" is a nominalisation of \"decide\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "номіналізація"
+      }
+    }
+  },
+  "nominalised": {
+    "adjective": {
+      "definition": "Changed into a noun form.",
+      "example": "\"Arrival\" is a nominalised form of \"arrive\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "номіналізований"
+      }
+    }
+  },
+  "noon": {
+    "noun": {
+      "definition": "Twelve o'clock in the middle of the day.",
+      "example": "We meet at noon.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "полудень, дванадцята година"
+      }
+    }
+  },
+  "normally": {
+    "adverb": {
+      "definition": "In most cases; usually.",
+      "example": "I normally get up at seven.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "зазвичай, звичайно"
+      }
+    }
+  },
+  "nose": {
+    "noun": {
+      "definition": "The part of the face used for smelling and breathing.",
+      "example": "He has a cold and a red nose.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ніс"
+      }
+    }
+  },
+  "noticeably": {
+    "adverb": {
+      "definition": "In a way that is easy to see or notice.",
+      "example": "It is noticeably colder today.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "помітно"
+      }
+    }
+  },
+  "noticed": {
+    "adjective": {
+      "definition": "Seen or observed by other people.",
+      "example": "The change went noticed by nobody.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "помічений, зауважений"
+      }
+    }
+  },
+  "noun": {
+    "noun": {
+      "definition": "A word that names a person, place, thing or idea.",
+      "example": "\"Table\" is a noun.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "іменник"
+      }
+    },
+    "verb": {
+      "definition": "To use a word as a noun.",
+      "example": "Some verbs can be noun-ed in casual speech.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "вживати як іменник"
+      }
+    }
+  },
+  "nowadays": {
+    "adverb": {
+      "definition": "At the present time, compared with the past.",
+      "example": "Nowadays most people have a smartphone.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "нині, у наші дні"
+      }
+    }
+  },
+  "nowhere": {
+    "adverb": {
+      "definition": "Not in any place.",
+      "example": "I have nowhere to go tonight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ніде, ніколи"
+      }
+    }
+  },
+  "numbered": {
+    "adjective": {
+      "definition": "Marked with a number.",
+      "example": "The seats are numbered.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пронумерований"
+      }
+    }
+  },
+  "numbering": {
+    "noun": {
+      "definition": "A system of giving numbers to things.",
+      "example": "The numbering of the pages is wrong.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нумерація"
+      }
+    }
+  },
+  "nurse": {
+    "noun": {
+      "definition": "A person who looks after sick people in a hospital.",
+      "example": "My sister works as a nurse.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "медсестра, медбрат"
+      }
+    }
+  },
+  "object": {
+    "noun": {
+      "definition": "A thing that you can see and touch; also the part of a sentence that receives the action.",
+      "example": "In \"I like tea\", \"tea\" is the object.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "предмет, додаток"
+      }
+    },
+    "verb": {
+      "definition": "To say that you do not agree with something.",
+      "example": "Nobody objected to the plan.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "заперечувати, протестувати"
+      }
+    }
+  },
+  "objective": {
+    "adjective": {
+      "definition": "Based on facts, not on personal feelings.",
+      "example": "A judge must be objective.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "об'єктивний"
+      }
+    },
+    "noun": {
+      "definition": "Something that you are trying to achieve.",
+      "example": "Our objective is to finish by Friday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "мета, завдання"
+      }
+    }
+  },
+  "obligation": {
+    "noun": {
+      "definition": "Something that you must do because of a rule, promise or duty.",
+      "example": "You have an obligation to tell the truth.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "обов'язок, зобов'язання"
+      }
+    }
+  },
+  "oblige": {
+    "verb": {
+      "definition": "To force someone to do something, or to do a favour for someone.",
+      "example": "The law obliges drivers to wear seat belts.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зобов'язувати, змушувати"
+      }
+    }
+  },
+  "obvious": {
+    "adjective": {
+      "definition": "Easy to see or understand.",
+      "example": "It was obvious that he was tired.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "очевидний, зрозумілий"
+      }
+    }
+  },
+  "obviously": {
+    "adverb": {
+      "definition": "In a way that is easy to see or understand.",
+      "example": "Obviously, I would like to help.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "очевидно, звісно"
+      }
+    }
+  },
+  "occasion": {
+    "noun": {
+      "definition": "A particular time when something happens.",
+      "example": "We only wear suits on special occasions.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "випадок, нагода"
+      }
+    }
+  },
+  "odd": {
+    "adjective": {
+      "definition": "Strange or unusual.",
+      "example": "It's odd that he didn't call.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дивний, незвичний"
+      }
+    }
+  },
+  "offend": {
+    "verb": {
+      "definition": "To make someone feel upset or insulted.",
+      "example": "I hope my joke didn't offend you.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ображати, кривдити"
+      }
+    }
+  },
+  "offense": {
+    "verb": {
+      "definition": "To make someone feel upset or angry (a spelling of \"offend\" used in the US).",
+      "example": "Her comments really offended me.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ображати, ображатися"
+      }
+    }
+  },
+  "officially": {
+    "adverb": {
+      "definition": "In a way that is approved by people in authority.",
+      "example": "The new bridge was officially opened yesterday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "офіційно"
+      }
+    }
+  },
+  "omelette": {
+    "noun": {
+      "definition": "A dish of beaten eggs cooked in a pan.",
+      "example": "I had a cheese omelette for breakfast.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "омлет"
+      }
+    }
+  },
+  "omit": {
+    "verb": {
+      "definition": "To leave something out.",
+      "example": "Please don't omit any details.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "пропускати, опускати"
+      }
+    }
+  },
+  "ongoing": {
+    "adjective": {
+      "definition": "Continuing to happen now.",
+      "example": "The police investigation is ongoing.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "поточний, той, що триває"
+      }
+    }
+  },
+  "opener": {
+    "noun": {
+      "definition": "Something that starts something, or a tool that opens a tin or bottle.",
+      "example": "A joke is a good conversation opener.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "початок, відкривачка"
+      }
+    }
+  },
+  "opera": {
+    "noun": {
+      "definition": "A play in which the words are sung to music.",
+      "example": "We went to the opera on Saturday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "опера"
+      }
+    }
+  },
+  "oppose": {
+    "verb": {
+      "definition": "To disagree strongly with something and try to stop it.",
+      "example": "Many people oppose the new law.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "виступати проти, заперечувати"
+      }
+    }
+  },
+  "opposite": {
+    "adjective": {
+      "definition": "Completely different, or on the other side.",
+      "example": "He lives on the opposite side of the street.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "протилежний"
+      }
+    },
+    "adverb": {
+      "definition": "On the other side, facing something.",
+      "example": "The bank is just opposite.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "навпроти"
+      }
+    },
+    "noun": {
+      "definition": "A person or thing that is completely different from another.",
+      "example": "\"Hot\" is the opposite of \"cold\".",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "протилежність"
+      }
+    }
+  },
+  "option": {
+    "noun": {
+      "definition": "A choice that you can make.",
+      "example": "You have two options: stay or leave.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "варіант, вибір"
+      }
+    }
+  },
+  "optional": {
+    "adjective": {
+      "definition": "Not required; you can choose whether to do it.",
+      "example": "The trip is optional.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "необов'язковий, за вибором"
+      }
+    }
+  },
+  "orange": {
+    "adjective": {
+      "definition": "Having the colour of the fruit called an orange.",
+      "example": "She wore an orange scarf.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "помаранчевий"
+      }
+    }
+  },
+  "ordinary": {
+    "adjective": {
+      "definition": "Normal, not special or different.",
+      "example": "It was an ordinary day at work.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "звичайний, буденний"
+      }
+    }
+  },
+  "organisation": {
+    "noun": {
+      "definition": "A group of people working together for a purpose.",
+      "example": "She works for a charity organisation.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "організація"
+      }
+    }
+  },
+  "organise": {
+    "verb": {
+      "definition": "To plan and arrange something so that it works well.",
+      "example": "I'm organising a party for Saturday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "організовувати, влаштовувати"
+      }
+    }
+  },
+  "organised": {
+    "adjective": {
+      "definition": "Well planned and arranged; good at planning.",
+      "example": "She is a very organised person.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "організований"
+      }
+    }
+  },
+  "organiser": {
+    "noun": {
+      "definition": "A person who plans and arranges an event.",
+      "example": "The organiser welcomed everyone to the event.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "організатор"
+      }
+    }
+  },
+  "orient": {
+    "verb": {
+      "definition": "To direct someone or something towards a position or aim.",
+      "example": "The map helps you orient yourself in a new city.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "орієнтувати, спрямовувати"
+      }
+    }
+  },
+  "origin": {
+    "verb": {
+      "definition": "To have a source or start from somewhere.",
+      "example": "The word originates in Latin.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "походити, брати початок"
+      }
+    }
+  },
+  "ours": {
+    "adjective": {
+      "definition": "Belonging to us.",
+      "example": "That table is ours.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "наш"
+      }
+    }
+  },
+  "outcome": {
+    "noun": {
+      "definition": "The result of an action or event.",
+      "example": "We are waiting for the outcome of the meeting.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "результат, наслідок"
+      }
+    }
+  },
+  "outdoors": {
+    "adverb": {
+      "definition": "In the open air, not inside a building.",
+      "example": "We like to eat outdoors in summer.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "надворі, на відкритому повітрі"
+      }
+    }
+  },
+  "outline": {
+    "verb": {
+      "definition": "To describe the main points of something.",
+      "example": "She outlined her plan in a few words.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "окреслювати, описувати в загальних рисах"
+      }
+    }
+  },
+  "output": {
+    "noun": {
+      "definition": "The amount of something that is produced.",
+      "example": "The factory has doubled its output.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "випуск, продукція"
+      }
+    }
+  },
+  "outweigh": {
+    "verb": {
+      "definition": "To be more important or greater than something else.",
+      "example": "The benefits outweigh the risks.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "переважувати, перевищувати"
+      }
+    }
+  },
+  "overlook": {
+    "verb": {
+      "definition": "To fail to notice something, or to ignore a mistake.",
+      "example": "I overlooked one small error in the report.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "не помічати, пропускати"
+      }
+    }
+  },
+  "overwork": {
+    "verb": {
+      "definition": "To work too much or make someone work too hard.",
+      "example": "He overworked himself and got ill.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перепрацьовувати, перевантажувати"
+      }
+    }
+  },
+  "owe": {
+    "verb": {
+      "definition": "To have to pay money back to someone.",
+      "example": "I owe my brother ten pounds.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бути винним, заборгувати"
+      }
+    }
+  },
+  "owner": {
+    "noun": {
+      "definition": "A person who has something that belongs to them.",
+      "example": "The owner of the shop is very friendly.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "власник, господар"
+      }
+    }
+  },
+  "pack": {
+    "verb": {
+      "definition": "To put things into a bag or a case for a journey.",
+      "example": "I need to pack my suitcase tonight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пакувати, складати речі"
+      }
+    }
+  },
+  "packet": {
+    "noun": {
+      "definition": "A small box or bag in which things are sold.",
+      "example": "He bought a packet of biscuits.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пачка, пакет"
+      }
+    }
+  },
+  "paella": {
+    "noun": {
+      "definition": "A Spanish dish of rice with meat or seafood.",
+      "example": "We ate paella by the sea.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "паелья"
+      }
+    }
+  },
+  "painful": {
+    "adjective": {
+      "definition": "Causing physical or emotional pain.",
+      "example": "My back is very painful today.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "болісний, хворобливий"
+      }
+    }
+  },
+  "painfully": {
+    "adverb": {
+      "definition": "In a way that causes pain or shows great difficulty.",
+      "example": "The boy was painfully shy.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "болісно, надзвичайно"
+      }
+    }
+  },
+  "paint": {
+    "noun": {
+      "definition": "A coloured liquid that you put on walls or pictures.",
+      "example": "We need two tins of white paint.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "фарба"
+      }
+    },
+    "verb": {
+      "definition": "To put colour on a surface, or to make a picture with paint.",
+      "example": "She painted the kitchen yellow.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "фарбувати, малювати"
+      }
+    }
+  },
+  "painting": {
+    "noun": {
+      "definition": "A picture made with paint.",
+      "example": "There is a famous painting in the hall.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "картина, живопис"
+      }
+    }
+  },
+  "pair": {
+    "noun": {
+      "definition": "Two things of the same kind that are used together.",
+      "example": "I bought a new pair of shoes.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пара"
+      }
+    },
+    "verb": {
+      "definition": "To put two people or things together.",
+      "example": "The teacher paired each student with a partner.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поєднувати в пару"
+      }
+    }
+  },
+  "panda": {
+    "noun": {
+      "definition": "A large black and white animal from China.",
+      "example": "The zoo has a baby panda.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "панда"
+      }
+    }
+  },
+  "paragraph": {
+    "noun": {
+      "definition": "A part of a text that starts on a new line.",
+      "example": "The first paragraph explains the problem.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "абзац"
+      }
+    }
+  },
+  "parallel": {
+    "noun": {
+      "definition": "A similarity between two things.",
+      "example": "There is a clear parallel between the two stories.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "паралель, схожість"
+      }
+    }
+  },
+  "parcel": {
+    "noun": {
+      "definition": "Something wrapped in paper to be sent by post.",
+      "example": "A parcel arrived for you this morning.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "посилка, пакунок"
+      }
+    }
+  },
+  "parent": {
+    "noun": {
+      "definition": "A mother or father.",
+      "example": "My parents live in a small town.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "один із батьків"
+      }
+    }
+  },
+  "parking": {
+    "noun": {
+      "definition": "The act of leaving a car in a place for a time.",
+      "example": "There is free parking behind the shop.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "паркування, парковка"
+      }
+    },
+    "verb": {
+      "definition": "Leaving a car in a place for a time.",
+      "example": "He is parking the car outside.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "паркувати, паркування"
+      }
+    }
+  },
+  "participle": {
+    "adjective": {
+      "definition": "Relating to a form of a verb such as \"eaten\" or \"eating\".",
+      "example": "A participle clause gives extra information.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "дієприкметниковий"
+      }
+    },
+    "noun": {
+      "definition": "A form of a verb, such as \"eating\" or \"eaten\".",
+      "example": "\"Broken\" is the past participle of \"break\".",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "дієприкметник"
+      }
+    }
+  },
+  "particle": {
+    "noun": {
+      "definition": "A small word such as \"up\" or \"off\" that is part of a phrasal verb.",
+      "example": "In \"give up\", \"up\" is a particle.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "частка, частинка"
+      }
+    }
+  },
+  "partway": {
+    "adverb": {
+      "definition": "At some point along a journey or a process.",
+      "example": "We stopped for a rest partway up the hill.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "на півдорозі, частково"
+      }
+    },
+    "noun": {
+      "definition": "A part of the way through something.",
+      "example": "We were partway through dinner when the phone rang.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "частина шляху"
+      }
+    }
+  },
+  "passenger": {
+    "noun": {
+      "definition": "A person who travels in a vehicle but does not drive it.",
+      "example": "The bus was full of passengers.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пасажир"
+      }
+    }
+  },
+  "passive": {
+    "adjective": {
+      "definition": "Not acting, or a verb form where the subject receives the action.",
+      "example": "\"The window was broken\" is a passive sentence.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пасивний"
+      }
+    },
+    "noun": {
+      "definition": "The verb form used when the subject receives the action.",
+      "example": "The passive is formed with be and a past participle.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пасив, пасивний стан"
+      }
+    }
+  },
+  "passport": {
+    "noun": {
+      "definition": "An official document that you need to travel to other countries.",
+      "example": "Don't forget your passport.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "паспорт"
+      }
+    }
+  },
+  "pasta": {
+    "noun": {
+      "definition": "An Italian food made from flour, water and eggs.",
+      "example": "We had pasta for dinner.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "макарони, паста"
+      }
+    }
+  },
+  "path": {
+    "noun": {
+      "definition": "A narrow way for people to walk along.",
+      "example": "We walked along a path through the woods.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "стежка, шлях"
+      }
+    }
+  },
+  "patient": {
+    "adjective": {
+      "definition": "Able to wait calmly without getting angry.",
+      "example": "Please be patient; the doctor is coming.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "терплячий"
+      }
+    },
+    "noun": {
+      "definition": "A person who is receiving medical treatment.",
+      "example": "The nurse looks after twenty patients.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пацієнт, хворий"
+      }
+    }
+  },
+  "pattern": {
+    "noun": {
+      "definition": "A regular way in which something happens or is arranged.",
+      "example": "The sentence follows a common pattern.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "модель, шаблон, візерунок"
+      }
+    }
+  },
+  "pause": {
+    "verb": {
+      "definition": "To stop for a short time before continuing.",
+      "example": "She paused before answering the question.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "робити паузу, зупинятися"
+      }
+    }
+  },
+  "payment": {
+    "noun": {
+      "definition": "An amount of money that you pay, or the act of paying.",
+      "example": "The payment must be made by Friday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "платіж, оплата"
+      }
+    }
+  },
+  "peaceful": {
+    "adjective": {
+      "definition": "Quiet and calm, without noise or trouble.",
+      "example": "It is a peaceful village by the lake.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "мирний, спокійний"
+      }
+    }
+  },
+  "peanut": {
+    "noun": {
+      "definition": "A small nut that grows under the ground.",
+      "example": "She is allergic to peanuts.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "арахіс"
+      }
+    }
+  },
+  "pen": {
+    "noun": {
+      "definition": "A tool with ink that you use for writing.",
+      "example": "Can I borrow your pen?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ручка"
+      }
+    }
+  },
+  "pencil": {
+    "noun": {
+      "definition": "A thin wooden tool with a soft centre for writing or drawing.",
+      "example": "Write your name in pencil.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "олівець"
+      }
+    }
+  },
+  "pepper": {
+    "noun": {
+      "definition": "A hot powder used to add flavour to food, or a red, green or yellow vegetable.",
+      "example": "Would you like salt and pepper?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "перець"
+      }
+    }
+  },
+  "perceive": {
+    "noun": {
+      "definition": "To notice or understand something in a certain way.",
+      "example": "Many people perceive him as a good leader.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "сприймати, розуміти"
+      }
+    }
+  },
+  "percentage": {
+    "noun": {
+      "definition": "An amount expressed as part of one hundred.",
+      "example": "A high percentage of students passed the exam.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відсоток, частка"
+      }
+    }
+  },
+  "perception": {
+    "noun": {
+      "definition": "The way that you think about or understand something.",
+      "example": "Her perception of the problem was different.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "сприйняття, уявлення"
+      }
+    }
+  },
+  "perfective": {
+    "adjective": {
+      "definition": "Showing that an action is completed.",
+      "example": "Some languages have a perfective form of verbs.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "доконаний"
+      }
+    }
+  },
+  "perfectly": {
+    "adverb": {
+      "definition": "In a way that is completely right or without any mistakes.",
+      "example": "She speaks English perfectly.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "чудово, ідеально"
+      }
+    }
+  },
+  "perform": {
+    "verb": {
+      "definition": "To do a task, or to entertain an audience.",
+      "example": "The band will perform tonight.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "виконувати, виступати"
+      }
+    }
+  },
+  "permanent": {
+    "adjective": {
+      "definition": "Lasting for a very long time or for ever.",
+      "example": "He is looking for a permanent job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "постійний, довготривалий"
+      }
+    }
+  },
+  "permanently": {
+    "adverb": {
+      "definition": "In a way that lasts for a very long time or for ever.",
+      "example": "The shop has closed permanently.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "назавжди, постійно"
+      }
+    }
+  },
+  "permission": {
+    "noun": {
+      "definition": "Agreement that allows someone to do something.",
+      "example": "You need permission to park here.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дозвіл"
+      }
+    }
+  },
+  "permit": {
+    "noun": {
+      "definition": "An official document that allows you to do something.",
+      "example": "You need a permit to work here.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дозвіл, перепустка"
+      }
+    },
+    "verb": {
+      "definition": "To allow something to happen.",
+      "example": "Smoking is not permitted in the building.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дозволяти"
+      }
+    }
+  },
+  "perpetually": {
+    "adverb": {
+      "definition": "All the time, or again and again in an annoying way.",
+      "example": "He is perpetually late for meetings.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "постійно, безперервно"
+      }
+    }
+  },
+  "persistently": {
+    "adverb": {
+      "definition": "In a way that continues for a long time, especially in a determined way.",
+      "example": "She persistently asked for help.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "наполегливо, уперто"
+      }
+    }
+  },
+  "personality": {
+    "noun": {
+      "definition": "The qualities of a person's character.",
+      "example": "Your brother has a friendly personality.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "особистість, характер"
+      }
+    }
+  },
+  "personally": {
+    "adverb": {
+      "definition": "In your own opinion or by yourself.",
+      "example": "Personally, I prefer tea to coffee.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "особисто"
+      }
+    }
+  },
+  "persuade": {
+    "verb": {
+      "definition": "To make someone agree to do something by giving reasons.",
+      "example": "I persuaded him to come to the party.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переконувати, умовляти"
+      }
+    }
+  },
+  "persuading": {
+    "noun": {
+      "definition": "The act of trying to make someone agree to do something.",
+      "example": "Persuading him took all afternoon.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "переконування"
+      }
+    }
+  },
+  "persuasion": {
+    "noun": {
+      "definition": "The act of making someone agree to do something.",
+      "example": "It took a lot of persuasion to get her to come.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "переконання, умовляння"
+      }
+    }
+  },
+  "pet": {
+    "noun": {
+      "definition": "An animal that you keep at home.",
+      "example": "Do you have any pets?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "домашня тварина, улюбленець"
+      }
+    }
+  },
+  "petrol": {
+    "noun": {
+      "definition": "A liquid fuel used in cars.",
+      "example": "We stopped to buy petrol.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "бензин"
+      }
+    }
+  },
+  "pharmacy": {
+    "noun": {
+      "definition": "A shop where you can buy medicine.",
+      "example": "Ask at the pharmacy for something for your cough.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "аптека"
+      }
+    }
+  },
+  "phrasal": {
+    "adjective": {
+      "definition": "Made up of a verb and a small word such as \"up\" or \"off\".",
+      "example": "\"Give up\" is a phrasal verb.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "фразовий"
+      }
+    },
+    "noun": {
+      "definition": "A phrasal verb.",
+      "example": "\"Look after\" is a common phrasal.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "фразове дієслово"
+      }
+    }
+  },
+  "phrase": {
+    "noun": {
+      "definition": "A group of words that go together.",
+      "example": "\"On the other hand\" is a useful phrase.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "фраза, вираз"
+      }
+    },
+    "verb": {
+      "definition": "To say or write something in a particular way.",
+      "example": "He phrased his question very politely.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "формулювати, висловлювати"
+      }
+    }
+  },
+  "physics": {
+    "noun": {
+      "definition": "The science of heat, light, force and energy.",
+      "example": "She studied physics at university.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "фізика"
+      }
+    }
+  },
+  "piano": {
+    "noun": {
+      "definition": "A large musical instrument with black and white keys.",
+      "example": "She plays the piano every evening.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "піаніно, фортепіано"
+      }
+    }
+  },
+  "picnic": {
+    "noun": {
+      "definition": "A meal that you eat outside.",
+      "example": "We had a picnic in the park.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "пікнік"
+      }
+    }
+  },
+  "piecework": {
+    "noun": {
+      "definition": "Work that is paid for by the amount you do, not by the hour.",
+      "example": "Many factory workers do piecework.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "відрядна робота"
+      }
+    }
+  },
+  "pillow": {
+    "noun": {
+      "definition": "A soft cushion that you put your head on in bed.",
+      "example": "I need another pillow.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "подушка"
+      }
+    }
+  },
+  "pilot": {
+    "noun": {
+      "definition": "A person who flies an aircraft.",
+      "example": "The pilot welcomed us on board.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пілот, льотчик"
+      }
+    }
+  },
+  "pink": {
+    "adjective": {
+      "definition": "Having a light red colour.",
+      "example": "She wore a pink dress.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "рожевий"
+      }
+    }
+  },
+  "pity": {
+    "noun": {
+      "definition": "A feeling of sadness for someone, or something that makes you sad.",
+      "example": "It's a pity you can't come.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "шкода, жаль"
+      }
+    }
+  },
+  "pizza": {
+    "noun": {
+      "definition": "A flat round bread with cheese and other food on top.",
+      "example": "Let's order a pizza.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "піца"
+      }
+    }
+  },
+  "plain": {
+    "adjective": {
+      "definition": "Simple, without decoration or extra things.",
+      "example": "She wore a plain white shirt.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "простий, звичайний"
+      }
+    },
+    "adverb": {
+      "definition": "Completely, used to make a statement stronger.",
+      "example": "It's just plain silly.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "просто, цілком"
+      }
+    }
+  },
+  "plane": {
+    "noun": {
+      "definition": "A vehicle with wings that flies.",
+      "example": "The plane leaves at eight o'clock.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "літак"
+      }
+    }
+  },
+  "planet": {
+    "noun": {
+      "definition": "A large round object in space that moves around a star.",
+      "example": "Earth is the third planet from the sun.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "планета"
+      }
+    }
+  },
+  "plastic": {
+    "adjective": {
+      "definition": "Made of a light, strong material produced by chemicals.",
+      "example": "He drank from a plastic cup.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пластиковий"
+      }
+    }
+  },
+  "platform": {
+    "noun": {
+      "definition": "The raised area at a station where you get on a train.",
+      "example": "The train leaves from platform four.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "платформа, перон"
+      }
+    }
+  },
+  "playful": {
+    "adjective": {
+      "definition": "Happy, fun and not serious.",
+      "example": "The puppy is very playful.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "грайливий, жвавий"
+      }
+    }
+  },
+  "pleasure": {
+    "noun": {
+      "definition": "A feeling of happiness or enjoyment.",
+      "example": "It's a pleasure to meet you.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "задоволення, радість"
+      }
+    }
+  },
+  "plenty": {
+    "noun": {
+      "definition": "A large amount of something, enough or more than enough.",
+      "example": "We have plenty of time.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "багато, достатньо"
+      }
+    }
+  },
+  "plot": {
+    "noun": {
+      "definition": "The main story of a book, film or play.",
+      "example": "The plot of the film is very simple.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "сюжет"
+      }
+    }
+  },
+  "plural": {
+    "adjective": {
+      "definition": "Showing more than one.",
+      "example": "\"Children\" is a plural noun.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "множинний"
+      }
+    },
+    "noun": {
+      "definition": "The form of a word that shows more than one.",
+      "example": "The plural of \"child\" is \"children\".",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "множина"
+      }
+    }
+  },
+  "pluralise": {
+    "verb": {
+      "definition": "To make a word plural.",
+      "example": "You pluralise most nouns by adding -s.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "утворювати множину"
+      }
+    }
+  },
+  "pm": {
+    "noun": {
+      "definition": "The letters used for times after twelve o'clock noon.",
+      "example": "The shop closes at 6 pm.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "після полудня"
+      }
+    }
+  },
+  "pocket": {
+    "noun": {
+      "definition": "A small bag sewn into clothes.",
+      "example": "He put the key in his pocket.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кишеня"
+      }
+    }
+  },
+  "poetry": {
+    "noun": {
+      "definition": "Poems as a form of writing.",
+      "example": "She writes poetry in her free time.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поезія, вірші"
+      }
+    }
+  },
+  "policeman": {
+    "noun": {
+      "definition": "A man who works for the police.",
+      "example": "A policeman stopped the car.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "поліцейський"
+      }
+    }
+  },
+  "polish": {
+    "adjective": {
+      "definition": "Made smooth and shiny by rubbing, or carefully improved.",
+      "example": "He wore polished shoes to the interview.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відполірований, вишуканий"
+      }
+    }
+  },
+  "polite": {
+    "adjective": {
+      "definition": "Behaving in a way that shows respect for other people.",
+      "example": "It's polite to say thank you.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ввічливий, чемний"
+      }
+    },
+    "adverb": {
+      "definition": "In a respectful way, used casually in speech.",
+      "example": "He asked ever so polite.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "чемно"
+      }
+    }
+  },
+  "politely": {
+    "adverb": {
+      "definition": "In a respectful way that shows good manners.",
+      "example": "She politely asked me to move.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "ввічливо, чемно"
+      }
+    }
+  },
+  "politeness": {
+    "noun": {
+      "definition": "Behaviour that shows respect and good manners.",
+      "example": "Politeness costs nothing.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ввічливість"
+      }
+    }
+  },
+  "polluted": {
+    "adjective": {
+      "definition": "Made dirty or harmful by chemicals or waste.",
+      "example": "The river is badly polluted.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "забруднений"
+      }
+    }
+  },
+  "pool": {
+    "noun": {
+      "definition": "A place filled with water for swimming.",
+      "example": "The hotel has a big pool.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "басейн"
+      }
+    }
+  },
+  "porter": {
+    "noun": {
+      "definition": "A person who carries bags at a hotel or station.",
+      "example": "The porter took our bags to the room.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "носій, швейцар"
+      }
+    }
+  },
+  "pose": {
+    "verb": {
+      "definition": "To cause a problem or a danger, or to sit still for a picture.",
+      "example": "Bad weather poses a danger to sailors.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "створювати, позувати"
+      }
+    }
+  },
+  "possession": {
+    "noun": {
+      "definition": "Something that you own.",
+      "example": "He lost all his possessions in the fire.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "власність, майно"
+      }
+    }
+  },
+  "possessive": {
+    "adjective": {
+      "definition": "Showing that something belongs to someone.",
+      "example": "\"My\" and \"your\" are possessive words.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "присвійний, власницький"
+      }
+    },
+    "noun": {
+      "definition": "A word or form that shows who owns something.",
+      "example": "\"Ours\" is a possessive.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "присвійна форма"
+      }
+    }
+  },
+  "possibility": {
+    "noun": {
+      "definition": "Something that might happen or be true.",
+      "example": "There is a possibility of rain tomorrow.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "можливість"
+      }
+    }
+  },
+  "possibly": {
+    "adverb": {
+      "definition": "Perhaps; used to say that something could happen.",
+      "example": "I can't possibly come tonight.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "можливо"
+      }
+    }
+  },
+  "postcard": {
+    "noun": {
+      "definition": "A card that you send by post without an envelope.",
+      "example": "She sent me a postcard from Rome.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "листівка"
+      }
+    }
+  },
+  "postmodifier": {
+    "noun": {
+      "definition": "A word or phrase that comes after a noun and gives more information.",
+      "example": "In \"the man in the hat\", \"in the hat\" is a postmodifier.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "післяіменникове означення"
+      }
+    }
+  },
+  "postpone": {
+    "verb": {
+      "definition": "To decide that something will happen at a later time.",
+      "example": "They postponed the match because of rain.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відкладати, переносити"
+      }
+    }
+  },
+  "potato": {
+    "noun": {
+      "definition": "A round vegetable that grows under the ground.",
+      "example": "We had roast potatoes with the meat.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "картопля"
+      }
+    }
+  },
+  "potentially": {
+    "adverb": {
+      "definition": "In a way that could become real in the future.",
+      "example": "This is a potentially dangerous situation.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "потенційно, можливо"
+      }
+    }
+  },
+  "poverty": {
+    "noun": {
+      "definition": "The state of being very poor.",
+      "example": "Many families live in poverty.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "бідність"
+      }
+    }
+  },
+  "practical": {
+    "adjective": {
+      "definition": "Useful and suitable for real situations.",
+      "example": "These shoes are cheap and practical.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "практичний"
+      }
+    }
+  },
+  "practically": {
+    "adverb": {
+      "definition": "Almost, or in a useful way.",
+      "example": "The shop is practically empty.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "практично, майже"
+      }
+    }
+  },
+  "practise": {
+    "noun": {
+      "definition": "The action of doing something regularly to get better at it.",
+      "example": "Piano practise takes an hour a day.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "практика, тренування"
+      }
+    },
+    "verb": {
+      "definition": "To do something regularly to get better at it.",
+      "example": "I practise English every day.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "практикувати, тренуватися"
+      }
+    }
+  },
+  "pragmatic": {
+    "adjective": {
+      "definition": "Dealing with problems in a sensible, realistic way.",
+      "example": "She took a pragmatic approach to the problem.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "прагматичний"
+      }
+    }
+  },
+  "precious": {
+    "adjective": {
+      "definition": "Very valuable or important.",
+      "example": "Time is very precious.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "цінний, дорогоцінний"
+      }
+    }
+  },
+  "precise": {
+    "adjective": {
+      "definition": "Exact and accurate.",
+      "example": "Can you give me a more precise time?",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "точний"
+      }
+    }
+  },
+  "precisely": {
+    "adverb": {
+      "definition": "Exactly and correctly.",
+      "example": "The meeting starts at two o'clock precisely.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "точно, саме"
+      }
+    }
+  },
+  "precision": {
+    "noun": {
+      "definition": "The quality of being exact and accurate.",
+      "example": "The surgeon worked with great precision.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "точність"
+      }
+    }
+  },
+  "predicative": {
+    "adjective": {
+      "definition": "Used after a verb such as \"be\" to describe the subject.",
+      "example": "In \"she is tired\", \"tired\" is used in a predicative way.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "предикативний"
+      }
+    }
+  },
+  "predicatively": {
+    "adverb": {
+      "definition": "In a way that comes after a verb such as \"be\" to describe the subject.",
+      "example": "Some adjectives can only be used predicatively.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "предикативно"
+      }
+    }
+  },
+  "predict": {
+    "verb": {
+      "definition": "To say that something will happen in the future.",
+      "example": "No one can predict the weather.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "передбачати, прогнозувати"
+      }
+    }
+  },
+  "prediction": {
+    "noun": {
+      "definition": "A statement about what will happen in the future.",
+      "example": "Her prediction turned out to be right.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прогноз, передбачення"
+      }
+    }
+  },
+  "prefer": {
+    "noun": {
+      "definition": "To like one thing more than another.",
+      "example": "I prefer tea to coffee.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "віддавати перевагу"
+      }
+    },
+    "verb": {
+      "definition": "To like one thing more than another.",
+      "example": "I prefer walking to driving.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "віддавати перевагу"
+      }
+    }
+  },
+  "preference": {
+    "noun": {
+      "definition": "A greater liking for one thing than another.",
+      "example": "Do you have a preference for a window seat?",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "перевага, вподобання"
+      }
+    }
+  },
+  "prefix": {
+    "noun": {
+      "definition": "A group of letters added to the start of a word to change its meaning.",
+      "example": "\"Un-\" is a prefix in the word \"unhappy\".",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "префікс, приставка"
+      }
+    }
+  },
+  "prehistoric": {
+    "adjective": {
+      "definition": "Belonging to the time before written history.",
+      "example": "They found prehistoric tools in the cave.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "доісторичний"
+      }
+    }
+  },
+  "premise": {
+    "noun": {
+      "definition": "An idea or statement that you accept as true and use as a base for an argument.",
+      "example": "The whole argument is based on a false premise.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "передумова, припущення"
+      }
+    }
+  },
+  "premodifer": {
+    "noun": {
+      "definition": "A word that comes before a noun and gives more information.",
+      "example": "In \"a red car\", \"red\" is a premodifier.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "означення перед іменником"
+      }
+    }
+  },
+  "premodifi": {
+    "adjective": {
+      "definition": "Coming before the noun that it describes.",
+      "example": "\"Big\" is a premodifying adjective in \"a big house\".",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "який стоїть перед іменником"
+      }
+    }
+  },
+  "premodifier": {
+    "noun": {
+      "definition": "A word that comes before a noun and gives more information about it.",
+      "example": "In \"a big house\", \"big\" is a premodifier.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "означення перед іменником"
+      }
+    }
+  },
+  "preparation": {
+    "noun": {
+      "definition": "The act of getting ready for something.",
+      "example": "Preparation for the exam took weeks.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "підготовка"
+      }
+    }
+  },
+  "prepare": {
+    "verb": {
+      "definition": "To get ready or to make something ready.",
+      "example": "She is preparing dinner for us.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "готувати, готуватися"
+      }
+    }
+  },
+  "preposition": {
+    "noun": {
+      "definition": "A word such as \"in\", \"on\" or \"at\" that shows place, time or direction.",
+      "example": "\"At\" is a preposition.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "прийменник"
+      }
+    }
+  },
+  "prepositional": {
+    "adjective": {
+      "definition": "Relating to or containing a preposition.",
+      "example": "\"Look at\" is a prepositional verb.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "прийменниковий"
+      }
+    }
+  },
+  "presentation": {
+    "noun": {
+      "definition": "A talk in which you show or explain something to a group.",
+      "example": "She gave a presentation about her project.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "презентація, виступ"
+      }
+    }
+  },
+  "presumably": {
+    "adverb": {
+      "definition": "Used to say that you think something is probably true.",
+      "example": "Presumably he missed the bus.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "імовірно, припустимо"
+      }
+    }
+  },
+  "pretend": {
+    "verb": {
+      "definition": "To behave as if something is true when it is not.",
+      "example": "The children pretended to be pirates.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вдавати, прикидатися"
+      }
+    }
+  },
+  "previously": {
+    "adverb": {
+      "definition": "Before now or before a particular time.",
+      "example": "She previously worked in a bank.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "раніше, попередньо"
+      }
+    }
+  },
+  "print": {
+    "verb": {
+      "definition": "To make words or pictures on paper with a machine.",
+      "example": "Can you print this document for me?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "друкувати"
+      }
+    }
+  },
+  "printer": {
+    "noun": {
+      "definition": "A machine that puts words or pictures on paper.",
+      "example": "The printer has run out of paper.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "принтер"
+      }
+    }
+  },
+  "prison": {
+    "noun": {
+      "definition": "A building where people are kept as a punishment for a crime.",
+      "example": "He spent two years in prison.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "в'язниця, тюрма"
+      }
+    }
+  },
+  "prize": {
+    "noun": {
+      "definition": "Something that you get for winning a competition.",
+      "example": "She won first prize in the race.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "приз, нагорода"
+      }
+    }
+  },
+  "probability": {
+    "noun": {
+      "definition": "How likely it is that something will happen.",
+      "example": "There is a high probability of rain.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "імовірність"
+      }
+    }
+  },
+  "probable": {
+    "adjective": {
+      "definition": "Likely to happen or be true.",
+      "example": "It is probable that he will win.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "імовірний, можливий"
+      }
+    }
+  },
+  "profession": {
+    "noun": {
+      "definition": "A job that needs special training or education.",
+      "example": "Teaching is a difficult profession.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "професія"
+      }
+    }
+  },
+  "profit": {
+    "noun": {
+      "definition": "Money that you make by selling something for more than it cost.",
+      "example": "The shop made a small profit last year.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прибуток"
+      }
+    }
+  },
+  "programme": {
+    "noun": {
+      "definition": "A show on television or radio, or a plan of things to do.",
+      "example": "What is your favourite TV programme?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "програма, передача"
+      }
+    }
+  },
+  "progress": {
+    "noun": {
+      "definition": "Movement forward, or improvement.",
+      "example": "You have made good progress this term.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прогрес, поступ"
+      }
+    },
+    "verb": {
+      "definition": "To move forward or to improve.",
+      "example": "The work is progressing well.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "просуватися, прогресувати"
+      }
+    }
+  },
+  "promise": {
+    "noun": {
+      "definition": "A statement that you will certainly do something.",
+      "example": "He kept his promise.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "обіцянка"
+      }
+    }
+  },
+  "promote": {
+    "verb": {
+      "definition": "To help something to grow or to move someone to a better job.",
+      "example": "She was promoted to manager last year.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "просувати, підвищувати"
+      }
+    }
+  },
+  "pronoun": {
+    "noun": {
+      "definition": "A word such as \"he\" or \"it\" that is used instead of a noun.",
+      "example": "\"She\" is a pronoun.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "займенник"
+      }
+    },
+    "verb": {
+      "definition": "To use a word as a pronoun.",
+      "example": "You can pronoun the subject to avoid repetition.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вживати як займенник"
+      }
+    }
+  },
+  "proper": {
+    "adjective": {
+      "definition": "Right, correct or suitable.",
+      "example": "You need the proper tools for this job.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "належний, правильний"
+      }
+    }
+  },
+  "properly": {
+    "adverb": {
+      "definition": "In a correct or suitable way.",
+      "example": "I can't sleep properly when it is noisy.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "належним чином, як слід"
+      }
+    }
+  },
+  "proposal": {
+    "noun": {
+      "definition": "A plan or suggestion that you offer for other people to consider.",
+      "example": "The manager liked our proposal.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пропозиція, план"
+      }
+    }
+  },
+  "propose": {
+    "verb": {
+      "definition": "To suggest a plan or idea.",
+      "example": "I propose that we meet on Monday.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "пропонувати"
+      }
+    }
+  },
+  "protest": {
+    "noun": {
+      "definition": "A strong public statement or action against something.",
+      "example": "There was a protest outside the building.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "протест"
+      }
+    }
+  },
+  "proud": {
+    "adjective": {
+      "definition": "Feeling pleased about what you or people close to you have done.",
+      "example": "I'm proud of my daughter.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "гордий"
+      }
+    }
+  },
+  "prove": {
+    "verb": {
+      "definition": "To show that something is true.",
+      "example": "Can you prove that you were there?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "доводити, підтверджувати"
+      }
+    }
+  },
+  "pub": {
+    "noun": {
+      "definition": "A place where people drink alcohol and meet friends.",
+      "example": "We met at the pub after work.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "паб"
+      }
+    }
+  },
+  "publicity": {
+    "noun": {
+      "definition": "Attention that something gets from newspapers, television and the internet.",
+      "example": "The film got a lot of publicity.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "реклама, розголос"
+      }
+    }
+  },
+  "publish": {
+    "verb": {
+      "definition": "To print a book or article so that people can buy it.",
+      "example": "The company publishes children's books.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "публікувати, видавати"
+      }
+    }
+  },
+  "pull": {
+    "verb": {
+      "definition": "To move something towards you.",
+      "example": "Pull the door, don't push it.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "тягнути"
+      }
+    }
+  },
+  "pullover": {
+    "noun": {
+      "definition": "A warm piece of clothing with sleeves that you pull over your head.",
+      "example": "He wore a blue pullover.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "пуловер, светр"
+      }
+    }
+  },
+  "punish": {
+    "verb": {
+      "definition": "To make someone suffer because they did something wrong.",
+      "example": "The teacher punished the class for cheating.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "карати"
+      }
+    }
+  },
+  "pupil": {
+    "noun": {
+      "definition": "A child who goes to school.",
+      "example": "The school has 300 pupils.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "учень, учениця"
+      }
+    }
+  },
+  "purchase": {
+    "noun": {
+      "definition": "Something that you buy, or the act of buying it.",
+      "example": "Keep the receipt as proof of purchase.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "покупка, придбання"
+      }
+    }
+  },
+  "purely": {
+    "adverb": {
+      "definition": "Only, or completely.",
+      "example": "We went to the museum purely by chance.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "виключно, цілком"
+      }
+    }
+  },
+  "purse": {
+    "noun": {
+      "definition": "A small bag or case for money.",
+      "example": "She took some coins from her purse.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "гаманець"
+      }
+    }
+  },
+  "push": {
+    "verb": {
+      "definition": "To move something away from you using your hands.",
+      "example": "Push the button to start the machine.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "штовхати, натискати"
+      }
+    }
+  },
+  "pushy": {
+    "adjective": {
+      "definition": "Trying too hard to make people do what you want.",
+      "example": "The salesman was very pushy.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "настирливий"
+      }
+    }
+  },
+  "puzzle": {
+    "noun": {
+      "definition": "A game or problem that you must think about to solve.",
+      "example": "The children did a jigsaw puzzle.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "головоломка, загадка"
+      }
+    }
+  },
+  "qualification": {
+    "noun": {
+      "definition": "An exam that you have passed or a course you have finished.",
+      "example": "She has a qualification in nursing.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кваліфікація, диплом"
+      }
+    }
+  },
+  "quantify": {
+    "verb": {
+      "definition": "To measure or express something as a number.",
+      "example": "It is hard to quantify the damage.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "обчислювати, кількісно оцінювати"
+      }
+    }
+  },
+  "quantity": {
+    "adjective": {
+      "definition": "Relating to an amount of something that can be counted or measured.",
+      "example": "The store sells goods in large quantity packs.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кількісний"
+      }
+    },
+    "noun": {
+      "definition": "An amount of something that can be counted or measured.",
+      "example": "A large quantity of water was used.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кількість"
+      }
+    }
+  },
+  "queue": {
+    "noun": {
+      "definition": "A line of people waiting for something.",
+      "example": "There was a long queue at the bank.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "черга"
+      }
+    }
+  },
+  "quiet": {
+    "adjective": {
+      "definition": "Making little or no noise.",
+      "example": "Please be quiet in the library.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "тихий, спокійний"
+      }
+    }
+  },
+  "quieter": {
+    "noun": {
+      "definition": "Something that is less noisy than another thing.",
+      "example": "This room is quieter than the kitchen.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "тихіший"
+      }
+    }
+  },
+  "quietly": {
+    "adverb": {
+      "definition": "Without making much noise.",
+      "example": "She closed the door quietly.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "тихо"
+      }
+    }
+  },
+  "quit": {
+    "verb": {
+      "definition": "To stop doing something, or to leave a job.",
+      "example": "He quit his job last week.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кидати, звільнятися"
+      }
+    }
+  },
+  "quiz": {
+    "noun": {
+      "definition": "A short test or game of questions.",
+      "example": "We did a quiz in class today.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "вікторина, тест"
+      }
+    }
+  },
+  "quotation": {
+    "noun": {
+      "definition": "A group of words taken from a book, speech or play.",
+      "example": "The essay starts with a quotation from Shakespeare.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "цитата"
+      }
+    }
+  },
+  "quote": {
+    "noun": {
+      "definition": "A group of words taken from something that someone said or wrote.",
+      "example": "He used a quote from a famous poet.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "цитата"
+      }
+    },
+    "verb": {
+      "definition": "To repeat what someone else has said or written.",
+      "example": "She quoted a line from the poem.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "цитувати"
+      }
+    }
   }
 }
