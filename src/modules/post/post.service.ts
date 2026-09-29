@@ -1,6 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  type AnnotatedGrammarPageView,
+  AnnotateGrammarPageCommand,
+} from './commands/annotate-grammar-page/annotate-grammar-page.command.js';
 import { AnnotatePostCommand } from './commands/annotate-post/annotate-post.command.js';
 import { AssessComplexityCommand } from './commands/assess-complexity/assess-complexity.command.js';
 import { EnrichGrammarCommand } from './commands/enrich-grammar/enrich-grammar.command.js';
@@ -104,6 +108,19 @@ export class PostService {
     usagePointId: string,
   ): Promise<UsagePointExercisesView> {
     return this.queryBus.execute(new GetUsagePointExercisesQuery(usagePointId));
+  }
+
+  async annotateGrammarPage(
+    slug: string,
+    blocks: string[],
+  ): Promise<AnnotatedGrammarPageView> {
+    const view = await this.commandBus.execute(
+      new AnnotateGrammarPageCommand(slug, blocks),
+    );
+
+    await this.em.flush();
+
+    return view;
   }
 
   async ingest(dto: IngestPostDto): Promise<IngestedPostView> {

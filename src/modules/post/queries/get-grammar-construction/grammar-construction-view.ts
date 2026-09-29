@@ -1,6 +1,8 @@
 import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
 import type { GrammarTranslations } from '../../domain/content-translations.js';
+import type { GrammarPageLexWord } from '../../entities/grammar-page-lex-block.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
+import type { WordAnnotationView } from '../get-post-detail/post-detail-view.js';
 
 export interface ConstructionUsagePointView {
   grammarUsagePointId: string;
@@ -44,4 +46,14 @@ export interface GrammarConstructionView {
   usagePoints: ConstructionUsagePointView[];
   // Easiest level first. Absent for a guest.
   levelProgress?: ConstructionLevelProgressView[];
+  lexicon: GrammarPageLexiconView;
+}
+
+// Clickable words of the handcrafted page (`grammar annotate-pages`): the word
+// spans of each text block, keyed by `lexBlockHash` of the block's text, and
+// the popup data of every word they link to. Empty when the page has not been
+// annotated.
+export interface GrammarPageLexiconView {
+  blocks: Record<string, GrammarPageLexWord[]>;
+  words: Record<string, WordAnnotationView>;
 }

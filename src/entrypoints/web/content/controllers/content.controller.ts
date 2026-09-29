@@ -20,7 +20,10 @@ import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor
 import { PostService } from '../../../../modules/post/post.service.js';
 import type { GrammarConstructionView } from '../../../../modules/post/queries/get-grammar-construction/grammar-construction-view.js';
 import type { GrammarReferenceView } from '../../../../modules/post/queries/get-grammar-reference/grammar-reference-view.js';
-import type { PostDetailView } from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
+import type {
+  PostDetailView,
+  WordAnnotationView,
+} from '../../../../modules/post/queries/get-post-detail/post-detail-view.js';
 import type {
   PostsListItemView,
   PostsListView,
@@ -32,6 +35,7 @@ import { GrammarReferenceResponseDto } from '../dto/grammar-reference-response.d
 import {
   PostAnnotationsDto,
   PostDetailResponseDto,
+  type PostWordAnnotationDto,
 } from '../dto/post-detail-response.dto.js';
 import { PostSuggestionsQueryDto } from '../dto/post-suggestions-query.dto.js';
 import { PostSuggestionsResponseDto } from '../dto/post-suggestions-response.dto.js';
@@ -311,19 +315,7 @@ function toAnnotationsDto(
   annotations: PostDetailView['annotations'],
 ): PostAnnotationsDto {
   return {
-    words: mapRecord(annotations.words, (word) => ({
-      wordDefinitionId: word.wordDefinitionId,
-      wordId: word.wordId,
-      lemma: word.lemma,
-      pos: word.pos,
-      definition: word.definition,
-      phonetic: word.phonetic,
-      example: word.example,
-      translations: word.translations,
-      cefrLevel: word.cefrLevel,
-      frequencyRank: word.frequencyRank,
-      state: word.state,
-    })),
+    words: mapRecord(annotations.words, toWordAnnotationDto),
     phrases: mapRecord(annotations.phrases, (phrase) => ({
       phraseId: phrase.phraseId,
       text: phrase.text,
@@ -421,6 +413,26 @@ function toGrammarConstructionResponse(
       assumedKnown: point.assumedKnown,
     })),
     levelProgress: view.levelProgress,
+    lexicon: {
+      blocks: view.lexicon.blocks,
+      words: mapRecord(view.lexicon.words, toWordAnnotationDto),
+    },
+  };
+}
+
+function toWordAnnotationDto(word: WordAnnotationView): PostWordAnnotationDto {
+  return {
+    wordDefinitionId: word.wordDefinitionId,
+    wordId: word.wordId,
+    lemma: word.lemma,
+    pos: word.pos,
+    definition: word.definition,
+    phonetic: word.phonetic,
+    example: word.example,
+    translations: word.translations,
+    cefrLevel: word.cefrLevel,
+    frequencyRank: word.frequencyRank,
+    state: word.state,
   };
 }
 

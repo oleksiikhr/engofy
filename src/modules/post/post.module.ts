@@ -5,6 +5,7 @@ import AiConfig from '../../core/ai/ai.config.js';
 import { aiClientProvider } from '../../core/ai/ai-client.provider.js';
 import NlpConfig from '../../core/nlp/nlp.config.js';
 import { nlpClientProvider } from '../../core/nlp/nlp-client.provider.js';
+import { AnnotateGrammarPageHandler } from './commands/annotate-grammar-page/annotate-grammar-page.handler.js';
 import { AnnotatePostHandler } from './commands/annotate-post/annotate-post.handler.js';
 import { AssessComplexityHandler } from './commands/assess-complexity/assess-complexity.handler.js';
 import { EnrichGrammarHandler } from './commands/enrich-grammar/enrich-grammar.handler.js';
@@ -29,6 +30,7 @@ import { GetPostsListHandler } from './queries/get-posts-list/get-posts-list.han
 import { GetPostsSitemapIndexHandler } from './queries/get-posts-sitemap-index/get-posts-sitemap-index.handler.js';
 import { GetPostsSitemapPageHandler } from './queries/get-posts-sitemap-page/get-posts-sitemap-page.handler.js';
 import { GetUsagePointExercisesHandler } from './queries/get-usage-point-exercises/get-usage-point-exercises.handler.js';
+import { LexiconViewService } from './services/lexicon-view.service.js';
 
 const commandHandlers = [
   IngestPostHandler,
@@ -44,6 +46,7 @@ const commandHandlers = [
   MarkPostReadHandler,
   UnmarkPostReadHandler,
   ReportLabelHandler,
+  AnnotateGrammarPageHandler,
 ];
 
 const queryHandlers = [
@@ -69,6 +72,7 @@ const queryHandlers = [
     PostQueueBootstrapService,
     aiClientProvider,
     nlpClientProvider,
+    LexiconViewService,
     ...commandHandlers,
     ...queryHandlers,
   ],

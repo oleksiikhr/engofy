@@ -12,13 +12,19 @@ import { readGrammarTranslations } from '../../domain/content-translations.js';
 import { countResolved } from '../../domain/effective-state-priority.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
+import { GrammarPageLexBlock } from '../../entities/grammar-page-lex-block.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
+import {
+  LexiconViewService,
+  type Viewer,
+} from '../../services/lexicon-view.service.js';
 import { GetGrammarConstructionQuery } from './get-grammar-construction.query.js';
 import type {
   ConstructionLevelProgressView,
   ConstructionUsagePointView,
   GrammarConstructionView,
+  GrammarPageLexiconView,
 } from './grammar-construction-view.js';
 
 // Backs `/grammar/{slug}` (PLAN.md §4): one construction with its cheat sheet
@@ -27,7 +33,10 @@ import type {
 export class GetGrammarConstructionHandler
   implements IQueryHandler<GetGrammarConstructionQuery>
 {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly lexicon: LexiconViewService,
+  ) {}
 
   async execute({
     slug,
@@ -85,6 +94,11 @@ export class GetGrammarConstructionHandler
       };
     });
 
+    const lexicon = await this.resolveLexicon(
+      construction.id,
+      userId && userCefrLevel ? { userId, userCefrLevel } : null,
+    );
+
     return {
       slug: construction.slug,
       name: construction.name,
@@ -95,7 +109,29 @@ export class GetGrammarConstructionHandler
       levelProgress: userId
         ? buildLevelProgress(sorted, stateByPoint)
         : undefined,
+      lexicon,
     };
+  }
+
+  private async resolveLexicon(
+    constructionId: string,
+    viewer: Viewer | null,
+  ): Promise<GrammarPageLexiconView> {
+    const rows = await this.em.find(
+      GrammarPageLexBlock,
+      { constructionId },
+      { disableIdentityMap: true },
+    );
+    const blocks = Object.fromEntries(
+      rows.map((row) => [row.textHash, row.words]),
+    );
+    const wordDefinitionIds = [
+      ...new Set(
+        rows.flatMap((row) => row.words.map((word) => word.wordDefinitionId)),
+      ),
+    ];
+    const words = await this.lexicon.resolveWords(wordDefinitionIds, viewer);
+    return { blocks, words };
   }
 
   // Per usage point, not collapsed to one construction-level value (unlike
