@@ -2364,6 +2364,622 @@
       "explanation": "Didn't dare + verb кажемо, що комусь не вистачило сміливості щось зробити в минулому. Дієслово може бути з to або без нього: didn't dare (to) look."
     }
   },
+  "464": {
+    "explanation": "Can has no future form, so use will be able to + verb to talk about ability or possibility in the future. The negative is won't be able to.",
+    "examples": [
+      "Will you be able to come on Saturday?",
+      "I won't be able to play without my glasses.",
+      "Soon you'll be able to speak English well."
+    ],
+    "uk": {
+      "explanation": "Can не має форми майбутнього часу, тому про вміння чи можливість у майбутньому кажемо will be able to + verb. Заперечення — won't be able to."
+    }
+  },
+  "467": {
+    "explanation": "Use be allowed to + verb to talk about permission, usually given by someone else: parents, a school or the rules. It works in every tense: am allowed to, wasn't allowed to, will be allowed to.",
+    "examples": [
+      "We aren't allowed to use phones in class.",
+      "I wasn't allowed to go out alone.",
+      "Will we be allowed to take photos?"
+    ],
+    "uk": {
+      "explanation": "Be allowed to + verb кажемо про дозвіл, який зазвичай дає хтось інший: батьки, школа чи правила. Це працює в будь-якому часі: am allowed to, wasn't allowed to, will be allowed to."
+    }
+  },
+  "468": {
+    "explanation": "Use was or were supposed to + verb for a plan or arrangement that did not happen, or that is going to change. The next clause often starts with but.",
+    "examples": [
+      "I was supposed to arrive on Monday, but my flight changed.",
+      "We were supposed to meet at noon.",
+      "The meeting was supposed to be on Tuesday."
+    ],
+    "uk": {
+      "explanation": "Was або were supposed to + verb кажемо про план чи домовленість, які не здійснилися або от-от зміняться. Наступна частина речення часто починається з but."
+    }
+  },
+  "469": {
+    "explanation": "Use was or were able to + verb to say that someone managed to do one particular thing in the past. For this kind of single success, don't use could.",
+    "examples": [
+      "The door was locked, but we were able to get in.",
+      "She was able to find a good seat.",
+      "Luckily, I was able to catch the last bus."
+    ],
+    "uk": {
+      "explanation": "Was або were able to + verb кажемо, що комусь удалося зробити щось конкретне в минулому. Про такий одиничний успіх could не вживаємо."
+    }
+  },
+  "472": {
+    "explanation": "Put more or less before likely to compare two groups or situations: more likely to, less likely to. Much makes the difference bigger: much more likely.",
+    "examples": [
+      "Cyclists are more likely to get hurt than drivers.",
+      "Tired people are much less likely to notice mistakes.",
+      "You're more likely to find a job in the city."
+    ],
+    "uk": {
+      "explanation": "More або less перед likely допомагають порівняти дві групи чи ситуації: more likely to, less likely to. Much збільшує різницю: much more likely."
+    }
+  },
+  "473": {
+    "explanation": "Use be likely to + verb to say that something will probably happen. Very, quite or highly before likely make it stronger or weaker, and the opposite is unlikely to.",
+    "examples": [
+      "It's likely to rain this afternoon.",
+      "Prices are very likely to go up.",
+      "He's unlikely to call before Friday."
+    ],
+    "uk": {
+      "explanation": "Be likely to + verb кажемо, що щось, імовірно, станеться. Very, quite чи highly перед likely роблять це сильнішим або слабшим, а протилежність — unlikely to."
+    }
+  },
+  "474": {
+    "explanation": "Use be due to + verb for things planned for a particular time: timetables, deadlines and start dates. Be to + verb means the same, but it is more formal and common in official plans and the news.",
+    "examples": [
+      "The train is due to leave at 6.15.",
+      "I'm due to start my new job on Monday.",
+      "The president is to visit Kyiv next week."
+    ],
+    "uk": {
+      "explanation": "Be due to + verb кажемо про те, що заплановано на певний час: розклади, дедлайни, дати початку. Be to + verb означає те саме, але звучить офіційніше й трапляється в офіційних планах і новинах."
+    }
+  },
+  "475": {
+    "explanation": "Use be meant to + verb to describe the ideal: how something should be, or what it exists for. It sounds more like a belief about nature or purpose than a rule.",
+    "examples": [
+      "Holidays are meant to be relaxing.",
+      "Animals are meant to be free.",
+      "This room is meant to be a quiet space."
+    ],
+    "uk": {
+      "explanation": "Be meant to + verb описує ідеал: яким щось має бути або для чого воно існує. Це звучить радше як переконання про природу чи призначення речі, ніж як правило."
+    }
+  },
+  "476": {
+    "explanation": "Use be supposed to + verb to say what should happen because of a rule, a plan or what people expect. It is softer than must and often suggests that reality may be different.",
+    "examples": [
+      "You're supposed to wear a helmet here.",
+      "What am I supposed to do with these papers?",
+      "We're supposed to be at the airport by six."
+    ],
+    "uk": {
+      "explanation": "Be supposed to + verb кажемо, що має статися згідно з правилом, планом чи очікуваннями людей. Це м'якше, ніж must, і часто натякає, що насправді все може бути інакше."
+    }
+  },
+  "477": {
+    "explanation": "Be supposed to + verb can also mean 'people say that…': you pass on information you have heard, without saying if it is true. For the past, use supposed to have + past participle.",
+    "examples": [
+      "The lake is supposed to be very beautiful.",
+      "This restaurant is supposed to be the best in town.",
+      "He's supposed to have met the Queen."
+    ],
+    "uk": {
+      "explanation": "Be supposed to + verb може також означати «кажуть, що…»: ви переказуєте почуте, не стверджуючи, що це правда. Про минуле кажемо supposed to have + past participle."
+    }
+  },
+  "478": {
+    "explanation": "Use be bound to + verb to say that something is certain to happen because of the situation. It is often used for problems and feelings you can't avoid.",
+    "examples": [
+      "Where many people meet, problems are bound to happen.",
+      "You're bound to feel nervous before the exam.",
+      "It's bound to rain on the day of the picnic."
+    ],
+    "uk": {
+      "explanation": "Be bound to + verb кажемо, що щось неодмінно станеться через саму ситуацію. Так часто говорять про проблеми й почуття, яких не уникнути."
+    }
+  },
+  "479": {
+    "explanation": "Use the imperative Be sure to + verb to tell someone firmly but politely to do something. It is common at the end of emails and means the same as Don't forget to….",
+    "examples": [
+      "Be sure to lock the door when you leave.",
+      "Be sure to contact me if you have questions.",
+      "Be sure to bring your passport."
+    ],
+    "uk": {
+      "explanation": "Наказова форма Be sure to + verb твердо, але ввічливо каже комусь щось зробити. Вона поширена в кінці листів і означає те саме, що Don't forget to…."
+    }
+  },
+  "480": {
+    "explanation": "Use be sure to or be certain to + verb to say that something will definitely happen. The speaker is sure, not the subject: You are sure to like it means I'm sure you will like it.",
+    "examples": [
+      "You're sure to like this film.",
+      "If you leave now, you're certain to arrive on time.",
+      "This idea is sure to be popular."
+    ],
+    "uk": {
+      "explanation": "Be sure to або be certain to + verb кажемо, що щось точно станеться. Упевнений мовець, а не підмет: You are sure to like it означає «я впевнений, що вам сподобається»."
+    }
+  },
+  "481": {
+    "explanation": "Use be obliged to + verb as a formal way to say have to, when the obligation comes from a rule, a law or an organisation. It is typical of official notices and work emails.",
+    "examples": [
+      "All staff are obliged to wear ID cards.",
+      "You are not obliged to answer these questions.",
+      "They were obliged to leave the building."
+    ],
+    "uk": {
+      "explanation": "Be obliged to + verb — офіційний спосіб сказати have to, коли обов'язок іде від правила, закону чи організації. Так пишуть в офіційних оголошеннях і робочих листах."
+    }
+  },
+  "482": {
+    "explanation": "Use be forced to + verb when circumstances leave no choice and the speaker can't control them. Nobody in particular is named as the one who forces.",
+    "examples": [
+      "Because of low sales, we were forced to close the shop.",
+      "I don't like being forced to work at weekends.",
+      "Many families were forced to leave their homes."
+    ],
+    "uk": {
+      "explanation": "Be forced to + verb кажемо, коли обставини не залишають вибору і мовець на них не впливає. Хто саме змушує, не називають."
+    }
+  },
+  "483": {
+    "explanation": "Use be set to + verb to make a strong, confident statement about the future, almost like a fact. It is typical of business reports, news and statistics, with verbs like increase, rise and become.",
+    "examples": [
+      "Sales are set to double next year.",
+      "The new law is set to change everything.",
+      "Temperatures are set to rise this weekend."
+    ],
+    "uk": {
+      "explanation": "Be set to + verb — впевнене твердження про майбутнє, майже як про факт. Це типово для ділових звітів, новин і статистики з дієсловами на кшталт increase, rise і become."
+    }
+  },
+  "484": {
+    "explanation": "Use be + not + adjective + that clause, for example I'm not sure that… or It's not likely that…, to make a claim less direct. It is a polite way to disagree or point out a problem.",
+    "examples": [
+      "I'm not sure that this plan will work.",
+      "It's not likely that he'll change his mind.",
+      "I'm not certain that everyone agrees."
+    ],
+    "uk": {
+      "explanation": "Be + not + adjective + that clause, наприклад I'm not sure that… чи It's not likely that…, робить твердження менш прямим. Це ввічливий спосіб не погодитися або вказати на проблему."
+    }
+  },
+  "486": {
+    "explanation": "Put not after the adjective and before to: be sure not to, be certain not to, be obliged not to. Only the action becomes negative, and the statement stays strong and emphatic.",
+    "examples": [
+      "Be sure not to miss the last train.",
+      "They are almost certain not to agree.",
+      "Visitors are obliged not to feed the animals."
+    ],
+    "uk": {
+      "explanation": "Поставте not після прикметника й перед to: be sure not to, be certain not to, be obliged not to. Заперечною стає лише дія, а твердження залишається сильним і наголошеним."
+    }
+  },
+  "490": {
+    "explanation": "Use have to + verb to say that something is necessary because of a rule, a plan or the situation. Use has to with he, she and it. Have got to means the same and is more informal.",
+    "examples": [
+      "I have to work on Saturday.",
+      "She has to wear a uniform at school.",
+      "We've got to buy the tickets today."
+    ],
+    "uk": {
+      "explanation": "Have to + verb кажемо, що щось потрібно зробити через правило, план чи ситуацію. З he, she та it — has to. Have got to означає те саме, але звучить розмовніше."
+    }
+  },
+  "491": {
+    "explanation": "Use the fixed expression I have to admit (that)… to say something honest, often something a little surprising or not very good about yourself. Nobody is forcing you; it adds emphasis.",
+    "examples": [
+      "I have to admit that I watch too much TV.",
+      "I have to admit it's a difficult choice.",
+      "I have to admit I was wrong."
+    ],
+    "uk": {
+      "explanation": "Сталий вираз I have to admit (that)… — так чесно визнаємо щось, часто трохи несподіване або не дуже добре про себе. Ніхто вас не змушує — це додає наголосу."
+    }
+  },
+  "493": {
+    "explanation": "Use you've got to or you have to + verb to make a strong, enthusiastic suggestion: not a rule, but 'you'll love it, don't miss it'.",
+    "examples": [
+      "You've got to see this film!",
+      "You have to try the cake here.",
+      "If you go to Lviv, you've got to visit the old town."
+    ],
+    "uk": {
+      "explanation": "You've got to або you have to + verb — наполеглива, захоплена порада: не правило, а «вам сподобається, не пропустіть»."
+    }
+  },
+  "495": {
+    "explanation": "Have to be or have got to be can mean 'I'm sure it is', a conclusion from what you know, like must be. For the past, use had to be or had to have + past participle.",
+    "examples": [
+      "You have to be joking!",
+      "It's got to be the best café in town.",
+      "It had to have been Peter."
+    ],
+    "uk": {
+      "explanation": "Have to be або have got to be може означати «я впевнений, що це так» — висновок із того, що ви знаєте, як must be. Про минуле кажемо had to be або had to have + past participle."
+    }
+  },
+  "496": {
+    "explanation": "Use have to have + past participle to say that something must already be done before something else is possible. It often describes a condition or a requirement.",
+    "examples": [
+      "You have to have finished school to apply.",
+      "Players have to have trained for a year.",
+      "To get this job, you had to have lived abroad."
+    ],
+    "uk": {
+      "explanation": "Have to have + past participle кажемо, що щось уже має бути зроблено, перш ніж стане можливим щось інше. Так часто описують умову чи вимогу."
+    }
+  },
+  "498": {
+    "explanation": "Use may + verb to say that something is possible now or in the future, but you are not sure. It is a little more formal than might.",
+    "examples": [
+      "It may rain tomorrow.",
+      "Take some money — we may need it.",
+      "Your bag may be in the car."
+    ],
+    "uk": {
+      "explanation": "May + verb кажемо, що щось можливо зараз або в майбутньому, але напевно ви не знаєте. Це трохи офіційніше, ніж might."
+    }
+  },
+  "501": {
+    "explanation": "Use May I + verb? to ask for permission politely. It is more polite and formal than Can I…?, good for teachers, customers and people you don't know well.",
+    "examples": [
+      "May I borrow your pen?",
+      "May I ask you a question?",
+      "May I sit here?"
+    ],
+    "uk": {
+      "explanation": "May I + verb? — так ввічливо питаємо дозволу. Це ввічливіше й офіційніше, ніж Can I…?, і підходить для вчителів, клієнтів і незнайомих людей."
+    }
+  },
+  "503": {
+    "explanation": "Use may have + past participle to say that something possibly happened in the past. You are guessing: you don't know for sure.",
+    "examples": [
+      "He may have forgotten about the meeting.",
+      "As you may have noticed, the office is closed.",
+      "I may have left my phone at work."
+    ],
+    "uk": {
+      "explanation": "May have + past participle кажемо, що щось, можливо, сталося в минулому. Це здогад: напевно ви не знаєте."
+    }
+  },
+  "505": {
+    "explanation": "In formal situations, May I…? can politely ask for something, tell people what to do or make a suggestion. It looks like a question, but the speaker doesn't really wait for permission.",
+    "examples": [
+      "May I have your attention, please?",
+      "May I suggest that we start at nine?",
+      "May I remind everyone to switch off their phones?"
+    ],
+    "uk": {
+      "explanation": "В офіційних ситуаціях May I…? може ввічливо про щось попросити, сказати людям, що робити, або щось запропонувати. Це схоже на запитання, але мовець насправді не чекає дозволу."
+    }
+  },
+  "506": {
+    "explanation": "Use as you may know or as you may have heard or noticed to introduce information the reader probably knows already. It makes a letter or email sound friendly and polite.",
+    "examples": [
+      "As you may know, the office moves next month.",
+      "As you may have heard, Anna is leaving.",
+      "As you may have noticed, prices have gone up."
+    ],
+    "uk": {
+      "explanation": "As you may know або as you may have heard чи noticed вводить інформацію, яку читач, імовірно, вже знає. Так лист звучить дружньо й ввічливо."
+    }
+  },
+  "507": {
+    "explanation": "Use may … but to first say what the listener probably thinks, then give a different, surprising view. You may think means 'perhaps you think'.",
+    "examples": [
+      "You may think it's boring, but it isn't.",
+      "This may surprise you, but I love cooking.",
+      "It may sound strange, but I don't like chocolate."
+    ],
+    "uk": {
+      "explanation": "May … but спочатку каже, що, мабуть, думає співрозмовник, а потім подає іншу, несподівану думку. You may think означає «можливо, ви думаєте»."
+    }
+  },
+  "508": {
+    "explanation": "Use May I…? to ask for permission very politely, for example on the phone, in an office or in a letter. The answer is Yes, of course or, formally, Yes, you may.",
+    "examples": [
+      "May I come in?",
+      "May I speak to Ms Wright, please?",
+      "May I ask if the offer is still available?"
+    ],
+    "uk": {
+      "explanation": "May I…? — так дуже ввічливо питаємо дозволу, наприклад телефоном, в офісі чи в листі. Відповідь — Yes, of course або, офіційно, Yes, you may."
+    }
+  },
+  "509": {
+    "explanation": "Use may well + verb to say that something is quite likely, often something the listener doesn't expect. Well here doesn't mean 'good'; it makes the possibility stronger.",
+    "examples": [
+      "They may well agree to our offer.",
+      "It may well be the best decision.",
+      "She may well come after all."
+    ],
+    "uk": {
+      "explanation": "May well + verb кажемо, що щось цілком імовірне, часто те, чого співрозмовник не чекає. Well тут не означає «добре» — воно підсилює ймовірність."
+    }
+  },
+  "510": {
+    "explanation": "Use may not have + past participle to say 'perhaps it didn't happen' or 'perhaps it wasn't so' in the past. You are guessing, not stating a fact.",
+    "examples": [
+      "She may not have seen your message.",
+      "The problem may not have been so serious.",
+      "They may not have understood the question."
+    ],
+    "uk": {
+      "explanation": "May not have + past participle означає «можливо, цього не сталося» або «можливо, так не було» в минулому. Це здогад, а не факт."
+    }
+  },
+  "511": {
+    "explanation": "Use may as well + base verb to say 'there's no better option, so let's do this' or 'it won't hurt to do it'. It often sounds a little unenthusiastic. Might as well means the same.",
+    "examples": [
+      "The bus is late — we may as well walk.",
+      "There's nothing on TV, so I may as well go to bed.",
+      "You may as well know the truth."
+    ],
+    "uk": {
+      "explanation": "May as well + base verb означає «кращого варіанту немає, тож зробімо це» або «гірше від цього не буде». Часто звучить трохи без ентузіазму. Might as well означає те саме."
+    }
+  },
+  "512": {
+    "explanation": "In formal writing, however, whatever or whoever + … + may be or may seem means 'it doesn't matter how, what or who'. The main clause is true in every case.",
+    "examples": [
+      "However small it may be, every gift matters.",
+      "Whatever the reason may be, we must act now.",
+      "However useful it may seem, it costs too much."
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі however, whatever чи whoever + … + may be або may seem означає «неважливо, як, що чи хто». Головна частина речення правдива за будь-яких умов."
+    }
+  },
+  "513": {
+    "explanation": "In academic writing, use it may be + past participle + that to present an idea carefully, without saying you are completely sure. Common verbs: argued, concluded, said, suggested.",
+    "examples": [
+      "It may be argued that exams are unfair.",
+      "It may be concluded that the course was useful.",
+      "It may be said that cities are safer today."
+    ],
+    "uk": {
+      "explanation": "В академічному письмі it may be + past participle + that обережно подає думку, не стверджуючи, що ви цілком упевнені. Поширені дієслова: argued, concluded, said, suggested."
+    }
+  },
+  "515": {
+    "explanation": "Use might + verb to say that something is possible, but not very likely or not certain. It is a little weaker and more common in speech than may.",
+    "examples": [
+      "It might rain later.",
+      "My dad might take us to the station.",
+      "The keys might be on the table."
+    ],
+    "uk": {
+      "explanation": "Might + verb кажемо, що щось можливо, але не дуже ймовірно або не напевно. Це трохи слабше, ніж may, і частіше трапляється в усному мовленні."
+    }
+  },
+  "517": {
+    "explanation": "When you report what someone said or thought in the past, may usually becomes might, just like will becomes would. 'It may be late' becomes She said it might be late.",
+    "examples": [
+      "She said she might be late.",
+      "My parents said it might be our last holiday together.",
+      "I thought it might be a mistake."
+    ],
+    "uk": {
+      "explanation": "Коли переказуємо, що хтось сказав чи подумав у минулому, may зазвичай стає might, так само як will стає would. 'It may be late' перетворюється на She said it might be late."
+    }
+  },
+  "518": {
+    "explanation": "Use you might + verb to give advice or a suggestion in a soft, polite way, softer than you should. Common phrases: you might want to, you might need to, you might try.",
+    "examples": [
+      "You might want to take an umbrella.",
+      "You might need to bring some food.",
+      "You might try talking to your teacher."
+    ],
+    "uk": {
+      "explanation": "You might + verb — так м'яко й ввічливо даємо пораду чи пропозицію, м'якше, ніж you should. Поширені фрази: you might want to, you might need to, you might try."
+    }
+  },
+  "520": {
+    "explanation": "Use might have + past participle to guess about the past: 'perhaps it happened'. You don't know for sure.",
+    "examples": [
+      "It might have been the neighbours' cat.",
+      "He might have missed the bus.",
+      "I thought someone might have broken in."
+    ],
+    "uk": {
+      "explanation": "Might have + past participle — так робимо здогад про минуле: «можливо, це сталося». Напевно ви не знаєте."
+    }
+  },
+  "521": {
+    "explanation": "Use as you might know or as you might have heard or noticed to introduce information the reader probably knows already. It makes a letter or email friendly and polite, like as you may know.",
+    "examples": [
+      "As you might know, I've been very busy lately.",
+      "As you might have heard, the trip is cancelled.",
+      "As you might have noticed, I broke your vase."
+    ],
+    "uk": {
+      "explanation": "As you might know або as you might have heard чи noticed вводить інформацію, яку читач, імовірно, вже знає. Так лист звучить дружньо й ввічливо, як і з as you may know."
+    }
+  },
+  "524": {
+    "explanation": "Use might not have + past participle to say 'perhaps it didn't happen' or 'perhaps it wasn't so' in the past.",
+    "examples": [
+      "She might not have heard the phone.",
+      "It might not have been as bad as you think.",
+      "They might not have got my email."
+    ],
+    "uk": {
+      "explanation": "Might not have + past participle означає «можливо, цього не сталося» або «можливо, так не було» в минулому."
+    }
+  },
+  "525": {
+    "explanation": "Use might … but to first admit a weak point ('OK, perhaps this is true'), then give a stronger, more positive point after but. It helps you defend an idea or make someone feel better.",
+    "examples": [
+      "It might be small, but it's very comfortable.",
+      "You might not have won, but you played really well.",
+      "It might sound expensive, but it's worth it."
+    ],
+    "uk": {
+      "explanation": "Might … but спочатку визнає слабке місце («гаразд, можливо, це так»), а після but подає сильніший, позитивніший аргумент. Так можна захистити ідею або підбадьорити когось."
+    }
+  },
+  "526": {
+    "explanation": "In formal writing, a question with might makes criticism or a suggestion very polite and indirect. Two common patterns: Might I suggest…? and Might it not be better to…?",
+    "examples": [
+      "Might I suggest a different hotel next time?",
+      "Might it not be better to wait a week?",
+      "Might it be possible to change the date?"
+    ],
+    "uk": {
+      "explanation": "В офіційному письмі запитання з might робить критику чи пропозицію дуже ввічливою й непрямою. Дві поширені моделі: Might I suggest…? і Might it not be better to…?"
+    }
+  },
+  "527": {
+    "explanation": "Use Try as I might at the start of a sentence to mean 'however hard I tried'. The main clause says the effort didn't work. It is formal and literary.",
+    "examples": [
+      "Try as I might, I couldn't open the door.",
+      "Try as I might, I can't remember his name.",
+      "Try as she might, she couldn't stop laughing."
+    ],
+    "uk": {
+      "explanation": "Try as I might на початку речення означає «як я не старався». Головна частина речення каже, що зусилля не допомогли. Це офіційний, книжний вираз."
+    }
+  },
+  "531": {
+    "explanation": "Use I must or you must + verb to say that something is necessary or very important. With I, it often shows your own feeling; with you, it tells someone what they need to do.",
+    "examples": [
+      "I must call my parents tonight.",
+      "You must bring your passport.",
+      "I must go now — it's late."
+    ],
+    "uk": {
+      "explanation": "I must або you must + verb кажемо, що щось потрібно або дуже важливо. З I це часто показує ваше власне відчуття, а з you — каже комусь, що потрібно зробити."
+    }
+  },
+  "535": {
+    "explanation": "Use must + be to say you are sure something is true, based on what you know or see. The most common patterns are it must be and you must be.",
+    "examples": [
+      "You must be tired after the trip.",
+      "It must be difficult to live so far away.",
+      "That must be the new teacher."
+    ],
+    "uk": {
+      "explanation": "Must + be кажемо, коли впевнені, що щось правда, спираючись на те, що знаєте або бачите. Найпоширеніші моделі — it must be і you must be."
+    }
+  },
+  "536": {
+    "explanation": "Use You must + verb to invite someone in a warm, friendly way. It isn't an order: it shows that you really want them to come.",
+    "examples": [
+      "You must come to dinner next week.",
+      "You must visit us in the summer.",
+      "You must stay with us when you're in town."
+    ],
+    "uk": {
+      "explanation": "You must + verb — тепле, дружнє запрошення. Це не наказ: так ви показуєте, що справді хочете, щоб людина прийшла."
+    }
+  },
+  "537": {
+    "explanation": "Must + verb can be used with any subject to say that something is necessary or very important: we, they, your parents, the government. It is the same for every subject.",
+    "examples": [
+      "We must leave before it gets dark.",
+      "The government must do more for schools.",
+      "Students must hand in their work by Friday."
+    ],
+    "uk": {
+      "explanation": "Must + verb можна вживати з будь-яким підметом, щоб сказати, що щось потрібно або дуже важливо: we, they, your parents, the government. Форма однакова для всіх підметів."
+    }
+  },
+  "538": {
+    "explanation": "Use must + verb to make a strong, excited suggestion: 'this is so good that you really should do it'. We must… suggests doing something together.",
+    "examples": [
+      "You must try this soup — it's amazing!",
+      "You must read this book.",
+      "We must go to that new café."
+    ],
+    "uk": {
+      "explanation": "Must + verb — наполеглива, захоплена порада: «це так добре, що вам справді варто це зробити». We must… пропонує зробити щось разом."
+    }
+  },
+  "542": {
+    "explanation": "Use the fixed expression I must admit (that)… to say something honest that you didn't expect or don't like to say. You must admit… asks the other person to agree with a fair point.",
+    "examples": [
+      "I must admit I was wrong.",
+      "I must admit that the film was better than I expected.",
+      "You must admit it's a good idea."
+    ],
+    "uk": {
+      "explanation": "Сталий вираз I must admit (that)… — так чесно визнаємо щось, чого не очікували або не хочемо казати. You must admit… просить співрозмовника погодитися зі слушною думкою."
+    }
+  },
+  "543": {
+    "explanation": "Use must have + past participle to say you are sure something happened in the past, based on what you know or see.",
+    "examples": [
+      "She must have missed the train.",
+      "You must have been very happy.",
+      "Someone must have taken my umbrella."
+    ],
+    "uk": {
+      "explanation": "Must have + past participle кажемо, коли впевнені, що щось сталося в минулому, спираючись на те, що знаєте або бачите."
+    }
+  },
+  "544": {
+    "explanation": "Use the fixed expression I must say (that)… to add emphasis to your opinion, usually a positive one.",
+    "examples": [
+      "I must say, this is a lovely house.",
+      "I must say that the service was excellent.",
+      "The food, I must say, was delicious."
+    ],
+    "uk": {
+      "explanation": "Сталий вираз I must say (that)… підсилює вашу думку, зазвичай позитивну."
+    }
+  },
+  "545": {
+    "explanation": "Use Must I…? or Must we…? to ask whether something is necessary. It is formal and quite rare; in speech people usually say Do I have to…?",
+    "examples": [
+      "Must I finish this today?",
+      "Must we wear a tie?",
+      "Must you leave so early?"
+    ],
+    "uk": {
+      "explanation": "Must I…? або Must we…? — так питаємо, чи щось обов'язково. Це офіційно й доволі рідко; в розмові зазвичай кажуть Do I have to…?"
+    }
+  },
+  "546": {
+    "explanation": "Use must not or mustn't + verb to say that something is not allowed. It is common for rules and strong advice. Don't confuse it with don't have to, which means 'it isn't necessary'.",
+    "examples": [
+      "You mustn't use your phone during the exam.",
+      "Visitors must not touch the paintings.",
+      "You mustn't tell anyone."
+    ],
+    "uk": {
+      "explanation": "Must not або mustn't + verb кажемо, що щось заборонено. Так часто формулюють правила й наполегливі поради. Не плутайте з don't have to — це означає «не обов'язково»."
+    }
+  },
+  "552": {
+    "explanation": "Use needn't + base verb, with no to, to say that something is not necessary: you can do it if you want, but nobody requires it. Don't need to means the same and is more common in speech.",
+    "examples": [
+      "You needn't bring anything.",
+      "We needn't hurry — the film starts at nine.",
+      "You needn't worry about me."
+    ],
+    "uk": {
+      "explanation": "Needn't + base verb, без to, кажемо, що щось не обов'язково: можна зробити, якщо хочете, але ніхто цього не вимагає. Don't need to означає те саме і частіше трапляється в розмові."
+    }
+  },
+  "555": {
+    "explanation": "In formal discussion, a question with need before the subject is often rhetorical: the writer doesn't expect an answer. Need I say more? means 'the point is already clear'.",
+    "examples": [
+      "Need I say more?",
+      "Need we really spend so much money?",
+      "Need I remind you of the rules?"
+    ],
+    "uk": {
+      "explanation": "В офіційній дискусії запитання з need перед підметом часто риторичне: автор не чекає відповіді. Need I say more? означає «і так усе зрозуміло»."
+    }
+  },
   "639": {
     "explanation": "Use probably to show you are not sure, and definitely to show you are sure. Put the adverb after be, or before the main verb: It's probably in the car. She definitely knows.",
     "examples": [
