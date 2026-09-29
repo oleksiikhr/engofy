@@ -17,6 +17,10 @@ export class PostLexiconTranslationDto {
 
 export class PostGrammarTranslationDto {
   readonly explanation!: string;
+
+  // Index-aligned with the usage point's `examples`; absent when only the
+  // explanation is translated.
+  readonly examples?: string[];
 }
 
 type PostLexiconTranslations = Partial<

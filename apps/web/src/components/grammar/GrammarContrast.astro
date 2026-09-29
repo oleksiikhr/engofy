@@ -7,9 +7,12 @@
 interface Props {
   good: string[];
   bad?: string[];
+  // Native-language translations of `good`, index-aligned; shown under each
+  // example only while <html data-popup-lang='native'> is set.
+  goodNative?: { lang: string; texts: string[] };
 }
 
-const { good, bad = [] } = Astro.props;
+const { good, bad = [], goodNative } = Astro.props;
 ---
 
 <ul class="gp-contrast">
@@ -19,8 +22,15 @@ const { good, bad = [] } = Astro.props;
     ))
   }
   {
-    good.map((example) => (
-      <li class="gp-contrast__item gp-contrast__item--good">{example}</li>
+    good.map((example, i) => (
+      <li class="gp-contrast__item gp-contrast__item--good">
+        {example}
+        {goodNative?.texts[i] && (
+          <span class="gp-contrast__native" lang={goodNative.lang}>
+            {goodNative.texts[i]}
+          </span>
+        )}
+      </li>
     ))
   }
 </ul>
@@ -50,6 +60,14 @@ const { good, bad = [] } = Astro.props;
   .gp-contrast__item--good::before {
     content: '✓';
     color: var(--color-success);
+  }
+  .gp-contrast__native {
+    display: none;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+  }
+  :global(:root[data-popup-lang='native']) .gp-contrast__native {
+    display: block;
   }
   .gp-contrast__item--bad {
     font-weight: 500;

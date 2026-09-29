@@ -57,6 +57,37 @@ describe('GrammarImportUsagePointContentCommand', () => {
     expect(flush).toHaveBeenCalledTimes(1);
   });
 
+  it('writes translated examples alongside the explanation', async () => {
+    const examples = ['Я ходжу на роботу пішки.', 'Вона читає щовечора.'];
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({
+        '2': { ...seed['2'], uk: { ...seed['2'].uk, examples } },
+      }),
+    );
+    const point = { id: 'up-1', egpIndex: 2, translations: null };
+    find.mockResolvedValueOnce([point]);
+
+    await command.run([], {});
+
+    expect(point.translations).toEqual({
+      uk: { explanation: seed['2'].uk.explanation, examples },
+    });
+  });
+
+  it('rejects translated examples that do not match the examples', async () => {
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({
+        '2': {
+          ...seed['2'],
+          uk: { ...seed['2'].uk, examples: ['Лише один.'] },
+        },
+      }),
+    );
+
+    await expect(command.run([], {})).rejects.toThrow();
+    expect(find).not.toHaveBeenCalled();
+  });
+
   it('throws when the seed references an egpIndex with no matching usage point', async () => {
     find.mockResolvedValueOnce([]);
 

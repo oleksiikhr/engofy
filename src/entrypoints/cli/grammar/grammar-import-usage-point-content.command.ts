@@ -56,7 +56,10 @@ export class GrammarImportUsagePointContentCommand extends CliCommandRunner {
       usagePoint.learnerExamples = content.examples;
       usagePoint.translations = {
         ...usagePoint.translations,
-        [ContentLanguage.Uk]: { explanation: content.uk.explanation },
+        [ContentLanguage.Uk]: {
+          explanation: content.uk.explanation,
+          ...(content.uk.examples && { examples: content.uk.examples }),
+        },
       };
     }
 

@@ -115,7 +115,7 @@ export type LexiconTranslations = Partial<
   Record<TranslationLang, { translation: string }>
 >;
 export type GrammarTranslations = Partial<
-  Record<TranslationLang, { explanation: string }>
+  Record<TranslationLang, { explanation: string; examples?: string[] }>
 >;
 
 export interface WordAnnotation {

@@ -29,6 +29,13 @@ describe('readGrammarTranslations', () => {
     ).toEqual({ uk: { explanation: 'Пояснення.' } });
   });
 
+  it('keeps translated examples', () => {
+    const value = {
+      uk: { explanation: 'Пояснення.', examples: ['Я гуляю.', 'Вона читає.'] },
+    };
+    expect(readGrammarTranslations(value)).toEqual(value);
+  });
+
   it('reads a lexicon-shaped value as no translations', () => {
     expect(readGrammarTranslations({ uk: { translation: 'ринок' } })).toEqual(
       {},

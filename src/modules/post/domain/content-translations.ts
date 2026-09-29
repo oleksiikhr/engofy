@@ -21,6 +21,10 @@ export interface LexiconTranslation {
 
 export interface GrammarTranslation {
   explanation: string;
+  // Translations of the usage point's example sentences, index-aligned with
+  // them. Only hand-written seed content has them; grammar_enrichment writes
+  // the explanation alone.
+  examples?: string[];
 }
 
 export type LexiconTranslations = Partial<
@@ -36,7 +40,10 @@ const lexiconTranslationsSchema = z.partialRecord(
 );
 const grammarTranslationsSchema = z.partialRecord(
   z.enum(ContentLanguage),
-  z.object({ explanation: z.string().min(1) }),
+  z.object({
+    explanation: z.string().min(1),
+    examples: z.array(z.string().min(1)).optional(),
+  }),
 );
 
 // A stored value that does not match the current shape reads as "no

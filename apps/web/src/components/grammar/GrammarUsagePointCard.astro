@@ -26,6 +26,9 @@ const native = nativeLang();
 const nativeExplanation = up.explanation
   ? up.translations[native]?.explanation
   : null;
+const nativeExamples = nativeExplanation
+  ? up.translations[native]?.examples
+  : undefined;
 ---
 
 <div class="usage-item card" data-state={up.state} id={anchorId}>
@@ -63,7 +66,12 @@ const nativeExplanation = up.explanation
   {
     up.examples.length > 0 && (
       <div data-testid="usage-examples">
-        <GrammarContrast good={up.examples} />
+        <GrammarContrast
+          good={up.examples}
+          goodNative={
+            nativeExamples && { lang: native, texts: nativeExamples }
+          }
+        />
       </div>
     )
   }

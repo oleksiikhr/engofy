@@ -285,7 +285,7 @@ test.describe('grammar construction detail', () => {
     await expect(enriched).toContainText('which of two past actions');
     await expect(
       enriched.getByTestId('usage-examples').locator('li'),
-    ).toHaveText([
+    ).toContainText([
       'She had drawn the map before he arrived.',
       'I had eaten when they called.',
     ]);
@@ -309,14 +309,20 @@ test.describe('grammar construction detail', () => {
     const translated = construction.usageItem(0);
     const english = translated.getByText('which of two past actions');
     const ukrainian = translated.getByText('яка з двох минулих дій');
+    const example = translated.getByText('She had drawn the map');
+    const exampleUk = translated.getByText('Вона намалювала мапу');
     const uk = translated.getByRole('button', { name: 'УКР' });
     await expect(english).toBeVisible();
     await expect(ukrainian).toBeHidden();
+    await expect(exampleUk).toBeHidden();
     await expect(uk).toHaveAttribute('aria-pressed', 'false');
 
     await uk.click();
     await expect(ukrainian).toBeVisible();
     await expect(english).toBeHidden();
+    // The English example stays; its translation appears under it.
+    await expect(example).toBeVisible();
+    await expect(exampleUk).toBeVisible();
     await expect(uk).toHaveAttribute('aria-pressed', 'true');
     // No translation — no switch, English only.
     await expect(
@@ -372,6 +378,9 @@ test.describe('grammar construction detail', () => {
         await construction.openUsage();
         await expect(
           construction.usageItem(0).getByText('яка з двох минулих дій'),
+        ).toBeVisible();
+        await expect(
+          construction.usageItem(0).getByText('Вона намалювала мапу'),
         ).toBeVisible();
         const box = await construction.usageItem(1).boundingBox();
         await context.close();

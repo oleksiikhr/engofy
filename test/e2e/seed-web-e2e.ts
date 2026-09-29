@@ -325,6 +325,10 @@ async function seed(orm: MikroORM): Promise<void> {
       uk: {
         explanation:
           'Past perfect показує, яка з двох минулих дій сталася раніше. Утворюється за схемою had + past participle.',
+        examples: [
+          'Вона намалювала мапу ще до того, як він прийшов.',
+          'Я вже поїв, коли вони подзвонили.',
+        ],
       },
     },
     learnerExamples: [

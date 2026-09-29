@@ -8,11 +8,22 @@ import { z } from 'zod';
 
 const text = z.string().trim().min(1);
 
-export const UsagePointContentSeedSchema = z.object({
-  explanation: text,
-  examples: z.array(text).min(2).max(3),
-  uk: z.object({ explanation: text }),
-});
+export const UsagePointContentSeedSchema = z
+  .object({
+    explanation: text,
+    examples: z.array(text).min(2).max(3),
+    // `examples` translates `examples` one to one, in the same order.
+    uk: z.object({ explanation: text, examples: z.array(text).optional() }),
+  })
+  .refine(
+    (seed) =>
+      seed.uk.examples === undefined ||
+      seed.uk.examples.length === seed.examples.length,
+    {
+      path: ['uk', 'examples'],
+      message: 'must translate every example, in order',
+    },
+  );
 
 export type UsagePointContentSeed = z.infer<typeof UsagePointContentSeedSchema>;
 
