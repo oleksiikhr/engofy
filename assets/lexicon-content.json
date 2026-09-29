@@ -13168,5 +13168,1295 @@
         "translation": "цитувати"
       }
     }
+  },
+  "rabbit": {
+    "noun": {
+      "definition": "A small furry animal with long ears that lives in a hole in the ground.",
+      "example": "The rabbit ran across the garden.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кролик"
+      }
+    }
+  },
+  "racket": {
+    "noun": {
+      "definition": "A piece of sports equipment with strings, used to hit a ball in tennis or badminton.",
+      "example": "She bought a new tennis racket.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ракетка"
+      }
+    }
+  },
+  "rain": {
+    "noun": {
+      "definition": "Water that falls from the clouds in small drops.",
+      "example": "We stayed inside because of the rain.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дощ"
+      }
+    },
+    "verb": {
+      "definition": "To fall from the sky as drops of water.",
+      "example": "It rained all day yesterday.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "іти (про дощ)"
+      }
+    }
+  },
+  "raise": {
+    "verb": {
+      "definition": "To lift something up or increase an amount or level.",
+      "example": "The shop raised its prices last month.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "піднімати, підвищувати"
+      }
+    }
+  },
+  "random": {
+    "adjective": {
+      "definition": "Done or chosen without any plan or pattern.",
+      "example": "He asked a random person for directions.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "випадковий"
+      }
+    }
+  },
+  "rang": {
+    "noun": {
+      "definition": "The past form of \"ring\": a bell or phone made a sound.",
+      "example": "The phone rang twice and then stopped.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дзвонив (минулий час від \"ring\")"
+      }
+    }
+  },
+  "rap": {
+    "noun": {
+      "definition": "A type of music in which words are spoken quickly with a strong beat.",
+      "example": "He listens to rap on the way to work.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "реп"
+      }
+    }
+  },
+  "rapidly": {
+    "adverb": {
+      "definition": "Very quickly.",
+      "example": "The city is growing rapidly.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "швидко, стрімко"
+      }
+    }
+  },
+  "rare": {
+    "adjective": {
+      "definition": "Not happening or found very often.",
+      "example": "It is rare to see snow here in October.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рідкісний"
+      }
+    }
+  },
+  "rarely": {
+    "adverb": {
+      "definition": "Not often.",
+      "example": "She rarely eats meat.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рідко"
+      }
+    }
+  },
+  "rat": {
+    "verb": {
+      "definition": "To tell someone in authority about the bad things a friend has done (informal).",
+      "example": "He ratted on his friends to the teacher.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "доносити, здавати (розм.)"
+      }
+    }
+  },
+  "react": {
+    "verb": {
+      "definition": "To behave or feel in a certain way because of something that has happened.",
+      "example": "How did she react to the news?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "реагувати"
+      }
+    }
+  },
+  "reaction": {
+    "noun": {
+      "definition": "What you do, say or feel because of something that has happened.",
+      "example": "His reaction to the joke was a big smile.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "реакція"
+      }
+    }
+  },
+  "reader": {
+    "noun": {
+      "definition": "A person who reads a book, newspaper or text.",
+      "example": "She is a keen reader of detective stories.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "читач"
+      }
+    },
+    "verb": {
+      "definition": "A person who reads a book, newspaper or text.",
+      "example": "Every reader can find something interesting here.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "читач"
+      }
+    }
+  },
+  "realise": {
+    "noun": {
+      "definition": "To understand or become aware of something (British spelling).",
+      "example": "I didn't realise it was so late.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "усвідомлювати, розуміти"
+      }
+    },
+    "verb": {
+      "definition": "To understand or become aware of something (British spelling).",
+      "example": "I suddenly realised that I had lost my keys.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "усвідомлювати, розуміти"
+      }
+    }
+  },
+  "realistic": {
+    "adjective": {
+      "definition": "Showing things as they really are, or expecting only what is possible.",
+      "example": "It is not realistic to finish this in one day.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "реалістичний"
+      }
+    }
+  },
+  "realize": {
+    "verb": {
+      "definition": "To understand or become aware of something.",
+      "example": "He realized he was on the wrong train.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "усвідомлювати, розуміти"
+      }
+    }
+  },
+  "reassure": {
+    "verb": {
+      "definition": "To say or do something that makes someone feel less worried.",
+      "example": "The doctor reassured her that everything was fine.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "заспокоювати, підбадьорювати"
+      }
+    }
+  },
+  "recall": {
+    "verb": {
+      "definition": "To remember something.",
+      "example": "I can't recall his name.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "пригадувати, згадувати"
+      }
+    }
+  },
+  "reception": {
+    "noun": {
+      "definition": "The place in a hotel or office where guests are met and helped.",
+      "example": "Please leave your key at reception.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рецепція, стійка реєстрації"
+      }
+    }
+  },
+  "recipe": {
+    "noun": {
+      "definition": "Instructions for cooking a particular food, with a list of what you need.",
+      "example": "This recipe uses only four ingredients.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "рецепт (кулінарний)"
+      }
+    }
+  },
+  "reciprocal": {
+    "adjective": {
+      "definition": "Done or felt by two people or groups in the same way.",
+      "example": "Their respect for each other was reciprocal.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "взаємний"
+      }
+    }
+  },
+  "recognise": {
+    "verb": {
+      "definition": "To know someone or something because you have seen them before (British spelling).",
+      "example": "I didn't recognise you with short hair.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "впізнавати, визнавати"
+      }
+    }
+  },
+  "recommend": {
+    "verb": {
+      "definition": "To say that something is good or suggest that someone should do it.",
+      "example": "Can you recommend a good restaurant?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "рекомендувати, радити"
+      }
+    }
+  },
+  "recommendation": {
+    "noun": {
+      "definition": "A suggestion about what someone should do or choose.",
+      "example": "We stayed at the hotel on her recommendation.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "рекомендація, порада"
+      }
+    }
+  },
+  "recycle": {
+    "verb": {
+      "definition": "To treat used things so that they can be used again.",
+      "example": "We recycle all our paper and glass.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "переробляти (на вторсировину)"
+      }
+    }
+  },
+  "redecorate": {
+    "verb": {
+      "definition": "To put new paint or paper on the walls of a room.",
+      "example": "They redecorated the kitchen last summer.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "робити ремонт, переоформлювати"
+      }
+    }
+  },
+  "reduce": {
+    "verb": {
+      "definition": "To make something smaller in size, amount or price.",
+      "example": "The shop reduced the price of all coats.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "зменшувати, знижувати"
+      }
+    }
+  },
+  "reduced": {
+    "adjective": {
+      "definition": "Made smaller or lower in price or amount.",
+      "example": "These shoes are on sale at a reduced price.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "зменшений, знижений"
+      }
+    }
+  },
+  "refer": {
+    "verb": {
+      "definition": "To mention or talk about someone or something.",
+      "example": "He never refers to his old job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "посилатися, згадувати"
+      }
+    }
+  },
+  "reference": {
+    "noun": {
+      "definition": "A mention of someone or something.",
+      "example": "She made no reference to the problem.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "посилання, згадка"
+      }
+    }
+  },
+  "reflect": {
+    "verb": {
+      "definition": "To show or be a sign of something, or to think carefully about something.",
+      "example": "The results reflect the hard work of the team.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відображати, роздумувати"
+      }
+    }
+  },
+  "reflexive": {
+    "adjective": {
+      "definition": "In grammar, describing a verb whose subject and object are the same person or thing.",
+      "example": "\"Himself\" is a reflexive pronoun.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зворотний (у граматиці)"
+      }
+    },
+    "noun": {
+      "definition": "In grammar, a reflexive pronoun or verb.",
+      "example": "The teacher wrote a list of reflexives on the board.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зворотне слово (у граматиці)"
+      }
+    },
+    "verb": {
+      "definition": "In grammar, describing a verb whose subject and object are the same person or thing.",
+      "example": "Reflexive verbs are followed by a word like \"myself\".",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "зворотний (у граматиці)"
+      }
+    }
+  },
+  "reform": {
+    "noun": {
+      "definition": "A change made to improve a system, law or organisation.",
+      "example": "The government promised a reform of the school system.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "реформа"
+      }
+    }
+  },
+  "refund": {
+    "noun": {
+      "definition": "Money that is given back to you, for example when you return something.",
+      "example": "I asked the shop for a refund.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "повернення коштів"
+      }
+    }
+  },
+  "refusal": {
+    "noun": {
+      "definition": "The act of saying no to something.",
+      "example": "His refusal to help made her angry.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відмова"
+      }
+    }
+  },
+  "refuse": {
+    "verb": {
+      "definition": "To say that you will not do or accept something.",
+      "example": "She refused to answer the question.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відмовлятися"
+      }
+    }
+  },
+  "register": {
+    "verb": {
+      "definition": "To put your name on an official list.",
+      "example": "You must register before you can vote.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "реєструватися"
+      }
+    }
+  },
+  "regret": {
+    "noun": {
+      "definition": "A feeling of sadness about something you did or did not do.",
+      "example": "He has no regrets about leaving the company.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "жаль, каяття"
+      }
+    },
+    "verb": {
+      "definition": "To feel sorry about something that you did or did not do.",
+      "example": "I regret telling him the secret.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "шкодувати, жалкувати"
+      }
+    }
+  },
+  "regularly": {
+    "adverb": {
+      "definition": "Often, or at the same time each day, week or month.",
+      "example": "She goes to the gym regularly.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "регулярно"
+      }
+    }
+  },
+  "reject": {
+    "verb": {
+      "definition": "To refuse to accept or agree with something.",
+      "example": "The company rejected our offer.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відхиляти"
+      }
+    }
+  },
+  "relate": {
+    "verb": {
+      "definition": "To connect one thing with another, or to be about something.",
+      "example": "The story relates to events in the war.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "стосуватися, пов'язувати"
+      }
+    }
+  },
+  "relative": {
+    "adjective": {
+      "definition": "Compared with something else.",
+      "example": "The country enjoys relative peace.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "відносний"
+      }
+    },
+    "noun": {
+      "definition": "A member of your family.",
+      "example": "All my relatives came to the party.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "родич"
+      }
+    }
+  },
+  "relax": {
+    "verb": {
+      "definition": "To rest and become calm and less worried.",
+      "example": "I like to relax with a book on Sunday.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "розслаблятися, відпочивати"
+      }
+    }
+  },
+  "relaxed": {
+    "adjective": {
+      "definition": "Calm and not worried.",
+      "example": "He felt relaxed after the holiday.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розслаблений, спокійний"
+      }
+    }
+  },
+  "relevance": {
+    "noun": {
+      "definition": "How closely something is connected with what is being discussed.",
+      "example": "I don't see the relevance of your question.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "значущість, доречність"
+      }
+    }
+  },
+  "relevant": {
+    "adjective": {
+      "definition": "Connected with what is being discussed or done.",
+      "example": "Please send only the relevant documents.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "доречний, відповідний"
+      }
+    }
+  },
+  "relief": {
+    "noun": {
+      "definition": "A feeling of comfort when something bad has ended or did not happen.",
+      "example": "It was a relief to hear that she was safe.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "полегшення"
+      }
+    }
+  },
+  "rely": {
+    "verb": {
+      "definition": "To trust or depend on someone or something.",
+      "example": "You can rely on me to be there.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "покладатися, розраховувати"
+      }
+    }
+  },
+  "remain": {
+    "noun": {
+      "definition": "To stay in the same place or state.",
+      "example": "The shop will remain open until nine.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "залишатися"
+      }
+    },
+    "verb": {
+      "definition": "To stay in the same place or state.",
+      "example": "Please remain seated until the plane stops.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "залишатися"
+      }
+    }
+  },
+  "remind": {
+    "verb": {
+      "definition": "To make someone remember something.",
+      "example": "Remind me to call her tomorrow.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "нагадувати"
+      }
+    }
+  },
+  "reminder": {
+    "noun": {
+      "definition": "Something that helps you remember something.",
+      "example": "I set a reminder on my phone.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нагадування"
+      }
+    }
+  },
+  "remorse": {
+    "noun": {
+      "definition": "A strong feeling of guilt about something bad you have done.",
+      "example": "He felt deep remorse for what he had said.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "каяття, докори сумління"
+      }
+    }
+  },
+  "remote": {
+    "adjective": {
+      "definition": "Far away from other places or people.",
+      "example": "They live in a remote village in the mountains.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "віддалений"
+      }
+    }
+  },
+  "remove": {
+    "verb": {
+      "definition": "To take something away from a place.",
+      "example": "Please remove your shoes at the door.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "прибирати, знімати"
+      }
+    }
+  },
+  "rename": {
+    "verb": {
+      "definition": "To give something a new name.",
+      "example": "I renamed the file before sending it.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перейменовувати"
+      }
+    }
+  },
+  "renovate": {
+    "verb": {
+      "definition": "To repair and improve an old building or room.",
+      "example": "They are renovating the old farmhouse.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "ремонтувати, реставрувати"
+      }
+    }
+  },
+  "rent": {
+    "noun": {
+      "definition": "Money you pay regularly to use a house, flat or room that belongs to someone else.",
+      "example": "The rent goes up every year.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "орендна плата"
+      }
+    },
+    "verb": {
+      "definition": "To pay money to use something that belongs to someone else.",
+      "example": "We rented a car for the weekend.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "орендувати, винаймати"
+      }
+    }
+  },
+  "reorder": {
+    "verb": {
+      "definition": "To order something again, or to put things in a different order.",
+      "example": "I need to reorder printer paper.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "замовляти повторно, змінювати порядок"
+      }
+    }
+  },
+  "repaint": {
+    "verb": {
+      "definition": "To paint something again.",
+      "example": "He repainted the fence last week.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "фарбувати заново"
+      }
+    }
+  },
+  "repair": {
+    "noun": {
+      "definition": "Work done to fix something that is broken or damaged.",
+      "example": "The road is closed for repairs.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ремонт"
+      }
+    },
+    "verb": {
+      "definition": "To fix something that is broken or damaged.",
+      "example": "He repaired the bike himself.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ремонтувати, лагодити"
+      }
+    }
+  },
+  "repeat": {
+    "noun": {
+      "definition": "Something that is done or shown again.",
+      "example": "The film is a repeat from last year.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "повтор"
+      }
+    },
+    "verb": {
+      "definition": "To say or do something again.",
+      "example": "Could you repeat that, please?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "повторювати"
+      }
+    }
+  },
+  "repeated": {
+    "adjective": {
+      "definition": "Done or happening many times.",
+      "example": "Despite repeated warnings, he ignored the sign.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "неодноразовий, повторний"
+      }
+    }
+  },
+  "rephrase": {
+    "verb": {
+      "definition": "To say or write something again in different words.",
+      "example": "Let me rephrase the question.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перефразувати"
+      }
+    }
+  },
+  "replace": {
+    "noun": {
+      "definition": "To put something new in the place of something old.",
+      "example": "We need to replace the old windows.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "замінювати"
+      }
+    },
+    "verb": {
+      "definition": "To put something new in the place of something old.",
+      "example": "She replaced the broken glass with a new one.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "замінювати"
+      }
+    }
+  },
+  "reply": {
+    "noun": {
+      "definition": "Something you say or write in answer to someone.",
+      "example": "I am waiting for a reply to my email.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "відповідь"
+      }
+    },
+    "verb": {
+      "definition": "To answer someone by speaking or writing.",
+      "example": "He didn't reply to my message.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "відповідати"
+      }
+    }
+  },
+  "replying": {
+    "verb": {
+      "definition": "Answering someone by speaking or writing (from \"reply\").",
+      "example": "She is replying to his email now.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "відповідаючи (від \"reply\")"
+      }
+    }
+  },
+  "reportedly": {
+    "adverb": {
+      "definition": "According to what people say, although it may not be true.",
+      "example": "The actor is reportedly moving to Paris.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "за повідомленнями, нібито"
+      }
+    }
+  },
+  "reporting": {
+    "noun": {
+      "definition": "The activity of giving news or information about something.",
+      "example": "The paper is known for its honest reporting.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "репортаж, звітність"
+      }
+    }
+  },
+  "representative": {
+    "noun": {
+      "definition": "A person who speaks or acts for another person or group.",
+      "example": "A representative of the company will call you.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "представник"
+      }
+    }
+  },
+  "reprimand": {
+    "noun": {
+      "definition": "A strong official statement of disapproval.",
+      "example": "He received a reprimand for being late.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "догана"
+      }
+    }
+  },
+  "request": {
+    "noun": {
+      "definition": "An act of asking politely for something.",
+      "example": "She made a request for more information.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "прохання, запит"
+      }
+    },
+    "verb": {
+      "definition": "To ask for something politely or formally.",
+      "example": "Passengers are requested to stay seated.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "просити, запитувати"
+      }
+    }
+  },
+  "require": {
+    "verb": {
+      "definition": "To need something, or to make something necessary.",
+      "example": "The job requires good English.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вимагати, потребувати"
+      }
+    }
+  },
+  "requirement": {
+    "noun": {
+      "definition": "Something that you must have or do.",
+      "example": "A degree is a requirement for this job.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "вимога"
+      }
+    }
+  },
+  "resemble": {
+    "verb": {
+      "definition": "To look like or be similar to someone or something.",
+      "example": "She closely resembles her mother.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "нагадувати, бути схожим"
+      }
+    }
+  },
+  "reserve": {
+    "verb": {
+      "definition": "To arrange for a seat, table or room to be kept for you.",
+      "example": "I reserved a table for four.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бронювати, резервувати"
+      }
+    }
+  },
+  "resign": {
+    "verb": {
+      "definition": "To officially say that you are leaving your job.",
+      "example": "The manager resigned after the scandal.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "подавати у відставку, звільнятися"
+      }
+    }
+  },
+  "resolve": {
+    "verb": {
+      "definition": "To find a solution to a problem.",
+      "example": "They managed to resolve the dispute.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розв'язувати, вирішувати"
+      }
+    }
+  },
+  "respond": {
+    "verb": {
+      "definition": "To say or do something as an answer to something.",
+      "example": "She responded to my email within an hour.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відповідати, реагувати"
+      }
+    }
+  },
+  "responsibility": {
+    "noun": {
+      "definition": "A duty to deal with something or take care of someone.",
+      "example": "Looking after the dog is my responsibility.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "відповідальність"
+      }
+    }
+  },
+  "restart": {
+    "noun": {
+      "definition": "An act of starting something again.",
+      "example": "A restart of the computer fixed the problem.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перезапуск"
+      }
+    },
+    "verb": {
+      "definition": "To start something again.",
+      "example": "Try restarting your phone.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "перезапускати, починати знову"
+      }
+    }
+  },
+  "restaurant": {
+    "noun": {
+      "definition": "A place where people pay to sit and eat meals.",
+      "example": "We had dinner at an Italian restaurant.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ресторан"
+      }
+    }
+  },
+  "retake": {
+    "verb": {
+      "definition": "To take an exam or test again.",
+      "example": "She has to retake the maths exam.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "перескладати, перездавати"
+      }
+    }
+  },
+  "retell": {
+    "verb": {
+      "definition": "To tell a story again.",
+      "example": "The children retold the story in their own words.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "переказувати"
+      }
+    }
+  },
+  "retire": {
+    "verb": {
+      "definition": "To stop working, usually because of your age.",
+      "example": "My father retires next year.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "виходити на пенсію"
+      }
+    }
+  },
+  "reverse": {
+    "noun": {
+      "definition": "The opposite of something.",
+      "example": "The result was the reverse of what we expected.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "протилежність"
+      }
+    }
+  },
+  "reward": {
+    "noun": {
+      "definition": "Something given to you because you have done something good.",
+      "example": "She got a reward for finding the lost dog.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "нагорода, винагорода"
+      }
+    }
+  },
+  "rhetorical": {
+    "adjective": {
+      "definition": "Asked or said only for effect, not to get an answer.",
+      "example": "\"Who cares?\" was a rhetorical question.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "риторичний"
+      }
+    }
+  },
+  "rhetorically": {
+    "adverb": {
+      "definition": "In a way that is meant for effect and not to get an answer.",
+      "example": "\"Isn't that obvious?\" he asked rhetorically.",
+      "cefrLevel": "C2",
+      "uk": {
+        "translation": "риторично"
+      }
+    }
+  },
+  "rice": {
+    "noun": {
+      "definition": "Small white or brown grains that are cooked and eaten.",
+      "example": "We had chicken with rice for dinner.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "рис"
+      }
+    }
+  },
+  "rid": {
+    "verb": {
+      "definition": "To make yourself free of something you do not want.",
+      "example": "We finally got rid of the old sofa.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "позбавлятися, звільняти"
+      }
+    }
+  },
+  "ridiculous": {
+    "adjective": {
+      "definition": "Very silly or unreasonable.",
+      "example": "It is ridiculous to pay so much for a coffee.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "смішний, абсурдний"
+      }
+    }
+  },
+  "ring": {
+    "verb": {
+      "definition": "To make a sound like a bell, or to call someone by phone.",
+      "example": "I will ring you tonight.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дзвонити, телефонувати"
+      }
+    }
+  },
+  "ringing": {
+    "noun": {
+      "definition": "The sound of a bell or phone.",
+      "example": "The ringing of the phone woke me up.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "дзвін, дзвінок"
+      }
+    },
+    "verb": {
+      "definition": "Making the sound of a bell, or calling by phone (from \"ring\").",
+      "example": "The phone is ringing.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "дзвонить (від \"ring\")"
+      }
+    }
+  },
+  "rip": {
+    "verb": {
+      "definition": "To tear something quickly and roughly.",
+      "example": "He ripped the letter open.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "розривати, рвати"
+      }
+    }
+  },
+  "rise": {
+    "noun": {
+      "definition": "An increase in an amount, level or price.",
+      "example": "There has been a rise in the price of food.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "зростання, підвищення"
+      }
+    },
+    "verb": {
+      "definition": "To go up, or to increase.",
+      "example": "Prices are rising every year.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "підніматися, зростати"
+      }
+    }
+  },
+  "risky": {
+    "adjective": {
+      "definition": "Involving the chance of something bad happening.",
+      "example": "Driving fast in the rain is risky.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "ризикований"
+      }
+    }
+  },
+  "rival": {
+    "noun": {
+      "definition": "A person or group that competes with another.",
+      "example": "The two shops are business rivals.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "суперник, конкурент"
+      }
+    }
+  },
+  "robot": {
+    "noun": {
+      "definition": "A machine that can do tasks by itself.",
+      "example": "A robot cleans the floor in our house.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "робот"
+      }
+    }
+  },
+  "rocky": {
+    "adjective": {
+      "definition": "Covered with or made of rocks.",
+      "example": "We walked along a rocky path.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "скелястий, кам'янистий"
+      }
+    }
+  },
+  "roll": {
+    "noun": {
+      "definition": "A small round piece of bread, or something shaped into a tube.",
+      "example": "I had a cheese roll for lunch.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "булочка, рулон"
+      }
+    }
+  },
+  "romantic": {
+    "adjective": {
+      "definition": "Connected with love, or showing strong feelings of love.",
+      "example": "They had a romantic dinner by the sea.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "романтичний"
+      }
+    }
+  },
+  "roof": {
+    "noun": {
+      "definition": "The top outside part of a building.",
+      "example": "There is a bird on the roof.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дах"
+      }
+    }
+  },
+  "rose": {
+    "noun": {
+      "definition": "A flower with a sweet smell and thorns on its stem.",
+      "example": "He gave her a red rose.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "троянда"
+      }
+    }
+  },
+  "roundabout": {
+    "noun": {
+      "definition": "A circular place where several roads meet and cars drive around.",
+      "example": "Take the second exit at the roundabout.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "кругове перехрестя"
+      }
+    }
+  },
+  "route": {
+    "noun": {
+      "definition": "The way you take to get from one place to another.",
+      "example": "What is the quickest route to the station?",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "маршрут"
+      }
+    }
+  },
+  "routine": {
+    "adjective": {
+      "definition": "Done regularly as part of a normal process.",
+      "example": "The doctor did a routine check.",
+      "cefrLevel": "C1",
+      "uk": {
+        "translation": "рутинний, звичайний"
+      }
+    },
+    "noun": {
+      "definition": "The usual way of doing things.",
+      "example": "My morning routine starts at six.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "розпорядок, рутина"
+      }
+    }
+  },
+  "rubber": {
+    "noun": {
+      "definition": "A soft material that can stretch, used to make tyres and boots.",
+      "example": "The tyres are made of rubber.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "гума, каучук"
+      }
+    }
+  },
+  "rubbish": {
+    "adjective": {
+      "definition": "Very bad (informal, British).",
+      "example": "The film was absolutely rubbish.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "жахливий, нікчемний (розм.)"
+      }
+    },
+    "noun": {
+      "definition": "Things that you throw away.",
+      "example": "Please put the rubbish in the bin.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "сміття"
+      }
+    }
+  },
+  "rude": {
+    "adjective": {
+      "definition": "Not polite.",
+      "example": "It is rude to talk with your mouth full.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "грубий, нечемний"
+      }
+    },
+    "noun": {
+      "definition": "Not polite.",
+      "example": "He was rude to the waiter.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "грубий, нечемний"
+      }
+    }
+  },
+  "ruin": {
+    "verb": {
+      "definition": "To spoil or destroy something completely.",
+      "example": "The rain ruined our picnic.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "руйнувати, псувати"
+      }
+    }
+  },
+  "runner": {
+    "noun": {
+      "definition": "A person who runs, especially for sport.",
+      "example": "She is a fast runner.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "бігун"
+      }
+    }
+  },
+  "rush": {
+    "verb": {
+      "definition": "To move or do something very quickly.",
+      "example": "We had to rush to catch the train.",
+      "cefrLevel": "B2",
+      "uk": {
+        "translation": "поспішати, кидатися"
+      }
+    }
   }
 }
