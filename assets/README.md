@@ -100,7 +100,8 @@ Shape: a JSON object keyed by `egpIndex`:
     "explanation": "We use the present simple for habits. Add -s after he, she, it: she works.",
     "examples": ["I walk to work every day.", "She plays tennis on Sundays."],
     "uk": {
-      "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works."
+      "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works.",
+      "examples": ["Я щодня ходжу на роботу пішки.", "Вона грає в теніс щонеділі."]
     }
   }
 }
@@ -113,6 +114,10 @@ Shape: a JSON object keyed by `egpIndex`:
   this use.
 - `uk.explanation` — faithful Ukrainian translation of `explanation`; the form
   pattern stays in English.
+- `uk.examples` — optional: natural Ukrainian translations of `examples`, one
+  per example, in the same order. Imported into `translations.uk.examples` and
+  shown under each English example when the learner switches to the native
+  language.
 
 ## `irregular-verbs.json`
 
