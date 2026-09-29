@@ -345,7 +345,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
-### [ ] 34. Словник сторінок правил: n–q (274)
+### [x] 34. Словник сторінок правил: n–q (274)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
