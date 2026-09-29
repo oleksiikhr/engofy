@@ -8635,6 +8635,3292 @@
       }
     }
   ],
+  "288": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like ____. (in general)",
+        "answer": "cats",
+        "options": ["the cats", "a cats", "cats"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ is good for children. (in general)",
+        "answer": "Milk",
+        "options": ["The milk", "A milk", "Milk"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We go to school by ____.",
+        "options": ["the bus's", "a bus by", "bus", "buses the"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ are friendly animals. (in general)",
+        "answer": "Dogs",
+        "options": ["Dogs", "The dogs", "A dogs"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I love the music in general.",
+          "I love music.",
+          "I love a music."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ is expensive in London. (in general)",
+        "answer": "Food",
+        "options": ["The food", "A food", "Food"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She doesn't eat ____. (in general)",
+        "answer": "meat",
+        "options": ["the meat", "a meat", "meat"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ are usually sweet.",
+        "options": ["The orange", "An oranges", "Oranges", "Orange are"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "289": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you pass me the ____ cup?",
+        "answer": "blue",
+        "options": ["blues", "bluely", "blue"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We stayed in ____ big hotel near the beach.",
+        "answer": "the",
+        "options": ["a the", "an", "the"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ new teacher is very kind.",
+        "options": ["The", "A", "An", "Some"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'd like the ____ one, please. (red)",
+        "answer": "red",
+        "options": ["redly", "red", "reds"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The small bag is mine.",
+          "Small the bag is mine.",
+          "The bag small is mine."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where's ____ black jacket I bought?",
+        "answer": "the",
+        "options": ["the", "a", "an"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's the best ____ in town. (restaurant)",
+        "answer": "restaurant",
+        "options": ["restaurant's", "restaurant", "restaurants"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Take ____ green bus, not the red one.",
+        "options": ["the", "a", "an", "some"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "293": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ can't buy happiness. (in general)",
+        "answer": "Money",
+        "options": ["Money", "The money", "A money"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Life in big cities ____ expensive.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ spend a lot of time online.",
+        "options": ["The teenager", "A teenagers", "Teenagers", "Teenager"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ need friends. (people in general)",
+        "answer": "People",
+        "options": ["People", "The people", "A people"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The children need sleep in general.",
+          "A children need sleep.",
+          "Children need sleep."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ is important for everyone. (education in general)",
+        "answer": "Education",
+        "options": ["Education", "The education", "An education in"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ often work long hours. (doctors in general)",
+        "answer": "Doctors",
+        "options": ["The doctors", "A doctors", "Doctors"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ is bad for your health.",
+        "options": ["The smoking", "A smoking", "Smokings", "Smoking"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "294": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Would you like ____ cup of tea?",
+        "answer": "another",
+        "options": ["other", "others", "another"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can I stay ____ night?",
+        "answer": "another",
+        "options": ["an other", "another", "other"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I need ____ pen — this one doesn't work.",
+        "options": ["other", "others", "another", "the others"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Let's wait ____ ten minutes.",
+        "answer": "another",
+        "options": ["other", "others", "another"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Can I have an other biscuit?",
+          "Can I have another biscuit?",
+          "Can I have another biscuits?"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ordered ____ coffee.",
+        "answer": "another",
+        "options": ["others", "another", "other"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We need another ____. (chair)",
+        "answer": "chair",
+        "options": ["chair's", "chair", "chairs"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ate ____ sandwich.",
+        "options": ["another", "other", "others", "the another"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "295": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This shirt is too small. Can I try ____ one?",
+        "answer": "another",
+        "options": ["other", "others", "another"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Let's meet on ____ day.",
+        "answer": "another",
+        "options": ["others", "another", "other"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She moved to ____ city last year.",
+        "options": ["other", "others", "an others", "another"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This café is full. Let's find ____ one.",
+        "answer": "another",
+        "options": ["others", "another", "other"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Let's go to another restaurant.",
+          "Let's go to other restaurant.",
+          "Let's go to another restaurants."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't like this colour. Do you have it in ____ colour?",
+        "answer": "another",
+        "options": ["another", "other", "others"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He works for ____ company now.",
+        "answer": "another",
+        "options": ["others", "another", "other"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Can you ask ____ person?",
+        "options": ["other", "others", "the others", "another"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "296": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "One sister lives here; the ____ sister lives in Spain.",
+        "answer": "other",
+        "options": ["another", "others", "other"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The other students ____ already gone home.",
+        "answer": "have",
+        "options": ["is", "have", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I found one glove, but I can't find the ____ one.",
+        "options": ["another", "others", "else", "other"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hold it with one hand and open it with the ____.",
+        "answer": "other",
+        "options": ["another", "others", "other"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Two boys came. One was tall; another was short.",
+          "Two boys came. One was tall; the others was short.",
+          "Two boys came. One was tall; the other was short."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where are the ____ people? (the rest)",
+        "answer": "other",
+        "options": ["another", "others", "other"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "One car is red, and the other ____ blue.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Only Tom came. The ____ children stayed at home.",
+        "options": ["another", "others", "else", "other"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "297": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The more you read, the ____ you learn.",
+        "answer": "more",
+        "options": ["much", "more", "most"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The less you sleep, the ____ you feel. (bad)",
+        "answer": "worse",
+        "options": ["worse", "bad", "worst"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The sooner we leave, ____.",
+        "options": ["the better", "better", "the best", "more better"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ you practise, the better you get.",
+        "answer": "more",
+        "options": ["more", "most", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Older he gets, wiser he becomes.",
+          "The older he gets, the wiser he becomes.",
+          "The older he gets, the more wiser he becomes."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The harder you work, the ____ you earn. (much)",
+        "answer": "more",
+        "options": ["more", "most", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ it is, the more I like it. (cold)",
+        "answer": "colder",
+        "options": ["colder", "cold", "coldest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The more I see him, ____ I like him.",
+        "options": ["more", "the most", "most", "the more"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "299": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like ____ city.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This school ____ very big.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Is there a bank in ____ street?",
+        "options": ["these", "this", "those", "they"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ room is my bedroom.",
+        "answer": "This",
+        "options": ["Those", "This", "These"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "This town is beautiful.",
+          "These town is beautiful.",
+          "This towns are beautiful."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I love ____ park.",
+        "answer": "this",
+        "options": ["this", "these", "those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ house is ours. (here)",
+        "answer": "This",
+        "options": ["These", "Those", "This"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ place is great!",
+        "options": ["These", "Those", "They", "This"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "300": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What are you doing ____ weekend?",
+        "answer": "this",
+        "options": ["this", "these", "in this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll call you ____ evening.",
+        "answer": "this",
+        "options": ["on this", "this", "these"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We're going to the cinema ____ Friday.",
+        "options": ["this", "in this", "on this", "these"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Are you free ____ afternoon?",
+        "answer": "this",
+        "options": ["in this", "this", "these"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'll see you on this Sunday.",
+          "I'll see you in this Sunday.",
+          "I'll see you this Sunday."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's coming ____ month.",
+        "answer": "this",
+        "options": ["this", "these", "in this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm busy ____ morning.",
+        "answer": "this",
+        "options": ["on this", "this", "these"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We have a test ____ week.",
+        "options": ["this", "these", "on this", "in this"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "302": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I really like ____ café.",
+        "answer": "this",
+        "options": ["this", "these", "those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There isn't much to do in ____ town.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ bag is very heavy.",
+        "options": ["These", "This", "Those", "They"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ chair is comfortable.",
+        "answer": "This",
+        "options": ["Those", "This", "These"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "These coffee is too hot.",
+          "This coffee is too hot.",
+          "This coffees are too hot."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you like ____ song?",
+        "answer": "this",
+        "options": ["this", "these", "those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ town is quiet at night.",
+        "answer": "This",
+        "options": ["These", "Those", "This"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Is ____ seat free?",
+        "options": ["these", "this", "those", "they"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "303": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm writing ____ email to ask about the job.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Look at ____ photo of my grandmother.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ phone is new.",
+        "options": ["This", "These", "Those", "They"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm reading ____ book — it's great.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "This letter is for you.",
+          "These letter is for you.",
+          "This letters is for you."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ pen doesn't work.",
+        "answer": "This",
+        "options": ["Those", "This", "These"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you help me with ____ form?",
+        "answer": "this",
+        "options": ["this", "these", "those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Listen to ____ message.",
+        "options": ["these", "those", "this", "they"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "304": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The tap is leaking. Can you fix ____ problem?",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My friend found a new café. This café ____ near the park.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I have an idea. ____ idea could save us money.",
+        "options": ["This", "These", "Those", "They"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had a problem with the car. ____ problem cost us a lot.",
+        "answer": "This",
+        "options": ["Those", "This", "These"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "There's a new rule. These rule starts today.",
+          "There's a new rule. This rules start today.",
+          "There's a new rule. This rule starts today."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I read a book about Japan. ____ book changed my life.",
+        "answer": "This",
+        "options": ["Those", "This", "These"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She has a plan. ____ plan is very clever.",
+        "answer": "This",
+        "options": ["This", "These", "Those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "There's a meeting at ten. ____ meeting is important.",
+        "options": ["These", "Those", "They", "This"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "306": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who's ____ man by the door?",
+        "answer": "that",
+        "options": ["that", "those", "these"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Look at that big house ____ the hill.",
+        "answer": "on",
+        "options": ["at", "on", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I remember ____ day very well.",
+        "options": ["that", "those", "these", "this's"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ building over there is a school.",
+        "answer": "That",
+        "options": ["Those", "These", "That"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Those car over there is mine.",
+          "That car over there is mine.",
+          "That cars over there is mine."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you see ____ tree?",
+        "answer": "that",
+        "options": ["these", "that", "those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ woman is my teacher. (over there)",
+        "answer": "That",
+        "options": ["These", "That", "Those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What's ____ noise?",
+        "options": ["those", "that", "these", "them"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "307": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I went to a new shop. ____ shop is really cheap.",
+        "answer": "That",
+        "options": ["These", "That", "Those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We went to a party. That night I ____ sleep. (not did)",
+        "answer": "didn't",
+        "options": ["didn't", "don't", "wasn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "You told me about a film. Is ____ film good?",
+        "options": ["those", "these", "that", "them"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I met a man at the station. ____ man was very kind.",
+        "answer": "That",
+        "options": ["These", "That", "Those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "We visited a castle. That castle was huge.",
+          "We visited a castle. Those castle was huge.",
+          "We visited a castle. That castles was huge."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Remember the restaurant we tried? ____ restaurant closed.",
+        "answer": "That",
+        "options": ["Those", "These", "That"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She gave me a book. That book ____ great.",
+        "answer": "was",
+        "options": ["were", "be", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I had a bad day. ____ day I lost my keys.",
+        "options": ["That", "Those", "These", "Them"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "309": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ flowers are for you.",
+        "answer": "These",
+        "options": ["That", "These", "This"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "These shoes ____ too small.",
+        "answer": "are",
+        "options": ["be", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I love ____ old photos.",
+        "options": ["this", "these", "that", "them"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ apples are sweet.",
+        "answer": "These",
+        "options": ["That", "These", "This"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "These book is mine.",
+          "This books are mine.",
+          "These books are mine."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Are ____ your keys?",
+        "answer": "these",
+        "options": ["this", "that", "these"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "These cakes ____ delicious.",
+        "answer": "are",
+        "options": ["is", "be", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ cookies are fresh.",
+        "options": ["This", "That", "These", "Them"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "310": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Visit the museum and castle. ____ places are very old.",
+        "answer": "These",
+        "options": ["These", "This", "That"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have two questions. These questions ____ about the test.",
+        "answer": "are",
+        "options": ["be", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Thanks for the tips. ____ ideas really helped me.",
+        "options": ["This", "That", "Them", "These"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have new rules. ____ rules start next week.",
+        "answer": "These",
+        "options": ["This", "That", "These"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I bought two books. This books are great.",
+          "I bought two books. These books are great.",
+          "I bought two books. These book is great."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I found some old letters. ____ letters were from my grandad.",
+        "answer": "These",
+        "options": ["That", "These", "This"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There are three options. These options ____ all good.",
+        "answer": "are",
+        "options": ["be", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She gave me some tips. ____ tips were useful.",
+        "options": ["These", "This", "That", "Them"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "312": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I bought some jumpers. I needed ____ clothes for my trip.",
+        "answer": "those",
+        "options": ["this", "those", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you remember ____ holidays in Italy?",
+        "answer": "those",
+        "options": ["those", "that", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ photos you sent me were lovely.",
+        "options": ["That", "This", "Those", "Them"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I miss ____ summer evenings we had.",
+        "answer": "those",
+        "options": ["that", "this", "those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Those were the best years.",
+          "That were the best years.",
+          "Those was the best years."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Remember ____ games we played as kids?",
+        "answer": "those",
+        "options": ["those", "that", "this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ days were happy. (in the past)",
+        "answer": "Those",
+        "options": ["That", "This", "Those"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Where are ____ shoes you bought last year?",
+        "options": ["that", "those", "this", "them"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "313": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you see ____ mountains?",
+        "answer": "those",
+        "options": ["that", "these", "those"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Those houses across the road ____ very old.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "In ____ days nobody had a mobile phone.",
+        "options": ["that", "those", "this", "them"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who are ____ people over there?",
+        "answer": "those",
+        "options": ["these", "those", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "That trees are very tall.",
+          "Those trees is very tall.",
+          "Those trees are very tall."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ birds are flying south. (over there)",
+        "answer": "Those",
+        "options": ["These", "Those", "That"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Look at ____ stars!",
+        "answer": "those",
+        "options": ["this", "those", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Life was hard in ____ times.",
+        "options": ["that", "this", "them", "those"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "314": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I received your letter ____ morning.",
+        "answer": "this",
+        "options": ["this", "these", "in this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We moved house ____ summer. (already passed)",
+        "answer": "this",
+        "options": ["this", "these", "in this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I met an old friend ____ afternoon.",
+        "options": ["these", "this", "in this", "on this"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ a great idea this morning. (have, past)",
+        "answer": "had",
+        "options": ["have", "has", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I saw Tom in this morning.",
+          "I saw Tom this morning.",
+          "I see Tom this morning yesterday."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She called me ____ week.",
+        "answer": "this",
+        "options": ["in this", "this", "these"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've been very busy ____ year.",
+        "answer": "this",
+        "options": ["this", "these", "in this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ the tickets this afternoon.",
+        "options": ["buy", "buying", "bought", "will bought"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "315": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There was ____ old man who lived alone by the sea.",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "So ____ guy walks into a bar...",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "In our class there was ____ girl who spoke five languages.",
+        "options": ["this", "these", "those", "them"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "And then ____ dog runs up to me!",
+        "answer": "this",
+        "options": ["these", "those", "this"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the best start for a funny story: ____",
+        "options": [
+          "So there's this man at the station...",
+          "So there's these man at the station...",
+          "So there's those man at the station..."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I met ____ amazing woman yesterday. (story style)",
+        "answer": "this",
+        "options": ["those", "this", "these"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There's ____ café near my house that sells great cake.",
+        "answer": "this",
+        "options": ["those", "this", "these"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "So I'm at the party and ____ guy comes over.",
+        "options": ["these", "those", "them", "this"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "316": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This calm of ____ helps him in difficult situations.",
+        "answer": "his",
+        "options": ["he", "his", "him"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That talent of ____ made the whole town proud.",
+        "answer": "theirs",
+        "options": ["theirs", "their", "them"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I love this garden of ____.",
+        "options": ["your", "yours", "you", "yourself"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This car of ____ is always breaking down. (me)",
+        "answer": "mine",
+        "options": ["me", "mine", "my"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct phrase: ____",
+        "options": ["this idea of hers", "this idea of her", "this her idea"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That smile of ____ is lovely. (she)",
+        "answer": "hers",
+        "options": ["she", "hers", "her"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This house of ____ is too big for us.",
+        "answer": "ours",
+        "options": ["us", "ours", "our"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm tired of that attitude of ____.",
+        "options": ["your", "you", "yours", "yourself"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "317": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I won't put up with ____ sort of behaviour.",
+        "answer": "that",
+        "options": ["this", "these", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Those so-____ experts were wrong again.",
+        "answer": "called",
+        "options": ["calling", "call", "called"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm tired of ____ attitude of yours.",
+        "options": ["this", "these", "that", "those's"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't want to hear ____ kind of language here.",
+        "answer": "that",
+        "options": ["that", "this", "these"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the phrase that shows the speaker dislikes it: ____",
+        "options": [
+          "this lovely music",
+          "these nice songs",
+          "that awful music of theirs"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ people make me angry. (distance)",
+        "answer": "Those",
+        "options": ["Those", "These", "This"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who does he think he is, ____ man!",
+        "answer": "that",
+        "options": ["this", "these", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm fed up with ____ noise.",
+        "options": ["this", "these", "that", "those's"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "324": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Everyone has ____ own opinion.",
+        "answer": "their",
+        "options": ["they", "their", "his"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Somebody left ____ umbrella on the bus.",
+        "answer": "their",
+        "options": ["their", "they", "them"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Each student must bring ____ own lunch.",
+        "options": ["they", "their", "them", "theirs"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "If anyone calls, tell ____ I'm out.",
+        "answer": "them",
+        "options": ["their", "him or her's", "them"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Nobody likes losing their keys.",
+          "Nobody likes losing they keys.",
+          "Nobody likes losing them keys."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Someone has forgotten ____ coat.",
+        "answer": "their",
+        "options": ["their", "they", "them"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Every person has ____ own story.",
+        "answer": "their",
+        "options": ["they", "them", "their"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Anyone can bring ____ friends.",
+        "options": ["they", "their", "them", "theirs"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "341": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had a ____ free time, so I called her.",
+        "answer": "bit of",
+        "options": ["many", "bit of", "few"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Could I have a ____ milk, please?",
+        "answer": "little",
+        "options": ["many", "little", "few"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I just watch a little ____ of TV at night.",
+        "options": ["bit", "few", "many", "lot"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Add a ____ salt to the soup.",
+        "answer": "little",
+        "options": ["many", "little", "few"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I need a few help.",
+          "I need a many help.",
+          "I need a little help."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She speaks a ____ bit of German.",
+        "answer": "little",
+        "options": ["many", "little", "few"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can I have a bit ____ cake?",
+        "answer": "of",
+        "options": ["for", "from", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "There's a ____ coffee left.",
+        "options": ["few", "many", "little", "lots"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "351": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I've got ____ of work to do this weekend.",
+        "answer": "loads",
+        "options": ["loading", "loads", "load"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She received ____ of messages on her birthday.",
+        "answer": "tons",
+        "options": ["tonne", "tons", "ton"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "There were ____ of people at the beach.",
+        "options": ["million", "millions", "millioned", "a million"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have ____ of time — don't worry.",
+        "answer": "loads",
+        "options": ["loading", "loads", "load"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct informal sentence: ____",
+        "options": [
+          "I've got tons homework.",
+          "I've got tons of homework.",
+          "I've got a tons of homework."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He's got ____ of money.",
+        "answer": "loads",
+        "options": ["load", "a load", "loads"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There were ____ of cars on the road.",
+        "answer": "millions",
+        "options": ["millions", "million", "millioned"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I ate ____ of chocolate.",
+        "options": ["ton", "a tons", "tonnes of", "tons"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "352": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ a traveller has been lost in these mountains.",
+        "answer": "Many",
+        "options": ["Much", "Lots", "Many"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have climbed many ____ mountain in my life.",
+        "answer": "a",
+        "options": ["a", "an", "the"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It has raised many ____ issue for the council.",
+        "options": ["an", "a", "the", "some"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Many a student ____ failed this exam. (have)",
+        "answer": "has",
+        "options": ["have", "having", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Many a man has tried.",
+          "Many a men have tried.",
+          "Many man has tried."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Many ____ time I've wondered why.",
+        "answer": "a",
+        "options": ["an", "the", "a"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Many an ____ has been told here. (story)",
+        "answer": "old story",
+        "options": ["old story", "old stories", "story old"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Many a ____ has sat in this chair.",
+        "options": ["kings", "king", "king's", "the king"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "659": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ a nice day.",
+        "answer": "such",
+        "options": ["such", "so", "very"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They are ____ good friends.",
+        "answer": "such",
+        "options": ["such a", "such", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I've never had ____ delicious food.",
+        "options": ["so", "such", "such a", "very"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's ____ a kind person.",
+        "answer": "such",
+        "options": ["very", "such", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was such good film.",
+          "It was so a good film.",
+          "It was such a good film."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They have ____ beautiful children.",
+        "answer": "such",
+        "options": ["such a", "so", "such"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ an easy test.",
+        "answer": "such",
+        "options": ["very", "such", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He tells ____ funny stories.",
+        "options": ["such a", "so", "very", "such"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "661": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's the funniest person I've ____ met.",
+        "answer": "ever",
+        "options": ["never", "every", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the best pizza I've ever ____. (have)",
+        "answer": "had",
+        "options": ["have", "having", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It was the worst trip we ____ ever taken.",
+        "options": ["have", "has", "were", "had"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's the tallest building I've ____ seen.",
+        "answer": "ever",
+        "options": ["never", "every", "ever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "He's the kindest man I ever have known.",
+          "He's the kindest man I've ever known.",
+          "He's the kinder man I've ever known."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the ____ coffee I've ever tasted. (bad)",
+        "answer": "worst",
+        "options": ["worse", "baddest", "worst"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was the best day we ____ ever had.",
+        "answer": "had",
+        "options": ["have", "has", "had"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She's the smartest student I've ____ taught.",
+        "options": ["never", "every", "once", "ever"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "662": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have to go to the ____. (dentist's shop)",
+        "answer": "dentist's",
+        "options": ["dentists'", "dentist's", "dentist"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had dinner at my ____. (aunt's house)",
+        "answer": "aunt's",
+        "options": ["aunt", "aunts", "aunt's"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Can you get some bread from the ____?",
+        "options": ["baker", "bakers'", "bake's", "baker's"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I bought it at the ____. (chemist's shop)",
+        "answer": "chemist's",
+        "options": ["chemist", "chemists", "chemist's"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'm staying at my grandma's.",
+          "I'm staying at my grandma.",
+          "I'm staying at my grandmas'."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She's at the ____ — she has a headache. (doctor's)",
+        "answer": "doctor's",
+        "options": ["doctor's", "doctor", "doctors"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Let's meet at ____. (Tom's house)",
+        "answer": "Tom's",
+        "options": ["Toms", "Tom's", "Tom"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I need a haircut. I'm going to the ____.",
+        "options": ["hairdresser", "hairdressers'", "hair's", "hairdresser's"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "668": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The thing I liked most ____ the swimming pool.",
+        "answer": "was",
+        "options": ["be", "was", "were"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The thing I need now ____ a holiday.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The thing she hates ____ waiting.",
+        "options": ["are", "be", "being", "is"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ I remember most is her smile.",
+        "answer": "thing",
+        "options": ["thing", "things", "think"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The thing I like about him are his humour.",
+          "Thing I like about him is his humour the.",
+          "The thing I like about him is his humour."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The thing that ____ me is the noise. (annoy)",
+        "answer": "annoys",
+        "options": ["annoying", "annoys", "annoy"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The thing we need ____ more time.",
+        "answer": "is",
+        "options": ["are", "be", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ I don't understand is the price.",
+        "options": ["thing", "think", "things", "thought"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "674": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There has been a sharp ____ in prices. (increase)",
+        "answer": "increase",
+        "options": ["increasing", "increased", "increase"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ to close the factory surprised everyone. (decide)",
+        "answer": "decision",
+        "options": ["deciding", "decision", "decide"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Sales showed steady ____ throughout the year.",
+        "options": ["grow", "grew", "growing", "growth"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ of the new bridge took two years. (build)",
+        "answer": "construction",
+        "options": ["constructed", "construction", "construct"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the more formal sentence: ____",
+        "options": [
+          "Sales falled.",
+          "Sales fell down a lot a lot.",
+          "There was a fall in sales."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ of the plan was a success. (introduce)",
+        "answer": "introduction",
+        "options": ["introduce", "introducing", "introduction"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We noticed an ____ in quality. (improve)",
+        "answer": "improvement",
+        "options": ["improve", "improving", "improvement"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ of the project was delayed.",
+        "options": ["complete", "completing", "completed", "completion"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "675": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What companies care about ____ money.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What I miss most ____ my mum's cooking.",
+        "answer": "is",
+        "options": ["is", "are", "was being"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What ____ me was the price.",
+        "options": ["surprise", "surprised", "surprising", "surprises that"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I need is a good sleep.",
+        "answer": "What",
+        "options": ["What", "That", "Which"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "What I want is a new job.",
+          "What I want are a new job.",
+          "That I want is a new job."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What she said ____ very kind.",
+        "answer": "was",
+        "options": ["was", "were", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we need is more time.",
+        "answer": "What",
+        "options": ["That", "Which", "What"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What I like about Kyiv ____ the parks.",
+        "options": ["are", "is", "be", "being"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "703": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ by Leo Tolstoy. (write)",
+        "answer": "written",
+        "options": ["written", "wrote", "writing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This car was bought ____ my uncle.",
+        "answer": "by",
+        "options": ["by", "from", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The picture was painted ____ a child.",
+        "options": ["from", "of", "with", "by"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The book was ____ by a famous author. (write)",
+        "answer": "written",
+        "options": ["wrote", "write", "written"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The song was sang by a choir.",
+          "The song was sung from a choir.",
+          "The song was sung by a choir."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The house was ____ in 1900. (build)",
+        "answer": "built",
+        "options": ["builded", "built", "build"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The window was broken ____ the storm.",
+        "answer": "by",
+        "options": ["of", "by", "from"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The cake was ____ by my sister.",
+        "options": ["make", "making", "made", "maked"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "706": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like clothes which ____ made by famous brands.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We visited a castle that was ____ by the king. (build)",
+        "answer": "built",
+        "options": ["build", "building", "built"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He met a girl who was loved ____ everyone.",
+        "options": ["by", "from", "of", "with"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the book that was ____ by my teacher. (write)",
+        "answer": "written",
+        "options": ["writing", "written", "wrote"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I love songs that written by Adele.",
+          "I love songs that are written by Adele.",
+          "I love songs that are wrote by Adele."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The man who was ____ by the dog is fine. (bite)",
+        "answer": "bitten",
+        "options": ["bit", "biting", "bitten"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film, which was ____ in Kyiv, won a prize. (make)",
+        "answer": "made",
+        "options": ["making", "made", "make"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She works for a company that was ____ in 1990.",
+        "options": ["found", "founded", "founding", "finded"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "713": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This song was ____ by my brother. (write)",
+        "answer": "written",
+        "options": ["wrote", "writing", "written"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My school was chosen ____ the TV company.",
+        "answer": "by",
+        "options": ["of", "by", "from"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The film was directed ____ a young woman.",
+        "options": ["from", "of", "with", "by"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The winner was chosen ____ the viewers.",
+        "answer": "by",
+        "options": ["of", "by", "from"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the sentence that puts the focus on who did it: ____",
+        "options": [
+          "Anna won the prize by.",
+          "The prize by Anna was won.",
+          "The prize was won by Anna."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The report was ____ by our manager. (prepare)",
+        "answer": "prepared",
+        "options": ["prepare", "preparing", "prepared"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The photos were taken ____ my dad.",
+        "answer": "by",
+        "options": ["by", "from", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The bridge was designed ____ a famous architect.",
+        "options": ["of", "from", "with", "by"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "714": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The seminar is ____ held in Kyiv next week.",
+        "answer": "being",
+        "options": ["be", "being", "been"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new sofa is being ____ on Friday. (deliver)",
+        "answer": "delivered",
+        "options": ["deliver", "delivering", "delivered"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We ____ being visited by the director tomorrow.",
+        "options": ["is", "are", "be", "been"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The meeting is being ____ at ten. (hold)",
+        "answer": "held",
+        "options": ["holding", "held", "hold"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The party is been organised for Saturday.",
+          "The party is organising for Saturday.",
+          "The party is being organised for Saturday."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The new rules are ____ introduced next month.",
+        "answer": "being",
+        "options": ["being", "been", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The car is being ____ tomorrow. (repair)",
+        "answer": "repaired",
+        "options": ["repairing", "repaired", "repair"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Your order is ____ sent tomorrow.",
+        "options": ["being", "been", "be", "was"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "728": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Something must ____ done about the traffic.",
+        "answer": "be",
+        "options": ["been", "being", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A lot could be ____ next year. (improve)",
+        "answer": "improved",
+        "options": ["improving", "improved", "improve"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It can be ____ that cycling is cheaper.",
+        "options": ["saw", "seen", "see", "seeing"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The problem should be ____ quickly. (solve)",
+        "answer": "solved",
+        "options": ["solve", "solving", "solved"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The rules must be follow.",
+          "The rules must be followed.",
+          "The rules must followed."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "More money should be ____ on schools. (spend)",
+        "answer": "spent",
+        "options": ["spending", "spent", "spend"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This can ____ done in two days.",
+        "answer": "be",
+        "options": ["been", "being", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The report might be ____ tomorrow.",
+        "options": ["finish", "finished", "finishing", "finishes"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "729": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The cinema will be ____ next year. (renovate)",
+        "answer": "renovated",
+        "options": ["renovating", "renovated", "renovate"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You will be ____ into the Palace Hotel. (book)",
+        "answer": "booked",
+        "options": ["book", "booking", "booked"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Your details won't be ____ to anyone.",
+        "options": ["send", "sending", "sended", "sent"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The results will be ____ on Friday. (announce)",
+        "answer": "announced",
+        "options": ["announced", "announce", "announcing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The tickets will be sent by email.",
+          "The tickets will sent by email.",
+          "The tickets will be send by email."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Lunch will be ____ at one. (serve)",
+        "answer": "served",
+        "options": ["serving", "served", "serve"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The road will ____ closed on Sunday.",
+        "answer": "be",
+        "options": ["being", "be", "been"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The new school will be ____ in May.",
+        "options": ["open", "opening", "opened", "opens"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "730": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ born in Mexico, she knows the country well.",
+        "answer": "Being",
+        "options": ["Been", "Be", "Being"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Being badly ____, many workers leave. (pay)",
+        "answer": "paid",
+        "options": ["paid", "pay", "paying"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ invited by your boss makes you feel noticed.",
+        "options": ["Been", "Be", "Is", "Being"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Being ____ by everyone, he felt happy. (love)",
+        "answer": "loved",
+        "options": ["love", "loving", "loved"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Been tired, she went to bed.",
+          "Be tired, she went to bed.",
+          "Being tired, she went to bed."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ asked to speak, he stood up.",
+        "answer": "Being",
+        "options": ["Being", "Been", "Be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Being ____ in London, he speaks with an accent. (raise)",
+        "answer": "raised",
+        "options": ["raising", "raised", "raise"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ ignored by the others, she left the room.",
+        "options": ["Been", "Being", "Be", "Was"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "731": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Students are not ____ educated equally.",
+        "answer": "being",
+        "options": ["being", "been", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The store isn't being ____ enough. (promote)",
+        "answer": "promoted",
+        "options": ["promoted", "promote", "promoting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The problem isn't ____ taken seriously.",
+        "options": ["been", "being", "be", "was"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The rules aren't being ____. (follow)",
+        "answer": "followed",
+        "options": ["follow", "following", "followed"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The park isn't been cleaned.",
+          "The park isn't being cleaned.",
+          "The park not being cleaned."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The children aren't ____ given enough help.",
+        "answer": "being",
+        "options": ["being", "been", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Our emails aren't being ____. (answer)",
+        "answer": "answered",
+        "options": ["answering", "answered", "answer"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The house isn't ____ looked after.",
+        "options": ["been", "being", "be", "was"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "732": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It can be ____ that the plan works. (conclude)",
+        "answer": "concluded",
+        "options": ["concluded", "conclude", "concluding"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is often ____ that zoos protect animals. (argue)",
+        "answer": "argued",
+        "options": ["argued", "argue", "arguing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It has been ____ that sales are falling.",
+        "options": ["find", "finding", "found", "founded"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It ____ believed that the house is very old.",
+        "answer": "is",
+        "options": ["are", "be", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It is said that he is rich.",
+          "It says that he is rich by people.",
+          "It is say that he is rich."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is ____ that prices will rise. (expect)",
+        "answer": "expected",
+        "options": ["expect", "expecting", "expected"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was ____ that the meeting would be cancelled. (decide)",
+        "answer": "decided",
+        "options": ["deciding", "decided", "decide"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It can be ____ that the results are good.",
+        "options": ["seen", "saw", "see", "seeing"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "733": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Having ____ taught well, we knew what to do.",
+        "answer": "been",
+        "options": ["been", "being", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not having been ____ clear orders, he worked alone. (give)",
+        "answer": "given",
+        "options": ["given", "gave", "giving"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She came in without having ____ asked.",
+        "options": ["been", "being", "be", "was"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Having been ____, he stayed at home. (warn)",
+        "answer": "warned",
+        "options": ["warning", "warned", "warn"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Having being told the truth, she forgave him.",
+          "Having been tell the truth, she forgave him.",
+          "Having been told the truth, she forgave him."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ been invited, we went to the party.",
+        "answer": "Having",
+        "options": ["Have", "Had", "Having"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Having been ____ twice, he gave up. (reject)",
+        "answer": "rejected",
+        "options": ["rejected", "reject", "rejecting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not ____ been told, I didn't know.",
+        "options": ["have", "having", "had", "being"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "738": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I had my car ____ last week. (service)",
+        "answer": "serviced",
+        "options": ["servicing", "serviced", "service"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I need to have my hair ____. (cut)",
+        "answer": "cut",
+        "options": ["cuts", "cut", "cutting"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She had her phone ____ on the bus.",
+        "options": ["stolen", "stole", "steal", "stealing"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We're having our kitchen ____. (paint)",
+        "answer": "painted",
+        "options": ["painting", "painted", "paint"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I had tested my eyes by someone.",
+          "I had my eyes tested.",
+          "I had my eyes test."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He had his bike ____. (repair)",
+        "answer": "repaired",
+        "options": ["repairing", "repaired", "repair"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Have you had your photo ____ yet? (take)",
+        "answer": "taken",
+        "options": ["took", "take", "taken"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They had their house ____ into.",
+        "options": ["break", "broke", "broken", "breaking"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "739": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I got my brother ____ help me.",
+        "answer": "to",
+        "options": ["that", "to", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How can we get them ____ visit more often?",
+        "answer": "to",
+        "options": ["to", "for", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She got her boss ____ agree.",
+        "options": ["for", "that", "to", "so"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I finally got him ____ me the truth. (tell)",
+        "answer": "to tell",
+        "options": ["to tell", "tell", "telling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She got me to clean the kitchen.",
+          "She got me clean the kitchen.",
+          "She got me cleaning the kitchen to."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you get Tom ____ call me?",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We got the kids ____ to bed early. (go)",
+        "answer": "to go",
+        "options": ["going", "to go", "go"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He got his friend ____ him a car.",
+        "options": ["to lend", "lend", "lending", "lends"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "740": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm going to get my hair ____ tomorrow. (cut)",
+        "answer": "cut",
+        "options": ["cutting", "to cut", "cut"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It took hours to get the bus ____. (repair)",
+        "answer": "repaired",
+        "options": ["repaired", "repair", "repairing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She always gets things ____.",
+        "options": ["do", "doing", "done", "did"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We need to get the car ____. (wash)",
+        "answer": "washed",
+        "options": ["washed", "wash", "washing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I got fixed my phone.",
+          "I got my phone fix.",
+          "I got my phone fixed."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where did you get your nails ____? (do)",
+        "answer": "done",
+        "options": ["done", "did", "do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll get the report ____ by Friday. (finish)",
+        "answer": "finished",
+        "options": ["finished", "finish", "finishing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He got his tooth ____ out.",
+        "options": ["pull", "pulled", "pulling", "to pull"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "741": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Your question got me ____. (think)",
+        "answer": "thinking",
+        "options": ["think", "thought", "thinking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This band really gets people ____. (dance)",
+        "answer": "dancing",
+        "options": ["dance", "danced", "dancing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We couldn't get the engine ____.",
+        "options": ["go", "went", "going", "gone"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The joke got everyone ____. (laugh)",
+        "answer": "laughing",
+        "options": ["laughed", "laughing", "laugh"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The music got us move.",
+          "The music got us moving.",
+          "The music got us to moved."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you get the fire ____? (burn)",
+        "answer": "burning",
+        "options": ["burnt", "burning", "burn"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Her story got me ____ about my childhood. (remember)",
+        "answer": "remembering",
+        "options": ["remember", "remembered", "remembering"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He got the car ____ at last.",
+        "options": ["start", "starts", "to start", "started"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "742": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll have my assistant ____ you tomorrow.",
+        "answer": "call",
+        "options": ["to call", "calling", "call"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The teacher had us ____ the text aloud. (read)",
+        "answer": "read",
+        "options": ["to read", "reading", "read"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We'll have the porter ____ your bags.",
+        "options": ["to carry", "carrying", "carries", "carry"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She had the waiter ____ a new glass. (bring)",
+        "answer": "bring",
+        "options": ["to bring", "bringing", "bring"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'll have someone fix it.",
+          "I'll have someone to fix it.",
+          "I'll have someone fixing it to."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The boss had me ____ the report again. (write)",
+        "answer": "write",
+        "options": ["writing", "write", "to write"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll have my secretary ____ the meeting. (arrange)",
+        "answer": "arrange",
+        "options": ["to arrange", "arranging", "arrange"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They had the students ____ the classroom.",
+        "options": ["clean", "to clean", "cleaning", "cleaned to"],
+        "answerIndex": 0
+      }
+    }
+  ],
   "822": [
     {
       "type": "fill_blank",
@@ -8741,6 +12027,216 @@
           "already booked have",
           "has already booked"
         ],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "848": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the club ____ which you are the secretary.",
+        "answer": "of",
+        "options": ["of", "in", "to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is someone to ____ I owe a lot.",
+        "answer": "whom",
+        "options": ["who", "which", "whom"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It is a position in ____ I am very interested.",
+        "options": ["which", "that", "what", "who"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The man ____ whom I spoke was very helpful.",
+        "answer": "to",
+        "options": ["of", "to", "with"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the formal sentence: ____",
+        "options": [
+          "This is the house in that I was born.",
+          "This is the house in which I was born.",
+          "This is the house which I was born."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The friend with ____ I travelled is Italian.",
+        "answer": "whom",
+        "options": ["which", "whom", "who"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The topic ____ which we talked was interesting.",
+        "answer": "about",
+        "options": ["about", "of", "for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The person ____ whom I work is kind.",
+        "options": ["for to", "at", "by which", "with"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "849": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please act ____ the advice you were given.",
+        "answer": "upon",
+        "options": ["upon", "amongst", "beneath"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "A survey was carried out ____ the students.",
+        "answer": "amongst",
+        "options": ["beneath", "amongst", "upon"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The house stood ____ a tall old tree.",
+        "options": ["amongst", "upon", "amid", "beneath"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He walked ____ the door.",
+        "answer": "towards",
+        "options": ["towards", "amongst", "beneath"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "She lived beneath the local people's.",
+          "She lived amongst the local people.",
+          "She lived upon among the local people."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The city lay ____ the hills. (in the middle of)",
+        "answer": "amid",
+        "options": ["upon", "beneath", "amid"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ arrival, please call us.",
+        "answer": "Upon",
+        "options": ["Beneath", "Upon", "Amongst"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The cat slept ____ the table.",
+        "options": ["beneath", "amongst", "upon of", "amid of"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "850": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The meeting was postponed ____ account of the strike.",
+        "answer": "on",
+        "options": ["in", "by", "on"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The company launched the product ahead ____ its rivals.",
+        "answer": "of",
+        "options": ["to", "from", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "We are writing ____ regard to your recent order.",
+        "options": ["in", "on", "with", "by"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The work was done in accordance ____ the rules.",
+        "answer": "with",
+        "options": ["to", "by", "with"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The flight was cancelled on account of the fog.",
+          "The flight was cancelled in account of the fog.",
+          "The flight was cancelled on account the fog."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She arrived ahead ____ time.",
+        "answer": "of",
+        "options": ["from", "of", "to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "With ____ to your question, the answer is yes.",
+        "answer": "regard",
+        "options": ["regard", "regards to", "regarding to"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Payment must be made in accordance ____ the contract.",
+        "options": ["with", "to", "by", "of"],
         "answerIndex": 0
       }
     }
@@ -11137,6 +14633,1892 @@
         "prompt": "As ____ above, the results are clear.",
         "options": ["stated", "stating", "state", "states"],
         "answerIndex": 0
+      }
+    }
+  ],
+  "1160": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the morning, I go to the beach.",
+        "answer": "In",
+        "options": ["On", "At", "In"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ my country, people eat a lot of rice.",
+        "answer": "In",
+        "options": ["At", "In", "On"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ school, we play football in the park.",
+        "options": ["After", "Before of", "During of", "In after"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the weekend, we visit my grandparents.",
+        "answer": "At",
+        "options": ["On", "At", "In"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "In the evening I, read a book.",
+          "The evening in, I read a book.",
+          "In the evening, I read a book."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ summer, it's very hot here.",
+        "answer": "In",
+        "options": ["At", "In", "On"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "On Sundays, we ____ lunch together. (have)",
+        "answer": "have",
+        "options": ["has", "having", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ my free time, I play the guitar.",
+        "options": ["In", "On", "At", "By"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1161": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the door opened. (without warning)",
+        "answer": "Suddenly",
+        "options": ["Sudden", "Suddenness", "Suddenly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, it was raining hard.",
+        "answer": "Outside",
+        "options": ["Outside", "Outsides", "Out of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, I opened the letter and started to read.",
+        "options": ["Quickly", "Quick", "Quickness", "Quicker"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ comes the bus!",
+        "answer": "Here",
+        "options": ["Hear", "There's", "Here"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Slow, she opened the box slowly.",
+          "Slowly, she opened the box.",
+          "Slowly she, opened the box."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, a dog ran into the road. (without warning)",
+        "answer": "Suddenly",
+        "options": ["Suddenness", "Suddenly", "Sudden"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____, the sun was shining.",
+        "answer": "Outside",
+        "options": ["Out", "Outside", "Outsides"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____, everyone was dancing.",
+        "options": ["Insides", "In", "Inside", "Into"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "1162": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's great ____ you have a new job!",
+        "answer": "that",
+        "options": ["what", "which", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's important that you ____ happy.",
+        "answer": "are",
+        "options": ["be being", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's sad ____ you have to move away.",
+        "options": ["what", "which", "that", "who"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's ____ that you passed! (wonderful)",
+        "answer": "wonderful",
+        "options": ["wonderfully", "wonder", "wonderful"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's nice that you called.",
+          "It's nice what you called.",
+          "Is nice that you called."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's strange that nobody ____. (come)",
+        "answer": "came",
+        "options": ["comes to", "came", "come"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's lucky ____ we left early.",
+        "answer": "that",
+        "options": ["which", "that", "what"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's a pity ____ she can't come.",
+        "options": ["what", "which", "who", "that"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1163": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The reason I am writing ____ to ask about the course.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The place we liked most ____ the old harbour.",
+        "answer": "was",
+        "options": ["be", "was", "were"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The reason I left ____ that the pay was low.",
+        "options": ["are", "be", "is", "being"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ I'm calling is to say thanks.",
+        "answer": "reason",
+        "options": ["reason", "reasons", "reasoning"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The person I admire most are my mum.",
+          "Person I admire most is my mum the.",
+          "The person I admire most is my mum."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The time I like best ____ the evening.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The reason ____ I'm late is the traffic.",
+        "answer": "that",
+        "options": ["which of", "that", "what"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ we went was beautiful.",
+        "options": ["places", "placing", "place", "placed"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "1164": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The problem ____ that I'm always late.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ is, we don't have enough time.",
+        "answer": "point",
+        "options": ["points", "pointing", "point"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The thing ____, I don't really like parties.",
+        "options": ["are", "be", "is", "was be"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ is that nobody told me. (fact)",
+        "answer": "fact",
+        "options": ["fact", "facts", "factual"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The reason are that I'm tired.",
+          "The reason is that I'm tired.",
+          "The reason is what I'm tired."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The problem is ____ the car is too old.",
+        "answer": "that",
+        "options": ["which", "that", "what"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The point ____, it's too expensive.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The ____ is that we must decide today.",
+        "options": ["facts", "fact", "factor", "factual"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1165": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All in ____, the trip was a great experience.",
+        "answer": "all",
+        "options": ["whole", "all", "every"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At the end of the ____, it's your decision.",
+        "answer": "day",
+        "options": ["days", "night", "day"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "All things ____, I'd choose the third option.",
+        "options": ["considering", "consider", "considers", "considered"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When it comes ____ to it, family matters most.",
+        "answer": "down",
+        "options": ["down", "up", "out"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "All in all, it was a good year.",
+          "All at all, it was a good year.",
+          "In all all, it was a good year."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "At the end ____ the day, money isn't everything.",
+        "answer": "of",
+        "options": ["for", "in", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All things considered, the plan ____ well. (work)",
+        "answer": "worked",
+        "options": ["worked", "work", "working"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ all, we had a great time.",
+        "options": ["In all in", "All in", "All of", "At all"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1166": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the disadvantages of this plan.",
+        "answer": "Note",
+        "options": ["Notes", "Noting", "Note"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the difference in price between the two offers.",
+        "answer": "Notice",
+        "options": ["Notice", "Notices", "Noticing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ the attached file for more details.",
+        "options": ["Sees", "Seeing", "See", "Seen"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the cost before you decide. (think about)",
+        "answer": "Consider",
+        "options": ["Considering", "Consider", "Considers"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct report sentence: ____",
+        "options": [
+          "Note that the prices include tax.",
+          "Noting that the prices include tax.",
+          "Notes that the prices include tax."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please ____ the chart below. (look at)",
+        "answer": "see",
+        "options": ["sees", "see", "seeing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ that the office is closed on Monday.",
+        "answer": "Note",
+        "options": ["Note", "Notes", "Noted"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ the risks carefully.",
+        "options": ["Consider", "Considers", "Considering", "Considered"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1167": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What we need ____ a strong campaign.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What I love about this city ____ the food.",
+        "answer": "is",
+        "options": ["are", "be", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What tourists want is ____ see famous places.",
+        "options": ["for", "that", "so", "to"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we need is more money.",
+        "answer": "What",
+        "options": ["What", "That", "Which"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "What I need are a holiday.",
+          "What I need is a holiday.",
+          "That I need is a holiday."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What surprised me ____ the size of the city.",
+        "answer": "was",
+        "options": ["were", "be", "was"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What she wants ____ a quiet life.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ I like most is the music.",
+        "options": ["That", "What", "Which", "Who"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1168": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you should choose this event (heading)",
+        "answer": "Why",
+        "options": ["Why", "What", "Who"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ we could benefit from the changes (heading)",
+        "answer": "How",
+        "options": ["How", "What", "Who"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ I learned in my first year (heading)",
+        "options": ["Why", "Who", "How much", "What"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ to find a cheap flat (heading)",
+        "answer": "How",
+        "options": ["What", "Why", "How"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct heading: ____",
+        "options": [
+          "Why do we need more parks is",
+          "Why we need more parks are",
+          "Why we need more parks"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ I chose this university (heading)",
+        "answer": "Why",
+        "options": ["Why", "What", "Who"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ happens next (heading)",
+        "answer": "What",
+        "options": ["How", "What", "Why"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ we can save money (heading)",
+        "options": ["What", "Who", "Which", "How"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1169": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Compared ____ other cities, Berlin is safe for cycling.",
+        "answer": "to",
+        "options": ["from", "to", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ on this survey, we recommend longer opening hours. (base)",
+        "answer": "Based",
+        "options": ["Basing", "Base", "Based"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ with rising costs, the company closed two shops.",
+        "options": ["Facing to", "Face", "Faces", "Faced"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the weather, we stayed inside. (give)",
+        "answer": "Given",
+        "options": ["Giving", "Gave", "Given"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Comparing to last year, sales are better.",
+          "Compared last year, sales are better.",
+          "Compared to last year, sales are better."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Based ____ the results, we will change the plan.",
+        "answer": "on",
+        "options": ["on", "in", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ with a difficult choice, she asked for advice. (face)",
+        "answer": "Faced",
+        "options": ["Face", "Faced", "Facing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ the time, I think we should leave.",
+        "options": ["Giving", "Gave", "Given", "Give"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "1170": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ was spoken during the journey.",
+        "answer": "word",
+        "options": ["wording", "word", "words"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a sound ____ be heard in the house.",
+        "answer": "could",
+        "options": ["can to", "could to", "could"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not a ____ of remorse do they show.",
+        "options": ["scraps", "scrap", "scrapped", "scrappy"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ person came. (one)",
+        "answer": "single",
+        "options": ["singly", "single", "singles"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Not a word she did say did.",
+          "Not a word did she say.",
+          "Not word did she say."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ was left on the plate. (crumb)",
+        "answer": "crumb",
+        "options": ["crumbs", "crumby", "crumb"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ could be seen. (star)",
+        "answer": "star",
+        "options": ["starry", "star", "stars"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not ____ single seat was free.",
+        "options": ["an", "a", "the", "one a"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1171": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ they influenced my life is hard to explain.",
+        "answer": "How",
+        "options": ["Who", "How", "What"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ he had gone was a mystery.",
+        "answer": "Where",
+        "options": ["What", "Who", "Where"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ people travel is an interesting question.",
+        "options": ["Why", "What", "Who", "Which"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ she said surprised everyone.",
+        "answer": "What",
+        "options": ["Why", "What", "How"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Where he lives is a secret.",
+          "Where does he live is a secret.",
+          "Where he lives are a secret."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How the fire started ____ still unknown.",
+        "answer": "is",
+        "options": ["be", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ the money went, nobody knows.",
+        "answer": "Where",
+        "options": ["Where", "What", "Who"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ we do next is up to you.",
+        "options": ["What", "Who", "How much", "Which one of"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1172": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The only problem ____ that the rooms are small.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The strange thing ____ that nobody answered.",
+        "answer": "was",
+        "options": ["were", "be", "was"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The sad ____ is, many people can't afford it.",
+        "options": ["facts", "factor", "factory", "fact"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ thing is that she never called. (odd)",
+        "answer": "odd",
+        "options": ["oddness", "odd", "oddly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "The main point are that we need help.",
+          "The main point is what we need help.",
+          "The main point is that we need help."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The good ____ is that nobody was hurt.",
+        "answer": "news",
+        "options": ["newly", "news", "new"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The big problem ____ the cost.",
+        "answer": "is",
+        "options": ["are", "be", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The funny ____ is that I forgot my own birthday.",
+        "options": ["things", "think", "thinking", "thing"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1173": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was Paul ____ stole the money.",
+        "answer": "who",
+        "options": ["who", "which", "whose"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is this silence ____ I love most.",
+        "answer": "that",
+        "options": ["who", "what", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It was the students ____ complained.",
+        "options": ["which", "whose", "who", "what"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was in Paris ____ we first met.",
+        "answer": "that",
+        "options": ["who", "which", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It was my brother which called.",
+          "It was my brother who called.",
+          "It was my brother whose called."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It's the price ____ worries me.",
+        "answer": "that",
+        "options": ["that", "who", "whose"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was Anna ____ found the keys.",
+        "answer": "who",
+        "options": ["whose", "who", "which"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It is her kindness ____ I admire.",
+        "options": ["that", "who", "whose", "what"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1174": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All in all, ____ everything into account, I'd choose the park.",
+        "answer": "taking",
+        "options": ["take", "took", "taking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "But all of a sudden, out of ____, a dog appeared.",
+        "answer": "nowhere",
+        "options": ["anywhere", "somewhere", "nowhere"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What is ____, in my opinion, the price is too high.",
+        "options": ["most", "more", "much", "many"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All things considered, ____ the end of the day, it was worth it.",
+        "answer": "at",
+        "options": ["at", "in", "on"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "All in all, taking everything into account, it was a success.",
+          "All in all, took everything into account, it was a success.",
+          "All in all, taking everything account into, it was a success."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What is more, ____ my opinion, it's too late.",
+        "answer": "in",
+        "options": ["on", "at", "in"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "All ____ a sudden, the lights went out.",
+        "answer": "of",
+        "options": ["in", "of", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Out of ____, a car appeared.",
+        "options": ["anywhere", "somewhere", "everywhere", "nowhere"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1188": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ it a beautiful day?",
+        "answer": "Isn't",
+        "options": ["Doesn't", "Aren't", "Isn't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You're free on Saturday, ____ you?",
+        "answer": "aren't",
+        "options": ["aren't", "don't", "isn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "____ you think it's too expensive?",
+        "options": ["Don't", "Aren't", "Isn't", "Doesn't"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She lives here, ____ she?",
+        "answer": "doesn't",
+        "options": ["don't", "doesn't", "isn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "It's cold today, doesn't it?",
+          "It's cold today, isn't they?",
+          "It's cold today, isn't it?"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You've seen this film, ____ you?",
+        "answer": "haven't",
+        "options": ["aren't", "haven't", "don't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you love this song?",
+        "answer": "Don't",
+        "options": ["Aren't", "Isn't", "Don't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "They're coming, ____ they?",
+        "options": ["don't", "aren't", "isn't", "won't"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1192": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I do ____ want to hear that again.",
+        "answer": "not",
+        "options": ["no", "n't", "not"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This ____ not acceptable.",
+        "answer": "is",
+        "options": ["does", "is", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The results have ____ been published yet.",
+        "options": ["no", "none", "n't not", "not"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We will ____ accept late work.",
+        "answer": "not",
+        "options": ["not", "no", "none"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the most formal sentence: ____",
+        "options": [
+          "I don't agree with you at all mate.",
+          "I no agree with you.",
+          "I do not agree with you."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please do ____ touch the paintings.",
+        "answer": "not",
+        "options": ["no", "none", "not"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The office ____ not open on Sundays.",
+        "answer": "is",
+        "options": ["is", "are", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I can ____ accept this offer.",
+        "options": ["not", "no", "none", "n't"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1193": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ I seen such a beautiful place.",
+        "answer": "have",
+        "options": ["had", "did", "have"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never had I ____ so tired. (feel)",
+        "answer": "felt",
+        "options": ["felt", "feel", "feeling"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never ____ I think I would win.",
+        "options": ["had", "did", "have", "was"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ she been so happy.",
+        "answer": "has",
+        "options": ["have", "did", "has"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Never have I heard such nonsense.",
+          "Never I have heard such nonsense.",
+          "Never have heard I such nonsense."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never ____ we seen so much snow.",
+        "answer": "have",
+        "options": ["have", "has", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Never did he ____ to thank me. (forget)",
+        "answer": "forget",
+        "options": ["forgotten", "forget", "forgot"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Never ____ they been so rude.",
+        "options": ["have", "has", "did", "are"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1194": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you nor I would like that.",
+        "answer": "Neither",
+        "options": ["Both", "Neither", "Either"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We can neither eat ____ drink during lessons.",
+        "answer": "nor",
+        "options": ["and", "nor", "or"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "The hotel was ____ clean nor cheap.",
+        "options": ["either", "neither", "both", "not"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Neither Tom ____ Anna came.",
+        "answer": "nor",
+        "options": ["or", "and", "nor"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Neither my mum or my dad drives.",
+          "Neither my mum nor my dad doesn't drive.",
+          "Neither my mum nor my dad drives."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film was ____ funny nor sad.",
+        "answer": "neither",
+        "options": ["both", "neither", "either"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She speaks neither French ____ German.",
+        "answer": "nor",
+        "options": ["nor", "or", "and"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He ____ called nor wrote.",
+        "options": ["neither", "either", "both", "not"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1198": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ the hotel cheap, but it was also clean.",
+        "answer": "was",
+        "options": ["had", "was", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ they sell books, they also sell coffee.",
+        "answer": "do",
+        "options": ["do", "are", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only ____ he forget, he also lied.",
+        "options": ["did", "he did", "was", "had he"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only is it fast, ____ it's also cheap.",
+        "answer": "but",
+        "options": ["but", "and", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Not only she sings, but she also dances.",
+          "Not only does she sing, but she also dances.",
+          "Not only does she sings, but she also dances."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only ____ we late, but we also forgot the tickets.",
+        "answer": "were",
+        "options": ["had", "were", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not only has she won, but she has ____ broken the record.",
+        "answer": "also",
+        "options": ["also", "too", "so"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not only ____ it rain, it also snowed.",
+        "options": ["was", "did", "had", "it"],
+        "answerIndex": 1
+      }
+    }
+  ],
+  "1199": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is ____ necessarily a bad idea.",
+        "answer": "not",
+        "options": ["n't", "not", "no"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Cooking is not really my ____.",
+        "answer": "thing",
+        "options": ["thing", "things", "think"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I'm not ____ sure about the date.",
+        "options": ["entire", "entirety", "entires", "entirely"],
+        "answerIndex": 3
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "That's not ____ what I said. (exact)",
+        "answer": "exactly",
+        "options": ["exactness", "exactly", "exact"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the softer sentence: ____",
+        "options": [
+          "I disagree totally.",
+          "I absolutely don't agree.",
+          "I don't really agree."
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Money is not ____ the most important thing. (necessary)",
+        "answer": "necessarily",
+        "options": ["necessity", "necessarily", "necessary"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm not ____ sure. (really)",
+        "answer": "really",
+        "options": ["reality", "really", "real"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "It's not ____ true.",
+        "options": ["entire", "entirety", "entirely", "entirely-ly"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "1200": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Very ____ people speak English correctly.",
+        "answer": "few",
+        "options": ["few", "little", "less"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Few students ____ the survey. (answer, past)",
+        "answer": "answered",
+        "options": ["answer", "answering", "answered"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Very ____ employees use the gym.",
+        "options": ["little", "less", "few", "much"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ people came to the meeting. (not many)",
+        "answer": "Few",
+        "options": ["Less", "Few", "Little"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct formal sentence: ____",
+        "options": [
+          "Few customers complained.",
+          "Little customers complained.",
+          "Few customer complained."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Very few ____ were happy with the result. (member)",
+        "answer": "members",
+        "options": ["member's", "members", "member"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ tourists visit in winter. (not many)",
+        "answer": "Few",
+        "options": ["Few", "Little", "Less"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Only a ____ students passed.",
+        "options": ["little", "less", "much", "few"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1201": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have no experience ____.",
+        "answer": "whatsoever",
+        "options": ["whatsoever", "whatever", "whenever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There is nothing ____ to worry about.",
+        "answer": "whatsoever",
+        "options": ["whoever", "whatsoever", "whatever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "He showed no interest ____ in the job.",
+        "options": ["whatsoever", "whatever", "however", "wherever"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have no idea ____.",
+        "answer": "whatsoever",
+        "options": ["whichever", "whatsoever", "whatever"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "There's no reason whatever so to worry.",
+          "There's no reason whatsoever to worry.",
+          "There's a reason whatsoever to worry."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She had no money ____.",
+        "answer": "whatsoever",
+        "options": ["whatsoever", "whatever", "whenever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It made no difference ____.",
+        "answer": "whatsoever",
+        "options": ["whatsoever", "whatever", "however"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I have ____ doubt whatsoever.",
+        "options": ["no", "any", "some", "none"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1202": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a single ____ could be heard from the rooms. (noise)",
+        "answer": "noise",
+        "options": ["noises", "noisy", "noise"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a single person ____ told about the plan.",
+        "answer": "was",
+        "options": ["was", "were", "did"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not ____ word was said about the accident.",
+        "options": ["a", "an", "the", "one a"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ car was on the road. (single)",
+        "answer": "single",
+        "options": ["single", "singles", "singly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "Not a single student was late.",
+          "Not a single students were late.",
+          "Not single a student was late."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a ____ was spoken. (word)",
+        "answer": "word",
+        "options": ["word", "words", "wordy"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Not a single ____ answered. (guest)",
+        "answer": "guest",
+        "options": ["guests", "guest's", "guest"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Not a ____ drop of rain fell.",
+        "options": ["single", "singles", "singly", "one"],
+        "answerIndex": 0
+      }
+    }
+  ],
+  "1203": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't ____ ever do that again!",
+        "answer": "you",
+        "options": ["your", "yourself", "you"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't you ____ touch my phone!",
+        "answer": "dare",
+        "options": ["dared", "dare", "dares"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't you ____ to me like that!",
+        "options": ["talking", "talk", "talks", "to talk"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't you ____ late again! (be)",
+        "answer": "be",
+        "options": ["being", "be", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct warning: ____",
+        "options": ["Don't you dares!", "Don't you dare!", "You don't dare!"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't you ____ lie to me!",
+        "answer": "ever",
+        "options": ["never", "every", "ever"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you forget it!",
+        "answer": "Don't",
+        "options": ["No", "Don't", "Not"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Don't you ____ my things again!",
+        "options": ["touching", "touches", "touch", "touched"],
+        "answerIndex": 2
+      }
+    }
+  ],
+  "1204": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I don't like horror films. — ____ do I.",
+        "answer": "Neither",
+        "options": ["Neither", "Either", "So"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We can't talk here. Nor ____ it possible to relax.",
+        "answer": "is",
+        "options": ["is", "it", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She didn't call, ____ did she write.",
+        "options": ["or", "so", "nor", "and"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He can't swim. ____ can I.",
+        "answer": "Neither",
+        "options": ["So", "Neither", "Either"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I haven't seen it. Neither Tom has.",
+          "I haven't seen it. Neither has Tom.",
+          "I haven't seen it. Neither has Tom not."
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They didn't come. Nor ____ they explain why.",
+        "answer": "did",
+        "options": ["they", "do", "did"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'm not hungry. — ____ am I.",
+        "answer": "Neither",
+        "options": ["Either", "So", "Neither"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She doesn't eat meat. ____ does her husband.",
+        "options": ["Either", "So", "Also not", "Neither"],
+        "answerIndex": 3
+      }
+    }
+  ],
+  "1205": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She was not in the ____ interested.",
+        "answer": "least",
+        "options": ["less", "little", "least"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It doesn't matter in the ____.",
+        "answer": "least",
+        "options": ["least", "less", "little"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "I wasn't in the ____ surprised by the news.",
+        "options": ["less", "least", "little", "lesser"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He isn't in the least ____. (worry)",
+        "answer": "worried",
+        "options": ["worry", "worrying", "worried"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence: ____",
+        "options": [
+          "I'm not in the least tired.",
+          "I'm not in the less tired.",
+          "I'm in the least tired not."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They weren't ____ the least bit sorry.",
+        "answer": "in",
+        "options": ["in", "at", "on"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It didn't hurt ____ the least.",
+        "answer": "in",
+        "options": ["on", "in", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She isn't in the ____ bit shy.",
+        "options": ["less", "least", "little", "lesser"],
+        "answerIndex": 1
       }
     }
   ]
