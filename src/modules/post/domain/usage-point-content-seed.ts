@@ -13,17 +13,12 @@ export const UsagePointContentSeedSchema = z
     explanation: text,
     examples: z.array(text).min(2).max(3),
     // `examples` translates `examples` one to one, in the same order.
-    uk: z.object({ explanation: text, examples: z.array(text).optional() }),
+    uk: z.object({ explanation: text, examples: z.array(text) }),
   })
-  .refine(
-    (seed) =>
-      seed.uk.examples === undefined ||
-      seed.uk.examples.length === seed.examples.length,
-    {
-      path: ['uk', 'examples'],
-      message: 'must translate every example, in order',
-    },
-  );
+  .refine((seed) => seed.uk.examples.length === seed.examples.length, {
+    path: ['uk', 'examples'],
+    message: 'must translate every example, in order',
+  });
 
 export type UsagePointContentSeed = z.infer<typeof UsagePointContentSeedSchema>;
 

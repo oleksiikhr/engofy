@@ -205,7 +205,7 @@ shift". Контент: `adjectives-*` (22), `adverbs-*` (37), `conjunctions-*` 
 - Base: `main`
 - PR: —
 
-### [ ] 17. `uk.examples`: MODALITY (162) + повнота
+### [x] 17. `uk.examples`: MODALITY (162) + повнота
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —

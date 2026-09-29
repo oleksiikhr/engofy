@@ -114,8 +114,8 @@ Shape: a JSON object keyed by `egpIndex`:
   this use.
 - `uk.explanation` — faithful Ukrainian translation of `explanation`; the form
   pattern stays in English.
-- `uk.examples` — optional: natural Ukrainian translations of `examples`, one
-  per example, in the same order. Imported into `translations.uk.examples` and
+- `uk.examples` — natural Ukrainian translations of `examples`, one per
+  example, in the same order. Imported into `translations.uk.examples` and
   shown under each English example when the learner switches to the native
   language.
 
