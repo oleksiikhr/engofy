@@ -183,7 +183,7 @@ not shift".
 
 Усі наступні зрізи — на гілці `grammar-translations-and-practice-09-modality-1`, один PR після останнього зрізу.
 
-### [ ] 14. Інфраструктура `uk.examples` + контент ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS, CLAUSES (157)
+### [x] 14. Інфраструктура `uk.examples` + контент ADJECTIVES, ADVERBS, CONJUNCTIONS, DISCOURSE MARKERS, CLAUSES (157)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
