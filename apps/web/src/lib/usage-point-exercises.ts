@@ -110,6 +110,8 @@ function itemHtml(step: QuickCheckStep): string {
 // point at a time) — the caller renders nothing in that case.
 export function usagePointExercisesHtml(
   exercises: UsagePointExercise[],
+  // Off when the caller already heads the list (the page's Practice section).
+  { title = true }: { title?: boolean } = {},
 ): string {
   const steps = usagePointDrillSteps(exercises);
   if (steps.length === 0) {
@@ -131,7 +133,7 @@ export function usagePointExercisesHtml(
     })
     .join('');
   return `<div class="upe" data-upe>
-    <h3 class="upe__title">Practice</h3>
+    ${title ? '<h3 class="upe__title">Practice</h3>' : ''}
     <ul class="upe__list">${items}</ul>
   </div>`;
 }

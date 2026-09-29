@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { grammarMetaDescription } from '../../lib/grammar-seo';
 import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
+import { usagePointExercisesHtml } from '../../lib/usage-point-exercises';
 import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
 import GrammarSection from './GrammarSection.astro';
@@ -46,6 +47,14 @@ const {
 const inlineIds = new Set(inlineUsagePointIds);
 const remainingUsagePoints = con.usagePoints.filter(
   (up) => !inlineIds.has(up.grammarUsagePointId),
+);
+
+// Practice: every exercise of the page's usage points in one list, in the
+// usage points' own (CEFR-ascending) order. GrammarUsagePointCard's script
+// (every usage point is rendered as a card on the page) binds it.
+const practiceHtml = usagePointExercisesHtml(
+  con.usagePoints.flatMap((up) => up.exercises),
+  { title: false },
 );
 
 const progressSections: Section[] = [
@@ -109,11 +118,17 @@ const jsonLd = jsonLdGraph([
   <GrammarUsagePoints sectionId="use" usagePoints={remainingUsagePoints} />
 
   <GrammarSection title="Practice" id="practice" open={false}>
-    <p>
-      Exercises for this rule are on the way — we're building them as a
-      separate step. For now, use the usage points above to track what
-      you've learned.
-    </p>
+    {
+      practiceHtml ? (
+        <div data-testid="page-practice" set:html={practiceHtml} />
+      ) : (
+        <p>
+          Exercises for this rule are on the way — we're building them as a
+          separate step. For now, use the usage points above to track what
+          you've learned.
+        </p>
+      )
+    }
   </GrammarSection>
 </Layout>
 

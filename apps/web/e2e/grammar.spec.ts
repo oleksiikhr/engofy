@@ -417,6 +417,40 @@ test.describe('grammar construction detail', () => {
     await expect(bare.locator('.upe')).toHaveCount(0);
   });
 
+  test("gathers the page's exercises in Practice and checks an answer", async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openPractice();
+
+    const exercise = page
+      .getByTestId('page-practice')
+      .locator('.upe__item')
+      .first();
+    await expect(exercise).toContainText('By the time he arrived');
+    // The ____ blank splits the prompt: the input sits inside the sentence.
+    await expect(exercise.locator('.qc__prompt [data-upe-input]')).toHaveCount(
+      1,
+    );
+    await exercise.locator('[data-upe-input]').fill('had drawn');
+    await exercise.locator('[data-upe-check]').click();
+    await expect(exercise.locator('[data-upe-feedback]')).toContainText(
+      'Correct',
+    );
+  });
+
+  test('keeps the Practice placeholder on a page with no exercises', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-present-simple');
+    await construction.openPractice();
+
+    await expect(construction.practiceSection).toContainText('on the way');
+    await expect(page.getByTestId('page-practice')).toHaveCount(0);
+  });
+
   test('renders a handcrafted page with its compare links', async ({
     page,
   }) => {

@@ -9,6 +9,7 @@ export class GrammarConstructionPage {
   readonly usageMore: Locator;
   readonly handcrafted: Locator;
   readonly compare: Locator;
+  readonly practiceSection: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,6 +20,7 @@ export class GrammarConstructionPage {
     this.usageMore = page.getByTestId('grammar-usage-more');
     this.handcrafted = page.locator('[data-handcrafted="true"]');
     this.compare = page.getByTestId('grammar-compare');
+    this.practiceSection = page.locator('#gp-section-practice');
   }
 
   async goto(slug: string) {
@@ -31,6 +33,10 @@ export class GrammarConstructionPage {
 
   usageItem(index = 0): Locator {
     return this.usageItems.nth(index);
+  }
+
+  async openPractice() {
+    await this.practiceSection.locator('.gp-section__summary').click();
   }
 
   // "When it's used" starts closed; open it before interacting with a card.

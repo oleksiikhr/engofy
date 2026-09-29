@@ -24,9 +24,10 @@ construction's cheat sheet.
 
 Reusable exercise bank per `grammar_usage_point` (~10 exercises per usage point,
 ~574 usage points) — distinct from the per-post `exercises` table, which is
-generated bespoke from one post's sentences. **Not checked in yet**: content
-is written in a separate session, without an AI API call from this codebase,
-and loaded once it exists. `import-usage-point-exercises` seeds it
+generated bespoke from one post's sentences. Content is written in a Claude
+Code session, without an AI API call from this codebase; for now it covers
+only an MVP sample (present perfect, egpIndex 822 and 824) awaiting a quality
+check before it is scaled. `import-usage-point-exercises` seeds it
 idempotently **per usage point** — a usage point that already has any
 exercises is left untouched; re-running only fills in usage points seeded for
 the first time (schema: `src/modules/post/domain/usage-point-exercise-seed.ts`).
@@ -40,7 +41,7 @@ upserts usage points on), each value an array of exercises:
     {
       "type": "fill_blank",
       "payload": {
-        "prompt": "I ___ to work by bus every day.",
+        "prompt": "I ____ to work by bus every day.",
         "answer": "go",
         "options": ["go", "goes", "went"]
       }
@@ -48,7 +49,7 @@ upserts usage points on), each value an array of exercises:
     {
       "type": "multiple_choice",
       "payload": {
-        "prompt": "She ___ football on Saturdays.",
+        "prompt": "She ____ football on Saturdays.",
         "options": ["play", "plays", "playing", "played"],
         "answerIndex": 1
       }
@@ -74,6 +75,8 @@ upserts usage points on), each value an array of exercises:
 
 - `type` is one of `fill_blank` / `multiple_choice` / `reorder` / `find_error`
   — `grammar_contrastive` never appears here, it stays bespoke to a post.
+- `fill_blank.prompt` and `multiple_choice.prompt` contain exactly one blank,
+  written as four underscores `____`.
 - `fill_blank.options`, when present, must include the answer plus at least
   one distractor (word bank shown to the learner); omit it for free typing.
 - `multiple_choice.answerIndex` must index into `options`.
