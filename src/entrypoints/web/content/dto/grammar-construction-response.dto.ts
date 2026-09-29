@@ -3,6 +3,7 @@ import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.j
 import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
 import type {
   PostGrammarTranslationDto,
+  PostPhraseAnnotationDto,
   PostWordAnnotationDto,
 } from './post-detail-response.dto.js';
 
@@ -72,22 +73,28 @@ export class GrammarConstructionResponseDto {
   readonly lexicon!: GrammarPageLexiconDto;
 }
 
-export class GrammarPageLexWordDto {
+export class GrammarPageLexSpanDto {
   // Half-open char range in the block's text.
   readonly start!: number;
 
   readonly end!: number;
 
-  readonly wordDefinitionId!: string;
+  // Exactly one of the two is set.
+  readonly wordDefinitionId?: string;
+
+  readonly phraseId?: string;
 }
 
-// Clickable words of the handcrafted page; empty until `grammar
+// Clickable words and phrases of the handcrafted page; empty until `grammar
 // annotate-pages` has run for it.
 export class GrammarPageLexiconDto {
-  // Word spans per text block, keyed by the hash of the block's text
-  // (sha256 hex, first 32 chars).
-  readonly blocks!: Record<string, GrammarPageLexWordDto[]>;
+  // Spans per text block, keyed by the hash of the block's text (sha256 hex,
+  // first 32 chars).
+  readonly blocks!: Record<string, GrammarPageLexSpanDto[]>;
 
   // Keyed by wordDefinitionId.
   readonly words!: Record<string, PostWordAnnotationDto>;
+
+  // Keyed by phraseId.
+  readonly phrases!: Record<string, PostPhraseAnnotationDto>;
 }

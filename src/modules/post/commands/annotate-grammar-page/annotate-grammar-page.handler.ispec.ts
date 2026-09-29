@@ -3,7 +3,11 @@ import { FakeNlpClient } from '../../../../../test/fakes/nlp.fake.js';
 import { createIntegrationSuite } from '../../../../../test/setup/int-suite.helper.js';
 import { NLP_CLIENT } from '../../../../core/nlp/nlp-client.port.js';
 import { lexBlockHash } from '../../domain/lex-block.js';
-import { GrammarPageLexBlock } from '../../entities/grammar-page-lex-block.entity.js';
+import {
+  GrammarPageLexBlock,
+  type GrammarPageLexSpan,
+} from '../../entities/grammar-page-lex-block.entity.js';
+import { Phrase } from '../../entities/phrase.entity.js';
 import { Word } from '../../entities/word.entity.js';
 import { WordDefinition } from '../../entities/word-definition.entity.js';
 import { PostModule } from '../../post.module.js';
@@ -18,6 +22,9 @@ const NLP_OVERRIDES = {
 };
 
 const FIRST = 'The cartographer sketched';
+
+const wordDefinitionIdOf = (span: GrammarPageLexSpan | undefined) =>
+  span && 'wordDefinitionId' in span ? span.wordDefinitionId : undefined;
 const SECOND = 'meticulous cartographer';
 const THIRD = 'The meticulous cartographer';
 
@@ -55,13 +62,13 @@ describe('AnnotateGrammarPageHandler', () => {
       constructionId,
       textHash: lexBlockHash(FIRST),
     });
-    expect(first.words.map((w) => [w.start, w.end])).toEqual([
+    expect(first.spans.map((span) => [span.start, span.end])).toEqual([
       [4, 16],
       [17, 25],
     ]);
     const sketch = await em.findOneOrFail(Word, { lemma: 'sketch' });
     const definition = await em.findOneOrFail(WordDefinition, {
-      id: first.words[1]?.wordDefinitionId,
+      id: wordDefinitionIdOf(first.spans[1]),
     });
     expect(definition).toMatchObject({ wordId: sketch.id, pos: 'verb' });
     // The same lemma + part of speech in another block is the same sense.
@@ -69,8 +76,8 @@ describe('AnnotateGrammarPageHandler', () => {
       constructionId,
       textHash: lexBlockHash(SECOND),
     });
-    expect(second.words[1]?.wordDefinitionId).toBe(
-      first.words[0]?.wordDefinitionId,
+    expect(wordDefinitionIdOf(second.spans[1])).toBe(
+      wordDefinitionIdOf(first.spans[0]),
     );
   });
 
@@ -103,7 +110,12 @@ describe('AnnotateGrammarPageHandler', () => {
     const callsBefore = fakeNlp.callCount;
 
     const view = await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND], true),
+      new AnnotateGrammarPageCommand(
+        'lex-test',
+        [FIRST, SECOND],
+        { literal: [], phrasalVerbs: [] },
+        true,
+      ),
     );
 
     expect(view).toEqual({ blocks: 2, parsed: 2, removed: 0 });
@@ -111,6 +123,27 @@ describe('AnnotateGrammarPageHandler', () => {
     expect(
       await suite.orm.em.count(GrammarPageLexBlock, { constructionId }),
     ).toBe(2);
+  });
+
+  it('links a listed phrase instead of the words inside it', async () => {
+    const constructionId = await createConstruction();
+
+    await suite.command(
+      new AnnotateGrammarPageCommand('lex-test', [THIRD], {
+        literal: ['meticulous cartographer'],
+        phrasalVerbs: [],
+      }),
+    );
+
+    const block = await suite.orm.em.findOneOrFail(GrammarPageLexBlock, {
+      constructionId,
+      textHash: lexBlockHash(THIRD),
+    });
+    expect(block.spans).toHaveLength(1);
+    const phrase = await suite.orm.em.findOneOrFail(Phrase, {
+      phraseText: 'meticulous cartographer',
+    });
+    expect(block.spans[0]).toEqual({ start: 4, end: 27, phraseId: phrase.id });
   });
 
   it('rejects an unknown construction', async () => {

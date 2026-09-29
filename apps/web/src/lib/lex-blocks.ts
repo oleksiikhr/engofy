@@ -10,6 +10,10 @@
 // before first paint.
 import { createHash } from 'node:crypto';
 
+function escAttr(value: string): string {
+  return value.replace(/"/g, '&quot;');
+}
+
 // Must match the backend's lexBlockHash (src/modules/post/domain/lex-block.ts).
 export function lexBlockHash(text: string): string {
   return createHash('sha256').update(text).digest('hex').slice(0, 32);
@@ -29,11 +33,11 @@ export function extractPageLexBlocks(pageHtml: string): string[] {
     : extractLexBlocks(pageHtml.slice(start + LEX_ROOT_START.length, end));
 }
 
-export interface LexWord {
-  start: number;
-  end: number;
-  wordDefinitionId: string;
-}
+// A stored span: a word sense or a phrase, as a range in the block's text.
+export type LexSpan = { start: number; end: number } & (
+  | { wordDefinitionId: string }
+  | { phraseId: string }
+);
 
 // Inline tags keep a block going; any other tag ends it.
 const INLINE = new Set([
@@ -249,26 +253,30 @@ export function extractLexBlocks(html: string): string[] {
   return scan(html).blocks.map((block) => block.text);
 }
 
-// The page body with every stored word wrapped in a clickable span. A word
-// whose block changed since the page was annotated has no spans (its hash
+// The page body with every stored word / phrase wrapped in a clickable span.
+// A block that changed since the page was annotated has no spans (its hash
 // doesn't match); a span that would cross a tag is left out.
 export function wrapLexWords(
   html: string,
-  blocks: Record<string, LexWord[]>,
+  blocks: Record<string, LexSpan[]>,
 ): string {
   const { pieces, blocks: found } = scan(html);
-  // Per piece: [rawStart, rawEnd, wordDefinitionId], in order.
+  // Per piece: [rawStart, rawEnd, span attribute], in order.
   const inserts = new Map<number, [number, number, string][]>();
   for (const block of found) {
-    const words = blocks[lexBlockHash(block.text)] ?? [];
-    for (const word of words) {
-      const first = block.chars[word.start];
-      const last = block.chars[word.end - 1];
+    const spans = blocks[lexBlockHash(block.text)] ?? [];
+    for (const span of spans) {
+      const first = block.chars[span.start];
+      const last = block.chars[span.end - 1];
       if (!first || !last || first.piece !== last.piece) {
         continue;
       }
+      const attribute =
+        'wordDefinitionId' in span
+          ? `data-word-definition-id="${escAttr(span.wordDefinitionId)}"`
+          : `data-phrase-id="${escAttr(span.phraseId)}"`;
       const list = inserts.get(first.piece) ?? [];
-      list.push([first.rawStart, last.rawEnd, word.wordDefinitionId]);
+      list.push([first.rawStart, last.rawEnd, attribute]);
       inserts.set(first.piece, list);
     }
   }
@@ -280,11 +288,11 @@ export function wrapLexWords(
       }
       let out = '';
       let at = 0;
-      for (const [start, end, id] of list.sort((a, b) => a[0] - b[0])) {
+      for (const [start, end, attribute] of list.sort((a, b) => a[0] - b[0])) {
         if (start < at) {
           continue;
         }
-        out += `${piece.slice(at, start)}<span class="lex-word" data-word-definition-id="${id.replace(/"/g, '&quot;')}">${piece.slice(start, end)}</span>`;
+        out += `${piece.slice(at, start)}<span class="lex-word" ${attribute}>${piece.slice(start, end)}</span>`;
         at = end;
       }
       return out + piece.slice(at);

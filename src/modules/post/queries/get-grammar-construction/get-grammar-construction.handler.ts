@@ -123,15 +123,26 @@ export class GetGrammarConstructionHandler
       { disableIdentityMap: true },
     );
     const blocks = Object.fromEntries(
-      rows.map((row) => [row.textHash, row.words]),
+      rows.map((row) => [row.textHash, row.spans]),
     );
+    const spans = rows.flatMap((row) => row.spans);
     const wordDefinitionIds = [
       ...new Set(
-        rows.flatMap((row) => row.words.map((word) => word.wordDefinitionId)),
+        spans.flatMap((span) =>
+          'wordDefinitionId' in span ? [span.wordDefinitionId] : [],
+        ),
       ),
     ];
-    const words = await this.lexicon.resolveWords(wordDefinitionIds, viewer);
-    return { blocks, words };
+    const phraseIds = [
+      ...new Set(
+        spans.flatMap((span) => ('phraseId' in span ? [span.phraseId] : [])),
+      ),
+    ];
+    const [words, phrases] = await Promise.all([
+      this.lexicon.resolveWords(wordDefinitionIds, viewer),
+      this.lexicon.resolvePhrases(phraseIds, viewer),
+    ]);
+    return { blocks, words, phrases };
   }
 
   // Per usage point, not collapsed to one construction-level value (unlike

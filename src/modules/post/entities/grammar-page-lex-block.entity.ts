@@ -11,15 +11,14 @@ import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { GrammarConstruction } from './grammar-construction.entity.js';
 
-// One clickable word of a text block, as a half-open char range in the
-// block's text.
-export interface GrammarPageLexWord {
+// One clickable span of a text block, as a half-open char range in the
+// block's text, linking either a word sense or a phrase.
+export type GrammarPageLexSpan = {
   start: number;
   end: number;
-  wordDefinitionId: string;
-}
+} & ({ wordDefinitionId: string } | { phraseId: string });
 
-// The word spans of one text block of a construction's handcrafted page
+// The word / phrase spans of one text block of a construction's handcrafted page
 // (apps/web `src/grammar-pages/*.astro`), keyed by the hash of the block's
 // text (`lexBlockHash`) so the page matches a block without sending it back.
 // Written only by `grammar annotate-pages` (spaCy, no AI); a block whose text
@@ -41,7 +40,7 @@ export class GrammarPageLexBlock {
   textHash!: string;
 
   @Property({ type: 'json' })
-  words!: GrammarPageLexWord[];
+  spans!: GrammarPageLexSpan[];
 
   @Property({ onCreate: () => DateTime.now(), type: LuxonTimestampType })
   createdAt: Opt<DateTime> = DateTime.now();

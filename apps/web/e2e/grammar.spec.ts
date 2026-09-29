@@ -475,6 +475,26 @@ test.describe('grammar construction detail', () => {
     ).toHaveCount(0);
   });
 
+  test('a phrase on a handcrafted page opens its own popup', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+
+    const phrase = construction.handcrafted
+      .locator('[data-phrase-id]', { hasText: 'so far' })
+      .first();
+    // Its section starts closed.
+    await phrase.evaluate((el) => {
+      const section = el.closest('details');
+      if (section) {
+        section.open = true;
+      }
+    });
+    await phrase.click();
+    await expect(page.locator('.lex-popup')).toContainText('Until now.');
+  });
+
   // The words are wrapped on the server, so they are there before first
   // paint and the text below them doesn't move when scripts run.
   test('clickable words do not shift the page when scripts run', async ({

@@ -17,9 +17,15 @@ export const GET: APIRoute = async ({ url }) => {
   for (const slug of slugs) {
     // One page at a time keeps the self-requests from piling onto the API.
     const response = await fetch(new URL(`/grammar/${slug}`, url));
-    if (response.ok) {
-      pages[slug] = extractPageLexBlocks(await response.text());
+    // A page that doesn't render would silently lose its spans — fail the
+    // whole list instead, so the CLI stops.
+    if (!response.ok) {
+      return new Response(
+        JSON.stringify({ error: `/grammar/${slug}: ${response.status}` }),
+        { status: 502, headers: { 'content-type': 'application/json' } },
+      );
     }
+    pages[slug] = extractPageLexBlocks(await response.text());
   }
   return new Response(JSON.stringify({ pages }), {
     headers: { 'content-type': 'application/json' },

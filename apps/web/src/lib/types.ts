@@ -1,4 +1,4 @@
-import type { LexWord } from './lex-blocks';
+import type { LexSpan } from './lex-blocks';
 // Mirrors the Nest read-API response DTOs (Slice 8a). Kept hand-written and
 // minimal rather than generated — the surface is small and stable.
 
@@ -319,8 +319,9 @@ export interface GrammarConstructionDetail {
   // spans per text block keyed by `lexBlockHash`, and the words' popup data.
   // Absent from an API still on the previous release.
   lexicon?: {
-    blocks: Record<string, LexWord[]>;
+    blocks: Record<string, LexSpan[]>;
     words: Record<string, WordAnnotation>;
+    phrases?: Record<string, PhraseAnnotation>;
   };
 }
 

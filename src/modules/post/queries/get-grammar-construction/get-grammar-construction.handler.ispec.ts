@@ -121,14 +121,14 @@ describe('GetGrammarConstructionHandler', () => {
     const block = new GrammarPageLexBlock();
     block.constructionId = constructionId;
     block.textHash = 'hash-1';
-    block.words = [{ start: 4, end: 16, wordDefinitionId: definition.id }];
+    block.spans = [{ start: 4, end: 16, wordDefinitionId: definition.id }];
     suite.orm.em.persist(block);
     await suite.orm.em.flush();
     suite.orm.em.clear();
 
     const view = await suite.query(new GetGrammarConstructionQuery(slug));
 
-    expect(view?.lexicon.blocks).toEqual({ 'hash-1': block.words });
+    expect(view?.lexicon.blocks).toEqual({ 'hash-1': block.spans });
     expect(view?.lexicon.words[definition.id]).toMatchObject({
       lemma: 'cartographer',
       pos: PartOfSpeech.Noun,
@@ -145,7 +145,7 @@ describe('GetGrammarConstructionHandler', () => {
 
     const view = await suite.query(new GetGrammarConstructionQuery(slug));
 
-    expect(view?.lexicon).toEqual({ blocks: {}, words: {} });
+    expect(view?.lexicon).toEqual({ blocks: {}, words: {}, phrases: {} });
   });
 
   describe('per-point state (grammar-page-redesign зріз 1)', () => {

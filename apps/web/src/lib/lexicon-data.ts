@@ -1,5 +1,10 @@
 import type { GrammarSiblingUsagePoint, LexiconData } from './reader-lexicon';
-import type { GrammarAnnotation, PostDetail, WordAnnotation } from './types';
+import type {
+  GrammarAnnotation,
+  PhraseAnnotation,
+  PostDetail,
+  WordAnnotation,
+} from './types';
 
 // The "why this, not that" explanation the grammar_contrastive exercise
 // generated for each usage point (the first one when a point has several).
@@ -76,19 +81,13 @@ export function wordLexiconEntries(
   return out;
 }
 
-// The popup data for every span `renderDoc` labels, whatever its state.
-export function buildLexiconData(
-  annotations: PostDetail['annotations'],
-  exercises: PostDetail['exercises'],
-): LexiconData {
-  const contrast = contrastByUsagePoint(exercises);
-  const data: LexiconData = {
-    words: wordLexiconEntries(annotations.words),
-    phrases: {},
-    grammar: {},
-  };
-  for (const p of Object.values(annotations.phrases)) {
-    data.phrases[p.phraseId] = {
+// Popup entries for phrase spans, keyed by phraseId.
+export function phraseLexiconEntries(
+  phrases: Record<string, PhraseAnnotation>,
+): LexiconData['phrases'] {
+  const out: LexiconData['phrases'] = {};
+  for (const p of Object.values(phrases)) {
+    out[p.phraseId] = {
       kind: 'phrase',
       id: p.phraseId,
       text: p.text,
@@ -100,6 +99,20 @@ export function buildLexiconData(
       state: p.state,
     };
   }
+  return out;
+}
+
+// The popup data for every span `renderDoc` labels, whatever its state.
+export function buildLexiconData(
+  annotations: PostDetail['annotations'],
+  exercises: PostDetail['exercises'],
+): LexiconData {
+  const contrast = contrastByUsagePoint(exercises);
+  const data: LexiconData = {
+    words: wordLexiconEntries(annotations.words),
+    phrases: phraseLexiconEntries(annotations.phrases),
+    grammar: {},
+  };
   // A usage point's viewer state rides on its matches; every match of one
   // point carries the same state.
   const stateOf = new Map(

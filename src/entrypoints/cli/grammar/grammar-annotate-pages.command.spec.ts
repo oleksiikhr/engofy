@@ -5,7 +5,18 @@ import type AppConfig from '../../../core/config/app.config.js';
 import type { PostService } from '../../../modules/post/post.service.js';
 import { GrammarAnnotatePagesCommand } from './grammar-annotate-pages.command.js';
 
+vi.mock('node:fs/promises', () => ({ readFile: vi.fn() }));
+
+const { readFile } = await import('node:fs/promises');
 const WEB_RUNNING_RE = /web app running/;
+const NO_PAGES_RE = /listed no grammar pages/;
+const LISTS = { literal: ['on the other hand'], phrasalVerbs: ['give up'] };
+const PHRASE_ENTRY = {
+  definition: 'Used to give the opposite point.',
+  example: 'It is cheap. On the other hand, it is slow.',
+  cefrLevel: 'B1',
+  uk: { translation: 'з іншого боку' },
+};
 
 describe('GrammarAnnotatePagesCommand', () => {
   let annotateGrammarPage: ReturnType<typeof vi.fn>;
@@ -24,6 +35,12 @@ describe('GrammarAnnotatePagesCommand', () => {
       ),
     );
     vi.stubGlobal('fetch', fetchMock);
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({
+        'on the other hand': PHRASE_ENTRY,
+        'give up': { ...PHRASE_ENTRY, type: 'phrasal_verb' },
+      }),
+    );
     vi.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
     command = injectOrm(
       new GrammarAnnotatePagesCommand(
@@ -45,8 +62,8 @@ describe('GrammarAnnotatePagesCommand', () => {
       'http://web.test/grammar/lex-blocks.json',
     );
     expect(annotateGrammarPage.mock.calls).toEqual([
-      ['modality-can', ['She can swim.'], false],
-      ['modality-may', [], false],
+      ['modality-can', ['She can swim.'], LISTS, false],
+      ['modality-may', [], LISTS, false],
     ]);
   });
 
@@ -61,7 +78,14 @@ describe('GrammarAnnotatePagesCommand', () => {
   it('passes --refresh through', async () => {
     await command.run([], { refresh: true });
 
-    expect(annotateGrammarPage.mock.calls[0]?.[2]).toBe(true);
+    expect(annotateGrammarPage.mock.calls[0]?.[3]).toBe(true);
+  });
+
+  it('fails when the web app lists no pages', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ pages: {} })));
+
+    await expect(command.run([], {})).rejects.toThrow(NO_PAGES_RE);
+    expect(annotateGrammarPage).not.toHaveBeenCalled();
   });
 
   it('fails when the web app does not answer', async () => {

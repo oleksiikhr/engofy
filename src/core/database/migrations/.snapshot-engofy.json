@@ -1383,6 +1383,23 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
+        "spans": {
+          "name": "spans",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "json"
+        },
         "text_hash": {
           "name": "text_hash",
           "type": "text",
@@ -1416,23 +1433,6 @@
           "collation": null,
           "enumItems": [],
           "mappedType": "datetime"
-        },
-        "words": {
-          "name": "words",
-          "type": "jsonb",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "unique": false,
-          "length": null,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "collation": null,
-          "enumItems": [],
-          "mappedType": "json"
         }
       },
       "indexes": [

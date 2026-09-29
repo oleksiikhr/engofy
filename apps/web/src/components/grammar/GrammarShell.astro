@@ -2,7 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { grammarMetaDescription } from '../../lib/grammar-seo';
 import { breadcrumbList, jsonLdGraph } from '../../lib/seo';
-import { wordLexiconEntries } from '../../lib/lexicon-data';
+import {
+  phraseLexiconEntries,
+  wordLexiconEntries,
+} from '../../lib/lexicon-data';
 import { LEX_ROOT_END, LEX_ROOT_START, wrapLexWords } from '../../lib/lex-blocks';
 import { escapeJson } from '../../lib/seo';
 import { pagePracticeHtml } from '../../lib/usage-point-exercises';
@@ -67,7 +70,7 @@ const bodyHtml = handcrafted
   : null;
 const lexiconJson = escapeJson({
   words: wordLexiconEntries(con.lexicon?.words ?? {}),
-  phrases: {},
+  phrases: phraseLexiconEntries(con.lexicon?.phrases ?? {}),
   grammar: {},
 });
 
@@ -168,7 +171,10 @@ const jsonLd = jsonLdGraph([
   const raw = document.getElementById('grammar-lexicon')?.textContent;
   if (body && raw) {
     const lexicon = JSON.parse(raw) as LexiconData;
-    if (Object.keys(lexicon.words).length > 0) {
+    if (
+      Object.keys(lexicon.words).length > 0 ||
+      Object.keys(lexicon.phrases).length > 0
+    ) {
       initReaderPopup(body, lexicon);
     }
   }
@@ -248,14 +254,14 @@ const jsonLd = jsonLdGraph([
   }
   /* Clickable words (lib/lex-blocks.ts), injected via set:html: a dotted
      underline only, so wrapping them never moves the text. */
-  .con-body [data-word-definition-id] {
+  .con-body :is([data-word-definition-id], [data-phrase-id]) {
     cursor: pointer;
     text-decoration: underline dotted;
     text-decoration-color: var(--color-border-strong);
     text-underline-offset: 3px;
   }
-  .con-body [data-word-definition-id]:hover,
-  .con-body [data-word-definition-id]:focus-visible {
+  .con-body :is([data-word-definition-id], [data-phrase-id]):hover,
+  .con-body :is([data-word-definition-id], [data-phrase-id]):focus-visible {
     background: var(--color-word);
   }
   /* Practice groups are injected via set:html. */

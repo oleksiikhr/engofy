@@ -73,6 +73,10 @@ export const E2E_GRAMMAR_HANDCRAFTED_SLUG = 'past-present-perfect-simple';
 export const E2E_LEX_BLOCK = 'I have lost my keys.';
 // Fixture-only lemma, so the seed never touches a real dictionary word.
 const LEX_WORD_LEMMA = 'lose-e2e';
+// A second block of that page with a phrase ("so far"), linked to a
+// fixture-only phrase.
+export const E2E_LEX_PHRASE_BLOCK = 'experience in your life so far';
+const LEX_PHRASE_TEXT = 'so far (e2e)';
 // Own user + session with no cards or dispositions, so specs can really save
 // words/phrases from the reader popup without touching the shared e2e user.
 export const E2E_DECK_USER_EMAIL = 'deck-e2e@engofy.test';
@@ -216,8 +220,11 @@ async function wipe(orm: MikroORM): Promise<void> {
   }
 
   await em.nativeDelete(GrammarPageLexBlock, {
-    textHash: lexBlockHash(E2E_LEX_BLOCK),
+    textHash: {
+      $in: [lexBlockHash(E2E_LEX_BLOCK), lexBlockHash(E2E_LEX_PHRASE_BLOCK)],
+    },
   });
+  await em.nativeDelete(Phrase, { phraseText: LEX_PHRASE_TEXT });
   const words = await em.find(Word, {
     lemma: { $in: [WORD_LEMMA, STUDY_WORD_LEMMA, LEX_WORD_LEMMA] },
   });
@@ -450,8 +457,19 @@ async function seed(orm: MikroORM): Promise<void> {
   const lexBlock = new GrammarPageLexBlock();
   lexBlock.constructionId = handcrafted.id;
   lexBlock.textHash = lexBlockHash(E2E_LEX_BLOCK);
-  lexBlock.words = [{ start: 7, end: 11, wordDefinitionId: loseVerb.id }];
+  lexBlock.spans = [{ start: 7, end: 11, wordDefinitionId: loseVerb.id }];
   em.persist(lexBlock);
+  const soFar = factories(em).phrase.makeOne({
+    phraseText: LEX_PHRASE_TEXT,
+    definition: 'Until now.',
+    cefrLevel: CefrLevel.A2,
+    translations: { uk: { translation: 'досі, поки що' } },
+  });
+  const phraseBlock = new GrammarPageLexBlock();
+  phraseBlock.constructionId = handcrafted.id;
+  phraseBlock.textHash = lexBlockHash(E2E_LEX_PHRASE_BLOCK);
+  phraseBlock.spans = [{ start: 24, end: 30, phraseId: soFar.id }];
+  em.persist(phraseBlock);
 
   // --- reader post: node tree with word / phrase / grammar spans ---
   const readerSource = {
