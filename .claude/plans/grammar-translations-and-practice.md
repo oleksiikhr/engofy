@@ -300,7 +300,7 @@ proper nouns, без ✗-прикладів (`data-no-lex`) — 1968 сенсі�
 - Base: `main`
 - PR: —
 
-### [ ] 26. Банк вправ: DETERMINERS, FOCUS, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (77)
+### [x] 26. Банк вправ: DETERMINERS, FOCUS, NEGATION, NOUNS, PASSIVES, PREPOSITIONS (77)
 - Branch: `grammar-translations-and-practice-09-modality-1`
 - Base: `main`
 - PR: —
