@@ -18,7 +18,9 @@ const { good, bad = [], goodNative } = Astro.props;
 <ul class="gp-contrast">
   {
     bad.map((example) => (
-      <li class="gp-contrast__item gp-contrast__item--bad">{example}</li>
+      <li class="gp-contrast__item gp-contrast__item--bad" data-no-lex>
+        {example}
+      </li>
     ))
   }
   {

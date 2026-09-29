@@ -19,10 +19,11 @@ export interface LexBlockWord {
   pos: PartOfSpeech;
 }
 
-// An English word of two letters or more (apostrophes/hyphens only inside):
-// the pages' Ukrainian comparisons, IPA transcriptions and fragments like
-// "-s" or "n't" sit inline in the prose and are not looked up.
-const ENGLISH_WORD_RE = /^[A-Za-z]{2,}(?:['’-][A-Za-z]+)*$/;
+// An English word of two letters or more (hyphens only inside): the pages'
+// Ukrainian comparisons, IPA transcriptions, fragments like "-s" and
+// contractions like "bus'll" or "amn't" sit inline in the prose and are not
+// looked up.
+const ENGLISH_WORD_RE = /^[A-Za-z]{2,}(?:-[A-Za-z]+)*$/;
 
 // The word spans a grammar page block gets — the same deterministic rule as
 // an article's word layer (content words outside the most common ones, see
