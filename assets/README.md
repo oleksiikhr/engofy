@@ -153,6 +153,17 @@ Shape: lowercase lemma → part of speech (`PartOfSpeech` value) → entry:
 - `example` — one natural sentence with the word in that sense.
 - `uk.translation` — one to three common Ukrainian equivalents, comma-separated.
 
+## `phrase-content.json`
+
+Hand-written dictionary entries for the phrases of the handcrafted grammar
+pages: phrase text (lowercase) → the same fields as `lexicon-content.json`.
+`words import-phrase-content` (part of `make seed`) creates the Phrase when
+missing and overwrites the fields. `grammar annotate-pages` links an entry
+with `"type": "phrasal_verb"` only where spaCy groups that phrasal verb (a
+literal match would also catch "go on holiday"); any other entry — an idiom or
+fixed expression — wherever its text occurs. After editing the list, re-run
+`grammar annotate-pages --refresh`.
+
 ## `irregular-verbs.json`
 
 ~164 English irregular verbs (`base_form`, `past_simple[]`,
