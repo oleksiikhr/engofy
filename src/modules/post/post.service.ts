@@ -113,9 +113,10 @@ export class PostService {
   async annotateGrammarPage(
     slug: string,
     blocks: string[],
+    refresh = false,
   ): Promise<AnnotatedGrammarPageView> {
     const view = await this.commandBus.execute(
-      new AnnotateGrammarPageCommand(slug, blocks),
+      new AnnotateGrammarPageCommand(slug, blocks, refresh),
     );
 
     await this.em.flush();

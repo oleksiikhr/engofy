@@ -45,8 +45,8 @@ describe('GrammarAnnotatePagesCommand', () => {
       'http://web.test/grammar/lex-blocks.json',
     );
     expect(annotateGrammarPage.mock.calls).toEqual([
-      ['modality-can', ['She can swim.']],
-      ['modality-may', []],
+      ['modality-can', ['She can swim.'], false],
+      ['modality-may', [], false],
     ]);
   });
 
@@ -56,6 +56,12 @@ describe('GrammarAnnotatePagesCommand', () => {
     expect(String(fetchMock.mock.calls[0]?.[0])).toBe(
       'http://localhost:4321/grammar/lex-blocks.json',
     );
+  });
+
+  it('passes --refresh through', async () => {
+    await command.run([], { refresh: true });
+
+    expect(annotateGrammarPage.mock.calls[0]?.[2]).toBe(true);
   });
 
   it('fails when the web app does not answer', async () => {

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import type { NlpParseResult } from '../../../core/nlp/nlp-client.port.js';
-import type { PartOfSpeech } from '../enums/part-of-speech.enum.js';
+import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
 import { buildSentences } from './build-sentences.js';
 import { buildTokenAnnotations } from './build-token-annotations.js';
 
@@ -19,10 +19,16 @@ export interface LexBlockWord {
   pos: PartOfSpeech;
 }
 
+// An English word of two letters or more (apostrophes/hyphens only inside):
+// the pages' Ukrainian comparisons, IPA transcriptions and fragments like
+// "-s" or "n't" sit inline in the prose and are not looked up.
+const ENGLISH_WORD_RE = /^[A-Za-z]{2,}(?:['’-][A-Za-z]+)*$/;
+
 // The word spans a grammar page block gets — the same deterministic rule as
 // an article's word layer (content words outside the most common ones, see
-// buildTokenAnnotations). Phrasal verbs are not grouped here: their tokens
-// stay plain words.
+// buildTokenAnnotations), English words only, and no proper nouns — on these
+// pages they are example names or grammar terms spaCy mistakes for names.
+// Phrasal verbs are not grouped here: their tokens stay plain words.
 export function buildLexBlockWords(
   text: string,
   parsed: NlpParseResult,
@@ -37,7 +43,11 @@ export function buildLexBlockWords(
   }));
   return buildTokenAnnotations(sentences, new Map(), frequencyRanks).flatMap(
     (annotation) =>
-      annotation.kind === 'word' && annotation.lemma && annotation.pos
+      annotation.kind === 'word' &&
+      annotation.lemma &&
+      annotation.pos &&
+      annotation.pos !== PartOfSpeech.ProperNoun &&
+      ENGLISH_WORD_RE.test(annotation.form)
         ? [
             {
               start: annotation.start,

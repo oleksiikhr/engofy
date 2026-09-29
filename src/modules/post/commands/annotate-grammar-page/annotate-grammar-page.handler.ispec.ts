@@ -95,6 +95,24 @@ describe('AnnotateGrammarPageHandler', () => {
     expect(hashes).toEqual([lexBlockHash(FIRST), lexBlockHash(THIRD)].sort());
   });
 
+  it('re-parses every kept block on refresh', async () => {
+    const constructionId = await createConstruction();
+    await suite.command(
+      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND]),
+    );
+    const callsBefore = fakeNlp.callCount;
+
+    const view = await suite.command(
+      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND], true),
+    );
+
+    expect(view).toEqual({ blocks: 2, parsed: 2, removed: 0 });
+    expect(fakeNlp.callCount - callsBefore).toBe(2);
+    expect(
+      await suite.orm.em.count(GrammarPageLexBlock, { constructionId }),
+    ).toBe(2);
+  });
+
   it('rejects an unknown construction', async () => {
     await expect(
       suite.command(new AnnotateGrammarPageCommand('no-such-page', [FIRST])),

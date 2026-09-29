@@ -53,6 +53,29 @@ describe('buildLexBlockWords', () => {
       { start: 11, end: 19, lemma: 'detailed', pos: PartOfSpeech.Adjective },
     ]);
   });
+
+  it('leaves out proper nouns, fragments and words not in the Latin script', () => {
+    const text = 'Ukrainian порада Anna -s';
+    const result: NlpParseResult = {
+      sentences: [
+        {
+          text,
+          start: 0,
+          end: text.length,
+          tokens: [
+            token(0, 'Ukrainian', 'ukrainian', 'ADJ', 0),
+            token(1, 'порада', 'порада', 'NOUN', 10),
+            token(2, 'Anna', 'Anna', 'PROPN', 17),
+            token(3, '-s', '-s', 'NOUN', 22),
+          ],
+        },
+      ],
+    };
+
+    expect(buildLexBlockWords(text, result, new Map())).toEqual([
+      { start: 0, end: 9, lemma: 'ukrainian', pos: PartOfSpeech.Adjective },
+    ]);
+  });
 });
 
 describe('lexBlockHash', () => {

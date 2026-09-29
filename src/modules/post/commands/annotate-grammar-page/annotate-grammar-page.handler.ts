@@ -56,8 +56,15 @@ export class AnnotateGrammarPageHandler
     const stale = existing.filter((row) => !textByHash.has(row.textHash));
     this.em.remove(stale);
 
-    const known = new Set(existing.map((row) => row.textHash));
-    const pending = [...textByHash].filter(([hash]) => !known.has(hash));
+    // A refresh re-parses kept blocks too, updating their row in place.
+    const rowByHash = new Map(
+      existing
+        .filter((row) => textByHash.has(row.textHash))
+        .map((row) => [row.textHash, row]),
+    );
+    const pending = [...textByHash].filter(
+      ([hash]) => command.refresh || !rowByHash.has(hash),
+    );
     const ranks = await loadWordFrequencyRanks();
     const refs = new Map<string, WordRef>();
 
@@ -79,7 +86,7 @@ export class AnnotateGrammarPageHandler
         });
       }
 
-      const block = new GrammarPageLexBlock();
+      const block = rowByHash.get(hash) ?? new GrammarPageLexBlock();
       block.constructionId = construction.id;
       block.textHash = hash;
       block.words = words;

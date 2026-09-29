@@ -8,6 +8,7 @@ import { CliCommandRunner } from '../cli-command.runner.js';
 
 interface AnnotatePagesOptions {
   webUrl?: string;
+  refresh?: boolean;
 }
 
 // apps/web `src/pages/grammar/lex-blocks.json.ts`: every handcrafted page's
@@ -44,6 +45,15 @@ export class GrammarAnnotatePagesCommand extends CliCommandRunner<AnnotatePagesO
     return val;
   }
 
+  @Option({
+    flags: '-r, --refresh',
+    description:
+      'Re-parse every block, not only new ones (after the word rule changed)',
+  })
+  parseRefresh(): boolean {
+    return true;
+  }
+
   protected async execute(
     _args: string[],
     options: AnnotatePagesOptions = {},
@@ -59,7 +69,11 @@ export class GrammarAnnotatePagesCommand extends CliCommandRunner<AnnotatePagesO
 
     for (const [slug, blocks] of Object.entries(pages)) {
       // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — one page (and its nlp-service calls) at a time.
-      const view = await this.postService.annotateGrammarPage(slug, blocks);
+      const view = await this.postService.annotateGrammarPage(
+        slug,
+        blocks,
+        options.refresh ?? false,
+      );
       this.logger.log({ slug, ...view }, 'Grammar page annotated');
     }
   }
