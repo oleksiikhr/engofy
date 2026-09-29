@@ -403,8 +403,13 @@ test.describe('grammar construction detail', () => {
     const construction = new GrammarConstructionPage(page);
     await expect(page.locator('#usage-point-90012')).toBeVisible();
 
+    // The card links to its group in Practice, which holds the exercises.
     const enriched = construction.usageItem(0);
-    const exercise = enriched.locator('.upe__item').first();
+    await expect(enriched.locator('.upe')).toHaveCount(0);
+    await enriched.getByRole('link', { name: 'Practice · 1' }).click();
+    const group = page.locator('#practice-90012');
+    await expect(group).toBeVisible();
+    const exercise = group.locator('.upe__item').first();
     await expect(exercise).toContainText('By the time he arrived');
     await exercise.locator('[data-upe-input]').fill('had drawn');
     await exercise.locator('[data-upe-check]').click();
@@ -412,9 +417,9 @@ test.describe('grammar construction detail', () => {
       'Correct',
     );
 
-    // The "Reported" point has no seeded pool yet — no exercises section.
+    // The "Reported" point has no seeded pool yet — no Practice link.
     const bare = construction.usageItem(1);
-    await expect(bare.locator('.upe')).toHaveCount(0);
+    await expect(bare.getByRole('link', { name: /Practice/ })).toHaveCount(0);
   });
 
   test("gathers the page's exercises in Practice and checks an answer", async ({

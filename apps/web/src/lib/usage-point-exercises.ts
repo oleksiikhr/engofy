@@ -1,6 +1,5 @@
-// The exercises section under one usage point on `/grammar/{slug}`
-// (grammar-usage-point-exercises plan, slice 5) — renders that point's
-// reusable exercise pool (slice 2/3), reusing the reader Quick check card's
+// The Practice section of `/grammar/{slug}` — renders each usage point's
+// reusable exercise pool, grouped by point, reusing the reader Quick check card's
 // step shapes (`quick-check-steps.ts`) and CSS (`.qc__*`, app.css) so the
 // look and the answer-checking pattern don't diverge. Unlike Quick check,
 // each exercise here is answered independently — a static list, not a
@@ -8,7 +7,10 @@
 // "Continue" button; `lib/usage-point-exercises-client.ts` drives the
 // checking.
 import { type QuickCheckStep, toDrill } from './quick-check-steps';
-import type { UsagePointExercise } from './types';
+import type {
+  GrammarConstructionUsagePoint,
+  UsagePointExercise,
+} from './types';
 
 const ESCAPE: Record<string, string> = {
   '&': '&amp;',
@@ -110,8 +112,6 @@ function itemHtml(step: QuickCheckStep): string {
 // point at a time) — the caller renders nothing in that case.
 export function usagePointExercisesHtml(
   exercises: UsagePointExercise[],
-  // Off when the caller already heads the list (the page's Practice section).
-  { title = true }: { title?: boolean } = {},
 ): string {
   const steps = usagePointDrillSteps(exercises);
   if (steps.length === 0) {
@@ -133,7 +133,38 @@ export function usagePointExercisesHtml(
     })
     .join('');
   return `<div class="upe" data-upe>
-    ${title ? '<h3 class="upe__title">Practice</h3>' : ''}
     <ul class="upe__list">${items}</ul>
   </div>`;
+}
+
+// `#practice-{key}` — one usage point's group in the page's Practice section,
+// the target of its card's "Practice" link. egpIndex when the point has one,
+// else its id.
+export function practiceAnchorId(
+  point: Pick<
+    GrammarConstructionUsagePoint,
+    'egpIndex' | 'grammarUsagePointId'
+  >,
+): string {
+  return `practice-${point.egpIndex ?? point.grammarUsagePointId}`;
+}
+
+// The page's Practice section: every usage point's exercises, one group per
+// point (level + guideword heading), in the points' own order. Empty when no
+// point has any.
+export function pagePracticeHtml(
+  points: GrammarConstructionUsagePoint[],
+): string {
+  return points
+    .map((point) => {
+      const list = usagePointExercisesHtml(point.exercises);
+      if (!list) {
+        return '';
+      }
+      return `<section class="upp__group" id="${esc(practiceAnchorId(point))}">
+    <h3 class="upp__head"><span class="badge">${esc(point.cefrLevel)}</span> ${esc(point.guideword)}</h3>
+    ${list}
+  </section>`;
+    })
+    .join('');
 }
