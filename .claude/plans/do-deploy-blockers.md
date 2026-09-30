@@ -19,12 +19,12 @@ status: in-progress
 
 Замінити схему `TRUST_PROXY`: довіряти `CF-Connecting-IP` лише для запитів, що прийшли через довірений проксі (адреси DO edge нестабільні, тож спосіб перевірки джерела визначається в зрізі). Оновити `parseTrustProxy` і тести; throttler та OTP-лічильники беруть IP звідти.
 
-### [ ] 2. Бюджет з'єднань Postgres
+### [x] 2. Бюджет з'єднань Postgres
 - Branch: `do-deploy-blockers`
 - Base: `main`
 - PR: —
 
-Підібрати пули для web+worker+cron під 22 з'єднання: дефолти `DB_POOL_MAX` і `QUEUE_POOL_MAX` для кожного entrypoint, окремий direct-URL для pg-boss (LISTEN/NOTIFY), перевірка на старті, що сума не перевищує ліміт.
+Окремі `QUEUE_DB_HOST`/`QUEUE_DB_PORT` для pg-boss (direct-з'єднання, LISTEN/NOTIFY) при пулері для MikroORM. Значення `DB_POOL_MAX`/`QUEUE_POOL_MAX` для кожного процесу під 22 з'єднання та бюджет — у зрізі 5 (env і docs/deploy.md).
 
 ### [ ] 3. Захист Telegram-поллера від перетину
 - Branch: `do-deploy-blockers`
