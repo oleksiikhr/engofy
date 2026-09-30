@@ -26,7 +26,7 @@ status: in-progress
 
 Видалити `docker-entrypoint.sh` і його підключення в `Dockerfile` (шим Docker secrets). Перевірити, що на нього не спираються compose e2e та CI docker build; прибрати згадки swarm у `health.controller.ts`.
 
-### [ ] 3. App spec для App Platform
+### [x] 3. App spec для App Platform
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
