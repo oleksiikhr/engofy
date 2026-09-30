@@ -74,18 +74,18 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
         <tr><th>plural or uncountable</th><td><code>some, any, no, more, most, all, enough, a lot of, lots of, plenty of</code></td><td>some shops, some water</td></tr>
       </tbody>
     </table>
-    <GrammarFormula label="Quantity + noun" parts={['quantity word', 'noun']} />
+    <GrammarFormula label="Quantity + noun" parts={[{ text: 'quantity word', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="Some + a plural noun: an amount that isn't counted exactly.">
-      Near my home there are <mark data-role="content">some</mark> <mark data-role="grammar">shops</mark>.
+      Near my home there are <mark data-role="content" data-pos="function">some</mark> <mark data-role="grammar" data-pos="noun">shops</mark>.
     </GrammarExample>
     <GrammarExample note="A number + a plural noun.">
-      My house has got <mark data-role="content">three</mark> <mark data-role="grammar">rooms</mark>.
+      My house has got <mark data-role="content" data-pos="function">three</mark> <mark data-role="grammar" data-pos="noun">rooms</mark>.
     </GrammarExample>
     <GrammarExample note="Every + a singular noun, even though it means all the days.">
-      I go to college <mark data-role="content">every</mark> <mark data-role="grammar">day</mark>.
+      I go to college <mark data-role="content" data-pos="function">every</mark> <mark data-role="grammar" data-pos="noun">day</mark>.
     </GrammarExample>
     <GrammarExample note="Some + an uncountable noun: the same word works for water.">
-      We should bring <mark data-role="content">some</mark> <mark data-role="grammar">water</mark> to drink.
+      We should bring <mark data-role="content" data-pos="function">some</mark> <mark data-role="grammar" data-pos="noun">water</mark> to drink.
     </GrammarExample>
     <p>
       The quantity word takes the place of the article: <em>some shops</em>, not <em>the some shops</em>.
@@ -99,15 +99,15 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       usual choice in positive sentences. Any is the usual choice in
       negative sentences and questions.
     </p>
-    <GrammarFormula label="Some / any / no" parts={['some / any / no', 'plural or uncountable noun']} />
+    <GrammarFormula label="Some / any / no" parts={[{ text: 'some / any / no', pos: 'function' }, { text: 'plural or uncountable noun', pos: 'noun' }]} />
     <GrammarExample note="Some in a positive sentence, with a plural noun.">
-      <mark data-role="content">Some</mark> <mark data-role="grammar">friends</mark> gave me books.
+      <mark data-role="content" data-pos="function">Some</mark> <mark data-role="grammar" data-pos="noun">friends</mark> gave me books.
     </GrammarExample>
     <GrammarExample note="Any after a negative verb (don't have), with a plural noun.">
-      I don't have <mark data-role="content">any</mark> <mark data-role="grammar">clothes</mark> for the summer.
+      I don't have <mark data-role="content" data-pos="function">any</mark> <mark data-role="grammar" data-pos="noun">clothes</mark> for the summer.
     </GrammarExample>
     <GrammarExample note="Any in a question, with an uncountable noun.">
-      Is there <mark data-role="content">any</mark> <mark data-role="grammar">milk</mark> in the fridge?
+      Is there <mark data-role="content" data-pos="function">any</mark> <mark data-role="grammar" data-pos="noun">milk</mark> in the fridge?
     </GrammarExample>
     <p>
       In offers and requests, use some even in a question — you expect the answer yes: <em>Would you like some tea?</em>
@@ -117,16 +117,16 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       only one negative word.
     </p>
     <GrammarExample note="No + a plural noun = there weren't any clouds.">
-      The weather was great. There were <mark data-role="content">no</mark> <mark data-role="grammar">clouds</mark>.
+      The weather was great. There were <mark data-role="content" data-pos="function">no</mark> <mark data-role="grammar" data-pos="noun">clouds</mark>.
     </GrammarExample>
     <GrammarExample note="No + an uncountable noun, after a positive verb (have).">
-      I have <mark data-role="content">no</mark> <mark data-role="grammar">time</mark> today.
+      I have <mark data-role="content" data-pos="function">no</mark> <mark data-role="grammar" data-pos="noun">time</mark> today.
     </GrammarExample>
     <p>
       More also works with both kinds of noun: <em>more details</em>, <em>more time</em>.
     </p>
     <GrammarExample note="More + an uncountable noun.">
-      We'll have <mark data-role="content">more</mark> <mark data-role="grammar">time</mark> in the club.
+      We'll have <mark data-role="content" data-pos="function">more</mark> <mark data-role="grammar" data-pos="noun">time</mark> in the club.
     </GrammarExample>
   </GrammarSection>
 
@@ -135,47 +135,47 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       Many goes with plural nouns, much with uncountable nouns. Both are
       used mostly in negative sentences and in questions.
     </p>
-    <GrammarFormula label="Many" parts={['many', 'plural noun']} />
-    <GrammarFormula label="Much" parts={['much', 'uncountable noun']} />
+    <GrammarFormula label="Many" parts={[{ text: 'many', pos: 'function' }, { text: 'plural noun', pos: 'noun' }]} />
+    <GrammarFormula label="Much" parts={[{ text: 'much', pos: 'function' }, { text: 'uncountable noun', pos: 'noun' }]} />
     <GrammarExample note="Negative: much + money (uncountable), many + things (plural).">
-      We didn't have <mark data-role="content">much</mark> <mark data-role="grammar">money</mark>, so we didn't buy <mark data-role="content">many</mark> <mark data-role="grammar">things</mark>.
+      We didn't have <mark data-role="content" data-pos="function">much</mark> <mark data-role="grammar" data-pos="noun">money</mark>, so we didn't buy <mark data-role="content" data-pos="function">many</mark> <mark data-role="grammar" data-pos="noun">things</mark>.
     </GrammarExample>
     <GrammarExample note="Negative: not many + a plural noun.">
-      There aren't <mark data-role="content">many</mark> <mark data-role="grammar">tickets</mark> left.
+      There aren't <mark data-role="content" data-pos="function">many</mark> <mark data-role="grammar" data-pos="noun">tickets</mark> left.
     </GrammarExample>
     <GrammarExample note="Question: much + an uncountable noun.">
-      Do you watch <mark data-role="content">much</mark> <mark data-role="grammar">TV</mark>?
+      Do you watch <mark data-role="content" data-pos="function">much</mark> <mark data-role="grammar" data-pos="noun">TV</mark>?
     </GrammarExample>
     <GrammarExample note="Question: many + a plural noun.">
-      Have you got <mark data-role="content">many</mark> <mark data-role="grammar">friends</mark> in England?
+      Have you got <mark data-role="content" data-pos="function">many</mark> <mark data-role="grammar" data-pos="noun">friends</mark> in England?
     </GrammarExample>
     <p>
       To ask about an amount, use how much or how many.
     </p>
-    <GrammarFormula label="Questions" parts={['how much / how many', 'noun']} />
+    <GrammarFormula label="Questions" parts={[{ text: 'how much / how many', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="How much + an uncountable noun.">
-      <mark data-role="content">How much</mark> <mark data-role="grammar">television</mark> do you watch?
+      <mark data-role="content" data-pos="function">How much</mark> <mark data-role="grammar" data-pos="noun">television</mark> do you watch?
     </GrammarExample>
     <GrammarExample note="How many + a plural noun.">
-      <mark data-role="content">How many</mark> <mark data-role="grammar">channels</mark> are there in Britain?
+      <mark data-role="content" data-pos="function">How many</mark> <mark data-role="grammar" data-pos="noun">channels</mark> are there in Britain?
     </GrammarExample>
     <p>
       In positive sentences, much and many alone sound formal. They are
       natural after so and too, which make the amount bigger or say it is
       more than you want.
     </p>
-    <GrammarFormula label="So / too" parts={['so / too', 'many / much', 'noun']} />
+    <GrammarFormula label="So / too" parts={[{ text: 'so / too', pos: 'function' }, { text: 'many / much', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="So many + a plural noun: a very large number.">
-      We visited <mark data-role="grammar">so</mark> <mark data-role="content">many</mark> <mark data-role="grammar">places</mark>.
+      We visited <mark data-role="grammar" data-pos="function">so</mark> <mark data-role="content" data-pos="function">many</mark> <mark data-role="grammar" data-pos="noun">places</mark>.
     </GrammarExample>
     <GrammarExample note="Too many: more than was needed.">
-      I bought <mark data-role="grammar">too</mark> <mark data-role="content">many</mark> <mark data-role="grammar">things</mark>, but I liked all of them.
+      I bought <mark data-role="grammar" data-pos="function">too</mark> <mark data-role="content" data-pos="function">many</mark> <mark data-role="grammar" data-pos="noun">things</mark>, but I liked all of them.
     </GrammarExample>
     <GrammarExample note="So much + an uncountable noun, often followed by that + result.">
-      I have <mark data-role="grammar">so</mark> <mark data-role="content">much</mark> <mark data-role="grammar">work</mark> at the moment that I can't help you.
+      I have <mark data-role="grammar" data-pos="function">so</mark> <mark data-role="content" data-pos="function">much</mark> <mark data-role="grammar" data-pos="noun">work</mark> at the moment that I can't help you.
     </GrammarExample>
     <GrammarExample note="Too much + an uncountable noun: more than is acceptable.">
-      My neighbours are making <mark data-role="grammar">too</mark> <mark data-role="content">much</mark> <mark data-role="grammar">noise</mark>.
+      My neighbours are making <mark data-role="grammar" data-pos="function">too</mark> <mark data-role="content" data-pos="function">much</mark> <mark data-role="grammar" data-pos="noun">noise</mark>.
     </GrammarExample>
   </GrammarSection>
 
@@ -185,34 +185,34 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       are the normal way to say "a large amount" in a positive sentence.
       Lots of is a little more informal.
     </p>
-    <GrammarFormula label="A large amount" parts={['a lot of / lots of / plenty of / loads of', 'plural or uncountable noun']} />
+    <GrammarFormula label="A large amount" parts={[{ text: 'a lot of / lots of / plenty of / loads of', pos: 'function' }, { text: 'plural or uncountable noun', pos: 'noun' }]} />
     <GrammarExample note="A lot of + a plural noun, in a positive sentence.">
-      I had <mark data-role="content">a lot of</mark> <mark data-role="grammar">friends</mark> in this town.
+      I had <mark data-role="content" data-pos="function">a lot of</mark> <mark data-role="grammar" data-pos="noun">friends</mark> in this town.
     </GrammarExample>
     <GrammarExample note="Lots of + an uncountable noun.">
-      We danced, played games and had <mark data-role="content">lots of</mark> <mark data-role="grammar">fun</mark>.
+      We danced, played games and had <mark data-role="content" data-pos="function">lots of</mark> <mark data-role="grammar" data-pos="noun">fun</mark>.
     </GrammarExample>
     <p>
       Plenty of means "enough, or more than enough" — it sounds positive.
       Loads of is very informal, for speaking and messages to friends.
     </p>
     <GrammarExample note="Plenty of time = more time than we need.">
-      If we meet at 8, we'll have <mark data-role="content">plenty of</mark> <mark data-role="grammar">time</mark> to buy the tickets.
+      If we meet at 8, we'll have <mark data-role="content" data-pos="function">plenty of</mark> <mark data-role="grammar" data-pos="noun">time</mark> to buy the tickets.
     </GrammarExample>
     <GrammarExample note="Loads of + a plural noun: informal for a lot of.">
-      We went to <mark data-role="content">loads of</mark> <mark data-role="grammar">beautiful places</mark>.
+      We went to <mark data-role="content" data-pos="function">loads of</mark> <mark data-role="grammar" data-pos="noun">beautiful places</mark>.
     </GrammarExample>
     <p>
       Millions of can be an exact number: <em>millions of dollars</em>. In informal English, millions of, loads of and tons of
       also exaggerate on purpose — the speaker doesn't mean the real number,
       just "very many".
     </p>
-    <GrammarFormula label="Exaggeration" parts={['millions of / loads of / tons of', 'plural or uncountable noun']} />
+    <GrammarFormula label="Exaggeration" parts={[{ text: 'millions of / loads of / tons of', pos: 'function' }, { text: 'plural or uncountable noun', pos: 'noun' }]} />
     <GrammarExample note="Not literally millions — just a very large number of cookbooks in a small kitchen.">
-      I managed to fit in a table as well as <mark data-role="content">millions of</mark> <mark data-role="grammar">cookbooks</mark>.
+      I managed to fit in a table as well as <mark data-role="content" data-pos="function">millions of</mark> <mark data-role="grammar" data-pos="noun">cookbooks</mark>.
     </GrammarExample>
     <GrammarExample note="Tons of: informal exaggeration, not a real weight.">
-      I received <mark data-role="content">tons of</mark> <mark data-role="grammar">plastic ducks</mark> every birthday.
+      I received <mark data-role="content" data-pos="function">tons of</mark> <mark data-role="grammar" data-pos="noun">plastic ducks</mark> every birthday.
     </GrammarExample>
     {hyperbolePoint && <GrammarUsagePointCard usagePoint={hyperbolePoint} />}
   </GrammarSection>
@@ -222,38 +222,38 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       A few goes with plural nouns, a little with uncountable nouns. Both
       mean "some, a small number or amount" and sound positive.
     </p>
-    <GrammarFormula label="A few" parts={['a few', 'plural noun']} />
-    <GrammarFormula label="A little" parts={['a little / a bit of / a little bit of', 'uncountable noun']} />
+    <GrammarFormula label="A few" parts={[{ text: 'a few', pos: 'function' }, { text: 'plural noun', pos: 'noun' }]} />
+    <GrammarFormula label="A little" parts={[{ text: 'a little / a bit of / a little bit of', pos: 'function' }, { text: 'uncountable noun', pos: 'noun' }]} />
     <GrammarExample note="A few + a plural noun: a small number of things.">
-      I'm writing to tell you <mark data-role="content">a few</mark> <mark data-role="grammar">things</mark>.
+      I'm writing to tell you <mark data-role="content" data-pos="function">a few</mark> <mark data-role="grammar" data-pos="noun">things</mark>.
     </GrammarExample>
     <GrammarExample note="A little + an uncountable noun: a small amount of time, and it was enough.">
-      We could spend <mark data-role="content">a little</mark> <mark data-role="grammar">time</mark> together.
+      We could spend <mark data-role="content" data-pos="function">a little</mark> <mark data-role="grammar" data-pos="noun">time</mark> together.
     </GrammarExample>
     <p>
       A bit of and a little bit of mean the same as a little, but are more
       informal — common in speaking and friendly writing.
     </p>
     <GrammarExample note="A bit of + an uncountable noun: informal for a little.">
-      I had <mark data-role="content">a bit of</mark> <mark data-role="grammar">free time</mark>, so I went to my friend's house.
+      I had <mark data-role="content" data-pos="function">a bit of</mark> <mark data-role="grammar" data-pos="noun">free time</mark>, so I went to my friend's house.
     </GrammarExample>
     <GrammarExample note="A little bit of: even more informal and softer.">
-      I just watch <mark data-role="content">a little bit of</mark> <mark data-role="grammar">TV</mark> when I come home.
+      I just watch <mark data-role="content" data-pos="function">a little bit of</mark> <mark data-role="grammar" data-pos="noun">TV</mark> when I come home.
     </GrammarExample>
     {littlePoint && <GrammarUsagePointCard usagePoint={littlePoint} />}
     <p>
       Without a, few and little change the meaning: they mean "not many" or "not much", less than you want or expect.
       They usually come after very, so or too.
     </p>
-    <GrammarFormula label="Not enough" parts={['very / so / too', 'few / little', 'noun']} />
+    <GrammarFormula label="Not enough" parts={[{ text: 'very / so / too', pos: 'function' }, { text: 'few / little', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="Very little time: almost no time, and that's a problem.">
-      I spend <mark data-role="grammar">very</mark> <mark data-role="content">little</mark> <mark data-role="grammar">time</mark> outside.
+      I spend <mark data-role="grammar" data-pos="function">very</mark> <mark data-role="content" data-pos="function">little</mark> <mark data-role="grammar" data-pos="noun">time</mark> outside.
     </GrammarExample>
     <GrammarExample note="So little money: less money than is fair for the work.">
-      We are tired of working hard for <mark data-role="grammar">so</mark> <mark data-role="content">little</mark> <mark data-role="grammar">money</mark>.
+      We are tired of working hard for <mark data-role="grammar" data-pos="function">so</mark> <mark data-role="content" data-pos="function">little</mark> <mark data-role="grammar" data-pos="noun">money</mark>.
     </GrammarExample>
     <GrammarExample note="So few + a plural noun: a worryingly small number.">
-      There are <mark data-role="grammar">so</mark> <mark data-role="content">few</mark> <mark data-role="grammar">pandas</mark> left in the wild.
+      There are <mark data-role="grammar" data-pos="function">so</mark> <mark data-role="content" data-pos="function">few</mark> <mark data-role="grammar" data-pos="noun">pandas</mark> left in the wild.
     </GrammarExample>
     <p>
       Compare: <em>I have a few friends here</em> (some — I'm fine) and <em>I have very few friends here</em> (not many — I'm lonely).
@@ -265,18 +265,18 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       A / an and one go with a singular noun. One stresses the number — one, not two.
     </p>
     <GrammarExample note="One + a singular noun, repeated for each colour.">
-      I bought <mark data-role="content">one</mark> <mark data-role="grammar">blue t-shirt</mark> and <mark data-role="content">one</mark> <mark data-role="grammar">pink t-shirt</mark>.
+      I bought <mark data-role="content" data-pos="function">one</mark> <mark data-role="grammar" data-pos="noun">blue t-shirt</mark> and <mark data-role="content" data-pos="function">one</mark> <mark data-role="grammar" data-pos="noun">pink t-shirt</mark>.
     </GrammarExample>
     <p>
       Every and each also take a singular noun and a singular verb, even though they are about all the members of a group.
       Every looks at the group as a whole; each looks at the members one by one.
     </p>
-    <GrammarFormula label="Every / each" parts={['every / each', 'singular noun']} />
+    <GrammarFormula label="Every / each" parts={[{ text: 'every / each', pos: 'function' }, { text: 'singular noun', pos: 'noun' }]} />
     <GrammarExample note="Every year: all the years, seen together.">
-      I go to India <mark data-role="content">every</mark> <mark data-role="grammar">year</mark> to see my family.
+      I go to India <mark data-role="content" data-pos="function">every</mark> <mark data-role="grammar" data-pos="noun">year</mark> to see my family.
     </GrammarExample>
     <GrammarExample note="Each class: the classes one at a time. Singular verb: is.">
-      <mark data-role="content">Each</mark> <mark data-role="grammar">class</mark> is about an hour long.
+      <mark data-role="content" data-pos="function">Each</mark> <mark data-role="grammar" data-pos="noun">class</mark> is about an hour long.
     </GrammarExample>
     <p>
       For exactly two things, use each, not every: <em>She had a bag in each hand.</em>
@@ -284,20 +284,20 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
     <p>
       Both is for two things together, so it takes a plural noun.
     </p>
-    <GrammarFormula label="Both" parts={['both', 'plural noun']} />
+    <GrammarFormula label="Both" parts={[{ text: 'both', pos: 'function' }, { text: 'plural noun', pos: 'noun' }]} />
     <GrammarExample note="Both teams = the two teams, and a plural verb (played).">
-      It was exciting as <mark data-role="content">both</mark> <mark data-role="grammar">teams</mark> played well.
+      It was exciting as <mark data-role="content" data-pos="function">both</mark> <mark data-role="grammar" data-pos="noun">teams</mark> played well.
     </GrammarExample>
     <p>
       Either means "one or the other of two"; neither means "not one and not the other".
       Both take a singular noun.
     </p>
-    <GrammarFormula label="Either / neither" parts={['either / neither', 'singular noun']} />
+    <GrammarFormula label="Either / neither" parts={[{ text: 'either / neither', pos: 'function' }, { text: 'singular noun', pos: 'noun' }]} />
     <GrammarExample note="Either floor = the ground floor or the first floor, it doesn't matter which.">
-      The toilet can be reached easily from <mark data-role="content">either</mark> <mark data-role="grammar">floor</mark>.
+      The toilet can be reached easily from <mark data-role="content" data-pos="function">either</mark> <mark data-role="grammar" data-pos="noun">floor</mark>.
     </GrammarExample>
     <GrammarExample note="Neither party = not the first party and not the second. Formal.">
-      <mark data-role="content">Neither</mark> <mark data-role="grammar">party</mark> could predict the rise in the price of wheat.
+      <mark data-role="content" data-pos="function">Neither</mark> <mark data-role="grammar" data-pos="noun">party</mark> could predict the rise in the price of wheat.
     </GrammarExample>
     <p>
       Neither already contains the negative, so the verb stays positive: <em>neither party could</em>, not <em>neither party couldn't</em>.
@@ -309,34 +309,34 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       All and most go with plural and uncountable nouns. Without the, they
       talk about things or people in general.
     </p>
-    <GrammarFormula label="In general" parts={['all / most / several / enough', 'noun']} />
+    <GrammarFormula label="In general" parts={[{ text: 'all / most / several / enough', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="All students = every student the notice is for.">
-      This notice is for <mark data-role="content">all</mark> <mark data-role="grammar">students</mark>.
+      This notice is for <mark data-role="content" data-pos="function">all</mark> <mark data-role="grammar" data-pos="noun">students</mark>.
     </GrammarExample>
     <GrammarExample note="Most people = the majority of people in general. No the before most.">
-      I'm sure <mark data-role="content">most</mark> <mark data-role="grammar">people</mark> watch too much TV these days.
+      I'm sure <mark data-role="content" data-pos="function">most</mark> <mark data-role="grammar" data-pos="noun">people</mark> watch too much TV these days.
     </GrammarExample>
     <p>
       Several means "more than two, but not many". It takes a plural noun.
     </p>
     <GrammarExample note="Several + a plural noun: a few days, a bit more than two.">
-      <mark data-role="content">Several</mark> <mark data-role="grammar">days</mark> ago we received a complaint.
+      <mark data-role="content" data-pos="function">Several</mark> <mark data-role="grammar" data-pos="noun">days</mark> ago we received a complaint.
     </GrammarExample>
     <p>
       Enough means "as much or as many as you need". It goes before the noun.
     </p>
     <GrammarExample note="Enough + an uncountable noun: the amount you need.">
-      If you haven't got <mark data-role="content">enough</mark> <mark data-role="grammar">credit</mark> on your phone, we can meet at the bookshop.
+      If you haven't got <mark data-role="content" data-pos="function">enough</mark> <mark data-role="grammar" data-pos="noun">credit</mark> on your phone, we can meet at the bookshop.
     </GrammarExample>
     <p>
       Almost and nearly can go before all, every and no to make the amount a little less than complete.
     </p>
-    <GrammarFormula label="Almost all" parts={['almost / nearly', 'all / every / no', 'noun']} />
+    <GrammarFormula label="Almost all" parts={[{ text: 'almost / nearly', pos: 'function' }, { text: 'all / every / no', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="Almost all = not every programme, but very close.">
-      <mark data-role="grammar">Almost</mark> <mark data-role="content">all</mark> <mark data-role="grammar">programmes</mark> are boring.
+      <mark data-role="grammar" data-pos="function">Almost</mark> <mark data-role="content" data-pos="function">all</mark> <mark data-role="grammar" data-pos="noun">programmes</mark> are boring.
     </GrammarExample>
     <GrammarExample note="Nearly every day: most days, with only a few exceptions.">
-      We've spent <mark data-role="grammar">nearly</mark> <mark data-role="content">every</mark> <mark data-role="grammar">day</mark> together since we were kids.
+      We've spent <mark data-role="grammar" data-pos="function">nearly</mark> <mark data-role="content" data-pos="function">every</mark> <mark data-role="grammar" data-pos="noun">day</mark> together since we were kids.
     </GrammarExample>
   </GrammarSection>
 
@@ -346,31 +346,31 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       games — put of between the quantity word and the/my/these. Without
       the/my, there is no of: <em>some friends</em> (friends in general) but <em>some of my friends</em>.
     </p>
-    <GrammarFormula label="Part of a group" parts={['some / all / many / five / none …', 'of', 'the / my / these …', 'noun']} />
+    <GrammarFormula label="Part of a group" parts={[{ text: 'some / all / many / five / none …', pos: 'function' }, { text: 'of', pos: 'function' }, { text: 'the / my / these …', pos: 'function' }, { text: 'noun', pos: 'noun' }]} />
     <GrammarExample note="Some of my friends: part of a specific group, my friends.">
-      <mark data-role="content">Some</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">friends</mark> gave me books.
+      <mark data-role="content" data-pos="function">Some</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">my</mark> <mark data-role="grammar" data-pos="noun">friends</mark> gave me books.
     </GrammarExample>
     <GrammarExample note="Many of my relatives: a large part of them.">
-      <mark data-role="content">Many</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">relatives</mark> had come.
+      <mark data-role="content" data-pos="function">Many</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">my</mark> <mark data-role="grammar" data-pos="noun">relatives</mark> had come.
     </GrammarExample>
     <GrammarExample note="A number + of: five from the group of my friends.">
-      I had invited <mark data-role="content">five</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">friends</mark>.
+      I had invited <mark data-role="content" data-pos="function">five</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">my</mark> <mark data-role="grammar" data-pos="noun">friends</mark>.
     </GrammarExample>
     <GrammarExample note="Any of the books, in a negative sentence.">
-      Without a library card you can't take <mark data-role="content">any</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the</mark> <mark data-role="grammar">books</mark> with you.
+      Without a library card you can't take <mark data-role="content" data-pos="function">any</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">the</mark> <mark data-role="grammar" data-pos="noun">books</mark> with you.
     </GrammarExample>
     <GrammarExample note="None of the stores = not one store. Positive verb (had).">
-      <mark data-role="content">None</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">the</mark> <mark data-role="grammar">stores</mark> had the dress I wanted.
+      <mark data-role="content" data-pos="function">None</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">the</mark> <mark data-role="grammar" data-pos="noun">stores</mark> had the dress I wanted.
     </GrammarExample>
     <GrammarExample note="Half of + your + a singular noun: half the time.">
-      You should spend <mark data-role="content">half</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">your</mark> <mark data-role="grammar">holiday</mark> with your parents.
+      You should spend <mark data-role="content" data-pos="function">half</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">your</mark> <mark data-role="grammar" data-pos="noun">holiday</mark> with your parents.
     </GrammarExample>
     <p>
       After all, both and half the of is optional: <em>all my money</em> = <em>all of my money</em>, <em>both the teams</em> = <em>both of the teams</em>.
       With other words, of is needed.
     </p>
     <GrammarExample note="All of my money = all my money: both are correct.">
-      I spent <mark data-role="content">all</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">my</mark> <mark data-role="grammar">money</mark>!
+      I spent <mark data-role="content" data-pos="function">all</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">my</mark> <mark data-role="grammar" data-pos="noun">money</mark>!
     </GrammarExample>
     <p>
       Every and no can't be followed by of. Use each of and none of instead: <em>each of the students</em>, <em>none of the students</em>.
@@ -378,12 +378,12 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
     <p>
       Either of and neither of work the same way, with a plural noun phrase or a pronoun (us, these, them).
     </p>
-    <GrammarFormula label="Either / neither of" parts={['either / neither', 'of', 'the / these / us …', 'plural noun or pronoun']} />
+    <GrammarFormula label="Either / neither of" parts={[{ text: 'either / neither', pos: 'function' }, { text: 'of', pos: 'function' }, { text: 'the / these / us …', pos: 'function' }, { text: 'plural noun or pronoun', pos: 'noun' }]} />
     <GrammarExample note="Neither of these games = not one of the two games.">
-      If you don't like sport, <mark data-role="content">neither</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">these</mark> <mark data-role="grammar">games</mark> will interest you.
+      If you don't like sport, <mark data-role="content" data-pos="function">neither</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">these</mark> <mark data-role="grammar" data-pos="noun">games</mark> will interest you.
     </GrammarExample>
     <GrammarExample note="Neither of + a pronoun: us.">
-      <mark data-role="content">Neither</mark> <mark data-role="grammar">of</mark> <mark data-role="grammar">us</mark> could foresee the rise in prices.
+      <mark data-role="content" data-pos="function">Neither</mark> <mark data-role="grammar" data-pos="function">of</mark> <mark data-role="grammar" data-pos="function">us</mark> could foresee the rise in prices.
     </GrammarExample>
     <p>
       Quantity words used without any noun after them (<em>Some were late</em>, <em>I've got none</em>) are covered on the quantity pronouns page — see the links below.
@@ -395,15 +395,15 @@ const inlineUsagePointIds = [littlePoint, hyperbolePoint, manyAPoint]
       In formal or literary English, many a / many an + a singular noun means "many" — with extra emphasis.
       The noun and the verb stay singular.
     </p>
-    <GrammarFormula label="Emphasis" parts={['many a / many an', 'singular noun']} />
+    <GrammarFormula label="Emphasis" parts={[{ text: 'many a / many an', pos: 'function' }, { text: 'singular noun', pos: 'noun' }]} />
     <GrammarExample note="Many a time = many times, said with emphasis.">
-      Mary was threatened <mark data-role="content">many a</mark> <mark data-role="grammar">time</mark> on her way home from work.
+      Mary was threatened <mark data-role="content" data-pos="function">many a</mark> <mark data-role="grammar" data-pos="noun">time</mark> on her way home from work.
     </GrammarExample>
     <GrammarExample note="Many a mountain: singular noun, but the meaning is plural.">
-      We have come a long way and climbed <mark data-role="content">many a</mark> <mark data-role="grammar">mountain</mark>.
+      We have come a long way and climbed <mark data-role="content" data-pos="function">many a</mark> <mark data-role="grammar" data-pos="noun">mountain</mark>.
     </GrammarExample>
     <GrammarExample note="Many an before a vowel sound, like the article an.">
-      It has raised <mark data-role="content">many an</mark> <mark data-role="grammar">issue</mark> which I would like to comment on.
+      It has raised <mark data-role="content" data-pos="function">many an</mark> <mark data-role="grammar" data-pos="noun">issue</mark> which I would like to comment on.
     </GrammarExample>
     {manyAPoint && <GrammarUsagePointCard usagePoint={manyAPoint} />}
   </GrammarSection>
