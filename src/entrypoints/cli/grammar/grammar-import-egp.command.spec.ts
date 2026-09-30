@@ -74,6 +74,25 @@ describe('GrammarImportEgpCommand', () => {
     );
   });
 
+  it('promotes the FORM records of a construction that has no USE record', async () => {
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify([
+        { ...records[0], index: 7, subcategory: 'plural' },
+        { ...records[0], index: 8, subcategory: 'plural', can_do: '' },
+      ]),
+    );
+    find.mockResolvedValue([]);
+
+    await command.run([], {});
+
+    const point = persist.mock.calls[2][0];
+    expect(point).toMatchObject({
+      egpIndex: 7,
+      guideword: "FORM: AFFIRMATIVE WITH 'DO'",
+    });
+    expect(persist).toHaveBeenCalledTimes(3);
+  });
+
   it('strips corpus-provenance tags and cross-reference markers from the stored text', async () => {
     vi.mocked(readFile).mockResolvedValue(
       JSON.stringify([

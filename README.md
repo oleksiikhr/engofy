@@ -40,7 +40,7 @@ On a fresh database, seed the static reference data (grammar catalogue, irregula
 verbs, word frequency — see [assets/README.md](assets/README.md)):
 
 ```bash
-pnpm cli grammar import-egp                # 19 categories / 90 constructions / 574 usage points
+pnpm cli grammar import-egp                # 19 categories / 90 constructions / 661 usage points
 pnpm cli grammar import-irregular-verbs    # ~164 words
 pnpm cli words import-frequency            # ranks existing Word rows
 ```

@@ -4,12 +4,12 @@ import { Logger } from '@nestjs/common';
 import { SubCommand } from 'nest-commander';
 import {
   buildCheatSheet,
-  classifyEgpRecord,
   cleanEgpExample,
   cleanEgpText,
   type EgpRecord,
   grammarConstructionSlug,
   parseEgpRecords,
+  usagePointRecords,
 } from '../../../modules/post/domain/egp.js';
 import { GrammarCategory } from '../../../modules/post/entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../../modules/post/entities/grammar-construction.entity.js';
@@ -19,9 +19,10 @@ import { CliCommandRunner } from '../cli-command.runner.js';
 const ASSET_PATH = join(process.cwd(), 'assets', 'egp.json');
 
 // Seeds grammar_categories / grammar_constructions / grammar_usage_points from
-// the Cambridge English Grammar Profile (assets/egp.json). Only USE and
-// FORM/USE records become usage points; FORM: records feed each construction's
-// cheat sheet (PLAN.md §3.4, §12). Idempotent — categories match on name,
+// the Cambridge English Grammar Profile (assets/egp.json). USE and FORM/USE
+// records become usage points (a construction with none promotes its FORM:
+// records instead); FORM: records also feed each construction's cheat sheet
+// (PLAN.md §3.4, §12). Idempotent — categories match on name,
 // constructions on slug, usage points on egpIndex.
 @SubCommand({
   name: 'import-egp',
@@ -58,6 +59,9 @@ export class GrammarImportEgpCommand extends CliCommandRunner {
       recordsByConstruction.set(slug, bucket);
     }
 
+    const usagePointIndexes = new Set(
+      usagePointRecords(records).map((r) => r.index),
+    );
     let usagePoints = 0;
     for (const record of records) {
       let category = categoryByName.get(record.category);
@@ -87,13 +91,8 @@ export class GrammarImportEgpCommand extends CliCommandRunner {
         recordsByConstruction.get(slug) ?? [],
       );
 
-      if (classifyEgpRecord(record) !== 'use') {
+      if (!usagePointIndexes.has(record.index)) {
         continue;
-      }
-      if (!record.can_do.trim()) {
-        throw new Error(
-          `EGP record #${record.index} is USE but has no can-do statement`,
-        );
       }
 
       let point = usagePointByEgpIndex.get(record.index);

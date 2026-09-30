@@ -159,6 +159,163 @@
       ]
     }
   },
+  "31": {
+    "explanation": "Put 'very' before a common adjective to make it stronger: very quiet, very nice, very big. It is the simplest way to say something has a lot of a quality.",
+    "examples": ["The room is very quiet.", "My teacher is very kind."],
+    "uk": {
+      "explanation": "Постав 'very' перед поширеним прикметником, щоб підсилити його: very quiet, very nice, very big. Це найпростіший спосіб сказати, що в чомусь багато якості.",
+      "examples": ["У кімнаті дуже тихо.", "Моя вчителька дуже добра."]
+    }
+  },
+  "32": {
+    "explanation": "Adverbs of degree such as 'really', 'so' and 'quite' go before an adjective and change how strong it is. 'Really' and 'so' make it stronger; 'quite' makes it a bit weaker.",
+    "examples": [
+      "It was really hot yesterday.",
+      "The story is so funny!",
+      "The café is quite small."
+    ],
+    "uk": {
+      "explanation": "Прислівники міри, як-от 'really', 'so' і 'quite', стоять перед прикметником і змінюють його силу. 'Really' і 'so' підсилюють, 'quite' трохи послаблює.",
+      "examples": [
+        "Учора було дуже спекотно.",
+        "Ця історія така смішна!",
+        "Кав'ярня доволі маленька."
+      ]
+    }
+  },
+  "33": {
+    "explanation": "An adjective can be followed by a prepositional phrase that tells us more: good for your body, afraid of dogs, interested in music. Each adjective usually goes with its own preposition, so learn them together.",
+    "examples": ["Vegetables are good for you.", "I am afraid of spiders."],
+    "uk": {
+      "explanation": "Після прикметника може стояти прийменниковий зворот, що уточнює його: good for your body, afraid of dogs, interested in music. Кожен прикметник зазвичай має свій прийменник, тож вчи їх разом.",
+      "examples": ["Овочі корисні для тебе.", "Я боюся павуків."]
+    }
+  },
+  "34": {
+    "explanation": "'Too' means more than is good or possible. It goes before the adjective: too big, too expensive. It usually describes a problem.",
+    "examples": ["This bag is too heavy.", "The shoes are too small for me."],
+    "uk": {
+      "explanation": "'Too' означає «більше, ніж треба або можна». Воно стоїть перед прикметником: too big, too expensive. Зазвичай це вказує на проблему.",
+      "examples": ["Ця сумка занадто важка.", "Це взуття мені замале."]
+    }
+  },
+  "35": {
+    "explanation": "You can add 'for' + a person or thing after 'too' + adjective to say who or what has the problem: too small for me, too loud for the baby.",
+    "examples": [
+      "The coat is too big for me.",
+      "This film is too scary for children."
+    ],
+    "uk": {
+      "explanation": "Після 'too' + прикметник можна додати 'for' + особу чи річ, щоб сказати, кому це заважає: too small for me, too loud for the baby.",
+      "examples": [
+        "Це пальто мені завелике.",
+        "Цей фільм занадто страшний для дітей."
+      ]
+    }
+  },
+  "36": {
+    "explanation": "An adjective phrase can come before a noun: a very important meeting, a really nice person. The adverb stays with the adjective, and the article comes first.",
+    "examples": [
+      "I have a very important meeting today.",
+      "She lives in a really old house."
+    ],
+    "uk": {
+      "explanation": "Прикметникова група може стояти перед іменником: a very important meeting, a really nice person. Прислівник залишається біля прикметника, а артикль стоїть першим.",
+      "examples": [
+        "Сьогодні в мене дуже важлива зустріч.",
+        "Вона живе в дуже старому будинку."
+      ]
+    }
+  },
+  "37": {
+    "explanation": "'Enough' means as much as we need. With an adjective it goes after the adjective: big enough, old enough, warm enough. It is the opposite word order to 'too' and 'very'.",
+    "examples": [
+      "The room is big enough for all of us.",
+      "Is the water warm enough?"
+    ],
+    "uk": {
+      "explanation": "'Enough' означає «достатньо». З прикметником воно стоїть після прикметника: big enough, old enough, warm enough. Це протилежний порядок слів порівняно з 'too' і 'very'.",
+      "examples": [
+        "Кімната достатньо велика для всіх нас.",
+        "Вода достатньо тепла?"
+      ]
+    }
+  },
+  "38": {
+    "explanation": "'Quite a' + adjective (+ noun) is a fixed pattern that means 'fairly' or 'more than you expect'. The 'a' comes right after 'quite': quite a long time, quite a big house.",
+    "examples": [
+      "We waited for quite a long time.",
+      "It is quite a big garden."
+    ],
+    "uk": {
+      "explanation": "'Quite a' + прикметник (+ іменник) — усталена модель зі значенням «досить» або «більше, ніж очікуєш». Артикль 'a' стоїть одразу після 'quite': quite a long time, quite a big house.",
+      "examples": ["Ми чекали досить довго.", "Це досить великий сад."]
+    }
+  },
+  "39": {
+    "explanation": "'Too' + adjective + 'to' + infinitive says something is impossible or not wise because of the quality: too busy to talk, too tired to walk.",
+    "examples": ["I am too tired to cook tonight.", "He was too shy to speak."],
+    "uk": {
+      "explanation": "'Too' + прикметник + 'to' + інфінітив означає, що щось неможливе або нерозумне через цю якість: too busy to talk, too tired to walk.",
+      "examples": [
+        "Я надто втомився, щоб готувати сьогодні ввечері.",
+        "Він був надто сором'язливий, щоб говорити."
+      ]
+    }
+  },
+  "40": {
+    "explanation": "'Adjective + enough + to' + infinitive says that someone has the quality needed to do something: lucky enough to win, old enough to vote. It is common in more formal speech and writing.",
+    "examples": [
+      "She was lucky enough to get a ticket.",
+      "He is old enough to vote."
+    ],
+    "uk": {
+      "explanation": "'Прикметник + enough + to' + інфінітив означає, що хтось має потрібну якість, щоб щось зробити: lucky enough to win, old enough to vote. Це поширено в більш формальному мовленні й письмі.",
+      "examples": [
+        "Їй пощастило дістати квиток.",
+        "Він досить дорослий, щоб голосувати."
+      ]
+    }
+  },
+  "41": {
+    "explanation": "'Rather a' + adjective is a formal way to say 'fairly' or 'more than expected', often with a small surprise. The pattern is rather a + adjective + noun.",
+    "examples": [
+      "It was rather a difficult decision.",
+      "This is rather a strange idea."
+    ],
+    "uk": {
+      "explanation": "'Rather a' + прикметник — формальний спосіб сказати «доволі» або «більше, ніж очікувалось», часто з легким подивом. Модель: rather a + прикметник + іменник.",
+      "examples": ["Це було доволі важке рішення.", "Це доволі дивна ідея."]
+    }
+  },
+  "42": {
+    "explanation": "Extreme adjectives (huge, terrible, wonderful) and strong adjectives take extreme adverbs like 'absolutely', 'extremely', 'incredibly' and 'totally'. Use them to make an opinion or feeling very strong.",
+    "examples": [
+      "I am absolutely sure about this.",
+      "The view was incredibly beautiful."
+    ],
+    "uk": {
+      "explanation": "Сильні прикметники (huge, terrible, wonderful) поєднуються з підсилювальними прислівниками, як-от 'absolutely', 'extremely', 'incredibly', 'totally'. Вони роблять думку чи почуття дуже сильними.",
+      "examples": [
+        "Я абсолютно впевнений у цьому.",
+        "Краєвид був неймовірно гарний."
+      ]
+    }
+  },
+  "43": {
+    "explanation": "Use 'as … as' to say two things are equal, and 'so … that' to give a result. An adjective sits in the middle: as tall as, so tired that I slept. In formal writing the pattern can be 'as large a number as'.",
+    "examples": [
+      "He is as tall as his father.",
+      "I was so tired that I fell asleep."
+    ],
+    "uk": {
+      "explanation": "Використовуй 'as … as', щоб сказати, що дві речі рівні, і 'so … that', щоб назвати наслідок. Посередині стоїть прикметник: as tall as, so tired that I slept. У формальному письмі можлива модель 'as large a number as'.",
+      "examples": [
+        "Він такий високий, як його батько.",
+        "Я так втомився, що заснув."
+      ]
+    }
+  },
   "46": {
     "explanation": "Adjectives like main and only go before a noun to pick out one thing from many. They cannot go after be: the main reason, not the reason is main.",
     "examples": [
@@ -1396,6 +1553,92 @@
         "Щоб ніколи більше так не робив!",
         "Тільки спробуй!",
         "Не смій так зі мною розмовляти!"
+      ]
+    }
+  },
+  "203": {
+    "explanation": "To make a question with 'be', put the verb before the subject: Are you ready? Is she at home? The verb 'be' does not need 'do'.",
+    "examples": ["How are you?", "Is your sister at home?"],
+    "uk": {
+      "explanation": "Щоб поставити питання з 'be', постав дієслово перед підметом: Are you ready? Is she at home? Дієслову 'be' не потрібне 'do'.",
+      "examples": ["Як ти?", "Твоя сестра вдома?"]
+    }
+  },
+  "204": {
+    "explanation": "With the auxiliary 'be' or 'have', make a yes/no question by moving the auxiliary before the subject: Are you coming? Have you finished? The main verb stays after the subject.",
+    "examples": ["Are you going to the class?", "Have you seen my keys?"],
+    "uk": {
+      "explanation": "З допоміжним 'be' або 'have' питання, на яке відповідають «так/ні», утворюється перестановкою допоміжного дієслова перед підметом: Are you coming? Have you finished? Основне дієслово залишається після підмета.",
+      "examples": ["Ти йдеш на заняття?", "Ти бачив мої ключі?"]
+    }
+  },
+  "205": {
+    "explanation": "For main verbs (not 'be' or modals) use 'do' or 'does' at the start of a yes/no question, and keep the main verb in its base form: Do you like tea? Does he work here?",
+    "examples": ["Do you remember Julie?", "Does he live near here?"],
+    "uk": {
+      "explanation": "Для основних дієслів (не 'be' і не модальних) на початку питання «так/ні» став 'do' або 'does', а основне дієслово залишай у початковій формі: Do you like tea? Does he work here?",
+      "examples": ["Ти пам'ятаєш Джулі?", "Він живе неподалік?"]
+    }
+  },
+  "206": {
+    "explanation": "With modal verbs (can, could, would, should) the modal goes before the subject and the main verb stays in the base form: Can you help me? Would you like some tea?",
+    "examples": ["Would you like to come with me?", "Can you open the window?"],
+    "uk": {
+      "explanation": "З модальними дієсловами (can, could, would, should) модальне стоїть перед підметом, а основне дієслово залишається в початковій формі: Can you help me? Would you like some tea?",
+      "examples": ["Хочеш піти зі мною?", "Можеш відчинити вікно?"]
+    }
+  },
+  "207": {
+    "explanation": "A 'wh-' question starts with a question word (what, where, when, why, how), followed by the auxiliary and the subject: When are you coming? Where do you live?",
+    "examples": ["When are you coming here?", "Where do you work?"],
+    "uk": {
+      "explanation": "Питання зі словом на 'wh-' починається з питального слова (what, where, when, why, how), далі йдуть допоміжне дієслово і підмет: When are you coming? Where do you live?",
+      "examples": ["Коли ти сюди прийдеш?", "Де ти працюєш?"]
+    }
+  },
+  "208": {
+    "explanation": "A negative 'wh-' question puts the negative auxiliary after the question word: Why don't we watch a film? Why can't you come? It is often a suggestion or a complaint.",
+    "examples": ["Why don't we watch a film?", "Why isn't she here?"],
+    "uk": {
+      "explanation": "У заперечному питанні з 'wh-' заперечне допоміжне дієслово стоїть після питального слова: Why don't we watch a film? Why can't you come? Часто це пропозиція або докір.",
+      "examples": ["Чому б нам не подивитися фільм?", "Чому її тут немає?"]
+    }
+  },
+  "209": {
+    "explanation": "A negative yes/no question puts the negative auxiliary before the subject: Isn't it great? Don't you like it? It often shows surprise or looks for agreement.",
+    "examples": ["Isn't it great?", "Don't you like pizza?"],
+    "uk": {
+      "explanation": "Заперечне питання «так/ні» ставить заперечне допоміжне дієслово перед підметом: Isn't it great? Don't you like it? Воно часто виражає подив або шукає згоди.",
+      "examples": ["Хіба це не чудово?", "Ти не любиш піцу?"]
+    }
+  },
+  "210": {
+    "explanation": "When the question word is the subject, there is no auxiliary and the word order is the same as in a statement: Who called? What happened? Which bus goes there?",
+    "examples": ["What happened?", "Who lives next door?"],
+    "uk": {
+      "explanation": "Коли питальне слово є підметом, допоміжного дієслова немає, а порядок слів такий, як у розповідному реченні: Who called? What happened? Which bus goes there?",
+      "examples": ["Що сталося?", "Хто живе по сусідству?"]
+    }
+  },
+  "211": {
+    "explanation": "In a question, a short adverb such as 'ever', 'always' or 'never' goes between the subject and the main verb: Have you ever been to Paris? Do you always walk to work?",
+    "examples": ["Have you ever been to Marseille?", "Do you often eat out?"],
+    "uk": {
+      "explanation": "У питанні короткий прислівник, як-от 'ever', 'always' чи 'never', стоїть між підметом і основним дієсловом: Have you ever been to Paris? Do you always walk to work?",
+      "examples": ["Ти коли-небудь був у Марселі?", "Ти часто їси надворі?"]
+    }
+  },
+  "213": {
+    "explanation": "In a negative question, an adverb still comes between the subject and the main verb, after the negative auxiliary and subject: Hasn't it always been important? Don't you often feel tired?",
+    "examples": [
+      "Hasn't it always been a problem?",
+      "Don't you usually walk to work?"
+    ],
+    "uk": {
+      "explanation": "У заперечному питанні прислівник теж стоїть між підметом і основним дієсловом, після заперечного допоміжного та підмета: Hasn't it always been important? Don't you often feel tired?",
+      "examples": [
+        "Хіба це не завжди було проблемою?",
+        "Хіба ти зазвичай не ходиш на роботу пішки?"
       ]
     }
   },
@@ -5335,6 +5578,256 @@
       ]
     }
   },
+  "677": {
+    "explanation": "Common nouns name everyday things, people and places: house, book, teacher, city. They start with a small letter and can be counted (one house, two houses).",
+    "examples": ["My house is near the station.", "I have a new book."],
+    "uk": {
+      "explanation": "Загальні іменники називають повсякденні речі, людей і місця: house, book, teacher, city. Вони пишуться з малої літери й лічаться (one house, two houses).",
+      "examples": ["Мій дім біля станції.", "У мене нова книжка."]
+    }
+  },
+  "678": {
+    "explanation": "Proper nouns name specific people, places, days and months, and always start with a capital letter: Anna, Kyiv, Saturday, July.",
+    "examples": ["I want to see you on Saturday.", "Anna lives in London."],
+    "uk": {
+      "explanation": "Власні назви позначають конкретних людей, місця, дні й місяці та завжди пишуться з великої літери: Anna, Kyiv, Saturday, July.",
+      "examples": ["Я хочу побачити тебе в суботу.", "Анна живе в Лондоні."]
+    }
+  },
+  "679": {
+    "explanation": "A compound noun is made of two words that together name one thing: swimming pool, bus stop, toothbrush, sunflower. It can be written as one word, two words or with a hyphen.",
+    "examples": [
+      "We go to the swimming pool on Sundays.",
+      "Where is the bus stop?"
+    ],
+    "uk": {
+      "explanation": "Складний іменник складається з двох слів, які разом називають одну річ: swimming pool, bus stop, toothbrush, sunflower. Його пишуть разом, окремо або через дефіс.",
+      "examples": ["По неділях ми ходимо до басейну.", "Де автобусна зупинка?"]
+    }
+  },
+  "680": {
+    "explanation": "The '-ing' form of a verb can work as a noun to name an activity. It often follows verbs like like, love, enjoy and hate: I enjoy swimming. We went shopping.",
+    "examples": ["I like swimming in the sea.", "We went shopping yesterday."],
+    "uk": {
+      "explanation": "Форма на '-ing' може працювати як іменник і називати заняття. Її часто ставлять після дієслів like, love, enjoy, hate: I enjoy swimming. We went shopping.",
+      "examples": ["Я люблю плавати в морі.", "Учора ми ходили по магазинах."]
+    }
+  },
+  "681": {
+    "explanation": "By B1 you use many more common nouns, including nouns for feelings and ideas, in a wider range of topics: exercise, advice, holiday, information.",
+    "examples": [
+      "Regular exercise is good for you.",
+      "Thank you for your advice."
+    ],
+    "uk": {
+      "explanation": "На рівні B1 ти вживаєш значно більше загальних іменників, зокрема для почуттів і ідей, у ширшому колі тем: exercise, advice, holiday, information.",
+      "examples": ["Регулярні вправи корисні для здоров'я.", "Дякую за пораду."]
+    }
+  },
+  "682": {
+    "explanation": "The '-ing' form can be the subject of a sentence and names an activity as a whole: Working late is tiring. Swimming is good for you. Use a singular verb after it.",
+    "examples": ["Working late is not a good idea.", "Swimming keeps you fit."],
+    "uk": {
+      "explanation": "Форма на '-ing' може бути підметом речення й називає заняття загалом: Working late is tiring. Swimming is good for you. Після неї стоїть дієслово в однині.",
+      "examples": [
+        "Працювати допізна — не найкраща ідея.",
+        "Плавання підтримує форму."
+      ]
+    }
+  },
+  "683": {
+    "explanation": "An '-ing' form can name an abstract idea or process, often with a possessive or an adjective: the beginning, good teaching, his upbringing. Learning English has its rewards.",
+    "examples": [
+      "Learning English has its rewards.",
+      "Good teaching makes a difference."
+    ],
+    "uk": {
+      "explanation": "Форма на '-ing' може називати абстрактну ідею чи процес, часто з присвійним словом або прикметником: the beginning, good teaching, his upbringing. Learning English has its rewards.",
+      "examples": [
+        "Вивчення англійської має свої переваги.",
+        "Гарне викладання має значення."
+      ]
+    }
+  },
+  "684": {
+    "explanation": "Most countable nouns form the plural by adding '-s': game → games, book → books, friend → friends.",
+    "examples": ["We play computer games.", "I have three brothers."],
+    "uk": {
+      "explanation": "Більшість лічильних іменників утворюють множину додаванням '-s': game → games, book → books, friend → friends.",
+      "examples": ["Ми граємо в комп'ютерні ігри.", "У мене троє братів."]
+    }
+  },
+  "685": {
+    "explanation": "Nouns that end in -s, -sh, -ch, -x, -z or -o usually add '-es' in the plural: class → classes, watch → watches, box → boxes, potato → potatoes.",
+    "examples": ["The art classes are on Tuesdays.", "I need two boxes."],
+    "uk": {
+      "explanation": "Іменники, що закінчуються на -s, -sh, -ch, -x, -z або -o, зазвичай у множині отримують '-es': class → classes, watch → watches, box → boxes, potato → potatoes.",
+      "examples": [
+        "Заняття з мистецтва — по вівторках.",
+        "Мені потрібні дві коробки."
+      ]
+    }
+  },
+  "686": {
+    "explanation": "Nouns that end in a consonant + '-y' change 'y' to 'i' and add '-es': hobby → hobbies, city → cities, baby → babies. If a vowel comes before 'y', just add '-s': boy → boys.",
+    "examples": ["I have a lot of hobbies.", "There are many big cities here."],
+    "uk": {
+      "explanation": "Іменники, що закінчуються на приголосну + '-y', змінюють 'y' на 'i' та отримують '-es': hobby → hobbies, city → cities, baby → babies. Якщо перед 'y' стоїть голосна, додаємо лише '-s': boy → boys.",
+      "examples": ["У мене багато захоплень.", "Тут багато великих міст."]
+    }
+  },
+  "687": {
+    "explanation": "Some plurals are irregular and do not use '-s': man → men, woman → women, child → children, person → people, foot → feet, tooth → teeth. Learn them one by one.",
+    "examples": [
+      "I bought clothes for my children.",
+      "Two women are waiting outside."
+    ],
+    "uk": {
+      "explanation": "Деякі форми множини неправильні й не мають '-s': man → men, woman → women, child → children, person → people, foot → feet, tooth → teeth. Їх треба вчити окремо.",
+      "examples": [
+        "Я купив одяг для своїх дітей.",
+        "Надворі чекають дві жінки."
+      ]
+    }
+  },
+  "688": {
+    "explanation": "Some nouns exist only in the plural and take a plural verb: clothes, trousers, glasses, scissors. To talk about one, say 'a pair of trousers'.",
+    "examples": ["My trousers are new.", "These scissors are sharp."],
+    "uk": {
+      "explanation": "Деякі іменники вживаються лише у множині й мають дієслово в множині: clothes, trousers, glasses, scissors. Щоб сказати про одну річ, кажуть 'a pair of trousers'.",
+      "examples": ["Мої штани нові.", "Ці ножиці гострі."]
+    }
+  },
+  "689": {
+    "explanation": "A collective noun names a group: team, family, staff, class. Use a singular verb if you think of the group as one thing, and a plural verb if you think of its members separately.",
+    "examples": ["The staff is friendly.", "My family are all at home."],
+    "uk": {
+      "explanation": "Збірний іменник називає групу: team, family, staff, class. Став дієслово в однині, якщо думаєш про групу як про одне ціле, і в множині, якщо маєш на увазі окремих членів.",
+      "examples": ["Персонал привітний.", "Уся моя сім'я вдома."]
+    }
+  },
+  "690": {
+    "explanation": "Uncountable nouns name things we do not count one by one: music, water, homework, money. They have no plural form and take a singular verb.",
+    "examples": ["I listen to music every day.", "Water is important."],
+    "uk": {
+      "explanation": "Незлічувані іменники називають те, що ми не лічимо поштучно: music, water, homework, money. Вони не мають множини й вживаються з дієсловом в однині.",
+      "examples": ["Я щодня слухаю музику.", "Вода важлива."]
+    }
+  },
+  "691": {
+    "explanation": "Use 'the' with an uncountable noun when you mean something specific that both people know about: The music is loud. The water is cold.",
+    "examples": [
+      "The music is going to be loud.",
+      "The water in the lake is cold."
+    ],
+    "uk": {
+      "explanation": "Вживай 'the' з незлічуваним іменником, коли йдеться про щось конкретне, відоме обом співрозмовникам: The music is loud. The water is cold.",
+      "examples": ["Музика буде гучна.", "Вода в озері холодна."]
+    }
+  },
+  "692": {
+    "explanation": "Uncountable nouns go with quantity words such as 'some', 'any', 'a lot of' and 'more': some water, a lot of money. Do not use 'a' or a plural form.",
+    "examples": ["I need to do some homework.", "Do you have any milk?"],
+    "uk": {
+      "explanation": "Незлічувані іменники вживаються зі словами кількості, як-от 'some', 'any', 'a lot of' і 'more': some water, a lot of money. Не став 'a' і не утворюй множину.",
+      "examples": [
+        "Мені треба зробити трохи домашнього завдання.",
+        "У тебе є молоко?"
+      ]
+    }
+  },
+  "693": {
+    "explanation": "To count an uncountable noun, use a container or a countable item: a bottle of water, a piece of advice, a cup of tea, a slice of bread.",
+    "examples": [
+      "Please bring a bottle of water.",
+      "She gave me a piece of advice."
+    ],
+    "uk": {
+      "explanation": "Щоб порахувати незлічуваний іменник, використовуй ємність або лічильне слово: a bottle of water, a piece of advice, a cup of tea, a slice of bread.",
+      "examples": ["Візьми, будь ласка, пляшку води.", "Вона дала мені пораду."]
+    }
+  },
+  "694": {
+    "explanation": "At B1 you know more uncountable nouns, including many for ideas and places: countryside, traffic, luggage, furniture, weather, news.",
+    "examples": ["The countryside is beautiful.", "The news is very good."],
+    "uk": {
+      "explanation": "На рівні B1 ти знаєш більше незлічуваних іменників, зокрема багато для ідей і місць: countryside, traffic, luggage, furniture, weather, news.",
+      "examples": ["Сільська місцевість гарна.", "Новини дуже хороші."]
+    }
+  },
+  "695": {
+    "explanation": "With uncountable nouns you can use 'much', 'a bit of', 'enough', 'plenty of' and 'loads of'. 'Much' is mostly used in questions and negatives.",
+    "examples": ["We don't have much time.", "There is plenty of food."],
+    "uk": {
+      "explanation": "З незлічуваними іменниками можна вживати 'much', 'a bit of', 'enough', 'plenty of' і 'loads of'. 'Much' переважно вживається в питаннях і запереченнях.",
+      "examples": ["У нас небагато часу.", "Їжі вдосталь."]
+    }
+  },
+  "696": {
+    "explanation": "Use an uncountable noun with no article to talk about something in general: Television is popular. Life is short. Music helps me relax.",
+    "examples": ["Television is more attractive.", "Music helps me relax."],
+    "uk": {
+      "explanation": "Незлічуваний іменник без артикля вживається, коли йдеться про щось загалом: Television is popular. Life is short. Music helps me relax.",
+      "examples": [
+        "Телебачення привабливіше.",
+        "Музика допомагає мені розслабитися."
+      ]
+    }
+  },
+  "697": {
+    "explanation": "At C1 you use a wide range of uncountable nouns, especially for abstract ideas: safety, knowledge, evidence, research, progress, behaviour.",
+    "examples": [
+      "The company cares about safety.",
+      "There is no evidence for this."
+    ],
+    "uk": {
+      "explanation": "На рівні C1 ти вживаєш широкий набір незлічуваних іменників, особливо абстрактних: safety, knowledge, evidence, research, progress, behaviour.",
+      "examples": ["Компанія дбає про безпеку.", "Для цього немає доказів."]
+    }
+  },
+  "698": {
+    "explanation": "A noun or noun phrase can be the subject: it does the action or is what the sentence is about. It comes before the verb: His name is Stanislav. The children play.",
+    "examples": ["His name is Stanislav.", "The children are playing."],
+    "uk": {
+      "explanation": "Іменник або іменникова група може бути підметом: він виконує дію або є темою речення. Він стоїть перед дієсловом: His name is Stanislav. The children play.",
+      "examples": ["Його звати Станіслав.", "Діти граються."]
+    }
+  },
+  "699": {
+    "explanation": "A noun or noun phrase can be the object: it receives the action and comes after the verb: I love my house. She reads books.",
+    "examples": ["I love my house.", "She reads a book every week."],
+    "uk": {
+      "explanation": "Іменник або іменникова група може бути додатком: він отримує дію і стоїть після дієслова: I love my house. She reads books.",
+      "examples": ["Я люблю свій дім.", "Вона читає книжку щотижня."]
+    }
+  },
+  "700": {
+    "explanation": "A noun phrase can come after a preposition: to my house, in the garden, with my friends. The preposition comes first, then the noun phrase.",
+    "examples": ["Come to my house for dinner.", "She is in the garden."],
+    "uk": {
+      "explanation": "Іменникова група може стояти після прийменника: to my house, in the garden, with my friends. Спочатку йде прийменник, потім іменникова група.",
+      "examples": ["Приходь до мене на вечерю.", "Вона в саду."]
+    }
+  },
+  "701": {
+    "explanation": "A noun phrase can follow 'be' and say who or what the subject is: She is a doctor. This is my house. There is a big garden.",
+    "examples": ["She is a doctor.", "There is a big garden."],
+    "uk": {
+      "explanation": "Іменникова група може стояти після 'be' і казати, хто або що є підметом: She is a doctor. This is my house. There is a big garden.",
+      "examples": ["Вона лікарка.", "Там великий сад."]
+    }
+  },
+  "702": {
+    "explanation": "Some nouns work as time words and answer 'when?': tomorrow morning, next week, last year, every day. They usually need no preposition.",
+    "examples": ["I will see you tomorrow morning.", "We met last year."],
+    "uk": {
+      "explanation": "Деякі іменники працюють як слова часу й відповідають на питання «коли?»: tomorrow morning, next week, last year, every day. Прийменник зазвичай не потрібен.",
+      "examples": [
+        "Побачимося завтра вранці.",
+        "Ми познайомилися минулого року."
+      ]
+    }
+  },
   "703": {
     "explanation": "Use the passive (be + past participle) with by to add who did something to a thing you are already talking about: I love my phone. It is made by Sony.",
     "examples": [
@@ -7615,6 +8108,299 @@
       ]
     }
   },
+  "1048": {
+    "explanation": "A prepositional verb is a verb that needs a fixed preposition before its object: listen to music, look at the board, wait for a bus. The preposition belongs to the verb, so learn them together.",
+    "examples": [
+      "I listen to music in the evening.",
+      "We are waiting for the bus."
+    ],
+    "uk": {
+      "explanation": "Прийменникове дієслово — це дієслово, якому потрібен сталий прийменник перед додатком: listen to music, look at the board, wait for a bus. Прийменник належить до дієслова, тож вчи їх разом.",
+      "examples": ["Ввечері я слухаю музику.", "Ми чекаємо на автобус."]
+    }
+  },
+  "1049": {
+    "explanation": "At B1 you use more prepositional verbs with noun or pronoun objects: look at, depend on, talk about, ask for, belong to. After the preposition you can use a noun or a pronoun (look at it).",
+    "examples": [
+      "Please look at the information sheet.",
+      "It depends on the weather."
+    ],
+    "uk": {
+      "explanation": "На рівні B1 ти вживаєш більше прийменникових дієслів з іменниками чи займенниками: look at, depend on, talk about, ask for, belong to. Після прийменника може стояти іменник або займенник (look at it).",
+      "examples": [
+        "Будь ласка, подивись на інформаційний листок.",
+        "Це залежить від погоди."
+      ]
+    }
+  },
+  "1050": {
+    "explanation": "In questions and relative clauses the preposition can move to the end and be separated from its object: What are you looking at? The film we talked about was great. This is natural and common in spoken English.",
+    "examples": ["What are you looking at?", "That is the man I spoke to."],
+    "uk": {
+      "explanation": "У питаннях і означальних підрядних реченнях прийменник може стояти в кінці, окремо від свого додатка: What are you looking at? The film we talked about was great. Це природно й часто в розмовній англійській.",
+      "examples": ["На що ти дивишся?", "Це той чоловік, з яким я розмовляв."]
+    }
+  },
+  "1051": {
+    "explanation": "You can put an adverb between a verb and its preposition: deal properly with, look carefully at, think seriously about. The adverb tells us how the action is done.",
+    "examples": [
+      "We must deal properly with this problem.",
+      "She looked carefully at the map."
+    ],
+    "uk": {
+      "explanation": "Між дієсловом і прийменником можна поставити прислівник: deal properly with, look carefully at, think seriously about. Прислівник показує, як виконується дія.",
+      "examples": [
+        "Ми маємо належно розібратися з цією проблемою.",
+        "Вона уважно подивилася на карту."
+      ]
+    }
+  },
+  "1052": {
+    "explanation": "Some reporting or thinking verbs are followed by a 'that'-clause: hope that, think that, say that, know that. The clause tells us what is hoped, thought or said.",
+    "examples": ["I hope that you will come.", "She says that she is tired."],
+    "uk": {
+      "explanation": "Деякі дієслова мовлення та думки вживаються з підрядним реченням із 'that': hope that, think that, say that, know that. Підрядне речення каже, на що сподіваються, що думають чи що кажуть.",
+      "examples": ["Сподіваюся, що ти прийдеш.", "Вона каже, що втомилася."]
+    }
+  },
+  "1053": {
+    "explanation": "After many reporting and thinking verbs, especially in informal speech, you can leave out 'that': I hope you can go. I think it is good. She said she was tired.",
+    "examples": ["I hope you can go.", "I think it is a good idea."],
+    "uk": {
+      "explanation": "Після багатьох дієслів мовлення й думки, особливо в розмові, 'that' можна опустити: I hope you can go. I think it is good. She said she was tired.",
+      "examples": ["Сподіваюся, ти зможеш піти.", "Я думаю, це гарна ідея."]
+    }
+  },
+  "1054": {
+    "explanation": "Some verbs take an indirect object (a person) and then a clause: tell someone that…, show someone that…, promise someone that… The person comes right after the verb.",
+    "examples": [
+      "I told you that she has a new car.",
+      "He showed us that it was easy."
+    ],
+    "uk": {
+      "explanation": "Деякі дієслова мають непрямий додаток (особу), а потім підрядне речення: tell someone that…, show someone that…, promise someone that… Особа стоїть одразу після дієслова.",
+      "examples": [
+        "Я казав тобі, що в неї нова машина.",
+        "Він показав нам, що це легко."
+      ]
+    }
+  },
+  "1055": {
+    "explanation": "By B1 you use more verbs with 'that'-clauses, especially mental verbs: understand, realise, believe, decide, agree. The clause after 'that' has its own subject and verb.",
+    "examples": [
+      "I understand that you want to go.",
+      "We agreed that it was too late."
+    ],
+    "uk": {
+      "explanation": "На рівні B1 ти вживаєш більше дієслів із підрядним 'that', особливо дієслів мислення: understand, realise, believe, decide, agree. Підрядне речення після 'that' має власні підмет і дієслово.",
+      "examples": [
+        "Я розумію, що ти хочеш піти.",
+        "Ми погодилися, що вже надто пізно."
+      ]
+    }
+  },
+  "1056": {
+    "explanation": "Some reporting verbs take a prepositional phrase first and then a 'that'-clause: say to someone that…, explain to someone that…, suggest to someone that… Note the word order: verb + to + person + that-clause.",
+    "examples": [
+      "You should say to your parents that you want to go.",
+      "She explained to us that it was closed."
+    ],
+    "uk": {
+      "explanation": "Деякі дієслова мовлення мають спершу прийменниковий зворот, а потім підрядне 'that': say to someone that…, explain to someone that…, suggest to someone that… Зверни увагу на порядок: дієслово + to + особа + that-речення.",
+      "examples": [
+        "Тобі варто сказати батькам, що ти хочеш поїхати.",
+        "Вона пояснила нам, що зачинено."
+      ]
+    }
+  },
+  "1057": {
+    "explanation": "A phrasal verb is a verb + particle with a special meaning. Some need no object: get up, sit down, wake up, come back. The particle stays right after the verb.",
+    "examples": ["I'm going to get up early on Saturday.", "Please sit down."],
+    "uk": {
+      "explanation": "Фразове дієслово — це дієслово + частка зі спеціальним значенням. Деяким не потрібен додаток: get up, sit down, wake up, come back. Частка стоїть одразу після дієслова.",
+      "examples": ["У суботу я збираюся рано встати.", "Будь ласка, сідайте."]
+    }
+  },
+  "1058": {
+    "explanation": "With a pronoun object, the pronoun goes between the verb and the particle: pick you up, turn it on, give them back. You cannot put the pronoun after the particle.",
+    "examples": ["I will pick you up at six.", "Turn it off, please."],
+    "uk": {
+      "explanation": "Якщо додаток — займенник, він стоїть між дієсловом і часткою: pick you up, turn it on, give them back. Займенник не можна ставити після частки.",
+      "examples": ["Я заберу тебе о шостій.", "Вимкни це, будь ласка."]
+    }
+  },
+  "1059": {
+    "explanation": "At B1 you use more phrasal verbs without an object: hang out, grow up, break down, show up, calm down. The verb and particle form one unit of meaning.",
+    "examples": [
+      "We like to hang out at the café.",
+      "The car broke down on the way."
+    ],
+    "uk": {
+      "explanation": "На рівні B1 ти вживаєш більше фразових дієслів без додатка: hang out, grow up, break down, show up, calm down. Дієслово й частка утворюють одне ціле за значенням.",
+      "examples": [
+        "Ми любимо посидіти в кав'ярні.",
+        "Машина зламалася по дорозі."
+      ]
+    }
+  },
+  "1060": {
+    "explanation": "Some phrasal verbs take a noun object after the particle: give up smoking, look after children, turn off the light. With a noun the particle can come before or after the noun for separable verbs, but before for inseparable ones.",
+    "examples": [
+      "I want to give up this class.",
+      "She looks after her little brother."
+    ],
+    "uk": {
+      "explanation": "Деякі фразові дієслова мають додаток-іменник після частки: give up smoking, look after children, turn off the light. З іменником частка у відокремлюваних дієсловах може стояти до або після додатка, а у невідокремлюваних — лише перед ним.",
+      "examples": [
+        "Я хочу кинути цей курс.",
+        "Вона доглядає за молодшим братом."
+      ]
+    }
+  },
+  "1061": {
+    "explanation": "At B1 you know more phrasal verbs that take a pronoun between the verb and particle: check it out, work it out, sort them out, put it on. Keep the pronoun in the middle.",
+    "examples": ["I wanted to check it out.", "Can you work it out?"],
+    "uk": {
+      "explanation": "На рівні B1 ти знаєш більше фразових дієслів із займенником між дієсловом і часткою: check it out, work it out, sort them out, put it on. Займенник залишається посередині.",
+      "examples": ["Я хотів це перевірити.", "Ти можеш це розібрати?"]
+    }
+  },
+  "1062": {
+    "explanation": "By B2 you use a wide range of phrasal verbs without an object: die out, take off, break up, turn up, carry on. Many have a meaning you cannot guess from the parts.",
+    "examples": ["Some species are dying out.", "The plane took off at noon."],
+    "uk": {
+      "explanation": "На рівні B2 ти вживаєш широкий спектр фразових дієслів без додатка: die out, take off, break up, turn up, carry on. Значення багатьох із них не вгадаєш за окремими частинами.",
+      "examples": ["Деякі види вимирають.", "Літак злетів опівдні."]
+    }
+  },
+  "1063": {
+    "explanation": "A wide range of phrasal verbs take a noun object after the particle: build up a picture, look up a word, set up a company. Use them to sound more natural and precise.",
+    "examples": [
+      "I can build up the whole picture in my head.",
+      "Please look up the word in a dictionary."
+    ],
+    "uk": {
+      "explanation": "Широкий спектр фразових дієслів має додаток-іменник після частки: build up a picture, look up a word, set up a company. Вони роблять мовлення природнішим і точнішим.",
+      "examples": [
+        "Я можу уявити всю картину в голові.",
+        "Будь ласка, знайди це слово в словнику."
+      ]
+    }
+  },
+  "1064": {
+    "explanation": "With a noun object, separable phrasal verbs let the noun go between the verb and particle or after the particle: take some time off / take off some time; put the light out / put out the light. A long noun phrase usually goes in the middle.",
+    "examples": ["I want to take some time off.", "She put the fire out."],
+    "uk": {
+      "explanation": "З іменником-додатком у відокремлюваних фразових дієсловах іменник може стояти між дієсловом і часткою або після частки: take some time off / take off some time; put the light out / put out the light. Довга іменникова група зазвичай стоїть посередині.",
+      "examples": ["Я хочу взяти трохи вільного часу.", "Вона загасила вогонь."]
+    }
+  },
+  "1065": {
+    "explanation": "At C1 you use a wide range of phrasal verbs with a pronoun in the middle, including less common ones: check them out, rule it out, sort it out, talk him into it. The pronoun always goes between the verb and particle.",
+    "examples": [
+      "I went to check them out last week.",
+      "We can sort it out later."
+    ],
+    "uk": {
+      "explanation": "На рівні C1 ти вживаєш широкий спектр фразових дієслів із займенником посередині, зокрема менш поширені: check them out, rule it out, sort it out, talk him into it. Займенник завжди стоїть між дієсловом і часткою.",
+      "examples": [
+        "Минулого тижня я пішов їх подивитися.",
+        "Ми можемо це вирішити пізніше."
+      ]
+    }
+  },
+  "1066": {
+    "explanation": "A main verb carries the meaning of the sentence: love, work, go, play. Regular verbs add -ed in the past; irregular verbs change form (go → went). In simple sentences the main verb is alone.",
+    "examples": ["I love your cooking.", "She works in a bank."],
+    "uk": {
+      "explanation": "Основне дієслово передає зміст речення: love, work, go, play. Правильні дієслова в минулому отримують -ed; неправильні змінюють форму (go → went). У простих реченнях основне дієслово стоїть саме.",
+      "examples": ["Я обожнюю твою кулінарію.", "Вона працює в банку."]
+    }
+  },
+  "1067": {
+    "explanation": "'Be' can be a linking verb: it connects the subject to a description or name. Forms: am, is, are (present); was, were (past). I am 22. She is a nurse.",
+    "examples": ["I am 22 years old.", "They are at home."],
+    "uk": {
+      "explanation": "'Be' може бути зв'язувальним дієсловом: воно з'єднує підмет з описом чи назвою. Форми: am, is, are (теперішній); was, were (минулий). I am 22. She is a nurse.",
+      "examples": ["Мені 22 роки.", "Вони вдома."]
+    }
+  },
+  "1068": {
+    "explanation": "'Be' is also an auxiliary verb: with an '-ing' form it makes the present continuous (I am writing). The auxiliary changes form for the subject; the main verb ends in -ing.",
+    "examples": ["I am writing a letter.", "They are playing football."],
+    "uk": {
+      "explanation": "'Be' також є допоміжним дієсловом: з формою на '-ing' воно утворює теперішній тривалий час (I am writing). Допоміжне дієслово змінюється залежно від підмета, а основне закінчується на -ing.",
+      "examples": ["Я пишу листа.", "Вони грають у футбол."]
+    }
+  },
+  "1069": {
+    "explanation": "Modal auxiliary verbs (can, will, would) are followed by the base form of a main verb, with no 'to' and no -s: I can swim. She will come. Would you like some tea?",
+    "examples": ["Can you bring some music?", "She will call you tomorrow."],
+    "uk": {
+      "explanation": "Модальні допоміжні дієслова (can, will, would) вживаються з початковою формою основного дієслова, без 'to' і без -s: I can swim. She will come. Would you like some tea?",
+      "examples": [
+        "Можеш принести якусь музику?",
+        "Вона зателефонує тобі завтра."
+      ]
+    }
+  },
+  "1070": {
+    "explanation": "'Have' and 'do' are also auxiliary verbs. 'Have' makes perfect tenses (I have seen it); 'do' makes questions and negatives in the present and past simple (Do you like it? I didn't go).",
+    "examples": ["It has been a long time.", "I don't know the answer."],
+    "uk": {
+      "explanation": "'Have' і 'do' також є допоміжними дієсловами. 'Have' утворює перфектні часи (I have seen it); 'do' — питання й заперечення в Present і Past Simple (Do you like it? I didn't go).",
+      "examples": ["Минуло багато часу.", "Я не знаю відповіді."]
+    }
+  },
+  "1071": {
+    "explanation": "Linking verbs such as 'look', 'feel', 'seem', 'sound' and 'smell' connect the subject to an adjective, not an adverb: She looks happy. It smells good. The music sounds great.",
+    "examples": ["The room looks bigger.", "This soup smells good."],
+    "uk": {
+      "explanation": "Зв'язувальні дієслова, як-от 'look', 'feel', 'seem', 'sound' і 'smell', з'єднують підмет із прикметником, а не з прислівником: She looks happy. It smells good. The music sounds great.",
+      "examples": ["Кімната здається більшою.", "Цей суп гарно пахне."]
+    }
+  },
+  "1072": {
+    "explanation": "You use more modals with time: should, could, must, may, might. They show advice, ability, obligation or possibility. The verb after a modal is always in the base form.",
+    "examples": ["We should go somewhere else.", "You must wear a seat belt."],
+    "uk": {
+      "explanation": "З часом ти вживаєш більше модальних: should, could, must, may, might. Вони виражають пораду, здатність, обов'язок чи можливість. Дієслово після модального завжди в початковій формі.",
+      "examples": [
+        "Нам варто піти кудись ще.",
+        "Ти маєш пристебнути ремінь безпеки."
+      ]
+    }
+  },
+  "1073": {
+    "explanation": "'Have to' and 'have got to' show that something is necessary. They behave like main verbs: I have to work. She has to go. Do you have to leave? The 'got' form is more informal.",
+    "examples": ["You've got to bring some paper.", "I have to get up early."],
+    "uk": {
+      "explanation": "'Have to' і 'have got to' показують, що щось необхідне. Вони поводяться як основні дієслова: I have to work. She has to go. Do you have to leave? Форма з 'got' менш формальна.",
+      "examples": ["Тобі треба принести папір.", "Мені треба рано вставати."]
+    }
+  },
+  "1074": {
+    "explanation": "'Used to' talks about past habits and states that are no longer true: We used to play together. 'Ought to' gives advice, like 'should': You ought to rest.",
+    "examples": [
+      "We used to play together every day.",
+      "You ought to see a doctor."
+    ],
+    "uk": {
+      "explanation": "'Used to' розповідає про минулі звички й стани, які вже неактуальні: We used to play together. 'Ought to' дає пораду, як і 'should': You ought to rest.",
+      "examples": ["Ми щодня гралися разом.", "Тобі варто піти до лікаря."]
+    }
+  },
+  "1075": {
+    "explanation": "'Dare' and 'need' can act like modals: they are followed by the base form without 'to', and they form negatives and questions without 'do': You needn't worry. Dare you say it?",
+    "examples": ["You needn't worry about it.", "I daren't tell him."],
+    "uk": {
+      "explanation": "'Dare' і 'need' можуть поводитися як модальні: після них стоїть початкова форма без 'to', а заперечення й питання утворюються без 'do': You needn't worry. Dare you say it?",
+      "examples": [
+        "Тобі не варто хвилюватися через це.",
+        "Я не смію йому сказати."
+      ]
+    }
+  },
   "1081": {
     "explanation": "Use would love + to-infinitive to say you really want to do something. It is stronger than would like. In speaking, would is usually short: I'd love to…",
     "examples": [
@@ -7692,6 +8478,107 @@
         "Нам було б дуже шкода, якби вся ця робота пропала марно.",
         "Мені б дуже не хотілося втратити старі фото.",
         "Мені було б прикро думати, що ти нещаслива."
+      ]
+    }
+  },
+  "1095": {
+    "explanation": "Use 'there is' + a singular noun to say that something exists or is present: There is a garden. There is a bus stop near here.",
+    "examples": ["There is a nice garden.", "There is a bus stop near here."],
+    "uk": {
+      "explanation": "Вживай 'there is' + іменник в однині, щоб сказати, що щось існує або є: There is a garden. There is a bus stop near here.",
+      "examples": ["Є гарний сад.", "Поруч є автобусна зупинка."]
+    }
+  },
+  "1096": {
+    "explanation": "Use 'there are' + a plural noun: There are two bathrooms. There are many people here.",
+    "examples": [
+      "There are two bathrooms.",
+      "There are five students in the room."
+    ],
+    "uk": {
+      "explanation": "Вживай 'there are' + іменник у множині: There are two bathrooms. There are many people here.",
+      "examples": ["Є дві ванні кімнати.", "У кімнаті п'ятеро студентів."]
+    }
+  },
+  "1097": {
+    "explanation": "With uncountable nouns use 'there is', never 'there are': There is some money in my bag. There is no time. There is water in the bottle.",
+    "examples": [
+      "There is some money in it.",
+      "There is some milk in the fridge."
+    ],
+    "uk": {
+      "explanation": "З незлічуваними іменниками вживай 'there is', а не 'there are': There is some money in my bag. There is no time. There is water in the bottle.",
+      "examples": ["У ньому є трохи грошей.", "У холодильнику є трохи молока."]
+    }
+  },
+  "1098": {
+    "explanation": "'A lot of' works with both 'there is' and 'there are'. The verb matches the noun after it: There are a lot of people (plural). There is a lot of noise (uncountable).",
+    "examples": [
+      "There are a lot of people there.",
+      "There is a lot of traffic today."
+    ],
+    "uk": {
+      "explanation": "'A lot of' вживається і з 'there is', і з 'there are'. Дієслово узгоджується з іменником після нього: There are a lot of people (множина). There is a lot of noise (незлічуваний).",
+      "examples": ["Там багато людей.", "Сьогодні дуже завантажений рух."]
+    }
+  },
+  "1099": {
+    "explanation": "Make a negative with 'There isn't' or 'There aren't', often with 'any': There isn't any noise. There aren't any chairs. It works with countable and uncountable nouns.",
+    "examples": ["There isn't any noise.", "There aren't any seats left."],
+    "uk": {
+      "explanation": "Заперечення утворюється з 'There isn't' або 'There aren't', часто з 'any': There isn't any noise. There aren't any chairs. Це працює з лічильними й незлічуваними іменниками.",
+      "examples": ["Шуму немає.", "Вільних місць не залишилося."]
+    }
+  },
+  "1100": {
+    "explanation": "You can use 'there' with a modal + 'be': There will be, There can be, There might be, There should be. The modal comes after 'there', and 'be' stays in its base form.",
+    "examples": [
+      "There will be flying cars in the future.",
+      "There might be some rain later."
+    ],
+    "uk": {
+      "explanation": "Можна вживати 'there' із модальним + 'be': There will be, There can be, There might be, There should be. Модальне стоїть після 'there', а 'be' лишається в початковій формі.",
+      "examples": [
+        "У майбутньому будуть літаючі машини.",
+        "Пізніше, можливо, буде дощ."
+      ]
+    }
+  },
+  "1101": {
+    "explanation": "Other verbs with a modal meaning can follow 'there' too: There has to be…, There used to be…, There seems to be…, There must be… They say something is necessary, past or probable.",
+    "examples": [
+      "There had to be matches somewhere.",
+      "There used to be a shop here."
+    ],
+    "uk": {
+      "explanation": "Після 'there' можуть стояти й інші дієслова з модальним значенням: There has to be…, There used to be…, There seems to be…, There must be… Вони кажуть, що щось необхідне, минуле чи ймовірне.",
+      "examples": ["Десь мали бути сірники.", "Раніше тут був магазин."]
+    }
+  },
+  "1102": {
+    "explanation": "'Be' is the most common linking verb. After it we put a complement — a noun, an adjective or a place: Today is my birthday. She is happy. We are at home.",
+    "examples": ["Today is my birthday.", "The soup is hot."],
+    "uk": {
+      "explanation": "'Be' — найпоширеніше зв'язувальне дієслово. Після нього стоїть іменна частина: іменник, прикметник або місце: Today is my birthday. She is happy. We are at home.",
+      "examples": ["Сьогодні мій день народження.", "Суп гарячий."]
+    }
+  },
+  "1103": {
+    "explanation": "More linking verbs join a subject to a complement: look, feel, seem, sound, become, get. It looks good on you. She feels ill. The idea sounds great.",
+    "examples": ["It looks good on you.", "You seem happy today."],
+    "uk": {
+      "explanation": "Більше зв'язувальних дієслів з'єднують підмет із іменною частиною: look, feel, seem, sound, become, get. It looks good on you. She feels ill. The idea sounds great.",
+      "examples": ["Це тобі личить.", "Ти сьогодні здаєшся щасливим."]
+    }
+  },
+  "1104": {
+    "explanation": "At B2 you use a wide range of linking verbs, including remain, appear, prove, turn out and grow: The plan proved difficult. It turned out well. She remained calm.",
+    "examples": ["It all seems very confusing.", "The plan proved difficult."],
+    "uk": {
+      "explanation": "На рівні B2 ти вживаєш широкий спектр зв'язувальних дієслів, зокрема remain, appear, prove, turn out і grow: The plan proved difficult. It turned out well. She remained calm.",
+      "examples": [
+        "Усе це здається дуже заплутаним.",
+        "План виявився складним."
       ]
     }
   },
