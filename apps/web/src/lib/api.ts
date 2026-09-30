@@ -1,7 +1,7 @@
 // SSR-side calls to the Nest API. Astro pages run this on the server, so the
 // browser never talks to Nest directly — it goes through the reverse proxy
 // (prod) or the Vite `/api` proxy (dev). Here we hit Nest at its own origin
-// and forward the visitor's session cookie.
+// and forward the visitor's session cookie and client IP.
 //
 // Nest serves the whole API under a `/api` global prefix (`configureApp` in the
 // backend); callers here pass the bare resource path (`/content/posts`, `/auth/me`, …)
@@ -38,6 +38,11 @@ async function call(
   const cookie = request?.headers.get('cookie');
   if (cookie) {
     merged.set('cookie', cookie);
+  }
+  // Nest rate-limits by client IP; without this it only ever sees apps-web's own address.
+  const clientIp = request?.headers.get('cf-connecting-ip');
+  if (clientIp) {
+    merged.set('cf-connecting-ip', clientIp);
   }
   return fetch(new URL(`/api${path}`, API_ORIGIN), {
     ...init,

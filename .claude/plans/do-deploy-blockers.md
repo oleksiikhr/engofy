@@ -12,7 +12,7 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Реальний IP клієнта за Cloudflare
+### [x] 1. Реальний IP клієнта за Cloudflare
 - Branch: `do-deploy-blockers`
 - Base: `main`
 - PR: —

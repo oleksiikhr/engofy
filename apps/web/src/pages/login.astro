@@ -35,7 +35,7 @@ if (Astro.request.method === 'POST') {
 
   if (action === 'request-code') {
     try {
-      await apiPost('/auth/login', { email });
+      await apiPost('/auth/login', { email }, { request: Astro.request });
       step = 'code';
       notice = `We sent a 6-digit code to ${email}.`;
     } catch {
@@ -47,7 +47,11 @@ if (Astro.request.method === 'POST') {
       .getAll('digit')
       .map((d) => String(d).trim())
       .join('');
-    const res = await apiPostRaw('/auth/login/verify-code', { email, code });
+    const res = await apiPostRaw(
+      '/auth/login/verify-code',
+      { email, code },
+      { request: Astro.request },
+    );
     if (res.ok) {
       const headers = new Headers({ location: '/' });
       for (const cookie of res.headers.getSetCookie()) {
@@ -59,7 +63,11 @@ if (Astro.request.method === 'POST') {
     error = 'That code did not match. Request a new one and try again.';
   } else if (action === 'google') {
     const credential = String(form.get('credential') ?? '');
-    const res = await apiPostRaw('/auth/google', { credential });
+    const res = await apiPostRaw(
+      '/auth/google',
+      { credential },
+      { request: Astro.request },
+    );
     if (res.ok) {
       const headers = new Headers({ location: '/' });
       for (const cookie of res.headers.getSetCookie()) {
