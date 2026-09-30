@@ -40,7 +40,7 @@ status: in-progress
 
 Рішення по Redis (Valkey чи внутрішній сервіс), реєстру (DOCR чи GHCR), CPU для `nlp`/`worker` і `max_connections` у `docs/hosting-direction.md`. Вибір Redis і реєстру — питання розробнику, не припущення. Залежить від 3.
 
-### [ ] 5. Перевірка рідера v2 вживу
+### [x] 5. Перевірка рідера v2 вживу
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
