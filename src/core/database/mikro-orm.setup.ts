@@ -4,6 +4,7 @@ import { Migrator } from '@mikro-orm/migrations';
 import { defineConfig } from '@mikro-orm/postgresql';
 import { Environment, getEnvironment } from '../enums/environment.enum.js';
 import { envNumber } from '../helpers/env.helper.js';
+import { tlsOptions } from '../helpers/ssl.helper.js';
 
 const env = getEnvironment();
 let debug: boolean | LoggerNamespace[];
@@ -51,5 +52,6 @@ export default defineConfig({
     // interprets in the session TimeZone — anything other than UTC silently
     // shifts the stored instant. Don't rely on the server/image default.
     options: '-c timezone=UTC',
+    ssl: tlsOptions('DB'),
   },
 });

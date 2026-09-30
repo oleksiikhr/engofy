@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import pg from 'pg';
+import { tlsOptions } from '../helpers/ssl.helper.js';
 import QueueConfig from './config/queue.config.js';
 
 // Session-level Postgres advisory lock on its own connection: the lock belongs
@@ -22,6 +23,7 @@ export class AdvisoryLockService {
       database: this.config.database,
       user: this.config.user,
       password: this.config.password,
+      ssl: tlsOptions('DB'),
     });
 
     await client.connect();

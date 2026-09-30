@@ -40,9 +40,16 @@ Session-level Postgres advisory lock (`AdvisoryLockService`, окреме `pg`-�
 
 `boss.stop()` з graceful і таймаутом з env (`QUEUE_SHUTDOWN_TIMEOUT_MS`, дефолт ≥120 с), щоб AI-стадія (~2 хв) доробила. Тест на lifecycle.
 
-### [ ] 5. Env для App Platform і docs/deploy.md
+### [x] 5. TLS до керованих Postgres і Valkey
 - Branch: `do-deploy-blockers`
 - Base: `main`
 - PR: —
 
-Переписати `.env.production.example` під змінні App Platform (прибрати swarm/Docker secrets), описати app spec (PRE_DEPLOY міграція, `grace_period_seconds=120`, cron = 1 інстанс, значення зі зрізів 1–4), написати `docs/deploy.md`, прибрати закриті пункти з `docs/hosting-direction.md`. Залежить від 1–4.
+Додано під час виконання: керовані Postgres і Valkey на DigitalOcean вимагають TLS, а код його не підтримував. `DB_SSL`/`DB_SSL_CA` (MikroORM, pg-boss, advisory lock) і `REDIS_SSL`/`REDIS_SSL_CA`; за замовчуванням вимкнено.
+
+### [ ] 6. Env для App Platform і docs/deploy.md
+- Branch: `do-deploy-blockers`
+- Base: `main`
+- PR: —
+
+Переписати `.env.production.example` під змінні App Platform (прибрати swarm/Docker secrets), описати app spec (PRE_DEPLOY міграція, `grace_period_seconds=120`, cron = 1 інстанс, значення зі зрізів 1–4), написати `docs/deploy.md`, прибрати закриті пункти з `docs/hosting-direction.md`. Залежить від 1–5.

@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { envNumber, envString } from '../helpers/env.helper.js';
+import { tlsOptions } from '../helpers/ssl.helper.js';
 
 export default registerAs('redis', () => ({
   host: envString('REDIS_HOST', '127.0.0.1'),
@@ -9,4 +10,5 @@ export default registerAs('redis', () => ({
   // index so the integration suite can `FLUSHDB` between tests without
   // touching anything real (T6).
   db: envNumber('REDIS_DB', 0),
+  tls: tlsOptions('REDIS'),
 }));
