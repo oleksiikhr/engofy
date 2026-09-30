@@ -62,7 +62,8 @@ export class AccountDeletionService {
   toView(request: AccountDeletionRequest): AccountDeletionView {
     return {
       requestedAt: request.requestedAt,
-      scheduledFor: request.requestedAt.plus({
+      // UTC so the grace period is exactly N*24h, not shifted by a local DST change.
+      scheduledFor: request.requestedAt.toUTC().plus({
         days: this.config.accountDeletionGraceDays,
       }),
     };

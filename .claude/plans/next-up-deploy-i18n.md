@@ -12,7 +12,7 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Виправити часові флейки
+### [x] 1. Виправити часові флейки
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
