@@ -1007,6 +1007,15 @@ async function main(): Promise<void> {
     debug: false,
   });
   try {
+    // The seed wipes and inserts fixture rows (`e2e-*` grammar constructions,
+    // a usage point on a real construction); on the shared dev DB they leak
+    // into /grammar, the sitemap and real pages.
+    const dbName = orm.config.get('dbName');
+    if (!dbName?.includes('e2e')) {
+      throw new Error(
+        `refusing to seed database "${dbName}": only an e2e database (name containing "e2e") may hold fixtures`,
+      );
+    }
     await wipe(orm);
     await seed(orm);
     // eslint-disable-next-line no-console
