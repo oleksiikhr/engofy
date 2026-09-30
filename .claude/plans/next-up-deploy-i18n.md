@@ -47,9 +47,37 @@ status: in-progress
 
 Запустити застосунок, пройти рідер «Editorial & Margin Notes» (Playwright, скриншоти), зафіксувати проблеми щільності анотацій і виправити очевидне; сумнівне — питання розробнику.
 
-### [ ] 6. i18n: дизайн другої мови (дослідницький)
+### [x] 6. i18n: дизайн другої мови (дослідницький)
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
 
 Вирішити, де живе рідна мова (cookie/акаунт), як зберігаються переклади для `grammar-usage-point`, `word-definition`, `phrase`, як додається мова й що з UI-рядками. Результат — нові зрізи за Step 3b `task`, а не код.
+
+### [ ] 7. Рідна мова: зберігання та визначення (бекенд)
+- Branch: `next-up-deploy-i18n`
+- Base: `main`
+- PR: —
+
+Колонка `users.native_lang` (default `uk`) + міграція; `PATCH /profile/native-lang`; `/auth/me` повертає `nativeLang`. Резолвер мови запиту: акаунт, інакше cookie `native-lang`, інакше `uk`. При логіні cookie гостя переноситься в акаунт, якщо там значення ще немає.
+
+### [ ] 8. API віддає лише резолвлену мову
+- Branch: `next-up-deploy-i18n`
+- Base: `main`
+- PR: —
+
+`lexicon-view`, post-detail, деталі слова/фрази та grammar-construction повертають плоский `translation` / `explanation` для резолвленої мови; прибрати DTO `Record<ContentLanguage, …>`. Кеш і ETag залежать від мови (Vary). Оновити тести. Залежить від 7.
+
+### [ ] 9. apps/web: динамічна рідна мова
+- Branch: `next-up-deploy-i18n`
+- Base: `main`
+- PR: —
+
+`nativeLang()` і `NATIVE_LANG_LABEL` беруться з `/auth/me` або cookie на сервері; прибрати літерал `TranslationLang = 'uk'`. Вибір мови на сторінці профілю та для гостя (пише cookie). e2e-перевірка «does not shift when scripts run» для підпису перемикача. Залежить від 8.
+
+### [ ] 10. Seed і backfill по мовах
+- Branch: `next-up-deploy-i18n`
+- Base: `main`
+- PR: —
+
+Імпорт-CLI читають `translations: { <lang>: … }` із seed-файлів замість `entry.uk`; `ENRICHMENT_LANGUAGES` — єдиний список мов для збагачення; backfill-CLI приймає `--lang`. Короткий файл у `docs/` з чеклистом додавання мови: член enum, `CONTENT_LANGUAGE_INFO`, підпис, backfill. Незалежний від 7–9.
