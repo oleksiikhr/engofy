@@ -163,14 +163,20 @@ export class PostService {
     await this.em.flush();
   }
 
-  async enrichLexicon(postId: string): Promise<void> {
-    await this.commandBus.execute(new EnrichLexiconCommand(postId));
+  async enrichLexicon(
+    postId: string,
+    languages?: readonly ContentLanguage[],
+  ): Promise<void> {
+    await this.commandBus.execute(new EnrichLexiconCommand(postId, languages));
 
     await this.em.flush();
   }
 
-  async enrichGrammar(postId: string): Promise<void> {
-    await this.commandBus.execute(new EnrichGrammarCommand(postId));
+  async enrichGrammar(
+    postId: string,
+    languages?: readonly ContentLanguage[],
+  ): Promise<void> {
+    await this.commandBus.execute(new EnrichGrammarCommand(postId, languages));
 
     await this.em.flush();
   }

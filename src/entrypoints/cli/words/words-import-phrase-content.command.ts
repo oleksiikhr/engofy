@@ -6,7 +6,6 @@ import { SubCommand } from 'nest-commander';
 import { parsePhraseContentSeedFile } from '../../../modules/post/domain/lexicon-content-seed.js';
 import { upsertPhraseId } from '../../../modules/post/domain/upsert-phrase-id.js';
 import { Phrase } from '../../../modules/post/entities/phrase.entity.js';
-import { ContentLanguage } from '../../../modules/post/enums/content-language.enum.js';
 import { CliCommandRunner } from '../cli-command.runner.js';
 
 const ASSET_PATH = join(process.cwd(), 'assets', 'phrase-content.json');
@@ -41,7 +40,7 @@ export class WordsImportPhraseContentCommand extends CliCommandRunner {
       phrase.cefrLevel = entry.cefrLevel;
       phrase.translations = {
         ...phrase.translations,
-        [ContentLanguage.Uk]: { translation: entry.uk.translation },
+        ...entry.translations,
       };
     }
 

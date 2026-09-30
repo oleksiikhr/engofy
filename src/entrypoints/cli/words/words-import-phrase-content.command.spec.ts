@@ -17,7 +17,7 @@ const entry = {
   definition: 'To stop trying.',
   example: 'Never give up.',
   cefrLevel: 'B1',
-  uk: { translation: 'здаватися' },
+  translations: { uk: { translation: 'здаватися' } },
 };
 
 describe('WordsImportPhraseContentCommand', () => {

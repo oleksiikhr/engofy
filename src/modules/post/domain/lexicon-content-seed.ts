@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CefrLevel } from '../enums/cefr-level.enum.js';
+import { ContentLanguage } from '../enums/content-language.enum.js';
 import { PartOfSpeech } from '../enums/part-of-speech.enum.js';
 import { PhraseType } from '../enums/phrase-type.enum.js';
 
@@ -15,7 +16,10 @@ export const LexiconContentEntrySchema = z.object({
   definition: text,
   example: text,
   cefrLevel: z.enum(CefrLevel),
-  uk: z.object({ translation: text }),
+  // Keyed by ContentLanguage; at least one language.
+  translations: z
+    .partialRecord(z.enum(ContentLanguage), z.object({ translation: text }))
+    .refine((t) => Object.keys(t).length > 0, 'must translate into a language'),
 });
 
 export type LexiconContentEntry = z.infer<typeof LexiconContentEntrySchema>;

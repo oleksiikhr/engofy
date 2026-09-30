@@ -6,14 +6,13 @@ import { SubCommand } from 'nest-commander';
 import { parseLexiconContentSeedFile } from '../../../modules/post/domain/lexicon-content-seed.js';
 import { upsertWordDefinition } from '../../../modules/post/domain/upsert-word-definition.js';
 import { WordDefinition } from '../../../modules/post/entities/word-definition.entity.js';
-import { ContentLanguage } from '../../../modules/post/enums/content-language.enum.js';
 import type { PartOfSpeech } from '../../../modules/post/enums/part-of-speech.enum.js';
 import { CliCommandRunner } from '../cli-command.runner.js';
 
 const ASSET_PATH = join(process.cwd(), 'assets', 'lexicon-content.json');
 
-// Loads hand-written dictionary entries (definition, example, CEFR level, uk
-// translation) from assets/lexicon-content.json (format documented in
+// Loads hand-written dictionary entries (definition, example, CEFR level,
+// translations) from assets/lexicon-content.json (format documented in
 // assets/README.md; content is written in a separate session, no AI call
 // here) — the words of the handcrafted grammar pages. The Word /
 // WordDefinition is created when missing; the seed is authoritative, so
@@ -54,7 +53,7 @@ export class WordsImportLexiconContentCommand extends CliCommandRunner {
         definition.cefrLevel = entry.cefrLevel;
         definition.translations = {
           ...definition.translations,
-          [ContentLanguage.Uk]: { translation: entry.uk.translation },
+          ...entry.translations,
         };
         imported++;
       }

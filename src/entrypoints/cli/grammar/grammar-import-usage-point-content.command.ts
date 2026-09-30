@@ -4,7 +4,6 @@ import { Logger } from '@nestjs/common';
 import { SubCommand } from 'nest-commander';
 import { parseUsagePointContentSeedFile } from '../../../modules/post/domain/usage-point-content-seed.js';
 import { GrammarUsagePoint } from '../../../modules/post/entities/grammar-usage-point.entity.js';
-import { ContentLanguage } from '../../../modules/post/enums/content-language.enum.js';
 import { CliCommandRunner } from '../cli-command.runner.js';
 
 const ASSET_PATH = join(
@@ -13,7 +12,7 @@ const ASSET_PATH = join(
   'grammar-usage-point-content.json',
 );
 
-// Loads hand-written learner content (explanation, examples, uk translation)
+// Loads hand-written learner content (explanation, examples, per-language translations)
 // from assets/grammar-usage-point-content.json (format documented in
 // assets/README.md; content is written in a separate session, no AI call
 // here). The seed is authoritative: every usage point it lists is
@@ -56,10 +55,7 @@ export class GrammarImportUsagePointContentCommand extends CliCommandRunner {
       usagePoint.learnerExamples = content.examples;
       usagePoint.translations = {
         ...usagePoint.translations,
-        [ContentLanguage.Uk]: {
-          explanation: content.uk.explanation,
-          examples: content.uk.examples,
-        },
+        ...content.translations,
       };
     }
 

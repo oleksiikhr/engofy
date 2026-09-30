@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ContentLanguage } from '../enums/content-language.enum.js';
 
 // Seed format for hand-written usage-point learner content (assets/grammar-
 // -usage-point-content.json, see assets/README.md): egpIndex -> the same
@@ -8,16 +9,34 @@ import { z } from 'zod';
 
 const text = z.string().trim().min(1);
 
+const UsagePointTranslationSchema = z.object({
+  explanation: text,
+  examples: z.array(text),
+});
+
 export const UsagePointContentSeedSchema = z
   .object({
     explanation: text,
     examples: z.array(text).min(2).max(3),
-    // `examples` translates `examples` one to one, in the same order.
-    uk: z.object({ explanation: text, examples: z.array(text) }),
+    // Keyed by ContentLanguage; at least one. Each language's `examples`
+    // translates `examples` one to one, in the same order.
+    translations: z
+      .partialRecord(z.enum(ContentLanguage), UsagePointTranslationSchema)
+      .refine(
+        (t) => Object.keys(t).length > 0,
+        'must translate into a language',
+      ),
   })
-  .refine((seed) => seed.uk.examples.length === seed.examples.length, {
-    path: ['uk', 'examples'],
-    message: 'must translate every example, in order',
+  .superRefine((seed, ctx) => {
+    for (const [lang, translation] of Object.entries(seed.translations)) {
+      if (translation.examples.length !== seed.examples.length) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['translations', lang, 'examples'],
+          message: 'must translate every example, in order',
+        });
+      }
+    }
   });
 
 export type UsagePointContentSeed = z.infer<typeof UsagePointContentSeedSchema>;

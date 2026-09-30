@@ -82,13 +82,13 @@ export class EnrichLexiconHandler
   ) {}
 
   async execute(command: EnrichLexiconCommand): Promise<void> {
-    const { postId } = command;
+    const { postId, languages } = command;
 
     const existingRun = await this.em.findOne(PostPipelineRun, {
       postId,
       stage: PostPipelineStage.Enrichment,
     });
-    if (existingRun?.status === PostPipelineRunStatus.Completed) {
+    if (!languages && existingRun?.status === PostPipelineRunStatus.Completed) {
       return;
     }
 
@@ -104,7 +104,7 @@ export class EnrichLexiconHandler
     // the whole job's unit of work is never flushed on throw (JobWorkerHost
     // just forks a scoped EM, it opens no DB transaction of its own) and a
     // retry would re-pay for every language that already succeeded.
-    for (const language of ENRICHMENT_LANGUAGES) {
+    for (const language of languages ?? ENRICHMENT_LANGUAGES) {
       // biome-ignore lint/performance/noAwaitInLoops: languages are enriched one after another, each flushed before the next starts.
       await this.enrichLanguage(postId, language, wordDefinitionIds, phraseIds);
       await this.em.flush();
