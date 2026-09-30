@@ -23,7 +23,8 @@ export class Word {
   lemma!: string;
 
   // 1-based frequency rank from wordfreq (1 = most common); null until the
-  // frequency import CLI runs (PLAN.md §3.3, Slice 1).
+  // the pipeline first meets the lemma or the frequency import CLI runs
+  // (PLAN.md §3.3, Slice 1). Lemmas missing from the list stay null.
   @Property({ type: 'integer', nullable: true })
   frequencyRank?: number | null;
 
