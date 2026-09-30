@@ -68,7 +68,7 @@ status: in-progress
 
 `lexicon-view`, post-detail, деталі слова/фрази та grammar-construction повертають плоский `translation` / `explanation` для резолвленої мови; прибрати DTO `Record<ContentLanguage, …>`. Кеш і ETag залежать від мови (Vary). Оновити тести. Залежить від 7.
 
-### [ ] 9. apps/web: динамічна рідна мова
+### [x] 9. apps/web: динамічна рідна мова
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
