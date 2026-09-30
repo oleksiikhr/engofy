@@ -372,6 +372,31 @@ async function seed(orm: MikroORM): Promise<void> {
       answer: 'had drawn',
     },
   });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.MultipleChoice,
+    payload: {
+      prompt: 'When we got there, the film ____ already started.',
+      options: ['has', 'had', 'was'],
+      answerIndex: 1,
+    },
+  });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.Reorder,
+    payload: {
+      scrambled: ['had', 'left', 'She', 'already'],
+      answer: [1, 3, 0, 2],
+    },
+  });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.FindError,
+    payload: {
+      prompt: 'He had went home before I called.',
+      correction: 'gone',
+    },
+  });
   const presentSimple = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'present simple',
@@ -982,6 +1007,15 @@ async function main(): Promise<void> {
     debug: false,
   });
   try {
+    // The seed wipes and inserts fixture rows (`e2e-*` grammar constructions,
+    // a usage point on a real construction); on the shared dev DB they leak
+    // into /grammar, the sitemap and real pages.
+    const dbName = orm.config.get('dbName');
+    if (!dbName?.includes('e2e')) {
+      throw new Error(
+        `refusing to seed database "${dbName}": only an e2e database (name containing "e2e") may hold fixtures`,
+      );
+    }
     await wipe(orm);
     await seed(orm);
     // eslint-disable-next-line no-console

@@ -8,6 +8,7 @@ import {
   type EgpRecord,
   grammarConstructionSlug,
   parseEgpRecords,
+  usagePointRecords,
 } from './egp.js';
 
 const rec = (over: Partial<EgpRecord> = {}): EgpRecord => ({
@@ -29,6 +30,37 @@ describe('classifyEgpRecord', () => {
     ['General comment', 'form'],
   ])('classifies %j as %s', (guideword, expected) => {
     expect(classifyEgpRecord(rec({ guideword }))).toBe(expected);
+  });
+});
+
+describe('usagePointRecords', () => {
+  const form = (over: Partial<EgpRecord> = {}) =>
+    rec({ guideword: 'FORM: PLURAL', ...over });
+
+  it('keeps only the USE records of a construction that has some', () => {
+    const use = rec({ index: 1 });
+    const records = [form({ index: 2 }), use];
+
+    expect(usagePointRecords(records)).toEqual([use]);
+  });
+
+  it('promotes the FORM records of a construction with no USE record', () => {
+    const records = [
+      form({ index: 1, subcategory: 'plural' }),
+      form({ index: 2, subcategory: 'plural' }),
+      rec({ index: 3 }),
+    ];
+
+    expect(usagePointRecords(records).map((r) => r.index)).toEqual([1, 2, 3]);
+  });
+
+  it('drops a promoted FORM record without a can-do statement', () => {
+    const records = [
+      form({ index: 1, subcategory: 'plural', can_do: '' }),
+      form({ index: 2, subcategory: 'plural' }),
+    ];
+
+    expect(usagePointRecords(records).map((r) => r.index)).toEqual([2]);
   });
 });
 
@@ -130,5 +162,6 @@ describe('parseEgpRecords', () => {
     expect(parsed.filter((r) => classifyEgpRecord(r) === 'use')).toHaveLength(
       574,
     );
+    expect(usagePointRecords(parsed)).toHaveLength(661);
   });
 });

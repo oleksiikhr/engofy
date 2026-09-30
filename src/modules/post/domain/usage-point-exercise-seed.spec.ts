@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ExerciseType } from '../enums/exercise-type.enum.js';
-import { classifyEgpRecord, parseEgpRecords } from './egp.js';
+import { parseEgpRecords, usagePointRecords } from './egp.js';
 import { parseUsagePointExerciseSeedFile } from './usage-point-exercise-seed.js';
 
 const BLANK_RE = /exactly one blank/;
@@ -127,12 +127,13 @@ describe('assets/grammar-usage-point-exercises.json', () => {
         ),
       ),
     );
-    const useIndexes = parseEgpRecords(
-      JSON.parse(
-        await readFile(join(process.cwd(), 'assets', 'egp.json'), 'utf8'),
+    const useIndexes = usagePointRecords(
+      parseEgpRecords(
+        JSON.parse(
+          await readFile(join(process.cwd(), 'assets', 'egp.json'), 'utf8'),
+        ),
       ),
     )
-      .filter((record) => classifyEgpRecord(record) === 'use')
       .map((record) => String(record.index))
       .sort();
 

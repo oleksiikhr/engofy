@@ -11,6 +11,10 @@
 // highlights, so the colour means the same thing in both places. That markup
 // lands in the parent page's astro scope, not this component's, so it's
 // styled by a global rule below rather than a scoped one.
+//
+// A mark that is a part of speech also carries `data-pos="noun|verb|adj|adv|function"`:
+// it drops the role wash and takes the reader's `--pos-*` ink + underline instead. Marks
+// without `data-pos` keep the neutral role wash.
 interface Props {
   note?: string;
 }
@@ -54,5 +58,35 @@ const { note } = Astro.props;
   }
   .gp-example mark[data-role='grammar'] {
     background: var(--color-gram);
+  }
+  .gp-example mark[data-pos] {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: var(--pos-tone-ink);
+    border-bottom: 2px solid var(--pos-tone);
+  }
+  .gp-example mark[data-pos='function'] {
+    border-bottom-style: dotted;
+  }
+  .gp-example mark[data-pos='noun'] {
+    --pos-tone: var(--pos-noun);
+    --pos-tone-ink: var(--pos-noun-ink);
+  }
+  .gp-example mark[data-pos='verb'] {
+    --pos-tone: var(--pos-verb);
+    --pos-tone-ink: var(--pos-verb-ink);
+  }
+  .gp-example mark[data-pos='adj'] {
+    --pos-tone: var(--pos-adj);
+    --pos-tone-ink: var(--pos-adj-ink);
+  }
+  .gp-example mark[data-pos='adv'] {
+    --pos-tone: var(--pos-adv);
+    --pos-tone-ink: var(--pos-adv-ink);
+  }
+  .gp-example mark[data-pos='function'] {
+    --pos-tone: var(--pos-function);
+    --pos-tone-ink: var(--pos-function-ink);
   }
 </style>

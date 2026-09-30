@@ -23,9 +23,16 @@ export function lexBlockHash(text: string): string {
 export const LEX_ROOT_START = '<!--lex-root-->';
 export const LEX_ROOT_END = '<!--/lex-root-->';
 
+// A block's text and the half-open char ranges of it inside a `<mark>` — the
+// page's target words, which the backend links whatever their part of speech.
+export interface LexBlockTargets {
+  text: string;
+  targets: { start: number; end: number }[];
+}
+
 // The text blocks of a rendered handcrafted page — empty for a page without
 // the markers (the generic fallback page).
-export function extractPageLexBlocks(pageHtml: string): string[] {
+export function extractPageLexBlocks(pageHtml: string): LexBlockTargets[] {
   const start = pageHtml.indexOf(LEX_ROOT_START);
   const end = pageHtml.indexOf(LEX_ROOT_END, start);
   return start === -1 || end === -1
@@ -117,6 +124,8 @@ interface Char {
   // Raw offsets of this character within its piece (an entity spans several).
   rawStart: number;
   rawEnd: number;
+  // Inside a `<mark>`.
+  target: boolean;
 }
 
 interface Block {
@@ -125,12 +134,18 @@ interface Block {
   chars: Char[];
 }
 
-function decode(raw: string, piece: number): Char[] {
+function decode(raw: string, piece: number, target: boolean): Char[] {
   const out: Char[] = [];
   let last = 0;
   const push = (from: number, to: number) => {
     for (let i = from; i < to; i++) {
-      out.push({ ch: raw[i] as string, piece, rawStart: i, rawEnd: i + 1 });
+      out.push({
+        ch: raw[i] as string,
+        piece,
+        rawStart: i,
+        rawEnd: i + 1,
+        target,
+      });
     }
   };
   for (const match of raw.matchAll(ENTITY_RE)) {
@@ -150,6 +165,7 @@ function decode(raw: string, piece: number): Char[] {
       piece,
       rawStart: at,
       rawEnd: at + match[0].length,
+      target,
     });
     last = at + match[0].length;
   }
@@ -206,7 +222,13 @@ function scan(html: string): { pieces: string[]; blocks: Block[] } {
   pieces.forEach((piece, index) => {
     if (!piece.startsWith('<')) {
       if (skipDepth === 0) {
-        current.push(...decode(piece, index));
+        current.push(
+          ...decode(
+            piece,
+            index,
+            stack.some(([open]) => open === 'mark'),
+          ),
+        );
       }
       return;
     }
@@ -249,8 +271,28 @@ function scan(html: string): { pieces: string[]; blocks: Block[] } {
 }
 
 // The text blocks of a page body, as `grammar annotate-pages` stores them.
-export function extractLexBlocks(html: string): string[] {
-  return scan(html).blocks.map((block) => block.text);
+export function extractLexBlocks(html: string): LexBlockTargets[] {
+  return scan(html).blocks.map((block) => ({
+    text: block.text,
+    targets: targetRanges(block.chars),
+  }));
+}
+
+// Runs of consecutive target characters, as ranges of the block's text.
+function targetRanges(chars: Char[]): { start: number; end: number }[] {
+  const ranges: { start: number; end: number }[] = [];
+  chars.forEach((c, i) => {
+    if (!c.target) {
+      return;
+    }
+    const last = ranges.at(-1);
+    if (last?.end === i) {
+      last.end = i + 1;
+    } else {
+      ranges.push({ start: i, end: i + 1 });
+    }
+  });
+  return ranges;
 }
 
 // The page body with every stored word / phrase wrapped in a clickable span.

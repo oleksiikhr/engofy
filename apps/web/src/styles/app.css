@@ -2328,6 +2328,11 @@ body {
   font-size: 0.85rem;
   color: var(--color-ink-soft);
 }
+.qc__rule {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
 .qc__intro {
   display: flex;
   flex-direction: column;

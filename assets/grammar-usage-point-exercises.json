@@ -716,6 +716,480 @@
       }
     }
   ],
+  "31": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The film was ____ good.",
+        "answer": "very",
+        "options": ["very", "much", "many"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My bag is ____ heavy today.",
+        "answer": "very",
+        "options": ["very", "a lot", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "The park is very big.",
+          "The park is big very.",
+          "The park very is big."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The soup is hot very.",
+        "incorrectForm": "hot very",
+        "correction": "very hot"
+      }
+    }
+  ],
+  "32": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I am ____ tired after the trip.",
+        "answer": "really",
+        "options": ["really", "much", "very of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The music was ____ loud that I went home.",
+        "answer": "so",
+        "options": ["so", "too", "such"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which word makes the adjective a little weaker? It is ____ cold today.",
+        "options": ["quite", "really", "so"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She is really tiredly today.",
+        "incorrectForm": "tiredly",
+        "correction": "tired"
+      }
+    }
+  ],
+  "33": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I am interested ____ history.",
+        "answer": "in",
+        "options": ["in", "on", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Sleep is important ____ children.",
+        "answer": "for",
+        "options": ["for", "to of", "by"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "She is good ____ maths.",
+        "options": ["at", "on", "of"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He is afraid from dogs.",
+        "incorrectForm": "from",
+        "correction": "of"
+      }
+    }
+  ],
+  "34": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I can't drink this tea. It is ____ hot.",
+        "answer": "too",
+        "options": ["too", "very much", "enough"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The room is ____ small for six people.",
+        "answer": "too",
+        "options": ["too", "so much", "more"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence describes a problem? ____",
+        "options": [
+          "The coffee is too hot.",
+          "The coffee is nice.",
+          "The coffee is warm."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The box is too much big.",
+        "incorrectForm": "too much big",
+        "correction": "too big"
+      }
+    }
+  ],
+  "35": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The jacket is too small ____ me.",
+        "answer": "for",
+        "options": ["for", "to", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The music is too loud ____ the baby.",
+        "answer": "for",
+        "options": ["for", "of", "in"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "This exam is too hard ____ beginners.",
+        "options": ["for", "by", "with"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The bag is too heavy to me.",
+        "incorrectForm": "heavy to me",
+        "correction": "heavy for me"
+      }
+    }
+  ],
+  "36": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is a ____ important day.",
+        "answer": "very",
+        "options": ["very", "much", "too of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We saw a really ____ film last night.",
+        "answer": "good",
+        "options": ["good", "well", "goodly"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct order. ____",
+        "options": ["a very tall man", "very a tall man", "a man very tall"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She is a very kindly teacher.",
+        "incorrectForm": "kindly",
+        "correction": "kind"
+      }
+    }
+  ],
+  "37": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Is your coat warm ____?",
+        "answer": "enough",
+        "options": ["enough", "too", "very"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The kitchen is big ____ for a table.",
+        "answer": "enough",
+        "options": ["enough", "too", "much"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He is old enough to drive.",
+          "He is enough old to drive.",
+          "He enough is old to drive."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The box is enough big.",
+        "incorrectForm": "enough big",
+        "correction": "big enough"
+      }
+    }
+  ],
+  "38": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It took quite ____ long time.",
+        "answer": "a",
+        "options": ["a", "the", "an"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She has quite ____ nice voice.",
+        "answer": "a",
+        "options": ["a", "an", "some"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct pattern. ____",
+        "options": [
+          "quite a big house",
+          "quite big a house",
+          "a big quite house"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "It was quite long a walk to the shop.",
+        "incorrectForm": "quite long a walk",
+        "correction": "quite a long walk"
+      }
+    }
+  ],
+  "39": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is too busy ____ talk now.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It is too cold ____ swim today.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "I am too tired to walk.",
+          "I am too tired for walk.",
+          "I am too tired that walk."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He is too young for drive.",
+        "incorrectForm": "for drive",
+        "correction": "to drive"
+      }
+    }
+  ],
+  "40": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is clever ____ to solve it.",
+        "answer": "enough",
+        "options": ["enough", "too", "so"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I was lucky enough ____ meet him.",
+        "answer": "to",
+        "options": ["to", "for", "that"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence is correct? ____",
+        "options": [
+          "He is strong enough to lift it.",
+          "He is enough strong to lift it.",
+          "He is strong enough for lift it."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She is enough old to drive.",
+        "incorrectForm": "enough old",
+        "correction": "old enough"
+      }
+    }
+  ],
+  "41": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was rather ____ hard exam.",
+        "answer": "a",
+        "options": ["a", "the", "some"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She made rather ____ good point.",
+        "answer": "a",
+        "options": ["a", "an", "one"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct pattern. ____",
+        "options": [
+          "rather a long story",
+          "rather long a story",
+          "a long rather story"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "It was rather long a film.",
+        "incorrectForm": "rather long a film",
+        "correction": "rather a long film"
+      }
+    }
+  ],
+  "42": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The food was ____ delicious.",
+        "answer": "absolutely",
+        "options": ["absolutely", "very", "much"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I am ____ sure it will work.",
+        "answer": "absolutely",
+        "options": ["absolutely", "a lot", "more"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which adverb fits 'terrible' best? It was ____ terrible.",
+        "options": ["absolutely", "very", "quite a"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The hotel was very fantastic.",
+        "incorrectForm": "very",
+        "correction": "absolutely"
+      }
+    }
+  ],
+  "43": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is as clever ____ her brother.",
+        "answer": "as",
+        "options": ["as", "than", "that"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It was so cold ____ we stayed inside.",
+        "answer": "that",
+        "options": ["that", "as", "than"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "The exam was as difficult as last year's.",
+          "The exam was as difficult than last year's.",
+          "The exam was so difficult as last year's."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He is as tall than his dad.",
+        "incorrectForm": "than",
+        "correction": "as"
+      }
+    }
+  ],
   "46": [
     {
       "type": "fill_blank",
@@ -6182,6 +6656,382 @@
         "prompt": "Don't you ____ at me!",
         "options": ["shout", "shouting", "shouts", "to shout"],
         "answerIndex": 0
+      }
+    }
+  ],
+  "203": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you from Ukraine?",
+        "answer": "Are",
+        "options": ["Are", "Do", "Is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ your name Anna?",
+        "answer": "Is",
+        "options": ["Is", "Are", "Does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Is he a teacher?",
+          "Does he be a teacher?",
+          "He is a teacher?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Do you are tired?",
+        "incorrectForm": "Do you are",
+        "correction": "Are you"
+      }
+    }
+  ],
+  "204": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you finished your homework?",
+        "answer": "Have",
+        "options": ["Have", "Are", "Do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ they coming to the party?",
+        "answer": "Are",
+        "options": ["Are", "Have", "Do"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Has she called you?",
+          "Does she has called you?",
+          "She has called you?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "You are going to the shop?",
+        "incorrectForm": "You are going",
+        "correction": "Are you going"
+      }
+    }
+  ],
+  "205": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you speak English?",
+        "answer": "Do",
+        "options": ["Do", "Are", "Does"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ she work on Saturdays?",
+        "answer": "Does",
+        "options": ["Does", "Do", "Is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Does he like coffee?",
+          "Does he likes coffee?",
+          "Do he like coffee?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Does she works here?",
+        "incorrectForm": "works",
+        "correction": "work"
+      }
+    }
+  ],
+  "206": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you help me with this bag?",
+        "answer": "Can",
+        "options": ["Can", "Do", "Are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you like some water?",
+        "answer": "Would",
+        "options": ["Would", "Do", "Are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Could I sit here?",
+          "Do I could sit here?",
+          "Could I to sit here?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Can you to open the door?",
+        "incorrectForm": "to open",
+        "correction": "open"
+      }
+    }
+  ],
+  "207": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Where ____ you live?",
+        "answer": "do",
+        "options": ["do", "does", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "When ____ the film start?",
+        "answer": "does",
+        "options": ["does", "do", "is start"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "What do you want?",
+          "What you want?",
+          "What do you wants?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Where you live?",
+        "incorrectForm": "Where you live",
+        "correction": "Where do you live"
+      }
+    }
+  ],
+  "208": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Why ____ we go to the cinema?",
+        "answer": "don't",
+        "options": ["don't", "doesn't", "aren't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Why ____ he answering the phone?",
+        "answer": "isn't",
+        "options": ["isn't", "doesn't", "don't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence is a suggestion? ____",
+        "options": [
+          "Why don't we have lunch?",
+          "Why we don't have lunch?",
+          "Why do we not to have lunch?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Why we don't eat now?",
+        "incorrectForm": "we don't eat",
+        "correction": "don't we eat"
+      }
+    }
+  ],
+  "209": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ it a lovely day?",
+        "answer": "Isn't",
+        "options": ["Isn't", "Doesn't", "Don't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ you want to come with us?",
+        "answer": "Don't",
+        "options": ["Don't", "Isn't", "Doesn't"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Aren't you tired?",
+          "Are not tired you?",
+          "Don't you are tired?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "You aren't tired?",
+        "incorrectForm": "You aren't",
+        "correction": "Aren't you"
+      }
+    }
+  ],
+  "210": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who ____ this window?",
+        "answer": "broke",
+        "options": ["broke", "did break", "was broke"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "What ____ next?",
+        "answer": "happens",
+        "options": ["happens", "does happen", "happen to"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": ["Who wants tea?", "Who does want tea?", "Who want tea?"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Who did call you?",
+        "incorrectForm": "did call",
+        "correction": "called"
+      }
+    }
+  ],
+  "211": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Have you ____ been to London?",
+        "answer": "ever",
+        "options": ["ever", "yet", "already"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you ____ get up early?",
+        "answer": "usually",
+        "options": ["usually", "usual", "use"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Do you often play tennis?",
+          "Do often you play tennis?",
+          "Do you play often tennis?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Have ever you seen a whale?",
+        "incorrectForm": "Have ever you",
+        "correction": "Have you ever"
+      }
+    }
+  ],
+  "213": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Hasn't it ____ been difficult?",
+        "answer": "always",
+        "options": ["always", "ever", "yet"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Don't you ____ get bored here?",
+        "answer": "sometimes",
+        "options": ["sometimes", "some time", "times"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct question. ____",
+        "options": [
+          "Haven't you ever tried it?",
+          "Haven't ever you tried it?",
+          "Have not you tried ever it?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Isn't always it hard?",
+        "incorrectForm": "Isn't always it",
+        "correction": "Isn't it always"
       }
     }
   ],
@@ -24085,6 +24935,926 @@
       }
     }
   ],
+  "677": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I live in a small ____.",
+        "answer": "house",
+        "options": ["house", "houses", "housing"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is a good ____.",
+        "answer": "teacher",
+        "options": ["teacher", "teach", "teaching"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which word is a common noun? ____",
+        "options": ["table", "quickly", "Monday"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I have two book on the table.",
+        "incorrectForm": "book",
+        "correction": "books"
+      }
+    }
+  ],
+  "678": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We meet on ____ (day).",
+        "answer": "Saturday",
+        "options": ["Saturday", "saturday", "saturdays"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My friend comes from ____ (city).",
+        "answer": "Paris",
+        "options": ["Paris", "paris", "the paris"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence is written correctly? ____",
+        "options": [
+          "I visit Rome in July.",
+          "I visit rome in july.",
+          "I visit Rome in july."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "They live in london.",
+        "incorrectForm": "london",
+        "correction": "London"
+      }
+    }
+  ],
+  "679": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I brush my teeth with a ____.",
+        "answer": "toothbrush",
+        "options": ["toothbrush", "brush tooth", "teethbrush"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ stop is over there.",
+        "answer": "bus",
+        "options": ["bus", "buses", "busy"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which is a compound noun? ____",
+        "options": ["bedroom", "quickly", "beautiful"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I keep my clothes in the room bed.",
+        "incorrectForm": "room bed",
+        "correction": "bedroom"
+      }
+    }
+  ],
+  "680": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She enjoys ____ books.",
+        "answer": "reading",
+        "options": ["reading", "read", "to reads"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We love ____ in the park.",
+        "answer": "walking",
+        "options": ["walking", "walk", "walks"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["I hate cooking.", "I hate cook.", "I hate cooks."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He likes swim.",
+        "incorrectForm": "swim",
+        "correction": "swimming"
+      }
+    }
+  ],
+  "681": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Thank you for the ____.",
+        "answer": "advice",
+        "options": ["advice", "advices", "advise"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We had a lovely ____ in Italy.",
+        "answer": "holiday",
+        "options": ["holiday", "holidaying", "holide"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which noun names an idea? ____",
+        "options": ["freedom", "table", "window"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She gave me an advice.",
+        "incorrectForm": "an advice",
+        "correction": "some advice"
+      }
+    }
+  ],
+  "682": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ every day is good for you.",
+        "answer": "Walking",
+        "options": ["Walking", "Walk", "To walking"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Learning languages ____ fun.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "Cooking is relaxing.",
+          "Cooking are relaxing.",
+          "Cook is relaxing."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Reading are my hobby.",
+        "incorrectForm": "are",
+        "correction": "is"
+      }
+    }
+  ],
+  "683": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Good ____ helps students learn.",
+        "answer": "teaching",
+        "options": ["teaching", "teach", "teached"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ English has its rewards.",
+        "answer": "Learning",
+        "options": ["Learning", "Learn", "Learned"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which '-ing' word is an abstract noun? ____",
+        "options": ["understanding", "running fast", "is going"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Learn English has its rewards.",
+        "incorrectForm": "Learn",
+        "correction": "Learning"
+      }
+    }
+  ],
+  "684": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have two ____ (dog).",
+        "answer": "dogs",
+        "options": ["dogs", "dog", "doges"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There are five ____ (book) on the shelf.",
+        "answer": "books",
+        "options": ["books", "book", "bookes"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct plural. ____",
+        "options": ["cars", "caress", "carr"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She has three sister.",
+        "incorrectForm": "sister",
+        "correction": "sisters"
+      }
+    }
+  ],
+  "685": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I bought two ____ (watch).",
+        "answer": "watches",
+        "options": ["watches", "watchs", "watchies"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have three ____ (class) today.",
+        "answer": "classes",
+        "options": ["classes", "classs", "class"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct plural of 'box'. ____",
+        "options": ["boxes", "boxs", "boxies"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She cooked some potatos.",
+        "incorrectForm": "potatos",
+        "correction": "potatoes"
+      }
+    }
+  ],
+  "686": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Two ____ (baby) are sleeping.",
+        "answer": "babies",
+        "options": ["babies", "babys", "babyes"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We visited three ____ (city).",
+        "answer": "cities",
+        "options": ["cities", "citys", "cityes"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct plural of 'boy'. ____",
+        "options": ["boys", "boies", "boyes"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She has two hobbys.",
+        "incorrectForm": "hobbys",
+        "correction": "hobbies"
+      }
+    }
+  ],
+  "687": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There are ten ____ (child) in the class.",
+        "answer": "children",
+        "options": ["children", "childs", "childrens"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My ____ (foot) hurt after the walk.",
+        "answer": "feet",
+        "options": ["feet", "foots", "feets"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the plural of 'person'. ____",
+        "options": ["people", "persons of", "peoples"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Three mans came in.",
+        "incorrectForm": "mans",
+        "correction": "men"
+      }
+    }
+  ],
+  "688": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My jeans ____ too big.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I need a new pair ____ glasses.",
+        "answer": "of",
+        "options": ["of", "from", "for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "The trousers are on the bed.",
+          "The trousers is on the bed.",
+          "A trousers is on the bed."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Your glasses is on the table.",
+        "incorrectForm": "is",
+        "correction": "are"
+      }
+    }
+  ],
+  "689": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The team ____ winning the match.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The staff ____ all very kind. (each person)",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which noun is a collective noun? ____",
+        "options": ["family", "table", "quickly"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Our class have a test tomorrow.",
+        "incorrectForm": "have",
+        "correction": "has"
+      }
+    }
+  ],
+  "690": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Music ____ my favourite thing.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have a lot of ____ today.",
+        "answer": "homework",
+        "options": ["homework", "homeworks", "a homework"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which noun is uncountable? ____",
+        "options": ["money", "coin", "euro"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I need some informations.",
+        "incorrectForm": "informations",
+        "correction": "information"
+      }
+    }
+  ],
+  "691": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ coffee you made is great.",
+        "answer": "The",
+        "options": ["The", "A", "An"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please turn down ____ music.",
+        "answer": "the",
+        "options": ["the", "a", "an"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence talks about a specific thing? ____",
+        "options": ["The rice is ready.", "Rice is cheap.", "I like rice."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "A music in this cafe is nice.",
+        "incorrectForm": "A music",
+        "correction": "The music"
+      }
+    }
+  ],
+  "692": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'd like ____ water, please.",
+        "answer": "some",
+        "options": ["some", "a", "many"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you have ____ time today?",
+        "answer": "any",
+        "options": ["any", "a", "many"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "We have a lot of rice.",
+          "We have a lot of rices.",
+          "We have many rice."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She has many money.",
+        "incorrectForm": "many",
+        "correction": "a lot of"
+      }
+    }
+  ],
+  "693": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can I have a ____ of tea?",
+        "answer": "cup",
+        "options": ["cup", "cups", "cupping"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I need a ____ of paper.",
+        "answer": "piece",
+        "options": ["piece", "pieces", "peace"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct phrase. ____",
+        "options": ["a slice of bread", "a bread", "two breads"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I bought a milk.",
+        "incorrectForm": "a milk",
+        "correction": "a bottle of milk"
+      }
+    }
+  ],
+  "694": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The weather ____ nice today.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I have a lot of ____ (luggage).",
+        "answer": "luggage",
+        "options": ["luggage", "luggages", "a luggage"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "The news is good.",
+          "The news are good.",
+          "The newses are good."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The traffics are terrible today.",
+        "incorrectForm": "traffics are",
+        "correction": "traffic is"
+      }
+    }
+  ],
+  "695": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "How ____ money do you have?",
+        "answer": "much",
+        "options": ["much", "many", "few"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We have ____ of time.",
+        "answer": "plenty",
+        "options": ["plenty", "many", "a few"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "I don't have much money.",
+          "I don't have many money.",
+          "I don't have a few money."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Is there many milk in the fridge?",
+        "incorrectForm": "many",
+        "correction": "much"
+      }
+    }
+  ],
+  "696": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "____ is important for good health. (sleep)",
+        "answer": "Sleep",
+        "options": ["Sleep", "The sleep", "A sleep"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think ____ makes people happy. (music, in general)",
+        "answer": "music",
+        "options": ["music", "the music", "a music"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence talks about the idea in general? ____",
+        "options": ["Life is short.", "The life is short.", "A life is short."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The love is the most important thing.",
+        "incorrectForm": "The love",
+        "correction": "Love"
+      }
+    }
+  ],
+  "697": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There is not enough ____ for this claim.",
+        "answer": "evidence",
+        "options": ["evidence", "evidences", "an evidence"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The research ____ that sleep matters.",
+        "answer": "shows",
+        "options": ["shows", "show", "are showing"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "We made good progress.",
+          "We made a good progress.",
+          "We made good progresses."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Her behaviours was excellent.",
+        "incorrectForm": "behaviours was",
+        "correction": "behaviour was"
+      }
+    }
+  ],
+  "698": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The ____ is very big. (subject)",
+        "answer": "house",
+        "options": ["house", "houses are", "house is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My sister ____ in London.",
+        "answer": "lives",
+        "options": ["lives", "live", "living"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What is the subject? 'My brother plays football.' ____",
+        "options": ["My brother", "plays", "football"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Plays football my brother.",
+        "incorrectForm": "Plays football my brother",
+        "correction": "My brother plays football"
+      }
+    }
+  ],
+  "699": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She bought a new ____.",
+        "answer": "car",
+        "options": ["car", "cars is", "car is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I like my new ____.",
+        "answer": "phone",
+        "options": ["phone", "phones is", "phoning"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "What is the object? 'He kicked the ball.' ____",
+        "options": ["the ball", "He", "kicked"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I my house love.",
+        "incorrectForm": "I my house love",
+        "correction": "I love my house"
+      }
+    }
+  ],
+  "700": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I am going ____ the shop.",
+        "answer": "to",
+        "options": ["to", "at the", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We talked ____ our teacher.",
+        "answer": "to",
+        "options": ["to", "at", "by"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct phrase. ____",
+        "options": ["with my friends", "with friends my", "my with friends"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She lives in the London.",
+        "incorrectForm": "the London",
+        "correction": "London"
+      }
+    }
+  ],
+  "701": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My father is ____ teacher.",
+        "answer": "a",
+        "options": ["a", "an", "the a"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This ____ my new bike.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He is an engineer.",
+          "He is engineer an.",
+          "He an engineer is."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She is doctor.",
+        "incorrectForm": "doctor",
+        "correction": "a doctor"
+      }
+    }
+  ],
+  "702": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I will call you ____ morning.",
+        "answer": "tomorrow",
+        "options": ["tomorrow", "on tomorrow", "at tomorrow"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They moved here ____ year.",
+        "answer": "last",
+        "options": ["last", "in last", "the last"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "See you next week.",
+          "See you on next week.",
+          "See you in next week."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I will see you on tomorrow.",
+        "incorrectForm": "on tomorrow",
+        "correction": "tomorrow"
+      }
+    }
+  ],
   "703": [
     {
       "type": "fill_blank",
@@ -35208,6 +36978,1038 @@
       }
     }
   ],
+  "1048": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I listen ____ the radio every morning.",
+        "answer": "to",
+        "options": ["to", "at", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She is waiting ____ her friend.",
+        "answer": "for",
+        "options": ["for", "to", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "Look at the picture.",
+          "Look the picture.",
+          "Look to the picture."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She is looking at a new job.",
+        "incorrectForm": "looking at",
+        "correction": "looking for"
+      }
+    }
+  ],
+  "1049": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It depends ____ the weather.",
+        "answer": "on",
+        "options": ["on", "of", "from"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We talked ____ the trip for an hour.",
+        "answer": "about",
+        "options": ["about", "of", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "This book belongs to me.",
+          "This book belongs me.",
+          "This book belongs at me."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She asked me the menu for.",
+        "incorrectForm": "the menu for",
+        "correction": "for the menu"
+      }
+    }
+  ],
+  "1050": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Who are you talking ____?",
+        "answer": "to",
+        "options": ["to", "to who", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "This is the song I was listening ____.",
+        "answer": "to",
+        "options": ["to", "at", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the natural question. ____",
+        "options": [
+          "What are you waiting for?",
+          "For what you are waiting?",
+          "What waiting are you for?"
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Which team do you belong?",
+        "incorrectForm": "belong",
+        "correction": "belong to"
+      }
+    }
+  ],
+  "1051": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She looked ____ at the map.",
+        "answer": "carefully",
+        "options": ["carefully", "careful", "care"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We thought ____ about the offer.",
+        "answer": "seriously",
+        "options": ["seriously", "serious", "seriousness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He listened carefully to the teacher.",
+          "He listened to carefully the teacher.",
+          "He carefully listened the to teacher."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I looked carefully the picture at.",
+        "incorrectForm": "the picture at",
+        "correction": "at the picture"
+      }
+    }
+  ],
+  "1052": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I hope ____ you can come.",
+        "answer": "that",
+        "options": ["that", "what", "to"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He says ____ he is busy.",
+        "answer": "that",
+        "options": ["that", "to", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "I think that it is a good idea.",
+          "I think that is it a good idea.",
+          "I think it that a good idea."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I know what you are right.",
+        "incorrectForm": "what",
+        "correction": "that"
+      }
+    }
+  ],
+  "1053": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I think ____ is a great film.",
+        "answer": "it",
+        "options": ["it", "that it that", "what"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She said she ____ late.",
+        "answer": "was",
+        "options": ["was", "is being", "be"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence is correct? ____",
+        "options": [
+          "I hope you like it.",
+          "I hope you to like it.",
+          "I hope like you it."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I think to it is right.",
+        "incorrectForm": "to it is",
+        "correction": "it is"
+      }
+    }
+  ],
+  "1054": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She told ____ that she was late.",
+        "answer": "me",
+        "options": ["me", "to me", "for me"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He promised us ____ he would call.",
+        "answer": "that",
+        "options": ["that", "to", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "I told him that I was ready.",
+          "I told to him that I was ready.",
+          "I told that him I was ready."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She told to me that she was tired.",
+        "incorrectForm": "to me",
+        "correction": "me"
+      }
+    }
+  ],
+  "1055": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I realise ____ I made a mistake.",
+        "answer": "that",
+        "options": ["that", "what", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They decided ____ they would stay home.",
+        "answer": "that",
+        "options": ["that", "to be", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "I believe that he is right.",
+          "I believe that is he right.",
+          "I believe he that right is."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I understand that want you to go.",
+        "incorrectForm": "that want you",
+        "correction": "that you want"
+      }
+    }
+  ],
+  "1056": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She explained ____ us that the shop was closed.",
+        "answer": "to",
+        "options": ["to", "for", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I said ____ him that I was busy.",
+        "answer": "to",
+        "options": ["to", "at", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He explained to me that it was easy.",
+          "He explained me that it was easy.",
+          "He explained that to me it easy was."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She suggested me that we go.",
+        "incorrectForm": "me",
+        "correction": "to me"
+      }
+    }
+  ],
+  "1057": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I usually get ____ at seven.",
+        "answer": "up",
+        "options": ["up", "on", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please sit ____.",
+        "answer": "down",
+        "options": ["down", "in", "off"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which phrasal verb needs no object? ____",
+        "options": ["wake up", "give up it", "turn on it"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He came in back yesterday.",
+        "incorrectForm": "in back",
+        "correction": "back"
+      }
+    }
+  ],
+  "1058": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Can you turn ____ on?",
+        "answer": "it",
+        "options": ["it", "up it", "on it"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I will pick ____ up at the station.",
+        "answer": "you",
+        "options": ["you", "up you", "to you"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "Please turn it off.",
+          "Please turn off it.",
+          "Please off turn it."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "Give back them tomorrow.",
+        "incorrectForm": "back them",
+        "correction": "them back"
+      }
+    }
+  ],
+  "1059": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She grew ____ in a small town.",
+        "answer": "up",
+        "options": ["up", "in", "of"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please calm ____ and listen.",
+        "answer": "down",
+        "options": ["down", "out", "for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence uses a phrasal verb without an object? ____",
+        "options": ["He showed up late.", "He gave up it.", "He turned on it."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The bus broke on down.",
+        "incorrectForm": "on down",
+        "correction": "down"
+      }
+    }
+  ],
+  "1060": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She looks ____ her grandmother.",
+        "answer": "after",
+        "options": ["after", "up", "in"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He gave ____ smoking last year.",
+        "answer": "up",
+        "options": ["up", "in", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "Please turn off the light.",
+          "Please turn the off light.",
+          "Please off the light turn."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I look after at the children.",
+        "incorrectForm": "after at",
+        "correction": "after"
+      }
+    }
+  ],
+  "1061": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I'll check ____ out tomorrow.",
+        "answer": "it",
+        "options": ["it", "out it", "that out it"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please put ____ on, it's cold.",
+        "answer": "it",
+        "options": ["it", "on it", "to it"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["I worked it out.", "I worked out it.", "I out worked it."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She sorted out them quickly.",
+        "incorrectForm": "out them",
+        "correction": "them out"
+      }
+    }
+  ],
+  "1062": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The plane will take ____ soon.",
+        "answer": "off",
+        "options": ["off", "of", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please carry ____ with your work.",
+        "answer": "on",
+        "options": ["on", "in", "of"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which phrasal verb means 'to appear'? ____",
+        "options": ["turn up", "give up", "take off"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "The dinosaurs died away out.",
+        "incorrectForm": "away out",
+        "correction": "out"
+      }
+    }
+  ],
+  "1063": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She wants to set ____ her own company.",
+        "answer": "up",
+        "options": ["up", "on", "for"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Look ____ this word in the dictionary.",
+        "answer": "up",
+        "options": ["up", "in", "at"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "They set up a new company.",
+          "They up set a new company.",
+          "They set a new up company."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He built a picture in his head up.",
+        "incorrectForm": "a picture in his head up",
+        "correction": "up a picture in his head"
+      }
+    }
+  ],
+  "1064": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Please turn the music ____.",
+        "answer": "off",
+        "options": ["off", "of", "at"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "He took his coat ____ and sat down.",
+        "answer": "off",
+        "options": ["off", "at", "to"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the natural sentence. ____",
+        "options": [
+          "She threw the old papers away.",
+          "She threw away old the papers.",
+          "She away threw the old papers."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She put out it.",
+        "incorrectForm": "out it",
+        "correction": "it out"
+      }
+    }
+  ],
+  "1065": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Let's sort ____ out tomorrow.",
+        "answer": "it",
+        "options": ["it", "out it", "up it"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They ruled ____ out.",
+        "answer": "it",
+        "options": ["it", "out it", "it up"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "We need to think it over.",
+          "We need to it think over.",
+          "We need to over it think."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "I checked out them.",
+        "incorrectForm": "out them",
+        "correction": "them out"
+      }
+    }
+  ],
+  "1066": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ to school every day.",
+        "answer": "goes",
+        "options": ["goes", "go", "going"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Yesterday we ____ a film.",
+        "answer": "watched",
+        "options": ["watched", "watch", "watching"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which word is a main verb? ____ 'They play tennis.'",
+        "options": ["play", "They", "tennis"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He go to work by bus.",
+        "incorrectForm": "go",
+        "correction": "goes"
+      }
+    }
+  ],
+  "1067": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ a nurse.",
+        "answer": "is",
+        "options": ["is", "are", "am"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ at school yesterday.",
+        "answer": "were",
+        "options": ["were", "was", "are"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["I am tired.", "I is tired.", "I are tired."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "They is my friends.",
+        "incorrectForm": "is",
+        "correction": "are"
+      }
+    }
+  ],
+  "1068": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ reading a book now.",
+        "answer": "is",
+        "options": ["is", "are", "does"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "They are ____ dinner.",
+        "answer": "cooking",
+        "options": ["cooking", "cook", "cooks"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "We are learning English.",
+          "We are learn English.",
+          "We learning English."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He are working today.",
+        "incorrectForm": "are",
+        "correction": "is"
+      }
+    }
+  ],
+  "1069": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ swim very well.",
+        "answer": "can",
+        "options": ["can", "cans", "am can"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She will ____ you tomorrow.",
+        "answer": "call",
+        "options": ["call", "calls", "to call"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He can play the guitar.",
+          "He can plays the guitar.",
+          "He can to play the guitar."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She can plays the piano.",
+        "incorrectForm": "plays",
+        "correction": "play"
+      }
+    }
+  ],
+  "1070": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ finished my homework.",
+        "answer": "have",
+        "options": ["have", "do", "am"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ not like coffee.",
+        "answer": "does",
+        "options": ["does", "has", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["Did you see him?", "Have you saw him?", "Do you saw him?"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He don't like fish.",
+        "incorrectForm": "don't",
+        "correction": "doesn't"
+      }
+    }
+  ],
+  "1071": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The cake smells ____.",
+        "answer": "good",
+        "options": ["good", "well", "goodly"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She looks very ____.",
+        "answer": "tired",
+        "options": ["tired", "tiredly", "tire"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "It sounds interesting.",
+          "It sounds interestingly.",
+          "It sounds interest."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He feels happily today.",
+        "incorrectForm": "happily",
+        "correction": "happy"
+      }
+    }
+  ],
+  "1072": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____ see a doctor. (advice)",
+        "answer": "should",
+        "options": ["should", "are", "have"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "It ____ rain later. (possible)",
+        "answer": "might",
+        "options": ["might", "is", "does"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "She must leave now.",
+          "She must to leave now.",
+          "She musts leave now."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "You should to go home.",
+        "incorrectForm": "to go",
+        "correction": "go"
+      }
+    }
+  ],
+  "1073": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ to work on Saturday.",
+        "answer": "has",
+        "options": ["has", "have", "is"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "Do you ____ to leave now?",
+        "answer": "have",
+        "options": ["have", "has", "must"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["He has to study.", "He have to study.", "He has study."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She have to go now.",
+        "incorrectForm": "have",
+        "correction": "has"
+      }
+    }
+  ],
+  "1074": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "We ____ to live in Kyiv.",
+        "answer": "used",
+        "options": ["used", "use", "were used"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____ to rest more.",
+        "answer": "ought",
+        "options": ["ought", "must", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Which sentence is about a past habit? ____",
+        "options": [
+          "I used to swim every day.",
+          "I ought to swim every day.",
+          "I swim used every day."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She use to work here.",
+        "incorrectForm": "use to",
+        "correction": "used to"
+      }
+    }
+  ],
+  "1075": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "You ____ worry about it.",
+        "answer": "needn't",
+        "options": ["needn't", "don't need", "aren't need"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "I ____ ask him. (I am afraid to)",
+        "answer": "daren't",
+        "options": ["daren't", "don't dare to", "am dare"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "You needn't come.",
+          "You needn't to come.",
+          "You needn't comes."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "She needn't to leave.",
+        "incorrectForm": "to leave",
+        "correction": "leave"
+      }
+    }
+  ],
   "1081": [
     {
       "type": "fill_blank",
@@ -35631,6 +38433,382 @@
           "I hate lose it."
         ],
         "answerIndex": 2
+      }
+    }
+  ],
+  "1095": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ a park near my house.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There is ____ big window in my room.",
+        "answer": "a",
+        "options": ["a", "two", "some"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There is a cat on the sofa.",
+          "There are a cat on the sofa.",
+          "It is a cat on the sofa."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There are a book on the table.",
+        "incorrectForm": "are",
+        "correction": "is"
+      }
+    }
+  ],
+  "1096": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ three chairs in the kitchen.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There are two ____ in the garden.",
+        "answer": "trees",
+        "options": ["trees", "tree", "a tree"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There are four rooms.",
+          "There is four rooms.",
+          "It are four rooms."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There is many people here.",
+        "incorrectForm": "is many people",
+        "correction": "are many people"
+      }
+    }
+  ],
+  "1097": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ some water on the floor.",
+        "answer": "is",
+        "options": ["is", "are", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There is a lot of ____ in the bag.",
+        "answer": "money",
+        "options": ["money", "moneys", "coins is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There is some bread.",
+          "There are some bread.",
+          "There is some breads."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There are some music in the room.",
+        "incorrectForm": "are",
+        "correction": "is"
+      }
+    }
+  ],
+  "1098": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ a lot of students in the hall.",
+        "answer": "are",
+        "options": ["are", "is", "be"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ a lot of snow in winter.",
+        "answer": "is",
+        "options": ["is", "are", "have"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There are a lot of cars.",
+          "There is a lot of cars.",
+          "There a lot of cars are."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There is a lot of children in the park.",
+        "incorrectForm": "is",
+        "correction": "are"
+      }
+    }
+  ],
+  "1099": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ any milk left.",
+        "answer": "isn't",
+        "options": ["isn't", "aren't", "don't"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ any tickets.",
+        "answer": "aren't",
+        "options": ["aren't", "isn't", "not"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There aren't any chairs.",
+          "There isn't any chairs.",
+          "There not are any chairs."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There don't any chairs here.",
+        "incorrectForm": "don't",
+        "correction": "aren't"
+      }
+    }
+  ],
+  "1100": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ be a party tomorrow.",
+        "answer": "will",
+        "options": ["will", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There might ____ some problems.",
+        "answer": "be",
+        "options": ["be", "are", "is"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There will be a test.",
+          "There will is a test.",
+          "There will to be a test."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There will are many people.",
+        "incorrectForm": "will are",
+        "correction": "will be"
+      }
+    }
+  ],
+  "1101": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There ____ to be a mistake.",
+        "answer": "seems",
+        "options": ["seems", "is", "are"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "There used ____ be a cinema here.",
+        "answer": "to",
+        "options": ["to", "be", "for"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "There must be a reason.",
+          "There must is a reason.",
+          "There must to be a reason."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "There used to being a park.",
+        "incorrectForm": "being",
+        "correction": "be"
+      }
+    }
+  ],
+  "1102": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The weather ____ nice today.",
+        "answer": "is",
+        "options": ["is", "are", "do"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "My brother is ____ engineer.",
+        "answer": "an",
+        "options": ["an", "a", "the a"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": ["She is happy.", "She happy.", "She does happy."],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "They be at home.",
+        "incorrectForm": "be",
+        "correction": "are"
+      }
+    }
+  ],
+  "1103": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She ____ tired today.",
+        "answer": "seems",
+        "options": ["seems", "does", "makes"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The idea ____ great.",
+        "answer": "sounds",
+        "options": ["sounds", "hears", "listens"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "He became a doctor.",
+          "He became doctor a.",
+          "He became to a doctor."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "It looks goodly on you.",
+        "incorrectForm": "goodly",
+        "correction": "good"
+      }
+    }
+  ],
+  "1104": [
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "The weather turned ____ cold.",
+        "answer": "very",
+        "options": ["very", "much", "many"]
+      }
+    },
+    {
+      "type": "fill_blank",
+      "payload": {
+        "prompt": "She remained ____ during the exam.",
+        "answer": "calm",
+        "options": ["calm", "calmly", "calmness"]
+      }
+    },
+    {
+      "type": "multiple_choice",
+      "payload": {
+        "prompt": "Choose the correct sentence. ____",
+        "options": [
+          "The story proved true.",
+          "The story proved truly.",
+          "The story proved truth."
+        ],
+        "answerIndex": 0
+      }
+    },
+    {
+      "type": "find_error",
+      "payload": {
+        "prompt": "He remained calmly.",
+        "incorrectForm": "calmly",
+        "correction": "calm"
       }
     }
   ],

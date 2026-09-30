@@ -21,12 +21,32 @@ export function parseEgpRecords(raw: unknown): EgpRecord[] {
   return z.array(EgpRecordSchema).min(1).parse(raw);
 }
 
-// Only USE / FORM/USE guideword records become grammar_usage_points; every
-// other record (FORM:, stray comments) feeds the construction cheat sheet
-// (PLAN.md §12).
+// USE / FORM/USE guideword records are usage points; every other record
+// (FORM:, stray comments) feeds the construction cheat sheet (PLAN.md §12).
+// `usagePointRecords` decides which records actually become usage points.
 export function classifyEgpRecord(record: EgpRecord): 'use' | 'form' {
   const g = record.guideword.trim().toUpperCase();
   return g.startsWith('USE') || g.startsWith('FORM/USE') ? 'use' : 'form';
+}
+
+// The records that become grammar_usage_points: every USE / FORM/USE record,
+// and — for a construction that has none (nouns, phrasal verbs, ...) — its FORM
+// records, so the page still has something to teach and practise. A FORM record
+// with no can-do statement is dropped (a usage point needs one). FORM records
+// stay in the cheat sheet either way.
+export function usagePointRecords(records: EgpRecord[]): EgpRecord[] {
+  const hasUse = new Set<string>();
+  for (const r of records) {
+    if (classifyEgpRecord(r) === 'use') {
+      hasUse.add(grammarConstructionSlug(r.category, r.subcategory));
+    }
+  }
+  return records.filter(
+    (r) =>
+      r.can_do.trim() !== '' &&
+      (classifyEgpRecord(r) === 'use' ||
+        !hasUse.has(grammarConstructionSlug(r.category, r.subcategory))),
+  );
 }
 
 // Constructions are keyed by (category, subcategory) — a subcategory name like

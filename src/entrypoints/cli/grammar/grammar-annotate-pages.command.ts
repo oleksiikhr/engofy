@@ -22,9 +22,17 @@ interface AnnotatePagesOptions {
 const PHRASES_PATH = join(process.cwd(), 'assets', 'phrase-content.json');
 
 // apps/web `src/pages/grammar/lex-blocks.json.ts`: every handcrafted page's
-// text blocks, keyed by construction slug.
+// text blocks with their target ranges, keyed by construction slug.
 const LexBlocksResponseSchema = z.object({
-  pages: z.record(z.string(), z.array(z.string())),
+  pages: z.record(
+    z.string(),
+    z.array(
+      z.object({
+        text: z.string(),
+        targets: z.array(z.object({ start: z.number(), end: z.number() })),
+      }),
+    ),
+  ),
 });
 
 // Makes every handcrafted grammar page's words clickable: pulls the pages'
@@ -58,7 +66,7 @@ export class GrammarAnnotatePagesCommand extends CliCommandRunner<AnnotatePagesO
   @Option({
     flags: '-r, --refresh',
     description:
-      'Re-parse every block, not only new ones (after the word rule or assets/phrase-content.json changed)',
+      'Re-parse every block, not only new ones (after the word rule, assets/phrase-content.json or the marked words changed)',
   })
   parseRefresh(): boolean {
     return true;

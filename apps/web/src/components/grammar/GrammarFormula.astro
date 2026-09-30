@@ -1,8 +1,11 @@
 ---
 // The form of a construction as a row of parts: <GrammarFormula parts={['have / has', 'past participle']} />.
+// A part that is a part of speech is `{ text, pos }` and takes the reader's `--pos-*` colour;
+// a plain string stays the neutral brand pill.
+type PosGroup = 'noun' | 'verb' | 'adj' | 'adv' | 'function';
 interface Props {
   label?: string;
-  parts: string[];
+  parts: (string | { text: string; pos?: PosGroup })[];
 }
 
 const { label, parts } = Astro.props;
@@ -14,7 +17,9 @@ const { label, parts } = Astro.props;
     parts.map((part, i) => (
       <>
         {i > 0 && <span class="gp-formula__plus">+</span>}
-        <code class="gp-formula__part">{part}</code>
+        <code class="gp-formula__part" data-pos={typeof part === 'string' ? undefined : part.pos}>
+          {typeof part === 'string' ? part : part.text}
+        </code>
       </>
     ))
   }
@@ -44,6 +49,35 @@ const { label, parts } = Astro.props;
     font-family: var(--font-mono);
     font-size: 0.9rem;
     font-weight: 700;
+  }
+  .gp-formula__part[data-pos] {
+    background: transparent;
+    color: var(--pos-tone-ink);
+    box-shadow: inset 0 0 0 2px var(--pos-tone);
+  }
+  .gp-formula__part[data-pos='function'] {
+    box-shadow: none;
+    border: 2px dotted var(--pos-tone);
+  }
+  .gp-formula__part[data-pos='noun'] {
+    --pos-tone: var(--pos-noun);
+    --pos-tone-ink: var(--pos-noun-ink);
+  }
+  .gp-formula__part[data-pos='verb'] {
+    --pos-tone: var(--pos-verb);
+    --pos-tone-ink: var(--pos-verb-ink);
+  }
+  .gp-formula__part[data-pos='adj'] {
+    --pos-tone: var(--pos-adj);
+    --pos-tone-ink: var(--pos-adj-ink);
+  }
+  .gp-formula__part[data-pos='adv'] {
+    --pos-tone: var(--pos-adv);
+    --pos-tone-ink: var(--pos-adv-ink);
+  }
+  .gp-formula__part[data-pos='function'] {
+    --pos-tone: var(--pos-function);
+    --pos-tone-ink: var(--pos-function-ink);
   }
   .gp-formula__plus {
     font-weight: 800;

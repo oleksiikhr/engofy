@@ -10,6 +10,7 @@ vi.mock('node:fs/promises', () => ({ readFile: vi.fn() }));
 const { readFile } = await import('node:fs/promises');
 const WEB_RUNNING_RE = /web app running/;
 const NO_PAGES_RE = /listed no grammar pages/;
+const BLOCK = { text: 'She can swim.', targets: [{ start: 4, end: 7 }] };
 const LISTS = { literal: ['on the other hand'], phrasalVerbs: ['give up'] };
 const PHRASE_ENTRY = {
   definition: 'Used to give the opposite point.',
@@ -30,7 +31,7 @@ describe('GrammarAnnotatePagesCommand', () => {
     fetchMock = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
-          pages: { 'modality-can': ['She can swim.'], 'modality-may': [] },
+          pages: { 'modality-can': [BLOCK], 'modality-may': [] },
         }),
       ),
     );
@@ -62,7 +63,7 @@ describe('GrammarAnnotatePagesCommand', () => {
       'http://web.test/grammar/lex-blocks.json',
     );
     expect(annotateGrammarPage.mock.calls).toEqual([
-      ['modality-can', ['She can swim.'], LISTS, false],
+      ['modality-can', [BLOCK], LISTS, false],
       ['modality-may', [], LISTS, false],
     ]);
   });

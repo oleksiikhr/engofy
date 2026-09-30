@@ -16,14 +16,16 @@ The Cambridge **English Grammar Profile** (EGP), 1239 records. Derived from
   (`couldn?t`, `I?m`); the unambiguous contraction cases are repaired
 - `\r\n`→`\n`, values trimmed, blank `example`→`null`
 
-`import-egp` keeps only `USE` / `FORM/USE` guideword records (574) as
-`grammar_usage_points`; the rest (`FORM:` etc.) feed the parent
-construction's cheat sheet.
+`import-egp` turns `USE` / `FORM/USE` guideword records (574) into
+`grammar_usage_points`. A construction with no such record (nouns, phrasal and
+prepositional verbs, `there is/are`, ...) gets its `FORM:` records with a can-do
+statement as usage points instead (87 more, 661 in total). `FORM:` records also
+feed the parent construction's cheat sheet.
 
 ## `grammar-usage-point-exercises.json`
 
 Reusable exercise bank per `grammar_usage_point` (~8-9 `fill_blank` /
-`multiple_choice` exercises per usage point, all 574 usage points) — distinct
+`multiple_choice` exercises per usage point, all 661 usage points) — distinct
 from the per-post `exercises` table, which is generated bespoke from one post's
 sentences. Content is written in a Claude Code session, without an AI API call
 from this codebase; `usage-point-exercise-seed.spec.ts` checks the file covers

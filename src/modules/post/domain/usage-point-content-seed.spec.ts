@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { classifyEgpRecord, parseEgpRecords } from './egp.js';
+import { parseEgpRecords, usagePointRecords } from './egp.js';
 import { parseUsagePointContentSeedFile } from './usage-point-content-seed.js';
 
 const readAsset = async (name: string): Promise<unknown> =>
@@ -11,8 +11,9 @@ describe('assets/grammar-usage-point-content.json', () => {
     const content = parseUsagePointContentSeedFile(
       await readAsset('grammar-usage-point-content.json'),
     );
-    const useIndexes = parseEgpRecords(await readAsset('egp.json'))
-      .filter((record) => classifyEgpRecord(record) === 'use')
+    const useIndexes = usagePointRecords(
+      parseEgpRecords(await readAsset('egp.json')),
+    )
       .map((record) => String(record.index))
       .sort();
 

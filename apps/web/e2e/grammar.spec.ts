@@ -255,6 +255,76 @@ test.describe('grammar construction detail', () => {
     await expect(construction.handcrafted).toHaveCount(0);
   });
 
+  test('names the construction with its category in H1 and title, level badge outside the H1', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('adjectives-position');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Adjectives: position',
+    );
+    await expect(page).toHaveTitle('Adjectives: position — Grammar — Engofy');
+    await expect(page.locator('h1 .badge')).toHaveCount(0);
+    await construction.goto('past-past-simple');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Past simple',
+    );
+  });
+
+  test('keeps the sticky progress a thin bar; the section list overlays on demand', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+    const bar = page.locator('[data-gp-progress]');
+    const list = page.locator('.gp-progress__list');
+    expect((await bar.boundingBox())?.height).toBeLessThan(48);
+    await expect(list).toBeHidden();
+
+    const below = page.locator('.con-body');
+    const before = (await below.boundingBox())?.y;
+    await page.locator('[data-gp-progress-more] summary').click();
+    await expect(list).toBeVisible();
+    expect((await below.boundingBox())?.y).toBe(before);
+
+    // The bar names the section being read.
+    await list.locator('a').last().click();
+    await expect(list).toBeHidden();
+    await expect(page.locator('[data-gp-progress-current]')).toHaveText(
+      'Practice',
+    );
+  });
+
+  test('folds usage points above B1 under "More difficult cases"', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-conditionals');
+    await construction.openUsage();
+
+    await expect(construction.usageMore).toHaveCount(1);
+    await expect(construction.usageMore).not.toHaveAttribute('open');
+    await expect(construction.usageMore).toContainText(
+      'More difficult cases (2)',
+    );
+    await expect(construction.usageItem(0)).toBeHidden();
+    await construction.usageMore.locator('summary').click();
+    await expect(construction.usageItem(0)).toBeVisible();
+  });
+
+  test('the header Practice button opens the Practice section', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await expect(construction.practiceSection).not.toHaveAttribute('open');
+
+    await page.getByTestId('grammar-practice-cta').click();
+    await expect(construction.practiceSection).toHaveAttribute('open');
+    await expect(page.getByTestId('page-practice')).toBeVisible();
+  });
+
   test('keeps "When it\'s used" closed until opened, with a rule count', async ({
     page,
   }) => {
@@ -264,10 +334,11 @@ test.describe('grammar construction detail', () => {
     await expect(construction.usageSection).not.toHaveAttribute('open');
     await expect(construction.usageSection).toContainText('2 rules');
     await expect(construction.usageItem(0)).toBeHidden();
-    // Two points fit under the visible limit — no "Show more" toggle.
+    // Both points are within the base level — no "More difficult cases" fold.
     await expect(construction.usageMore).toHaveCount(0);
 
     const checklistItem = page.locator('[data-gp-progress-item="use"]');
+    await page.locator('[data-gp-progress-more] summary').click();
     await expect(checklistItem).toHaveAttribute('data-done', 'false');
     await checklistItem.click();
     await expect(construction.usageSection).toHaveAttribute('open');
@@ -355,6 +426,31 @@ test.describe('grammar construction detail', () => {
     ).toHaveAttribute('aria-pressed', 'true');
   });
 
+  test('a stored Ukrainian choice does not shift the header when scripts run', async ({
+    browser,
+  }) => {
+    const barY = async (scripts: boolean) => {
+      const context = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+      });
+      await context.addInitScript(() => {
+        localStorage.setItem('popup-lang', 'native');
+      });
+      const page = await context.newPage();
+      if (!scripts) {
+        await blockScripts(page);
+      }
+      await new GrammarConstructionPage(page).goto('e2e-past-perfect');
+      const box = await page.locator('[data-gp-progress]').boundingBox();
+      await context.close();
+      return box?.y;
+    };
+    const withoutScripts = await barY(false);
+    const withScripts = await barY(true);
+    expect(withoutScripts).toBeDefined();
+    expect(withoutScripts).toBeCloseTo(withScripts ?? -1, 0);
+  });
+
   // The stored language is applied before first paint (boot script), so the
   // card below the translated one sits where it will once scripts have run.
   for (const [name, viewport] of [
@@ -406,7 +502,7 @@ test.describe('grammar construction detail', () => {
     // The card links to its group in Practice, which holds the exercises.
     const enriched = construction.usageItem(0);
     await expect(enriched.locator('.upe')).toHaveCount(0);
-    await enriched.getByRole('link', { name: 'Practice · 1' }).click();
+    await enriched.getByRole('link', { name: 'Practice · 4' }).click();
     const group = page.locator('#practice-90012');
     await expect(group).toBeVisible();
     const exercise = group.locator('.upe__item').first();
@@ -443,6 +539,61 @@ test.describe('grammar construction detail', () => {
     await expect(exercise.locator('[data-upe-feedback]')).toContainText(
       'Correct',
     );
+  });
+
+  test('checks every exercise of a page: Correct on the right answer, the answer and rule on a miss', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openPractice();
+
+    const items = page.getByTestId('page-practice').locator('.upe__item');
+    const count = await items.count();
+    expect(count).toBeGreaterThan(0);
+
+    const answer = async (index: number, right: boolean) => {
+      const item = items.nth(index);
+      const kind = await item.getAttribute('data-upe-kind');
+      const feedback = item.locator('[data-upe-feedback]');
+      if (kind === 'choose') {
+        const correct = Number(await item.getAttribute('data-answer-index'));
+        const optionCount = await item.locator('[data-option]').count();
+        const pick = right ? correct : (correct + 1) % optionCount;
+        await item.locator('[data-option]').nth(pick).click();
+        await item.locator('[data-upe-check]').click();
+      } else if (kind === 'type') {
+        const text = (await item.getAttribute('data-answer')) ?? '';
+        await item.locator('[data-upe-input]').fill(right ? text : 'zzz');
+        await item.locator('[data-upe-check]').click();
+      } else {
+        const order: number[] = JSON.parse(
+          (await item.getAttribute('data-order')) ?? '[]',
+        );
+        const slots = order
+          .map((target, slot) => ({ target, slot }))
+          .sort((a, b) => a.target - b.target)
+          .map((x) => x.slot);
+        const sequence = right ? slots : [...slots].reverse();
+        for (const slot of sequence) {
+          await item.locator(`[data-order-chip="${slot}"]`).click();
+        }
+      }
+      await expect(feedback.locator('[data-upe-verdict]')).toHaveText(
+        right ? 'Correct' : 'Not quite',
+      );
+      if (!right) {
+        await expect(item.locator('[data-upe-note]')).toContainText('Answer:');
+        await expect(
+          item.locator('[data-upe-note] a[href^="#usage-point-"]'),
+        ).toHaveCount(1);
+      }
+    };
+
+    for (let i = 0; i < count; i++) {
+      // Every third exercise is answered wrong, so both paths are covered.
+      await answer(i, i % 3 !== 0);
+    }
   });
 
   test('keeps the Practice placeholder on a page with no exercises', async ({
@@ -542,7 +693,10 @@ test.describe('grammar construction detail', () => {
     const construction = new GrammarConstructionPage(page);
     await construction.goto('e2e-past-perfect');
     const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute('content', /E2E: Tenses/);
+    await expect(description).toHaveAttribute(
+      'content',
+      /past perfect \(A2\) in English grammar/,
+    );
     await expect(description).not.toHaveAttribute(
       'content',
       'Learn English through short authentic texts.',

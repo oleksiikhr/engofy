@@ -46,6 +46,46 @@ const parsed: NlpParseResult = {
 };
 
 describe('buildLexBlockSpans', () => {
+  it('links a function word inside a target range, with its own part of speech', () => {
+    // "a" (DET, start 9) is a target; "She" is not.
+    const words = buildLexBlockSpans(
+      TEXT,
+      parsed,
+      new Map(),
+      { literal: [], phrasalVerbs: [] },
+      [{ start: 9, end: 10 }],
+    );
+
+    expect(words).toContainEqual({
+      kind: 'word',
+      start: 9,
+      end: 10,
+      lemma: 'a',
+      pos: PartOfSpeech.Determiner,
+    });
+    expect(words.some((span) => span.start === 0)).toBe(false);
+  });
+
+  it('links a very common word inside a target range once', () => {
+    const words = buildLexBlockSpans(
+      TEXT,
+      parsed,
+      new Map([['map', 10]]),
+      { literal: [], phrasalVerbs: [] },
+      [{ start: 20, end: 23 }],
+    );
+
+    expect(words.filter((span) => span.start === 20)).toEqual([
+      {
+        kind: 'word',
+        start: 20,
+        end: 23,
+        lemma: 'map',
+        pos: PartOfSpeech.Noun,
+      },
+    ]);
+  });
+
   it('links content words, skipping function words and very common lemmas', () => {
     const words = buildLexBlockSpans(TEXT, parsed, new Map([['map', 900]]));
 

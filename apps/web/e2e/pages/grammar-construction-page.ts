@@ -49,8 +49,22 @@ export class GrammarConstructionPage {
     }
   }
 
+  // Points above B1 sit inside the "More difficult cases" fold.
+  async openUsageMore() {
+    if ((await this.usageMore.count()) === 0) {
+      return;
+    }
+    const open = await this.usageMore.evaluate(
+      (el) => (el as HTMLDetailsElement).open,
+    );
+    if (!open) {
+      await this.usageMore.locator('summary').click();
+    }
+  }
+
   async addUsageToDeck(index = 0) {
     await this.openUsage();
+    await this.openUsageMore();
     await this.usageItem(index)
       .getByRole('button', { name: '+ Add to deck' })
       .click();
@@ -58,6 +72,7 @@ export class GrammarConstructionPage {
 
   async markUsageKnown(index = 0) {
     await this.openUsage();
+    await this.openUsageMore();
     await this.usageItem(index)
       .getByRole('button', { name: 'I know this' })
       .click();

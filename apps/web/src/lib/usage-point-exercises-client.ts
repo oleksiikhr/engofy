@@ -30,12 +30,23 @@ function showFeedback(item: HTMLElement, right: boolean): void {
     ?.setAttribute('hidden', '');
 }
 
+// After a miss: the right answer, and a link back to the point's rule when
+// the item knows where it lives.
 function showAnswer(item: HTMLElement, right: boolean): void {
   const note = item.querySelector<HTMLElement>('[data-upe-note]');
-  if (note && !right) {
-    note.textContent = `Answer: ${item.dataset.answer ?? ''}`;
-    note.hidden = false;
+  if (!note || right) {
+    return;
   }
+  note.textContent = `Answer: ${item.dataset.answer ?? ''}`;
+  const href = item.dataset.ruleHref;
+  if (href) {
+    const link = document.createElement('a');
+    link.href = href;
+    link.textContent = 'See the rule';
+    link.className = 'qc__rule';
+    note.append(' · ', link);
+  }
+  note.hidden = false;
 }
 
 function select(item: HTMLElement, index: number): void {
@@ -83,6 +94,7 @@ function checkChoice(item: HTMLElement): void {
   if (blank) {
     blank.textContent = all[answer]?.dataset.text ?? '';
   }
+  showAnswer(item, right);
   showFeedback(item, right);
 }
 

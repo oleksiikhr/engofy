@@ -22,6 +22,13 @@ const NLP_OVERRIDES = {
 };
 
 const FIRST = 'The cartographer sketched';
+const asBlock = (
+  text: string,
+  targets: { start: number; end: number }[] = [],
+) => ({
+  text,
+  targets,
+});
 
 const wordDefinitionIdOf = (span: GrammarPageLexSpan | undefined) =>
   span && 'wordDefinitionId' in span ? span.wordDefinitionId : undefined;
@@ -53,7 +60,10 @@ describe('AnnotateGrammarPageHandler', () => {
     const constructionId = await createConstruction();
 
     const view = await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND]),
+      new AnnotateGrammarPageCommand('lex-test', [
+        asBlock(FIRST),
+        asBlock(SECOND),
+      ]),
     );
 
     expect(view).toEqual({ blocks: 2, parsed: 2, removed: 0 });
@@ -84,12 +94,18 @@ describe('AnnotateGrammarPageHandler', () => {
   it('parses only new blocks and removes the ones the page lost', async () => {
     const constructionId = await createConstruction();
     await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND]),
+      new AnnotateGrammarPageCommand('lex-test', [
+        asBlock(FIRST),
+        asBlock(SECOND),
+      ]),
     );
     const callsBefore = fakeNlp.callCount;
 
     const view = await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [FIRST, THIRD]),
+      new AnnotateGrammarPageCommand('lex-test', [
+        asBlock(FIRST),
+        asBlock(THIRD),
+      ]),
     );
 
     expect(view).toEqual({ blocks: 2, parsed: 1, removed: 1 });
@@ -105,14 +121,17 @@ describe('AnnotateGrammarPageHandler', () => {
   it('re-parses every kept block on refresh', async () => {
     const constructionId = await createConstruction();
     await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [FIRST, SECOND]),
+      new AnnotateGrammarPageCommand('lex-test', [
+        asBlock(FIRST),
+        asBlock(SECOND),
+      ]),
     );
     const callsBefore = fakeNlp.callCount;
 
     const view = await suite.command(
       new AnnotateGrammarPageCommand(
         'lex-test',
-        [FIRST, SECOND],
+        [asBlock(FIRST), asBlock(SECOND)],
         { literal: [], phrasalVerbs: [] },
         true,
       ),
@@ -125,11 +144,35 @@ describe('AnnotateGrammarPageHandler', () => {
     ).toBe(2);
   });
 
+  it('links a function word inside a target range with its own part of speech', async () => {
+    const constructionId = await createConstruction();
+
+    await suite.command(
+      new AnnotateGrammarPageCommand('lex-test', [
+        asBlock(FIRST, [{ start: 0, end: 3 }]),
+      ]),
+    );
+
+    const row = await suite.orm.em.findOneOrFail(GrammarPageLexBlock, {
+      constructionId,
+      textHash: lexBlockHash(FIRST),
+    });
+    expect(row.spans.map((span) => [span.start, span.end])).toEqual([
+      [0, 3],
+      [4, 16],
+      [17, 25],
+    ]);
+    const definition = await suite.orm.em.findOneOrFail(WordDefinition, {
+      id: wordDefinitionIdOf(row.spans[0]),
+    });
+    expect(definition.pos).toBe('determiner');
+  });
+
   it('links a listed phrase instead of the words inside it', async () => {
     const constructionId = await createConstruction();
 
     await suite.command(
-      new AnnotateGrammarPageCommand('lex-test', [THIRD], {
+      new AnnotateGrammarPageCommand('lex-test', [asBlock(THIRD)], {
         literal: ['meticulous cartographer'],
         phrasalVerbs: [],
       }),
@@ -148,7 +191,9 @@ describe('AnnotateGrammarPageHandler', () => {
 
   it('rejects an unknown construction', async () => {
     await expect(
-      suite.command(new AnnotateGrammarPageCommand('no-such-page', [FIRST])),
+      suite.command(
+        new AnnotateGrammarPageCommand('no-such-page', [asBlock(FIRST)]),
+      ),
     ).rejects.toThrow('Grammar construction not found');
   });
 });

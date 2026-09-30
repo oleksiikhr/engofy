@@ -4,19 +4,29 @@
 // and handcrafted pages, which drop it inline inside the GrammarSection its
 // rule belongs to instead of leaving it stranded in the bottom list.
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
-import { NATIVE_LANG_LABEL, nativeLang } from '../../lib/native-lang';
+import { isHardLevel } from '../../lib/grammar-level';
+import { nativeLang } from '../../lib/native-lang';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
 import {
   practiceAnchorId,
   usagePointDrillSteps,
 } from '../../lib/usage-point-exercises';
 import GrammarContrast from './GrammarContrast.astro';
+import GrammarLangSwitch from './GrammarLangSwitch.astro';
 
 interface Props {
   usagePoint: GrammarConstructionUsagePoint;
+  // Set by a container that already folds hard cases itself
+  // (GrammarUsagePoints); otherwise a hard case folds on its own.
+  bare?: boolean;
 }
 
-const { usagePoint: up } = Astro.props;
+const { usagePoint: up, bare = false } = Astro.props;
+// A rule above the page's base level starts folded, so it doesn't crowd a
+// learner who isn't there yet; its guideword row is the toggle.
+const collapsed = !bare && isHardLevel(up.cefrLevel);
+const Wrap = collapsed ? 'details' : 'div';
+const Head = collapsed ? 'summary' : 'div';
 // Deep-link target for the Reader popup's "Practice" button
 // (`lib/reader-lexicon.ts`'s `practiceHref`); null for a usage point added
 // from a non-EGP source, which has no anchor.
@@ -36,27 +46,22 @@ const nativeExamples = nativeExplanation
   : undefined;
 ---
 
-<div class="usage-item card" data-state={up.state} id={anchorId}>
-  <div class="usage-item__head" data-no-lex>
+<Wrap
+  class:list={['usage-item card', { 'usage-item--hard': collapsed }]}
+  data-state={up.state}
+  id={anchorId}
+>
+  <Head class="usage-item__head" data-no-lex>
     <span class="badge">{up.cefrLevel}</span>
     <span class="usage-item__guide">{up.guideword}</span>
     {
-      nativeExplanation && (
-        <div
-          class="usage-item__lang"
-          role="group"
-          aria-label="Explanation language"
-        >
-          <button type="button" data-usage-lang="en" aria-pressed="true">
-            EN
-          </button>
-          <button type="button" data-usage-lang="native" aria-pressed="false">
-            {NATIVE_LANG_LABEL[native]}
-          </button>
-        </div>
+      nativeExplanation && !collapsed && (
+        <span class="usage-item__lang">
+          <GrammarLangSwitch />
+        </span>
       )
     }
-  </div>
+  </Head>
   <p class="usage-item__can">
     <span class="usage-item__en">{up.explanation ?? up.canDoStatement}</span>
     {
@@ -95,7 +100,7 @@ const nativeExamples = nativeExplanation
       </a>
     )
   }
-</div>
+</Wrap>
 
 <style>
   .usage-item {
@@ -116,6 +121,27 @@ const nativeExamples = nativeExplanation
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+  }
+  .usage-item__lang {
+    margin-left: auto;
+  }
+  .usage-item--hard > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .usage-item--hard > summary::-webkit-details-marker {
+    display: none;
+  }
+  .usage-item--hard > summary::after {
+    content: '▾';
+    margin-left: auto;
+    color: var(--color-ink-faint);
+  }
+  .usage-item--hard[open] > summary {
+    margin-bottom: 0.5rem;
+  }
+  .usage-item--hard[open] > summary::after {
+    content: '▴';
   }
   .usage-item__guide {
     font-size: 0.75rem;
@@ -139,33 +165,6 @@ const nativeExamples = nativeExplanation
   :global(:root[data-popup-lang='native'])
     .usage-item__en:has(~ .usage-item__native) {
     display: none;
-  }
-  .usage-item__lang {
-    display: inline-flex;
-    margin-left: auto;
-    padding: 2px;
-    border-radius: 999px;
-    background: var(--color-paper-soft);
-  }
-  .usage-item__lang button {
-    min-width: 2.25rem;
-    padding: 0.2rem 0.55rem;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-ink-soft);
-    font-size: 0.72rem;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  :global(:root:not([data-popup-lang='native']))
-    .usage-item__lang
-    [data-usage-lang='en'],
-  :global(:root[data-popup-lang='native'])
-    .usage-item__lang
-    [data-usage-lang='native'] {
-    background: var(--color-brand-wash);
-    color: var(--color-brand-strong);
   }
   .usage-item__cando {
     margin: 0 0 0.5rem;
