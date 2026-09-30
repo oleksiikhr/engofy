@@ -372,6 +372,31 @@ async function seed(orm: MikroORM): Promise<void> {
       answer: 'had drawn',
     },
   });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.MultipleChoice,
+    payload: {
+      prompt: 'When we got there, the film ____ already started.',
+      options: ['has', 'had', 'was'],
+      answerIndex: 1,
+    },
+  });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.Reorder,
+    payload: {
+      scrambled: ['had', 'left', 'She', 'already'],
+      answer: [1, 3, 0, 2],
+    },
+  });
+  factories(em).grammarUsagePointExercise.makeOne({
+    usagePointId: pastPerfectUp.id,
+    type: ExerciseType.FindError,
+    payload: {
+      prompt: 'He had went home before I called.',
+      correction: 'gone',
+    },
+  });
   const presentSimple = factories(em).grammarConstruction.makeOne({
     categoryId: category.id,
     name: 'present simple',

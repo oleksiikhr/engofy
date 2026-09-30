@@ -44,7 +44,7 @@ function chooseHtml(step: ChooseStep): string {
     .join('');
   return `<p class="qc__prompt">${esc(step.before)}<span class="qc__blank" data-upe-blank>&nbsp;</span>${esc(step.after)}</p>
       <div class="qc__options" role="group" aria-label="Options">${options}</div>
-      <div class="alert qc__feedback" data-upe-feedback role="status" hidden><div><b data-upe-verdict></b></div></div>
+      <div class="alert qc__feedback" data-upe-feedback role="status" hidden><div><b data-upe-verdict></b><p class="qc__note" data-upe-note hidden></p></div></div>
       <div class="qc__actions"><button type="button" class="btn btn--sm" data-upe-check disabled>Check</button></div>`;
 }
 
@@ -112,6 +112,7 @@ function itemHtml(step: QuickCheckStep): string {
 // point at a time) — the caller renders nothing in that case.
 export function usagePointExercisesHtml(
   exercises: UsagePointExercise[],
+  ruleHref?: string,
 ): string {
   const steps = usagePointDrillSteps(exercises);
   if (steps.length === 0) {
@@ -125,9 +126,11 @@ export function usagePointExercisesHtml(
           ? step.answer
           : step.kind === 'order'
             ? step.answerText
-            : '';
+            : step.kind === 'choose'
+              ? `${step.before}${step.options[step.answerIndex]}${step.after}`
+              : '';
       const order = step.kind === 'order' ? JSON.stringify(step.order) : '';
-      return `<li class="upe__item card card--soft" data-upe-item data-upe-kind="${step.kind}" data-answer-index="${answerIndex}" data-answer="${esc(answer)}" data-order='${esc(order)}'>
+      return `<li class="upe__item card card--soft" data-upe-item data-upe-kind="${step.kind}" data-answer-index="${answerIndex}" data-answer="${esc(answer)}"${ruleHref ? ` data-rule-href="${esc(ruleHref)}"` : ''} data-order='${esc(order)}'>
         ${itemHtml(step)}
       </li>`;
     })
@@ -157,7 +160,10 @@ export function pagePracticeHtml(
 ): string {
   return points
     .map((point) => {
-      const list = usagePointExercisesHtml(point.exercises);
+      const list = usagePointExercisesHtml(
+        point.exercises,
+        point.egpIndex == null ? undefined : `#usage-point-${point.egpIndex}`,
+      );
       if (!list) {
         return '';
       }

@@ -502,7 +502,7 @@ test.describe('grammar construction detail', () => {
     // The card links to its group in Practice, which holds the exercises.
     const enriched = construction.usageItem(0);
     await expect(enriched.locator('.upe')).toHaveCount(0);
-    await enriched.getByRole('link', { name: 'Practice · 1' }).click();
+    await enriched.getByRole('link', { name: 'Practice · 4' }).click();
     const group = page.locator('#practice-90012');
     await expect(group).toBeVisible();
     const exercise = group.locator('.upe__item').first();
@@ -539,6 +539,61 @@ test.describe('grammar construction detail', () => {
     await expect(exercise.locator('[data-upe-feedback]')).toContainText(
       'Correct',
     );
+  });
+
+  test('checks every exercise of a page: Correct on the right answer, the answer and rule on a miss', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await construction.openPractice();
+
+    const items = page.getByTestId('page-practice').locator('.upe__item');
+    const count = await items.count();
+    expect(count).toBeGreaterThan(0);
+
+    const answer = async (index: number, right: boolean) => {
+      const item = items.nth(index);
+      const kind = await item.getAttribute('data-upe-kind');
+      const feedback = item.locator('[data-upe-feedback]');
+      if (kind === 'choose') {
+        const correct = Number(await item.getAttribute('data-answer-index'));
+        const optionCount = await item.locator('[data-option]').count();
+        const pick = right ? correct : (correct + 1) % optionCount;
+        await item.locator('[data-option]').nth(pick).click();
+        await item.locator('[data-upe-check]').click();
+      } else if (kind === 'type') {
+        const text = (await item.getAttribute('data-answer')) ?? '';
+        await item.locator('[data-upe-input]').fill(right ? text : 'zzz');
+        await item.locator('[data-upe-check]').click();
+      } else {
+        const order: number[] = JSON.parse(
+          (await item.getAttribute('data-order')) ?? '[]',
+        );
+        const slots = order
+          .map((target, slot) => ({ target, slot }))
+          .sort((a, b) => a.target - b.target)
+          .map((x) => x.slot);
+        const sequence = right ? slots : [...slots].reverse();
+        for (const slot of sequence) {
+          await item.locator(`[data-order-chip="${slot}"]`).click();
+        }
+      }
+      await expect(feedback.locator('[data-upe-verdict]')).toHaveText(
+        right ? 'Correct' : 'Not quite',
+      );
+      if (!right) {
+        await expect(item.locator('[data-upe-note]')).toContainText('Answer:');
+        await expect(
+          item.locator('[data-upe-note] a[href^="#usage-point-"]'),
+        ).toHaveCount(1);
+      }
+    };
+
+    for (let i = 0; i < count; i++) {
+      // Every third exercise is answered wrong, so both paths are covered.
+      await answer(i, i % 3 !== 0);
+    }
   });
 
   test('keeps the Practice placeholder on a page with no exercises', async ({
