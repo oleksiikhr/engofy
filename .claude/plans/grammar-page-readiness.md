@@ -126,12 +126,12 @@ status: in-progress
 
 B6 — горизонтальний скрол на `clauses-phrases-exclamations`. B9 — фікстури `e2e-*` не потрапляють у список, sitemap і пошук. B3 — неповний UP на `past-present-perfect-simple`. Повторний прогін `grammar-audit.mjs` для B4 після зрізу 2, оновити карту розкатки.
 
-### [ ] 10. Розкатка: 13 сторінок без usage point
+### [x] 10. Розкатка: 13 сторінок без usage point
 - Branch: `grammar-page-readiness`
 - Base: `main`
-- PR: —
+- PR: — (єдиний PR наприкінці плану)
 
-B2/B3 для `nouns-*`, `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`, `adjectives-modifying`, `clauses-interrogatives`, `nouns-noun-phrases-grammatical-functions`: usage points з `learner_explanation`, `learner_examples`, українським перекладом. `<mark>` у прикладах і `--refresh` для `annotate-pages`.
+Джерело: у конструкцій без USE-записів EGP `import-egp` тепер робить usage points із FORM-записів із can-do (`usagePointRecords`, 87 записів, разом 661); контент і вправи в `assets/grammar-usage-point-*.json`, вправи в цих сторінках уже є (D1), тож зріз 11 їх не торкається. Українські тексти потребують читання людиною. `<mark>` не потрібен: сторінки рукописні, `annotate-pages` не запускали. B2/B3 для `nouns-*`, `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`, `adjectives-modifying`, `clauses-interrogatives`, `nouns-noun-phrases-grammatical-functions`: usage points з `learner_explanation`, `learner_examples`, українським перекладом.
 
 ### [ ] 11. Розкатка: вправи для 39 сторінок без вправ
 - Branch: `grammar-page-readiness`
@@ -164,9 +164,9 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 
 Підсумок:
 
-- B2: 13 без usage point (`nouns-plural/types/uncountable/noun-phrases-grammatical-functions`,
+- B2: пройдено після зрізу 10 (було 13 без usage point: `nouns-plural/types/uncountable/noun-phrases-grammatical-functions`,
   `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`,
-  `adjectives-modifying`, `clauses-interrogatives`, `e2e-empty-construction`).
+  `adjectives-modifying`, `clauses-interrogatives`, `e2e-empty-construction`; лишилась лише фікстура).
 - B3: 77 повні; неповні `past-present-perfect-simple` (10/11) і три e2e-фікстури.
 - B4: пройдено (перепрогін після зрізу 2 і 9): 90 реальних сторінок з унікальними H1 і `<title>`
   («Adjectives: combining»); однослівні лише самі категорії (`Focus`, `Negation`, `Prepositions`).
@@ -186,7 +186,7 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 |---|---|---|---|---|---|---|---|
 | `adjectives-combining` | combining | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `adjectives-comparatives` | comparatives | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
-| `adjectives-modifying` | modifying | ✗ | — | ✓ | ✓ | — | ✓ |
+| `adjectives-modifying` | modifying | ✓ | ✓ | ✓ | ✓ | 13/13 | ✓ |
 | `adjectives-position` | position | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
 | `adjectives-superlatives` | superlatives | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
 | `adverbs-adverb-phrases-form` | adverb phrases - form | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
@@ -198,7 +198,7 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `clauses-coordinated` | coordinated | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
 | `clauses-declarative` | declarative | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `clauses-imperatives` | imperatives | ✓ | ✓ | ✓ | ✓ | 16/16 | ✓ |
-| `clauses-interrogatives` | interrogatives | ✗ | — | ✓ | ✓ | — | ✓ |
+| `clauses-interrogatives` | interrogatives | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
 | `clauses-phrases-exclamations` | phrases/exclamations | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `clauses-relative` | relative | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
 | `clauses-subordinated` | subordinated | ✓ | ✓ | ✓ | ✓ | 16/16 | ✓ |
@@ -241,10 +241,10 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `modality-would` | would | ✓ | ✓ | ✓ | ✓ | 0/13 | ✓ |
 | `negation-negation` | negation | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
 | `nouns-noun-phrases` | noun phrases | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
-| `nouns-noun-phrases-grammatical-functions` | noun phrases - grammatical functions | ✗ | — | ✓ | ✓ | — | ✓ |
-| `nouns-plural` | plural | ✗ | — | ✓ | ✓ | — | ✓ |
-| `nouns-types` | types | ✗ | — | ✓ | ✓ | — | ✓ |
-| `nouns-uncountable` | uncountable | ✗ | — | ✓ | ✓ | — | ✓ |
+| `nouns-noun-phrases-grammatical-functions` | noun phrases - grammatical functions | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
+| `nouns-plural` | plural | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
+| `nouns-types` | types | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
+| `nouns-uncountable` | uncountable | ✓ | ✓ | ✓ | ✓ | 8/8 | ✓ |
 | `passives-get-and-have` | get and have | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
 | `passives-passives-form` | passives: form | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
 | `past-past-continuous` | past continuous | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
@@ -270,11 +270,11 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `questions-wh` | wh- | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
 | `questions-yes-no` | yes/no | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
 | `reported-speech-reported-speech` | reported speech | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
-| `verbs-linking` | linking | ✗ | — | ✓ | ✓ | — | ✓ |
-| `verbs-patterns-that-clauses` | patterns_that clauses | ✗ | — | ✓ | ✓ | — | ✓ |
+| `verbs-linking` | linking | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
+| `verbs-patterns-that-clauses` | patterns_that clauses | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
 | `verbs-patterns-with-to-and-ing` | patterns_with to and -ing | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
-| `verbs-phrasal` | phrasal | ✗ | — | ✓ | ✓ | — | ✓ |
+| `verbs-phrasal` | phrasal | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
 | `verbs-phrasal-prepositional` | phrasal-prepositional | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
-| `verbs-prepositional` | prepositional | ✗ | — | ✓ | ✓ | — | ✓ |
-| `verbs-there-is-are` | there is/are | ✗ | — | ✓ | ✓ | — | ✓ |
-| `verbs-types` | types | ✗ | — | ✓ | ✓ | — | ✓ |
+| `verbs-prepositional` | prepositional | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
+| `verbs-there-is-are` | there is/are | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
+| `verbs-types` | types | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
