@@ -74,7 +74,7 @@ status: in-progress
 `data-pos="noun|verb|adj|adv|function"` на `<mark>` у `GrammarExample` і `{ text, pos }` у частинах
 `GrammarFormula`. Розмітка з `data-pos` втрачає заливку ролі й бере чорнило та підкреслення `--pos-*`
 (службові слова — пунктир). Без `data-pos` — нейтральна заливка ролі. На `determiners-quantity`:
-кванторы/службові слова — `function`, іменники — `noun`.
+квантори/службові слова — `function`, іменники — `noun`.
 
 ### [ ] 4. Еталонна сторінка, ч.3: слова й переклад
 - Branch: `grammar-page-readiness`
