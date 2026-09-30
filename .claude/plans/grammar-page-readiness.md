@@ -31,7 +31,8 @@ status: in-progress
 
 - D1. Кожен usage point має вправи.
 - D2. Вправи «choose» після помилки показують правильну відповідь/пояснення.
-- D3. Cheat sheet не порожній, є «Compare with».
+- D3. Якщо в EGP є `FORM:`-записи конструкції, cheat sheet не порожній, є «Compare with». Конструкції без
+  `FORM:`-записів (лише `USE` / `FORM/USE`) cheat sheet не мають, і це не дефект.
 - D4. Темна тема без візуальних дефектів.
 - D5. Word-popup і словник працюють на сторінці.
 - D6. Ролі-частини мови мають ті самі кольори, що й у читалці (`--pos-*`).
@@ -140,19 +141,19 @@ B6 — горизонтальний скрол на `clauses-phrases-exclamation
 
 Змін у коді немає: банк вправ покриває всі 661 UP, dev-БД уже посіяна, `grammar-audit.mjs` показує D1 на всіх реальних сторінках, `modality-can` віддає вправи; D2 закрито в зрізі 6. Карта розкатки оновлена. Початковий опис: D1 за категоріями: `modality-*`, `present-*`, `pronouns-*`, `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`. Вправи «choose» показують правильну відповідь після помилки (D2).
 
-### [ ] 12. Розкатка: cheat sheet для 6 сторінок
+### [x] 12. Розкатка: cheat sheet для 6 сторінок
 - Branch: `grammar-page-readiness`
 - Base: `main`
 - PR: —
 
-D3: `adverbs-adverbs-as-modifiers`, `discourse-markers-discourse-markers-in-writing`, `focus-focus`, `future-future-in-the-past`, `pronouns-generic-use`, `e2e-empty-construction` (остання — фікстура, пропустити).
+Змін у коді немає. Cheat sheet імпортер будує лише з EGP `FORM:`-записів (`buildCheatSheet`); у 5 сторінок (`adverbs-adverbs-as-modifiers`, `discourse-markers-discourse-markers-in-writing`, `focus-focus`, `future-future-in-the-past`, `pronouns-generic-use`) усі записи — `USE` або `FORM/USE`, тобто вони вже стали usage points. Рішення: D3 уточнено (чекліст вище), ці сторінки його проходять; `e2e-empty-construction` — фікстура. Початковий опис: D3 для 6 сторінок.
 
 ### [ ] 13. Розкатка: фінальний прогін чекліста по всіх сторінках
 - Branch: `grammar-page-readiness`
 - Base: `main`
 - PR: —
 
-Перенести перевірки чекліста (B1, B4–B6, D1, D3) з `grammar-audit.mjs` у e2e або CI-скрипт по всіх реальних сторінках, оновити карту розкатки; сторінка-стандарт лишається джерелом істини.
+Перенести перевірки чекліста (B1, B4–B6, D1 і D3 лише для конструкцій із `FORM:`-записами в EGP) з `grammar-audit.mjs` у e2e або CI-скрипт по всіх реальних сторінках, оновити карту розкатки; сторінка-стандарт лишається джерелом істини.
 
 ## Карта розкатки
 
@@ -181,7 +182,7 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
   `past-present-perfect-simple` 10/11 — той самий витік e2e-фікстур у dev-БД, що й у B3. Було 39 сторінок
   без вправ: банк `grammar-usage-point-exercises.json` уже покриває всі 661 UP, у dev-БД бракувало лише
   посіву (`import-usage-point-exercises`, зараз 0 нових).
-- D3: 6 сторінок без cheat sheet.
+- D3: пройдено (зріз 12): 5 сторінок без cheat sheet не мають `FORM:`-записів в EGP, вимога їх не стосується.
 - B7, B8, B10, D2, D4–D8 аудитом не покриті (потрібна взаємодія/зір) — зрізи 2–7.
 
 | Конструкція | Назва | B2 | B3 | B4 | B6 | D1 | D3 |
@@ -193,7 +194,7 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `adjectives-superlatives` | superlatives | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
 | `adverbs-adverb-phrases-form` | adverb phrases - form | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
 | `adverbs-adverbs-and-adverb-phrases-types-and-meanings` | adverbs and adverb phrases: types and meanings | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
-| `adverbs-adverbs-as-modifiers` | adverbs as modifiers | ✓ | ✓ | ✓ | ✓ | 31/31 | ✗ |
+| `adverbs-adverbs-as-modifiers` | adverbs as modifiers | ✓ | ✓ | ✓ | ✓ | 31/31 | — |
 | `adverbs-position` | position | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
 | `clauses-comparatives` | comparatives | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
 | `clauses-conditional` | conditional | ✓ | ✓ | ✓ | ✓ | 23/23 | ✓ |
@@ -210,15 +211,15 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `determiners-demonstratives` | demonstratives | ✓ | ✓ | ✓ | ✓ | 15/15 | ✓ |
 | `determiners-possessives` | possessives | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `determiners-quantity` | quantity | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
-| `discourse-markers-discourse-markers-in-writing` | discourse markers in writing | ✓ | ✓ | ✓ | ✓ | 11/11 | ✗ |
+| `discourse-markers-discourse-markers-in-writing` | discourse markers in writing | ✓ | ✓ | ✓ | ✓ | 11/11 | — |
 | `e2e-conditionals` (e2e) | conditionals | ✓ | ✗ 0/2 | ✓ | ✓ | 0/2 | ✓ |
 | `e2e-empty-construction` (e2e) | empty construction | ✗ | — | ✓ | ✓ | — | ✗ |
 | `e2e-past-perfect` (e2e) | past perfect | ✓ | ✗ 1/2 | ✓ | ✓ | 0/2 | ✓ |
 | `e2e-present-simple` (e2e) | present simple | ✓ | ✗ 0/1 | ✓ | ✓ | 0/1 | ✓ |
-| `focus-focus` | focus | ✓ | ✓ | ✓ | ✓ | 15/15 | ✗ |
+| `focus-focus` | focus | ✓ | ✓ | ✓ | ✓ | 15/15 | — |
 | `future-future-continuous` | future continuous | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
 | `future-future-expressions-with-be` | future expressions with be | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
-| `future-future-in-the-past` | future in the past | ✓ | ✓ | ✓ | ✓ | 5/5 | ✗ |
+| `future-future-in-the-past` | future in the past | ✓ | ✓ | ✓ | ✓ | 5/5 | — |
 | `future-future-perfect-continuous` | future perfect continuous | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
 | `future-future-perfect-simple` | future perfect simple | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
 | `future-future-simple-with-will-and-shall` | future simple (with will and shall) | ✓ | ✓ | ✓ | ✓ | 11/11 | ✓ |
@@ -259,7 +260,7 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `present-present-continuous` | present continuous | ✓ | ✓ | ✓ | ✓ | 11/11 | ✓ |
 | `present-present-simple` | present simple | ✓ | ✓ | ✓ | ✓ | 14/14 | ✓ |
 | `pronouns-demonstratives` | demonstratives | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
-| `pronouns-generic-use` | generic use | ✓ | ✓ | ✓ | ✓ | 5/5 | ✗ |
+| `pronouns-generic-use` | generic use | ✓ | ✓ | ✓ | ✓ | 5/5 | — |
 | `pronouns-indefinite-thing-one-body-etc` | indefinite - thing, -one, -body etc | ✓ | ✓ | ✓ | ✓ | 8/8 | ✓ |
 | `pronouns-possessive` | possessive | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `pronouns-quantity` | quantity | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
