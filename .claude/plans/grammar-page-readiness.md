@@ -133,12 +133,12 @@ B6 — горизонтальний скрол на `clauses-phrases-exclamation
 
 Джерело: у конструкцій без USE-записів EGP `import-egp` тепер робить usage points із FORM-записів із can-do (`usagePointRecords`, 87 записів, разом 661); контент і вправи в `assets/grammar-usage-point-*.json`, вправи в цих сторінках уже є (D1), тож зріз 11 їх не торкається. Українські тексти потребують читання людиною. `<mark>` не потрібен: сторінки рукописні, `annotate-pages` не запускали. B2/B3 для `nouns-*`, `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`, `adjectives-modifying`, `clauses-interrogatives`, `nouns-noun-phrases-grammatical-functions`: usage points з `learner_explanation`, `learner_examples`, українським перекладом.
 
-### [ ] 11. Розкатка: вправи для 39 сторінок без вправ
+### [x] 11. Розкатка: вправи для 39 сторінок без вправ
 - Branch: `grammar-page-readiness`
 - Base: `main`
-- PR: —
+- PR: — (єдиний PR наприкінці плану)
 
-D1 за категоріями: `modality-*`, `present-*`, `pronouns-*`, `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`. Вправи «choose» показують правильну відповідь після помилки (D2).
+Змін у коді немає: банк вправ покриває всі 661 UP, dev-БД уже посіяна, `grammar-audit.mjs` показує D1 на всіх реальних сторінках, `modality-can` віддає вправи; D2 закрито в зрізі 6. Карта розкатки оновлена. Початковий опис: D1 за категоріями: `modality-*`, `present-*`, `pronouns-*`, `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`. Вправи «choose» показують правильну відповідь після помилки (D2).
 
 ### [ ] 12. Розкатка: cheat sheet для 6 сторінок
 - Branch: `grammar-page-readiness`
@@ -177,8 +177,10 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
   у проді таких рядків немає. `seed-web-e2e.ts` тепер відмовляється працювати з БД, назва якої не
   містить `e2e`. Витік у dev-БД лишається до ручного очищення (`grammar_usage_points` з
   `egp_index is null`, конструкції категорії «E2E: Tenses», повʼязані матчі/картки).
-- D1: вправи є в усіх UP на 42 сторінках, на 39 — жодних (`modality-*`, `present-*`, `pronouns-*`,
-  `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`).
+- D1: пройдено (перепрогін у зрізі 11): вправи є в усіх UP усіх 90 реальних сторінок, крім
+  `past-present-perfect-simple` 10/11 — той самий витік e2e-фікстур у dev-БД, що й у B3. Було 39 сторінок
+  без вправ: банк `grammar-usage-point-exercises.json` уже покриває всі 661 UP, у dev-БД бракувало лише
+  посіву (`import-usage-point-exercises`, зараз 0 нових).
 - D3: 6 сторінок без cheat sheet.
 - B7, B8, B10, D2, D4–D8 аудитом не покриті (потрібна взаємодія/зір) — зрізи 2–7.
 
@@ -222,23 +224,23 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `future-future-simple-with-will-and-shall` | future simple (with will and shall) | ✓ | ✓ | ✓ | ✓ | 11/11 | ✓ |
 | `future-future-with-be-going-to` | future with be going to | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
 | `future-present-continuous-for-future-use` | present continuous for future use | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
-| `modality-adjectives` | adjectives | ✓ | ✓ | ✓ | ✓ | 0/6 | ✓ |
-| `modality-adverbs` | adverbs | ✓ | ✓ | ✓ | ✓ | 0/7 | ✓ |
-| `modality-can` | can | ✓ | ✓ | ✓ | ✓ | 0/13 | ✓ |
-| `modality-could` | could | ✓ | ✓ | ✓ | ✓ | 0/26 | ✓ |
-| `modality-dare` | dare | ✓ | ✓ | ✓ | ✓ | 0/4 | ✓ |
-| `modality-expressions-with-be` | expressions with be | ✓ | ✓ | ✓ | ✓ | 0/18 | ✓ |
-| `modality-have-got-to` | have (got) to | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
-| `modality-may` | may | ✓ | ✓ | ✓ | ✓ | 0/12 | ✓ |
-| `modality-might` | might | ✓ | ✓ | ✓ | ✓ | 0/9 | ✓ |
-| `modality-must` | must | ✓ | ✓ | ✓ | ✓ | 0/10 | ✓ |
-| `modality-need` | need | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `modality-ought` | ought | ✓ | ✓ | ✓ | ✓ | 0/6 | ✓ |
-| `modality-shall` | shall | ✓ | ✓ | ✓ | ✓ | 0/7 | ✓ |
-| `modality-should` | should | ✓ | ✓ | ✓ | ✓ | 0/12 | ✓ |
-| `modality-used-to` | used to | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `modality-will` | will | ✓ | ✓ | ✓ | ✓ | 0/10 | ✓ |
-| `modality-would` | would | ✓ | ✓ | ✓ | ✓ | 0/13 | ✓ |
+| `modality-adjectives` | adjectives | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
+| `modality-adverbs` | adverbs | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
+| `modality-can` | can | ✓ | ✓ | ✓ | ✓ | 13/13 | ✓ |
+| `modality-could` | could | ✓ | ✓ | ✓ | ✓ | 26/26 | ✓ |
+| `modality-dare` | dare | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
+| `modality-expressions-with-be` | expressions with be | ✓ | ✓ | ✓ | ✓ | 18/18 | ✓ |
+| `modality-have-got-to` | have (got) to | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
+| `modality-may` | may | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
+| `modality-might` | might | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
+| `modality-must` | must | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
+| `modality-need` | need | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `modality-ought` | ought | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
+| `modality-shall` | shall | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
+| `modality-should` | should | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
+| `modality-used-to` | used to | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `modality-will` | will | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
+| `modality-would` | would | ✓ | ✓ | ✓ | ✓ | 13/13 | ✓ |
 | `negation-negation` | negation | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
 | `nouns-noun-phrases` | noun phrases | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
 | `nouns-noun-phrases-grammatical-functions` | noun phrases - grammatical functions | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
@@ -254,27 +256,27 @@ console error/warning, без 4xx/5xx), B5 (title, description, canonical, од�
 | `past-present-perfect-continuous` | present perfect continuous | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
 | `past-present-perfect-simple` | present perfect simple | ✓ | ✗ 10/11 | ✓ | ✓ | 10/11 | ✓ |
 | `prepositions-prepositions` | prepositions | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
-| `present-present-continuous` | present continuous | ✓ | ✓ | ✓ | ✓ | 0/11 | ✓ |
-| `present-present-simple` | present simple | ✓ | ✓ | ✓ | ✓ | 0/14 | ✓ |
-| `pronouns-demonstratives` | demonstratives | ✓ | ✓ | ✓ | ✓ | 0/12 | ✓ |
-| `pronouns-generic-use` | generic use | ✓ | ✓ | ✓ | ✓ | 0/5 | ✗ |
-| `pronouns-indefinite-thing-one-body-etc` | indefinite - thing, -one, -body etc | ✓ | ✓ | ✓ | ✓ | 0/8 | ✓ |
-| `pronouns-possessive` | possessive | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
-| `pronouns-quantity` | quantity | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `pronouns-reciprocal` | reciprocal | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
-| `pronouns-reflexive` | reflexive | ✓ | ✓ | ✓ | ✓ | 0/8 | ✓ |
-| `pronouns-subject-object` | subject/ object | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
-| `pronouns-substitution-one-ones-none` | substitution, one, ones, none | ✓ | ✓ | ✓ | ✓ | 0/4 | ✓ |
-| `questions-alternatives` | alternatives | ✓ | ✓ | ✓ | ✓ | 0/4 | ✓ |
-| `questions-tags` | tags | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `questions-wh` | wh- | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `questions-yes-no` | yes/no | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
-| `reported-speech-reported-speech` | reported speech | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
+| `present-present-continuous` | present continuous | ✓ | ✓ | ✓ | ✓ | 11/11 | ✓ |
+| `present-present-simple` | present simple | ✓ | ✓ | ✓ | ✓ | 14/14 | ✓ |
+| `pronouns-demonstratives` | demonstratives | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
+| `pronouns-generic-use` | generic use | ✓ | ✓ | ✓ | ✓ | 5/5 | ✗ |
+| `pronouns-indefinite-thing-one-body-etc` | indefinite - thing, -one, -body etc | ✓ | ✓ | ✓ | ✓ | 8/8 | ✓ |
+| `pronouns-possessive` | possessive | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
+| `pronouns-quantity` | quantity | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `pronouns-reciprocal` | reciprocal | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
+| `pronouns-reflexive` | reflexive | ✓ | ✓ | ✓ | ✓ | 8/8 | ✓ |
+| `pronouns-subject-object` | subject/ object | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
+| `pronouns-substitution-one-ones-none` | substitution, one, ones, none | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
+| `questions-alternatives` | alternatives | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
+| `questions-tags` | tags | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `questions-wh` | wh- | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `questions-yes-no` | yes/no | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `reported-speech-reported-speech` | reported speech | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
 | `verbs-linking` | linking | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
 | `verbs-patterns-that-clauses` | patterns_that clauses | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
-| `verbs-patterns-with-to-and-ing` | patterns_with to and -ing | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
+| `verbs-patterns-with-to-and-ing` | patterns_with to and -ing | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
 | `verbs-phrasal` | phrasal | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
-| `verbs-phrasal-prepositional` | phrasal-prepositional | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
+| `verbs-phrasal-prepositional` | phrasal-prepositional | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
 | `verbs-prepositional` | prepositional | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
 | `verbs-there-is-are` | there is/are | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
 | `verbs-types` | types | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
