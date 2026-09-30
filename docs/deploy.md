@@ -98,6 +98,8 @@ node cli words import-phrase-content
 node cli grammar annotate-pages
 ```
 
+`import-frequency` is a one-off: words the pipeline creates later are ranked on insert.
+
 Order matters: keep it as listed (same as `make seed`, then `grammar annotate-pages`). Re-running an importer
 only fills gaps or applies edits. `annotate-pages` calls `PUBLIC_URL` (the `apps-web` route) and
 `nlp`, so run it only once the site and `nlp` respond. Re-run the seed commands after an `assets/`
