@@ -1,9 +1,8 @@
 import { STATE_LABEL, STATE_TONE } from './dictionary-state';
-import { nativeLang } from './native-lang';
+import type { NativeLang } from './native-lang';
 import { postUrl } from './post-url';
 import type {
   EffectiveState,
-  LexiconTranslations,
   PhraseDictionaryDetail,
   WordDictionaryDetail,
   WordDictionarySense,
@@ -118,22 +117,27 @@ export function senseActionsHtml(
 // The native-language translation, when one exists — same field the reader
 // popup shows via its EN / native toggle (`reader-lexicon.ts`), surfaced here
 // unconditionally since the dictionary page has no such toggle.
-function translationHtml(translations: LexiconTranslations): string {
-  const native = nativeLang();
-  const translation = translations[native]?.translation;
+function translationHtml(
+  translation: string | null,
+  native: NativeLang,
+): string {
   return translation
     ? `<p class="wd-sense__translation" lang="${native}">${esc(translation)}</p>`
     : '';
 }
 
-function senseHtml(lemma: string, sense: WordDictionarySense): string {
+function senseHtml(
+  lemma: string,
+  sense: WordDictionarySense,
+  native: NativeLang,
+): string {
   return `<li class="wd-sense card" data-testid="wd-sense">
     <div class="wd-sense__head">
       <span class="eyebrow">${esc(sense.pos)}</span>
       ${sense.cefrLevel ? `<span class="badge">${esc(sense.cefrLevel)}</span>` : ''}
     </div>
     ${sense.phonetic ? `<p class="wd-sense__phonetic">${esc(sense.phonetic)}</p>` : ''}
-    ${translationHtml(sense.translations)}
+    ${translationHtml(sense.translation, native)}
     ${sense.definition ? `<p class="wd-sense__def">${esc(sense.definition)}</p>` : ''}
     ${sense.example ? `<p class="wd-sense__eg">“${esc(sense.example)}”</p>` : ''}
     ${senseActionsHtml(lemma, sense)}
@@ -162,9 +166,12 @@ function postListHtml(
   `;
 }
 
-export function renderWordDetail(view: WordDictionaryDetail): string {
+export function renderWordDetail(
+  view: WordDictionaryDetail,
+  native: NativeLang,
+): string {
   const senses = `<ul class="wd-sense-list">${view.senses
-    .map((sense) => senseHtml(view.lemma, sense))
+    .map((sense) => senseHtml(view.lemma, sense, native))
     .join('')}</ul>`;
 
   const irregular = view.irregularVerb
@@ -188,7 +195,10 @@ export function renderWordDetail(view: WordDictionaryDetail): string {
   `;
 }
 
-export function renderPhraseDetail(view: PhraseDictionaryDetail): string {
+export function renderPhraseDetail(
+  view: PhraseDictionaryDetail,
+  native: NativeLang,
+): string {
   const target: ActionTarget = {
     kind: 'phrase',
     phraseId: view.phraseId,
@@ -201,7 +211,7 @@ export function renderPhraseDetail(view: PhraseDictionaryDetail): string {
           ${view.type ? `<span class="eyebrow">${esc(view.type)}</span>` : ''}
           ${view.cefrLevel ? `<span class="badge">${esc(view.cefrLevel)}</span>` : ''}
         </div>
-        ${translationHtml(view.translations)}
+        ${translationHtml(view.translation, native)}
         ${view.definition ? `<p class="wd-sense__def">${esc(view.definition)}</p>` : ''}
         ${view.example ? `<p class="wd-sense__eg">“${esc(view.example)}”</p>` : ''}
         ${actionsHtml(target, view)}

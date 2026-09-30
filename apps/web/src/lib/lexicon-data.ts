@@ -43,7 +43,7 @@ function buildSiblings(
     guideword: point.guideword,
     canDoStatement: point.canDoStatement,
     explanation: point.explanation,
-    translations: point.translations,
+    translation: point.translation,
     examples: point.examples,
     matched,
   });
@@ -73,7 +73,7 @@ export function wordLexiconEntries(
       frequencyRank: w.frequencyRank,
       definition: w.definition,
       example: w.example,
-      translations: w.translations,
+      translation: w.translation,
       cefrLevel: w.cefrLevel,
       state: w.state,
     };
@@ -94,7 +94,7 @@ export function phraseLexiconEntries(
       type: p.type,
       definition: p.definition,
       example: p.example,
-      translations: p.translations,
+      translation: p.translation,
       cefrLevel: p.cefrLevel,
       state: p.state,
     };
@@ -134,7 +134,7 @@ export function buildLexiconData(
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           explanation: point.explanation,
-          translations: point.translations,
+          translation: point.translation,
           examples: point.examples,
           contrast: contrast.get(point.grammarUsagePointId) ?? null,
           state,

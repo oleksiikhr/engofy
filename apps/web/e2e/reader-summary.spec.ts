@@ -63,7 +63,7 @@ test('seenSummary lists new words and phrases and distinct constructions, capped
       frequencyRank: null,
       definition: null,
       example: null,
-      translations: {},
+      translation: null,
       cefrLevel: 'B1',
       state: i === 0 ? 'learned' : 'new',
     };

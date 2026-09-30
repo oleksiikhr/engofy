@@ -103,7 +103,7 @@ test.describe('grammar reference', () => {
     context,
   }) => {
     await context.addCookies([
-      { name: 'reader-level', value: 'A2', url: 'http://localhost:4321' },
+      { name: 'reader-level', value: 'A2', domain: 'localhost', path: '/' },
     ]);
     const grammar = new GrammarPage(page);
     await grammar.goto();
@@ -488,6 +488,45 @@ test.describe('grammar construction detail', () => {
       expect(beforeScripts).toBeCloseTo(afterScripts ?? -1, 0);
     });
   }
+
+  // The switch label comes from the resolved native language, rendered into
+  // the HTML — it is in place (and the page does not move) without scripts.
+  test('renders the native-language switch label server-side from the cookie', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext();
+    await context.addCookies([
+      { name: 'native-lang', value: 'uk', domain: 'localhost', path: '/' },
+    ]);
+    const page = await context.newPage();
+    await blockScripts(page);
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-native-lang',
+      'uk',
+    );
+    await expect(
+      construction.usageItem(0).locator('[data-usage-lang="native"]'),
+    ).toHaveText('УКР');
+    await context.close();
+  });
+
+  test('falls back to Ukrainian for a cookie naming an unknown language', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext();
+    await context.addCookies([
+      { name: 'native-lang', value: 'xx', domain: 'localhost', path: '/' },
+    ]);
+    const page = await context.newPage();
+    await page.goto('/grammar/e2e-past-perfect');
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-native-lang',
+      'uk',
+    );
+    await context.close();
+  });
 
   test('anchors a usage point at its egpIndex and lets the visitor answer its exercise pool', async ({
     page,

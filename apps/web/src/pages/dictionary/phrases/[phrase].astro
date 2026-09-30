@@ -3,7 +3,7 @@ import DictionaryDetailStyles from '../../../components/DictionaryDetailStyles.a
 import Layout from '../../../layouts/Layout.astro';
 import { apiGetOrNull } from '../../../lib/api';
 import { renderPhraseDetail } from '../../../lib/dictionary-detail';
-import { getCurrentUser } from '../../../lib/session';
+import { getCurrentUser, resolveNativeLang } from '../../../lib/session';
 import type { PhraseDictionaryDetail } from '../../../lib/types';
 
 const { phrase } = Astro.params;
@@ -24,7 +24,7 @@ if (!detail) {
   return new Response('Not found', { status: 404 });
 }
 
-const detailHtml = renderPhraseDetail(detail);
+const detailHtml = renderPhraseDetail(detail, await resolveNativeLang(Astro.request));
 ---
 
 <Layout title={`${detail.phraseText} — Dictionary — Engofy`} user={user} active="dictionary" noindex>

@@ -4,6 +4,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import { apiGetOrNull } from '../lib/api';
 import { guestBootScript } from '../lib/guest-boot';
 import { bootScript } from '../lib/prefs';
+import { resolveNativeLang } from '../lib/session';
 import { publicOrigin } from '../lib/site';
 import type {
   CurrentUser,
@@ -36,6 +37,8 @@ const {
   ogImage = '/og-default.png',
 } = Astro.props;
 
+// Known before paint: client code reads it off <html data-native-lang>.
+const native = await resolveNativeLang(Astro.request);
 const origin = publicOrigin(Astro.url);
 // Query strings (`?from=home`, filters, cursors) never make a distinct page.
 const canonical = `${origin}${Astro.url.pathname}`;
@@ -62,7 +65,7 @@ const goal = streakResponse
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-native-lang={native}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
