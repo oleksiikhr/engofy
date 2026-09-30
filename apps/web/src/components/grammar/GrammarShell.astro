@@ -8,9 +8,11 @@ import {
 } from '../../lib/lexicon-data';
 import { LEX_ROOT_END, LEX_ROOT_START, wrapLexWords } from '../../lib/lex-blocks';
 import { escapeJson } from '../../lib/seo';
-import { pagePracticeHtml } from '../../lib/usage-point-exercises';
+import { nativeLang } from '../../lib/native-lang';
+import { pagePracticeHtml, usagePointDrillSteps } from '../../lib/usage-point-exercises';
 import { publicOrigin } from '../../lib/site';
 import type { CurrentUser, GrammarConstructionDetail } from '../../lib/types';
+import GrammarLangSwitch from './GrammarLangSwitch.astro';
 import GrammarSection from './GrammarSection.astro';
 import GrammarSectionProgress from './GrammarSectionProgress.astro';
 import GrammarUsagePoints from './GrammarUsagePoints.astro';
@@ -59,6 +61,14 @@ const remainingUsagePoints = con.usagePoints.filter(
 // point; each card links to its group. GrammarUsagePointCard's script (every
 // usage point is rendered as a card on the page) binds it.
 const practiceHtml = pagePracticeHtml(con.usagePoints);
+const exerciseCount = con.usagePoints.reduce(
+  (sum, up) => sum + usagePointDrillSteps(up.exercises).length,
+  0,
+);
+// The EN / native switch and the native lede only exist where there is a
+// translation to switch to.
+const hasLedeNative = Astro.slots.has('lede-native');
+const hasNative = hasLedeNative || con.usagePoints.some((up) => up.explanation && Object.keys(up.translations).length > 0);
 
 // A handcrafted page's words are wrapped server-side (known before paint),
 // between markers `/grammar/lex-blocks.json` reads the page's text from.
@@ -111,7 +121,30 @@ const jsonLd = jsonLdGraph([
       {con.categoryName}
     </p>
     <h1>{displayName}</h1>
-    <div class="con-head__lede"><slot name="lede" /></div>
+    <div class="con-head__lede con-head__lede--en"><slot name="lede" /></div>
+    {
+      hasLedeNative && (
+        <div class="con-head__lede con-head__lede--native" lang={nativeLang()}>
+          <slot name="lede-native" />
+        </div>
+      )
+    }
+    {
+      (hasNative || exerciseCount > 0) && (
+        <div class="con-head__actions">
+          {exerciseCount > 0 && (
+            <a
+              class="con-head__practice"
+              href="#gp-section-practice"
+              data-testid="grammar-practice-cta"
+            >
+              Practice · {exerciseCount}
+            </a>
+          )}
+          {hasNative && <GrammarLangSwitch />}
+        </div>
+      )
+    }
     {
       con.levelProgress && con.levelProgress.length > 0 && (
         <ul class="con-head__progress" data-testid="grammar-level-progress">
@@ -212,6 +245,28 @@ const jsonLd = jsonLdGraph([
     margin: 0.75rem 0 0;
     font-size: 1.05rem;
     color: var(--color-ink-soft);
+  }
+  :global(:root:not([data-popup-lang='native'])) .con-head__lede--native,
+  :global(:root[data-popup-lang='native']) .con-head__lede--native ~ .con-head__lede--en,
+  :global(:root[data-popup-lang='native']) .con-head__lede--en:has(~ .con-head__lede--native) {
+    display: none;
+  }
+  .con-head__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .con-head__practice {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-decoration: none;
   }
   .con-head__progress {
     list-style: none;

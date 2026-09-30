@@ -7,9 +7,10 @@
 // inline doesn't leave an empty section (and its own progress bar, if the
 // construction has one, lives in GrammarShell's header instead).
 //
-// Closed by default, and only the first VISIBLE_COUNT points are shown once
-// opened — the rest sit behind a "Show N more" toggle. The source order (EGP:
-// roughly the typical rule first, exceptions later) is the only ranking.
+// Closed by default; once opened, rules up to the base level (grammar-level.ts)
+// are listed and harder ones sit behind a "More difficult cases" toggle. The
+// source order (EGP: roughly the typical rule first) ranks within each group.
+import { isHardLevel } from '../../lib/grammar-level';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
 import GrammarSection from './GrammarSection.astro';
 import GrammarUsagePointCard from './GrammarUsagePointCard.astro';
@@ -20,11 +21,9 @@ interface Props {
   sectionId: string;
 }
 
-const VISIBLE_COUNT = 2;
-
 const { usagePoints, sectionId } = Astro.props;
-const shown = usagePoints.slice(0, VISIBLE_COUNT);
-const more = usagePoints.slice(VISIBLE_COUNT);
+const shown = usagePoints.filter((up) => !isHardLevel(up.cefrLevel));
+const more = usagePoints.filter((up) => isHardLevel(up.cefrLevel));
 const plural = (n: number) => (n === 1 ? '' : 's');
 ---
 
@@ -40,19 +39,19 @@ const plural = (n: number) => (n === 1 ? '' : 's');
       <ul class="usage-list">
         {shown.map((up) => (
           <li>
-            <GrammarUsagePointCard usagePoint={up} />
+            <GrammarUsagePointCard usagePoint={up} bare />
           </li>
         ))}
       </ul>
       {more.length > 0 && (
         <details class="usage-more" data-testid="grammar-usage-more">
           <summary class="usage-more__toggle">
-            Show {more.length} more usage point{plural(more.length)}
+            More difficult cases ({more.length})
           </summary>
           <ul class="usage-list">
             {more.map((up) => (
               <li>
-                <GrammarUsagePointCard usagePoint={up} />
+                <GrammarUsagePointCard usagePoint={up} bare />
               </li>
             ))}
           </ul>

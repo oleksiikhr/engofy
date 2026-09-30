@@ -296,6 +296,35 @@ test.describe('grammar construction detail', () => {
     );
   });
 
+  test('folds usage points above B1 under "More difficult cases"', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-conditionals');
+    await construction.openUsage();
+
+    await expect(construction.usageMore).toHaveCount(1);
+    await expect(construction.usageMore).not.toHaveAttribute('open');
+    await expect(construction.usageMore).toContainText(
+      'More difficult cases (2)',
+    );
+    await expect(construction.usageItem(0)).toBeHidden();
+    await construction.usageMore.locator('summary').click();
+    await expect(construction.usageItem(0)).toBeVisible();
+  });
+
+  test('the header Practice button opens the Practice section', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('e2e-past-perfect');
+    await expect(construction.practiceSection).not.toHaveAttribute('open');
+
+    await page.getByTestId('grammar-practice-cta').click();
+    await expect(construction.practiceSection).toHaveAttribute('open');
+    await expect(page.getByTestId('page-practice')).toBeVisible();
+  });
+
   test('keeps "When it\'s used" closed until opened, with a rule count', async ({
     page,
   }) => {
@@ -305,7 +334,7 @@ test.describe('grammar construction detail', () => {
     await expect(construction.usageSection).not.toHaveAttribute('open');
     await expect(construction.usageSection).toContainText('2 rules');
     await expect(construction.usageItem(0)).toBeHidden();
-    // Two points fit under the visible limit — no "Show more" toggle.
+    // Both points are within the base level — no "More difficult cases" fold.
     await expect(construction.usageMore).toHaveCount(0);
 
     const checklistItem = page.locator('[data-gp-progress-item="use"]');
@@ -395,6 +424,31 @@ test.describe('grammar construction detail', () => {
     await expect(
       translated.getByRole('button', { name: 'EN' }),
     ).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('a stored Ukrainian choice does not shift the header when scripts run', async ({
+    browser,
+  }) => {
+    const barY = async (scripts: boolean) => {
+      const context = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+      });
+      await context.addInitScript(() => {
+        localStorage.setItem('popup-lang', 'native');
+      });
+      const page = await context.newPage();
+      if (!scripts) {
+        await blockScripts(page);
+      }
+      await new GrammarConstructionPage(page).goto('e2e-past-perfect');
+      const box = await page.locator('[data-gp-progress]').boundingBox();
+      await context.close();
+      return box?.y;
+    };
+    const withoutScripts = await barY(false);
+    const withScripts = await barY(true);
+    expect(withoutScripts).toBeDefined();
+    expect(withoutScripts).toBeCloseTo(withScripts ?? -1, 0);
   });
 
   // The stored language is applied before first paint (boot script), so the
