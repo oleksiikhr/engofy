@@ -12,6 +12,40 @@ export function lexBlockHash(text: string): string {
   return createHash('sha256').update(text).digest('hex').slice(0, 32);
 }
 
+// A range of a block's text (half-open char range) the page marks as a target
+// word — the `<mark>`s of its examples. Every English word inside one is
+// linked, whatever its part of speech or frequency.
+export interface LexBlockTarget {
+  start: number;
+  end: number;
+}
+
+// A text block plus the target ranges inside it.
+export interface LexBlockInput {
+  text: string;
+  targets: LexBlockTarget[];
+}
+
+// spaCy UPOS -> PartOfSpeech for a target word. Unlike the article rule this
+// covers the function classes (determiners, prepositions, …): the quantifiers
+// and auxiliaries a grammar page teaches are exactly those.
+const TARGET_POS: Record<string, PartOfSpeech> = {
+  NOUN: PartOfSpeech.Noun,
+  VERB: PartOfSpeech.Verb,
+  ADJ: PartOfSpeech.Adjective,
+  ADV: PartOfSpeech.Adverb,
+  AUX: PartOfSpeech.Auxiliary,
+  PRON: PartOfSpeech.Pronoun,
+  DET: PartOfSpeech.Determiner,
+  ADP: PartOfSpeech.Preposition,
+  CCONJ: PartOfSpeech.Conjunction,
+  SCONJ: PartOfSpeech.Conjunction,
+  INTJ: PartOfSpeech.Interjection,
+  NUM: PartOfSpeech.Numeral,
+  PART: PartOfSpeech.Particle,
+  X: PartOfSpeech.Other,
+};
+
 // A clickable span in a block (half-open char range): a word, linked to its
 // sense by lemma + part of speech, or a phrase, linked by its text. A
 // discontinuous phrasal verb ("picked her up") is one span per fragment.
@@ -36,6 +70,8 @@ export type LexBlockSpan =
 // contractions like "bus'll" or "amn't" sit inline in the prose and are not
 // looked up.
 const ENGLISH_WORD_RE = /^[A-Za-z]{2,}(?:-[A-Za-z]+)*$/;
+// A target word may be a single letter ("a", "I").
+const TARGET_WORD_RE = /^[A-Za-z]+(?:-[A-Za-z]+)*$/;
 const REGEX_SPECIAL_RE = /[.*+?^${}()|[\]\\]/g;
 
 // The phrases a grammar page links, both hand-listed: `literal` ones (idioms,
@@ -58,6 +94,7 @@ export function buildLexBlockSpans(
   parsed: NlpParseResult,
   frequencyRanks: Map<string, number>,
   phrases: LexBlockPhrases = { literal: [], phrasalVerbs: [] },
+  targets: LexBlockTarget[] = [],
 ): LexBlockSpan[] {
   const listedPhrasalVerbs = new Set(phrases.phrasalVerbs);
   const sentences = buildSentences(text, parsed).map((sentence) => ({
@@ -112,12 +149,17 @@ export function buildLexBlockSpans(
       : [];
   });
 
+  const linked = new Set(fromTokens.map((span) => span.start));
+  const fromTargets = targetWordSpans(sentences, targets).filter(
+    (span) => !linked.has(span.start),
+  );
+
   const listed = findListedPhrases(text, phrases.literal);
   const overlapsListed = (span: LexBlockSpan) =>
     listed.some((phrase) => span.start < phrase.end && phrase.start < span.end);
   return [
     ...listed,
-    ...fromTokens.filter((span) => !overlapsListed(span)),
+    ...[...fromTokens, ...fromTargets].filter((span) => !overlapsListed(span)),
   ].sort((a, b) => a.start - b.start);
 }
 
@@ -147,4 +189,41 @@ function findListedPhrases(text: string, phrases: string[]): LexBlockSpan[] {
     }
   }
   return found;
+}
+
+// A word span for every English token inside a target range that the article
+// rule left out (function words, very common lemmas). Proper nouns stay out,
+// as in the general rule.
+function targetWordSpans(
+  sentences: {
+    charStart: number;
+    tokens: {
+      text: string;
+      lemma: string;
+      pos: string;
+      charStart: number;
+      charEnd: number;
+    }[];
+  }[],
+  targets: LexBlockTarget[],
+): LexBlockSpan[] {
+  if (targets.length === 0) {
+    return [];
+  }
+  const spans: LexBlockSpan[] = [];
+  for (const sentence of sentences) {
+    for (const token of sentence.tokens) {
+      const start = sentence.charStart + token.charStart;
+      const end = sentence.charStart + token.charEnd;
+      const pos = TARGET_POS[token.pos];
+      if (
+        pos &&
+        TARGET_WORD_RE.test(token.text) &&
+        targets.some((target) => target.start <= start && end <= target.end)
+      ) {
+        spans.push({ kind: 'word', start, end, lemma: token.lemma, pos });
+      }
+    }
+  }
+  return spans;
 }

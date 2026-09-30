@@ -31,7 +31,10 @@ import {
 // WordDefinition by lemma + part of speech, phrasal verbs and the listed
 // phrases to Phrase — the same deterministic rule as an article's word layer. No AI call: the definitions themselves come from the
 // enrichment job or a hand-written seed. Rows for blocks the page no longer
-// has are removed.
+// has are removed. A word inside a target range (the page's `<mark>`s) is
+// linked whatever its part of speech or frequency; a block's targets are only
+// read when it is parsed, so `refresh` after editing marks without changing
+// the text.
 @CommandHandler(AnnotateGrammarPageCommand)
 export class AnnotateGrammarPageHandler
   implements ICommandHandler<AnnotateGrammarPageCommand>
@@ -51,30 +54,30 @@ export class AnnotateGrammarPageHandler
       throw new GrammarConstructionNotFoundError(command.slug);
     }
 
-    const textByHash = new Map(
+    const blockByHash = new Map(
       command.blocks
-        .filter((text) => text.trim())
-        .map((text) => [lexBlockHash(text), text]),
+        .filter((block) => block.text.trim())
+        .map((block) => [lexBlockHash(block.text), block]),
     );
     const existing = await this.em.find(GrammarPageLexBlock, {
       constructionId: construction.id,
     });
-    const stale = existing.filter((row) => !textByHash.has(row.textHash));
+    const stale = existing.filter((row) => !blockByHash.has(row.textHash));
     this.em.remove(stale);
 
     // A refresh re-parses kept blocks too, updating their row in place.
     const rowByHash = new Map(
       existing
-        .filter((row) => textByHash.has(row.textHash))
+        .filter((row) => blockByHash.has(row.textHash))
         .map((row) => [row.textHash, row]),
     );
-    const pending = [...textByHash].filter(
+    const pending = [...blockByHash].filter(
       ([hash]) => command.refresh || !rowByHash.has(hash),
     );
     const ranks = await loadWordFrequencyRanks();
     const ids = new Map<string, string>();
 
-    for (const [hash, text] of pending) {
+    for (const [hash, { text, targets }] of pending) {
       // biome-ignore lint/performance/noAwaitInLoops: sequential on purpose — one nlp-service call at a time, and each upsert must see the previous block's ids.
       const parsed = await this.nlp.parse(text);
       const spans: GrammarPageLexSpan[] = [];
@@ -83,6 +86,7 @@ export class AnnotateGrammarPageHandler
         parsed,
         ranks,
         command.phrases,
+        targets,
       )) {
         // biome-ignore lint/performance/noAwaitInLoops: see above.
         spans.push(await this.linkSpan(span, ids));
@@ -96,7 +100,7 @@ export class AnnotateGrammarPageHandler
     }
 
     return {
-      blocks: textByHash.size,
+      blocks: blockByHash.size,
       parsed: pending.length,
       removed: stale.length,
     };

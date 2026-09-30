@@ -22,7 +22,7 @@ import { RetryPostCommand } from './commands/retry-post/retry-post.command.js';
 import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-post.command.js';
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
 import { UnmarkPostReadCommand } from './commands/unmark-post-read/unmark-post-read.command.js';
-import type { LexBlockPhrases } from './domain/lex-block.js';
+import type { LexBlockInput, LexBlockPhrases } from './domain/lex-block.js';
 import { GetGrammarConstructionQuery } from './queries/get-grammar-construction/get-grammar-construction.query.js';
 import type { GrammarConstructionView } from './queries/get-grammar-construction/grammar-construction-view.js';
 import {
@@ -113,7 +113,7 @@ export class PostService {
 
   async annotateGrammarPage(
     slug: string,
-    blocks: string[],
+    blocks: LexBlockInput[],
     phrases: LexBlockPhrases = { literal: [], phrasalVerbs: [] },
     refresh = false,
   ): Promise<AnnotatedGrammarPageView> {

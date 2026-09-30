@@ -1,5 +1,8 @@
 import type { APIRoute } from 'astro';
-import { extractPageLexBlocks } from '../../lib/lex-blocks';
+import {
+  extractPageLexBlocks,
+  type LexBlockTargets,
+} from '../../lib/lex-blocks';
 
 // Every handcrafted grammar page's text blocks, keyed by construction slug —
 // read by the backend's `grammar annotate-pages` to link the pages' words to
@@ -13,7 +16,7 @@ export const GET: APIRoute = async ({ url }) => {
     .map((path) => path.match(SLUG_RE)?.[1])
     .filter((slug): slug is string => slug !== undefined);
 
-  const pages: Record<string, string[]> = {};
+  const pages: Record<string, LexBlockTargets[]> = {};
   for (const slug of slugs) {
     // One page at a time keeps the self-requests from piling onto the API.
     const response = await fetch(new URL(`/grammar/${slug}`, url));
