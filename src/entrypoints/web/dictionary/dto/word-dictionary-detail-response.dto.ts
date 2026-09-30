@@ -1,15 +1,6 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
-import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
 import type { PartOfSpeech } from '../../../../modules/post/enums/part-of-speech.enum.js';
-
-export class WordDictionaryTranslationDto {
-  readonly translation!: string;
-}
-
-type WordDictionaryTranslations = Partial<
-  Record<ContentLanguage, WordDictionaryTranslationDto>
->;
 
 export class WordDictionarySenseDto {
   readonly wordDefinitionId!: string;
@@ -22,8 +13,8 @@ export class WordDictionarySenseDto {
 
   readonly example!: string | null;
 
-  // By language code; a language with no entry is not translated yet.
-  readonly translations!: WordDictionaryTranslations;
+  // In the viewer's native language; null until translated.
+  readonly translation!: string | null;
 
   readonly cefrLevel!: CefrLevel | null;
 

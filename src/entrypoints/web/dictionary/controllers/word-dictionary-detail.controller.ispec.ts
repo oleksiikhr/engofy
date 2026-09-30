@@ -80,7 +80,7 @@ describe('DictionaryController words/:lemma', () => {
       state: 'new',
       cardId: null,
       definition: 'to move from one place to another',
-      translations: { uk: { translation: 'йти, рухатися' } },
+      translation: 'йти, рухатися',
     });
     expect(res.body.posts).toEqual([]);
   });

@@ -135,13 +135,13 @@ describe('GetWordDictionaryDetailHandler', () => {
       state: EffectiveState.Learning,
       cardId: card.id,
       definition: 'a financial institution',
-      translations: { uk: { translation: 'банк' } },
+      translation: 'банк',
     });
     // No card, no disposition, C1 > the learner's B1 default -> New.
     expect(verb).toMatchObject({
       state: EffectiveState.New,
       cardId: null,
-      translations: {},
+      translation: null,
     });
   });
 

@@ -57,3 +57,22 @@ export function readGrammarTranslations(raw: unknown): GrammarTranslations {
   const parsed = grammarTranslationsSchema.safeParse(raw ?? {});
   return parsed.success ? parsed.data : {};
 }
+
+// The one language a request is served in; null when it is not translated yet.
+export function pickLexiconTranslation(
+  raw: unknown,
+  lang: ContentLanguage,
+): string | null {
+  return readLexiconTranslations(raw)[lang]?.translation ?? null;
+}
+
+export function pickGrammarTranslation(
+  raw: unknown,
+  lang: ContentLanguage,
+): { translation: string | null; exampleTranslations: string[] | null } {
+  const entry = readGrammarTranslations(raw)[lang];
+  return {
+    translation: entry?.explanation ?? null,
+    exampleTranslations: entry?.examples ?? null,
+  };
+}

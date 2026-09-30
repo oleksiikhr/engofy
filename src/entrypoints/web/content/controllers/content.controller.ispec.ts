@@ -437,11 +437,13 @@ describe('ContentController', () => {
       .request('get', `/content/posts/${slug}-${shortId}`)
       .expect(HttpStatus.OK);
 
+    // The language comes from the account or a cookie, so a cache must key on it.
+    expect(res.headers.vary).toContain('Cookie');
     expect(res.body.doc.type).toBe('doc');
     expect(res.body.annotations.words[wordDefinitionId]).toMatchObject({
       pos: 'verb',
       definition: 'to go from one place to another',
-      translations: { uk: { translation: 'подорожувати' } },
+      translation: 'подорожувати',
       cefrLevel: 'A2',
     });
     expect(res.body.exercises).toHaveLength(1);
@@ -667,6 +669,7 @@ describe('ContentController', () => {
     expect(detail.body.usagePoints[0]).toMatchObject({
       egpIndex: 42,
       explanation: 'We use the present simple for routines.',
+      translation: 'Present simple вживаємо для рутини.',
       examples: ['I get up at seven.'],
       state: 'new',
       assumedKnown: false,

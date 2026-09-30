@@ -3,20 +3,27 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   Post as PostRoute,
   Query,
+  Req,
 } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import type { FastifyRequest } from 'fastify';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { CurrentUserOrNull } from '../../../../core/decorators/current-user-or-null.decorator.js';
 import { Public } from '../../../../core/decorators/public.decorator.js';
 import { toCursorPage } from '../../../../core/http/dto/cursor-page.js';
 import { CachePolicy } from '../../../../core/http/interceptors/etag.interceptor.js';
+import { AuthService } from '../../../../modules/auth/auth.service.js';
+import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import { PostService } from '../../../../modules/post/post.service.js';
 import type { GrammarConstructionView } from '../../../../modules/post/queries/get-grammar-construction/grammar-construction-view.js';
 import type { GrammarReferenceView } from '../../../../modules/post/queries/get-grammar-reference/grammar-reference-view.js';
@@ -30,6 +37,7 @@ import type {
   PostsListView,
 } from '../../../../modules/post/queries/get-posts-list/posts-list-view.js';
 import { parseSlugId } from '../../../../modules/post/queries/parse-slug-id.js';
+import { readNativeLangCookie } from '../../auth/cookies/auth-cookies.helper.js';
 import { GrammarConstructionResponseDto } from '../dto/grammar-construction-response.dto.js';
 import { GrammarReferenceQueryDto } from '../dto/grammar-reference-query.dto.js';
 import { GrammarReferenceResponseDto } from '../dto/grammar-reference-response.dto.js';
@@ -68,7 +76,12 @@ import { UsagePointExercisesResponseDto } from '../dto/usage-point-exercises-res
 @CachePolicy('public')
 @Controller('content')
 export class ContentController {
-  constructor(private readonly post: PostService) {}
+  constructor(
+    private readonly post: PostService,
+    private readonly auth: AuthService,
+    @Inject(AuthConfig.KEY)
+    private readonly authConfig: ConfigType<typeof AuthConfig>,
+  ) {}
 
   // The `/posts` archive: published posts, newest first, keyset-paginated —
   // a CEFR multi-select + "unread only" (posts-list-page §1). `isRead` and
@@ -143,16 +156,26 @@ export class ContentController {
   // cache must never reuse one user's personalized response for another.
   @Public()
   @CachePolicy('private')
+  @Header('Vary', 'Cookie')
   @Get('posts/:slugId')
   async postDetail(
     @Param('slugId') slugId: string,
     @CurrentUserOrNull() actor: UserActor | null,
+    @Req() request: FastifyRequest,
   ): Promise<PostDetailResponseDto> {
     const shortId = parseSlugId(slugId);
     if (!shortId) {
       throw new NotFoundException('Post not found');
     }
-    const view = await this.post.getPostDetail(shortId, actor?.id ?? null);
+    const lang = await this.auth.resolveNativeLang(
+      actor?.id ?? null,
+      readNativeLangCookie(request, this.authConfig),
+    );
+    const view = await this.post.getPostDetail(
+      shortId,
+      actor?.id ?? null,
+      lang,
+    );
     if (!view) {
       throw new NotFoundException('Post not found');
     }
@@ -233,14 +256,21 @@ export class ContentController {
   // with its own per-user state gating its "+ Add to deck" button.
   @Public()
   @CachePolicy('private')
+  @Header('Vary', 'Cookie')
   @Get('grammar/:slug')
   async grammarConstruction(
     @Param('slug') slug: string,
     @CurrentUserOrNull() actor: UserActor | null,
+    @Req() request: FastifyRequest,
   ): Promise<GrammarConstructionResponseDto> {
+    const lang = await this.auth.resolveNativeLang(
+      actor?.id ?? null,
+      readNativeLangCookie(request, this.authConfig),
+    );
     const view = await this.post.getGrammarConstruction(
       slug,
       actor?.id ?? null,
+      lang,
     );
     if (!view) {
       throw new NotFoundException('Grammar construction not found');
@@ -330,7 +360,8 @@ function toAnnotationsDto(
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
         explanation: point.explanation,
-        translations: point.translations,
+        translation: point.translation,
+        exampleTranslations: point.exampleTranslations,
         examples: point.examples,
       })),
     })),
@@ -400,7 +431,8 @@ function toGrammarConstructionResponse(
       guideword: point.guideword,
       canDoStatement: point.canDoStatement,
       explanation: point.explanation,
-      translations: point.translations,
+      translation: point.translation,
+      exampleTranslations: point.exampleTranslations,
       examples: point.examples,
       state: point.state,
       assumedKnown: point.assumedKnown,
@@ -423,7 +455,7 @@ function toPhraseAnnotationDto(
     type: phrase.type,
     definition: phrase.definition,
     example: phrase.example,
-    translations: phrase.translations,
+    translation: phrase.translation,
     cefrLevel: phrase.cefrLevel,
     state: phrase.state,
   };
@@ -438,7 +470,7 @@ function toWordAnnotationDto(word: WordAnnotationView): PostWordAnnotationDto {
     definition: word.definition,
     phonetic: word.phonetic,
     example: word.example,
-    translations: word.translations,
+    translation: word.translation,
     cefrLevel: word.cefrLevel,
     frequencyRank: word.frequencyRank,
     state: word.state,

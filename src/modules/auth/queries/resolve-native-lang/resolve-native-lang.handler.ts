@@ -1,10 +1,11 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { ContentLanguage } from '../../../post/enums/content-language.enum.js';
+import {
+  ContentLanguage,
+  DEFAULT_CONTENT_LANGUAGE,
+} from '../../../post/enums/content-language.enum.js';
 import { User } from '../../entities/user.entity.js';
 import { ResolveNativeLangQuery } from './resolve-native-lang.query.js';
-
-const DEFAULT_NATIVE_LANG = ContentLanguage.Uk;
 
 @QueryHandler(ResolveNativeLangQuery)
 export class ResolveNativeLangHandler
@@ -29,7 +30,7 @@ export class ResolveNativeLangHandler
 
     return (
       Object.values(ContentLanguage).find((lang) => lang === cookieValue) ??
-      DEFAULT_NATIVE_LANG
+      DEFAULT_CONTENT_LANGUAGE
     );
   }
 }

@@ -1,18 +1,25 @@
 import {
   Controller,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Query,
+  Req,
 } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import type { FastifyRequest } from 'fastify';
 import type { UserActor } from '../../../../core/actor/actor.js';
 import { CurrentUser } from '../../../../core/decorators/current-user.decorator.js';
 import { toCursorPage } from '../../../../core/http/dto/cursor-page.js';
+import { AuthService } from '../../../../modules/auth/auth.service.js';
+import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import { LearningService } from '../../../../modules/learning/learning.service.js';
 import type { DictionaryEntryView } from '../../../../modules/learning/queries/get-dictionary/dictionary-view.js';
 import type { PhraseDictionaryDetailView } from '../../../../modules/learning/queries/get-phrase-dictionary-detail/phrase-dictionary-detail-view.js';
 import type { WordDictionaryDetailView } from '../../../../modules/learning/queries/get-word-dictionary-detail/word-dictionary-detail-view.js';
+import { readNativeLangCookie } from '../../auth/cookies/auth-cookies.helper.js';
 import { DictionaryQueryDto } from '../dto/dictionary-query.dto.js';
 import {
   DictionaryEntryDto,
@@ -28,7 +35,12 @@ import { WordDictionaryDetailResponseDto } from '../dto/word-dictionary-detail-r
 @ApiCookieAuth()
 @Controller('dictionary')
 export class DictionaryController {
-  constructor(private readonly learning: LearningService) {}
+  constructor(
+    private readonly learning: LearningService,
+    private readonly auth: AuthService,
+    @Inject(AuthConfig.KEY)
+    private readonly authConfig: ConfigType<typeof AuthConfig>,
+  ) {}
 
   @Get()
   async dictionary(
@@ -50,8 +62,13 @@ export class DictionaryController {
   async wordDetail(
     @CurrentUser() actor: UserActor,
     @Param('lemma') lemma: string,
+    @Req() request: FastifyRequest,
   ): Promise<WordDictionaryDetailResponseDto> {
-    const view = await this.learning.getWordDictionaryDetail(lemma, actor.id);
+    const view = await this.learning.getWordDictionaryDetail(
+      lemma,
+      actor.id,
+      await this.nativeLang(actor, request),
+    );
     if (!view) {
       throw new NotFoundException('Word not found');
     }
@@ -64,15 +81,24 @@ export class DictionaryController {
   async phraseDetail(
     @CurrentUser() actor: UserActor,
     @Param('phrase') phrase: string,
+    @Req() request: FastifyRequest,
   ): Promise<PhraseDictionaryDetailResponseDto> {
     const view = await this.learning.getPhraseDictionaryDetail(
       phrase,
       actor.id,
+      await this.nativeLang(actor, request),
     );
     if (!view) {
       throw new NotFoundException('Phrase not found');
     }
     return toPhraseDictionaryDetailDto(view);
+  }
+
+  private nativeLang(actor: UserActor, request: FastifyRequest) {
+    return this.auth.resolveNativeLang(
+      actor.id,
+      readNativeLangCookie(request, this.authConfig),
+    );
   }
 }
 
@@ -115,7 +141,7 @@ function toPhraseDictionaryDetailDto(
     type: view.type,
     definition: view.definition,
     example: view.example,
-    translations: view.translations,
+    translation: view.translation,
     cefrLevel: view.cefrLevel,
     state: view.state,
     cardId: view.cardId,

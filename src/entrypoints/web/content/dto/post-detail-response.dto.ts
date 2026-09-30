@@ -7,28 +7,8 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { Doc } from '../../../../modules/post/domain/node-tree.types.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
-import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
 import type { ExerciseSource } from '../../../../modules/post/enums/exercise-source.enum.js';
 import type { ExerciseType } from '../../../../modules/post/enums/exercise-type.enum.js';
-
-export class PostLexiconTranslationDto {
-  readonly translation!: string;
-}
-
-export class PostGrammarTranslationDto {
-  readonly explanation!: string;
-
-  // Index-aligned with the usage point's `examples`; absent when only the
-  // explanation is translated.
-  readonly examples?: string[];
-}
-
-type PostLexiconTranslations = Partial<
-  Record<ContentLanguage, PostLexiconTranslationDto>
->;
-type PostGrammarTranslations = Partial<
-  Record<ContentLanguage, PostGrammarTranslationDto>
->;
 
 export class PostExerciseDto {
   readonly id!: string;
@@ -60,8 +40,8 @@ export class PostWordAnnotationDto {
 
   readonly example!: string | null;
 
-  // By language code; a language with no entry is not translated yet.
-  readonly translations!: PostLexiconTranslations;
+  // In the viewer's native language; null until translated.
+  readonly translation!: string | null;
 
   readonly cefrLevel!: CefrLevel | null;
 
@@ -82,8 +62,8 @@ export class PostPhraseAnnotationDto {
 
   readonly example!: string | null;
 
-  // By language code; a language with no entry is not translated yet.
-  readonly translations!: PostLexiconTranslations;
+  // In the viewer's native language; null until translated.
+  readonly translation!: string | null;
 
   readonly cefrLevel!: CefrLevel | null;
 
@@ -107,7 +87,12 @@ export class PostGrammarUsagePointDto {
 
   readonly explanation!: string | null;
 
-  readonly translations!: PostGrammarTranslations;
+  // `explanation` in the viewer's native language; null until translated.
+  readonly translation!: string | null;
+
+  // Index-aligned with `examples`; null when only the explanation is
+  // translated.
+  readonly exampleTranslations!: string[] | null;
 
   readonly examples!: string[];
 }

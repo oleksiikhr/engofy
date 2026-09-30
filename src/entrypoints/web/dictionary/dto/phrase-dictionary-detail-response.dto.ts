@@ -1,15 +1,6 @@
 import type { EffectiveState } from '../../../../modules/learning/domain/resolve-effective-state.js';
 import type { CefrLevel } from '../../../../modules/post/enums/cefr-level.enum.js';
-import type { ContentLanguage } from '../../../../modules/post/enums/content-language.enum.js';
 import type { PhraseType } from '../../../../modules/post/enums/phrase-type.enum.js';
-
-export class PhraseDictionaryTranslationDto {
-  readonly translation!: string;
-}
-
-type PhraseDictionaryTranslations = Partial<
-  Record<ContentLanguage, PhraseDictionaryTranslationDto>
->;
 
 export class PhraseDictionaryPostDto {
   readonly shortId!: string;
@@ -32,8 +23,8 @@ export class PhraseDictionaryDetailResponseDto {
 
   readonly example!: string | null;
 
-  // By language code; a language with no entry is not translated yet.
-  readonly translations!: PhraseDictionaryTranslations;
+  // In the viewer's native language; null until translated.
+  readonly translation!: string | null;
 
   readonly cefrLevel!: CefrLevel | null;
 

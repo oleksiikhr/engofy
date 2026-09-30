@@ -4,7 +4,7 @@ import { User } from '../../../auth/entities/user.entity.js';
 import { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
 import { cefrRank } from '../../domain/cefr-order.js';
 import { collectSpanNodes } from '../../domain/collect-spans.js';
-import { readGrammarTranslations } from '../../domain/content-translations.js';
+import { pickGrammarTranslation } from '../../domain/content-translations.js';
 import { loadIrregularVerbsByLemma } from '../../domain/irregular-verb.js';
 import { locateGrammarMatch } from '../../domain/locate-grammar-match.js';
 import { locateSentenceTokens } from '../../domain/locate-sentence-tokens.js';
@@ -20,6 +20,7 @@ import { PostPart } from '../../entities/post-part.entity.js';
 import { PostRead } from '../../entities/post-read.entity.js';
 import { Sentence } from '../../entities/sentence.entity.js';
 import { SentenceToken } from '../../entities/sentence-token.entity.js';
+import type { ContentLanguage } from '../../enums/content-language.enum.js';
 import { PostStatus } from '../../enums/post-status.enum.js';
 import {
   LexiconViewService,
@@ -60,6 +61,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   async execute({
     shortId,
     userId,
+    lang,
   }: GetPostDetailQuery): Promise<PostDetailView | null> {
     const post = await this.em.findOne(
       Post,
@@ -108,6 +110,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
     const annotations = await this.resolveAnnotations(
       spans,
       userId,
+      lang,
       post.id,
       parts,
     );
@@ -134,6 +137,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   private async resolveAnnotations(
     spans: SpanNode[],
     userId: string | null,
+    lang: ContentLanguage,
     postId: string,
     parts: PostPart[],
   ): Promise<ResolvedAnnotations> {
@@ -166,14 +170,15 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
       { disableIdentityMap: true },
     );
     const [words, phrases, grammarMatches, tokens] = await Promise.all([
-      this.lexicon.resolveWords(wordDefinitionIds, viewer),
-      this.lexicon.resolvePhrases(phraseIds, viewer),
+      this.lexicon.resolveWords(wordDefinitionIds, viewer, lang),
+      this.lexicon.resolvePhrases(phraseIds, viewer, lang),
       this.resolveGrammarMatches(sentences, parts, viewer),
       this.resolveTokens(sentences, parts),
     ]);
     const grammar = await this.resolveGrammar(
       grammarSlugs,
       unique(grammarMatches.map((match) => match.grammarUsagePointId)),
+      lang,
     );
 
     return { words, phrases, grammar, grammarMatches, tokens };
@@ -328,6 +333,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
   private async resolveGrammar(
     slugs: string[],
     matchedPointIds: string[],
+    lang: ContentLanguage,
   ): Promise<Record<string, GrammarAnnotationView>> {
     if (slugs.length === 0 && matchedPointIds.length === 0) {
       return {};
@@ -378,7 +384,7 @@ export class GetPostDetailHandler implements IQueryHandler<GetPostDetailQuery> {
           guideword: point.guideword,
           canDoStatement: point.canDoStatement,
           explanation: point.learnerExplanation ?? null,
-          translations: readGrammarTranslations(point.translations),
+          ...pickGrammarTranslation(point.translations, lang),
           examples: point.learnerExamples ?? [],
         })),
       };
