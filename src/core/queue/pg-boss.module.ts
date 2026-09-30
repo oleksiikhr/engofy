@@ -2,6 +2,7 @@ import type { DynamicModule } from '@nestjs/common';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import type { AppRuntime } from '../app.js';
+import { AdvisoryLockService } from './advisory-lock.service.js';
 import QueueConfig from './config/queue.config.js';
 import { OutboxSubscriber } from './outbox.subscriber.js';
 import { OutboxSenderService } from './outbox-sender.service.js';
@@ -24,8 +25,14 @@ export class PgBossModule {
         OutboxSenderService,
         OutboxSubscriber,
         QueueManagementService,
+        AdvisoryLockService,
       ],
-      exports: [PG_BOSS, OutboxSenderService, QueueManagementService],
+      exports: [
+        PG_BOSS,
+        OutboxSenderService,
+        QueueManagementService,
+        AdvisoryLockService,
+      ],
     };
   }
 }

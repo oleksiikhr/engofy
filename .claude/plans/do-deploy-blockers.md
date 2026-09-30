@@ -26,12 +26,12 @@ status: in-progress
 
 Окремі `QUEUE_DB_HOST`/`QUEUE_DB_PORT` для pg-boss (direct-з'єднання, LISTEN/NOTIFY) при пулері для MikroORM. Значення `DB_POOL_MAX`/`QUEUE_POOL_MAX` для кожного процесу під 22 з'єднання та бюджет — у зрізі 5 (env і docs/deploy.md).
 
-### [ ] 3. Захист Telegram-поллера від перетину
+### [x] 3. Захист Telegram-поллера від перетину
 - Branch: `do-deploy-blockers`
 - Base: `main`
 - PR: —
 
-Postgres advisory lock (try-lock, без очікування) навколо `PollUpdatesService.run()`, щоб старий і новий cron під час rollout не робили `getUpdates` паралельно. Інтеграційний тест на два одночасні `run()`.
+Session-level Postgres advisory lock (`AdvisoryLockService`, окреме `pg`-з'єднання, try-lock без очікування) навколо `PollUpdatesService.run()`, щоб старий і новий cron під час rollout не робили `getUpdates` паралельно. Ispec на два одночасні `run()`.
 
 ### [ ] 4. Повне завершення worker
 - Branch: `do-deploy-blockers`

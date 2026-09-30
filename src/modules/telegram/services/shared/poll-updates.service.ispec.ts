@@ -61,6 +61,26 @@ describe('PollUpdatesService', () => {
     fakeClient.offsets = [];
     fakeClient.sent = [];
     fakeClient.failSendMessage = false;
+    fakeClient.getUpdatesGate = null;
+  });
+
+  it('skips a poll while another one holds the lock', async () => {
+    let release = () => {};
+    fakeClient.getUpdatesGate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+
+    const first = service.run();
+    await vi.waitUntil(() => fakeClient.offsets.length === 1);
+
+    await service.run();
+    expect(fakeClient.offsets).toHaveLength(1);
+
+    release();
+    await first;
+
+    await service.run();
+    expect(fakeClient.offsets).toHaveLength(2);
   });
 
   it('stores an admin /add update and ingests the pasted text', async () => {
