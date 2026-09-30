@@ -44,12 +44,12 @@ status: in-progress
 
 ## Зрізи
 
-### [ ] 1. Аудит усіх 94 сторінок і базовий звіт
+### [x] 1. Аудит усіх 94 сторінок і базовий звіт
 - Branch: `grammar-page-readiness`
 - Base: `main`
-- PR: —
+- PR: — (єдиний PR наприкінці плану)
 
-Скрипт лише для читання: SQL по B2–B3 та D1 і Playwright по B1, B4–B6, B9. Результат —
+Скрипт `apps/web/scripts/grammar-audit.mjs` лише для читання: SQL по B2–B3 та D1 і Playwright по B1, B4–B6, B9. Результат —
 таблиця «конструкція × перевірка» нижче в цьому файлі (розділ «Карта розкатки»). Без змін у
 продукті.
 
@@ -114,4 +114,123 @@ status: in-progress
 
 ## Карта розкатки
 
-Заповнюється зрізом 1: одна строка на конструкцію (94), стовпці — перевірки чекліста.
+Знято 2026-09-30 на dev-стеку (`node scripts/grammar-audit.mjs > audit.json` з `apps/web`,
+вʼюпорт 390 px, гість). Стовпці: B2 (є usage point), B3 (пояснення+приклади+переклад у всіх UP;
+`✗ n/m` — скільки повних), B4 (назва унікальна й не однослівна), B6 (без гор. скролу), D1
+(UP із вправами / усього UP), D3 (є cheat sheet). Не в таблиці, бо пройшли на всіх 94: B1 (200, без
+console error/warning, без 4xx/5xx), B5 (title, description, canonical, один H1, JSON-LD).
+
+Підсумок:
+
+- B2: 13 без usage point (`nouns-plural/types/uncountable/noun-phrases-grammatical-functions`,
+  `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`,
+  `adjectives-modifying`, `clauses-interrogatives`, `e2e-empty-construction`).
+- B3: 77 повні; неповні `past-present-perfect-simple` (10/11) і три e2e-фікстури.
+- B4: 56 сторінок із однословною назвою або назвою, що збігається з іншою (`comparatives`,
+  `position`, `demonstratives`, `quantity`, `present simple`, `types` — по 2 сторінки). H1 і `<title>`
+  не називають категорію («combining — Grammar — Engofy»). У H1 бейдж рівня зливається з назвою
+  в `textContent` («C2combining»).
+- B6: горизонтальний скрол лише на `clauses-phrases-exclamations`.
+- B9: фікстури `e2e-*` у dev-БД потрапляють у список (3 із 4) і в sitemap (усі 4). Слід перевірити,
+  чи це артефакт спільної dev/e2e-БД, чи фільтра немає взагалі.
+- D1: вправи є в усіх UP на 42 сторінках, на 39 — жодних (`modality-*`, `present-*`, `pronouns-*`,
+  `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`).
+- D3: 6 сторінок без cheat sheet.
+- B7, B8, B10, D2, D4–D8 аудитом не покриті (потрібна взаємодія/зір) — зрізи 2–7.
+
+| Конструкція | Назва | B2 | B3 | B4 | B6 | D1 | D3 |
+|---|---|---|---|---|---|---|---|
+| `adjectives-combining` | combining | ✓ | ✓ | ✗ | ✓ | 1/1 | ✓ |
+| `adjectives-comparatives` | comparatives | ✓ | ✓ | ✗ | ✓ | 9/9 | ✓ |
+| `adjectives-modifying` | modifying | ✗ | — | ✗ | ✓ | — | ✓ |
+| `adjectives-position` | position | ✓ | ✓ | ✗ | ✓ | 3/3 | ✓ |
+| `adjectives-superlatives` | superlatives | ✓ | ✓ | ✗ | ✓ | 9/9 | ✓ |
+| `adverbs-adverb-phrases-form` | adverb phrases - form | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `adverbs-adverbs-and-adverb-phrases-types-and-meanings` | adverbs and adverb phrases: types and meanings | ✓ | ✓ | ✓ | ✓ | 1/1 | ✓ |
+| `adverbs-adverbs-as-modifiers` | adverbs as modifiers | ✓ | ✓ | ✓ | ✓ | 31/31 | ✗ |
+| `adverbs-position` | position | ✓ | ✓ | ✗ | ✓ | 3/3 | ✓ |
+| `clauses-comparatives` | comparatives | ✓ | ✓ | ✗ | ✓ | 6/6 | ✓ |
+| `clauses-conditional` | conditional | ✓ | ✓ | ✗ | ✓ | 23/23 | ✓ |
+| `clauses-coordinated` | coordinated | ✓ | ✓ | ✗ | ✓ | 6/6 | ✓ |
+| `clauses-declarative` | declarative | ✓ | ✓ | ✗ | ✓ | 1/1 | ✓ |
+| `clauses-imperatives` | imperatives | ✓ | ✓ | ✗ | ✓ | 16/16 | ✓ |
+| `clauses-interrogatives` | interrogatives | ✗ | — | ✗ | ✓ | — | ✓ |
+| `clauses-phrases-exclamations` | phrases/exclamations | ✓ | ✓ | ✗ | ✗ | 1/1 | ✓ |
+| `clauses-relative` | relative | ✓ | ✓ | ✗ | ✓ | 5/5 | ✓ |
+| `clauses-subordinated` | subordinated | ✓ | ✓ | ✗ | ✓ | 16/16 | ✓ |
+| `conjunctions-coordinating` | coordinating | ✓ | ✓ | ✗ | ✓ | 11/11 | ✓ |
+| `conjunctions-subordinating` | subordinating | ✓ | ✓ | ✗ | ✓ | 2/2 | ✓ |
+| `determiners-articles` | articles | ✓ | ✓ | ✗ | ✓ | 7/7 | ✓ |
+| `determiners-demonstratives` | demonstratives | ✓ | ✓ | ✗ | ✓ | 15/15 | ✓ |
+| `determiners-possessives` | possessives | ✓ | ✓ | ✗ | ✓ | 1/1 | ✓ |
+| `determiners-quantity` | quantity | ✓ | ✓ | ✗ | ✓ | 3/3 | ✓ |
+| `discourse-markers-discourse-markers-in-writing` | discourse markers in writing | ✓ | ✓ | ✓ | ✓ | 11/11 | ✗ |
+| `e2e-conditionals` (e2e) | conditionals | ✓ | ✗ 0/2 | ✗ | ✓ | 0/2 | ✓ |
+| `e2e-empty-construction` (e2e) | empty construction | ✗ | — | ✓ | ✓ | — | ✗ |
+| `e2e-past-perfect` (e2e) | past perfect | ✓ | ✗ 1/2 | ✓ | ✓ | 0/2 | ✓ |
+| `e2e-present-simple` (e2e) | present simple | ✓ | ✗ 0/1 | ✗ | ✓ | 0/1 | ✓ |
+| `focus-focus` | focus | ✓ | ✓ | ✗ | ✓ | 15/15 | ✗ |
+| `future-future-continuous` | future continuous | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
+| `future-future-expressions-with-be` | future expressions with be | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
+| `future-future-in-the-past` | future in the past | ✓ | ✓ | ✓ | ✓ | 5/5 | ✗ |
+| `future-future-perfect-continuous` | future perfect continuous | ✓ | ✓ | ✓ | ✓ | 2/2 | ✓ |
+| `future-future-perfect-simple` | future perfect simple | ✓ | ✓ | ✓ | ✓ | 3/3 | ✓ |
+| `future-future-simple-with-will-and-shall` | future simple (with will and shall) | ✓ | ✓ | ✓ | ✓ | 11/11 | ✓ |
+| `future-future-with-be-going-to` | future with be going to | ✓ | ✓ | ✓ | ✓ | 7/7 | ✓ |
+| `future-present-continuous-for-future-use` | present continuous for future use | ✓ | ✓ | ✓ | ✓ | 9/9 | ✓ |
+| `modality-adjectives` | adjectives | ✓ | ✓ | ✗ | ✓ | 0/6 | ✓ |
+| `modality-adverbs` | adverbs | ✓ | ✓ | ✗ | ✓ | 0/7 | ✓ |
+| `modality-can` | can | ✓ | ✓ | ✗ | ✓ | 0/13 | ✓ |
+| `modality-could` | could | ✓ | ✓ | ✗ | ✓ | 0/26 | ✓ |
+| `modality-dare` | dare | ✓ | ✓ | ✗ | ✓ | 0/4 | ✓ |
+| `modality-expressions-with-be` | expressions with be | ✓ | ✓ | ✓ | ✓ | 0/18 | ✓ |
+| `modality-have-got-to` | have (got) to | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
+| `modality-may` | may | ✓ | ✓ | ✗ | ✓ | 0/12 | ✓ |
+| `modality-might` | might | ✓ | ✓ | ✗ | ✓ | 0/9 | ✓ |
+| `modality-must` | must | ✓ | ✓ | ✗ | ✓ | 0/10 | ✓ |
+| `modality-need` | need | ✓ | ✓ | ✗ | ✓ | 0/2 | ✓ |
+| `modality-ought` | ought | ✓ | ✓ | ✗ | ✓ | 0/6 | ✓ |
+| `modality-shall` | shall | ✓ | ✓ | ✗ | ✓ | 0/7 | ✓ |
+| `modality-should` | should | ✓ | ✓ | ✗ | ✓ | 0/12 | ✓ |
+| `modality-used-to` | used to | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
+| `modality-will` | will | ✓ | ✓ | ✗ | ✓ | 0/10 | ✓ |
+| `modality-would` | would | ✓ | ✓ | ✗ | ✓ | 0/13 | ✓ |
+| `negation-negation` | negation | ✓ | ✓ | ✗ | ✓ | 12/12 | ✓ |
+| `nouns-noun-phrases` | noun phrases | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
+| `nouns-noun-phrases-grammatical-functions` | noun phrases - grammatical functions | ✗ | — | ✓ | ✓ | — | ✓ |
+| `nouns-plural` | plural | ✗ | — | ✗ | ✓ | — | ✓ |
+| `nouns-types` | types | ✗ | — | ✗ | ✓ | — | ✓ |
+| `nouns-uncountable` | uncountable | ✗ | — | ✗ | ✓ | — | ✓ |
+| `passives-get-and-have` | get and have | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
+| `passives-passives-form` | passives: form | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
+| `past-past-continuous` | past continuous | ✓ | ✓ | ✓ | ✓ | 6/6 | ✓ |
+| `past-past-perfect-continuous` | past perfect continuous | ✓ | ✓ | ✓ | ✓ | 5/5 | ✓ |
+| `past-past-perfect-simple` | past perfect simple | ✓ | ✓ | ✓ | ✓ | 12/12 | ✓ |
+| `past-past-simple` | past simple | ✓ | ✓ | ✓ | ✓ | 10/10 | ✓ |
+| `past-present-perfect-continuous` | present perfect continuous | ✓ | ✓ | ✓ | ✓ | 4/4 | ✓ |
+| `past-present-perfect-simple` | present perfect simple | ✓ | ✗ 10/11 | ✓ | ✓ | 10/11 | ✓ |
+| `prepositions-prepositions` | prepositions | ✓ | ✓ | ✗ | ✓ | 3/3 | ✓ |
+| `present-present-continuous` | present continuous | ✓ | ✓ | ✓ | ✓ | 0/11 | ✓ |
+| `present-present-simple` | present simple | ✓ | ✓ | ✗ | ✓ | 0/14 | ✓ |
+| `pronouns-demonstratives` | demonstratives | ✓ | ✓ | ✗ | ✓ | 0/12 | ✓ |
+| `pronouns-generic-use` | generic use | ✓ | ✓ | ✓ | ✓ | 0/5 | ✗ |
+| `pronouns-indefinite-thing-one-body-etc` | indefinite - thing, -one, -body etc | ✓ | ✓ | ✓ | ✓ | 0/8 | ✓ |
+| `pronouns-possessive` | possessive | ✓ | ✓ | ✗ | ✓ | 0/1 | ✓ |
+| `pronouns-quantity` | quantity | ✓ | ✓ | ✗ | ✓ | 0/2 | ✓ |
+| `pronouns-reciprocal` | reciprocal | ✓ | ✓ | ✗ | ✓ | 0/1 | ✓ |
+| `pronouns-reflexive` | reflexive | ✓ | ✓ | ✗ | ✓ | 0/8 | ✓ |
+| `pronouns-subject-object` | subject/ object | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
+| `pronouns-substitution-one-ones-none` | substitution, one, ones, none | ✓ | ✓ | ✓ | ✓ | 0/4 | ✓ |
+| `questions-alternatives` | alternatives | ✓ | ✓ | ✗ | ✓ | 0/4 | ✓ |
+| `questions-tags` | tags | ✓ | ✓ | ✗ | ✓ | 0/2 | ✓ |
+| `questions-wh` | wh- | ✓ | ✓ | ✓ | ✓ | 0/2 | ✓ |
+| `questions-yes-no` | yes/no | ✓ | ✓ | ✗ | ✓ | 0/2 | ✓ |
+| `reported-speech-reported-speech` | reported speech | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
+| `verbs-linking` | linking | ✗ | — | ✗ | ✓ | — | ✓ |
+| `verbs-patterns-that-clauses` | patterns_that clauses | ✗ | — | ✓ | ✓ | — | ✓ |
+| `verbs-patterns-with-to-and-ing` | patterns_with to and -ing | ✓ | ✓ | ✓ | ✓ | 0/5 | ✓ |
+| `verbs-phrasal` | phrasal | ✗ | — | ✗ | ✓ | — | ✓ |
+| `verbs-phrasal-prepositional` | phrasal-prepositional | ✓ | ✓ | ✓ | ✓ | 0/1 | ✓ |
+| `verbs-prepositional` | prepositional | ✗ | — | ✗ | ✓ | — | ✓ |
+| `verbs-there-is-are` | there is/are | ✗ | — | ✓ | ✓ | — | ✓ |
+| `verbs-types` | types | ✗ | — | ✗ | ✓ | — | ✓ |
