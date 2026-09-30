@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
+import { AdvisoryLockService } from '../../../../core/queue/advisory-lock.service.js';
 import { IngestPostDto } from '../../../post/commands/ingest-post/ingest-post.dto.js';
 import { PostService } from '../../../post/post.service.js';
 import TelegramConfig from '../../config/telegram.config.js';
@@ -21,10 +22,15 @@ const UNKNOWN_COMMAND_REPLY =
 // `/status` without an id lists this many of the latest processing/failed posts.
 const STATUS_LIST_LIMIT = 10;
 
+// Arbitrary constant advisory-lock key, unique to this poller.
+const POLL_LOCK_KEY = 7_206_001;
+
 // Polls Telegram getUpdates (PLAN.md §3.9), stores every new update on
 // telegram_updates for audit, and acts on the ones sent by the configured
 // admin: `/add <text>` -> ingest, `/retry <post_id>` -> full pipeline re-run,
 // `/status [post_id]` -> stage progress.
+// An advisory lock keeps two instances (an old and a new cron during a rollout)
+// from polling at once — Telegram answers a concurrent getUpdates with 409.
 // The next poll offset is derived from max(update_id) already stored, so no
 // separate cursor is needed and a re-poll of a stored update is a no-op.
 //
@@ -36,6 +42,7 @@ export class PollUpdatesService {
 
   constructor(
     private readonly em: EntityManager,
+    private readonly locks: AdvisoryLockService,
     private readonly client: TelegramClientService,
     private readonly postService: PostService,
     @Inject(TelegramConfig.KEY)
@@ -50,6 +57,14 @@ export class PollUpdatesService {
       return;
     }
 
+    const ran = await this.locks.tryRun(POLL_LOCK_KEY, () => this.poll());
+
+    if (!ran) {
+      this.logger.warn('Another instance is polling Telegram; skipping');
+    }
+  }
+
+  private async poll(): Promise<void> {
     const offset = await this.nextOffset();
     const updates = await this.client.getUpdates(offset);
 

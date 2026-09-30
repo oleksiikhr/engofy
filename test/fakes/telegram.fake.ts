@@ -25,6 +25,9 @@ export class FakeTelegramClient
   /** Every message `sendMessage` accepted, in order. */
   sent: { chatId: string; text: string }[] = [];
 
+  /** When set, `getUpdates` waits on it — holds a poll open mid-flight. */
+  getUpdatesGate: Promise<void> | null = null;
+
   /** When true, every `sendMessage` throws. */
   failSendMessage = false;
   /** One-shot: thrown (and cleared) on the next `sendMessage`. */
@@ -34,6 +37,7 @@ export class FakeTelegramClient
 
   async getUpdates(offset?: number): Promise<TelegramUpdatePayload[]> {
     this.offsets.push(offset);
+    await this.getUpdatesGate;
     return this.queued;
   }
 

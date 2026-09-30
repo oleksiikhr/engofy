@@ -13,6 +13,7 @@ import { AppModule } from './app.module.js';
 import AppConfig from './core/config/app.config.js';
 import SwaggerConfig from './core/config/swagger.config.js';
 import { isProdEnvironment } from './core/enums/environment.enum.js';
+import { registerClientIpHook } from './core/helpers/client-ip.helper.js';
 import { envString } from './core/helpers/env.helper.js';
 import { parseTrustProxy } from './core/helpers/trust-proxy.helper.js';
 import { buildOpenApiDocument } from './entrypoints/web/build-openapi-document.js';
@@ -32,6 +33,11 @@ const config = {
   swagger: app.get<ConfigType<typeof SwaggerConfig>>(SwaggerConfig.KEY),
   auth: app.get<ConfigType<typeof AuthConfig>>(AuthConfig.KEY),
 };
+
+registerClientIpHook(
+  app.getHttpAdapter().getInstance(),
+  envString('CLIENT_IP_HEADER'),
+);
 
 app.enableShutdownHooks();
 app.useLogger(app.get(Logger));

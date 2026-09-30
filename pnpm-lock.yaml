@@ -219,6 +219,9 @@ importers:
       nodemailer:
         specifier: ^9.1.1
         version: 9.1.1
+      pg:
+        specifier: 8.22.0
+        version: 8.22.0
       pg-boss:
         specifier: ^12.27.0
         version: 12.27.0
@@ -286,6 +289,9 @@ importers:
       '@types/nodemailer':
         specifier: ^8.0.1
         version: 8.0.1
+      '@types/pg':
+        specifier: 8.6.1
+        version: 8.6.1
       '@types/supertest':
         specifier: ^7.2.1
         version: 7.2.1
@@ -2402,6 +2408,9 @@ packages:
 
   '@types/nodemailer@8.0.1':
     resolution: {integrity: sha512-PxpaInm8V1JQDd4j0ds5HfvWQk8JupS1C0Picb96QJsrrRDjBH+DlK7L4ZdNSqNULhiZRQHc40nLVShaGxXAMw==}
+
+  '@types/pg@8.6.1':
+    resolution: {integrity: sha512-1Kc4oAGzAl7uqUStZCDvaLFqZrW9qWSjXOmBfdgyBP5La7Us6Mg4GBvRlSoaZMhQF/zSj1C8CtKMBkoiT8eL8w==}
 
   '@types/superagent@8.1.11':
     resolution: {integrity: sha512-KA7srSW/HENDtOw9DOqaFLgWuMqN9WgjEw62lh9dpvRaZDkhdOkazASd7X7i2eMUYLHa1U37ZttnePsH5zTDHw==}
@@ -7378,6 +7387,12 @@ snapshots:
   '@types/nodemailer@8.0.1':
     dependencies:
       '@types/node': 24.13.3
+
+  '@types/pg@8.6.1':
+    dependencies:
+      '@types/node': 26.4.0
+      pg-protocol: 1.15.0
+      pg-types: 2.2.0
 
   '@types/superagent@8.1.11':
     dependencies:

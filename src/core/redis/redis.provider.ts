@@ -14,6 +14,7 @@ export const redisProvider: Provider = {
       host: config.host,
       port: config.port,
       db: config.db,
+      ...(config.tls && { tls: config.tls }),
       ...(config.password && { password: config.password }),
     });
 
