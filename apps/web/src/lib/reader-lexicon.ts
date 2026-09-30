@@ -7,12 +7,7 @@ import {
   shortExample,
 } from './popup-labels';
 import type { PopupLang } from './prefs';
-import type {
-  CefrLevel,
-  EffectiveState,
-  GrammarTranslations,
-  LexiconTranslations,
-} from './types';
+import type { CefrLevel, EffectiveState } from './types';
 
 // Popup content for the reader's word, phrase and grammar labels — shared by
 // the client popup (bundled into the page) and the /partials/lexicon-action
@@ -59,7 +54,7 @@ interface LexiconEntryBase {
   id: string;
   definition: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -88,7 +83,7 @@ export interface GrammarSiblingUsagePoint {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  translations: GrammarTranslations;
+  translation: string | null;
   examples: string[];
   matched: boolean;
 }
@@ -105,7 +100,7 @@ export interface GrammarLexiconEntry {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  translations: GrammarTranslations;
+  translation: string | null;
   examples: string[];
   // "Why this construction, not a competing one" — shown in Analyze mode.
   contrast: string | null;
@@ -214,10 +209,7 @@ function hasTranslation(
   lexical: LexiconEntry | null,
   grammar: GrammarLexiconEntry | null,
 ): boolean {
-  const native = nativeLang();
-  return Boolean(
-    lexical?.translations[native] || grammar?.translations[native],
-  );
+  return Boolean(lexical?.translation || grammar?.translation);
 }
 
 // The EN / native switch for the popup's definitions. Only offered when some
@@ -274,8 +266,7 @@ function lexiconSectionHtml(
       ? ['Word', posLabel(entry.pos)].filter(Boolean).join(' · ')
       : ['Phrase', phraseTypeLabel(entry.type)].filter(Boolean).join(' · ');
   const sub = entry.kind === 'word' ? (entry.phonetic ?? '') : '';
-  const translation =
-    lang === 'en' ? null : entry.translations[nativeLang()]?.translation;
+  const translation = lang === 'en' ? null : entry.translation;
   const cefr = entry.cefrLevel
     ? `<span class="badge">${esc(entry.cefrLevel)}</span>`
     : '';
@@ -312,8 +303,7 @@ function usagePickerHtml(entry: GrammarLexiconEntry, lang: PopupLang): string {
   const pills = entry.siblings
     .map((point) => {
       const guideword = guidewordLabel(point.guideword);
-      const translated =
-        lang === 'en' ? null : point.translations[nativeLang()]?.explanation;
+      const translated = lang === 'en' ? null : point.translation;
       const detail = translated ?? point.explanation ?? point.canDoStatement;
       const example = shortExample(point.examples[0] ?? '');
       const href = practiceHref(entry.constructionSlug, point.egpIndex);
@@ -331,8 +321,7 @@ function grammarSectionHtml(
   demo: boolean,
 ): string {
   const guideword = guidewordLabel(entry.guideword);
-  const translated =
-    lang === 'en' ? null : entry.translations[nativeLang()]?.explanation;
+  const translated = lang === 'en' ? null : entry.translation;
   const explanation = translated
     ? `<p class="lex-popup__def" lang="${nativeLang()}">${esc(translated)}</p>`
     : `<p class="lex-popup__def">${esc(entry.explanation ?? entry.canDoStatement)}</p>`;

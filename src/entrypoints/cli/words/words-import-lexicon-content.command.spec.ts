@@ -17,7 +17,7 @@ const entry = {
   definition: 'A person who draws maps.',
   example: 'The cartographer drew the coast.',
   cefrLevel: 'C1',
-  uk: { translation: 'картограф' },
+  translations: { uk: { translation: 'картограф' } },
 };
 
 describe('WordsImportLexiconContentCommand', () => {
@@ -82,7 +82,7 @@ describe('WordsImportLexiconContentCommand', () => {
   });
 
   it('rejects an entry without a translation', async () => {
-    const { uk: _uk, ...noTranslation } = entry;
+    const { translations: _t, ...noTranslation } = entry;
     vi.mocked(readFile).mockResolvedValue(
       JSON.stringify({ cartographer: { noun: noTranslation } }),
     );

@@ -1,5 +1,4 @@
 import type { EffectiveState } from '../../../learning/domain/resolve-effective-state.js';
-import type { GrammarTranslations } from '../../domain/content-translations.js';
 import type { GrammarPageLexSpan } from '../../entities/grammar-page-lex-block.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
 import type {
@@ -17,8 +16,10 @@ export interface ConstructionUsagePointView {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  // Translations of `explanation` by language code.
-  translations: GrammarTranslations;
+  // `explanation` in the request's language; null until translated.
+  translation: string | null;
+  // Index-aligned with `examples`; null when only the explanation is translated.
+  exampleTranslations: string[] | null;
   examples: string[];
   // Per-point, not collapsed (unlike the reference list's construction-level
   // badge): gates that point's own "+ Add to deck" button. From the learner's

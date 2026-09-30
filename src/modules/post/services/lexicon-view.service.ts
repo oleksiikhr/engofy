@@ -6,11 +6,12 @@ import {
 } from '../../learning/domain/resolve-effective-state.js';
 import { LearningCard } from '../../learning/entities/learning-card.entity.js';
 import { LearningDisposition } from '../../learning/entities/learning-disposition.entity.js';
-import { readLexiconTranslations } from '../domain/content-translations.js';
+import { pickLexiconTranslation } from '../domain/content-translations.js';
 import { Phrase } from '../entities/phrase.entity.js';
 import { Word } from '../entities/word.entity.js';
 import { WordDefinition } from '../entities/word-definition.entity.js';
 import type { CefrLevel } from '../enums/cefr-level.enum.js';
+import type { ContentLanguage } from '../enums/content-language.enum.js';
 import type {
   PhraseAnnotationView,
   WordAnnotationView,
@@ -34,6 +35,7 @@ export class LexiconViewService {
   async resolveWords(
     wordDefinitionIds: string[],
     viewer: Viewer | null,
+    lang: ContentLanguage,
   ): Promise<Record<string, WordAnnotationView>> {
     if (wordDefinitionIds.length === 0) {
       return {};
@@ -66,7 +68,7 @@ export class LexiconViewService {
         definition: definition.definition ?? null,
         phonetic: definition.phonetic ?? null,
         example: definition.exampleSentence ?? null,
-        translations: readLexiconTranslations(definition.translations),
+        translation: pickLexiconTranslation(definition.translations, lang),
         cefrLevel: definition.cefrLevel ?? null,
         frequencyRank: word?.frequencyRank ?? null,
         state: states.get(definition.id) ?? EffectiveState.New,
@@ -78,6 +80,7 @@ export class LexiconViewService {
   async resolvePhrases(
     phraseIds: string[],
     viewer: Viewer | null,
+    lang: ContentLanguage,
   ): Promise<Record<string, PhraseAnnotationView>> {
     if (phraseIds.length === 0) {
       return {};
@@ -101,7 +104,7 @@ export class LexiconViewService {
         type: phrase.type ?? null,
         definition: phrase.definition ?? null,
         example: phrase.exampleSentence ?? null,
-        translations: readLexiconTranslations(phrase.translations),
+        translation: pickLexiconTranslation(phrase.translations, lang),
         cefrLevel: phrase.cefrLevel ?? null,
         state: states.get(phrase.id) ?? EffectiveState.New,
       };

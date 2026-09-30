@@ -42,7 +42,7 @@ const words: Record<string, WordLexiconEntry> = {
     frequencyRank: null,
     definition: 'to travel regularly between home and work.',
     example: 'I commute to the city by bus every day.',
-    translations: { uk: { translation: 'їздити на роботу' } },
+    translation: 'їздити на роботу',
     cefrLevel: 'B1',
     state: 'new',
   },
@@ -56,7 +56,7 @@ const phrases: Record<string, PhraseLexiconEntry> = {
     type: 'phrasal verb',
     definition: 'to spend time learning about something you have missed.',
     example: 'I need to catch up on my emails.',
-    translations: { uk: { translation: 'надолужити, наздогнати' } },
+    translation: 'надолужити, наздогнати',
     cefrLevel: 'B1',
     state: 'new',
   },
@@ -77,12 +77,8 @@ const grammar: Record<string, GrammarLexiconEntry> = {
       'Can use “used to” to talk about things that were true or regular in the past but are not now.',
     explanation:
       'Use “used to” plus the base verb for a habit or state in the past that has changed.',
-    translations: {
-      uk: {
-        explanation:
-          '«Used to» + інфінітив описує звичку чи стан у минулому, які вже змінилися.',
-      },
-    },
+    translation:
+      '«Used to» + інфінітив описує звичку чи стан у минулому, які вже змінилися.',
     examples: ['We used to live by the sea.'],
     contrast: null,
     state: 'new',

@@ -1,4 +1,7 @@
+import { ContentLanguage } from '../enums/content-language.enum.js';
 import {
+  pickGrammarTranslation,
+  pickLexiconTranslation,
   readGrammarTranslations,
   readLexiconTranslations,
 } from './content-translations.js';
@@ -40,5 +43,31 @@ describe('readGrammarTranslations', () => {
     expect(readGrammarTranslations({ uk: { translation: 'ринок' } })).toEqual(
       {},
     );
+  });
+});
+
+describe('pickLexiconTranslation', () => {
+  it('picks the requested language, null when it is missing or malformed', () => {
+    const raw = { uk: { translation: 'ринок' } };
+    expect(pickLexiconTranslation(raw, ContentLanguage.Uk)).toBe('ринок');
+    expect(pickLexiconTranslation(raw, 'xx' as ContentLanguage)).toBeNull();
+    expect(pickLexiconTranslation(null, ContentLanguage.Uk)).toBeNull();
+  });
+});
+
+describe('pickGrammarTranslation', () => {
+  it('picks the explanation and example translations of one language', () => {
+    const raw = { uk: { explanation: 'Пояснення.', examples: ['Приклад.'] } };
+    expect(pickGrammarTranslation(raw, ContentLanguage.Uk)).toEqual({
+      translation: 'Пояснення.',
+      exampleTranslations: ['Приклад.'],
+    });
+  });
+
+  it('is empty for a language with no entry', () => {
+    expect(pickGrammarTranslation({}, ContentLanguage.Uk)).toEqual({
+      translation: null,
+      exampleTranslations: null,
+    });
   });
 });

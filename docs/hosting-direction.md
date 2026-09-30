@@ -1,6 +1,6 @@
 # Hosting — DigitalOcean, managed-first
 
-Direction only (2026-09-20): no app spec, IaC, or runbook exists yet.
+Direction only (2026-09-20): the app spec is `.do/app.yaml`; no runbook exists yet.
 
 Goal: minimise self-administration — no servers to patch, no hand-managed secrets or backups.
 The database uses the cheapest Managed Postgres plan.
@@ -14,8 +14,8 @@ The database uses the cheapest Managed Postgres plan.
 | `worker`, `cron` | App Platform workers, 1 instance each (`cron` must never run 2) |
 | Migrations | App Platform `PRE_DEPLOY` job running `node cli migrate up`; a failed job aborts the deploy |
 | Postgres | DigitalOcean Managed Postgres (v18 supported; PITR for the last 7 days) |
-| Redis (throttler, OTP counters — ephemeral) | Managed Valkey, or a `redis` image as an internal service |
-| Images | A registry App Platform can pull from |
+| Redis (throttler, OTP counters — ephemeral) | `redis` image as an internal App Platform service, no persistence, no password, no TLS |
+| Images | DigitalOcean Container Registry (Basic) |
 | DNS / proxy / WAF | Cloudflare |
 | Errors | Sentry |
 
@@ -27,18 +27,19 @@ The database uses the cheapest Managed Postgres plan.
   $0.02/GiB.
 - Managed Postgres Standard: $15.15 (1 GiB, 10 GiB disk, 22 connections), $30.45 (2 GiB, 30 GiB
   disk, 47 connections), $60.90 (4 GiB).
-- Managed Valkey: $15 (1 GiB).
 - Container Registry: free tier = 1 repo / 500 MiB; Basic $5 = 5 repos / 5 GiB. Three images are
   needed (`engofy`, `engofy-web`, `engofy-nlp`).
-- Estimated total: ≈ $65–95/month (5 components ≈ $40, Redis $5–15, Postgres $15–30, registry $5).
+- Estimated total: ≈ $65–95/month (5 components ≈ $40, Redis $5, Postgres $30, registry $5).
 
-## Open points
+## Decisions
 
-Connection budget, client IP, Telegram poller, worker shutdown and the env matrix are settled — see `docs/deploy.md`.
+Connection budget, client IP, Telegram poller, worker shutdown and the env matrix — see `docs/deploy.md`.
 
-- **Redis.** Managed Valkey ($15) vs. an internal `redis` service ($5–10); losing the data only
-  resets rate-limit windows.
-- **Registry.** DigitalOcean Container Registry (Basic, $5) vs. private GHCR — App Platform pulling
-  from private GHCR is unverified.
-- **CPU.** Shared vCPU may be too slow for `nlp` and `worker`; measure before fixing sizes.
-- **Cheapest Postgres plan.** Confirm its disk and `max_connections` fit before choosing it.
+- **Redis.** Internal `redis` service ($5); losing the data only resets rate-limit windows. It is
+  reachable only inside the app, so it has no password or TLS.
+- **Registry.** DOCR Basic ($5). Private GHCR is not used (App Platform pulling from it is unverified).
+- **Postgres plan.** The $30.45 plan (47 connections). Steady state is 19 connections; a rolling
+  deploy of `web` or `worker` adds 7 and `migrate` adds 2, which exceeds the $15.15 plan's 22.
+  Confirm the plan's actual `max_connections` in the panel after provisioning.
+- **CPU.** Start with the sizes in `.do/app.yaml`; raise `nlp`/`worker` only if measured latency
+  on the first real deploy requires it.

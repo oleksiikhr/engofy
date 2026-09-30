@@ -11,9 +11,11 @@ const seed = {
   '2': {
     explanation: 'We use the present simple for habits.',
     examples: ['I walk to work.', 'She reads every night.'],
-    uk: {
-      explanation: 'Present simple вживаємо для звичок.',
-      examples: ['Я ходжу на роботу пішки.', 'Вона читає щовечора.'],
+    translations: {
+      uk: {
+        explanation: 'Present simple вживаємо для звичок.',
+        examples: ['Я ходжу на роботу пішки.', 'Вона читає щовечора.'],
+      },
     },
   },
 };
@@ -53,7 +55,7 @@ describe('GrammarImportUsagePointContentCommand', () => {
       learnerExplanation: seed['2'].explanation,
       learnerExamples: seed['2'].examples,
       translations: {
-        uk: seed['2'].uk,
+        uk: seed['2'].translations.uk,
         xx: { explanation: 'x' },
       },
     });
@@ -63,7 +65,12 @@ describe('GrammarImportUsagePointContentCommand', () => {
   it('rejects an entry without translated examples', async () => {
     vi.mocked(readFile).mockResolvedValue(
       JSON.stringify({
-        '2': { ...seed['2'], uk: { explanation: seed['2'].uk.explanation } },
+        '2': {
+          ...seed['2'],
+          translations: {
+            uk: { explanation: seed['2'].translations.uk.explanation },
+          },
+        },
       }),
     );
 
@@ -76,7 +83,9 @@ describe('GrammarImportUsagePointContentCommand', () => {
       JSON.stringify({
         '2': {
           ...seed['2'],
-          uk: { ...seed['2'].uk, examples: ['Лише один.'] },
+          translations: {
+            uk: { ...seed['2'].translations.uk, examples: ['Лише один.'] },
+          },
         },
       }),
     );

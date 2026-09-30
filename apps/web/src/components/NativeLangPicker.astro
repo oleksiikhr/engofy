@@ -1,0 +1,53 @@
+---
+import {
+  NATIVE_LANG_LABEL,
+  NATIVE_LANG_NAME,
+  NATIVE_LANGS,
+} from '../lib/native-lang';
+import { resolveNativeLang } from '../lib/session';
+
+// "Translations in: …" — one button per language, plain form POST (no JS).
+// Nothing to choose between while only one language exists.
+const current = await resolveNativeLang(Astro.request);
+---
+
+{
+  NATIVE_LANGS.length > 1 && (
+    <form class="native-lang" method="post" action="/native-lang">
+      <span class="meta">Translations in</span>
+      {NATIVE_LANGS.map((lang) => (
+        <button
+          type="submit"
+          name="nativeLang"
+          value={lang}
+          aria-pressed={lang === current}
+          title={NATIVE_LANG_NAME[lang]}
+        >
+          {NATIVE_LANG_LABEL[lang]}
+        </button>
+      ))}
+    </form>
+  )
+}
+
+<style>
+  .native-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .native-lang button {
+    padding: 0.2rem 0.55rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-paper-soft);
+    color: var(--color-ink-soft);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .native-lang button[aria-pressed='true'] {
+    background: var(--color-brand-wash);
+    color: var(--color-brand-strong);
+  }
+</style>

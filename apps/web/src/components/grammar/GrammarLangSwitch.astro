@@ -1,9 +1,10 @@
 ---
 // EN / native switch. The visible language is pure CSS off
 // <html data-popup-lang>; initGrammarLangToggle persists the choice.
-import { NATIVE_LANG_LABEL, nativeLang } from '../../lib/native-lang';
+import { NATIVE_LANG_LABEL } from '../../lib/native-lang';
+import { resolveNativeLang } from '../../lib/session';
 
-const native = nativeLang();
+const native = await resolveNativeLang(Astro.request);
 ---
 
 <div class="lang-switch" role="group" aria-label="Explanation language">

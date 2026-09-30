@@ -100,12 +100,14 @@ describe('GetGrammarConstructionHandler', () => {
     expect(a2).toMatchObject({
       explanation: 'We use it for recent events.',
       examples: ['I have just eaten.', 'She has left.'],
-      translations: { uk: { explanation: 'Для недавніх подій.' } },
+      translation: 'Для недавніх подій.',
+      exampleTranslations: null,
     });
     expect(b1).toMatchObject({
       explanation: null,
       examples: [],
-      translations: {},
+      translation: null,
+      exampleTranslations: null,
     });
   });
 

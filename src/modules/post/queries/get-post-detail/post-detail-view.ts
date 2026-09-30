@@ -4,10 +4,6 @@ import type {
   TokenTense,
   VerbGroupTense,
 } from '../../domain/analyze-token.js';
-import type {
-  GrammarTranslations,
-  LexiconTranslations,
-} from '../../domain/content-translations.js';
 import type { Doc } from '../../domain/node-tree.types.js';
 import type { WordRoleFallback } from '../../domain/word-role-fallback.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
@@ -27,7 +23,8 @@ export interface WordAnnotationView {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  // In the request's language; null until translated.
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
   state: EffectiveState;
@@ -39,7 +36,7 @@ export interface PhraseAnnotationView {
   type: string | null;
   definition: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -54,7 +51,10 @@ export interface GrammarUsagePointView {
   guideword: string;
   canDoStatement: string;
   explanation: string | null;
-  translations: GrammarTranslations;
+  // `explanation` in the request's language; null until translated.
+  translation: string | null;
+  // Index-aligned with `examples`; null when only the explanation is translated.
+  exampleTranslations: string[] | null;
   examples: string[];
 }
 

@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Post } from '../post/entities/post.entity.js';
+import type { ContentLanguage } from '../post/enums/content-language.enum.js';
 import { PostStatus } from '../post/enums/post-status.enum.js';
 import { PostNotFoundError } from '../post/errors/post-not-found.error.js';
 import { AddCardCommand } from './commands/add-card/add-card.command.js';
@@ -120,18 +121,20 @@ export class LearningService {
   getWordDictionaryDetail(
     lemma: string,
     userId: string,
+    lang: ContentLanguage,
   ): Promise<WordDictionaryDetailView | null> {
     return this.queryBus.execute(
-      new GetWordDictionaryDetailQuery(lemma, userId),
+      new GetWordDictionaryDetailQuery(lemma, userId, lang),
     );
   }
 
   getPhraseDictionaryDetail(
     phraseText: string,
     userId: string,
+    lang: ContentLanguage,
   ): Promise<PhraseDictionaryDetailView | null> {
     return this.queryBus.execute(
-      new GetPhraseDictionaryDetailQuery(phraseText, userId),
+      new GetPhraseDictionaryDetailQuery(phraseText, userId, lang),
     );
   }
 

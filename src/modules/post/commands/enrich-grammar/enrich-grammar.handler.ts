@@ -54,19 +54,19 @@ export class EnrichGrammarHandler
   ) {}
 
   async execute(command: EnrichGrammarCommand): Promise<void> {
-    const { postId } = command;
+    const { postId, languages } = command;
 
     const existingRun = await this.em.findOne(PostPipelineRun, {
       postId,
       stage: PostPipelineStage.GrammarEnrichment,
     });
-    if (existingRun?.status === PostPipelineRunStatus.Completed) {
+    if (!languages && existingRun?.status === PostPipelineRunStatus.Completed) {
       return;
     }
 
     await this.em.findOneOrFail(Post, postId);
 
-    for (const language of ENRICHMENT_LANGUAGES) {
+    for (const language of languages ?? ENRICHMENT_LANGUAGES) {
       // biome-ignore lint/performance/noAwaitInLoops: languages are enriched one after another.
       await this.enrichLanguage(postId, language);
     }

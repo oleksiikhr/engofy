@@ -7,6 +7,7 @@ import { AiSchemaMismatchError } from '../../../../core/ai/ai-schema-mismatch.er
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import { PostPipelineRun } from '../../entities/post-pipeline-run.entity.js';
 import { CefrLevel } from '../../enums/cefr-level.enum.js';
+import { ContentLanguage } from '../../enums/content-language.enum.js';
 import { PostPipelineRunStatus } from '../../enums/post-pipeline-run-status.enum.js';
 import { PostPipelineStage } from '../../enums/post-pipeline-stage.enum.js';
 import { PostSourceFormat } from '../../enums/post-source-format.enum.js';
@@ -141,6 +142,21 @@ describe('EnrichGrammarHandler', () => {
     await suite.command(new EnrichGrammarCommand(postId));
 
     expect(fakeAi.structuredCallCount).toBe(1);
+  });
+
+  it('re-runs a completed stage when the backfill names a language', async () => {
+    const { postId, matchedPointId } = await seedPost(suite.orm.em);
+    await suite.command(new EnrichGrammarCommand(postId));
+    const matched = await suite.orm.em.findOneOrFail(
+      GrammarUsagePoint,
+      matchedPointId,
+    );
+    matched.translations = {};
+    await suite.orm.em.flush();
+
+    await suite.command(new EnrichGrammarCommand(postId, [ContentLanguage.Uk]));
+
+    expect(fakeAi.structuredCallCount).toBe(2);
   });
 
   it('skips the AI call when the matched point is already enriched', async () => {

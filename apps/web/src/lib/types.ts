@@ -1,4 +1,5 @@
 import type { LexSpan } from './lex-blocks';
+import type { NativeLang } from './native-lang';
 // Mirrors the Nest read-API response DTOs (Slice 8a). Kept hand-written and
 // minimal rather than generated — the surface is small and stable.
 
@@ -110,15 +111,6 @@ export interface Doc {
   children: Block[];
 }
 
-// Languages the backend can translate popup content into (English is the base).
-export type TranslationLang = 'uk';
-export type LexiconTranslations = Partial<
-  Record<TranslationLang, { translation: string }>
->;
-export type GrammarTranslations = Partial<
-  Record<TranslationLang, { explanation: string; examples?: string[] }>
->;
-
 export interface WordAnnotation {
   wordDefinitionId: string;
   wordId: string;
@@ -127,8 +119,8 @@ export interface WordAnnotation {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
-  // By language code; a language with no entry is not translated yet.
-  translations: LexiconTranslations;
+  // In the viewer's native language; null until translated.
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   frequencyRank: number | null;
   // The viewer's effective state for this sense; `new` for a guest.
@@ -140,7 +132,7 @@ export interface PhraseAnnotation {
   type: string | null;
   definition: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
 }
@@ -155,8 +147,10 @@ export interface GrammarUsagePointRef {
   // Learner-facing explanation and clean example sentences; null / empty
   // until the backend's grammar enrichment has covered this point.
   explanation: string | null;
-  // Translations of `explanation` by language code.
-  translations: GrammarTranslations;
+  // `explanation` in the viewer's native language; null until translated.
+  translation: string | null;
+  // Index-aligned with `examples`; null when only the explanation is translated.
+  exampleTranslations: string[] | null;
   examples: string[];
 }
 export interface GrammarAnnotation {
@@ -361,7 +355,7 @@ export interface WordDictionarySense {
   definition: string | null;
   phonetic: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this sense — needed by
@@ -399,7 +393,7 @@ export interface PhraseDictionaryDetail {
   type: string | null;
   definition: string | null;
   example: string | null;
-  translations: LexiconTranslations;
+  translation: string | null;
   cefrLevel: CefrLevel | null;
   state: EffectiveState;
   // Non-null only when an active LearningCard backs this phrase — needed by
@@ -508,6 +502,7 @@ export interface CompleteDailyPlanResponse {
 export interface CurrentUser {
   id: string;
   email: string;
+  nativeLang: NativeLang;
 }
 export interface Subscription {
   plan: 'free' | 'premium';

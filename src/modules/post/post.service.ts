@@ -23,6 +23,7 @@ import { SpacyParsePostCommand } from './commands/spacy-parse-post/spacy-parse-p
 import { TagGrammarCommand } from './commands/tag-grammar/tag-grammar.command.js';
 import { UnmarkPostReadCommand } from './commands/unmark-post-read/unmark-post-read.command.js';
 import type { LexBlockInput, LexBlockPhrases } from './domain/lex-block.js';
+import type { ContentLanguage } from './enums/content-language.enum.js';
 import { GetGrammarConstructionQuery } from './queries/get-grammar-construction/get-grammar-construction.query.js';
 import type { GrammarConstructionView } from './queries/get-grammar-construction/grammar-construction-view.js';
 import {
@@ -57,9 +58,10 @@ export class PostService {
 
   getPostDetail(
     shortId: string,
-    userId: string | null = null,
+    userId: string | null,
+    lang: ContentLanguage,
   ): Promise<PostDetailView | null> {
-    return this.queryBus.execute(new GetPostDetailQuery(shortId, userId));
+    return this.queryBus.execute(new GetPostDetailQuery(shortId, userId, lang));
   }
 
   getPostsList(
@@ -100,9 +102,12 @@ export class PostService {
 
   getGrammarConstruction(
     slug: string,
-    userId: string | null = null,
+    userId: string | null,
+    lang: ContentLanguage,
   ): Promise<GrammarConstructionView | null> {
-    return this.queryBus.execute(new GetGrammarConstructionQuery(slug, userId));
+    return this.queryBus.execute(
+      new GetGrammarConstructionQuery(slug, userId, lang),
+    );
   }
 
   getUsagePointExercises(
@@ -158,14 +163,20 @@ export class PostService {
     await this.em.flush();
   }
 
-  async enrichLexicon(postId: string): Promise<void> {
-    await this.commandBus.execute(new EnrichLexiconCommand(postId));
+  async enrichLexicon(
+    postId: string,
+    languages?: readonly ContentLanguage[],
+  ): Promise<void> {
+    await this.commandBus.execute(new EnrichLexiconCommand(postId, languages));
 
     await this.em.flush();
   }
 
-  async enrichGrammar(postId: string): Promise<void> {
-    await this.commandBus.execute(new EnrichGrammarCommand(postId));
+  async enrichGrammar(
+    postId: string,
+    languages?: readonly ContentLanguage[],
+  ): Promise<void> {
+    await this.commandBus.execute(new EnrichGrammarCommand(postId, languages));
 
     await this.em.flush();
   }

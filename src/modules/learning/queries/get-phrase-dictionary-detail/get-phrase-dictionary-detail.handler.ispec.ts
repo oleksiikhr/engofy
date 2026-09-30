@@ -107,7 +107,7 @@ describe('GetPhraseDictionaryDetailHandler', () => {
       type: PhraseType.Idiom,
       definition: 'having nothing particular to do',
       example: 'She was at loose ends all week.',
-      translations: { uk: { translation: 'нічим особливим не зайнятий' } },
+      translation: 'нічим особливим не зайнятий',
       cefrLevel: CefrLevel.C1,
       // No card, no disposition, C1 > the learner's B1 default.
       state: EffectiveState.New,

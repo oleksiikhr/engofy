@@ -1,4 +1,6 @@
 ---
+import NativeLangPicker from './NativeLangPicker.astro';
+
 interface Props {
   active?: string;
 }
@@ -11,6 +13,7 @@ const { active } = Astro.props;
     <p class="tagline">Learn English through real writing, a little every day.</p>
     <div class="site-footer-row">
       <span class="meta">© Engofy</span>
+      <NativeLangPicker />
       <div class="site-footer-links">
         <a href="/pricing" aria-current={active === 'pricing' ? 'page' : undefined}>Pricing</a>
       </div>

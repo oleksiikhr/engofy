@@ -5,7 +5,7 @@
 // rule belongs to instead of leaving it stranded in the bottom list.
 import { usageActionsHtml } from '../../lib/grammar-usage-actions';
 import { isHardLevel } from '../../lib/grammar-level';
-import { nativeLang } from '../../lib/native-lang';
+import { resolveNativeLang } from '../../lib/session';
 import type { GrammarConstructionUsagePoint } from '../../lib/types';
 import {
   practiceAnchorId,
@@ -35,14 +35,12 @@ const anchorId =
 // The native-language explanation stands in for the English one when the
 // learner picks it; a card with no translation has no switch and always shows
 // English. Only the native language reaches the HTML, not every translation.
-const native = nativeLang();
-const nativeExplanation = up.explanation
-  ? up.translations[native]?.explanation
-  : null;
+const native = await resolveNativeLang(Astro.request);
+const nativeExplanation = up.explanation ? up.translation : null;
 // The exercises themselves live in the page's Practice section.
 const exerciseCount = usagePointDrillSteps(up.exercises).length;
 const nativeExamples = nativeExplanation
-  ? up.translations[native]?.examples
+  ? (up.exampleTranslations ?? undefined)
   : undefined;
 ---
 

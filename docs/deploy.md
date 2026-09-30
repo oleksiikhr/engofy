@@ -1,7 +1,7 @@
 # Deploying to DigitalOcean App Platform
 
 Target shape and prices: `docs/hosting-direction.md`. Env var checklist: `.env.production.example`.
-No app spec or IaC is committed yet; the tables below are what it must contain.
+App spec: `.do/app.yaml` (replace `TAG` and `CHANGE_ME` placeholders before `doctl apps create --spec`; SECRET vars are entered in the control panel). The tables below describe it.
 
 ## Components
 
@@ -32,14 +32,15 @@ Cheapest managed plan: 22 connections.
 | Steady state | | | | 19 |
 
 During a rolling deploy the old and new instances overlap, which exceeds 22 — take the 47-connection
-plan before running more than one `web` instance, and verify the plan's actual `max_connections`.
+plan (chosen in `docs/hosting-direction.md`), and verify the plan's actual `max_connections`.
 The Telegram poll lock and pg-boss need direct (session) connections; if `MIKRO_ORM_HOST`/`PORT`
 point at a pooler, set `QUEUE_DB_HOST`/`QUEUE_DB_PORT` to the direct endpoint.
 
 ## TLS
 
-Managed Postgres and Valkey require TLS. Set `DB_SSL=true` + `DB_SSL_CA` (PEM from the database's
-panel) and `REDIS_SSL=true` + `REDIS_SSL_CA`. The server certificate is always verified.
+Managed Postgres requires TLS. Set `DB_SSL=true` + `DB_SSL_CA` (PEM from the database's panel); the
+server certificate is always verified. The internal `redis` service uses no TLS and no password:
+leave `REDIS_SSL`, `REDIS_SSL_CA` and `REDIS_PASSWORD` unset.
 
 ## Client IP
 
@@ -61,8 +62,3 @@ single instance.
 2. Set every var in `.env.production.example` on the matching components; secrets as encrypted vars.
 3. Deploy; `migrate` runs first.
 4. Check `/_healthz/ready` and Sentry for the new `SENTRY_RELEASE`.
-
-## Not decided yet
-
-Redis (managed Valkey vs. internal service), registry (DOCR vs. private GHCR), and CPU sizing for
-`nlp`/`worker` — see `docs/hosting-direction.md`.

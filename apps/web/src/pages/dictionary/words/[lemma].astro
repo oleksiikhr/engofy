@@ -3,7 +3,7 @@ import DictionaryDetailStyles from '../../../components/DictionaryDetailStyles.a
 import Layout from '../../../layouts/Layout.astro';
 import { apiGetOrNull } from '../../../lib/api';
 import { renderWordDetail } from '../../../lib/dictionary-detail';
-import { getCurrentUser } from '../../../lib/session';
+import { getCurrentUser, resolveNativeLang } from '../../../lib/session';
 import type { WordDictionaryDetail } from '../../../lib/types';
 
 const { lemma } = Astro.params;
@@ -24,7 +24,7 @@ if (!detail) {
   return new Response('Not found', { status: 404 });
 }
 
-const detailHtml = renderWordDetail(detail);
+const detailHtml = renderWordDetail(detail, await resolveNativeLang(Astro.request));
 ---
 
 <Layout title={`${detail.lemma} — Dictionary — Engofy`} user={user} active="dictionary" noindex>

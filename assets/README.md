@@ -104,12 +104,14 @@ Shape: a JSON object keyed by `egpIndex`:
   "2": {
     "explanation": "We use the present simple for habits. Add -s after he, she, it: she works.",
     "examples": ["I walk to work every day.", "She plays tennis on Sundays."],
-    "uk": {
-      "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works.",
-      "examples": [
-        "Я щодня ходжу на роботу пішки.",
-        "Вона грає в теніс щонеділі."
-      ]
+    "translations": {
+      "uk": {
+        "explanation": "Present simple вживаємо для звичок. Після he, she, it додаємо -s: she works.",
+        "examples": [
+          "Я щодня ходжу на роботу пішки.",
+          "Вона грає в теніс щонеділі."
+        ]
+      }
     }
   }
 }
@@ -120,12 +122,13 @@ Shape: a JSON object keyed by `egpIndex`:
   pattern.
 - `examples` — 2-3 complete sentences, at most 12 words each, showing exactly
   this use.
-- `uk.explanation` — faithful Ukrainian translation of `explanation`; the form
-  pattern stays in English.
-- `uk.examples` — natural Ukrainian translations of `examples`, one per
-  example, in the same order. Imported into `translations.uk.examples` and
-  shown under each English example when the learner switches to the native
-  language.
+- `translations` — keyed by language code (a `ContentLanguage` value, at least
+  one), merged into the point's `translations` column.
+- `translations.<lang>.explanation` — faithful translation of `explanation`; the
+  form pattern stays in English.
+- `translations.<lang>.examples` — natural translations of `examples`, one per
+  example, in the same order. Shown under each English example when the
+  learner's native language is `<lang>`.
 
 ## `lexicon-content.json`
 
@@ -147,7 +150,7 @@ Shape: lowercase lemma → part of speech (`PartOfSpeech` value) → entry:
       "definition": "A person whose job is to draw maps.",
       "example": "The cartographer drew a map of the coast.",
       "cefrLevel": "C1",
-      "uk": { "translation": "картограф" }
+      "translations": { "uk": { "translation": "картограф" } }
     }
   }
 }
@@ -156,7 +159,8 @@ Shape: lowercase lemma → part of speech (`PartOfSpeech` value) → entry:
 - `definition` — one short plain-English sentence, as a learner's dictionary
   would phrase it, without the headword; the sense the pages use.
 - `example` — one natural sentence with the word in that sense.
-- `uk.translation` — one to three common Ukrainian equivalents, comma-separated.
+- `translations.<lang>.translation` — one to three common equivalents in that
+  language, comma-separated. Keyed by a `ContentLanguage` value, at least one.
 
 ## `phrase-content.json`
 

@@ -8,13 +8,14 @@ import {
 import { LearningCard } from '../../../learning/entities/learning-card.entity.js';
 import { LearningDisposition } from '../../../learning/entities/learning-disposition.entity.js';
 import { cefrRank } from '../../domain/cefr-order.js';
-import { readGrammarTranslations } from '../../domain/content-translations.js';
+import { pickGrammarTranslation } from '../../domain/content-translations.js';
 import { countResolved } from '../../domain/effective-state-priority.js';
 import { GrammarCategory } from '../../entities/grammar-category.entity.js';
 import { GrammarConstruction } from '../../entities/grammar-construction.entity.js';
 import { GrammarPageLexBlock } from '../../entities/grammar-page-lex-block.entity.js';
 import { GrammarUsagePoint } from '../../entities/grammar-usage-point.entity.js';
 import type { CefrLevel } from '../../enums/cefr-level.enum.js';
+import type { ContentLanguage } from '../../enums/content-language.enum.js';
 import {
   LexiconViewService,
   type Viewer,
@@ -41,6 +42,7 @@ export class GetGrammarConstructionHandler
   async execute({
     slug,
     userId,
+    lang,
   }: GetGrammarConstructionQuery): Promise<GrammarConstructionView | null> {
     const construction = await this.em.findOne(
       GrammarConstruction,
@@ -82,7 +84,7 @@ export class GetGrammarConstructionHandler
         guideword: point.guideword,
         canDoStatement: point.canDoStatement,
         explanation: point.learnerExplanation ?? null,
-        translations: readGrammarTranslations(point.translations),
+        ...pickGrammarTranslation(point.translations, lang),
         examples: point.learnerExamples ?? [],
         state,
         // Untouched but at or below the learner's own level — shown as
@@ -97,6 +99,7 @@ export class GetGrammarConstructionHandler
     const lexicon = await this.resolveLexicon(
       construction.id,
       userId && userCefrLevel ? { userId, userCefrLevel } : null,
+      lang,
     );
 
     return {
@@ -116,6 +119,7 @@ export class GetGrammarConstructionHandler
   private async resolveLexicon(
     constructionId: string,
     viewer: Viewer | null,
+    lang: ContentLanguage,
   ): Promise<GrammarPageLexiconView> {
     const rows = await this.em.find(
       GrammarPageLexBlock,
@@ -139,8 +143,8 @@ export class GetGrammarConstructionHandler
       ),
     ];
     const [words, phrases] = await Promise.all([
-      this.lexicon.resolveWords(wordDefinitionIds, viewer),
-      this.lexicon.resolvePhrases(phraseIds, viewer),
+      this.lexicon.resolveWords(wordDefinitionIds, viewer, lang),
+      this.lexicon.resolvePhrases(phraseIds, viewer, lang),
     ]);
     return { blocks, words, phrases };
   }

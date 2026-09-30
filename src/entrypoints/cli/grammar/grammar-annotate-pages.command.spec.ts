@@ -16,7 +16,7 @@ const PHRASE_ENTRY = {
   definition: 'Used to give the opposite point.',
   example: 'It is cheap. On the other hand, it is slow.',
   cefrLevel: 'B1',
-  uk: { translation: 'з іншого боку' },
+  translations: { uk: { translation: 'з іншого боку' } },
 };
 
 describe('GrammarAnnotatePagesCommand', () => {

@@ -80,7 +80,7 @@ describe('DictionaryController phrases/:phrase', () => {
       phraseId: phrase.id,
       phraseText: phrase.phraseText,
       definition: 'having nothing particular to do',
-      translations: { uk: { translation: 'нічим особливим не зайнятий' } },
+      translation: 'нічим особливим не зайнятий',
       state: 'new',
       cardId: null,
       posts: [],
