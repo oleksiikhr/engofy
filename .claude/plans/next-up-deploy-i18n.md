@@ -19,7 +19,7 @@ status: in-progress
 
 Два ispec (`request-account-deletion`, `profile.controller`) отримують 30,04 дня замість 30: 30 днів у локальній зоні перетинають перехід на зимовий час. Знайти, де дні додаються не в UTC, виправити код (Luxon, UTC) і тести.
 
-### [ ] 2. Прибрати залишки Swarm
+### [x] 2. Прибрати залишки Swarm
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —

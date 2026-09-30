@@ -12,9 +12,9 @@ import { RedisHealthIndicator } from './redis.health.js';
 //
 //   GET /_healthz        liveness  — the process is up and the event loop
 //                        answers. No dependency checks. This is what the
-//                        container runtime (Docker/Swarm HEALTHCHECK) polls;
-//                        a Redis/Postgres blip must NOT make the orchestrator
-//                        kill an otherwise-serving task.
+//                        platform health check polls; a Redis/Postgres blip
+//                        must NOT make the orchestrator kill an
+//                        otherwise-serving task.
 //
 //   GET /_healthz/ready  readiness — 200 only when Postgres AND Redis answer.
 //                        For a load balancer / manual check deciding whether
