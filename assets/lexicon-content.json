@@ -1,4 +1,14 @@
 {
+  "a": {
+    "determiner": {
+      "definition": "Used before a singular noun you can count, when it is not a specific one.",
+      "example": "She has a dog.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "певний, якийсь (неозначений артикль)"
+      }
+    }
+  },
   "abroad": {
     "adverb": {
       "definition": "In or to a foreign country.",
@@ -559,6 +569,24 @@
       }
     }
   },
+  "all": {
+    "determiner": {
+      "definition": "The whole number or amount of something.",
+      "example": "All my friends came to the party.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "усі, весь"
+      }
+    },
+    "pronoun": {
+      "definition": "Everything, or everyone in a group.",
+      "example": "All of them were late.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "усе, усі"
+      }
+    }
+  },
   "allegedly": {
     "adverb": {
       "definition": "Used to say that people claim something is true, but it is not proved.",
@@ -576,6 +604,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "алігатор"
+      }
+    }
+  },
+  "almost": {
+    "adverb": {
+      "definition": "Very nearly, but not completely.",
+      "example": "It is almost ten o'clock.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "майже"
       }
     }
   },
@@ -784,6 +822,24 @@
       "cefrLevel": "B1",
       "uk": {
         "translation": "дратівливий, надокучливий"
+      }
+    }
+  },
+  "any": {
+    "determiner": {
+      "definition": "Used in questions and negatives to mean some; or no matter which.",
+      "example": "Do you have any money?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "будь-який, якийсь (у питаннях і запереченнях)"
+      }
+    },
+    "pronoun": {
+      "definition": "One or some of a group, when it does not matter which.",
+      "example": "I need pens, but I don't have any.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "будь-який, жоден (у запереченні)"
       }
     }
   },
@@ -1495,6 +1551,16 @@
       }
     }
   },
+  "beautiful": {
+    "adjective": {
+      "definition": "Very nice to look at or to listen to.",
+      "example": "They visited some beautiful places.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "красивий, гарний"
+      }
+    }
+  },
   "beautifully": {
     "adverb": {
       "definition": "In a very beautiful or very good way.",
@@ -1739,6 +1805,16 @@
       }
     }
   },
+  "blue": {
+    "adjective": {
+      "definition": "Having the colour of the sky on a clear day.",
+      "example": "She wore a blue t-shirt.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "синій, блакитний"
+      }
+    }
+  },
   "boat": {
     "noun": {
       "definition": "A small vehicle that travels on water.",
@@ -1766,6 +1842,16 @@
       "cefrLevel": "B1",
       "uk": {
         "translation": "дуже гарячий, спекотний"
+      }
+    }
+  },
+  "book": {
+    "noun": {
+      "definition": "A set of printed pages that are fastened together and have a cover.",
+      "example": "I read a book every month.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "книжка, книга"
       }
     }
   },
@@ -1866,6 +1952,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "владний, що любить командувати"
+      }
+    }
+  },
+  "both": {
+    "determiner": {
+      "definition": "Used for two people or things together.",
+      "example": "Both my parents work.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "обидва"
       }
     }
   },
@@ -2471,6 +2567,16 @@
       }
     }
   },
+  "channel": {
+    "noun": {
+      "definition": "A television station.",
+      "example": "There are five channels on this TV.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "канал"
+      }
+    }
+  },
   "chaos": {
     "noun": {
       "definition": "A situation with no order, where everything is confused.",
@@ -2696,6 +2802,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "громадянин"
+      }
+    }
+  },
+  "class": {
+    "noun": {
+      "definition": "A group of students who are taught together; or a lesson.",
+      "example": "There are twenty students in my class.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "клас, заняття"
       }
     }
   },
@@ -3959,6 +4075,16 @@
       }
     }
   },
+  "credit": {
+    "noun": {
+      "definition": "An arrangement to pay for something later.",
+      "example": "We bought the sofa on credit.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "кредит"
+      }
+    }
+  },
   "crew": {
     "noun": {
       "definition": "A group of people who work together on a ship, plane or film.",
@@ -4210,6 +4336,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "дані (одиничний факт)"
+      }
+    }
+  },
+  "day": {
+    "noun": {
+      "definition": "A period of 24 hours; the time when it is light.",
+      "example": "I go to work every day.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "день"
       }
     }
   },
@@ -5289,6 +5425,16 @@
       }
     }
   },
+  "each": {
+    "determiner": {
+      "definition": "Every one of two or more things, thought of separately.",
+      "example": "Each student has a book.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кожен"
+      }
+    }
+  },
   "echo": {
     "verb": {
       "definition": "To be heard again after a sound has bounced off a surface.",
@@ -5346,6 +5492,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "яйце"
+      }
+    }
+  },
+  "either": {
+    "determiner": {
+      "definition": "One or the other of two.",
+      "example": "You can park on either side of the road.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "той чи інший (з двох), будь-який з двох"
       }
     }
   },
@@ -5597,6 +5753,16 @@
       }
     }
   },
+  "enough": {
+    "adjective": {
+      "definition": "As much or as many as you need.",
+      "example": "We have enough chairs for everyone.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "достатній, досить"
+      }
+    }
+  },
   "enter": {
     "verb": {
       "definition": "To go or come into a place.",
@@ -5822,6 +5988,24 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "оцінка, оцінювання"
+      }
+    }
+  },
+  "every": {
+    "determiner": {
+      "definition": "Each one of a group, without exception.",
+      "example": "She goes to the gym every day.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кожен, всі"
+      }
+    },
+    "pronoun": {
+      "definition": "Used in 'every one' to mean each single person or thing.",
+      "example": "Every one of the tickets was sold.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кожен"
       }
     }
   },
@@ -6513,6 +6697,16 @@
       }
     }
   },
+  "few": {
+    "adjective": {
+      "definition": "Not many; a small number of.",
+      "example": "Few people know the answer.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "мало, небагато"
+      }
+    }
+  },
   "fiction": {
     "noun": {
       "definition": "Stories about imaginary people and events, not real ones.",
@@ -6619,6 +6813,16 @@
       }
     }
   },
+  "five": {
+    "numeral": {
+      "definition": "The number 5.",
+      "example": "She has five cousins.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "п'ять"
+      }
+    }
+  },
   "fix": {
     "noun": {
       "definition": "A solution to a problem, or an act of repairing something.",
@@ -6692,6 +6896,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "перевертати, підкидати"
+      }
+    }
+  },
+  "floor": {
+    "noun": {
+      "definition": "The surface you walk on inside a building; one level of a building.",
+      "example": "Our flat is on the third floor.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "підлога, поверх"
       }
     }
   },
@@ -6943,6 +7157,16 @@
       }
     }
   },
+  "free": {
+    "adjective": {
+      "definition": "Not costing any money; or not busy.",
+      "example": "The museum is free on Sundays.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "безкоштовний, вільний"
+      }
+    }
+  },
   "freely": {
     "adverb": {
       "definition": "Without being controlled or limited.",
@@ -7031,6 +7255,16 @@
       }
     }
   },
+  "friend": {
+    "noun": {
+      "definition": "A person you know well and like.",
+      "example": "My friend lives near me.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "друг, подруга"
+      }
+    }
+  },
   "friendly": {
     "adjective": {
       "definition": "Kind and pleasant towards other people.",
@@ -7116,6 +7350,16 @@
       "cefrLevel": "C2",
       "uk": {
         "translation": "повніший"
+      }
+    }
+  },
+  "fun": {
+    "noun": {
+      "definition": "Enjoyment, or something that is enjoyable.",
+      "example": "The trip was a lot of fun.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "веселощі, розвага"
       }
     }
   },
@@ -7216,6 +7460,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "здобувати, набувати"
+      }
+    }
+  },
+  "game": {
+    "noun": {
+      "definition": "An activity with rules that people play for fun.",
+      "example": "The children played a game.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "гра"
       }
     }
   },
@@ -7677,6 +7931,16 @@
       }
     }
   },
+  "half": {
+    "noun": {
+      "definition": "One of two equal parts of something.",
+      "example": "I ate half of the cake.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "половина"
+      }
+    }
+  },
   "handful": {
     "noun": {
       "definition": "A small number of people or things.",
@@ -8130,6 +8394,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "домогосподарка"
+      }
+    }
+  },
+  "how": {
+    "conjunction": {
+      "definition": "In the way that; used to ask about amount or degree, as in 'how many' and 'how much'.",
+      "example": "She asked how many people were coming.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "як, скільки"
       }
     }
   },
@@ -9225,6 +9499,16 @@
       }
     }
   },
+  "issue": {
+    "noun": {
+      "definition": "A subject or problem that people discuss.",
+      "example": "Traffic is a big issue in this city.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "питання, проблема"
+      }
+    }
+  },
   "italian": {
     "adjective": {
       "definition": "Relating to Italy, its people or its language.",
@@ -9857,6 +10141,16 @@
       }
     }
   },
+  "little": {
+    "adjective": {
+      "definition": "Small in amount; not much. Also used in 'a little' to mean some.",
+      "example": "We have little time.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "мало, трохи"
+      }
+    }
+  },
   "load": {
     "noun": {
       "definition": "Something heavy that is being carried.",
@@ -9914,6 +10208,16 @@
       "cefrLevel": "B1",
       "uk": {
         "translation": "самотній"
+      }
+    }
+  },
+  "lot": {
+    "noun": {
+      "definition": "A large number or amount; used in 'a lot of'.",
+      "example": "She has a lot of friends.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "багато (a lot of)"
       }
     }
   },
@@ -10104,6 +10408,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "виготовляти, виробляти"
+      }
+    }
+  },
+  "many": {
+    "adjective": {
+      "definition": "A large number of.",
+      "example": "There are many shops in the town.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "багато"
       }
     }
   },
@@ -10405,6 +10719,16 @@
       }
     }
   },
+  "million": {
+    "noun": {
+      "definition": "The number 1,000,000.",
+      "example": "Millions of people watched the match.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "мільйон"
+      }
+    }
+  },
   "minibus": {
     "noun": {
       "definition": "A small bus for a small group of people.",
@@ -10529,6 +10853,16 @@
       }
     }
   },
+  "money": {
+    "noun": {
+      "definition": "What you use to buy things, such as coins and notes.",
+      "example": "I don't have much money.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "гроші"
+      }
+    }
+  },
   "monster": {
     "noun": {
       "definition": "An imaginary, frightening creature.",
@@ -10569,6 +10903,16 @@
       }
     }
   },
+  "more": {
+    "adjective": {
+      "definition": "A greater number or amount of.",
+      "example": "I need more time.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "більше, ще"
+      }
+    }
+  },
   "moreover": {
     "adverb": {
       "definition": "Used to add a further, stronger point.",
@@ -10576,6 +10920,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "крім того, більше того"
+      }
+    }
+  },
+  "most": {
+    "adjective": {
+      "definition": "The largest number or amount of.",
+      "example": "Most students walk to school.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "більшість, найбільший"
       }
     }
   },
@@ -10606,6 +10960,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "миша"
+      }
+    }
+  },
+  "much": {
+    "adjective": {
+      "definition": "A large amount of; used with uncountable nouns.",
+      "example": "We don't have much time.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "багато (з незлічуваними іменниками)"
       }
     }
   },
@@ -10656,6 +11020,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "взаємний, спільний"
+      }
+    }
+  },
+  "my": {
+    "pronoun": {
+      "definition": "Belonging to or connected with me.",
+      "example": "My friends live nearby.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "мій, моя, моє, мої"
       }
     }
   },
@@ -10785,6 +11159,16 @@
       }
     }
   },
+  "nearly": {
+    "adverb": {
+      "definition": "Almost; not quite.",
+      "example": "I nearly missed the bus.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "майже, ледве не"
+      }
+    }
+  },
   "necessarily": {
     "adverb": {
       "definition": "In a way that cannot be avoided.",
@@ -10881,6 +11265,22 @@
       "uk": {
         "translation": "також не, теж не"
       }
+    },
+    "determiner": {
+      "definition": "Not one and not the other of two.",
+      "example": "Neither answer is correct.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "жоден (з двох)"
+      }
+    },
+    "pronoun": {
+      "definition": "Not one and not the other of two people or things.",
+      "example": "Neither of them came.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ні той, ні інший"
+      }
     }
   },
   "nervous": {
@@ -10953,6 +11353,16 @@
       }
     }
   },
+  "no": {
+    "determiner": {
+      "definition": "Not any.",
+      "example": "There is no milk in the fridge.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "жоден, ніякий"
+      }
+    }
+  },
   "noise": {
     "noun": {
       "definition": "A loud or unpleasant sound.",
@@ -10990,6 +11400,16 @@
       "cefrLevel": "C2",
       "uk": {
         "translation": "номіналізований"
+      }
+    }
+  },
+  "none": {
+    "noun": {
+      "definition": "Not one and not any of a group of things or people.",
+      "example": "None of my friends came.",
+      "cefrLevel": "B1",
+      "uk": {
+        "translation": "ніхто, ніщо, жоден"
       }
     }
   },
@@ -11217,6 +11637,16 @@
       }
     }
   },
+  "of": {
+    "preposition": {
+      "definition": "Used to show that something belongs to a group or is a part of it.",
+      "example": "Some of my friends live abroad.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "з, із (частина чогось), чого"
+      }
+    }
+  },
   "offend": {
     "verb": {
       "definition": "To make someone feel upset or insulted.",
@@ -11264,6 +11694,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "пропускати, опускати"
+      }
+    }
+  },
+  "one": {
+    "numeral": {
+      "definition": "The number 1; a single person or thing.",
+      "example": "I have one brother.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "один"
       }
     }
   },
@@ -11761,6 +12201,16 @@
       }
     }
   },
+  "party": {
+    "noun": {
+      "definition": "An event where people meet to enjoy themselves.",
+      "example": "We had a party for her birthday.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "вечірка"
+      }
+    }
+  },
   "passenger": {
     "noun": {
       "definition": "A person who travels in a vehicle but does not drive it.",
@@ -11904,6 +12354,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "олівець"
+      }
+    }
+  },
+  "people": {
+    "noun": {
+      "definition": "More than one person.",
+      "example": "Many people take the bus to work.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "люди"
       }
     }
   },
@@ -12248,6 +12708,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "піца"
+      }
+    }
+  },
+  "place": {
+    "noun": {
+      "definition": "A particular area, town or building.",
+      "example": "This is a nice place to live.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "місце"
       }
     }
   },
@@ -14565,6 +15035,16 @@
       }
     }
   },
+  "room": {
+    "noun": {
+      "definition": "A part of a building with its own walls and a door.",
+      "example": "There are three rooms in the flat.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "кімната"
+      }
+    }
+  },
   "rose": {
     "noun": {
       "definition": "A flower with a sweet smell and thorns on its stem.",
@@ -15147,6 +15627,16 @@
       }
     }
   },
+  "several": {
+    "adjective": {
+      "definition": "More than two but not many.",
+      "example": "I have several friends in London.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "кілька, декілька"
+      }
+    }
+  },
   "shade": {
     "noun": {
       "definition": "A slightly different form of a colour or meaning.",
@@ -15292,6 +15782,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "взуття, черевик"
+      }
+    }
+  },
+  "shop": {
+    "noun": {
+      "definition": "A place where you buy things.",
+      "example": "There are some shops near my home.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "магазин"
       }
     }
   },
@@ -15775,6 +16275,16 @@
       }
     }
   },
+  "so": {
+    "adverb": {
+      "definition": "To such a degree; very.",
+      "example": "I have so much work today.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "так, настільки"
+      }
+    }
+  },
   "soap": {
     "noun": {
       "definition": "A substance you use with water to wash.",
@@ -15890,6 +16400,24 @@
       "cefrLevel": "B1",
       "uk": {
         "translation": "розв'язувати"
+      }
+    }
+  },
+  "some": {
+    "determiner": {
+      "definition": "An amount or number of something that is not stated exactly.",
+      "example": "There are some shops near here.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "деякі, трохи, кілька"
+      }
+    },
+    "pronoun": {
+      "definition": "An amount or number of people or things that is not stated exactly.",
+      "example": "I made cakes. Would you like some?",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "дещо, дехто, трохи"
       }
     }
   },
@@ -16349,6 +16877,16 @@
       }
     }
   },
+  "store": {
+    "noun": {
+      "definition": "A place where you buy things; a shop.",
+      "example": "She works in a clothing store.",
+      "cefrLevel": "A2",
+      "uk": {
+        "translation": "магазин, крамниця"
+      }
+    }
+  },
   "storm": {
     "noun": {
       "definition": "Very bad weather with strong wind and heavy rain.",
@@ -16592,6 +17130,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "структурований"
+      }
+    }
+  },
+  "student": {
+    "noun": {
+      "definition": "A person who is studying at a school or university.",
+      "example": "There are many students in the class.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "студент, учень"
       }
     }
   },
@@ -17419,6 +17967,16 @@
       }
     }
   },
+  "team": {
+    "noun": {
+      "definition": "A group of people who work or play together.",
+      "example": "Our team won the match.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "команда"
+      }
+    }
+  },
   "teenage": {
     "adjective": {
       "definition": "Aged between thirteen and nineteen, or connected with that age.",
@@ -17567,6 +18125,16 @@
       }
     }
   },
+  "the": {
+    "determiner": {
+      "definition": "Used before a noun when it is clear which one you mean.",
+      "example": "The shops close at six.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "(означений артикль)"
+      }
+    }
+  },
   "theatre": {
     "noun": {
       "definition": "A building where you go to see plays.",
@@ -17605,6 +18173,16 @@
       }
     }
   },
+  "these": {
+    "determiner": {
+      "definition": "Used for people or things that are near, when there is more than one.",
+      "example": "These books are mine.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ці"
+      }
+    }
+  },
   "thief": {
     "noun": {
       "definition": "A person who steals things.",
@@ -17622,6 +18200,16 @@
       "cefrLevel": "A2",
       "uk": {
         "translation": "тонкий, худий"
+      }
+    }
+  },
+  "thing": {
+    "noun": {
+      "definition": "An object, or something you do not name exactly.",
+      "example": "There are a lot of things in the box.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "річ, штука"
       }
     }
   },
@@ -17652,6 +18240,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "погрожувати, загрожувати"
+      }
+    }
+  },
+  "three": {
+    "numeral": {
+      "definition": "The number 3.",
+      "example": "We have three rooms.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "три"
       }
     }
   },
@@ -17692,6 +18290,16 @@
       "cefrLevel": "A2",
       "uk": {
         "translation": "краватка"
+      }
+    }
+  },
+  "time": {
+    "noun": {
+      "definition": "What is measured in minutes, hours and days; or an occasion.",
+      "example": "I don't have much time.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "час, раз"
       }
     }
   },
@@ -17856,6 +18464,16 @@
       "cefrLevel": "B2",
       "uk": {
         "translation": "тон"
+      }
+    }
+  },
+  "too": {
+    "adverb": {
+      "definition": "More than is good or needed; also.",
+      "example": "There are too many people here.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "занадто, також"
       }
     }
   },
@@ -18154,6 +18772,16 @@
       "cefrLevel": "C1",
       "uk": {
         "translation": "обіг, оборот"
+      }
+    }
+  },
+  "tv": {
+    "noun": {
+      "definition": "A television, or the programmes shown on it.",
+      "example": "We watch TV in the evening.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "телевізор, телебачення"
       }
     }
   },
@@ -18885,6 +19513,16 @@
       }
     }
   },
+  "very": {
+    "adverb": {
+      "definition": "Used before an adjective or adverb to make it stronger.",
+      "example": "She is very tired.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "дуже"
+      }
+    }
+  },
   "vietnamese": {
     "adjective": {
       "definition": "From Vietnam or connected with Vietnam.",
@@ -19146,6 +19784,26 @@
       "cefrLevel": "B1",
       "uk": {
         "translation": "марнувати"
+      }
+    }
+  },
+  "water": {
+    "noun": {
+      "definition": "The clear liquid that falls as rain and is in rivers and seas.",
+      "example": "I drink a lot of water.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "вода"
+      }
+    }
+  },
+  "we": {
+    "pronoun": {
+      "definition": "Used by a speaker to talk about themselves and other people.",
+      "example": "We have a few plans for the weekend.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "ми"
       }
     }
   },
@@ -19491,6 +20149,16 @@
       }
     }
   },
+  "work": {
+    "noun": {
+      "definition": "Something you do to earn money; a job or the place you do it.",
+      "example": "I have a lot of work today.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "робота"
+      }
+    }
+  },
   "workbook": {
     "noun": {
       "definition": "A book with exercises that students write in.",
@@ -19579,6 +20247,16 @@
       }
     }
   },
+  "year": {
+    "noun": {
+      "definition": "A period of twelve months.",
+      "example": "She lived here for a year.",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "рік"
+      }
+    }
+  },
   "yellow": {
     "adjective": {
       "definition": "Having the colour of a lemon.",
@@ -19586,6 +20264,16 @@
       "cefrLevel": "A1",
       "uk": {
         "translation": "жовтий"
+      }
+    }
+  },
+  "your": {
+    "pronoun": {
+      "definition": "Belonging to or connected with you.",
+      "example": "Are your friends coming?",
+      "cefrLevel": "A1",
+      "uk": {
+        "translation": "твій, ваш"
       }
     }
   },
