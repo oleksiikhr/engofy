@@ -14,4 +14,7 @@ export default registerAs('queue', () => ({
   user: envString('MIKRO_ORM_USER', 'engofy'),
   password: envString('MIKRO_ORM_PASSWORD', 'engofy'),
   poolMax: envNumber('QUEUE_POOL_MAX', 5),
+  // How long `boss.stop()` waits for in-flight jobs (an AI stage runs ~2 min).
+  // Keep it below the platform's termination grace period.
+  shutdownTimeoutMs: envNumber('QUEUE_SHUTDOWN_TIMEOUT_MS', 120_000),
 }));

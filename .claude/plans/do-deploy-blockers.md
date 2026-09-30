@@ -33,12 +33,12 @@ status: in-progress
 
 Session-level Postgres advisory lock (`AdvisoryLockService`, окреме `pg`-з'єднання, try-lock без очікування) навколо `PollUpdatesService.run()`, щоб старий і новий cron під час rollout не робили `getUpdates` паралельно. Ispec на два одночасні `run()`.
 
-### [ ] 4. Повне завершення worker
+### [x] 4. Повне завершення worker
 - Branch: `do-deploy-blockers`
 - Base: `main`
 - PR: —
 
-`boss.stop()` з graceful і таймаутом з env (`WORKER_SHUTDOWN_TIMEOUT_MS`, дефолт ≥120 с), щоб AI-стадія (~2 хв) доробила. Тест на lifecycle.
+`boss.stop()` з graceful і таймаутом з env (`QUEUE_SHUTDOWN_TIMEOUT_MS`, дефолт ≥120 с), щоб AI-стадія (~2 хв) доробила. Тест на lifecycle.
 
 ### [ ] 5. Env для App Platform і docs/deploy.md
 - Branch: `do-deploy-blockers`

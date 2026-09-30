@@ -20,4 +20,12 @@ describe('QueueConfig', () => {
 
     expect(QueueConfig()).toMatchObject({ host: 'db.internal', port: 25060 });
   });
+
+  it('waits two minutes for in-flight jobs on shutdown by default', () => {
+    expect(QueueConfig().shutdownTimeoutMs).toBe(120_000);
+
+    vi.stubEnv('QUEUE_SHUTDOWN_TIMEOUT_MS', '45000');
+
+    expect(QueueConfig().shutdownTimeoutMs).toBe(45_000);
+  });
 });
