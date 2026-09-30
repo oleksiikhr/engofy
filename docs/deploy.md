@@ -1,7 +1,7 @@
 # Deploying to DigitalOcean App Platform
 
 Target shape and prices: `docs/hosting-direction.md`. Env var checklist: `.env.production.example`.
-No app spec or IaC is committed yet; the tables below are what it must contain.
+App spec: `.do/app.yaml` (replace `TAG` and `CHANGE_ME` placeholders before `doctl apps create --spec`; SECRET vars are entered in the control panel). The tables below describe it.
 
 ## Components
 

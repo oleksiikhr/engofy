@@ -1,6 +1,6 @@
 # Hosting — DigitalOcean, managed-first
 
-Direction only (2026-09-20): no app spec, IaC, or runbook exists yet.
+Direction only (2026-09-20): the app spec is `.do/app.yaml`; no runbook exists yet.
 
 Goal: minimise self-administration — no servers to patch, no hand-managed secrets or backups.
 The database uses the cheapest Managed Postgres plan.
