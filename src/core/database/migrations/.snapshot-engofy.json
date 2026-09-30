@@ -5694,6 +5694,25 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
+        "native_lang": {
+          "name": "native_lang",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'uk'",
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "uk"
+          ],
+          "mappedType": "enum"
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamptz(6)",
@@ -5750,6 +5769,12 @@
           "expression": "\"cefr_level\" in ('A1', 'A2', 'B1', 'B2', 'C1', 'C2')",
           "definition": "check (\"cefr_level\" in ('A1', 'A2', 'B1', 'B2', 'C1', 'C2'))",
           "columnName": "cefr_level"
+        },
+        {
+          "name": "users_native_lang_check",
+          "expression": "\"native_lang\" in ('uk')",
+          "definition": "check (\"native_lang\" in ('uk'))",
+          "columnName": "native_lang"
         }
       ],
       "triggers": [],

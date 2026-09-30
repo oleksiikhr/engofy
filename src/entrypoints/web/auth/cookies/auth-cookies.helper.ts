@@ -55,3 +55,12 @@ export function setOnboardingCookie(
     maxAge: Math.floor(config.onboardingCookieTtlMs / 1000),
   });
 }
+
+// The guest's native-language choice, written by the frontend (readable
+// client-side); the backend only reads it.
+export function readNativeLangCookie(
+  request: FastifyRequest,
+  config: AuthConfigType,
+): string | undefined {
+  return request.cookies[config.nativeLangCookieName];
+}

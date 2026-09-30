@@ -22,6 +22,7 @@ import { VerifyLoginCodeDto } from '../../../../modules/auth/commands/verify-log
 import AuthConfig from '../../../../modules/auth/config/auth.config.js';
 import {
   clearSessionCookie,
+  readNativeLangCookie,
   readSessionCookie,
   setOnboardingCookie,
   setSessionCookie,
@@ -52,6 +53,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async verifyLoginCode(
     @Body() dto: VerifyLoginCodeDto,
+    @Req() request: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<{ userId: string }> {
     const result = await this.auth.verifyLoginCode(dto);
@@ -59,6 +61,7 @@ export class AuthController {
     setSessionCookie(reply, result.sessionToken, this.authConfig);
     if (result.isNewUser) {
       setOnboardingCookie(reply, this.authConfig);
+      await this.adoptGuestNativeLang(request, result.userId);
     }
 
     return { userId: result.userId };
@@ -69,6 +72,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async loginWithGoogle(
     @Body() dto: LoginWithGoogleDto,
+    @Req() request: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<{ userId: string }> {
     const result = await this.auth.loginWithGoogle(dto);
@@ -76,6 +80,7 @@ export class AuthController {
     setSessionCookie(reply, result.sessionToken, this.authConfig);
     if (result.isNewUser) {
       setOnboardingCookie(reply, this.authConfig);
+      await this.adoptGuestNativeLang(request, result.userId);
     }
 
     return { userId: result.userId };
@@ -102,6 +107,19 @@ export class AuthController {
   async me(@CurrentUser() actor: UserActor): Promise<CurrentUserResponseDto> {
     const user = await this.auth.getUser(actor.id);
 
-    return { id: user.id, email: user.email };
+    return { id: user.id, email: user.email, nativeLang: user.nativeLang };
+  }
+
+  // A brand-new account has no language of its own yet, so it takes the one the
+  // guest picked; an existing account keeps its own.
+  private async adoptGuestNativeLang(
+    request: FastifyRequest,
+    userId: string,
+  ): Promise<void> {
+    const guestLang = await this.auth.resolveNativeLang(
+      null,
+      readNativeLangCookie(request, this.authConfig),
+    );
+    await this.auth.setNativeLang(userId, guestLang);
   }
 }

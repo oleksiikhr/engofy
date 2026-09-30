@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import type { CefrLevel } from '../post/enums/cefr-level.enum.js';
+import type { ContentLanguage } from '../post/enums/content-language.enum.js';
 import { CancelAccountDeletionCommand } from './commands/cancel-account-deletion/cancel-account-deletion.command.js';
 import { CancelAccountDeletionByTokenCommand } from './commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.command.js';
 import type { CancelAccountDeletionByTokenDto } from './commands/cancel-account-deletion-by-token/cancel-account-deletion-by-token.dto.js';
@@ -20,11 +21,13 @@ import type { ResolveSessionDto } from './commands/resolve-session/resolve-sessi
 import { SetCefrLevelCommand } from './commands/set-cefr-level/set-cefr-level.command.js';
 import { SetDailyGoalCommand } from './commands/set-daily-goal/set-daily-goal.command.js';
 import { SetDailyNewCardLimitCommand } from './commands/set-daily-new-card-limit/set-daily-new-card-limit.command.js';
+import { SetNativeLangCommand } from './commands/set-native-lang/set-native-lang.command.js';
 import { VerifyLoginCodeCommand } from './commands/verify-login-code/verify-login-code.command.js';
 import type { VerifyLoginCodeDto } from './commands/verify-login-code/verify-login-code.dto.js';
 import type { User } from './entities/user.entity.js';
 import { GetAccountDeletionQuery } from './queries/get-account-deletion/get-account-deletion.query.js';
 import { GetUserQuery } from './queries/get-user/get-user.query.js';
+import { ResolveNativeLangQuery } from './queries/resolve-native-lang/resolve-native-lang.query.js';
 import type { AccountDeletionView } from './types/account-deletion-view.type.js';
 import type { LoginResult } from './types/login-result.type.js';
 
@@ -80,6 +83,30 @@ export class AuthService {
     await this.em.flush();
 
     return result;
+  }
+
+  async setNativeLang(
+    userId: string,
+    nativeLang: ContentLanguage,
+  ): Promise<ContentLanguage> {
+    const result = await this.commandBus.execute(
+      new SetNativeLangCommand(userId, nativeLang),
+    );
+
+    await this.em.flush();
+
+    return result;
+  }
+
+  // The language a request's translations are served in: the account's, else
+  // the guest cookie's, else Ukrainian.
+  resolveNativeLang(
+    userId: string | null,
+    cookieValue: string | undefined,
+  ): Promise<ContentLanguage> {
+    return this.queryBus.execute(
+      new ResolveNativeLangQuery(userId, cookieValue),
+    );
   }
 
   async setDailyGoal(userId: string, dailyGoal: number): Promise<number> {

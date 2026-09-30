@@ -16,6 +16,7 @@ import { CancelAccountDeletionByTokenDto } from '../../../../modules/auth/comman
 import { SetCefrLevelDto } from '../../../../modules/auth/commands/set-cefr-level/set-cefr-level.dto.js';
 import { SetDailyGoalDto } from '../../../../modules/auth/commands/set-daily-goal/set-daily-goal.dto.js';
 import { SetDailyNewCardLimitDto } from '../../../../modules/auth/commands/set-daily-new-card-limit/set-daily-new-card-limit.dto.js';
+import { SetNativeLangDto } from '../../../../modules/auth/commands/set-native-lang/set-native-lang.dto.js';
 import type { AccountDeletionView } from '../../../../modules/auth/types/account-deletion-view.type.js';
 import { BillingService } from '../../../../modules/billing/billing.service.js';
 import { SubscriptionPlan } from '../../../../modules/billing/enums/subscription-plan.enum.js';
@@ -25,6 +26,7 @@ import { AccountDeletionResponseDto } from '../dto/account-deletion-response.dto
 import { CefrLevelResponseDto } from '../dto/cefr-level-response.dto.js';
 import { DailyGoalResponseDto } from '../dto/daily-goal-response.dto.js';
 import { DailyNewCardLimitResponseDto } from '../dto/daily-new-card-limit-response.dto.js';
+import { NativeLangResponseDto } from '../dto/native-lang-response.dto.js';
 import { ProfileHubResponseDto } from '../dto/profile-hub-response.dto.js';
 import { ProfileProgressResponseDto } from '../dto/profile-progress-response.dto.js';
 import { ProfileSubscriptionResponseDto } from '../dto/profile-subscription-response.dto.js';
@@ -128,6 +130,17 @@ export class ProfileController {
   ): Promise<CefrLevelResponseDto> {
     const cefrLevel = await this.auth.setCefrLevel(actor.id, dto.cefrLevel);
     return { cefrLevel };
+  }
+
+  // Change the language translations are shown in.
+  @Patch('native-lang')
+  @HttpCode(HttpStatus.OK)
+  async setNativeLang(
+    @CurrentUser() actor: UserActor,
+    @Body() dto: SetNativeLangDto,
+  ): Promise<NativeLangResponseDto> {
+    const nativeLang = await this.auth.setNativeLang(actor.id, dto.nativeLang);
+    return { nativeLang };
   }
 
   // Change the learner's daily card goal (the header's progress ring).

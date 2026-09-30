@@ -285,6 +285,44 @@ describe('ProfileController', () => {
     });
   });
 
+  describe('PATCH /profile/native-lang', () => {
+    it('rejects an unauthenticated request', async () => {
+      await suite
+        .request('patch', '/profile/native-lang')
+        .send({ nativeLang: 'uk' })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('stores the language and returns it from /auth/me', async () => {
+      const cookie = await login(suite.orm.em);
+
+      const patchRes = await suite
+        .request('patch', '/profile/native-lang')
+        .set('Cookie', cookie)
+        .send({ nativeLang: 'uk' })
+        .expect(HttpStatus.OK);
+
+      expect(patchRes.body).toEqual({ nativeLang: 'uk' });
+
+      const meRes = await suite
+        .request('get', '/auth/me')
+        .set('Cookie', cookie)
+        .expect(HttpStatus.OK);
+
+      expect(meRes.body.nativeLang).toBe('uk');
+    });
+
+    it('rejects an unknown language', async () => {
+      const cookie = await login(suite.orm.em);
+
+      await suite
+        .request('patch', '/profile/native-lang')
+        .set('Cookie', cookie)
+        .send({ nativeLang: 'xx' })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+  });
+
   describe('PATCH /profile/daily-goal', () => {
     it('rejects an unauthenticated request', async () => {
       await suite

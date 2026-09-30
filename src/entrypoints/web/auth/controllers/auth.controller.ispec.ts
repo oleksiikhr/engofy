@@ -175,7 +175,7 @@ describe('AuthController', () => {
         .set('Cookie', cookie)
         .expect(HttpStatus.OK);
 
-      expect(meResponse.body).toMatchObject({ email });
+      expect(meResponse.body).toMatchObject({ email, nativeLang: 'uk' });
     });
 
     it('sets an onboarding cookie for a first-time signup but not a returning login', async () => {

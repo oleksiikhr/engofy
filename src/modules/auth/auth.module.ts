@@ -15,10 +15,12 @@ import { ResolveSessionHandler } from './commands/resolve-session/resolve-sessio
 import { SetCefrLevelHandler } from './commands/set-cefr-level/set-cefr-level.handler.js';
 import { SetDailyGoalHandler } from './commands/set-daily-goal/set-daily-goal.handler.js';
 import { SetDailyNewCardLimitHandler } from './commands/set-daily-new-card-limit/set-daily-new-card-limit.handler.js';
+import { SetNativeLangHandler } from './commands/set-native-lang/set-native-lang.handler.js';
 import { VerifyLoginCodeHandler } from './commands/verify-login-code/verify-login-code.handler.js';
 import AuthConfig from './config/auth.config.js';
 import { GetAccountDeletionHandler } from './queries/get-account-deletion/get-account-deletion.handler.js';
 import { GetUserHandler } from './queries/get-user/get-user.handler.js';
+import { ResolveNativeLangHandler } from './queries/resolve-native-lang/resolve-native-lang.handler.js';
 import { AccountDeletionService } from './services/account-deletion.service.js';
 import { AuthQueueBootstrapService } from './services/auth-queue-bootstrap.service.js';
 import { ChallengeService } from './services/challenge.service.js';
@@ -40,10 +42,15 @@ const commandHandlers = [
   SetCefrLevelHandler,
   SetDailyGoalHandler,
   SetDailyNewCardLimitHandler,
+  SetNativeLangHandler,
   VerifyLoginCodeHandler,
 ];
 
-const queryHandlers = [GetAccountDeletionHandler, GetUserHandler];
+const queryHandlers = [
+  GetAccountDeletionHandler,
+  GetUserHandler,
+  ResolveNativeLangHandler,
+];
 
 @Module({
   imports: [

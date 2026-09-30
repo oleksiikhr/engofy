@@ -10,6 +10,7 @@ import { DateTime } from 'luxon';
 import { v7 as uuidv7 } from 'uuid';
 import { LuxonTimestampType } from '../../../core/database/types/luxon-timestamp.type.js';
 import { CefrLevel } from '../../post/enums/cefr-level.enum.js';
+import { ContentLanguage } from '../../post/enums/content-language.enum.js';
 
 @Entity({ tableName: 'users' })
 export class User {
@@ -29,6 +30,12 @@ export class User {
   // in `ProfileView.cefr`.
   @Enum({ items: () => CefrLevel })
   cefrLevel: Opt<CefrLevel> = CefrLevel.A1;
+
+  // The language lexicon/grammar translations are shown in (`PATCH
+  // /profile/native-lang`). A guest's choice lives in the `native-lang` cookie;
+  // see `ResolveNativeLangQuery` for how a request's language is resolved.
+  @Enum({ items: () => ContentLanguage })
+  nativeLang: Opt<ContentLanguage> = ContentLanguage.Uk;
 
   // Cards the learner aims to review per UTC day; drives the header's
   // progress ring (`PATCH /profile/daily-goal`).
