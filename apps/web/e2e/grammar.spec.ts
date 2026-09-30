@@ -255,6 +255,47 @@ test.describe('grammar construction detail', () => {
     await expect(construction.handcrafted).toHaveCount(0);
   });
 
+  test('names the construction with its category in H1 and title, level badge outside the H1', async ({
+    page,
+  }) => {
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('adjectives-position');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Adjectives: position',
+    );
+    await expect(page).toHaveTitle('Adjectives: position — Grammar — Engofy');
+    await expect(page.locator('h1 .badge')).toHaveCount(0);
+    await construction.goto('past-past-simple');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Past simple',
+    );
+  });
+
+  test('keeps the sticky progress a thin bar; the section list overlays on demand', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const construction = new GrammarConstructionPage(page);
+    await construction.goto('past-present-perfect-simple');
+    const bar = page.locator('[data-gp-progress]');
+    const list = page.locator('.gp-progress__list');
+    expect((await bar.boundingBox())?.height).toBeLessThan(48);
+    await expect(list).toBeHidden();
+
+    const below = page.locator('.con-body');
+    const before = (await below.boundingBox())?.y;
+    await page.locator('[data-gp-progress-more] summary').click();
+    await expect(list).toBeVisible();
+    expect((await below.boundingBox())?.y).toBe(before);
+
+    // The bar names the section being read.
+    await list.locator('a').last().click();
+    await expect(list).toBeHidden();
+    await expect(page.locator('[data-gp-progress-current]')).toHaveText(
+      'Practice',
+    );
+  });
+
   test('keeps "When it\'s used" closed until opened, with a rule count', async ({
     page,
   }) => {
@@ -268,6 +309,7 @@ test.describe('grammar construction detail', () => {
     await expect(construction.usageMore).toHaveCount(0);
 
     const checklistItem = page.locator('[data-gp-progress-item="use"]');
+    await page.locator('[data-gp-progress-more] summary').click();
     await expect(checklistItem).toHaveAttribute('data-done', 'false');
     await checklistItem.click();
     await expect(construction.usageSection).toHaveAttribute('open');
@@ -542,7 +584,10 @@ test.describe('grammar construction detail', () => {
     const construction = new GrammarConstructionPage(page);
     await construction.goto('e2e-past-perfect');
     const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute('content', /E2E: Tenses/);
+    await expect(description).toHaveAttribute(
+      'content',
+      /past perfect \(A2\) in English grammar/,
+    );
     await expect(description).not.toHaveAttribute(
       'content',
       'Learn English through short authentic texts.',
