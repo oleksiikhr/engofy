@@ -56,9 +56,60 @@ it, so disable that default domain once the custom one works.
 rollout cannot poll at once; the loser logs a warning and skips that tick. It still must run as a
 single instance.
 
+## Images
+
+Push all three images with the same tag; that tag is `TAG` in `.do/app.yaml` (also `SENTRY_RELEASE`).
+Build from the repo root (`web`/`worker`/`cron`/`migrate` share `engofy`):
+
+```bash
+REG=registry.digitalocean.com/<registry>
+TAG=v0.1.0
+doctl registry login
+docker build --target runtime -t $REG/engofy:$TAG .
+docker build --target runtime -f apps/web/Dockerfile -t $REG/engofy-web:$TAG .
+docker build -f nlp-service/Dockerfile -t $REG/engofy-nlp:$TAG nlp-service
+docker push $REG/engofy:$TAG && docker push $REG/engofy-web:$TAG && docker push $REG/engofy-nlp:$TAG
+```
+
+`apps/web` needs the repo root as context (workspace lockfile); `nlp-service` is standalone and uses
+its own directory. Builds need BuildKit (`docker buildx`). `.github/workflows/docker.yaml` only builds
+and scans `engofy`; nothing pushes to the registry.
+
+## Seeding reference data
+
+A fresh database has no grammar catalogue, irregular verbs, word frequency or dictionary content.
+`migrate` does not seed. Run the importers once, after the first successful deploy, from the `worker`
+component's console (it has the DB, `NLP_SERVICE_URL` and `PUBLIC_URL` vars):
+
+```bash
+doctl apps console <app-id> worker
+```
+
+Inside it (WORKDIR is `/app/dist`; `node cli` reads `assets/` baked into the image):
+
+```bash
+node cli grammar import-egp
+node cli grammar import-irregular-verbs
+node cli words import-frequency
+node cli grammar import-usage-point-exercises
+node cli grammar import-usage-point-content
+node cli words import-lexicon-content
+node cli words import-phrase-content
+node cli grammar annotate-pages
+```
+
+`import-frequency` is a one-off: words the pipeline creates later are ranked on insert.
+
+Order matters: keep it as listed (same as `make seed`, then `grammar annotate-pages`). Re-running an importer
+only fills gaps or applies edits. `annotate-pages` calls `PUBLIC_URL` (the `apps-web` route) and
+`nlp`, so run it only once the site and `nlp` respond. Re-run the seed commands after an `assets/`
+change ships in a new image. Adding a native language also needs `post backfill-translations`
+(`docs/adding-a-language.md`).
+
 ## Release checklist
 
-1. Build and push `engofy`, `engofy-web`, `engofy-nlp` images to the registry.
+1. Build and push `engofy`, `engofy-web`, `engofy-nlp` (see Images).
 2. Set every var in `.env.production.example` on the matching components; secrets as encrypted vars.
 3. Deploy; `migrate` runs first.
-4. Check `/_healthz/ready` and Sentry for the new `SENTRY_RELEASE`.
+4. First deploy only: run the importers (see Seeding reference data).
+5. Check `/_healthz/ready` and Sentry for the new `SENTRY_RELEASE`.
