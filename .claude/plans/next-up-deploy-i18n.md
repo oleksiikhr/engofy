@@ -33,7 +33,7 @@ status: in-progress
 
 Закомітити `.do/app.yaml` за таблицею з `docs/deploy.md`: компоненти, команди, health checks, `grace_period_seconds` 180/60, `PRE_DEPLOY` міграція, env з `.env.production.example`. Залежить від 2.
 
-### [ ] 4. Закрити відкриті питання хостингу
+### [x] 4. Закрити відкриті питання хостингу
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —

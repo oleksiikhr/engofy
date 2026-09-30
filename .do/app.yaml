@@ -1,7 +1,7 @@
 # App Platform spec — see docs/deploy.md for the rationale behind each value.
 # Placeholders to replace before `doctl apps create --spec .do/app.yaml`:
 #   TAG            image tag being released (also used as SENTRY_RELEASE)
-#   CHANGE_ME      values from the managed Postgres / Valkey panels and the public domain
+#   CHANGE_ME      values from the managed Postgres panel and the public domain
 # SECRET vars carry no value here; enter them in the control panel.
 # Var reference: .env.production.example.
 name: engofy
@@ -79,19 +79,10 @@ services:
         value: "2"
       - key: REDIS_HOST
         scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "redis"
       - key: REDIS_PORT
         scope: RUN_TIME
-        value: "25061"
-      - key: REDIS_PASSWORD
-        scope: RUN_TIME
-        type: SECRET
-      - key: REDIS_SSL
-        scope: RUN_TIME
-        value: "true"
-      - key: REDIS_SSL_CA
-        scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "6379"
       - key: NLP_SERVICE_URL
         scope: RUN_TIME
         value: "http://nlp:8000"
@@ -159,6 +150,24 @@ services:
       timeout_seconds: 5
       failure_threshold: 3
 
+  - name: redis
+    image:
+      registry_type: DOCKER_HUB
+      registry: library
+      repository: redis
+      tag: 8-alpine
+    run_command: redis-server --save "" --appendonly no
+    internal_ports:
+      - 6379
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    health_check:
+      tcp_port: 6379
+      initial_delay_seconds: 5
+      period_seconds: 10
+      timeout_seconds: 3
+      failure_threshold: 3
+
 workers:
   - name: worker
     image:
@@ -212,19 +221,10 @@ workers:
         value: "3"
       - key: REDIS_HOST
         scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "redis"
       - key: REDIS_PORT
         scope: RUN_TIME
-        value: "25061"
-      - key: REDIS_PASSWORD
-        scope: RUN_TIME
-        type: SECRET
-      - key: REDIS_SSL
-        scope: RUN_TIME
-        value: "true"
-      - key: REDIS_SSL_CA
-        scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "6379"
       - key: NLP_SERVICE_URL
         scope: RUN_TIME
         value: "http://nlp:8000"
@@ -298,19 +298,10 @@ workers:
         value: "2"
       - key: REDIS_HOST
         scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "redis"
       - key: REDIS_PORT
         scope: RUN_TIME
-        value: "25061"
-      - key: REDIS_PASSWORD
-        scope: RUN_TIME
-        type: SECRET
-      - key: REDIS_SSL
-        scope: RUN_TIME
-        value: "true"
-      - key: REDIS_SSL_CA
-        scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "6379"
       - key: PUBLIC_URL
         scope: RUN_TIME
         value: "https://engofy.com"
@@ -376,16 +367,7 @@ jobs:
         value: "1"
       - key: REDIS_HOST
         scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "redis"
       - key: REDIS_PORT
         scope: RUN_TIME
-        value: "25061"
-      - key: REDIS_PASSWORD
-        scope: RUN_TIME
-        type: SECRET
-      - key: REDIS_SSL
-        scope: RUN_TIME
-        value: "true"
-      - key: REDIS_SSL_CA
-        scope: RUN_TIME
-        value: "CHANGE_ME"
+        value: "6379"
