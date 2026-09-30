@@ -61,7 +61,7 @@ status: in-progress
 
 Колонка `users.native_lang` (default `uk`) + міграція; `PATCH /profile/native-lang`; `/auth/me` повертає `nativeLang`. Резолвер мови запиту: акаунт, інакше cookie `native-lang`, інакше `uk`. При логіні cookie гостя переноситься в акаунт, якщо там значення ще немає.
 
-### [ ] 8. API віддає лише резолвлену мову
+### [x] 8. API віддає лише резолвлену мову
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
