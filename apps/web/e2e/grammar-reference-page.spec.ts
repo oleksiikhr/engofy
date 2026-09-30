@@ -47,7 +47,9 @@ for (const vp of viewports) {
       expect(res?.status()).toBe(200);
       expect(problems).toEqual([]);
       await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
-      await expect(page).toHaveTitle('Determiners: quantity — Grammar — Engofy');
+      await expect(page).toHaveTitle(
+        'Determiners: quantity — Grammar — Engofy',
+      );
       await expect(page.locator('meta[name="description"]')).toHaveAttribute(
         'content',
         /.+/,
