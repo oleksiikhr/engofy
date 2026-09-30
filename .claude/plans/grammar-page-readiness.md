@@ -112,13 +112,47 @@ status: in-progress
 Прогін чекліста по `determiners-quantity` (mobile/desktop, світла/темна теми), e2e на нове,
 скріншоти. Коротка сторінка-стандарт «як виглядає готова сторінка граматики».
 
-### [ ] 8. Розкатка на решту 93 сторінок
+### [x] 8. Розкатка на решту 93 сторінок: розбито на зрізи 9–13
+- Branch: `grammar-page-readiness`
+- Base: `main`
+- PR: — (єдиний PR наприкінці плану)
+
+Зріз-плейсхолдер закрито розбиттям на пакети нижче. Контент (usage points, вправи) генерується зараз, українські тексти позначаються для читання людиною.
+
+### [ ] 9. Розкатка: блокери з аудиту
 - Branch: `grammar-page-readiness`
 - Base: `main`
 - PR: —
 
-Обсяг і поділ на пакети за категоріями залежать від звіту зрізу 1 та еталона зрізу 7. Після
-зрізу 7 цей зріз розбивається на пакети й додається сюди.
+B6 — горизонтальний скрол на `clauses-phrases-exclamations`. B9 — фікстури `e2e-*` не потрапляють у список, sitemap і пошук. B3 — неповний UP на `past-present-perfect-simple`. Повторний прогін `grammar-audit.mjs` для B4 після зрізу 2, оновити карту розкатки.
+
+### [ ] 10. Розкатка: 13 сторінок без usage point
+- Branch: `grammar-page-readiness`
+- Base: `main`
+- PR: —
+
+B2/B3 для `nouns-*`, `verbs-linking/phrasal/prepositional/there-is-are/types/patterns-that-clauses`, `adjectives-modifying`, `clauses-interrogatives`, `nouns-noun-phrases-grammatical-functions`: usage points з `learner_explanation`, `learner_examples`, українським перекладом. `<mark>` у прикладах і `--refresh` для `annotate-pages`.
+
+### [ ] 11. Розкатка: вправи для 39 сторінок без вправ
+- Branch: `grammar-page-readiness`
+- Base: `main`
+- PR: —
+
+D1 за категоріями: `modality-*`, `present-*`, `pronouns-*`, `questions-*`, `reported-speech`, `verbs-patterns-*`, `verbs-phrasal-*`. Вправи «choose» показують правильну відповідь після помилки (D2).
+
+### [ ] 12. Розкатка: cheat sheet для 6 сторінок
+- Branch: `grammar-page-readiness`
+- Base: `main`
+- PR: —
+
+D3: `adverbs-adverbs-as-modifiers`, `discourse-markers-discourse-markers-in-writing`, `focus-focus`, `future-future-in-the-past`, `pronouns-generic-use`, `e2e-empty-construction` (остання — фікстура, пропустити).
+
+### [ ] 13. Розкатка: фінальний прогін чекліста по всіх сторінках
+- Branch: `grammar-page-readiness`
+- Base: `main`
+- PR: —
+
+Перенести перевірки чекліста (B1, B4–B6, D1, D3) з `grammar-audit.mjs` у e2e або CI-скрипт по всіх реальних сторінках, оновити карту розкатки; сторінка-стандарт лишається джерелом істини.
 
 ## Карта розкатки
 
