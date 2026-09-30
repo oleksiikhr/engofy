@@ -75,7 +75,7 @@ status: in-progress
 
 `nativeLang()` і `NATIVE_LANG_LABEL` беруться з `/auth/me` або cookie на сервері; прибрати літерал `TranslationLang = 'uk'`. Вибір мови на сторінці профілю та для гостя (пише cookie). e2e-перевірка «does not shift when scripts run» для підпису перемикача. Залежить від 8.
 
-### [ ] 10. Seed і backfill по мовах
+### [x] 10. Seed і backfill по мовах
 - Branch: `next-up-deploy-i18n`
 - Base: `main`
 - PR: —
