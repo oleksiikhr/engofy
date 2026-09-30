@@ -34,22 +34,11 @@ The database uses the cheapest Managed Postgres plan.
 
 ## Open points
 
-- **Connection limit.** The cheapest Postgres plan allows 22 connections. Each Nest process holds a
-  MikroORM pool (`DB_POOL_MAX`, default 10) plus a pg-boss pool (`QUEUE_POOL_MAX`, default 5), so
-  `web` + `worker` + `cron` ≈ 45. Either lower the pool sizes or take the $30 plan. pg-boss needs a
-  direct/session connection (`LISTEN/NOTIFY`), not a transaction pool.
-- **`TRUST_PROXY`.** The request chain is Cloudflare → DigitalOcean edge → app. The app rejects
-  numeric hop counts, and throttler / OTP-per-IP counters depend on the real client IP, so the
-  client-IP handling needs rework.
-- **Telegram poller.** During a rollout the old `cron` can overlap the new one, causing a duplicate
-  `getUpdates` (409). Guard with a Postgres advisory lock or a pg-boss singleton.
-- **Worker shutdown.** Set `termination.grace_period_seconds` to at least 120 (allowed 1–600) so an
-  in-flight AI stage (~2 min) finishes.
+Connection budget, client IP, Telegram poller, worker shutdown and the env matrix are settled — see `docs/deploy.md`.
+
 - **Redis.** Managed Valkey ($15) vs. an internal `redis` service ($5–10); losing the data only
   resets rate-limit windows.
 - **Registry.** DigitalOcean Container Registry (Basic, $5) vs. private GHCR — App Platform pulling
   from private GHCR is unverified.
 - **CPU.** Shared vCPU may be too slow for `nlp` and `worker`; measure before fixing sizes.
 - **Cheapest Postgres plan.** Confirm its disk and `max_connections` fit before choosing it.
-- **Leftover env matrix.** `.env.production.example` still describes Docker secrets and stack file
-  names; rework it for App Platform env vars.
